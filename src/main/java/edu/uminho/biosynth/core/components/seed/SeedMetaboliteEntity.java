@@ -19,7 +19,7 @@ import edu.uminho.biosynth.core.components.seed.components.SeedCompoundStructure
 
 @Entity
 @Table(name="SEED_COMPOUND")
-public class SeedCompoundEntity extends GenericMetabolite {
+public class SeedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 	

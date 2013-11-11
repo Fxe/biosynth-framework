@@ -39,16 +39,16 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 			metaboliteIndexMap.put(metaNames[i], i);
 		}
 		for (int i = 0; i < reacNames.length; i++) {
-			reversibility[i] = reactionDataMap.get(reacNames[i]).isReversible();
-			reactionIndexMap.put(reacNames[i], i);
-			for (String cpdId : this.reactionDataMap.get(reacNames[i]).getReactantsID()) {
-				int cpdIndex = this.metaboliteIndexMap.get(cpdId);
-				this.values[cpdIndex][i] = 1;
-			}
-			for (String cpdId : this.reactionDataMap.get(reacNames[i]).getProductsID()) {
-				int cpdIndex = this.metaboliteIndexMap.get(cpdId);
-				this.values[cpdIndex][i] = -1;
-			}
+//			reversibility[i] = reactionDataMap.get(reacNames[i]).isReversible();
+//			reactionIndexMap.put(reacNames[i], i);
+//			for (String cpdId : this.reactionDataMap.get(reacNames[i]).getReactantsID()) {
+//				int cpdIndex = this.metaboliteIndexMap.get(cpdId);
+//				this.values[cpdIndex][i] = 1;
+//			}
+//			for (String cpdId : this.reactionDataMap.get(reacNames[i]).getProductsID()) {
+//				int cpdIndex = this.metaboliteIndexMap.get(cpdId);
+//				this.values[cpdIndex][i] = -1;
+//			}
 		}
 	}
 	
@@ -71,8 +71,8 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 	@Override
 	public boolean addReaction(GenericReaction rxn) {
 		this.reactionDataMap.put(rxn.getId(), rxn);
-		for (GenericMetabolite cpd : rxn.getProducts()) this.addMetabolite(cpd);
-		for (GenericMetabolite cpd : rxn.getReactants()) this.addMetabolite(cpd);
+//		for (GenericMetabolite cpd : rxn.getProducts()) this.addMetabolite(cpd);
+//		for (GenericMetabolite cpd : rxn.getReactants()) this.addMetabolite(cpd);
 		return true;
 	}
 

@@ -89,7 +89,7 @@ public abstract class AbstractGenericEntity implements Serializable {
 	public DateTime getUpdatedAt() {
 		return this.updated_at;
 	}
-	public void setpdatedAt(String modDate) {
+	public void setUpdatedAt(String modDate) {
 		this.updated_at = new DateTime(modDate);
 	}
 }

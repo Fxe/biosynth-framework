@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import edu.uminho.biosynth.core.components.seed.SeedCompoundEntity;
+import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_COMPOUND_PK")
@@ -24,7 +24,7 @@ public class SeedCompoundPkEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="ID_COMPOUND")
-	private SeedCompoundEntity seedCompoundEntity;
+	private SeedMetaboliteEntity seedCompoundEntity;
 	
 	@Column(name="PK") private double pk;
 	@Column(name="ATOM") private short atom;
@@ -40,10 +40,10 @@ public class SeedCompoundPkEntity {
 		this.id = id;
 	}
 	
-	public SeedCompoundEntity getSeedCompoundEntity() {
+	public SeedMetaboliteEntity getSeedCompoundEntity() {
 		return seedCompoundEntity;
 	}
-	public void setSeedCompoundEntity(SeedCompoundEntity seedCompoundEntity) {
+	public void setSeedCompoundEntity(SeedMetaboliteEntity seedCompoundEntity) {
 		this.seedCompoundEntity = seedCompoundEntity;
 	}
 	

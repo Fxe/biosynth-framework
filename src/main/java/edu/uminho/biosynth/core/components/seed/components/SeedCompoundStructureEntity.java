@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import edu.uminho.biosynth.core.components.seed.SeedCompoundEntity;
+import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_COMPOUND_STRUCTURE")
@@ -21,7 +21,7 @@ public class SeedCompoundStructureEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="ID_COMPOUND")
-	private SeedCompoundEntity seedCompoundEntity;
+	private SeedMetaboliteEntity seedCompoundEntity;
 	
 	@Column(name="STRUCTURE") private String structure;
 	@Column(name="CKSUM") private String cksum;
@@ -34,10 +34,10 @@ public class SeedCompoundStructureEntity {
 		this.id = id;
 	}
 	
-	public SeedCompoundEntity getSeedCompoundEntity() {
+	public SeedMetaboliteEntity getSeedCompoundEntity() {
 		return seedCompoundEntity;
 	}
-	public void setSeedCompoundEntity(SeedCompoundEntity seedCompoundEntity) {
+	public void setSeedCompoundEntity(SeedMetaboliteEntity seedCompoundEntity) {
 		this.seedCompoundEntity = seedCompoundEntity;
 	}
 	

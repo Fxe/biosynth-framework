@@ -19,7 +19,7 @@ import edu.uminho.biosynth.core.components.seed.components.SeedReactionReagentEn
 
 @Entity
 @Table(name="SEED_REACTION")
-public class SeedReactionEntity extends GenericReaction<SeedCompoundEntity> {
+public class SeedReactionEntity extends GenericReaction<SeedMetaboliteEntity> {
     
 	private static final long serialVersionUID = 1L;
 	

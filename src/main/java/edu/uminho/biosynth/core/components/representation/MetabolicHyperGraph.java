@@ -29,10 +29,10 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 		ReactionEdge edge = null;
 		if ( leftToRight) {
 			LOGGER.log(Level.INFO, "Creating EDGE " + edgeName + " => ");
-			edge = new ReactionEdge( rxn.getReactantsID(), rxn.getProductsID(), edgeName, rxn.getId());
+//			edge = new ReactionEdge( rxn.getReactantsID(), rxn.getProductsID(), edgeName, rxn.getId());
 		} else {
 			LOGGER.log(Level.INFO, "Creating EDGE " + edgeName + " <= ");
-			edge = new ReactionEdge( rxn.getProductsID(), rxn.getReactantsID(), edgeName, rxn.getId());
+//			edge = new ReactionEdge( rxn.getProductsID(), rxn.getReactantsID(), edgeName, rxn.getId());
 		}
 		return edge;
 	}
@@ -48,18 +48,18 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
 		ReactionEdge edge = this.createEdge(rxn, origOrientation);
 		
-		if ( duplicateForReverse && rxn.isReversible()) {
-			LOGGER.log(Level.INFO, "Add Reaction " + rxn.getId() + " is reversible");
-			// CREATE opposite Direction EDGE'
-			DiHyperEdge<String, String> edge_ = createEdge(rxn, !origOrientation);
-			if ( !this.addEdge(edge_)) {
-				LOGGER.log(Level.SEVERE, "Error Adding Reverse Edge: " + rxn.getId());
-			}
-		}
-		if ( !this.addEdge(edge)) {
-			LOGGER.log(Level.SEVERE, "Error Adding Normal Edge: " + rxn.getId());
-			return false;
-		}
+//		if ( duplicateForReverse && rxn.isReversible()) {
+//			LOGGER.log(Level.INFO, "Add Reaction " + rxn.getId() + " is reversible");
+//			// CREATE opposite Direction EDGE'
+//			DiHyperEdge<String, String> edge_ = createEdge(rxn, !origOrientation);
+//			if ( !this.addEdge(edge_)) {
+//				LOGGER.log(Level.SEVERE, "Error Adding Reverse Edge: " + rxn.getId());
+//			}
+//		}
+//		if ( !this.addEdge(edge)) {
+//			LOGGER.log(Level.SEVERE, "Error Adding Normal Edge: " + rxn.getId());
+//			return false;
+//		}
 		return true;
 	}
 	

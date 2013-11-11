@@ -36,22 +36,24 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 	
 	@Override
 	public boolean addReaction(GenericReaction rxn, boolean duplicateForReverse) {
-		Set<String> alpha = rxn.getReactantsID();
-		Set<String> beta = rxn.getProductsID();
-		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
-		op.setID(rxn.getId());
-		if ( duplicateForReverse ) {
-			Set<String> alpha_ = rxn.getProductsID();
-			Set<String> beta_ = rxn.getReactantsID();
-			OperatingUnit<String> op_ = new OperatingUnit<String>(alpha_, beta_);
-			op_.setID(rxn.getId() + "R");
-			op.setOpposite(op_);
-			op_.setOpposite(op);
-			if ( !this.addOperatingUnit(op_)) {
-				System.err.println("ERROR ADD REVERSE: " + rxn);
-			}
-		}
-		return this.addOperatingUnit(op);
+//		Set<String> alpha = rxn.getReactantsID();
+//		Set<String> beta = rxn.getProductsID();
+//		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
+//		op.setID(rxn.getId());
+//		if ( duplicateForReverse ) {
+//			Set<String> alpha_ = rxn.getProductsID();
+//			Set<String> beta_ = rxn.getReactantsID();
+//			OperatingUnit<String> op_ = new OperatingUnit<String>(alpha_, beta_);
+//			op_.setID(rxn.getId() + "R");
+//			op.setOpposite(op_);
+//			op_.setOpposite(op);
+//			if ( !this.addOperatingUnit(op_)) {
+//				System.err.println("ERROR ADD REVERSE: " + rxn);
+//			}
+//		}
+//		return this.addOperatingUnit(op);
+		
+		return false;
 	}
 
 	@Override

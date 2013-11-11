@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.seed.SeedCompoundEntity;
+import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_COMPOUND_CROSSREF")
@@ -16,7 +16,7 @@ public class SeedCompoundCrossReferenceEntity extends GenericCrossReference{
 
 	@ManyToOne
 	@JoinColumn(name="ID_COMPOUND")
-	private SeedCompoundEntity seedCompoundEntity;
+	private SeedMetaboliteEntity seedCompoundEntity;
 	
 	public SeedCompoundCrossReferenceEntity() {
 		super(null, null, null);
@@ -28,10 +28,10 @@ public class SeedCompoundCrossReferenceEntity extends GenericCrossReference{
 		super(crossReference.getType(), crossReference.getRef(), crossReference.getValue());
 	}
 
-	public SeedCompoundEntity getSeedCompoundEntity() {
+	public SeedMetaboliteEntity getSeedCompoundEntity() {
 		return seedCompoundEntity;
 	}
-	public void setSeedCompoundEntity(SeedCompoundEntity seedCompoundEntity) {
+	public void setSeedCompoundEntity(SeedMetaboliteEntity seedCompoundEntity) {
 		this.seedCompoundEntity = seedCompoundEntity;
 	}
 }

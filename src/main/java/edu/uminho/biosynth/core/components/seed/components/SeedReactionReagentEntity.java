@@ -5,11 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.StoichiometryPair;
-import edu.uminho.biosynth.core.components.seed.SeedCompoundEntity;
+import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_REACTION_REAGENT")
-public class SeedReactionReagentEntity extends StoichiometryPair<SeedCompoundEntity> {
+public class SeedReactionReagentEntity extends StoichiometryPair<SeedMetaboliteEntity> {
 
 	@Column(name="IS_COFACT") private short isCofactor;
 	@Column(name="CPD_UUID") private String compound_uuid;
