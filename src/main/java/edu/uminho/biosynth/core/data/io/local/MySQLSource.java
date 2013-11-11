@@ -616,11 +616,11 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 	@Override
 	public void saveCompoundInformation(GenericMetabolite cpd) {
 		try {
-			this.saveCompoundData(cpd.getId(), cpd.getName(), cpd.getFormula(), cpd.getDescription(), cpd.getSource(), cpd.getMetaboliteClass());
-			this.saveCompoundReactions( cpd.getId(), cpd.getReactionIdSet());
+			this.saveCompoundData(cpd.getEntry(), cpd.getName(), cpd.getFormula(), cpd.getDescription(), cpd.getSource(), cpd.getMetaboliteClass());
+			this.saveCompoundReactions( cpd.getEntry(), cpd.getReactionIdSet());
 			if (this.commitAfterSave) this.commit();
 		} catch (SQLException sqlEx) {
-			System.err.println("MySQLSource::saveCompoundInformation - " + cpd.getId() + " - " + sqlEx.getMessage());
+			System.err.println("MySQLSource::saveCompoundInformation - " + cpd.getEntry() + " - " + sqlEx.getMessage());
 		}
 	}
 	
@@ -726,16 +726,16 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 	public void saveReactionInformation(GenericReaction rxn) { 
 		EquationParser eqp = new EquationParser(rxn.getEquation());
 		try {
-			this.saveReactionData(rxn.getId(), rxn.getName(), rxn.getEquation(), 
+			this.saveReactionData(rxn.getEntry(), rxn.getName(), rxn.getEquation(), 
 								  rxn.getDescription(), rxn.getSource(), eqp.isVariable(), rxn.getOrientation());
-			this.saveReactionEnzymes(rxn.getId(), rxn.getEnzymes());
-			this.saveReactionReactants( rxn.getId(), rxn.getLeft(), rxn.getLeftGeneric());
-			this.saveReactionProducts( rxn.getId(), rxn.getRight(), rxn.getRightGeneric());
-			this.saveReactionSameas( rxn.getId(), rxn.getSameAs());
-			this.saveReactionRPairs( rxn.getId(), rxn.getRPairs());
+			this.saveReactionEnzymes(rxn.getEntry(), rxn.getEnzymes());
+			this.saveReactionReactants( rxn.getEntry(), rxn.getLeft(), rxn.getLeftGeneric());
+			this.saveReactionProducts( rxn.getEntry(), rxn.getRight(), rxn.getRightGeneric());
+			this.saveReactionSameas( rxn.getEntry(), rxn.getSameAs());
+			this.saveReactionRPairs( rxn.getEntry(), rxn.getRPairs());
 			if (this.commitAfterSave) this.commit();
 		} catch (SQLException sqlEx) {
-			LOGGER.log(Level.SEVERE, "saveReactionInformation " + rxn.getId() + " - " + sqlEx.getMessage());
+			LOGGER.log(Level.SEVERE, "saveReactionInformation " + rxn.getEntry() + " - " + sqlEx.getMessage());
 		}
 	}
 	
@@ -774,11 +774,11 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 	@Override
 	public void saveEnzymeInformation(GenericEnzyme ecn) {
 		try {
-			saveEnzymeData( ecn.getId(), ecn.getName(), ecn.getSource());
-			saveEnzymeOrganisms( ecn.getId(), ecn.getOrganismMap());
+			saveEnzymeData( ecn.getEntry(), ecn.getName(), ecn.getSource());
+			saveEnzymeOrganisms( ecn.getEntry(), ecn.getOrganismMap());
 			if (this.commitAfterSave) this.commit();
 		} catch (SQLException sqlEx) {
-			LOGGER.log(Level.SEVERE, "saveEnzymeInformation " + ecn.getId() + " - " + sqlEx.getMessage());
+			LOGGER.log(Level.SEVERE, "saveEnzymeInformation " + ecn.getEntry() + " - " + sqlEx.getMessage());
 		}
 
 	}
@@ -839,13 +839,13 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		
 		try {
 		
-			this.saveReactionPairData(rpr.getId(), rpr.getName(), rpr.getSource(), rpr.getType(), 
-					rpr.getEntry1().getId(), rpr.getEntry2().getId());
-			this.saveReactionPairReactions( rpr.getId(), rpr.getReactions());
-			this.saveReactionPairRelatedPairs( rpr.getId(), rpr.getRelatedPairs());
+			this.saveReactionPairData(rpr.getEntry(), rpr.getName(), rpr.getSource(), rpr.getType(), 
+					rpr.getEntry1().getEntry(), rpr.getEntry2().getEntry());
+			this.saveReactionPairReactions( rpr.getEntry(), rpr.getReactions());
+			this.saveReactionPairRelatedPairs( rpr.getEntry(), rpr.getRelatedPairs());
 			if (this.commitAfterSave) this.commit();
 		} catch (SQLException sqlEx) {
-			LOGGER.log(Level.SEVERE, "saveEnzymeInformation " + rpr.getId() + " - " + sqlEx.getMessage());
+			LOGGER.log(Level.SEVERE, "saveEnzymeInformation " + rpr.getEntry() + " - " + sqlEx.getMessage());
 		}
 	}
 
@@ -905,24 +905,24 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			PreparedStatement sqlInsertRxnProductSt = connection_.prepareStatement(sqlInsertRxnProductData);
 			for ( int i = 0; i < rxnIdList.size(); i++) {
 				GenericReaction rxn = localSource.getReactionInformation( rxnIdList.get(i));
-				sqlInsertRxnSt.setString( 1, rxn.getId());
+				sqlInsertRxnSt.setString( 1, rxn.getEntry());
 				sqlInsertRxnSt.setString( 2, rxn.getName());
 				sqlInsertRxnSt.setString( 3, rxn.getEquation());
 				sqlInsertRxnSt.setString( 4, rxn.getDescription());
 				sqlInsertRxnSt.setInt(5, rxn.isGeneric()?1:0);
 				sqlInsertRxnSt.addBatch();
 				for ( String ecnId : rxn.getEnzymes()) {
-					sqlInsertRxnEcnSt.setString( 1, rxn.getId());
+					sqlInsertRxnEcnSt.setString( 1, rxn.getEntry());
 					sqlInsertRxnEcnSt.setString( 2, ecnId);
 					sqlInsertRxnEcnSt.addBatch();
 				}
 				for ( String rprId : rxn.getRPairs()) {
-					sqlInsertRxnRPairSt.setString( 1, rxn.getId());
+					sqlInsertRxnRPairSt.setString( 1, rxn.getEntry());
 					sqlInsertRxnRPairSt.setString( 2, rprId);
 					sqlInsertRxnRPairSt.addBatch();
 				}
 				for ( String rxnSynId : rxn.getSameAs()) {
-					sqlInsertRxnSynSt.setString( 1, rxn.getId());
+					sqlInsertRxnSynSt.setString( 1, rxn.getEntry());
 					sqlInsertRxnSynSt.setString( 2, rxnSynId);
 					sqlInsertRxnSynSt.addBatch();
 				}
@@ -978,12 +978,12 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			PreparedStatement sqlInsertMetRxnSt = connection_.prepareStatement(sqlInsertMetRxnData);
 			for ( int i = 0; i < cpdIdList.size(); i++) {
 				GenericMetabolite met = localSource.getMetaboliteInformation(cpdIdList.get(i));
-				sqlInsertMetSt.setString( 1, met.getId());
+				sqlInsertMetSt.setString( 1, met.getEntry());
 				sqlInsertMetSt.setString( 2, met.getName());
 				sqlInsertMetSt.setString( 3, met.getFormula());
 				sqlInsertMetSt.addBatch();
 				for ( String rxnId : met.getReactionIdSet()) {
-					sqlInsertMetRxnSt.setString( 1, met.getId());
+					sqlInsertMetRxnSt.setString( 1, met.getEntry());
 					sqlInsertMetRxnSt.setString( 2, rxnId);
 					sqlInsertMetRxnSt.addBatch();
 				}
@@ -1022,19 +1022,19 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			PreparedStatement sqlInsertRPairRelSt = connection_.prepareStatement(sqlInsertRPairRelData);
 			for ( int i = 0; i < rprIdList.size(); i++) {
 				GenericReactionPair rpr = localSource.getPairInformation( rprIdList.get(i));
-				sqlInsertRPairSt.setString( 1, rpr.getId());
+				sqlInsertRPairSt.setString( 1, rpr.getEntry());
 				sqlInsertRPairSt.setString( 2, rpr.getName());
-				sqlInsertRPairSt.setString( 3, rpr.getEntry1().getId());
-				sqlInsertRPairSt.setString( 4, rpr.getEntry2().getId());
+				sqlInsertRPairSt.setString( 3, rpr.getEntry1().getEntry());
+				sqlInsertRPairSt.setString( 4, rpr.getEntry2().getEntry());
 				sqlInsertRPairSt.setString( 5, rpr.getType());
 				sqlInsertRPairSt.addBatch();
 				for ( String rxnId : rpr.getReactions()) {
-					sqlInsertRPairRxnSt.setString( 1, rpr.getId());
+					sqlInsertRPairRxnSt.setString( 1, rpr.getEntry());
 					sqlInsertRPairRxnSt.setString( 2, rxnId);
 					sqlInsertRPairRxnSt.addBatch();
 				}
 				for ( String rprId : rpr.getRelatedPairs()) {
-					sqlInsertRPairRelSt.setString( 1, rpr.getId());
+					sqlInsertRPairRelSt.setString( 1, rpr.getEntry());
 					sqlInsertRPairRelSt.setString( 2, rprId);
 					sqlInsertRPairRelSt.addBatch();
 				}

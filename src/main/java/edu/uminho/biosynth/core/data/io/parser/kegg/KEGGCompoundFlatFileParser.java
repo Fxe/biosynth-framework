@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.uminho.biosynth.core.data.io.parser.ICompoundParser;
+import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
-public class KEGGCompoundFlatFileParser extends AbstractKEGGFlatFileParser implements ICompoundParser {
+public class KEGGCompoundFlatFileParser extends AbstractKEGGFlatFileParser implements IGenericMetaboliteParser {
 
 	public KEGGCompoundFlatFileParser(String flatfile) {
 		super(flatfile);

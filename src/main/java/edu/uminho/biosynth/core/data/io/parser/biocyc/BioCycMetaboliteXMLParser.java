@@ -9,9 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uminho.biosynth.core.data.io.parser.ICompoundParser;
+import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
-public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implements ICompoundParser {
+public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implements IGenericMetaboliteParser {
 
 	private final static Logger LOGGER = Logger.getLogger(BioCycMetaboliteXMLParser.class.getName());
 	

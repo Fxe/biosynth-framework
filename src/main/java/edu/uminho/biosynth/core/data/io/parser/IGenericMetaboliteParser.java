@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.data.io.parser;
 
 import java.util.Set;
 
-public interface ICompoundParser {
+public interface IGenericMetaboliteParser {
 
 	public String getEntry();
 	public String getName();

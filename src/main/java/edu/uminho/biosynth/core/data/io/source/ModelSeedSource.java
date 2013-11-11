@@ -98,7 +98,7 @@ public class ModelSeedSource implements ISource {
 				SeedMetabolite cpd = new SeedMetabolite(data[0], data[1], data[2], mass);
 				cpd.setKeggMaps(data[4]);
 				cpd.setKeggRef(data[5]);
-				this.cpdMap.put(cpd.getId(), cpd);
+				this.cpdMap.put(cpd.getEntry(), cpd);
 				
 				LOGGER.log(Level.INFO, "Successfully added: " + cpd + " " + cpd.getKeggRef());
 			}

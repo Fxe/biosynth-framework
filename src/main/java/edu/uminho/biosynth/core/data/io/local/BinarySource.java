@@ -32,12 +32,6 @@ public class BinarySource implements ILocalSource {
 	public BinarySource(String datapath) {
 		this.datapath_ = datapath;
 	}
-	
-	@Deprecated
-	public TreeSet<String> getCompoundReactions(String cpID) {
-		TreeSet<String> set = new TreeSet<String> (this.storedCompounds_.get(cpID).getReactionIdSet());
-		return set;
-	}
 
 	@Override
 	public GenericReaction getReactionInformation(String rcID) {
@@ -151,17 +145,17 @@ if ( VERBOSE) System.out.println( "File (" + datapath_ + ") Not Found - Empty Fi
 
 	@Override
 	public void saveCompoundInformation(GenericMetabolite cInfo) {
-		this.storedCompounds_.put( cInfo.getId(), cInfo);
+		this.storedCompounds_.put( cInfo.getEntry(), cInfo);
 	}
 
 	@Override
 	public void saveReactionInformation(GenericReaction rInfo) {
-		this.storedReactions_.put( rInfo.getId(), rInfo);
+		this.storedReactions_.put( rInfo.getEntry(), rInfo);
 	}
 
 	@Override
 	public void saveEnzymeInformation(GenericEnzyme eInfo) {
-		this.storedEnzymes_.put( eInfo.getId(), eInfo);
+		this.storedEnzymes_.put( eInfo.getEntry(), eInfo);
 	}
 
 	@Override
@@ -192,7 +186,7 @@ if ( VERBOSE) System.out.println( "File (" + datapath_ + ") Not Found - Empty Fi
 
 	@Override
 	public void savePairInformation(GenericReactionPair rpInfo) {
-		this.storedReactionPair_.put(rpInfo.getId(), rpInfo);
+		this.storedReactionPair_.put(rpInfo.getEntry(), rpInfo);
 	}
 
 	@Override
@@ -211,18 +205,18 @@ if ( VERBOSE) System.out.println( "File (" + datapath_ + ") Not Found - Empty Fi
 
 	@Override
 	public void addMetatagToReaction(String rxnId, String metatag) {
-		this.storedReactions_.get(rxnId).addMetatag(metatag);
+//		this.storedReactions_.get(rxnId).addMetatag(metatag);
 	}
 
 	@Override
 	public void addMetatagsToReaction(String rxnId, Set<String> metatags) {
-		this.storedReactions_.get(rxnId).addMetatags(metatags);
+//		this.storedReactions_.get(rxnId).addMetatags(metatags);
 	}
 
 	@Override
 	public void addMetatagsToReactions(Map<String, Set<String>> metatags) {
 		for ( String rxnId : metatags.keySet()) {
-			this.storedReactions_.get(rxnId).addMetatags( metatags.get(rxnId));
+//			this.storedReactions_.get(rxnId).addMetatags( metatags.get(rxnId));
 		}
 	}
 	

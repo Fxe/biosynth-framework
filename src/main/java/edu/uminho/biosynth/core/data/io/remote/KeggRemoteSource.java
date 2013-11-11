@@ -10,8 +10,9 @@ import java.util.regex.Pattern;
 import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericOrganism;
-import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
+import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGCompoundFlatFileParser;
@@ -20,9 +21,9 @@ import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
 import edu.uminho.biosynth.util.EquationParser;
 
-public class KEGGRemoteSource implements IRemoteSource {
+public class KeggRemoteSource implements IRemoteSource {
 	
-	private final static Logger LOGGER = Logger.getLogger(KEGGRemoteSource.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(KeggRemoteSource.class.getName());
 
 	public static boolean VERBOSE = false;
 	private static final String SOURCE = "KEGG";
@@ -155,7 +156,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	}
 
 	@Override
-	public GenericReaction getReactionInformation(String rxnId) {
+	public KeggReactionEntity getReactionInformation(String rxnId) {
 		String flatFile = HttpRequest.get(String.format("http://rest.kegg.jp/get/%s:%s", "rn", rxnId));
 		if (flatFile == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve Reaction - " + rxnId);
@@ -163,48 +164,53 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		}
 		
 		KEGGReactionFlatFileParser parser = new KEGGReactionFlatFileParser(flatFile);
-		
-//		KeggReactionInformation rInfo = null;
-		
-//		try {
-//			rInfo = KEGGAPI.get_reaction_by_keggId( rxnId);
-//		} catch (Exception e) {
-//			LOGGER.log(Level.SEVERE, "Error Retrieve - " + rxnId + " " + e.getMessage());
-//			return null;
-//		}
-		
-		GenericReaction rxn = new GenericReaction( rxnId);
-		rxn.addEnzymes( parser.getEnzymes());
-		if ( parser.getSimilarReactions() != null) {
-			rxn.addSameAs( parser.getSimilarReactions());
-		}
-		// ALL KEGG Reactions are <=>
+		KeggReactionEntity rxn = new KeggReactionEntity();
+		rxn.setEntry(rxnId);
+		rxn.setComment(null);
+		rxn.setDefinition(null);
+		rxn.setRemark(parser.getRemark());
 		rxn.setOrientation(0);
+		rxn.setName(parser.getName());
 		
-		rxn.setName( parser.getName());
-		rxn.setEquation( parser.getEquation());
-		rxn.addSameAs( parser.getSimilarReactions());
-		rxn.addRPairs( parser.getRPair());
-		rxn.setDescription( parser.getRemark());
-		rxn.setSource(SOURCE);
-		
-		EquationParser eqp = new EquationParser( rxn.getEquation());
-		String[][] left = eqp.getLeftTriplet();
-		String[][] right = eqp.getRightTriplet();
-		rxn.setGeneric( eqp.isVariable());
-		rxn.addReactants(left);
-		rxn.addProducts(right);
-		
-		
-		GenericReaction rxn_rev = new GenericReaction( rxn);
-		rxn_rev.swap();
-		
-		rxn.setReverse(rxn_rev);
+//		EquationParser eqp = new EquationParser( rxn.getEquation());
+				
+////		KeggReactionInformation rInfo = null;
+//		
+////		try {
+////			rInfo = KEGGAPI.get_reaction_by_keggId( rxnId);
+////		} catch (Exception e) {
+////			LOGGER.log(Level.SEVERE, "Error Retrieve - " + rxnId + " " + e.getMessage());
+////			return null;
+////		}
+//		
+//		KeggReactionEntity rxn = new KeggReactionEntity();
+//		rxn.setId(rxnId);
+////		rxn.addEnzymes( parser.getEnzymes());
+////		if ( parser.getSimilarReactions() != null) {
+////			rxn.addSameAs( parser.getSimilarReactions());
+////		}
+//		// ALL KEGG Reactions are <=>
+//		rxn.setOrientation(0);
+//		
+//		rxn.setName( parser.getName());
+//		
+//		rxn.setEquation( parser.getEquation());
+////		rxn.addSameAs( parser.getSimilarReactions());
+////		rxn.addRPairs( parser.getRPair());
+//		rxn.setDescription( parser.getRemark());
+//		rxn.setSource(SOURCE);
+//		
+////		EquationParser eqp = new EquationParser( rxn.getEquation());
+////		String[][] left = eqp.getLeftTriplet();
+////		String[][] right = eqp.getRightTriplet();
+////		rxn.setGeneric( eqp.isVariable());
+////		rxn.addReactants(left);
+////		rxn.addProducts(right);
 		
 		return rxn;
 	}
 	@Override
-	public GenericMetabolite getMetaboliteInformation(String cpdId) {
+	public KeggMetaboliteEntity getMetaboliteInformation(String cpdId) {
 		final String db = cpdId.charAt(0) == 'C' ? "cpd" : "gl"; 
 		String flatFile = HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", db, cpdId));
 		
@@ -215,10 +221,11 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		
 		KEGGCompoundFlatFileParser parser = new KEGGCompoundFlatFileParser(flatFile);
 
-		GenericMetabolite cpd = new GenericMetabolite(cpdId);
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry(cpdId);
 		cpd.setName( parser.getName());
 		cpd.setFormula( parser.getFormula());
-		cpd.addReactions( parser.getReactions());
+//		cpd.addReactions( parser.getReactions());
 		cpd.setMetaboliteClass( parser.getMetaboliteClass());
 		cpd.setSource(SOURCE);
 

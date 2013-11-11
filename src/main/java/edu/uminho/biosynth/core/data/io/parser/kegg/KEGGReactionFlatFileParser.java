@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.uminho.biosynth.core.data.io.parser.IReactionParser;
+import edu.uminho.biosynth.core.data.io.parser.IGenericReactionParser;
 
-public class KEGGReactionFlatFileParser extends AbstractKEGGFlatFileParser implements IReactionParser {
+public class KEGGReactionFlatFileParser extends AbstractKEGGFlatFileParser implements IGenericReactionParser {
 	
 	public static boolean VERBOSE = false;
 	

@@ -14,23 +14,15 @@
 
    <!-- Assume test is the database name -->
    <property name="hibernate.connection.url">
-      jdbc:mysql://localhost/hibernate_test
+      jdbc:mysql://localhost/biosynth_test
    </property>
    <property name="hibernate.connection.username">
       root
    </property>
    <property name="hibernate.connection.password"></property>
    <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
-   <mapping class="de.fxe.MavenExample.hibernate.EmployeeEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCompoundEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCompoundStructureEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCompoundPkEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCompoundCueEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedReactionEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedReactionReagentEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedReactionCueEntity"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCrossReferenceCompound"></mapping>
-   <mapping class="de.fxe.MavenExample.seed.SeedCrossReferenceReaction"></mapping>
+
+   <mapping class="edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity"></mapping>
    
 </session-factory>
 </hibernate-configuration>

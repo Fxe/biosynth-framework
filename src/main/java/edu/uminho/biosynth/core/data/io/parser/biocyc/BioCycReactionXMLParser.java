@@ -12,9 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.uminho.biosynth.core.data.io.parser.IReactionParser;
+import edu.uminho.biosynth.core.data.io.parser.IGenericReactionParser;
 
-public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements IReactionParser {
+public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements IGenericReactionParser {
 
 	private final static Logger LOGGER = Logger.getLogger(BioCycReactionXMLParser.class.getName());
 	public static boolean VERBOSE = false;
