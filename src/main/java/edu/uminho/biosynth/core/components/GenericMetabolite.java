@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public class GenericMetabolite extends AbstractGenericEntity implements Serializable {
@@ -15,23 +16,23 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 	private static final long serialVersionUID = 134867731L;
 
 	@Column(name="FORMULA") protected String formula;
-	private Map<Integer, GenericReaction<?>> rxnMap = new HashMap<> ();
-	private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
+	@Transient private Map<Integer, GenericReaction<?>> rxnMap = new HashMap<> ();
+	@Transient private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
 	@Column(name="MCLASS") protected String metaboliteClass = "COMPOUND";
 	
 	public GenericMetabolite() {
 		super(null);
-		this.key = 0;
+		this.id = 0;
 	}
 	
 	public GenericMetabolite(String id) {
 		super(id);
-		this.key = 0;
+		this.id = 0;
 	}
 	
 	public GenericMetabolite(String id, int key) {
 		super(id);
-		this.key = key;
+		this.id = key;
 	}
 	
 	public void setFormula(String formula) {
@@ -83,8 +84,8 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.key).append(':');
-		sb.append( this.getId());
+		sb.append(this.id).append(':');
+		sb.append( this.getEntry());
 		return sb.toString();
 	}
 }

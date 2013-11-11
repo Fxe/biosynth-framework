@@ -16,7 +16,7 @@ public class GenericOrganism extends AbstractGenericEntity implements Serializab
 	
 	public GenericOrganism(String id) {
 		super(id);
-		this.key = 0;
+		this.id = 0;
 		this.name = "unnamed";
 		this.numberProteinsGenes = 0;
 		this.numberRnaGenes = 0;
@@ -24,7 +24,7 @@ public class GenericOrganism extends AbstractGenericEntity implements Serializab
 	
 	public GenericOrganism(String id, int key) {
 		super(id);
-		this.key = key;
+		this.id = key;
 		this.name = "unnamed";
 		this.numberProteinsGenes = 0;
 		this.numberRnaGenes = 0;

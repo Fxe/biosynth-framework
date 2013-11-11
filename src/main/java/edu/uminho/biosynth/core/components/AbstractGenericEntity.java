@@ -18,15 +18,15 @@ public abstract class AbstractGenericEntity implements Serializable {
 	@Id
     @Column(name="ID")
     @GeneratedValue
-	protected Integer key;
+	protected Integer id;
 	
-	@Column(name="ENTRY")
-	private String id;
+	@Column(name="ENTRY", unique = true)
+	private String entry;
 
-	@Column(name="NAME")
+	@Column(name="E_NAME")
 	protected String name;
 	
-	@Column(name="SOURCE")
+	@Column(name="E_SOURCE")
 	protected String source;
 	
 	@Column(name="DESCRIPTION")
@@ -38,17 +38,17 @@ public abstract class AbstractGenericEntity implements Serializable {
     @Column(name="UPDATED_AT") private DateTime updated_at;
 	
 	public AbstractGenericEntity() {
-		this.id = null;
+		this.entry = null;
 	}
-	public AbstractGenericEntity(String id) {
-		this.id = id;
+	public AbstractGenericEntity(String entry) {
+		this.entry = entry;
 	}
 	
-	public String getId() {
-		return id;
+	public String getEntry() {
+		return entry;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setEntry(String entry) {
+		this.entry = entry;
 	}
 	
 	public String getDescription() {
@@ -65,11 +65,11 @@ public abstract class AbstractGenericEntity implements Serializable {
 		this.name = name;
 	}
 	
-	public int getKey() {
-		return this.key;
+	public int getId() {
+		return this.id;
 	}
-	public void setKey(int key) {
-		this.key = key;
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getSource() {

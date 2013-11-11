@@ -34,16 +34,16 @@ public class MetabolicGraph extends Graph<String, String> implements IMetabolicR
 	@Override
 	public boolean addReactionPair(GenericReactionPair rpr) {
 		DefaultBinaryEdge<String, String> edge = 
-				new DefaultBinaryEdge<String, String>( rpr.getId(), rpr.getEntry1().getId(), rpr.getEntry2().getId());
+				new DefaultBinaryEdge<String, String>( rpr.getEntry(), rpr.getEntry1().getEntry(), rpr.getEntry2().getEntry());
 		return this.addEdge(edge);
 	}
 	
 	@Override
 	public boolean addReactionPair(GenericReactionPair rpr, boolean duplicateForReverse) {
-		String id = rpr.getId();
+		String id = rpr.getEntry();
 		String normId = id + normTag;
 		DefaultBinaryEdge<String, String> edge = 
-				new DefaultBinaryEdge<String, String>( normId, rpr.getEntry1().getId(), rpr.getEntry2().getId());
+				new DefaultBinaryEdge<String, String>( normId, rpr.getEntry1().getEntry(), rpr.getEntry2().getEntry());
 		
 		if (duplicateForReverse) {
 			String reveId = id + reveTag;
@@ -61,7 +61,7 @@ public class MetabolicGraph extends Graph<String, String> implements IMetabolicR
 
 	@Override
 	public boolean addMetabolite(GenericMetabolite cpd) {
-		return this.addVertex(cpd.getId());
+		return this.addVertex(cpd.getEntry());
 	}
 
 	@Override

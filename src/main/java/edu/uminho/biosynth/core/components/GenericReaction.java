@@ -42,7 +42,7 @@ public class GenericReaction<M extends GenericMetabolite> extends AbstractGeneri
 	
 	public GenericReaction(String id) {
 		super(id);
-		this.key = 0;
+		this.id = 0;
 		this.orientation = 0;
 		this.cpdMap = new HashMap<>();
 		this.rprMap = new HashMap<>();
@@ -53,7 +53,7 @@ public class GenericReaction<M extends GenericMetabolite> extends AbstractGeneri
 	
 	public GenericReaction(String id, int key) {
 		super(id);
-		this.key = key;
+		this.id = key;
 		this.orientation = 0;
 		this.cpdMap = new HashMap<>();
 		this.rprMap = new HashMap<>();
@@ -74,8 +74,8 @@ public class GenericReaction<M extends GenericMetabolite> extends AbstractGeneri
 	
 	public String getFullDetails() {
 		StringBuilder ret = new StringBuilder();
-		ret.append("Key: ").append( this.key).append('\n');
-		ret.append("ID: ").append(this.getId()).append('\n');
+		ret.append("Key: ").append( this.id).append('\n');
+		ret.append("ID: ").append(this.getEntry()).append('\n');
 		ret.append("Name: ").append(this.name).append('\n');
 		ret.append("Equation: ").append(this.equation).append('\n');
 		ret.append("Left: ").append(this.left).append('\n');

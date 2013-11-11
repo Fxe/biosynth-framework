@@ -19,12 +19,12 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	
 	@Override
 	public boolean addMetabolite(GenericMetabolite cpd) {
-		return this.addVertice( cpd.getId());
+		return this.addVertice( cpd.getEntry());
 	}
 	
 	private ReactionEdge createEdge(GenericReaction rxn, boolean leftToRight) {
 
-		String edgeName = rxn.getId() + ( leftToRight ? normTag:reveTag);
+		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
 		
 		ReactionEdge edge = null;
 		if ( leftToRight) {
@@ -43,7 +43,7 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	}
 	@Override
 	public boolean addReaction(GenericReaction rxn, boolean duplicateForReverse) {
-		LOGGER.log(Level.INFO, "Add Reaction " + rxn.getId() + (duplicateForReverse? " WITH reverse span":" NO reverse span"));
+		LOGGER.log(Level.INFO, "Add Reaction " + rxn.getEntry() + (duplicateForReverse? " WITH reverse span":" NO reverse span"));
 		
 		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
 		ReactionEdge edge = this.createEdge(rxn, origOrientation);

@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 @Entity
-@Table(name="KEGG_COMPOUND")
+@Table(name="KEGG_METABOLITE")
 public class KeggMetaboliteEntity extends GenericMetabolite{
 	
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,7 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	@Column(name="MASS") private double mass;
 	@Column(name="MOLW") private double molWeight;
 	
-	@Column(name="COMMENT") private String comment;
+	@Column(name="K_COMMENT") private String comment;
 	@Column(name="REMARK") private String remark;
 	
 	public double getMass() {

@@ -17,7 +17,7 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	
 	public GenericReactionPair(String id) {
 		super(id);
-		this.key = 0;
+		this.id = 0;
 		this.name = "unnamed";
 		this.type = "undefined";
 		this.relatedPairs = new HashSet<String> ();
@@ -26,7 +26,7 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	
 	public GenericReactionPair(String id, String name, String type) {
 		super(id);
-		this.key = 0;
+		this.id = 0;
 		this.name = name;
 		this.type = type;
 		this.relatedPairs = new HashSet<String> ();
@@ -34,8 +34,8 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	}
 	
 	public GenericReactionPair(GenericReactionPair rpr) {
-		super(rpr.getId());
-		this.key = rpr.getKey();
+		super(rpr.getEntry());
+		this.id = rpr.getId();
 		this.name = rpr.getName();
 		this.type = rpr.getType();
 		this.relatedPairs = new HashSet<String> ( rpr.getRelatedPairs());
@@ -85,7 +85,7 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append( this.key).append(':').append( this.getId()).append('[');
+		sb.append( this.id).append(':').append( this.getEntry()).append('[');
 		sb.append( this.cpdEntry1).append("] <-> [").append( this.cpdEntry2).append(']');
 		//sb.append("RP:").append( relatedPairs).append("R:").append( reactions);
 		return sb.toString();

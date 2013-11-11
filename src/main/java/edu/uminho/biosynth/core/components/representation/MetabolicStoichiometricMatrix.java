@@ -70,7 +70,7 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 
 	@Override
 	public boolean addReaction(GenericReaction rxn) {
-		this.reactionDataMap.put(rxn.getId(), rxn);
+		this.reactionDataMap.put(rxn.getEntry(), rxn);
 //		for (GenericMetabolite cpd : rxn.getProducts()) this.addMetabolite(cpd);
 //		for (GenericMetabolite cpd : rxn.getReactants()) this.addMetabolite(cpd);
 		return true;
@@ -83,7 +83,7 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 
 	@Override
 	public boolean addMetabolite(GenericMetabolite cpd) {
-		this.metaboliteDataMap.put(cpd.getId(), cpd);
+		this.metaboliteDataMap.put(cpd.getEntry(), cpd);
 		return true;
 	}
 
