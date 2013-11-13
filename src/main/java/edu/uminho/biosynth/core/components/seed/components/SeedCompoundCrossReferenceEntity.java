@@ -10,7 +10,7 @@ import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_COMPOUND_CROSSREF")
-public class SeedCompoundCrossReferenceEntity extends GenericCrossReference{
+public class SeedCompoundCrossReferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 1L;
 

@@ -69,9 +69,9 @@ public class GenericCrossReference implements Serializable {
 		final char end = '>';
 		StringBuilder sb = new StringBuilder();
 		sb.append(ini);
-		sb.append("type:").append(type).append(sep);
-		sb.append("ref:").append(ref).append(sep);
-		sb.append("value:").append(value);
+		sb.append(type).append(sep);
+		sb.append(ref).append(sep);
+		sb.append(value);
 		sb.append(end);
 		return sb.toString();
 	}

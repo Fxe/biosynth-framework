@@ -24,13 +24,13 @@ public abstract class AbstractGenericEntity implements Serializable {
 	private String entry;
 
 	@Column(name="E_NAME")
-	protected String name;
+	protected String name = "";
 	
 	@Column(name="E_SOURCE")
 	protected String source;
 	
 	@Column(name="DESCRIPTION")
-	protected String description;
+	protected String description = "";
 	
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="CREATED_AT") private DateTime created_at;
