@@ -23,6 +23,7 @@
    <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
 
    <mapping class="edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.kegg.components.KeggMetaboliteCrossReferenceEntity"></mapping>
    
 </session-factory>
 </hibernate-configuration>

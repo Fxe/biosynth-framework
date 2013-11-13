@@ -15,7 +15,7 @@ import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
-import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGCompoundFlatFileParser;
+import edu.uminho.biosynth.core.data.io.parser.kegg.KeggCompoundFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGEnzymeFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
@@ -219,15 +219,21 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 			return null;
 		}
 		
-		KEGGCompoundFlatFileParser parser = new KEGGCompoundFlatFileParser(flatFile);
+		KeggCompoundFlatFileParser parser = new KeggCompoundFlatFileParser(flatFile);
 
 		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
 		cpd.setEntry(cpdId);
 		cpd.setName( parser.getName());
 		cpd.setFormula( parser.getFormula());
-//		cpd.addReactions( parser.getReactions());
 		cpd.setMetaboliteClass( parser.getMetaboliteClass());
+		cpd.setMass( parser.getMass());
+		cpd.setMolWeight( parser.getMolWeight());
+		cpd.setRemark( parser.getRemark());
+		cpd.setComment( parser.getComment());
 		cpd.setSource(SOURCE);
+		cpd.setCrossReferences( parser.getCrossReferences());
+		
+//		cpd.addReactions( parser.getReactions());
 
 		return cpd;
 	}

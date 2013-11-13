@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KEGGEnzymeFlatFileParser extends AbstractKEGGFlatFileParser {
+public class KEGGEnzymeFlatFileParser extends AbstractKeggFlatFileParser {
 	
 	private final String geneRegex = "(\\w+):\\s+([a-zA-Z0-9-_ ()\\.]+)?";
 	

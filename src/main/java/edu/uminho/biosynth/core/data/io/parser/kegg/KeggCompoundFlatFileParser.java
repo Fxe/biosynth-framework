@@ -1,15 +1,19 @@
 package edu.uminho.biosynth.core.data.io.parser.kegg;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.components.kegg.components.KeggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
-public class KEGGCompoundFlatFileParser extends AbstractKEGGFlatFileParser implements IGenericMetaboliteParser {
+public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser implements IGenericMetaboliteParser {
 
-	public KEGGCompoundFlatFileParser(String flatfile) {
+	public KeggCompoundFlatFileParser(String flatfile) {
 		super(flatfile);
 		
 		this.parseContent();
@@ -57,6 +61,50 @@ public class KEGGCompoundFlatFileParser extends AbstractKEGGFlatFileParser imple
 		return content;
 	}
 	
+	public double getMass() {
+		int tabIndex = this.getTabIndex("EXACT_MASS");
+		String value = this.tabContent_.get(tabIndex);
+		if (value == null) return Double.MIN_VALUE;
+		double v = Double.parseDouble(value);
+		return v;
+	}
+	
+	public double getMolWeight() {
+		int tabIndex = this.getTabIndex("MOL_WEIGHT");
+		String value = this.tabContent_.get(tabIndex);
+		if (value == null) return Double.MIN_VALUE;
+		double v = Double.parseDouble(value);
+		return v;
+	}
+	
+	@Override
+	public String getComment() {
+		int tabIndex = this.getTabIndex("COMMENT");
+		String content = this.tabContent_.get(tabIndex);
+		return content;
+	}
+	
+	@Override
+	public String getRemark() {
+		int tabIndex = this.getTabIndex("REMARK");
+		String content = this.tabContent_.get(tabIndex);
+		return content;
+	}
+	
+	public List<KeggMetaboliteCrossReferenceEntity> getCrossReferences() {
+		List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
+		int tabIndex = this.getTabIndex("DBLINKS");
+		String content = this.tabContent_.get(tabIndex);
+		String[] xrefs = content.split("\n");
+		for (int i = 0; i < xrefs.length; i++) {
+			String[] xrefPair = xrefs[i].trim().split(": ");
+			KeggMetaboliteCrossReferenceEntity xref = new KeggMetaboliteCrossReferenceEntity(
+					GenericCrossReference.Type.DATABASE, xrefPair[0], xrefPair[1]);
+			crossReferences.add(xref);
+		}
+		return crossReferences;
+	}
+	
 	@Override
 	public Set<String> getReactions() {
 		int tabIndex = this.getTabIndex("REACTION");
@@ -74,19 +122,7 @@ public class KEGGCompoundFlatFileParser extends AbstractKEGGFlatFileParser imple
 		return reactionIdSet;
 	}
 	
-	@Override
-	public String getComment() {
-		int tabIndex = this.getTabIndex("COMMENT");
-		String content = this.tabContent_.get(tabIndex);
-		return content;
-	}
-	
-	@Override
-	public String getRemark() {
-		int tabIndex = this.getTabIndex("REMARK");
-		String content = this.tabContent_.get(tabIndex);
-		return content;
-	}
+
 	
 	@Override
 	public Set<String> getSimilarity() {

@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AbstractKEGGFlatFileParser {
+public abstract class AbstractKeggFlatFileParser {
 	protected String flatfile_ = null;
 	protected HashMap<Integer, String> tabName_ = null;
 	protected HashMap<Integer, String> tabContent_ = null;
 	private final String TAB_REGEX = "\n(\\w+)\\s+";
 	private final String END_OF_FILE_DELIMITER = "///";
 	
-	public AbstractKEGGFlatFileParser( String flatfile) {
+	public AbstractKeggFlatFileParser( String flatfile) {
 		this.flatfile_ = flatfile;
 	}
 	

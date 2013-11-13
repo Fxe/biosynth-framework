@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import edu.uminho.biosynth.core.data.io.parser.IGenericReactionParser;
 
-public class KEGGReactionFlatFileParser extends AbstractKEGGFlatFileParser implements IGenericReactionParser {
+public class KEGGReactionFlatFileParser extends AbstractKeggFlatFileParser implements IGenericReactionParser {
 	
 	public static boolean VERBOSE = false;
 	

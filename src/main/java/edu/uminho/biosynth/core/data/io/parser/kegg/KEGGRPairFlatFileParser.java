@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import java.util.Arrays;
 
-public class KEGGRPairFlatFileParser extends AbstractKEGGFlatFileParser{
+public class KEGGRPairFlatFileParser extends AbstractKeggFlatFileParser{
 
 	public static boolean VERBOSE = false;
 	

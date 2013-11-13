@@ -31,16 +31,37 @@ public class TestKeggRemoteSource {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	private String keggMetaboliteEntityToString(KeggMetaboliteEntity cpd) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("ID:\t\t").append(cpd.getId()).append('\n');
+		sb.append("ENTRY:\t\t").append(cpd.getEntry()).append('\n');
+		sb.append("NAME:\t\t").append(cpd.getName()).append('\n');
+		sb.append("SOURCE:\t\t").append(cpd.getSource()).append('\n');
+		sb.append("DESCRIPTION:\t").append(cpd.getDescription()).append('\n');
+		sb.append("FORMULA:\t").append(cpd.getFormula()).append('\n');
+		sb.append("CLASS:\t\t").append(cpd.getMetaboliteClass()).append('\n');
+		sb.append("MASS:\t\t").append(cpd.getMass()).append('\n');
+		sb.append("WEIGHT:\t\t").append(cpd.getMolWeight()).append('\n');
+		sb.append("REMARK:\t\t").append(cpd.getRemark()).append('\n');
+		sb.append("COMMENT:\t").append(cpd.getComment()).append('\n');
+		sb.append("CROSSREF:\t").append(cpd.getCrossReferences());
+		return sb.toString();
+	}
 
-	@Test
+	//@Test
 	public void testGetR00001() {
 		KeggReactionEntity rxn = remote.getReactionInformation("R00001");
-		System.out.println(rxn);
+		System.out.println((rxn));
 	}
 
 	@Test
 	public void testGetC00001() {
 		KeggMetaboliteEntity cpd = remote.getMetaboliteInformation("C00001");
-		System.out.println(cpd);
+		System.out.println(keggMetaboliteEntityToString(cpd));
+		cpd = remote.getMetaboliteInformation("C00755");
+		System.out.println(keggMetaboliteEntityToString(cpd));
+		cpd = remote.getMetaboliteInformation("G00100");
+		System.out.println(keggMetaboliteEntityToString(cpd));
 	}
 }
