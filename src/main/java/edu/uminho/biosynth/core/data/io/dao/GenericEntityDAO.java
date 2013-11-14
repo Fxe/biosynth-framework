@@ -1,20 +1,31 @@
 package edu.uminho.biosynth.core.data.io.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.AbstractGenericEntity;
+public interface GenericEntityDAO {
+	
+	public <T> T find(Class<T> type, Serializable id);
+    public <T> T[] find(Class<T> type, Serializable... ids);
+    
+    public <T> T getReference(Class<T> type, Serializable id);
+    public <T> T[] getReferences(Class<T> type, Serializable... ids);
 
-public interface GenericEntityDAO<T extends AbstractGenericEntity> {
-	public void addEntity(T entity);
-	
-	public T getEntityById(int id);
-	public T getEntityByEntry(String entry);
-	
-	public boolean contains(int id);
-	public boolean contains(String entry);
-	public boolean contains(T entity);
-	
-	public void updateEntity(T entity);
-	public List<T> getAllEntities();
-	public void deleteEntity(Integer entityId);
+    public Serializable save(Object entity);
+    public Serializable[] save(Object... entities);
+
+    public boolean remove(Object entity);
+    public void remove(Object... entities);
+
+    public boolean removeById(Class<?> type, Serializable id);
+    public void removeByIds(Class<?> type, Serializable... ids);
+
+    public <T> List<T> findAll(Class<T> type);
+
+    public boolean isAttached(Object entity);
+
+    public void refresh(Object... entities);
+
+    public void flush();
+
 }

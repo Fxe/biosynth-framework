@@ -25,5 +25,12 @@
    <mapping class="edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity"></mapping>
    <mapping class="edu.uminho.biosynth.core.components.kegg.components.KeggMetaboliteCrossReferenceEntity"></mapping>
    
+   <mapping class="edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity"></mapping>
+   
+   <mapping class="edu.uminho.biosynth.core.components.mnx.MnxReactionEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity"></mapping>
 </session-factory>
 </hibernate-configuration>

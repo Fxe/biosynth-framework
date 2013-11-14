@@ -64,7 +64,7 @@ public class TestKeggMetaboliteDaoImpl {
 		cpd.setName("The metabolite; CBA; ABC;");
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		
-		keggMetaboliteDao.addEntity(cpd);
+		keggMetaboliteDao.save(cpd);
 		
 		tx.commit();
 	}
@@ -86,7 +86,7 @@ public class TestKeggMetaboliteDaoImpl {
 
 		System.out.println(maybeKeggMetaboliteEntity(keggMetaboliteDao, 1));
 		System.out.println(maybeKeggMetaboliteEntity(keggMetaboliteDao, 4));
-		System.out.println(keggMetaboliteDao.getAllEntities());
+		System.out.println(keggMetaboliteDao.findAll());
 		System.out.println(keggMetaboliteDao.contains(2));
 		
 		

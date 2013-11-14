@@ -7,7 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class KeggMetaboliteDaoImpl extends GenericEntityDaoImpl<KeggMetaboliteEntity>{
 
@@ -36,9 +36,15 @@ public class KeggMetaboliteDaoImpl extends GenericEntityDaoImpl<KeggMetaboliteEn
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<KeggMetaboliteEntity> getAllEntities() {
+	public List<KeggMetaboliteEntity> findAll() {
 		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(KeggMetaboliteEntity.class);
 		return criteria.list();
+	}
+
+	@Override
+	public void save(KeggMetaboliteEntity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
