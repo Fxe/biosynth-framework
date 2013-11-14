@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 public class HttpRequest {
 	
@@ -18,12 +18,12 @@ public class HttpRequest {
 		LOGGER.log(Level.INFO, "HttpRequest - " + url);
 		
 		
-		HttpClient client = new HttpClient();
-		HttpMethod method = new GetMethod(url);
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet httpGet = new HttpGet(url);
 		StringBuilder ret = new StringBuilder();
+		
 		try {
-			client.executeMethod(method);
-			BufferedReader buffer = new BufferedReader( new InputStreamReader( method.getResponseBodyAsStream()));
+			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));
 			String line;
 			while ( (line = buffer.readLine()) != null) {
 				ret.append(line).append('\n');
