@@ -21,7 +21,7 @@ public abstract class AbstractGenericEntity implements Serializable {
 	protected Integer id;
 	
 	@Column(name="ENTRY", unique = true)
-	private String entry;
+	protected String entry;
 
 	@Column(name="E_NAME")
 	protected String name = "";

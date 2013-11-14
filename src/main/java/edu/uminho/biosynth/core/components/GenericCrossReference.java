@@ -7,7 +7,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class GenericCrossReference implements Serializable {
 
 	private static final long serialVersionUID = 1L;

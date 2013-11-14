@@ -8,7 +8,7 @@ import edu.uminho.biosynth.core.components.GenericReaction;
 
 @Entity
 @Table(name="KEGG_REACTION")
-public class KeggReactionEntity extends GenericReaction<KeggMetaboliteEntity>{
+public class KeggReactionEntity extends GenericReaction {
 	
 	private static final long serialVersionUID = 1L;
 	

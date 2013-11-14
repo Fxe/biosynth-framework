@@ -1,30 +1,21 @@
 package edu.uminho.biosynth.core.components;
 
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
 
 @MappedSuperclass
-public class StoichiometryPair<M extends GenericMetabolite> {
+public class StoichiometryPair {
 	
     @Id
     @Column(name="ID")
     @GeneratedValue
 	private Integer id;
     
-    @Column(name="COEFFIC") protected Integer value;
-	
-	@OneToMany(mappedBy = "s", fetch = FetchType.LAZY)
-	protected M genericMetabolite;
-	
-	@ManyToOne
-	@JoinColumn(name="ID_REACTION")
-	protected GenericReaction<M> genericReaction;
+    @Column(name="COEFFIC") protected double value;
+    @Column(name="ID_METABOLITE") protected Integer cpdKey;
+    @Column(name="ENTRY_METABOLITE") protected String cpdEntry;
 
 	public Integer getId() {
 		return id;
@@ -33,26 +24,24 @@ public class StoichiometryPair<M extends GenericMetabolite> {
 		this.id = id;
 	}
 
-	public Integer getValue() {
+	public Integer getCpdKey() {
+		return cpdKey;
+	}
+	public void setCpdKey(Integer cpdKey) {
+		this.cpdKey = cpdKey;
+	}
+	
+	public String getCpdEntry() {
+		return cpdEntry;
+	}
+	public void setCpdEntry(String cpdEntry) {
+		this.cpdEntry = cpdEntry;
+	}
+	
+	public double getValue() {
 		return value;
 	}
-	public void setValue(Integer value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
-	
-	public M getGenericMetabolite() {
-		return genericMetabolite;
-	}
-	public void setGenericMetabolite(M genericMetabolite) {
-		this.genericMetabolite = genericMetabolite;
-	}
-
-	public GenericReaction<M> getGenericReaction() {
-		return genericReaction;
-	}
-	public void setGenericReaction(GenericReaction<M> genericReaction) {
-		this.genericReaction = genericReaction;
-	}
-	
-	
 }

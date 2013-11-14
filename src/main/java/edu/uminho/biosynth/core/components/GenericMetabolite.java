@@ -16,7 +16,7 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 	private static final long serialVersionUID = 134867731L;
 
 	@Column(name="FORMULA") protected String formula;
-	@Transient private Map<Integer, GenericReaction<?>> rxnMap = new HashMap<> ();
+	@Transient private Map<Integer, GenericReaction> rxnMap = new HashMap<> ();
 	@Transient private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
 	@Column(name="MCLASS") protected String metaboliteClass = "COMPOUND";
 	
@@ -42,7 +42,7 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 		return this.formula;
 	}
 	
-	public Map<Integer, GenericReaction<?>> getReactionMap() {
+	public Map<Integer, GenericReaction> getReactionMap() {
 		return this.rxnMap;
 	}
 	public Map<Integer, GenericEnzyme> getEnzymeMap() {
