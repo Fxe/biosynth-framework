@@ -2,15 +2,23 @@ package edu.uminho.biosynth.core.components.seed.components;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.StoichiometryPair;
-import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
+import edu.uminho.biosynth.core.components.seed.SeedReactionEntity;
 
 @Entity
 @Table(name="SEED_REACTION_REAGENT")
-public class SeedReactionReagentEntity extends StoichiometryPair<SeedMetaboliteEntity> {
+public class SeedReactionReagentEntity extends StoichiometryPair {
 
+	private static final long serialVersionUID = 1L;
+
+	@ManyToOne
+	@JoinColumn(name="ID_REACTION")
+	private SeedReactionEntity seedReactionEntity;
+	
 	@Column(name="IS_COFACT") private short isCofactor;
 	@Column(name="CPD_UUID") private String compound_uuid;
 	@Column(name="CMP_UUID") private String destinationCompartment_uuid;
@@ -37,18 +45,18 @@ public class SeedReactionReagentEntity extends StoichiometryPair<SeedMetaboliteE
 		this.destinationCompartment_uuid = destinationCompartment_uuid;
 	}
 	
-	public int getCoefficient() {
-		return this.value;
-	}
-	public void setCoefficient(int coefficient) {
-		this.value = coefficient;
-	}
-	
 	public short getIsTransport() {
 		return isTransport;
 	}
 	public void setIsTransport(short isTransport) {
 		this.isTransport = isTransport;
+	}
+	
+	public SeedReactionEntity getSeedReactionEntity() {
+		return seedReactionEntity;
+	}
+	public void setSeedReactionEntity(SeedReactionEntity seedReactionEntity) {
+		this.seedReactionEntity = seedReactionEntity;
 	}
 	
 	@Override

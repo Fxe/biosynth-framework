@@ -1,14 +1,18 @@
 package edu.uminho.biosynth.core.components;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class StoichiometryPair {
+public class StoichiometryPair implements Serializable{
 	
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @Column(name="ID")
     @GeneratedValue
 	private Integer id;

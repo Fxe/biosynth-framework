@@ -50,5 +50,20 @@ public class MnxMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	@Override
+	public String toString() {
+		final char sep = ',';
+		final char ini = '<';
+		final char end = '>';
+		StringBuilder sb = new StringBuilder();
+		sb.append(ini);
+		sb.append(type).append(sep);
+		sb.append(ref).append(sep);
+		sb.append(value).append(sep);
+		sb.append(evidence);
+		sb.append(end);
+		return sb.toString();
+	}
 
 }

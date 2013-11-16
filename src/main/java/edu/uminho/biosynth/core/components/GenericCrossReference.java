@@ -21,14 +21,14 @@ public class GenericCrossReference implements Serializable {
 	@Id
     @Column(name="ID")
     @GeneratedValue
-    private Integer id;
+    protected Integer id;
 	
 	@Column(name="REFTYPE")
 	@Enumerated(EnumType.STRING)
-	private Type type;
+	protected Type type;
 	
-	@Column(name="REFSOURCE") private String ref;
-	@Column(name="REFVALUE") private String value;
+	@Column(name="REFSOURCE") protected String ref;
+	@Column(name="REFVALUE") protected String value;
 	
 	public GenericCrossReference(GenericCrossReference.Type type, String reference, String value) {
 		this.type = type;

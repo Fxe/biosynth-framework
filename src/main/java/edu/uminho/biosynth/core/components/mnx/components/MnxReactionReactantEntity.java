@@ -12,6 +12,8 @@ import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
 @Table(name="MNX_REACTION_REACTANT")
 public class MnxReactionReactantEntity extends StoichiometryPair {
 
+	private static final long serialVersionUID = 1L;
+	
 	@ManyToOne
 	@JoinColumn(name="ID_REACTION")
 	private MnxReactionEntity mnxReactionEntity;
