@@ -3,8 +3,11 @@ package edu.uminho.biosynth.core.components.kegg;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -25,6 +28,11 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	
 	@OneToMany(mappedBy = "keggMetaboliteEntity")
 	private List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
+	
+	@ElementCollection
+	@CollectionTable(name="KEGG_METABOLITE_ENZYME", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@Column(name="ENZYME")
+	protected List<String> enzymes = new ArrayList<> ();
 	
 	public double getMass() {
 		return mass;
@@ -66,5 +74,11 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	public void addCrossReference(KeggMetaboliteCrossReferenceEntity crossReference) {
 		this.crossReferences.add(crossReference);
 		crossReference.setKeggMetaboliteEntity(this);
+	}
+	public List<String> getEnzymes() {
+		return enzymes;
+	}
+	public void setEnzymes(List<String> enzymes) {
+		this.enzymes = enzymes;
 	}
 }
