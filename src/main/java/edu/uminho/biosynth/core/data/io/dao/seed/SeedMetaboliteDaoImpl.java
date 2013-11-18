@@ -3,7 +3,8 @@ package edu.uminho.biosynth.core.data.io.dao.seed;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.seed.SeedMetaboliteEntity;
+import org.hibernate.criterion.Criterion;
+
 import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
 
 public class SeedMetaboliteDaoImpl implements GenericEntityDAO{
@@ -90,6 +91,18 @@ public class SeedMetaboliteDaoImpl implements GenericEntityDAO{
 	public void flush() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public <T> List<T> criteria(Class<T> type, Criterion criterion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object[]> query(String queryString) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 
 import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
 
@@ -109,6 +111,21 @@ public class GenericEntityDaoImpl implements GenericEntityDAO {
 	public void flush() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> criteria(Class<T> type, Criterion criterion) {
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(type).add(criterion);
+		
+		return criteria.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> query(String queryString) {
+		Query query = this.sessionFactory.getCurrentSession().createQuery(queryString);
+		return query.list();
 	}
 	
 	

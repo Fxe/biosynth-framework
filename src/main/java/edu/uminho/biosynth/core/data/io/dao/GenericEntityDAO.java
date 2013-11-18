@@ -3,10 +3,16 @@ package edu.uminho.biosynth.core.data.io.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
+
 public interface GenericEntityDAO {
 	
 	public <T> T find(Class<T> type, Serializable id);
     public <T> T[] find(Class<T> type, Serializable... ids);
+    
+    public <T> List<T> criteria(Class<T> type, Criterion criterion);
+    
+    public List<Object[]> query(String queryString);
     
     public <T> T getReference(Class<T> type, Serializable id);
     public <T> T[] getReferences(Class<T> type, Serializable... ids);

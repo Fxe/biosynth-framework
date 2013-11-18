@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
@@ -215,9 +214,9 @@ if ( VERBOSE) System.out.println( "File (" + datapath_ + ") Not Found - Empty Fi
 
 	@Override
 	public void addMetatagsToReactions(Map<String, Set<String>> metatags) {
-		for ( String rxnId : metatags.keySet()) {
+//		for ( String rxnId : metatags.keySet()) {
 //			this.storedReactions_.get(rxnId).addMetatags( metatags.get(rxnId));
-		}
+//		}
 	}
 	
 	
