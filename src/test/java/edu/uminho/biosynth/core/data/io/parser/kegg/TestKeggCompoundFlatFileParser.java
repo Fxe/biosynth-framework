@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 
 public class TestKeggCompoundFlatFileParser {
@@ -19,7 +20,20 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00007"));
 		
-		fail("Not yet implemented");
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry( parser.getEntry());
+		cpd.setName( parser.getName());
+		cpd.setMass( parser.getMass());
+		cpd.setMolWeight( parser.getMolWeight());
+		cpd.setFormula( parser.getFormula());
+		cpd.setRemark( parser.getRemark());
+		cpd.setComment( parser.getComment());
+		cpd.setEnzymes( parser.getEnzymes());
+		cpd.setReactions( parser.getReactions());
+		cpd.setPathways( parser.getPathways());
+		cpd.setCrossReferences( parser.getCrossReferences());
+		
+		assertEquals( 11, cpd.getPathways().size());
 	}
 	
 	@Test
@@ -27,7 +41,20 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00755"));
 
-		fail("Not yet implemented");
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry( parser.getEntry());
+		cpd.setName( parser.getName());
+		cpd.setMass( parser.getMass());
+		cpd.setMolWeight( parser.getMolWeight());
+		cpd.setFormula( parser.getFormula());
+		cpd.setRemark( parser.getRemark());
+		cpd.setComment( parser.getComment());
+		cpd.setEnzymes( parser.getEnzymes());
+		cpd.setReactions( parser.getReactions());
+		cpd.setPathways( parser.getPathways());
+		cpd.setCrossReferences( parser.getCrossReferences());
+
+		assertEquals( 7, cpd.getPathways().size());
 	}
 	
 	@Test
@@ -35,7 +62,20 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C01245"));
 
-		fail("Not yet implemented");
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry( parser.getEntry());
+		cpd.setName( parser.getName());
+		cpd.setMass( parser.getMass());
+		cpd.setMolWeight( parser.getMolWeight());
+		cpd.setFormula( parser.getFormula());
+		cpd.setRemark( parser.getRemark());
+		cpd.setComment( parser.getComment());
+		cpd.setEnzymes( parser.getEnzymes());
+		cpd.setReactions( parser.getReactions());
+		cpd.setPathways( parser.getPathways());
+		cpd.setCrossReferences( parser.getCrossReferences());
+		
+		assertEquals( "C6H15O15P3", cpd.getFormula());
 	}
 
 }

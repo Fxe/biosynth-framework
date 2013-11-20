@@ -45,6 +45,8 @@ public class TestKeggRemoteSource {
 		sb.append("WEIGHT:\t\t").append(cpd.getMolWeight()).append('\n');
 		sb.append("REMARK:\t\t").append(cpd.getRemark()).append('\n');
 		sb.append("COMMENT:\t").append(cpd.getComment()).append('\n');
+		sb.append("PATHWAYS:\t").append(cpd.getPathways()).append('\n');
+		sb.append("REACTIONS:\t").append(cpd.getReactions()).append('\n');
 		sb.append("CROSSREF:\t").append(cpd.getCrossReferences());
 		return sb.toString();
 	}
@@ -53,6 +55,14 @@ public class TestKeggRemoteSource {
 	public void testGetR00001() {
 		KeggReactionEntity rxn = remote.getReactionInformation("R00001");
 		System.out.println((rxn));
+		assertEquals(true, rxn != null);
+	}
+	
+	@Test
+	public void testGetG10608() {
+		KeggMetaboliteEntity cpd = remote.getMetaboliteInformation("G10608");
+		System.out.println(keggMetaboliteEntityToString(cpd));
+		assertEquals(true, cpd != null);
 	}
 
 	@Test
@@ -63,5 +73,6 @@ public class TestKeggRemoteSource {
 		System.out.println(keggMetaboliteEntityToString(cpd));
 		cpd = remote.getMetaboliteInformation("G00100");
 		System.out.println(keggMetaboliteEntityToString(cpd));
+		assertEquals(true, cpd != null);
 	}
 }

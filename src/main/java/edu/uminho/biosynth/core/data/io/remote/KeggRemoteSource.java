@@ -19,73 +19,24 @@ import edu.uminho.biosynth.core.data.io.parser.kegg.KeggCompoundFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGEnzymeFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
-import edu.uminho.biosynth.util.EquationParser;
 
 public class KeggRemoteSource implements IRemoteSource {
 	
 	private final static Logger LOGGER = Logger.getLogger(KeggRemoteSource.class.getName());
 
-	public static boolean VERBOSE = false;
+	public static final boolean VERBOSE = false;
 	private static final String SOURCE = "KEGG";
 	
-//	@Deprecated
-//	private String keggAPIList(String list) {
-//		String ret = null;
-//		
-////		try {
-////			ret = KeggRestful.fetch( KEGGOPERATION.LIST, list);
-////		} catch (URIException ex) { }
-//		
-//		return ret;
-//	}
-	
-//	@Deprecated
-//	private String keggAPILink(String db, String orgId) {
-//		String ret = null;
-//		
-////		try {
-////			ret = KeggRestful.fetch( KEGGOPERATION.LINK, db, orgId);
-////		} catch (URIException ex) { }
-//		
-//		return ret;
-//	}
-	
-//	@Deprecated
-//	public TreeSet<String> getCompoundReactions(String cpID) {
-//		
-//		TreeSet<String> retList = null;
-////		TreeSet<String> reactions = null;
-////		try {
-////			reactions = KEGGAPI.get_reactions_by_compounds( cpID);
-////		} catch (Exception e) {
-////			System.err.println("Error::" + e.getMessage());
-////		}
-////		
-////		
-////		if (reactions != null) {
-////			List<String> reactions_list = new ArrayList<String>( reactions);
-////			for (int i = 0; i < reactions_list.size(); i++) {
-////				String reaction_string = reactions_list.get( i);
-////				String[] reaction = reaction_string.split(":");
-////				reactions_list.set( i, reaction[1]);
-////			}
-////		
-////			retList = new TreeSet<String>( reactions_list);
-////		}
-////		
-//		
-//		return retList;
-//	}
 	@Override
 	public Set<String> getAllReactionIds() {
-		Set<String> rxnIDs = new HashSet<String>(); 
+		Set<String> rxnIds = new HashSet<String>(); 
 		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "rn")); // keggAPIList("rn");
 		String[] compound_array = flat_string.split("\n");
 		for ( int i = 0; i < compound_array.length; i++) {
 			String[] values = compound_array[i].split("\\t");
-			rxnIDs.add(values[0].substring(3));
+			rxnIds.add(values[0].substring(3));
 		}
-		return rxnIDs;
+		return rxnIds;
 	}
 	public Set<String> getAllCompoundIds(boolean includeGlycans) {
 		Set<String> cpdIDs = new HashSet<String>(); 
@@ -108,10 +59,12 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 
 		return cpdIDs;
 	}
+	
 	@Override
 	public Set<String> getAllMetabolitesIds() {
 		return getAllCompoundIds( true);
 	}
+	
 	@Override
 	public Set<String> getAllEnzymeIds() {
 		Set<String> ecnIdSet = new HashSet<String>(); 
@@ -222,18 +175,19 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		KeggCompoundFlatFileParser parser = new KeggCompoundFlatFileParser(flatFile);
 
 		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
-		cpd.setEntry(cpdId);
+		cpd.setEntry( parser.getEntry());
 		cpd.setName( parser.getName());
-		cpd.setFormula( parser.getFormula());
-		cpd.setMetaboliteClass( parser.getMetaboliteClass());
 		cpd.setMass( parser.getMass());
 		cpd.setMolWeight( parser.getMolWeight());
+		cpd.setFormula( parser.getFormula());
 		cpd.setRemark( parser.getRemark());
 		cpd.setComment( parser.getComment());
+		cpd.setEnzymes( parser.getEnzymes());
+		cpd.setReactions( parser.getReactions());
+		cpd.setPathways( parser.getPathways());
+		cpd.setMetaboliteClass( cpdId.charAt(0) == 'C' ? "COMPOUND" : "GLYCAN");
 		cpd.setSource(SOURCE);
 		cpd.setCrossReferences( parser.getCrossReferences());
-		
-//		cpd.addReactions( parser.getReactions());
 
 		return cpd;
 	}

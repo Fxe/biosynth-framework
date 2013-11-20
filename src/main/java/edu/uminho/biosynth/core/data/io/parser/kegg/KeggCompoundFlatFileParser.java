@@ -95,6 +95,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
 		int tabIndex = this.getTabIndex("DBLINKS");
 		String content = this.tabContent_.get(tabIndex);
+		if (content == null) return crossReferences;
 		String[] xrefs = content.split("\n");
 		for (int i = 0; i < xrefs.length; i++) {
 			String[] xrefPair = xrefs[i].trim().split(": ");
@@ -106,11 +107,11 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 	}
 	
 	@Override
-	public Set<String> getReactions() {
+	public List<String> getReactions() {
 		int tabIndex = this.getTabIndex("REACTION");
 		String content = this.tabContent_.get(tabIndex);
 		
-		Set<String> reactionIdSet = new HashSet<String> ();
+		List<String> reactionIdSet = new ArrayList<> ();
 		if ( content == null || content.isEmpty()) return reactionIdSet;
 		
 		Pattern reactionIdPattern = Pattern.compile( "(R[0-9]+)");
@@ -122,6 +123,19 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		return reactionIdSet;
 	}
 	
+	public List<String> getPathways() {
+		int tabIndex = this.getTabIndex("PATHWAY");
+		String content = this.tabContent_.get(tabIndex);
+		List<String> pathwayIdSet = new ArrayList<> ();
+		if ( content == null || content.isEmpty()) return pathwayIdSet;
+		Pattern reactionIdPattern = Pattern.compile( "(map[0-9]+)");
+		Matcher matcher = reactionIdPattern.matcher( content);
+		while ( matcher.find()) {
+			pathwayIdSet.add( matcher.group(1));
+		}
+		
+		return pathwayIdSet;
+	}
 
 	
 	@Override
@@ -153,12 +167,12 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 	}
 	
 	@Override
-	public Set<String> getEnzymes() {
+	public List<String> getEnzymes() {
 		int tabIndex = this.getTabIndex("ENZYME");
 		
 		String content = this.tabContent_.get(tabIndex);
 		
-		Set<String> enzymeIdSet = new HashSet<String> ();
+		List<String> enzymeIdSet = new ArrayList<String> ();
 		if ( content == null || content.isEmpty()) return enzymeIdSet;
 		
 		
@@ -169,4 +183,6 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		
 		return enzymeIdSet;
 	}
+	
+	
 }
