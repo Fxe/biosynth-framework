@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
+import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity;
 import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
@@ -43,6 +44,12 @@ public class MnxService {
 		}
 		
 		return null;
+	}
+	
+	public MnxMetaboliteEntity getMnxMetaboliteFromCrossReference(String value) {
+		int cpdId = this.dao.criteria(MnxMetaboliteCrossReferenceEntity.class, Restrictions.eq("value", value)).get(0).getMnxMetaboliteEntity().getId();
+		
+		return this.dao.find(MnxMetaboliteEntity.class, cpdId);
 	}
 	
 	public List<String> consumes(String cpdEntry) {
@@ -107,21 +114,31 @@ public class MnxService {
 	}
 	
 	public List<String> findReactionByReactantsAndProducts(List<String> reactants, List<String> products) {
-		List<String> reactionsWithNReactants = numberOfConsumersByEntry(reactants.size());
-		List<String> reactionsWithNProducts = numberOfProductsByEntry(products.size());
+		List<String> reactants_ = new ArrayList<> (reactants);
+		List<String> products_ = new ArrayList<> (products);
 		
+		List<String> reactionsWithNReactants = numberOfConsumersByEntry(reactants_.size());
+		List<String> reactionsWithNProducts = numberOfProductsByEntry(products_.size());
 		
-		List<String> consumers = consumes(reactants.remove(0));
-		for (String reactantId : reactants) {
-			consumers.retainAll( consumes(reactantId));
+		List<String> consumers = new ArrayList<> ();
+		
+		if (reactants_.size() > 0) {
+			consumers.addAll(consumes(reactants_.remove(0)));
+			for (String reactantId : reactants_) {
+				consumers.retainAll( consumes(reactantId));
+			}
 		}
 //		System.out.println(consumers);
 		consumers.retainAll(reactionsWithNReactants);
 //		System.out.println(consumers);
 		
-		List<String> producers = produces(products.remove(0));
-		for (String productId : products) {
-			producers.retainAll( produces(productId));
+		List<String> producers = new ArrayList<> ();
+		
+		if (products_.size() > 0) {
+			producers.addAll(produces(products_.remove(0)));
+			for (String productId : products_) {
+				producers.retainAll( produces(productId));
+			}
 		}
 //		System.out.println(producers);
 		producers.retainAll(reactionsWithNProducts);
