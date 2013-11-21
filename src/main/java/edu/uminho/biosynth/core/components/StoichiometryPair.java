@@ -48,4 +48,17 @@ public class StoichiometryPair implements Serializable{
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
+	@Override
+	public String toString() {
+		final char sep = ',';
+		final char ini = '<';
+		final char end = '>';
+		StringBuilder sb = new StringBuilder();
+		sb.append(ini);
+		sb.append(this.cpdEntry).append(sep);
+		sb.append(this.value).append(sep);
+		sb.append(end);
+		return sb.toString();
+	}
 }
