@@ -28,7 +28,7 @@ import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
 import edu.uminho.biosynth.optflux.parser.SbmlTransformer;
 
 public class TestModelReactionMap {
-
+	
 	private static SessionFactory sessionFactory;
 	
 	@BeforeClass
@@ -73,7 +73,8 @@ public class TestModelReactionMap {
 		System.out.println(loader.getDrainReactions());
 		for (String rxnSiD : loader.getNormalReactions()) {
 			DefaultGenericReaction rxn = loader.getReactions().get(rxnSiD);
-			System.out.println(rxn);
+			
+//			System.out.println(rxn);
 			List<String> reactants = new ArrayList<> ();
 			for (StoichiometryPair stoich : rxn.getReactant()) {
 				String biggId = transformer.normalizeMetaboliteId(stoich.getCpdEntry());
@@ -86,12 +87,14 @@ public class TestModelReactionMap {
 				String mxnEntry = service.getMnxMetaboliteFromCrossReference(biggId).getEntry();
 				products.add(mxnEntry);
 			}
-			System.out.println(reactants + " => " + products);
+//			System.out.println(reactants + " => " + products);
 			List<String> res = service.findReactionByReactantsAndProducts(reactants, products);
-			System.out.println(products + " => " + reactants);
+//			System.out.println(products + " => " + reactants);
 			res.addAll(service.findReactionByReactantsAndProducts(products, reactants));
-			System.out.println(res);
+//			System.out.println(res);
 //			break;
+			
+			System.out.println(rxnSiD + "\t" + res);
 		}
 		
 		tx.commit();
