@@ -17,19 +17,15 @@ public class KeggMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	@ManyToOne
 	@JoinColumn(name="ID_METABOLITE")
 	private KeggMetaboliteEntity keggMetaboliteEntity;
-	
-	public KeggMetaboliteCrossReferenceEntity() {
-		super(null, null, null);
-	}
-	public KeggMetaboliteCrossReferenceEntity(Type type, String reference,
-			String value) {
-		super(type, reference, value);
-	}
-	
-	public KeggMetaboliteEntity getKeggMetaboliteEntity() {
-		return keggMetaboliteEntity;
-	}
+	public KeggMetaboliteEntity getKeggMetaboliteEntity() { return keggMetaboliteEntity; }
 	public void setKeggMetaboliteEntity(KeggMetaboliteEntity keggMetaboliteEntity) {
 		this.keggMetaboliteEntity = keggMetaboliteEntity;
 	}
+	
+	public KeggMetaboliteCrossReferenceEntity() { super(null, null, null); }
+	public KeggMetaboliteCrossReferenceEntity(Type type, String reference, String value) {
+		super(type, reference, value);
+	}
+	
+
 }

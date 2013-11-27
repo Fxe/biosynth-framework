@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +37,14 @@ public class MnxReactionEntity extends GenericReaction {
 	
     @OneToMany(mappedBy = "mnxReactionEntity", cascade = CascadeType.ALL)
     private List<MnxReactionCrossReferenceEntity> crossReferences = new ArrayList<>();
+    
+	@ElementCollection
+	@CollectionTable(name="MNX_REACTION_ENZYME", joinColumns=@JoinColumn(name="ID_REACTION"))
+	@Column(name="ENZYME")
+	protected List<String> enzymes = new ArrayList<> ();
+	public List<String> getEnzymes() { return enzymes; }
+	public void addEnzyme(String enzyme) { this.enzymes.add(enzyme); }
+	public void setEnzymes(List<String> enzymes) { this.enzymes = enzymes; }
 	
 	public boolean isBalanced() {
 		return balanced;
