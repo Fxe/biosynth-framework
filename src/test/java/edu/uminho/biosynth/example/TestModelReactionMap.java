@@ -20,6 +20,8 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.DefaultGenericReaction;
 import edu.uminho.biosynth.core.components.StoichiometryPair;
+import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
+import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
@@ -56,7 +58,7 @@ public class TestModelReactionMap {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void testMetabolitePairIdentification() throws IOException {
 		File sbml = new File("./src/main/resources/SBML/iJR904.xml");
 		SbmlTransformer transformer = new DefaultSbmlTransformerImpl();
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
@@ -97,6 +99,35 @@ public class TestModelReactionMap {
 			System.out.println(rxnSiD + "\t" + res);
 		}
 		
+		tx.commit();
+	}
+	
+	@Test
+	public void testReactionCrossReferenceIdentification() throws IOException {
+		File sbml = new File("./src/main/resources/SBML/iJR904.xml");
+		SbmlTransformer transformer = new DefaultSbmlTransformerImpl();
+		ContainerLoader loader = new ContainerLoader(sbml, transformer);
+		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		MnxService service = new MnxService(dao);
+		
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
+		
+		for (String rxnMid : loader.getNormalReactions()) {
+			String biggId = transformer.normalizeReactionId(rxnMid);
+			List<MnxReactionEntity> result = service.getReactionByCrossreference(biggId);
+			if (result.size() > 1)  {			System.err.println("omg more than 1");
+			} else if ( result.size() == 0) {	System.out.println(biggId + "\t" + "RXXXXX");
+			} else {
+				StringBuilder sb = new StringBuilder(biggId + "\t");
+				MnxReactionEntity rxn = result.get(0);
+				for (MnxReactionCrossReferenceEntity xref : rxn.getCrossReferences()) {
+					if (xref.getRef().toLowerCase().equals("kegg")) {
+						sb.append(xref.getValue()).append('\t');
+					}
+				}
+				System.out.println(sb.toString());
+			}
+		}
 		tx.commit();
 	}
 

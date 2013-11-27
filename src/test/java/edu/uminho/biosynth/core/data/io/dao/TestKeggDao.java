@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class TestKeggDao {
@@ -53,7 +54,7 @@ public class TestKeggDao {
 		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
-		cpd.setEntry("C00755");
+		cpd.setEntry("T00755");
 		cpd.setName("4-Hydroxy-3-methoxy-benzaldehyde;Vanillin;Vanillaldehyde;4-Hydroxy-3-methoxybenzaldehyde");
 		cpd.setFormula("C8H8O3");
 		cpd.setMass(152.0473);
@@ -76,9 +77,32 @@ public class TestKeggDao {
 		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		KeggMetaboliteEntity cpd1 = dao.find(KeggMetaboliteEntity.class, 1);
-		KeggMetaboliteEntity cpd2 = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", "C00755")).get(0);
+		KeggMetaboliteEntity cpd2 = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", "T00755")).get(0);
 		System.out.println(cpd1.getFormula());
 		System.out.println(cpd2.getName());
+		tx.commit();
+		
+		
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testSaveReaction() {
+		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
+		KeggReactionEntity rxn = new KeggReactionEntity();
+		rxn.setEntry("R00010");
+		rxn.setName("alpha,alpha-trehalose glucohydrolase");
+		rxn.setDefinition("alpha,alpha-Trehalose + H2O <=> 2 D-Glucose");
+		rxn.setEquation("C01083 + C00001 <=> 2 C00031");
+		rxn.setRemark("Same as: R06103");
+		rxn.setComment("No comment");
+		rxn.setSource("KEGG");
+		rxn.setEnzymes(Arrays.asList(new String[] {"3.2.1.28"}));
+		rxn.setPathways(Arrays.asList(new String[] {"rn00500", "rn01100"}));
+		rxn.setRpairs(Arrays.asList(new String[] {"RP00453", "RP05679"}));
+		rxn.setOrthologies(Arrays.asList(new String[] {"K01194"}));
+		dao.save(rxn);
 		tx.commit();
 		
 		

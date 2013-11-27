@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity;
 import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
@@ -148,5 +149,15 @@ public class MnxService {
 		finalAnswer.retainAll(producers);
 		
 		return finalAnswer;
+	}
+	
+	public List<MnxReactionEntity> getReactionByCrossreference(String xrefValue) {
+		List<MnxReactionEntity> result = new ArrayList<> ();
+		List<MnxReactionCrossReferenceEntity> xrefs = this.dao.criteria(MnxReactionCrossReferenceEntity.class, Restrictions.eq("value", xrefValue));
+		for (MnxReactionCrossReferenceEntity xref: xrefs) {
+			result.add(xref.getMnxReactionEntity());
+		}
+		
+		return result;
 	}
 }
