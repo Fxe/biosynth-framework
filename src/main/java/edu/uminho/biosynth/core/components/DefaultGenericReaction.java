@@ -10,18 +10,11 @@ public class DefaultGenericReaction extends GenericReaction {
 	private List<StoichiometryPair> product = new ArrayList<> ();
 	
 	
-	public List<StoichiometryPair> getReactant() {
-		return reactant;
-	}
-	public void setReactant(List<StoichiometryPair> reactant) {
-		this.reactant = reactant;
-	}
-	public List<StoichiometryPair> getProduct() {
-		return product;
-	}
-	public void setProduct(List<StoichiometryPair> product) {
-		this.product = product;
-	}
+	public List<StoichiometryPair> getReactant() { return reactant; }
+	public void setReactant(List<StoichiometryPair> reactant) { this.reactant = reactant; }
+	
+	public List<StoichiometryPair> getProduct() { return product; }
+	public void setProduct(List<StoichiometryPair> product) { this.product = product; }
 	
 	@Override
 	public String toString() {
