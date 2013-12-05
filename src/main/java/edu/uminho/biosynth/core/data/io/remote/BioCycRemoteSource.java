@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.io.remote;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -13,9 +15,11 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import edu.uminho.biosynth.core.components.GenericEnzyme;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
+import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biocyc.BioCycReactionEntity;
+import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycEnzymeXMLParser;
@@ -82,7 +86,7 @@ public class BioCycRemoteSource implements IRemoteSource {
 	}
 
 	@Override
-	public GenericReaction getReactionInformation(String rxnId) {
+	public BioCycReactionEntity getReactionInformation(String rxnId) {
 		String pgdb = orgId;
 		String xmlDoc;
 		if (rxnId.contains(":")) {
@@ -116,21 +120,36 @@ public class BioCycRemoteSource implements IRemoteSource {
 			entry = entryPrefix + ":" + entry;
 		}
 
-		GenericReaction rxn = null;
+		BioCycReactionEntity rxn = null;
 		
 		try {
-			rxn = new GenericReaction( entry);
+			rxn = new BioCycReactionEntity();
+			rxn.setEntry( rxnId);
 			rxn.setSource( pgdb);
 			rxn.setName( parser.getName());
 			rxn.setDescription( parser.getRemark());
-			rxn.setEquation( parser.getEquation());
-			rxn.addEnzymes( parser.getEnzymes());;
-			EquationParser eqp = new EquationParser( rxn.getEquation());
+			rxn.setOrientation( parser.getOrientation());
+			rxn.setDirection( parser.getOrientationString());
+//			rxn.setEquation( parser.getEquation());
+			rxn.setEnzyme( parser.getEnzymes().iterator().next());;
+			EquationParser eqp = new EquationParser( "123456789012345");
 			String[][] left = eqp.getLeftTriplet();
 			String[][] right = eqp.getRightTriplet();
-			rxn.setGeneric( eqp.isVariable());
-			rxn.addReactants(left);
-			rxn.addProducts(right);
+//			rxn.setGeneric( eqp.isVariable());
+			for (String[] l : left) {
+				BioCycReactionLeftEntity leftPair = new BioCycReactionLeftEntity();
+				leftPair.setValue(0.00000000000);
+				leftPair.setCpdEntry("AAAAAAAAA");
+				leftPair.setBioCycReactionEntity(rxn);
+				rxn.getLeft().add(leftPair);
+			}
+			for (String[] r : right) {
+				BioCycReactionRightEntity rightPair = new BioCycReactionRightEntity();
+				rightPair.setValue(0.00000000000);
+				rightPair.setCpdEntry("AAAAAAAAA");
+				rightPair.setBioCycReactionEntity(rxn);
+				rxn.getRight().add(rightPair);
+			}
 			rxn.setOrientation( parser.getOrientation());
 
 		} catch (IllegalArgumentException e) {
@@ -141,7 +160,7 @@ public class BioCycRemoteSource implements IRemoteSource {
 		return rxn;
 	}
 	@Override
-	public GenericMetabolite getMetaboliteInformation(String cpdId) {
+	public BioCycMetaboliteEntity getMetaboliteInformation(String cpdId) {
 		String pgdb = orgId;
 		if ( !cpdId.contains(":")) {
 			pgdb = "META";
@@ -168,20 +187,22 @@ public class BioCycRemoteSource implements IRemoteSource {
 			return null;
 		}
 		if (VERBOSE) LOGGER.log(Level.INFO, url + cpdId);
-		GenericMetabolite cpd = null;
+		BioCycMetaboliteEntity cpd = null;
 		
 //			String entry = parser.getEntry();
 //			if ( this.entryPrefix.length() > 0) {
 //				entry = entryPrefix + ":" + entry;
 //			}
-		cpd = new GenericMetabolite( parser.getEntry());
+		cpd = new BioCycMetaboliteEntity();
+		cpd.setEntry( parser.getEntry());
 		cpd.setSource( pgdb);
 		cpd.setName( parser.getName());
 		cpd.setMetaboliteClass( parser.getEntityClass());
 		Set<String> rxnIdSet = new HashSet<> ();
 		for (String rxnId : parser.getReactions())
 			rxnIdSet.add(this.orgId.concat(":").concat(rxnId));
-		cpd.setReactionIdSet( rxnIdSet);
+		List<String> auxArray = new ArrayList<> (rxnIdSet);
+		cpd.setReactions(auxArray);
 		cpd.setFormula( parser.getFormula());
 		cpd.setDescription( parser.getRemark());
 		

@@ -38,6 +38,11 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 		this.base = jsRxn;
 	}
 	
+	public String getOrientationString() {
+		if ( !this.base.has("reaction-direction")) return null;
+		return this.base.getString("reaction-direction");
+	}
+	
 	public int getOrientation() {
 		try {
 			if ( !this.base.has("reaction-direction")) return 0;

@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.io.parser.biocyc;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,13 +47,13 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 		return this.base != null;
 	}
 	
-	public Set<String> getReactions() {
+	public List<String> getReactions() {
 		try {
-			Set<String> rxnIdList = null;
+			List<String> rxnIdList = null;
 			JSONArray rxnJSArray = null;
 			
 			
-			rxnIdList = new HashSet<String>();
+			rxnIdList = new ArrayList<String>();
 			
 			if (base.has("appears-in-right-side-of")) {
 				Object rightSide = base.getJSONObject("appears-in-right-side-of").get("Reaction");
@@ -195,7 +196,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 	}
 
 	@Override
-	public Set<String> getEnzymes() {
+	public List<String> getEnzymes() {
 		// TODO Auto-generated method stub
 		return null;
 	}
