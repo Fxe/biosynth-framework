@@ -16,17 +16,15 @@ public class StoichiometryPair implements Serializable{
     @Column(name="ID")
     @GeneratedValue
 	private Integer id;
-    
+	public Integer getId() { return id;}
+	public void setId(Integer id) { this.id = id;}
+	
     @Column(name="COEFFIC") protected double value;
+	public double getValue() { return value;}
+	public void setValue(double value) { this.value = value;}
+	
     @Column(name="ID_METABOLITE") protected Integer cpdKey;
     @Column(name="ENTRY_METABOLITE") protected String cpdEntry;
-
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public Integer getCpdKey() {
 		return cpdKey;
@@ -40,13 +38,6 @@ public class StoichiometryPair implements Serializable{
 	}
 	public void setCpdEntry(String cpdEntry) {
 		this.cpdEntry = cpdEntry;
-	}
-	
-	public double getValue() {
-		return value;
-	}
-	public void setValue(double value) {
-		this.value = value;
 	}
 	
 	@Override

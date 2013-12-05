@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.components.bigg;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -31,6 +32,9 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 	private List<String> compartments = new ArrayList<> ();
 	public List<String> getCompartments() { return compartments; }
 	public void setCompartments(List<String> compartments) { this.compartments = compartments; }
+	public void setCompartments(String[] compartments) { 
+		this.compartments.clear();
+		this.compartments.addAll(Arrays.asList(compartments)); }
 
 	@OneToMany(mappedBy = "biggMetaboliteEntity")
 	private List<BiggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
@@ -44,5 +48,16 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 	public void addCrossReference(BiggMetaboliteCrossReferenceEntity crossReference) {
 		this.crossReferences.add(crossReference);
 		crossReference.setBiggMetaboliteEntity(this);
+	}
+	
+	@Override
+	public String toString() {
+		final char sep = '\n';
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString()).append('\n');
+		sb.append("CHARGE:").append(this.charge).append(sep);
+		sb.append("COMPARTMENTS:").append(this.compartments).append(sep);
+		sb.append("CROSSREFERENCE:").append(this.crossReferences);
+		return sb.toString();
 	}
 }

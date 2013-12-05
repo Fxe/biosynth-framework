@@ -83,9 +83,11 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 
 	@Override
 	public String toString() {
+		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.id).append(':');
-		sb.append( this.getEntry());
+		sb.append(super.toString()).append(sep);
+		sb.append("Formula:").append(this.formula).append(sep);
+		sb.append("Class:").append(this.metaboliteClass);
 		return sb.toString();
 	}
 }
