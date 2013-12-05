@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -17,8 +19,11 @@ public abstract class AbstractGenericEntity implements Serializable {
 
 	@Id
     @Column(name="ID")
-    @GeneratedValue
+    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
+	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	protected Integer id;
+	public Integer getId() { return this.id; }
+	public void setId(Integer id) { this.id = id; }
 	
 	@Column(name="ENTRY", unique = true)
 	protected String entry;
@@ -65,13 +70,6 @@ public abstract class AbstractGenericEntity implements Serializable {
 		this.name = name;
 	}
 	
-	public int getId() {
-		return this.id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public String getSource() {
 		return source;
 	}
@@ -91,5 +89,17 @@ public abstract class AbstractGenericEntity implements Serializable {
 	}
 	public void setUpdatedAt(String modDate) {
 		this.updated_at = new DateTime(modDate);
+	}
+	
+	@Override
+	public String toString() {
+		final char sep = '\n';
+		StringBuilder sb = new StringBuilder();
+		sb.append("Id:").append(this.id).append(sep);
+		sb.append("Entry:").append(this.entry).append(sep);
+		sb.append("Name:").append(this.name).append(sep);
+		sb.append("Description:").append(this.description).append(sep);
+		sb.append("Source:").append(this.source);
+		return sb.toString();
 	}
 }

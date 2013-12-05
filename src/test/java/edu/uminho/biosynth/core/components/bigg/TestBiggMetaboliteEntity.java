@@ -43,7 +43,7 @@ public class TestBiggMetaboliteEntity {
 		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
 				GenericCrossReference.Type.MODEL, "iNJ661", "3dhq"));
 		
-		assertEquals(36436, cpd.getId());
+		assertEquals(36436, (int)cpd.getId());
 		assertEquals(9, cpd.getCrossReferences().size());
 		
 	}

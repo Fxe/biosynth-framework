@@ -17,13 +17,8 @@ public class MnxReactionProductEntity extends StoichiometryPair {
 	@ManyToOne
 	@JoinColumn(name="ID_REACTION")
 	private MnxReactionEntity mnxReactionEntity;
-
-	public MnxReactionEntity getMnxReactionEntity() {
-		return mnxReactionEntity;
-	}
-	public void setMnxReactionEntity(MnxReactionEntity mnxReactionEntity) {
-		this.mnxReactionEntity = mnxReactionEntity;
-	}
+	public MnxReactionEntity getMnxReactionEntity() { return mnxReactionEntity;}
+	public void setMnxReactionEntity(MnxReactionEntity mnxReactionEntity) { this.mnxReactionEntity = mnxReactionEntity;}
 	
 	@Override
 	public String toString() {

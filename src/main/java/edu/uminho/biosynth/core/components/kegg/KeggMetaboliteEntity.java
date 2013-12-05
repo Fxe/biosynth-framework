@@ -33,6 +33,8 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	@CollectionTable(name="KEGG_METABOLITE_REACTION", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="REACTION")
 	protected List<String> reactions = new ArrayList<> ();
+	public List<String> getReactions() { return reactions;}
+	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_METABOLITE_PATHWAY", joinColumns=@JoinColumn(name="ID_METABOLITE"))
@@ -93,12 +95,7 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 		this.enzymes = enzymes;
 	}
 	
-	public List<String> getReactions() {
-		return reactions;
-	}
-	public void setReactions(List<String> reactions) {
-		this.reactions = reactions;
-	}
+
 	
 	public List<String> getPathways() {
 		return pathways;

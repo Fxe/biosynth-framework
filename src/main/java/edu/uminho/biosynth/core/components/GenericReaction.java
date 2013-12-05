@@ -50,5 +50,17 @@ public class GenericReaction extends AbstractGenericEntity implements Serializab
 	}
 	
 	
-
+	@Override
+	public String toString() {
+		final char sep = '\n';
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString()).append(sep);
+		sb.append("Orientation:")
+			.append('(')
+			.append(this.orientation)
+			.append(')')
+			.append(' ')
+			.append(this.orientation == 0 ? "L <-> R" : (this.orientation < 0 ? "L <-- R" : "L --> R" ));
+		return sb.toString();
+	}
 }
