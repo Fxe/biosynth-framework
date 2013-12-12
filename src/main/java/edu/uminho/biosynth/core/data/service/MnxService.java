@@ -34,6 +34,12 @@ public class MnxService {
 		return null;
 	}
 	
+	public List<MnxReactionCrossReferenceEntity> getReactionCrossreferences(String db, String value) {
+		return this.dao.criteria(MnxReactionCrossReferenceEntity.class, Restrictions.and(
+				Restrictions.eq("ref", db),
+				Restrictions.eq("value", value)));
+	}
+	
 	public MnxReactionEntity getMnxReaction(int id) {
 		return this.dao.find(MnxReactionEntity.class, id);
 	}
