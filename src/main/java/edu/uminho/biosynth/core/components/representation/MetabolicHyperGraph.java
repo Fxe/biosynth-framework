@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
-import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperEdge;
+//import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperEdge;
 import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperGraph;
 import edu.uminho.biosynth.core.components.representation.basic.hypergraph.ReactionEdge;
 
@@ -22,7 +22,7 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 		return this.addVertice( cpd.getEntry());
 	}
 	
-	private ReactionEdge createEdge(GenericReaction rxn, boolean leftToRight) {
+	public ReactionEdge createEdge(GenericReaction rxn, boolean leftToRight) {
 
 		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
 		
@@ -45,8 +45,8 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	public boolean addReaction(GenericReaction rxn, boolean duplicateForReverse) {
 		LOGGER.log(Level.INFO, "Add Reaction " + rxn.getEntry() + (duplicateForReverse? " WITH reverse span":" NO reverse span"));
 		
-		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
-		ReactionEdge edge = this.createEdge(rxn, origOrientation);
+//		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
+//		ReactionEdge edge = this.createEdge(rxn, origOrientation);
 		
 //		if ( duplicateForReverse && rxn.isReversible()) {
 //			LOGGER.log(Level.INFO, "Add Reaction " + rxn.getId() + " is reversible");

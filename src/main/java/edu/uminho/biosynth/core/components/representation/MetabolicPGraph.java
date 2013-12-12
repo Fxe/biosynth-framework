@@ -1,11 +1,11 @@
 package edu.uminho.biosynth.core.components.representation;
 
-import java.util.Set;
+//import java.util.Set;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
-import edu.uminho.biosynth.core.components.representation.basic.pgraph.OperatingUnit;
+//import edu.uminho.biosynth.core.components.representation.basic.pgraph.OperatingUnit;
 import edu.uminho.biosynth.core.components.representation.basic.pgraph.ProcessGraph;
 
 public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicRepresentation {

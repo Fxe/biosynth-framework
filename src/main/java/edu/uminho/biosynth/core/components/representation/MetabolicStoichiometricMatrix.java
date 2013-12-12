@@ -12,7 +12,7 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 
 	private Map<String, GenericReaction> reactionDataMap;
 	private Map<String, GenericMetabolite> metaboliteDataMap;
-	private Map<String, Integer> reactionIndexMap;
+//	private Map<String, Integer> reactionIndexMap;
 	private Map<String, Integer> metaboliteIndexMap;
 	private boolean[] reversibility;
 	private String[] metaNames;
@@ -26,7 +26,7 @@ public class MetabolicStoichiometricMatrix implements IMetabolicRepresentation {
 	
 	public void initializeMatrix() {
 		this.metaboliteIndexMap = new HashMap<> ();
-		this.reactionIndexMap = new HashMap<> ();
+//		this.reactionIndexMap = new HashMap<> ();
 		int numReactions = reactionDataMap.size();
 		int numMetabolites = metaboliteDataMap.size();
 		reversibility = new boolean[numReactions];
