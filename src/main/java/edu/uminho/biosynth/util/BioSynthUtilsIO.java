@@ -1,30 +1,46 @@
 package edu.uminho.biosynth.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 
 public class BioSynthUtilsIO {
 	
-	public static String readFromFile(String file) {
+	public static String readFromFile(String file) throws FileNotFoundException, IOException {
 		StringBuilder sb = new StringBuilder();
-		
-		try {
-			File file_ptr = new File(file);
-			FileReader reader = new FileReader(file_ptr);
-			BufferedReader br = new BufferedReader(reader);
-			String line;
-			while ( (line = br.readLine()) != null ) {
-				sb.append(line).append('\n');
-			}
-			
-			br.close();
-			reader.close();
-		} catch (IOException fnfEx) {
-			System.err.println("FILE NOT FOUND - " + file);
+
+		File file_ptr = new File(file);
+		FileReader reader = new FileReader(file_ptr);
+		BufferedReader br = new BufferedReader(reader);
+		String line;
+		while ( (line = br.readLine()) != null ) {
+			sb.append(line).append('\n');
 		}
+		
+		br.close();
+		reader.close();
 
 		return sb.toString();
+	}
+	
+	public static void writeToFile(String data, String file) throws IOException {
+		StringReader stringReader = new StringReader(data);
+		BufferedReader bufferedReader = new BufferedReader(stringReader);
+		FileWriter fileWriter = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+            bufferedWriter.write(line);
+            bufferedWriter.newLine();
+        }
+        bufferedReader.close();
+        bufferedWriter.close();
+        fileWriter.close();
+        bufferedReader.close();
+        stringReader.close();
 	}
 }
