@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ptools-xml ptools-version='17.5' xml:base='http://BioCyc.org/getxml?META:Alcohols'>
+  <metadata>
+    <url>http://BioCyc.org/</url>
+    <service_name>getxml</service_name>
+    <query>META:Alcohols</query>
+    <num_results>1</num_results>
+    <PGDB orgid='META' version='17.5'>
+      <species datatype='string'>MetaCyc</species>
+    </PGDB>
+  </metadata>
+  <Compound ID='META:Alcohols' orgid='META' frameid='Alcohols' detail='full' class='true'>
+    <subclass>
+      <Compound resource='getxml?META:Sugar-alcohols' orgid='META' frameid='Sugar-alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Primary-Alcohols' orgid='META' frameid='Primary-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Monoterpenols' orgid='META' frameid='Monoterpenols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Short-Chain-Alcohols' orgid='META' frameid='Short-Chain-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Medium-Chain-Alcohols' orgid='META' frameid='Medium-Chain-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Cyclic-Alcohols' orgid='META' frameid='Cyclic-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Very-Long-Chain-Alcohols' orgid='META' frameid='Very-Long-Chain-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Sesquiterpenols' orgid='META' frameid='Sesquiterpenols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Amino-alcohols' orgid='META' frameid='Amino-alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Long-chain-alcohols' orgid='META' frameid='Long-chain-alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:GALACTINOL-TYPE-DISACCHARIDE-ALCOHOLS' orgid='META' frameid='GALACTINOL-TYPE-DISACCHARIDE-ALCOHOLS' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Secondary-Alcohols' orgid='META' frameid='Secondary-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Diols' orgid='META' frameid='Diols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Tertiary-Alcohols' orgid='META' frameid='Tertiary-Alcohols' class='true'/>
+    </subclass>
+    <instance>
+      <Compound resource='getxml?META:CPD-8692' orgid='META' frameid='CPD-8692'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7873' orgid='META' frameid='CPD-7873'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8723' orgid='META' frameid='CPD-8723'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8727' orgid='META' frameid='CPD-8727'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7872' orgid='META' frameid='CPD-7872'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8710' orgid='META' frameid='CPD-8710'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8709' orgid='META' frameid='CPD-8709'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8517' orgid='META' frameid='CPD-8517'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8705' orgid='META' frameid='CPD-8705'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8715' orgid='META' frameid='CPD-8715'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8706' orgid='META' frameid='CPD-8706'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7869' orgid='META' frameid='CPD-7869'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8691' orgid='META' frameid='CPD-8691'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:TRANS-2-HEXENOL' orgid='META' frameid='TRANS-2-HEXENOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8516' orgid='META' frameid='CPD-8516'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8512' orgid='META' frameid='CPD-8512'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7874' orgid='META' frameid='CPD-7874'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CIS-3-HEXENOL' orgid='META' frameid='CIS-3-HEXENOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8722' orgid='META' frameid='CPD-8722'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-13614' orgid='META' frameid='CPD-13614'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8130' orgid='META' frameid='CPD-8130'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7868' orgid='META' frameid='CPD-7868'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7845' orgid='META' frameid='CPD-7845'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7871' orgid='META' frameid='CPD-7871'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7875' orgid='META' frameid='CPD-7875'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8714' orgid='META' frameid='CPD-8714'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8726' orgid='META' frameid='CPD-8726'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7876' orgid='META' frameid='CPD-7876'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7877' orgid='META' frameid='CPD-7877'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:BENZYL-ALCOHOL' orgid='META' frameid='BENZYL-ALCOHOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7867' orgid='META' frameid='CPD-7867'/>
+    </instance>
+    <cml>
+      <molecule id='Alcohols' title='an+alcohol' formalCharge='0'>
+        <atomArray>
+          <atom id='Alcohols-atom1' elementType='O' x2='1212.0' y2='0.0'/>
+          <atom id='Alcohols-atom2' elementType='R' x2='0.0' y2='-700.0'/>
+        </atomArray>
+        <bondArray>
+          <bond id='Alcohols-bond1' atomRefs='Alcohols-atom1 Alcohols-atom2' order='1'/>
+        </bondArray>
+        <formula concise=''/>
+        <string title='smiles'>O[R]</string>
+      </molecule>
+    </cml>
+    <comment datatype='string'>&lt;a href=&quot;http://biocyc.org/META/new-image?object=Alcohols&quot;&gt;Alcohols&lt;/a&gt; are organic compounds in which the hydroxyl functional group (-OH) is bound to a carbon atom. Alcohols are classified into primary, secondary, and tertiary, based upon the number of carbon atoms connected to the carbon atom that bears the hydroxyl group. The &lt;a href=&quot;http://biocyc.org/META/new-image?object=Primary-Alcohols&quot;&gt;primary alcohols&lt;/a&gt; have general formulas RCH&lt;sub&gt;2&lt;/sub&gt;OH; &lt;a href=&quot;http://biocyc.org/META/new-image?object=Secondary-Alcohols&quot;&gt;secondary alcohols&lt;/a&gt; are RR'CHOH; and tertiary ones are RR'R&quot;COH, where R, R', and R&quot; stand for alkyl groups.
+
+Alcohols are also classified based on the length of the alkyl groups.
+
+&lt;a href=&quot;http://biocyc.org/META/new-image?object=Short-Chain-Alcohols&quot;&gt;Short-chain alcohols&lt;/a&gt; have alkyl chains of 1- 3 carbons.
+
+&lt;a href=&quot;http://biocyc.org/META/new-image?object=Medium-Chain-Alcohols&quot;&gt;Medium-chain alcohols&lt;/a&gt; have alkyl chains of 4-7 carbons.
+
+&lt;a href=&quot;http://biocyc.org/META/new-image?object=Long-chain-alcohols&quot;&gt;Long-chain alcohols&lt;/a&gt; (also known as fatty alcohols) have alkyl chains of 8-21 carbons.
+
+&lt;a href=&quot;http://biocyc.org/META/new-image?object=Very-Long-Chain-Alcohols&quot;&gt;Very long-chain alcohols&lt;/a&gt; have alkyl chains of 22 carbons or longer.</comment>
+    <dblink>
+      <dblink-db>CHEBI</dblink-db>
+      <dblink-oid>30879</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:30879</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>LIGAND-CPD</dblink-db>
+      <dblink-oid>C00069</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.genome.ad.jp/dbget-bin/www_bget?C00069</dblink-URL>
+    </dblink>
+    <n-name datatype='string'>ROH</n-name>
+    <synonym datatype='string'>an alcohol</synonym>
+    <synonym datatype='string'>alcohol</synonym>
+    <synonym datatype='string'>ROH</synonym>
+    <regulates>
+      <Regulation ID='META:REG0-10205' orgid='META' frameid='REG0-10205' detail='low'>
+        <parent>
+          <Regulation resource='getxml?META:Regulation-of-Enzyme-Activity' orgid='META' frameid='Regulation-of-Enzyme-Activity' class='true'/>
+        </parent>
+        <regulator>
+          <Compound resource='#META:Alcohols' orgid='META' frameid='Alcohols' class='true'/>
+        </regulator>
+        <regulated-entity>
+          <Enzymatic-Reaction ID='META:PEPCARBOX-ENZRXN' orgid='META' frameid='PEPCARBOX-ENZRXN' detail='low'>
+            <enzyme>
+              <Protein resource='getxml?META:PEPCARBOX-CPLX' orgid='META' frameid='PEPCARBOX-CPLX'/>
+            </enzyme>
+            <reaction>
+              <Reaction resource='getxml?META:PEPCARBOX-RXN' orgid='META' frameid='PEPCARBOX-RXN'/>
+            </reaction>
+            <synonym datatype='string'>orthophosphate:oxaloacetate carboxy-lyase (phosphorylating)</synonym>
+            <common-name datatype='string'>phosphoenolpyruvate carboxylase</common-name>
+          </Enzymatic-Reaction>
+        </regulated-entity>
+        <mode datatype='string'>+</mode>
+      </Regulation>
+    </regulates>
+    <appears-in-right-side-of>
+      <Reaction resource='getxml?META:3.2.1.139-RXN' orgid='META' frameid='3.2.1.139-RXN'/>
+      <Reaction resource='getxml?META:BETA-GLUCURONID-RXN' orgid='META' frameid='BETA-GLUCURONID-RXN'/>
+      <Reaction resource='getxml?META:ALPHA-AMINO-ACID-ESTERASE-RXN' orgid='META' frameid='ALPHA-AMINO-ACID-ESTERASE-RXN'/>
+      <Reaction resource='getxml?META:ALKAPHOSPHA-RXN' orgid='META' frameid='ALKAPHOSPHA-RXN'/>
+      <Reaction resource='getxml?META:UNSPECIFIC-MONOOXYGENASE-RXN' orgid='META' frameid='UNSPECIFIC-MONOOXYGENASE-RXN'/>
+      <Reaction resource='getxml?META:BETA-L-ARABINOSIDASE-RXN' orgid='META' frameid='BETA-L-ARABINOSIDASE-RXN'/>
+      <Reaction resource='getxml?META:3.2.1.52-RXN' orgid='META' frameid='3.2.1.52-RXN'/>
+      <Reaction resource='getxml?META:ACID-PHOSPHATASE-RXN' orgid='META' frameid='ACID-PHOSPHATASE-RXN'/>
+      <Reaction resource='getxml?META:CARBOXYLESTERASE-RXN' orgid='META' frameid='CARBOXYLESTERASE-RXN'/>
+      <Reaction resource='getxml?META:ACETYLESTERASE-RXN' orgid='META' frameid='ACETYLESTERASE-RXN'/>
+      <Reaction resource='getxml?META:RXN0-5468' orgid='META' frameid='RXN0-5468'/>
+      <Reaction resource='getxml?META:1.11.1.15-RXN' orgid='META' frameid='1.11.1.15-RXN'/>
+      <Reaction resource='getxml?META:3.2.1.149-RXN' orgid='META' frameid='3.2.1.149-RXN'/>
+      <Reaction resource='getxml?META:RXN-11819' orgid='META' frameid='RXN-11819'/>
+      <Reaction resource='getxml?META:RXN-12615' orgid='META' frameid='RXN-12615'/>
+      <Reaction resource='getxml?META:RXN-11814' orgid='META' frameid='RXN-11814'/>
+      <Reaction resource='getxml?META:GLYCPDIESTER-RXN' orgid='META' frameid='GLYCPDIESTER-RXN'/>
+      <Reaction resource='getxml?META:FUSARININE-C-ORNITHINESTERASE-RXN' orgid='META' frameid='FUSARININE-C-ORNITHINESTERASE-RXN'/>
+      <Reaction resource='getxml?META:ALPHA-L-FUCOSIDASE-RXN' orgid='META' frameid='ALPHA-L-FUCOSIDASE-RXN'/>
+      <Reaction resource='getxml?META:2-DEOXYGLUCOSIDASE-RXN' orgid='META' frameid='2-DEOXYGLUCOSIDASE-RXN'/>
+      <Reaction resource='getxml?META:6-PHOSPHO-BETA-GALACTOSIDASE-RXN' orgid='META' frameid='6-PHOSPHO-BETA-GALACTOSIDASE-RXN'/>
+    </appears-in-right-side-of>
+    <appears-in-left-side-of>
+      <Reaction resource='getxml?META:ALCOHOL-O-ACETYLTRANSFERASE-RXN' orgid='META' frameid='ALCOHOL-O-ACETYLTRANSFERASE-RXN'/>
+      <Reaction resource='getxml?META:2.3.1.152-RXN' orgid='META' frameid='2.3.1.152-RXN'/>
+      <Reaction resource='getxml?META:ALCOHOL-DEHYDROGENASE-NADPORNOP+-RXN' orgid='META' frameid='ALCOHOL-DEHYDROGENASE-NADPORNOP+-RXN'/>
+      <Reaction resource='getxml?META:ALCOHOL-DEHYDROGENASE-NADP+-RXN' orgid='META' frameid='ALCOHOL-DEHYDROGENASE-NADP+-RXN'/>
+      <Reaction resource='getxml?META:ALCOHOL-SULFOTRANSFERASE-RXN' orgid='META' frameid='ALCOHOL-SULFOTRANSFERASE-RXN'/>
+      <Reaction resource='getxml?META:R4-RXN' orgid='META' frameid='R4-RXN'/>
+    </appears-in-left-side-of>
+    <credits>
+      <revised>
+        <date datatype='date'>2012-03-08</date>
+        <Person ID='META:caspi' orgid='META' frameid='caspi' detail='full'>
+          <affiliations>
+            <Organization ID='META:SRI' orgid='META' frameid='SRI' detail='full'>
+              <abbrev-name datatype='string'>SRI International</abbrev-name>
+              <email datatype='string'>ptools-support@ai.sri.com</email>
+              <url datatype='string'>http://bioinformatics.ai.sri.com/</url>
+              <common-name datatype='string'>SRI International</common-name>
+            </Organization>
+          </affiliations>
+          <email datatype='string'>caspi@ai.sri.com</email>
+          <common-name datatype='string'>Ron Caspi</common-name>
+        </Person>
+        <Organization resource='#META:SRI' orgid='META' frameid='SRI'/>
+      </revised>
+    </credits>
+    <common-name datatype='string'>an alcohol</common-name>
+  </Compound>
+</ptools-xml>

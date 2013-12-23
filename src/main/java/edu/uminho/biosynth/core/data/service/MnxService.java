@@ -11,13 +11,13 @@ import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossRefe
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity;
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 
 public class MnxService {
 	
-	private GenericEntityDAO dao;
+	private IGenericEntityDao dao;
 	
-	public MnxService(GenericEntityDAO dao) {
+	public MnxService(IGenericEntityDao dao) {
 		this.dao = dao;
 	}
 	

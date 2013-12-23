@@ -9,10 +9,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 
-public class GenericEntityDaoImpl implements GenericEntityDAO {
+public class GenericEntityDaoImpl implements IGenericEntityDao {
 
+	
 	protected SessionFactory sessionFactory;
 	
 	public GenericEntityDaoImpl(SessionFactory sessionFactory) {

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ptools-xml ptools-version='17.5' xml:base='http://BioCyc.org/getxml?META:VANILLIN'>
+  <metadata>
+    <url>http://BioCyc.org/</url>
+    <service_name>getxml</service_name>
+    <query>META:VANILLIN</query>
+    <num_results>1</num_results>
+    <PGDB orgid='META' version='17.5'>
+      <species datatype='string'>MetaCyc</species>
+    </PGDB>
+  </metadata>
+  <Compound ID='META:VANILLIN' orgid='META' frameid='VANILLIN' detail='full'>
+    <cml>
+      <molecule id='VANILLIN' title='vanillin' formalCharge='0'>
+        <atomArray>
+          <atom id='VANILLIN-atom1' elementType='C' x2='2105.0' y2='1706.0'/>
+          <atom id='VANILLIN-atom2' elementType='C' x2='4248.0' y2='-356.0'/>
+          <atom id='VANILLIN-atom3' elementType='C' x2='4248.0' y2='469.0'/>
+          <atom id='VANILLIN-atom4' elementType='C' x2='2819.0' y2='-356.0'/>
+          <atom id='VANILLIN-atom5' elementType='C' x2='3534.0' y2='-1594.0'/>
+          <atom id='VANILLIN-atom6' elementType='C' x2='3534.0' y2='-769.0'/>
+          <atom id='VANILLIN-atom7' elementType='C' x2='3534.0' y2='881.0'/>
+          <atom id='VANILLIN-atom8' elementType='C' x2='2819.0' y2='469.0'/>
+          <atom id='VANILLIN-atom9' elementType='O' x2='2819.0' y2='-2006.0'/>
+          <atom id='VANILLIN-atom10' elementType='O' x2='3534.0' y2='1706.0'/>
+          <atom id='VANILLIN-atom11' elementType='O' x2='2105.0' y2='881.0'/>
+        </atomArray>
+        <bondArray>
+          <bond id='VANILLIN-bond1' atomRefs='VANILLIN-atom11 VANILLIN-atom8' order='1'/>
+          <bond id='VANILLIN-bond2' atomRefs='VANILLIN-atom8 VANILLIN-atom4' order='2'/>
+          <bond id='VANILLIN-bond3' atomRefs='VANILLIN-atom8 VANILLIN-atom7' order='1'/>
+          <bond id='VANILLIN-bond4' atomRefs='VANILLIN-atom4 VANILLIN-atom6' order='1'/>
+          <bond id='VANILLIN-bond5' atomRefs='VANILLIN-atom7 VANILLIN-atom10' order='1'/>
+          <bond id='VANILLIN-bond6' atomRefs='VANILLIN-atom7 VANILLIN-atom3' order='2'/>
+          <bond id='VANILLIN-bond7' atomRefs='VANILLIN-atom6 VANILLIN-atom5' order='1'/>
+          <bond id='VANILLIN-bond8' atomRefs='VANILLIN-atom6 VANILLIN-atom2' order='2'/>
+          <bond id='VANILLIN-bond9' atomRefs='VANILLIN-atom3 VANILLIN-atom2' order='1'/>
+          <bond id='VANILLIN-bond10' atomRefs='VANILLIN-atom11 VANILLIN-atom1' order='1'/>
+          <bond id='VANILLIN-bond11' atomRefs='VANILLIN-atom5 VANILLIN-atom9' order='2'/>
+        </bondArray>
+        <formula concise='C 8 H 8 O 3'/>
+        <float title='molecularWeight' units='g/mol'>152.149</float>
+        <string title='smiles'>COC1(C(=CC=C(C=O)C=1)O)</string>
+      </molecule>
+    </cml>
+    <appears-in-right-side-of>
+      <Reaction resource='getxml?META:RXN-8873' orgid='META' frameid='RXN-8873'/>
+      <Reaction resource='getxml?META:4.1.2.41-RXN' orgid='META' frameid='4.1.2.41-RXN'/>
+      <Reaction resource='getxml?META:LIGNOSTILBENE-ALPHA-BETA-DIOXYGENASE-RXN' orgid='META' frameid='LIGNOSTILBENE-ALPHA-BETA-DIOXYGENASE-RXN'/>
+      <Reaction resource='getxml?META:1.1.3.38-RXN' orgid='META' frameid='1.1.3.38-RXN'/>
+    </appears-in-right-side-of>
+    <common-name datatype='string'>vanillin</common-name>
+    <synonym datatype='string'>4-hydroxy-3-methoxybenzaldehyde</synonym>
+    <gibbs-0 datatype='float'>-64.66
+      <evidence>
+        <Evidence-Code ID='META:EV-COMP' orgid='META' frameid='EV-COMP' detail='full' class='true'>
+          <common-name datatype='string'>Inferred by computational analysis</common-name>
+          <comment datatype='string'>Inferred from computation.  The evidence for an assertion comes from a
+computational analysis.  The assertion itself might have been made
+by a person or by a computer, that is, EV-COMP does not specify whether
+manual interpretation of the computation occurred.
+
+</comment>
+        </Evidence-Code>
+        <Publication ID='META:PUB-LATENDRESSE2013' orgid='META' frameid='PUB-LATENDRESSE2013' detail='full'>
+          <author datatype='string'>Latendresse Mario</author>
+          <year datatype='integer'>2013</year>
+          <url datatype='string'>http://biocyc.org/PGDBConceptsGuide.shtml#gibbs</url>
+          <title datatype='string'>Computing Gibbs Free Energy of Compounds and Reactions in MetaCyc</title>
+          <source datatype='string'>Web</source>
+        </Publication>
+      </evidence>
+    </gibbs-0>
+    <appears-in-left-side-of>
+      <Reaction resource='getxml?META:RXN-8925' orgid='META' frameid='RXN-8925'/>
+      <Reaction resource='getxml?META:1.2.1.67-RXN' orgid='META' frameid='1.2.1.67-RXN'/>
+    </appears-in-left-side-of>
+    <inchi datatype='string'>InChI=1S/C8H8O3/c1-11-8-4-6(5-9)2-3-7(8)10/h2-5,10H,1H3</inchi>
+    <dblink>
+      <dblink-db>CHEMSPIDER</dblink-db>
+      <dblink-oid>13860434</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.chemspider.com/13860434</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>PUBCHEM</dblink-db>
+      <dblink-oid>1183</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=1183</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>CHEBI</dblink-db>
+      <dblink-oid>18346</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:18346</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>LIGAND-CPD</dblink-db>
+      <dblink-oid>C00755</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.genome.ad.jp/dbget-bin/www_bget?C00755</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>NCI</dblink-db>
+      <dblink-oid>403658</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://cactus.nci.nih.gov/ncidb2.2/?nsc=403658</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>CAS</dblink-db>
+      <dblink-oid>121-33-5</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+    </dblink>
+    <molecular-weight datatype='float' units='Daltons'>152.149</molecular-weight>
+  </Compound>
+</ptools-xml>

@@ -15,12 +15,15 @@ public class HttpRequest {
 	private final static Logger LOGGER = Logger.getLogger(HttpRequest.class.getName());
 	
 	public static String get(String url) {
+		
 		LOGGER.log(Level.INFO, "HttpRequest - " + url);
 		
-		
 		HttpClient client = HttpClientBuilder.create().build();
+
 		HttpGet httpGet = new HttpGet(url);
 		StringBuilder ret = new StringBuilder();
+		
+		
 		
 		try {
 			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));

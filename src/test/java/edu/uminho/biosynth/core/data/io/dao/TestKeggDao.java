@@ -51,7 +51,7 @@ public class TestKeggDao {
 
 	@Test
 	public void testSaveMetabolite() {
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
 		cpd.setEntry("T00755");
@@ -74,7 +74,7 @@ public class TestKeggDao {
 	
 	@Test
 	public void testLoadMetabolite() {
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		KeggMetaboliteEntity cpd1 = dao.find(KeggMetaboliteEntity.class, 1);
 		KeggMetaboliteEntity cpd2 = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", "T00755")).get(0);
@@ -88,7 +88,7 @@ public class TestKeggDao {
 	
 	@Test
 	public void testSaveReaction() {
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		KeggReactionEntity rxn = new KeggReactionEntity();
 		rxn.setEntry("R00010");

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
-public interface GenericEntityDAO {
+public interface IGenericEntityDao {
 	
 	public <T> T find(Class<T> type, Serializable id);
     public <T> T[] find(Class<T> type, Serializable... ids);

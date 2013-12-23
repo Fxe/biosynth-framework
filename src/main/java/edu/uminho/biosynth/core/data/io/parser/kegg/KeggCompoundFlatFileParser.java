@@ -77,14 +77,14 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		return v;
 	}
 	
-	@Override
+	
 	public String getComment() {
 		int tabIndex = this.getTabIndex("COMMENT");
 		String content = this.tabContent_.get(tabIndex);
 		return content;
 	}
 	
-	@Override
+	
 	public String getRemark() {
 		int tabIndex = this.getTabIndex("REMARK");
 		String content = this.tabContent_.get(tabIndex);
@@ -138,7 +138,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 	}
 
 	
-	@Override
+	
 	public Set<String> getSimilarity() {
 		Set<String> similarMetaboliteIdSet = new HashSet<String> ();
 		
@@ -166,7 +166,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		return "Error";
 	}
 	
-	@Override
+	
 	public List<String> getEnzymes() {
 		int tabIndex = this.getTabIndex("ENZYME");
 		

@@ -1,7 +1,6 @@
 package edu.uminho.biosynth.core.data.io.parser;
 
 import java.util.List;
-import java.util.Set;
 
 public interface IGenericMetaboliteParser {
 
@@ -10,8 +9,8 @@ public interface IGenericMetaboliteParser {
 	public String getFormula();
 	
 	public List<String> getReactions();
-	public String getComment();
-	public String getRemark();
-	public Set<String> getSimilarity();
-	public List<String> getEnzymes();
+//	public String getComment();
+//	public String getRemark();
+//	public Set<String> getSimilarity();
+//	public List<String> getEnzymes();
 }

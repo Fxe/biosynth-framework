@@ -22,7 +22,7 @@ import edu.uminho.biosynth.core.components.DefaultGenericReaction;
 import edu.uminho.biosynth.core.components.StoichiometryPair;
 import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
 import edu.uminho.biosynth.optflux.ContainerLoader;
@@ -62,7 +62,7 @@ public class TestModelReactionMap {
 		File sbml = new File("./src/main/resources/SBML/iJR904.xml");
 		SbmlTransformer transformer = new DefaultSbmlTransformerImpl();
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		MnxService service = new MnxService(dao);
 //		System.out.println(loader.getReactions().keySet());
 //		for (String rxnSpecieId : loader.getReactions().keySet()) {
@@ -107,7 +107,7 @@ public class TestModelReactionMap {
 		File sbml = new File("./src/main/resources/SBML/iJR904.xml");
 		SbmlTransformer transformer = new DefaultSbmlTransformerImpl();
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		MnxService service = new MnxService(dao);
 		
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();

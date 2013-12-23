@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ptools-xml ptools-version='17.5' xml:base='http://BioCyc.org/getxml?META:Aryl-Aldehyde'>
+  <metadata>
+    <url>http://BioCyc.org/</url>
+    <service_name>getxml</service_name>
+    <query>META:Aryl-Aldehyde</query>
+    <num_results>1</num_results>
+    <PGDB orgid='META' version='17.5'>
+      <species datatype='string'>MetaCyc</species>
+    </PGDB>
+  </metadata>
+  <Compound ID='META:Aryl-Aldehyde' orgid='META' frameid='Aryl-Aldehyde' detail='full' class='true'>
+    <parent>
+      <Compound resource='getxml?META:Aromatics' orgid='META' frameid='Aromatics' class='true'/>
+    </parent>
+    <instance>
+      <Compound resource='getxml?META:CPD-7616' orgid='META' frameid='CPD-7616'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8773' orgid='META' frameid='CPD-8773'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:BENZALDEHYDE' orgid='META' frameid='BENZALDEHYDE'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12426' orgid='META' frameid='CPD-12426'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CINNAMALDEHYDE' orgid='META' frameid='CINNAMALDEHYDE'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-1003' orgid='META' frameid='CPD-1003'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-7614' orgid='META' frameid='CPD-7614'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:PHENYLACETALDEHYDE' orgid='META' frameid='PHENYLACETALDEHYDE'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-8489' orgid='META' frameid='CPD-8489'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-703' orgid='META' frameid='CPD-703'/>
+    </instance>
+    <cml>
+      <molecule id='Aryl-Aldehyde' title='an+aryl+aldehyde' formalCharge='0'>
+        <atomArray>
+          <atom id='Aryl-Aldehyde-atom1' elementType='C' x2='1212.0' y2='-700.0'/>
+          <atom id='Aryl-Aldehyde-atom2' elementType='O' x2='1212.0' y2='-2100.0'/>
+          <atom id='Aryl-Aldehyde-atom3' elementType='R' x2='0.0' y2='0.0'/>
+        </atomArray>
+        <bondArray>
+          <bond id='Aryl-Aldehyde-bond1' atomRefs='Aryl-Aldehyde-atom3 Aryl-Aldehyde-atom1' order='1'/>
+          <bond id='Aryl-Aldehyde-bond2' atomRefs='Aryl-Aldehyde-atom2 Aryl-Aldehyde-atom1' order='2'/>
+        </bondArray>
+        <formula concise=''/>
+        <string title='smiles'>C(=O)[R]</string>
+      </molecule>
+    </cml>
+    <comment datatype='string'>The R group in this structure contains an aromatic ring.</comment>
+    <dblink>
+      <dblink-db>LIGAND-CPD</dblink-db>
+      <dblink-oid>C00193</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.genome.ad.jp/dbget-bin/www_bget?C00193</dblink-URL>
+    </dblink>
+    <synonym datatype='string'>an aromatic aldehyde</synonym>
+    <synonym datatype='string'>an aryl aldehyde</synonym>
+    <appears-in-right-side-of>
+      <Reaction resource='getxml?META:ARALKYLAMINE-DEHYDROGENASE-RXN' orgid='META' frameid='ARALKYLAMINE-DEHYDROGENASE-RXN'/>
+      <Reaction resource='getxml?META:ARYL-ALCOHOL-DEHYDROGENASE-RXN' orgid='META' frameid='ARYL-ALCOHOL-DEHYDROGENASE-RXN'/>
+      <Reaction resource='getxml?META:RXN-11732' orgid='META' frameid='RXN-11732'/>
+      <Reaction resource='getxml?META:ARYL-ALCOHOL-OXIDASE-RXN' orgid='META' frameid='ARYL-ALCOHOL-OXIDASE-RXN'/>
+      <Reaction resource='getxml?META:ARYL-ALCOHOL-DEHYDROGENASE-NADP+-RXN' orgid='META' frameid='ARYL-ALCOHOL-DEHYDROGENASE-NADP+-RXN'/>
+    </appears-in-right-side-of>
+    <appears-in-left-side-of>
+      <Reaction resource='getxml?META:ARYL-ALDEHYDE-OXIDASE-RXN' orgid='META' frameid='ARYL-ALDEHYDE-OXIDASE-RXN'/>
+      <Reaction resource='getxml?META:ARYL-ALDEHYDE-DEHYDROGENASE-NADP+-RXN' orgid='META' frameid='ARYL-ALDEHYDE-DEHYDROGENASE-NADP+-RXN'/>
+      <Reaction resource='getxml?META:ARYL-ALDEHYDE-DEHYDROGENASE-RXN' orgid='META' frameid='ARYL-ALDEHYDE-DEHYDROGENASE-RXN'/>
+    </appears-in-left-side-of>
+    <common-name datatype='string'>an aryl aldehyde</common-name>
+  </Compound>
+</ptools-xml>

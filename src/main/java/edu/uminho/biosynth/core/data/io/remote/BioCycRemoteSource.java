@@ -1,5 +1,8 @@
 package edu.uminho.biosynth.core.data.io.remote;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +21,7 @@ import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biocyc.BioCycReactionEntity;
+import edu.uminho.biosynth.core.components.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
@@ -25,6 +29,7 @@ import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycEnzymeXMLParser;
 import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycMetaboliteXMLParser;
 import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycReactionXMLParser;
+import edu.uminho.biosynth.util.BioSynthUtilsIO;
 import edu.uminho.biosynth.util.EquationParser;
 
 public class BioCycRemoteSource implements IRemoteSource {
@@ -32,10 +37,12 @@ public class BioCycRemoteSource implements IRemoteSource {
 	private final static Logger LOGGER = Logger.getLogger(BioCycRemoteSource.class.getName());
 	
 	public static boolean VERBOSE = false;
+	public static String LOCALCACHE = null;
+	public static boolean SAVETOCACHE = false;
 	
 	public static String SRC = "BioCyc";
 	
-	private final String url = "http://biocyc.org/getxml?";
+	private final String xmlGet = "http://biocyc.org/getxml?";
 	private final String xmlquery = "http://biocyc.org/xmlquery?";
 //	private final String urlRxnGeneAPI = "http://biocyc.org/apixml?fn=genes-of-reaction&id=META:";
 	private final String urlRxnEnzymeAPI = "http://biocyc.org/apixml?fn=enzymes-of-reaction&id=%s:%s&detail=full";
@@ -91,9 +98,9 @@ public class BioCycRemoteSource implements IRemoteSource {
 		String xmlDoc;
 		if (rxnId.contains(":")) {
 			pgdb = rxnId.replaceFirst(":[^:]+", "");
-			xmlDoc = HttpRequest.get(url + String.format("id=%s", rxnId));
+			xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s", rxnId));
 		} else {
-			xmlDoc = HttpRequest.get(url + String.format("id=%s:%s", orgId, rxnId));
+			xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s:%s", orgId, rxnId));
 		}
 		
 		if ( xmlDoc == null) {
@@ -159,15 +166,43 @@ public class BioCycRemoteSource implements IRemoteSource {
 		
 		return rxn;
 	}
-	@Override
-	public BioCycMetaboliteEntity getMetaboliteInformation(String cpdId) {
-		String pgdb = orgId;
-		if ( !cpdId.contains(":")) {
-			pgdb = "META";
-			cpdId = pgdb + ":" + cpdId;
+	
+	private String getLocalOrWeb(String entityType, String biocycDatabase, String entry) throws IOException {
+		String entryXml = null;
+		
+		String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
+		if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
+		String dataFileStr = baseDirectory  + entityType + "/" + biocycDatabase + "/" + entry.replace(':', '_') + ".xml";
+		File dataFile = new File(dataFileStr);
+		
+		System.out.println(dataFile);
+		if ( !dataFile.exists()) {
+			String arg = String.format("%s:%s", biocycDatabase, entry);
+			entryXml = HttpRequest.get(xmlGet + arg);
+			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryXml, dataFileStr);
+		} else {
+			entryXml = BioSynthUtilsIO.readFromFile(dataFileStr);
 		}
 		
-		String xmlDoc = HttpRequest.get(url + cpdId);
+		return entryXml;
+	}
+	
+	@Override
+	public BioCycMetaboliteEntity getMetaboliteInformation(String cpdId) {
+//		String pgdb = orgId;
+//		if ( !cpdId.contains(":")) {
+//			pgdb = "META";
+//			cpdId = pgdb + ":" + cpdId;
+//		}
+		
+		String xmlDoc = null;
+		try {
+			xmlDoc = getLocalOrWeb("compound", orgId, cpdId);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "IO: " + e.getMessage());
+			return null;
+		}
+		
 		if ( xmlDoc == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve - " + cpdId);
 			return null;
@@ -186,25 +221,46 @@ public class BioCycRemoteSource implements IRemoteSource {
 			LOGGER.log(Level.SEVERE, "Invalid Metabolite XML - " + cpdId);
 			return null;
 		}
-		if (VERBOSE) LOGGER.log(Level.INFO, url + cpdId);
-		BioCycMetaboliteEntity cpd = null;
-		
-//			String entry = parser.getEntry();
-//			if ( this.entryPrefix.length() > 0) {
-//				entry = entryPrefix + ":" + entry;
-//			}
-		cpd = new BioCycMetaboliteEntity();
-		cpd.setEntry( parser.getEntry());
-		cpd.setSource( pgdb);
-		cpd.setName( parser.getName());
-		cpd.setMetaboliteClass( parser.getEntityClass());
-		Set<String> rxnIdSet = new HashSet<> ();
-		for (String rxnId : parser.getReactions())
-			rxnIdSet.add(this.orgId.concat(":").concat(rxnId));
-		List<String> auxArray = new ArrayList<> (rxnIdSet);
-		cpd.setReactions(auxArray);
-		cpd.setFormula( parser.getFormula());
-		cpd.setDescription( parser.getRemark());
+		if (VERBOSE) LOGGER.log(Level.INFO, xmlGet + cpdId);
+		BioCycMetaboliteEntity cpd = new BioCycMetaboliteEntity();
+
+		String source = parser.getSource();
+		String entry = parser.getEntry();
+		String metaboliteClass = parser.getEntityClass();
+		String formula = parser.getFormula();
+		String name = parser.getName();
+		String comment = parser.getComment();
+		Integer charge = parser.getCharge();
+		Double molWeight = parser.getMolWeight();
+		Double cmlMolWeight = parser.getCmlMolWeight();
+		String smiles = parser.getSmiles();
+		String inchi = parser.getInchi();
+		Double gibbs = parser.getGibbs();
+		List<BioCycMetaboliteCrossReferenceEntity> crossReferences = parser.getCrossReferences();
+		List<String> synonyms = parser.getSynonym();
+		List<String> reactions = parser.getReactions();
+		List<String> parents = parser.getParents();
+		List<String> instances = parser.getInstanses();
+		List<String> subclasses = parser.getSubclasses();
+
+		cpd.setEntry(entry);
+		cpd.setSource(source);
+		cpd.setMetaboliteClass(metaboliteClass);
+		cpd.setFormula(formula);
+		cpd.setName(name);
+		cpd.setComment(comment);
+		cpd.setCharge(charge);
+		cpd.setMolWeight(molWeight);
+		cpd.setCmlMolWeight(cmlMolWeight);
+		cpd.setSmiles(smiles);
+		cpd.setInChI(inchi);
+		cpd.setGibbs(gibbs);
+		cpd.setSynonyms(synonyms);
+		cpd.setCrossReferences(crossReferences);
+		cpd.setReactions(reactions);
+		cpd.setParents(parents);
+		cpd.setInstances(instances);
+		cpd.setSubclasses(subclasses);
 		
 		return cpd;
 	}
@@ -296,25 +352,52 @@ public class BioCycRemoteSource implements IRemoteSource {
 	public Set<String> getAllMetabolitesIds(String xmlResponse) {
 		try {
 			JSONObject jsDoc = XML.toJSONObject(xmlResponse);
-			JSONArray reactions = jsDoc.getJSONObject("ptools-xml").getJSONArray("Compound");
-			Set<String> rxnIdSet = new HashSet<String> ();
-			for (int i = 0; i < reactions.length(); i++) {
-				String entry = reactions.getJSONObject(i).getString("frameid");
-				if ( this.entryPrefix.length() > 0) {
-					entry = entryPrefix + ":" + entry;
-				}
-				rxnIdSet.add( entry);
+			JSONArray compoundJsArray = jsDoc.getJSONObject("ptools-xml").getJSONArray("Compound");
+			Set<String> cpdIdSet = new HashSet<String> ();
+			for (int i = 0; i < compoundJsArray.length(); i++) {
+				String entry = compoundJsArray.getJSONObject(i).getString("frameid");
+//				if ( this.entryPrefix.length() > 0) {
+//					entry = entryPrefix + ":" + entry;
+//				}
+				cpdIdSet.add( entry);
 			}
-			return rxnIdSet;
+			return cpdIdSet;
 		} catch (JSONException ex) {
 			LOGGER.log(Level.SEVERE, "JSONException");
 			return null;
 		}
 	}
+	
 	@Override
 	public Set<String> getAllMetabolitesIds() {
-		//String xmlResponse = HttpRequest.get(xmlquery + String.format("[x:x<-%s^^compounds]", orgId));
-		return null;
+		String xmlResponse = null;
+		
+		try {
+			if (LOCALCACHE != null) {
+				String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
+				if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
+				String queryFileStr = baseDirectory + "query/" + "compound" + ".xml";
+				File queryFile = new File(queryFileStr);
+				
+				if ( !queryFile.exists()) {
+					String arg = URLEncoder.encode(String.format("[x:x<-%s^^%ss]", "META", "compound"), "UTF-8");
+					xmlResponse = HttpRequest.get(xmlquery + arg);
+					BioSynthUtilsIO.writeToFile(xmlResponse, queryFileStr);
+				} else {
+					xmlResponse = BioSynthUtilsIO.readFromFile(queryFileStr);
+				}
+			} else {
+				String arg = URLEncoder.encode(String.format("[x:x<-%s^^%ss]", "META", "compound"), "UTF-8");
+				xmlResponse = HttpRequest.get(xmlquery + arg);
+			}
+		
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "IO: " + e.getMessage());
+		}
+		
+		if (xmlResponse == null) return null;
+		
+		return getAllMetabolitesIds(xmlResponse);
 	}
 	@Override
 	public Set<String> getAllEnzymeIds() {

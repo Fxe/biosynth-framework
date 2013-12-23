@@ -13,12 +13,12 @@ import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.core.data.io.parser.swissprot.ExPASyEnzymeFlatFileParser;
-import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
-import uk.ac.ebi.kraken.uuw.services.remoting.EntryIterator;
-import uk.ac.ebi.kraken.uuw.services.remoting.Query;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
+//import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
+//import uk.ac.ebi.kraken.uuw.services.remoting.EntryIterator;
+//import uk.ac.ebi.kraken.uuw.services.remoting.Query;
+//import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
+//import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
+//import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
 
 public class ExPASyRemoteSource implements IRemoteSource{
 
@@ -50,13 +50,13 @@ public class ExPASyRemoteSource implements IRemoteSource{
 		ecn.setName( parser.getName());
 		
 		List<String> entryList = new ArrayList<String> ( parser.getGeneEntrys());
-	    Query query = UniProtQueryBuilder.buildIDListQuery( entryList);
-	    UniProtQueryService uniProtQueryService = UniProtJAPI.factory.getUniProtQueryService();
-	    EntryIterator<UniProtEntry> entries = uniProtQueryService.getEntryIterator(query);
-		
-	    for (UniProtEntry entry : entries) {
-	    	ecn.addOrganims(entry.getNcbiTaxonomyIds().get(0).getValue() , entry.getUniProtId().toString());
-	    }
+//	    Query query = UniProtQueryBuilder.buildIDListQuery( entryList);
+//	    UniProtQueryService uniProtQueryService = UniProtJAPI.factory.getUniProtQueryService();
+//	    EntryIterator<UniProtEntry> entries = uniProtQueryService.getEntryIterator(query);
+//		
+//	    for (UniProtEntry entry : entries) {
+//	    	ecn.addOrganims(entry.getNcbiTaxonomyIds().get(0).getValue() , entry.getUniProtId().toString());
+//	    }
 		return ecn;
 	}
 	@Override

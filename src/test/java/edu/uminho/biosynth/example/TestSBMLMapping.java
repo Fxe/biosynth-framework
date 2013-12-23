@@ -26,7 +26,7 @@ import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.optflux.ContainerLoader;
 import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
@@ -1200,14 +1200,14 @@ public class TestSBMLMapping {
 		sessionFactory.getCurrentSession().close();
 	}
 	
-	private void mapToMeta(String file, GenericEntityDAO dao) throws Exception {
+	private void mapToMeta(String file, IGenericEntityDao dao) throws Exception {
 		File sbml = new File(file);
 		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
 //		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
 		
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
 		
-		System.out.println(loader.getMetaboliteSpecies());
+//		System.out.println(loader.getMetaboliteSpecies());
 
 		for (String cpdId : loader.getMetaboliteIdSet()) {
 			StringBuilder sb = new StringBuilder();
@@ -1238,14 +1238,14 @@ public class TestSBMLMapping {
 //		}
 	}
 	
-	private void mapToKegg(String file, GenericEntityDAO dao) throws Exception {
+	private void mapToKegg(String file, IGenericEntityDao dao) throws Exception {
 		File sbml = new File(file);
 		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
 //		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
 		
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
 		
-		System.out.println(loader.getMetaboliteSpecies());
+//		System.out.println(loader.getMetaboliteSpecies());
 
 		for (String cpdId : loader.getMetaboliteIdSet()) {
 			StringBuilder sb = new StringBuilder();
@@ -1291,15 +1291,15 @@ public class TestSBMLMapping {
 //			System.out.println(rxnId + "\t" + "RXXXXX" + "\tKEGG_REACTION");
 //		}
 //		
-		for (String cpdSiD : loader.getMetaboliteSpecies()) {
-			System.out.println(cpdSiD + "\t" + toKeggMap.get(transformer.normalizeMetaboliteId(cpdSiD)) + "\tKEGG_CPD");
-		}
+//		for (String cpdSiD : loader.getMetaboliteSpecies()) {
+//			System.out.println(cpdSiD + "\t" + toKeggMap.get(transformer.normalizeMetaboliteId(cpdSiD)) + "\tKEGG_CPD");
+//		}
 	}
 	
 	
 	@Test
-	public void keggToBigg() {
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+	public void keggToBigg() throws Exception {
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		String file = BioSynthUtilsIO.readFromFile("E:/kegg_rxn_id.txt");
 		String[] rxn = file.split("\n");
@@ -1338,14 +1338,14 @@ public class TestSBMLMapping {
 		File sbml = new File("./src/main/resources/sbml/iJO1366.xml");
 		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
 		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		System.out.println(loader.getMetaboliteSpecies());
+//		System.out.println(loader.getMetaboliteSpecies());
 	}
 	
 	@Test
 	public void testMapSbmlMetabolites() throws Exception {
 		biggToMnxMap = new HashMap<> ();
 		
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		List<MnxMetaboliteEntity> metabolites = dao.findAll(MnxMetaboliteEntity.class);
 		

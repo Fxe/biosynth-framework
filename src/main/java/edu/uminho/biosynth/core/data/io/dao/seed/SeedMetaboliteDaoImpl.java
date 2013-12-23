@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 
-public class SeedMetaboliteDaoImpl implements GenericEntityDAO{
+public class SeedMetaboliteDaoImpl implements IGenericEntityDao{
 
 	@Override
 	public <T> T find(Class<T> type, Serializable id) {

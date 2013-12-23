@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.example;
+package edu.uminho.biosynth.core.data.io.dao;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
@@ -15,15 +16,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.data.service.MnxService;
+import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 
-public class TestMxnService {
+public class TestBiocycDao {
 	
 	private static SessionFactory sessionFactory;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		Configuration config = new Configuration();
@@ -49,22 +49,29 @@ public class TestMxnService {
 	}
 
 	@Test
-	public void test() {
-		final String[] keggId = {"R08101", "R08105", "R08108", "R08109", "R08110"};
-		
+	public void testInsertDeleteBiocycMetaboliteDao() {
 		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
-		MnxService service = new MnxService(dao);
-		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
-		List<MnxReactionCrossReferenceEntity> res = service.getReactionCrossreferences("kegg", "R00066");
-		for (MnxReactionCrossReferenceEntity xrefKegg : res) {
-			for (MnxReactionCrossReferenceEntity rxnXref : xrefKegg.getMnxReactionEntity().getCrossReferences()) {
-				if (rxnXref.getRef().equals("metacyc")) {
-					System.out.println(rxnXref);
-				}
-			}
+		Transaction tx;
+		BioCycMetaboliteEntity cpd = null;
+		List<BioCycMetaboliteEntity> res = null;
+		tx = sessionFactory.getCurrentSession().beginTransaction();
+		
+		BioCycRemoteSource remote = new BioCycRemoteSource("META");
+		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
+		if (res.size() < 1) {
+			cpd = remote.getMetaboliteInformation("CPD-14641");
+			dao.save(cpd);
+			System.out.println(cpd);
 		}
 		tx.commit();
 		
+		tx = sessionFactory.getCurrentSession().beginTransaction();
+		
+		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
+		assertEquals(true, res.size() > 0);
+		
+		dao.remove(res.iterator().next());
+		
+		tx.commit();
 	}
-
 }

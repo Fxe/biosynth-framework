@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.GenericEntityDAO;
+import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
@@ -53,8 +53,8 @@ public class TestMapMetabolites {
 	}
 	
 	@Test
-	public void testMapMetabolites() {
-		GenericEntityDAO dao = new GenericEntityDaoImpl(sessionFactory);
+	public void testMapMetabolites() throws Exception {
+		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		
 		String rawFileString = BioSynthUtilsIO.readFromFile("./src/main/resources/MISC/iTO977_cpd.tsv");

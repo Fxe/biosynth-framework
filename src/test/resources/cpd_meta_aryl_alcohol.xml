@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ptools-xml ptools-version='17.5' xml:base='http://BioCyc.org/getxml?META:Aryl-Alcohol'>
+  <metadata>
+    <url>http://BioCyc.org/</url>
+    <service_name>getxml</service_name>
+    <query>META:Aryl-Alcohol</query>
+    <num_results>1</num_results>
+    <PGDB orgid='META' version='17.5'>
+      <species datatype='string'>MetaCyc</species>
+    </PGDB>
+  </metadata>
+  <Compound ID='META:Aryl-Alcohol' orgid='META' frameid='Aryl-Alcohol' detail='full' class='true'>
+    <parent>
+      <Compound resource='getxml?META:Aromatics' orgid='META' frameid='Aromatics' class='true'/>
+    </parent>
+    <subclass>
+      <Compound resource='getxml?META:Methylphenols' orgid='META' frameid='Methylphenols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Cardanols' orgid='META' frameid='Cardanols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:Aromatic-Primary-Alcohols' orgid='META' frameid='Aromatic-Primary-Alcohols' class='true'/>
+    </subclass>
+    <subclass>
+      <Compound resource='getxml?META:2-Alkyl-Dinitrophenol-Derivatives' orgid='META' frameid='2-Alkyl-Dinitrophenol-Derivatives' class='true'/>
+    </subclass>
+    <instance>
+      <Compound resource='getxml?META:CPD-12036' orgid='META' frameid='CPD-12036'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6626' orgid='META' frameid='CPD-6626'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-14836' orgid='META' frameid='CPD-14836'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6483' orgid='META' frameid='CPD-6483'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:4-HYDROXY-BENZYL-ALCOHOL' orgid='META' frameid='4-HYDROXY-BENZYL-ALCOHOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6602' orgid='META' frameid='CPD-6602'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-1002' orgid='META' frameid='CPD-1002'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-702' orgid='META' frameid='CPD-702'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6625' orgid='META' frameid='CPD-6625'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-14835' orgid='META' frameid='CPD-14835'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6622' orgid='META' frameid='CPD-6622'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12326' orgid='META' frameid='CPD-12326'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:PHENOL' orgid='META' frameid='PHENOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12038' orgid='META' frameid='CPD-12038'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-10888' orgid='META' frameid='CPD-10888'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-9130' orgid='META' frameid='CPD-9130'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-13113' orgid='META' frameid='CPD-13113'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-10597' orgid='META' frameid='CPD-10597'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-259' orgid='META' frameid='CPD-259'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-14703' orgid='META' frameid='CPD-14703'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12037' orgid='META' frameid='CPD-12037'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6624' orgid='META' frameid='CPD-6624'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:COUMARYL-ALCOHOL' orgid='META' frameid='COUMARYL-ALCOHOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:P-NITROPHENOL' orgid='META' frameid='P-NITROPHENOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12032' orgid='META' frameid='CPD-12032'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-6623' orgid='META' frameid='CPD-6623'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:CPD-12033' orgid='META' frameid='CPD-12033'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:2-AMINOPHENOL' orgid='META' frameid='2-AMINOPHENOL'/>
+    </instance>
+    <instance>
+      <Compound resource='getxml?META:ORCINOL-CPD' orgid='META' frameid='ORCINOL-CPD'/>
+    </instance>
+    <cml>
+      <molecule id='Aryl-Alcohol' title='a+phenol' formalCharge='0'>
+        <atomArray>
+          <atom id='Aryl-Alcohol-atom1' elementType='O' x2='1212.0' y2='0.0'/>
+          <atom id='Aryl-Alcohol-atom2' elementType='R' x2='0.0' y2='-700.0'/>
+        </atomArray>
+        <bondArray>
+          <bond id='Aryl-Alcohol-bond1' atomRefs='Aryl-Alcohol-atom1 Aryl-Alcohol-atom2' order='1'/>
+        </bondArray>
+        <formula concise=''/>
+        <string title='smiles'>O[R]</string>
+      </molecule>
+    </cml>
+    <comment datatype='string'>&lt;a href=&quot;http://biocyc.org/META/new-image?object=PHENOL&quot;&gt;Phenol&lt;/a&gt; is an organic compound consisting of a phenyl group (-C&lt;sub&gt;6&lt;/sub&gt;H&lt;sub&gt;5&lt;/sub&gt;) bonded to a hydroxyl group.
+
+The word phenol is also used to refer to any compound that contains a six-membered aromatic ring, bonded directly to a hydroxyl group (-OH). Thus, &lt;a href=&quot;http://biocyc.org/META/new-image?object=Aryl-Alcohol&quot;&gt;phenols&lt;/a&gt; are a class of organic compounds of which the &lt;a href=&quot;http://biocyc.org/META/new-image?object=PHENOL&quot;&gt;phenol compound&lt;/a&gt; is the simplest member.
+
+The R group in this structure contains a six-membered  aromatic ring.</comment>
+    <dblink>
+      <dblink-db>CHEBI</dblink-db>
+      <dblink-oid>33853</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:33853</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>KNAPSACK</dblink-db>
+      <dblink-oid>C00002664</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://kanaya.naist.jp/knapsack_jsp/information.jsp?sname=C_ID&amp;word=C00002664</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>LIGAND-CPD</dblink-db>
+      <dblink-oid>C15584</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.genome.ad.jp/dbget-bin/www_bget?C15584</dblink-URL>
+    </dblink>
+    <synonym datatype='string'>an aromatic alcohol</synonym>
+    <synonym datatype='string'>aryl alcohol</synonym>
+    <synonym datatype='string'>an aryl alcohol</synonym>
+    <appears-in-right-side-of>
+      <Reaction resource='getxml?META:ARYLDIALKYLPHOSPHATASE-RXN' orgid='META' frameid='ARYLDIALKYLPHOSPHATASE-RXN'/>
+      <Reaction resource='getxml?META:ARYLESTERASE-RXN' orgid='META' frameid='ARYLESTERASE-RXN'/>
+      <Reaction resource='getxml?META:ARYLSULFAT-RXN' orgid='META' frameid='ARYLSULFAT-RXN'/>
+      <Reaction resource='getxml?META:ARYLSULFATE-SULFOTRANSFERASE-RXN' orgid='META' frameid='ARYLSULFATE-SULFOTRANSFERASE-RXN'/>
+    </appears-in-right-side-of>
+    <appears-in-left-side-of>
+      <Reaction resource='getxml?META:ARYL-ALCOHOL-DEHYDROGENASE-RXN' orgid='META' frameid='ARYL-ALCOHOL-DEHYDROGENASE-RXN'/>
+      <Reaction resource='getxml?META:PHENOL-BETA-GLUCOSYLTRANSFERASE-RXN' orgid='META' frameid='PHENOL-BETA-GLUCOSYLTRANSFERASE-RXN'/>
+      <Reaction resource='getxml?META:ARYLSULFATE-SULFOTRANSFERASE-RXN' orgid='META' frameid='ARYLSULFATE-SULFOTRANSFERASE-RXN'/>
+      <Reaction resource='getxml?META:ARYL-SULFOTRANSFERASE-RXN' orgid='META' frameid='ARYL-SULFOTRANSFERASE-RXN'/>
+      <Reaction resource='getxml?META:ARYL-ALCOHOL-DEHYDROGENASE-NADP+-RXN' orgid='META' frameid='ARYL-ALCOHOL-DEHYDROGENASE-NADP+-RXN'/>
+    </appears-in-left-side-of>
+    <credits>
+      <revised>
+        <date datatype='date'>2012-06-14</date>
+        <Person ID='META:caspi' orgid='META' frameid='caspi' detail='full'>
+          <affiliations>
+            <Organization ID='META:SRI' orgid='META' frameid='SRI' detail='full'>
+              <abbrev-name datatype='string'>SRI International</abbrev-name>
+              <email datatype='string'>ptools-support@ai.sri.com</email>
+              <url datatype='string'>http://bioinformatics.ai.sri.com/</url>
+              <common-name datatype='string'>SRI International</common-name>
+            </Organization>
+          </affiliations>
+          <email datatype='string'>caspi@ai.sri.com</email>
+          <common-name datatype='string'>Ron Caspi</common-name>
+        </Person>
+        <Organization resource='#META:SRI' orgid='META' frameid='SRI'/>
+      </revised>
+    </credits>
+    <common-name datatype='string'>a phenol</common-name>
+  </Compound>
+</ptools-xml>
