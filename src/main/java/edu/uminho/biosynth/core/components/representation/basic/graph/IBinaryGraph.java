@@ -3,8 +3,6 @@ package edu.uminho.biosynth.core.components.representation.basic.graph;
 import java.util.Collection;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.representation.basic.IGraph;
-
 public interface IBinaryGraph<V, E> extends IGraph {
 	
 	public boolean addVertex(V vertex);

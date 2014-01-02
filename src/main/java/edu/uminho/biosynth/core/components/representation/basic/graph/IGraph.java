@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.representation.basic;
+package edu.uminho.biosynth.core.components.representation.basic.graph;
 
 
 public interface IGraph {
