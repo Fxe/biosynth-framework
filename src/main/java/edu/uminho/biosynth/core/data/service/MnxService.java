@@ -13,12 +13,10 @@ import edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEnti
 import edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 
-public class MnxService {
-	
-	private IGenericEntityDao dao;
+public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	
 	public MnxService(IGenericEntityDao dao) {
-		this.dao = dao;
+		super(dao, MnxMetaboliteEntity.class);
 	}
 	
 	public MnxMetaboliteEntity getMnxMetabolite(int id) {
@@ -166,4 +164,5 @@ public class MnxService {
 		
 		return result;
 	}
+
 }

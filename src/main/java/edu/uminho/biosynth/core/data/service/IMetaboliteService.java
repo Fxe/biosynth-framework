@@ -8,6 +8,8 @@ public interface IMetaboliteService<T extends GenericMetabolite> {
 	public T getMetaboliteByEntry(String entry);
 	public T getMetaboliteById(int id);
 	
+//	public T getMetaboliteByCrossreference
+	
 	public List<T> getAllMetabolites();
 	public int countNumberOfMetabolites();
 	
