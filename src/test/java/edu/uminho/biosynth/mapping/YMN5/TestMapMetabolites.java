@@ -90,6 +90,8 @@ private static SessionFactory sessionFactory;
 					System.err.println("NOT FOUND: " + ref + ":" + value);
 				} else {
 					MnxMetaboliteCrossReferenceEntity xref = res.get(0);
+//					sb.append(xref.getMnxMetaboliteEntity().getEntry()).append('\t');
+					
 					for (MnxMetaboliteCrossReferenceEntity xr : xref.getMnxMetaboliteEntity().getCrossReferences()) {
 						if (xr.getRef().equals("kegg")) {
 							sb.append(xr).append('\t');
