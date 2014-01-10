@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
 

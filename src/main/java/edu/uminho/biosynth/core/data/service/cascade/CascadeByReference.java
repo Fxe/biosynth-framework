@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.kegg.components.KeggMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
 import edu.uminho.biosynth.core.data.service.mapping.MapperService;
 

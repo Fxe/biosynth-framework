@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 
 public class TestBiocycRemoteSource {
 

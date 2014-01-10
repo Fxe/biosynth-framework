@@ -20,8 +20,8 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.DefaultGenericReaction;
 import edu.uminho.biosynth.core.components.StoichiometryPair;
-import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;

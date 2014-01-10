@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 
 public class TestKeggRemoteSource {
 

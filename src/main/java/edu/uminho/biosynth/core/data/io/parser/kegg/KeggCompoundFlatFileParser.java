@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
 public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser implements IGenericMetaboliteParser {

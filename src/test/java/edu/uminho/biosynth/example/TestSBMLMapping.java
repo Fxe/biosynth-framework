@@ -21,11 +21,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.kegg.KeggReactionEntity;
-import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.optflux.ContainerLoader;

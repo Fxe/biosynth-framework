@@ -19,11 +19,11 @@ import org.json.XML;
 
 import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
-import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biocyc.BioCycReactionEntity;
-import edu.uminho.biosynth.core.components.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionLeftEntity;
-import edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionRightEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycEnzymeXMLParser;

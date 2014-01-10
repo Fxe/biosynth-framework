@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
 
-import edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionProductEntity;
-import edu.uminho.biosynth.core.components.mnx.components.MnxReactionReactantEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionProductEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionReactantEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
 
 public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
