@@ -6,8 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 
 public class IntegratedMetabolite extends GenericMetabolite {
 

@@ -6,7 +6,8 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 
 public class TestBiggMetaboliteEntity {
 
