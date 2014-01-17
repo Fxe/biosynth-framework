@@ -71,10 +71,10 @@ public class TestModelReactionMap {
 		
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		
-		System.out.println(loader.getBiomassReaction());
+//		System.out.println(loader.getBiomassReaction());
 		System.out.println(loader.getDrainReactions());
 		for (String rxnSiD : loader.getNormalReactions()) {
-			DefaultGenericReaction rxn = loader.getReactions().get(rxnSiD);
+			DefaultGenericReaction rxn = null; //loader.getReactions().get(rxnSiD);
 			
 //			System.out.println(rxn);
 			List<String> reactants = new ArrayList<> ();
