@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.uminho</groupId>
-  <artifactId>BioSynth-Data</artifactId>
+  <groupId>edu.uminho.biosynthframework</groupId>
+  <artifactId>biosynth-data</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -25,6 +25,12 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>edu.uminho.biosynthframework</groupId>
+      <artifactId>biosynth-components</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>

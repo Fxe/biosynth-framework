@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
 
@@ -52,7 +52,7 @@ public class TestMxnService {
 	public void test() {
 		final String[] keggId = {"R08101", "R08105", "R08108", "R08109", "R08110"};
 		
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		MnxService service = new MnxService(dao);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		List<MnxReactionCrossReferenceEntity> res = service.getReactionCrossreferences("kegg", "R00066");

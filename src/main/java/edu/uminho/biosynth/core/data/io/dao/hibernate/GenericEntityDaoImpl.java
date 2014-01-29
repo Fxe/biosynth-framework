@@ -9,12 +9,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
-public class GenericEntityDaoImpl implements IGenericEntityDao {
+public class GenericEntityDaoImpl implements IGenericDao {
 
 	
 	protected SessionFactory sessionFactory;
+	public SessionFactory getSessionFactory() { return sessionFactory;}
+	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
+
+	public GenericEntityDaoImpl() {};
 	
 	public GenericEntityDaoImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -127,6 +131,11 @@ public class GenericEntityDaoImpl implements IGenericEntityDao {
 	public List<Object[]> query(String queryString) {
 		Query query = this.sessionFactory.getCurrentSession().createQuery(queryString);
 		return query.list();
+	}
+	
+	@Override
+	public void saveOrUpdate(Object entity) {
+		this.sessionFactory.getCurrentSession().saveOrUpdate(entity);
 	}
 	
 	

@@ -50,7 +50,7 @@ public class TestBiocycDao {
 
 	@Test
 	public void testInsertDeleteBiocycMetaboliteDao() {
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx;
 		BioCycMetaboliteEntity cpd = null;
 		List<BioCycMetaboliteEntity> res = null;

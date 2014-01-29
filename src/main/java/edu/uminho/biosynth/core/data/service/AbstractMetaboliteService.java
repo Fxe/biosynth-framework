@@ -5,16 +5,16 @@ import java.util.List;
 import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public abstract class AbstractMetaboliteService<T extends GenericMetabolite> 
 	implements IMetaboliteService<T> {
 	
-	protected IGenericEntityDao dao;
+	protected IGenericDao dao;
 	protected Class<T> metaboliteClass;
 	protected String name = "unnamed";
 	
-	public AbstractMetaboliteService(IGenericEntityDao dao, Class<T> metaboliteClass) {
+	public AbstractMetaboliteService(IGenericDao dao, Class<T> metaboliteClass) {
 		this.dao = dao;
 		this.metaboliteClass = metaboliteClass;
 	}

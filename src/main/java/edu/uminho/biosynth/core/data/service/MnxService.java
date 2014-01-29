@@ -11,11 +11,11 @@ import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCro
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionProductEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionReactantEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	
-	public MnxService(IGenericEntityDao dao) {
+	public MnxService(IGenericDao dao) {
 		super(dao, MnxMetaboliteEntity.class);
 	}
 	

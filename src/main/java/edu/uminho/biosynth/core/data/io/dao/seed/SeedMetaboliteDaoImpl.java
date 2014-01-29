@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
-public class SeedMetaboliteDaoImpl implements IGenericEntityDao{
+public class SeedMetaboliteDaoImpl implements IGenericDao{
 
 	@Override
 	public <T> T find(Class<T> type, Serializable id) {
@@ -103,6 +103,12 @@ public class SeedMetaboliteDaoImpl implements IGenericEntityDao{
 	public List<Object[]> query(String queryString) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void saveOrUpdate(Object entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

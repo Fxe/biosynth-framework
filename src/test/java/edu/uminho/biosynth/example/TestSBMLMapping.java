@@ -26,7 +26,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.optflux.ContainerLoader;
 import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
@@ -1200,7 +1200,7 @@ public class TestSBMLMapping {
 		sessionFactory.getCurrentSession().close();
 	}
 	
-	private void mapToMeta(String file, IGenericEntityDao dao) throws Exception {
+	private void mapToMeta(String file, IGenericDao dao) throws Exception {
 		File sbml = new File(file);
 		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
 //		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
@@ -1238,7 +1238,7 @@ public class TestSBMLMapping {
 //		}
 	}
 	
-	private void mapToKegg(String file, IGenericEntityDao dao) throws Exception {
+	private void mapToKegg(String file, IGenericDao dao) throws Exception {
 		File sbml = new File(file);
 		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
 //		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
@@ -1299,7 +1299,7 @@ public class TestSBMLMapping {
 	
 	@Test
 	public void keggToBigg() throws Exception {
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		String file = BioSynthUtilsIO.readFromFile("E:/kegg_rxn_id.txt");
 		String[] rxn = file.split("\n");
@@ -1345,7 +1345,7 @@ public class TestSBMLMapping {
 	public void testMapSbmlMetabolites() throws Exception {
 		biggToMnxMap = new HashMap<> ();
 		
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		List<MnxMetaboliteEntity> metabolites = dao.findAll(MnxMetaboliteEntity.class);
 		

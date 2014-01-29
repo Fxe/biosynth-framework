@@ -51,7 +51,7 @@ public class TestMnxDao {
 
 	@Test
 	public void testLoadMetabolite() {
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		MnxMetaboliteEntity cpd = dao.find(MnxMetaboliteEntity.class, 58);
 		System.out.println(cpd);
@@ -60,7 +60,7 @@ public class TestMnxDao {
 	
 	@Test
 	public void testLoadReaction() {
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		MnxReactionEntity rxn = dao.find(MnxReactionEntity.class, 585);
 		System.out.println(rxn);
@@ -71,7 +71,7 @@ public class TestMnxDao {
 	public void testFindProducer() {
 		
 		
-		IGenericEntityDao dao = new GenericEntityDaoImpl(sessionFactory);
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		MnxService service = new MnxService(dao);
 		

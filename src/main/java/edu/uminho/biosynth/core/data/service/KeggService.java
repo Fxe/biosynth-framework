@@ -1,11 +1,11 @@
 package edu.uminho.biosynth.core.data.service;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericEntityDao;
+import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class KeggService extends AbstractMetaboliteService<KeggMetaboliteEntity> {
 	
-	public KeggService(IGenericEntityDao dao) {
+	public KeggService(IGenericDao dao) {
 		super(dao, KeggMetaboliteEntity.class);
 	}
 }

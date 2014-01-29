@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
-public interface IGenericEntityDao {
+public interface IGenericDao {
 	
 	public <T> T find(Class<T> type, Serializable id);
     public <T> T[] find(Class<T> type, Serializable... ids);
@@ -19,6 +19,8 @@ public interface IGenericEntityDao {
 
     public Serializable save(Object entity);
     public Serializable[] save(Object... entities);
+    
+    public void saveOrUpdate(Object entity);
 
     public boolean remove(Object entity);
     public void remove(Object... entities);
