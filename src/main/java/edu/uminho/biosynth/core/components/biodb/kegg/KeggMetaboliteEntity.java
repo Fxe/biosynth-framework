@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.components.biodb.kegg;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -26,7 +27,7 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	@Column(name="K_COMMENT") private String comment;
 	@Column(name="REMARK") private String remark;
 	
-	@OneToMany(mappedBy = "keggMetaboliteEntity")
+	@OneToMany(mappedBy = "keggMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	
 	@ElementCollection

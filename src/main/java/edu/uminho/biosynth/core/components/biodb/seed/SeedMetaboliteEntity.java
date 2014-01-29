@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.components.biodb.seed;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -36,16 +37,16 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="MODDATE") private DateTime modDate;
 	
-    @OneToMany(mappedBy = "seedCompoundEntity")
+    @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedCompoundStructureEntity> structures = new ArrayList<>();
     
-    @OneToMany(mappedBy = "seedCompoundEntity")
+    @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedCompoundPkEntity> pks = new ArrayList<>();
     
-    @OneToMany(mappedBy = "seedCompoundEntity")
+    @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedCompoundCueEntity> compoundCues = new ArrayList<>();
     
-    @OneToMany(mappedBy = "seedCompoundEntity")
+    @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedCompoundCrossReferenceEntity> crossReferences = new ArrayList<>();
 	
 	public int getDefaultCharge() {

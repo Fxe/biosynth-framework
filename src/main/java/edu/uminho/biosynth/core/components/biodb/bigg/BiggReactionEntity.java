@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -53,7 +54,7 @@ public class BiggReactionEntity extends GenericReaction{
 		this.synonyms.clear();
 		this.synonyms.addAll(Arrays.asList(synonyms)); }
 
-	@OneToMany(mappedBy = "biggReactionEntity")
+	@OneToMany(mappedBy = "biggReactionEntity", cascade = CascadeType.ALL)
 	private List<BiggReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	public List<BiggReactionCrossReferenceEntity> getCrossReferences() { return crossReferences; }
 	public void setCrossReferences(List<BiggReactionCrossReferenceEntity> crossReferences) {

@@ -11,6 +11,29 @@ import java.io.StringReader;
 
 public class BioSynthUtilsIO {
 	
+	public static void printDir(String dir) {
+		File f = new File(dir); // current directory
+
+	    File[] files = f.listFiles();
+	    for (File file : files) {
+	        if (file.isDirectory()) {
+	            System.out.print("directory:");
+	        } else {
+	            System.out.print("     file:");
+	        }
+	        
+	        try {
+	        	System.out.println(file.getCanonicalPath());
+	        } catch (IOException ioEx) {
+	        	System.out.println(ioEx);
+	        }
+	    }
+	}
+	
+	public static void printDir() {
+		printDir(".");
+	}
+	
 	public static String readFromFile(String file) throws FileNotFoundException, IOException {
 		StringBuilder sb = new StringBuilder();
 

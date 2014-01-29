@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.components.biodb.seed;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,13 +37,13 @@ public class SeedReactionEntity extends GenericReaction {
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="MODDATE") private DateTime modDate;
     
-    @OneToMany (mappedBy = "seedReactionEntity")
+    @OneToMany (mappedBy = "seedReactionEntity", cascade = CascadeType.ALL)
     private List<SeedReactionReagentEntity> reagents = new ArrayList<> ();
     
-    @OneToMany (mappedBy = "seedReactionEntity")
+    @OneToMany (mappedBy = "seedReactionEntity", cascade = CascadeType.ALL)
     private List<SeedReactionCueEntity> reactionCues = new ArrayList<> ();
     
-    @OneToMany(mappedBy = "seedReactionEntity")
+    @OneToMany(mappedBy = "seedReactionEntity", cascade = CascadeType.ALL)
     private List<SeedReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
     
 	public short getLocked() {

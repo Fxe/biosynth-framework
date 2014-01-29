@@ -19,8 +19,9 @@ public abstract class AbstractGenericEntity implements Serializable {
 
 	@Id
     @Column(name="ID")
-    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
-	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+//    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.SEQUENCE)
+//	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	protected Integer id;
 	public Integer getId() { return this.id; }
 	public void setId(Integer id) { this.id = id; }

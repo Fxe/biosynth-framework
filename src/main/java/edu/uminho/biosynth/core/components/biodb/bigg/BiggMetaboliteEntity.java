@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -36,7 +37,7 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 		this.compartments.clear();
 		this.compartments.addAll(Arrays.asList(compartments)); }
 
-	@OneToMany(mappedBy = "biggMetaboliteEntity")
+	@OneToMany(mappedBy = "biggMetaboliteEntity", cascade=CascadeType.ALL)
 	private List<BiggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	public List<BiggMetaboliteCrossReferenceEntity> getCrossReferences() { return crossReferences; }
 	public void setCrossReferences(List<BiggMetaboliteCrossReferenceEntity> crossReferences) {

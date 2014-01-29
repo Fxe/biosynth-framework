@@ -24,6 +24,8 @@ public class AbstractEntityIdGenerator extends IdentityGenerator {
 		} else {
 			id = ((AbstractGenericEntity)obj).getId();
 		}
+		
+		System.out.println(id);
 		return id;
 	}
 }
