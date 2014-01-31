@@ -15,6 +15,8 @@ public interface IBinaryGraph<V, E> extends IGraph {
 	public IBinaryEdge<E, V> getEdge(E edge);
 	public Collection<IBinaryEdge<E, V>> getEdges();
 	
+	public void addAll(IBinaryGraph<V, E> graph);
+	
 	public void setWeight(V src, V dst, double w);
 	public double getWeight(V src, V dst);
 }

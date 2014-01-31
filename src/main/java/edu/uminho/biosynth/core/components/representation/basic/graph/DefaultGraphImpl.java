@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Graph<V, E> implements IBinaryGraph<V, E> {
+public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 	private final Set<V> vertexes;
 	private final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap;
 	
 	private final Map<E, IBinaryEdge<E, V>> edgeMap;
 	
-	public Graph() {
+	public DefaultGraphImpl() {
 		this.vertexes = new HashSet<V> ();
 		this.vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
 		this.edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
 	}
 	
-	public Graph( Graph<V, E> graph) {
+	public DefaultGraphImpl( DefaultGraphImpl<V, E> graph) {
 		
 		this.vertexes = new HashSet<V> ( graph.getVertices());
 		this.vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
@@ -78,7 +78,7 @@ public class Graph<V, E> implements IBinaryGraph<V, E> {
 		return this.edgeMap.get(edge);
 	}
 	
-	public void merge( Graph<V, E> graph) {
+	public void merge( DefaultGraphImpl<V, E> graph) {
 		for (V v : graph.getVertices()) {
 			if ( this.vertexes.add(v)) {
 				Set<IBinaryEdge<E, V>> edgeSet = new HashSet<IBinaryEdge<E, V>> ();
@@ -162,12 +162,13 @@ public class Graph<V, E> implements IBinaryGraph<V, E> {
 		return true;
 	}
 	
+
 	public int size() {
-		return this.vertexes.size();
+		return this.edgeMap.size();
 	}
 	
 	public int order() {
-		return edgeMap.size();
+		return this.vertexes.size();
 	}
 	
 	public void reverseGraph() {
@@ -205,8 +206,10 @@ public class Graph<V, E> implements IBinaryGraph<V, E> {
 		StringBuilder sb = new StringBuilder();
 		for (V vertex : vertexes) {
 			sb.append( vertex.toString()).append(" -> ");
-			for ( IBinaryEdge<E, V> edge : vertexEdgesMap.get(vertex)) {
-				sb.append( edge.getRight()).append(',').append( edge.getWeight()).append(" -> ");
+			if (vertexEdgesMap.containsKey(vertex)) {
+				for ( IBinaryEdge<E, V> edge : vertexEdgesMap.get(vertex)) {
+					sb.append( edge.getRight()).append(',').append( edge.getWeight()).append(" -> ");
+				}
 			}
 			sb.append(" /\n");
 		}
@@ -219,5 +222,13 @@ public class Graph<V, E> implements IBinaryGraph<V, E> {
 	public boolean removeVertex(V vertex) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void addAll(IBinaryGraph<V, E> graph) {
+		this.vertexes.addAll(graph.getVertices());
+		for (IBinaryEdge<E, V> edge : graph.getEdges()) {
+			this.addEdge(edge);
+		}
 	}
 }

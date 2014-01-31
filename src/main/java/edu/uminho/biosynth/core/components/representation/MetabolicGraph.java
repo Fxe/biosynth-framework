@@ -4,9 +4,9 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.Graph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultGraphImpl;
 
-public class MetabolicGraph extends Graph<String, String> implements IMetabolicRepresentation {
+public class MetabolicGraph extends DefaultGraphImpl<String, String> implements IMetabolicRepresentation {
 
 	public static String normTag = "";
 	public static String reveTag = "R";
