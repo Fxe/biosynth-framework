@@ -8,22 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
-	private final Set<V> vertexes;
-	private final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap;
+	private final Set<V> vertexes = new HashSet<V> ();
+	private final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
 	
-	private final Map<E, IBinaryEdge<E, V>> edgeMap;
+	private final Map<E, IBinaryEdge<E, V>> edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
 	
-	public DefaultGraphImpl() {
-		this.vertexes = new HashSet<V> ();
-		this.vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
-		this.edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
-	}
+	public DefaultGraphImpl() { }
 	
 	public DefaultGraphImpl( DefaultGraphImpl<V, E> graph) {
-		
-		this.vertexes = new HashSet<V> ( graph.getVertices());
-		this.vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
-		this.edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
 		this.clearEdges();
 		for (V v : graph.getVertices()) {
 			Set<IBinaryEdge<E, V>> adjEdges = graph.getEdges(v);
@@ -157,6 +149,10 @@ public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 		this.addVertex(edge.getRight());
 		
 		this.edgeMap.put(edge.getEdge(), edge);
+		
+		if (!this.vertexEdgesMap.containsKey(edge.getLeft())) {
+			this.vertexEdgesMap.put(edge.getLeft(), new HashSet<IBinaryEdge<E, V>> ());
+		}
 		this.vertexEdgesMap.get(edge.getLeft()).add(edge);
 
 		return true;
@@ -213,6 +209,7 @@ public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 			}
 			sb.append(" /\n");
 		}
+		System.out.println(this.edgeMap);
 		sb.append("SIZE:" + this.size()).append('\n');
 		sb.append("ORDER:" + this.order());
 		return sb.toString();
