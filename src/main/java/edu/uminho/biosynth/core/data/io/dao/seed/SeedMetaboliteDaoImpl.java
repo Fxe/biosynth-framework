@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projection;
 
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
@@ -109,6 +110,12 @@ public class SeedMetaboliteDaoImpl implements IGenericDao{
 	public void saveOrUpdate(Object entity) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public <T> List<T> projection(Class<T> type, Projection projection) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

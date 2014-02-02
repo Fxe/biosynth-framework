@@ -111,4 +111,10 @@ public class IntegratedService implements IMetaboliteService<IntegratedMetabolit
 		tx.commit();
 		sessionFactory.close();
 	}
+
+	@Override
+	public List<String> getAllMetabolitesEntries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

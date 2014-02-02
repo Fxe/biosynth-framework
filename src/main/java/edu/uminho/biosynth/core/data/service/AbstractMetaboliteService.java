@@ -1,5 +1,6 @@
 package edu.uminho.biosynth.core.data.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
@@ -46,5 +47,22 @@ public abstract class AbstractMetaboliteService<T extends GenericMetabolite>
 	@Override
 	public int countNumberOfMetabolites() {
 		throw new RuntimeException("Not yet implemented !");
+	}
+	
+	@Override
+	public List<String> getAllMetabolitesEntries() {
+		List<String> res = new ArrayList<> ();
+		
+		for (T cpd : dao.findAll(metaboliteClass)) {
+			res.add(cpd.getEntry());
+		}
+//				dao.projection(String.class, Projections.property("entry"));
+//		for (String r : res) {
+//			System.out.println(r + " + " + r.getClass().toString());
+//		}
+//		
+//		dao.cre
+//		dao.criteria(metaboliteClass, Projections.property("entry"));
+		return res;
 	}
 }

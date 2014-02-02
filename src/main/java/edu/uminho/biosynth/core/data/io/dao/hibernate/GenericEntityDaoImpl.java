@@ -8,6 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projection;
 
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
@@ -116,6 +117,16 @@ public class GenericEntityDaoImpl implements IGenericDao {
 	public void flush() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> projection(Class<T> type, Projection projection) {
+		System.out.println(projection);
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(type).setProjection(projection);
+//		System.out.println(criteria.);
+		System.out.println("hi");
+		System.out.println(criteria.list());
+		return criteria.list();
 	}
 
 	@SuppressWarnings("unchecked")
