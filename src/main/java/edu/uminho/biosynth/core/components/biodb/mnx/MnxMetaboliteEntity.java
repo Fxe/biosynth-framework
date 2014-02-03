@@ -19,9 +19,9 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="CHARGE") private int charge;
-    @Column(name="O_SOURCE") private String originalSource;
-    @Column(name="SMILES") private String smiles;
-    @Column(name="INCHI") private String inChI;
+    @Column(name="O_SOURCE", length=255) private String originalSource;
+    @Column(name="SMILES", length=16383) private String smiles;
+    @Column(name="INCHI", length=16383) private String inChI;
     @Column(name="MASS") private double mass;
     
     @OneToMany(mappedBy = "mnxMetaboliteEntity", cascade = CascadeType.ALL)

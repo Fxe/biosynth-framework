@@ -24,27 +24,27 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	@Column(name="MASS") private double mass;
 	@Column(name="MOLW") private double molWeight;
 	
-	@Column(name="K_COMMENT") private String comment;
-	@Column(name="REMARK") private String remark;
+	@Column(name="K_COMMENT", length=2047) private String comment;
+	@Column(name="REMARK", length=1023) private String remark;
 	
 	@OneToMany(mappedBy = "keggMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_METABOLITE_REACTION", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="REACTION")
+	@Column(name="REACTION", length=15)
 	protected List<String> reactions = new ArrayList<> ();
 	public List<String> getReactions() { return reactions;}
 	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_METABOLITE_PATHWAY", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="PATHWAY")
+	@Column(name="PATHWAY", length=15)
 	protected List<String> pathways = new ArrayList<> ();
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_METABOLITE_ENZYME", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="ENZYME")
+	@Column(name="ENZYME", length=15)
 	protected List<String> enzymes = new ArrayList<> ();
 	
 	public double getMass() {

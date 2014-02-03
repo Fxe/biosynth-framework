@@ -19,8 +19,8 @@ public class MnxMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	@JoinColumn(name="ID_METABOLITE")
 	private MnxMetaboliteEntity mnxMetaboliteEntity;
 	
-	@Column(name="EVIDENCE") private String evidence;
-	@Column(name="DESCRIPTION") private String description;
+	@Column(name="EVIDENCE", length=63) private String evidence;
+	@Column(name="DESCRIPTION", length=32767) private String description;
 	
 	public MnxMetaboliteCrossReferenceEntity() {
 		super(null, null, null);

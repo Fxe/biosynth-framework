@@ -18,25 +18,25 @@ public class KeggReactionEntity extends GenericReaction {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="DEFINITION") private String definition;
+	@Column(name="DEFINITION", length=2047) private String definition;
 	public String getDefinition() { return definition; }
 	public void setDefinition(String definition) { this.definition = definition; }
 	
-	@Column(name="EQUATION") private String equation;
+	@Column(name="EQUATION", length=2047) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }
 
-	@Column(name="K_COMMENT") private String comment;
+	@Column(name="K_COMMENT", length=2047) private String comment;
 	public String getComment() { return comment; }
 	public void setComment(String comment) { this.comment = comment; }
 	
-	@Column(name="REMARK") private String remark;
+	@Column(name="REMARK", length=1047) private String remark;
 	public String getRemark() { return remark; }
 	public void setRemark(String remark) { this.remark = remark; }
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_REACTION_ENZYME", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="ENZYME")
+	@Column(name="ENZYME", length=31)
 	protected List<String> enzymes = new ArrayList<> ();
 	public List<String> getEnzymes() { return enzymes; }
 	public void addEnzyme(String enzyme) { this.enzymes.add(enzyme); }
@@ -44,7 +44,7 @@ public class KeggReactionEntity extends GenericReaction {
 
 	@ElementCollection
 	@CollectionTable(name="KEGG_REACTION_RPAIR", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="RPAIR")
+	@Column(name="RPAIR", length=15)
 	protected List<String> rpairs = new ArrayList<> ();
 	public List<String> getRpairs() { return rpairs; }
 	public void addRpair(String rpair) { this.rpairs.add(rpair); }
@@ -52,7 +52,7 @@ public class KeggReactionEntity extends GenericReaction {
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_REACTION_ORTHOLOGY", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="ORTHOLOGY")
+	@Column(name="ORTHOLOGY", length=15)
 	protected List<String> orthologies = new ArrayList<> ();
 	public List<String> getOrthologies() { return orthologies; }
 	public void addOrthology(String orthology) { this.orthologies.add(orthology); }
@@ -60,7 +60,7 @@ public class KeggReactionEntity extends GenericReaction {
 	
 	@ElementCollection
 	@CollectionTable(name="KEGG_REACTION_PATHWAY", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="PATHWAY")
+	@Column(name="PATHWAY", length=15)
 	protected List<String> pathways = new ArrayList<> ();
 	public List<String> getPathways() { return pathways; }
 	public void setPathways(List<String> pathways) { this.pathways = pathways; }

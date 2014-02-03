@@ -22,11 +22,11 @@ public class BiggReactionEntity extends GenericReaction{
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="ENZYME") private String enzyme;
+	@Column(name="ENZYME", length=31) private String enzyme;
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme; }
 
-	@Column(name="EQUATION") private String equation;
+	@Column(name="EQUATION", length=4095) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }
 	
@@ -36,7 +36,7 @@ public class BiggReactionEntity extends GenericReaction{
 	
 	@ElementCollection
 	@CollectionTable(name="BIGG_REACTION_COMPARTMENT", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="COMPARTMENT")
+	@Column(name="COMPARTMENT", length=31)
 	private List<String> compartments = new ArrayList<> ();
 	public List<String> getCompartments() { return compartments; }
 	public void setCompartments(List<String> compartments) { this.compartments = compartments; }
@@ -46,7 +46,7 @@ public class BiggReactionEntity extends GenericReaction{
 	
 	@ElementCollection
 	@CollectionTable(name="BIGG_REACTION_SYNONYM", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="SYNONYM")
+	@Column(name="SYNONYM", length=2047)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms; }
 	public void setSynonyms(List<String> synonyms) { this.compartments = synonyms; }

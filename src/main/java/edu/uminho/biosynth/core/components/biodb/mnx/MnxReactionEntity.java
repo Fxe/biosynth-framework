@@ -24,9 +24,9 @@ public class MnxReactionEntity extends GenericReaction {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="BALANCED") private boolean balanced;
-	@Column(name="DEFINITION") private String definition;
-	@Column(name="EQUATION") private String equation;
-	@Column(name="O_SOURCE") private String originalSource;
+	@Column(name="DEFINITION", length=4095) private String definition;
+	@Column(name="EQUATION", length=4095) private String equation;
+	@Column(name="O_SOURCE", length=255) private String originalSource;
 	@Column(name="VARIABLE") private boolean variable;
 	
 	@OneToMany(mappedBy = "mnxReactionEntity", cascade = CascadeType.ALL)

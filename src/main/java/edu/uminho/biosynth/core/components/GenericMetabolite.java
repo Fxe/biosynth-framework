@@ -15,10 +15,10 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 
 	private static final long serialVersionUID = 134867731L;
 
-	@Column(name="FORMULA") protected String formula;
+	@Column(name="FORMULA", length=255) protected String formula;
 	@Transient private Map<Integer, GenericReaction> rxnMap = new HashMap<> ();
 	@Transient private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
-	@Column(name="MCLASS") protected String metaboliteClass = "COMPOUND";
+	@Column(name="MCLASS", length=63) protected String metaboliteClass = "COMPOUND";
 	
 	public GenericMetabolite() {
 		super(null);

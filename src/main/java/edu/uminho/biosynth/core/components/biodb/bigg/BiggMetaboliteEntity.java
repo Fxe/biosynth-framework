@@ -29,7 +29,7 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 	
 	@ElementCollection
 	@CollectionTable(name="BIGG_METABOLITE_COMPARTMENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="COMPARTMENT")
+	@Column(name="COMPARTMENT", length=127)
 	private List<String> compartments = new ArrayList<> ();
 	public List<String> getCompartments() { return compartments; }
 	public void setCompartments(List<String> compartments) { this.compartments = compartments; }

@@ -19,7 +19,7 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="ENZYME") private String enzyme;
+	@Column(name="ENZYME", length=63) private String enzyme;
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme;}
 	

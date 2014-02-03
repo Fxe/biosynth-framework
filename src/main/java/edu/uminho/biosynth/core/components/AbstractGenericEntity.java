@@ -19,23 +19,23 @@ public abstract class AbstractGenericEntity implements Serializable {
 
 	@Id
     @Column(name="ID")
-//	@GeneratedValue(strategy=GenerationType.AUTO)
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
     @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.AUTO)
 	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	protected Integer id;
 	public Integer getId() { return this.id; }
 	public void setId(Integer id) { this.id = id; }
 	
-	@Column(name="ENTRY", unique = true)
+	@Column(name="ENTRY", unique=true, length=255)
 	protected String entry;
 
-	@Column(name="E_NAME")
+	@Column(name="E_NAME", length=2047)
 	protected String name = "";
 	
-	@Column(name="E_SOURCE")
+	@Column(name="E_SOURCE", length=255)
 	protected String source;
 	
-	@Column(name="DESCRIPTION")
+	@Column(name="DESCRIPTION", length=2047)
 	protected String description = "";
 	
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")

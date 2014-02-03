@@ -29,11 +29,11 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public double getCmlMolWeight() { return cmlMolWeight;}
 	public void setCmlMolWeight(Double cmlMolWeight) { this.cmlMolWeight = cmlMolWeight;}
 
-	@Column(name="INCHI") private String inChI;
+	@Column(name="INCHI", length=16383) private String inChI;
 	public String getInChI() { return inChI;}
 	public void setInChI(String inChI) { this.inChI = inChI;}
 
-	@Column(name="SMILES") private String smiles;
+	@Column(name="SMILES", length=16383) private String smiles;
 	public String getSmiles() { return smiles;}
 	public void setSmiles(String smiles) { this.smiles = smiles;}
 
@@ -45,41 +45,41 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public int getCharge() { return charge; }
 	public void setCharge(Integer charge) { this.charge = charge; }
 	
-	@Column(name="B_COMMENT") private String comment;
+	@Column(name="B_COMMENT", length=16383) private String comment;
 	public String getComment() { return comment;}
 	public void setComment(String comment) { this.comment = comment;}
 	
 	@ElementCollection
 	@CollectionTable(name="BIOCYC_METABOLITE_SUBCLASS", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="SUBCLASS")
+	@Column(name="SUBCLASS", length=63)
 	protected List<String> subclasses = new ArrayList<> ();
 	public List<String> getSubclasses() { return subclasses;}
 	public void setSubclasses(List<String> subclasses) { this.subclasses = subclasses;}
 
 	@ElementCollection
 	@CollectionTable(name="BIOCYC_METABOLITE_PARENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="PARENT")
+	@Column(name="PARENT", length=63)
 	protected List<String> parents = new ArrayList<> ();
 	public List<String> getParents() { return parents;}
 	public void setParents(List<String> parents) { this.parents = parents;}
 
 	@ElementCollection
 	@CollectionTable(name="BIOCYC_METABOLITE_INSTANCE", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="INSTANCE")
+	@Column(name="INSTANCE", length=63)
 	protected List<String> instances = new ArrayList<> ();
 	public List<String> getInstances() { return instances;}
 	public void setInstances(List<String> instances) { this.instances = instances;}
 
 	@ElementCollection
 	@CollectionTable(name="BIOCYC_METABOLITE_REACTION", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="REACTION")
+	@Column(name="REACTION", length=63)
 	protected List<String> reactions = new ArrayList<> ();
 	public List<String> getReactions() { return reactions;}
 	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
 	@ElementCollection
 	@CollectionTable(name="BIOCYC_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="SYNONYM")
+	@Column(name="SYNONYM", length=1023)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms;}
 	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
