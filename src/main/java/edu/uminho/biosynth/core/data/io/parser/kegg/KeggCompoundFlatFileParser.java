@@ -99,9 +99,11 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		String[] xrefs = content.split("\n");
 		for (int i = 0; i < xrefs.length; i++) {
 			String[] xrefPair = xrefs[i].trim().split(": ");
-			KeggMetaboliteCrossReferenceEntity xref = new KeggMetaboliteCrossReferenceEntity(
-					GenericCrossReference.Type.DATABASE, xrefPair[0], xrefPair[1]);
-			crossReferences.add(xref);
+			for (String refValue : xrefPair[1].trim().split(" +")) {
+				KeggMetaboliteCrossReferenceEntity xref = new KeggMetaboliteCrossReferenceEntity(
+						GenericCrossReference.Type.DATABASE, xrefPair[0], refValue);
+				crossReferences.add(xref);
+			}
 		}
 		return crossReferences;
 	}

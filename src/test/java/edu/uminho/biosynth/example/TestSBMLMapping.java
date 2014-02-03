@@ -28,8 +28,8 @@ import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCro
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.optflux.ContainerLoader;
-import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
+//import edu.uminho.biosynth.optflux.ContainerLoader;
+//import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
 public class TestSBMLMapping {
@@ -1201,99 +1201,99 @@ public class TestSBMLMapping {
 	}
 	
 	private void mapToMeta(String file, IGenericDao dao) throws Exception {
-		File sbml = new File(file);
-		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
-//		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
-		
-		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		
-//		System.out.println(loader.getMetaboliteSpecies());
-
-		for (String cpdId : loader.getMetaboliteIdSet()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(cpdId).append("\t");
-			if (biggToMnxMap.containsKey(cpdId)) {
-				sb.append(biggToMnxMap.get(cpdId).getEntry()).append("\t");
-				for (MnxMetaboliteCrossReferenceEntity xref : biggToMnxMap.get(cpdId).getCrossReferences()) {
-					if (xref.getRef().toLowerCase().equals("metacyc") /*&& xref.getValue().toLowerCase().charAt(0) == 'c' */) {
-						sb.append(xref).append("\t");
+//		File sbml = new File(file);
+//		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
+////		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
+//		
+//		ContainerLoader loader = new ContainerLoader(sbml, transformer);
+//		
+////		System.out.println(loader.getMetaboliteSpecies());
+//
+//		for (String cpdId : loader.getMetaboliteIdSet()) {
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(cpdId).append("\t");
+//			if (biggToMnxMap.containsKey(cpdId)) {
+//				sb.append(biggToMnxMap.get(cpdId).getEntry()).append("\t");
+//				for (MnxMetaboliteCrossReferenceEntity xref : biggToMnxMap.get(cpdId).getCrossReferences()) {
+//					if (xref.getRef().toLowerCase().equals("metacyc") /*&& xref.getValue().toLowerCase().charAt(0) == 'c' */) {
+//						sb.append(xref).append("\t");
+////						List<KeggMetaboliteEntity> entry = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", xref.getValue()));
+////						if (entry.size() == 1) {
+////							if (entry.get(0).getReactions().size() > 0) sb.append(xref).append("\t");
+////						} else {
+////							sb.append("##############OMG###############");
+////						}
+//					}
+//				}
+//			} else {
+//				sb.append("NOTFOUND");
+//			}
+//			System.out.println(sb.toString());
+//		}
+//		
+////		for (String cpdId : loader.getMetaboliteIdSet()) {
+////			for (String cpdSpecieId : loader.getMetaboliteSpecieMap().get(cpdId)) {
+//////				System.out.println(cpdSpecieId + "\t" + );
+////			}
+////		}
+	}
+	
+	private void mapToKegg(String file, IGenericDao dao) throws Exception {
+//		File sbml = new File(file);
+//		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
+////		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
+//		
+//		ContainerLoader loader = new ContainerLoader(sbml, transformer);
+//		
+////		System.out.println(loader.getMetaboliteSpecies());
+//
+//		for (String cpdId : loader.getMetaboliteIdSet()) {
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(cpdId).append("\t");
+//			if (biggToMnxMap.containsKey(cpdId)) {
+//				sb.append(biggToMnxMap.get(cpdId).getEntry()).append("\t");
+//				for (MnxMetaboliteCrossReferenceEntity xref : biggToMnxMap.get(cpdId).getCrossReferences()) {
+//					if (xref.getRef().toLowerCase().equals("kegg") && xref.getValue().toLowerCase().charAt(0) == 'c' ) {
+////						sb.append(xref).append("\t");
 //						List<KeggMetaboliteEntity> entry = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", xref.getValue()));
 //						if (entry.size() == 1) {
 //							if (entry.get(0).getReactions().size() > 0) sb.append(xref).append("\t");
 //						} else {
-//							sb.append("##############OMG###############");
+//							sb.append("##############OMG+" +  entry.toString() +  "###############");
 //						}
-					}
-				}
-			} else {
-				sb.append("NOTFOUND");
-			}
-			System.out.println(sb.toString());
-		}
-		
-//		for (String cpdId : loader.getMetaboliteIdSet()) {
-//			for (String cpdSpecieId : loader.getMetaboliteSpecieMap().get(cpdId)) {
-////				System.out.println(cpdSpecieId + "\t" + );
+//					}
+//				}
+//			} else {
+//				sb.append("NOTFOUND");
 //			}
+//			System.out.println(sb.toString());
 //		}
-	}
-	
-	private void mapToKegg(String file, IGenericDao dao) throws Exception {
-		File sbml = new File(file);
-		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
-//		System.out.println(transformer.normalizeMetaboliteId("M_lald_L_c"));
-		
-		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		
-//		System.out.println(loader.getMetaboliteSpecies());
-
-		for (String cpdId : loader.getMetaboliteIdSet()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(cpdId).append("\t");
-			if (biggToMnxMap.containsKey(cpdId)) {
-				sb.append(biggToMnxMap.get(cpdId).getEntry()).append("\t");
-				for (MnxMetaboliteCrossReferenceEntity xref : biggToMnxMap.get(cpdId).getCrossReferences()) {
-					if (xref.getRef().toLowerCase().equals("kegg") && xref.getValue().toLowerCase().charAt(0) == 'c' ) {
-//						sb.append(xref).append("\t");
-						List<KeggMetaboliteEntity> entry = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", xref.getValue()));
-						if (entry.size() == 1) {
-							if (entry.get(0).getReactions().size() > 0) sb.append(xref).append("\t");
-						} else {
-							sb.append("##############OMG+" +  entry.toString() +  "###############");
-						}
-					}
-				}
-			} else {
-				sb.append("NOTFOUND");
-			}
-			System.out.println(sb.toString());
-		}
-		
-//		for (String cpdId : loader.getMetaboliteIdSet()) {
-//			for (String cpdSpecieId : loader.getMetaboliteSpecieMap().get(cpdId)) {
-////				System.out.println(cpdSpecieId + "\t" + );
-//			}
-//		}
+//		
+////		for (String cpdId : loader.getMetaboliteIdSet()) {
+////			for (String cpdSpecieId : loader.getMetaboliteSpecieMap().get(cpdId)) {
+//////				System.out.println(cpdSpecieId + "\t" + );
+////			}
+////		}
 	}
 	
 	@Test
 	public void test2() throws Exception {
-		Map<String, String> toKeggMap = new HashMap<> ();
-		for (int i = 0; i < cpdMap.length; i+=2) {
-			toKeggMap.put(cpdMap[i], cpdMap[i + 1]);
-		}
-		
-		File sbml = new File("./src/main/resources/sbml/iJO1366.xml");
-		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
-		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-		
-//		for (String rxnId : loader.getReactionSpecies()) {
-//			System.out.println(rxnId + "\t" + "RXXXXX" + "\tKEGG_REACTION");
+//		Map<String, String> toKeggMap = new HashMap<> ();
+//		for (int i = 0; i < cpdMap.length; i+=2) {
+//			toKeggMap.put(cpdMap[i], cpdMap[i + 1]);
 //		}
 //		
-//		for (String cpdSiD : loader.getMetaboliteSpecies()) {
-//			System.out.println(cpdSiD + "\t" + toKeggMap.get(transformer.normalizeMetaboliteId(cpdSiD)) + "\tKEGG_CPD");
-//		}
+//		File sbml = new File("./src/main/resources/sbml/iJO1366.xml");
+//		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
+//		ContainerLoader loader = new ContainerLoader(sbml, transformer);
+//		
+////		for (String rxnId : loader.getReactionSpecies()) {
+////			System.out.println(rxnId + "\t" + "RXXXXX" + "\tKEGG_REACTION");
+////		}
+////		
+////		for (String cpdSiD : loader.getMetaboliteSpecies()) {
+////			System.out.println(cpdSiD + "\t" + toKeggMap.get(transformer.normalizeMetaboliteId(cpdSiD)) + "\tKEGG_CPD");
+////		}
 	}
 	
 	
@@ -1335,10 +1335,10 @@ public class TestSBMLMapping {
 	
 	@Test
 	public void readModel() throws IOException {
-		File sbml = new File("./src/main/resources/sbml/iJO1366.xml");
-		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
-		ContainerLoader loader = new ContainerLoader(sbml, transformer);
-//		System.out.println(loader.getMetaboliteSpecies());
+//		File sbml = new File("./src/main/resources/sbml/iJO1366.xml");
+//		DefaultSbmlTransformerImpl transformer = new DefaultSbmlTransformerImpl();
+//		ContainerLoader loader = new ContainerLoader(sbml, transformer);
+////		System.out.println(loader.getMetaboliteSpecies());
 	}
 	
 	@Test

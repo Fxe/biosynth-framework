@@ -1,5 +1,7 @@
 package edu.uminho.biosynth.core.data.io.remote;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import edu.uminho.biosynth.core.data.io.parser.kegg.KeggCompoundFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGEnzymeFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
+import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
 public class KeggRemoteSource implements IRemoteSource {
 	
@@ -26,6 +29,11 @@ public class KeggRemoteSource implements IRemoteSource {
 
 	public static final boolean VERBOSE = false;
 	private static final String SOURCE = "KEGG";
+	public static String LOCALCACHE = null;
+	public static boolean SAVETOCACHE = false;
+	
+//	private static final String restList = "http://rest.kegg.jp/list/";
+	private static final String restGet = "http://rest.kegg.jp/get/";
 	
 	@Override
 	public Set<String> getAllReactionIds() {
@@ -162,10 +170,37 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		
 		return rxn;
 	}
+	
+	private String getLocalOrWeb(String entityType, String entry) throws IOException {
+		String entryFlatFile = null;
+		
+		String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
+		if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
+		String dataFileStr = baseDirectory  + entityType + "/" + entry + ".txt";
+		File dataFile = new File(dataFileStr);
+		
+		System.out.println(dataFile);
+		if ( !dataFile.exists()) {
+			entryFlatFile =  HttpRequest.get(restGet + String.format("%s:%s", entityType, entry));
+			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryFlatFile, dataFileStr);
+		} else {
+			entryFlatFile = BioSynthUtilsIO.readFromFile(dataFileStr);
+		}
+		
+		return entryFlatFile;
+	}
+	
 	@Override
 	public KeggMetaboliteEntity getMetaboliteInformation(String cpdId) {
 		final String db = cpdId.charAt(0) == 'C' ? "cpd" : "gl"; 
-		String flatFile = HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", db, cpdId));
+		
+		String flatFile = null;
+		try {
+			flatFile = getLocalOrWeb(db, cpdId); //HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", db, cpdId));
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "IO: " + e.getMessage());
+			return null;
+		}
 		
 		if (flatFile == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve Metabolite - " + cpdId);
