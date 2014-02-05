@@ -9,6 +9,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -37,7 +38,7 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 		this.compartments.clear();
 		this.compartments.addAll(Arrays.asList(compartments)); }
 
-	@OneToMany(mappedBy = "biggMetaboliteEntity", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "biggMetaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<BiggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	public List<BiggMetaboliteCrossReferenceEntity> getCrossReferences() { return crossReferences; }
 	public void setCrossReferences(List<BiggMetaboliteCrossReferenceEntity> crossReferences) {
