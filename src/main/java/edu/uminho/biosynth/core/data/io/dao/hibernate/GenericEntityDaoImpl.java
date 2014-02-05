@@ -14,7 +14,6 @@ import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class GenericEntityDaoImpl implements IGenericDao {
 
-	
 	protected SessionFactory sessionFactory;
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
