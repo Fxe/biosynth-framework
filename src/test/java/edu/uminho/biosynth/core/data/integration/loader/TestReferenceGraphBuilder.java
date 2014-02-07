@@ -28,10 +28,10 @@ import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteC
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.integration.loader.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;

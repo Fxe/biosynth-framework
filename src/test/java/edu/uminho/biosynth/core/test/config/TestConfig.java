@@ -13,6 +13,7 @@ public class TestConfig {
 	public static SessionFactory sessionFactory;
 	public static IGenericDao dao;
 	public static String HIBERNATE_CFG = "hibernate_production_pgsql.cfg.xml";
+//	public static String HIBERNATE_CFG = "hibernate_production_mysql.cfg.xml";
 	
 	public static void initializeHibernateSession() {
 		Configuration config = new Configuration().configure(HIBERNATE_CFG);

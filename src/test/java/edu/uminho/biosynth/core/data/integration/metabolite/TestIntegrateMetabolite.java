@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.algorithm.graph.GraphCluster;
+import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
@@ -26,10 +27,10 @@ import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteC
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.integration.loader.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
@@ -86,6 +87,8 @@ public class TestIntegrateMetabolite {
 		
 		IMetaboliteService<BioCycMetaboliteEntity> biocycService = new BiocycService(dao);
 		IMetaboliteService<BiggMetaboliteEntity> biggService = new BiggService(dao);
+		IMetaboliteService<BiggMetaboliteEntity> biggService2 = new BiggService(dao);
+		biggService2.setServiceId("bigg personal");
 		IMetaboliteService<KeggMetaboliteEntity> keggService = new KeggService(dao);
 		IMetaboliteService<MnxMetaboliteEntity> mxnService = new MnxService(dao);
 		
@@ -99,6 +102,11 @@ public class TestIntegrateMetabolite {
 				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossReferenceEntity.class, biggXrefTrans);
 		biggLoader.setService(biggService);
 		biggLoader.setReferenceTransformer(biggXrefTrans);
+		
+		ReferenceLoader<BiggMetaboliteEntity, BiggMetaboliteCrossReferenceEntity> biggLoader2 = 
+				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossReferenceEntity.class, biggXrefTrans);
+		biggLoader2.setService(biggService2);
+		biggLoader2.setReferenceTransformer(biggXrefTrans);
 		
 		ReferenceLoader<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity> keggLoader =
 				new ReferenceLoader<>(KeggMetaboliteEntity.class, KeggMetaboliteCrossReferenceEntity.class, keggXrefTrans);
@@ -126,12 +134,13 @@ public class TestIntegrateMetabolite {
 		xrefBuilder.getLoadersList().add(biggLoader);
 		xrefBuilder.getLoadersList().add(keggLoader);
 		xrefBuilder.getLoadersList().add(mnxLoader);
+//		xrefBuilder.getLoadersList().add(biggLoader2);
 		IBinaryGraph<ReferenceNode, ReferenceLink> graph 
 			= xrefBuilder.extractReferenceGraph(new String[] {
 					"h2o", "oh1",
-					"WATER", "OH", "CPD-12377",
+					"WATER", "OH", "CPD-12377", "VANILLIN",
 					"MNXM2",
-					"C00001", "C16844", "C01328"
+					"C00001", "C16844", "C01328", "C00755"
 				});
 		
 		
@@ -147,15 +156,16 @@ public class TestIntegrateMetabolite {
 		serviceMap.put(keggService.getServiceId(), keggService);
 		serviceMap.put(mxnService.getServiceId(), mxnService);
 		serviceMap.put(biggService.getServiceId(), biggService);
-		
+		serviceMap.put(biggService2.getServiceId(), biggService2);
 		for (String clusterId : clusterAlgorithm.getClustersToListOfVertex().keySet()) {
 			System.out.println(clusterId + ":");
+			System.out.println(clusterAlgorithm.getClustersToListOfVertex().get(clusterId));
 			for (ReferenceNode node : clusterAlgorithm.getClustersToListOfVertex().get(clusterId)) {
-				String entry = node.getEntry();
+				String entry = node.getEntryTypePair().getFirst();
 				for (String serviceId : node.getRelatedServiceIds()) {
 					if (serviceMap.containsKey(serviceId)) {
-						Object obj = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
-						System.out.println(obj);
+						GenericMetabolite obj = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
+						System.out.println(obj.getEntry() + ":" + serviceId);
 					} else {
 						System.out.println("No Service For: " + entry);
 					}

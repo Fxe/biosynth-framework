@@ -3,6 +3,8 @@ package edu.uminho.biosynth.core.data.integration.components;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.uminho.biosynth.util.math.components.OrderedPair;
+
 public class ReferenceNode {
 
 	private Integer id;
@@ -55,6 +57,10 @@ public class ReferenceNode {
 		this.idServiceMap.add(pair);
 	}
 	
+	public Set<OrderedPair<Integer, String>> getIdServiceMap() {
+		return idServiceMap;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || obj.getClass() != this.getClass()) return false;
@@ -72,6 +78,6 @@ public class ReferenceNode {
 	
 	@Override
 	public String toString() {
-		return String.format("%s => %s", this.entryTypePair.getFirst(), this.idServiceMap);
+		return String.format("%s:%s", this.entryTypePair.getFirst(), this.idServiceMap);
 	}
 }
