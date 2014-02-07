@@ -35,7 +35,7 @@ public class TestDefaultGraph {
 	}
 
 	@Test
-	public void testEmptyGraphWithSingleVertex() {
+	public void testGraphWithSingleVertex() {
 		IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		assertEquals(0, graph.size());
@@ -43,7 +43,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithManyVertexex() {
+	public void testGraphWithManyVertexex() {
 		IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(1);
@@ -55,7 +55,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithSingleEdge() {
+	public void testGraphWithSingleEdge() {
 		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
@@ -66,7 +66,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithManyEdge() {
+	public void testGraphWithManyEdge() {
 		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
@@ -79,7 +79,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithCollisionEdge() {
+	public void testGraphWithCollisionEdge() {
 		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
@@ -93,7 +93,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithBidirectionalEdge() {
+	public void testGraphWithBidirectionalEdge() {
 		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(2);
@@ -104,7 +104,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphWithAllEdge() {
+	public void testGraphWithAllEdge() {
 		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
@@ -119,7 +119,7 @@ public class TestDefaultGraph {
 	}
 	
 	@Test
-	public void testEmptyGraphMergeSingleVertex() {
+	public void testGraphMergeSingleVertex() {
 		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
