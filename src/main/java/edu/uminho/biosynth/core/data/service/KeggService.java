@@ -7,5 +7,6 @@ public class KeggService extends AbstractMetaboliteService<KeggMetaboliteEntity>
 	
 	public KeggService(IGenericDao dao) {
 		super(dao, KeggMetaboliteEntity.class);
+		super.setServiceId("kegg");
 	}
 }

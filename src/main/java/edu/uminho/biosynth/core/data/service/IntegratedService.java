@@ -20,6 +20,7 @@ import edu.uminho.biosynth.core.data.service.cascade.CascadeByReference;
 import edu.uminho.biosynth.core.data.service.cascade.ICascadeStrategy;
 import edu.uminho.biosynth.core.data.service.mapping.MapperService;
 
+@Deprecated
 public class IntegratedService implements IMetaboliteService<IntegratedMetabolite> {
 	
 	private final static Logger LOGGER = Logger.getLogger(IntegratedService.class.getName());
@@ -114,6 +115,12 @@ public class IntegratedService implements IMetaboliteService<IntegratedMetabolit
 
 	@Override
 	public List<String> getAllMetabolitesEntries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getServiceId() {
 		// TODO Auto-generated method stub
 		return null;
 	}

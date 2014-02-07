@@ -5,6 +5,9 @@ import java.util.List;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 public interface IMetaboliteService<T extends GenericMetabolite> {
+	
+	public String getServiceId();
+	
 	public T getMetaboliteByEntry(String entry);
 	public T getMetaboliteById(int id);
 	

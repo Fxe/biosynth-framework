@@ -13,7 +13,7 @@ public abstract class AbstractMetaboliteService<T extends GenericMetabolite>
 	
 	protected IGenericDao dao;
 	protected Class<T> metaboliteClass;
-	protected String name = "unnamed";
+	protected String serviceId;
 	
 	public AbstractMetaboliteService(IGenericDao dao, Class<T> metaboliteClass) {
 		this.dao = dao;
@@ -22,8 +22,8 @@ public abstract class AbstractMetaboliteService<T extends GenericMetabolite>
 	
 	public Class<T> getMetaboliteClass() { return metaboliteClass; }
 
-	public String getName() { return name;}
-	public void setName(String name) { this.name = name;}
+	public String getServiceId() { return serviceId;}
+	public void setServiceId(String serviceId) { this.serviceId = serviceId;}
 
 	@Override
 	public T getMetaboliteById(int id) { 

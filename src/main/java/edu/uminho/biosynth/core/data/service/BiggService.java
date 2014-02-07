@@ -7,6 +7,7 @@ public class BiggService extends AbstractMetaboliteService<BiggMetaboliteEntity>
 
 	public BiggService(IGenericDao dao) {
 		super(dao, BiggMetaboliteEntity.class);
+		super.setServiceId("bigg");
 	}
 
 }

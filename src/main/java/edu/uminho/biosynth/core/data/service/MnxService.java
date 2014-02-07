@@ -17,6 +17,7 @@ public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	
 	public MnxService(IGenericDao dao) {
 		super(dao, MnxMetaboliteEntity.class);
+		super.setServiceId("mnx");
 	}
 	
 	public MnxMetaboliteEntity getMnxMetabolite(int id) {
