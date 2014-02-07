@@ -2,9 +2,12 @@ package edu.uminho.biosynth.core.data.integration.dictionary;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.brenda.BrendaMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChEbiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.pubchem.PubchemMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.reactome.ReactomeMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 
 public class BioDbEntityDictionary {
@@ -35,13 +38,13 @@ public class BioDbEntityDictionary {
 				clazz = java.lang.String.class;
 				break;
 			case "PUBCHEM":
-				clazz = java.lang.Integer.class;
+				clazz = PubchemMetaboliteEntity.class;
 				break;
 			case "BRENDA":
-				clazz = java.lang.Double.class;
+				clazz = BrendaMetaboliteEntity.class;
 				break;
 			case "REACTOME":
-				clazz = java.lang.Float.class;
+				clazz = ReactomeMetaboliteEntity.class;
 				break;
 			default:
 				clazz = null;

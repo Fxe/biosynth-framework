@@ -36,6 +36,15 @@ public class ReferenceNode {
 	public Class<?> getEntityType() {
 		return entryTypePair.getSecond();
 	}
+	
+	public Set<String> getRelatedServiceIds() {
+		Set<String> serviceIdSet = new HashSet<> ();
+		for (OrderedPair<Integer, String> pair : idServiceMap) {
+			serviceIdSet.add(pair.getSecond());
+		}
+		
+		return serviceIdSet;
+	}
 
 	public void setEntityType(Class<?> entityType) {
 		this.entryTypePair.setSecond(entityType);
@@ -63,6 +72,6 @@ public class ReferenceNode {
 	
 	@Override
 	public String toString() {
-		return String.format("%s => %s", this.entryTypePair, this.idServiceMap);
+		return String.format("%s => %s", this.entryTypePair.getFirst(), this.idServiceMap);
 	}
 }

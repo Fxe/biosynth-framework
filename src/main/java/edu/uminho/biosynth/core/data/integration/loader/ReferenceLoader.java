@@ -59,6 +59,7 @@ public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCross
 		// builds the main node (the metabolite T it self) 
 		ReferenceNode selfNode = new ReferenceNode(metabolite.getEntry().toUpperCase(), entityClazz);
 		selfNode.setEntryTypePair(selfNode.getEntryTypePair());
+		selfNode.addIdServicePair(0, this.service.getServiceId());
 		referenceGraph.addVertex(selfNode);
 		
 		// atempts to invoke the getCrossReferences method
