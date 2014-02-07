@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
-	private final Set<V> vertexes = new HashSet<V> ();
-	private final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
+	protected final Set<V> vertexes = new HashSet<V> ();
+	protected final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
 	
-	private final Map<E, IBinaryEdge<E, V>> edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
+	protected final Map<E, IBinaryEdge<E, V>> edgeMap = new HashMap<E, IBinaryEdge<E, V>>();
 	
 	public DefaultGraphImpl() { }
 	
@@ -204,14 +204,14 @@ public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 			sb.append( vertex.toString()).append(" -> ");
 			if (vertexEdgesMap.containsKey(vertex)) {
 				for ( IBinaryEdge<E, V> edge : vertexEdgesMap.get(vertex)) {
-					sb.append( edge.getRight()).append(',').append( edge.getWeight()).append(" -> ");
+					sb.append( edge.getRight()).append(" -> ");
 				}
 			}
 			sb.append(" /\n");
 		}
 		System.out.println(this.edgeMap);
-		sb.append("SIZE:" + this.size()).append('\n');
-		sb.append("ORDER:" + this.order());
+//		sb.append("SIZE:" + this.size()).append('\n');
+//		sb.append("ORDER:" + this.order());
 		return sb.toString();
 	}
 

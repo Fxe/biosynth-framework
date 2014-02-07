@@ -18,15 +18,15 @@ public abstract class AbstractGenericEntity implements Serializable {
 	private static final long serialVersionUID = 353453463465587L;
 
 	@Id
-    @Column(name="ID")
+    @Column(name="ID", nullable=false)
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.AUTO)
+    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
 	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	protected Integer id;
 	public Integer getId() { return this.id; }
 	public void setId(Integer id) { this.id = id; }
 	
-	@Column(name="ENTRY", unique=true, length=255)
+	@Column(name="ENTRY", unique=true, length=255, nullable=false)
 	protected String entry;
 
 	@Column(name="E_NAME", length=2047)
