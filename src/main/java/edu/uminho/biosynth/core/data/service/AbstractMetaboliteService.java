@@ -32,7 +32,7 @@ public abstract class AbstractMetaboliteService<T extends GenericMetabolite>
 	
 	@Override
 	public T getMetaboliteByEntry(String entry) {
-		System.out.println(metaboliteClass);
+//		System.out.println(metaboliteClass);
 		List<T> result = this.dao.criteria(metaboliteClass, Restrictions.eq("entry", entry));
 		if (result == null || result.size() < 1) return null;
 		if (result.size() > 1) throw new RuntimeException("Unique field error, duplicate entry " + entry);

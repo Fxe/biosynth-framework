@@ -124,4 +124,10 @@ public class IntegratedService implements IMetaboliteService<IntegratedMetabolit
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void setServiceId(String serviceId) {
+		// TODO Auto-generated method stub
+		
+	}
 }
