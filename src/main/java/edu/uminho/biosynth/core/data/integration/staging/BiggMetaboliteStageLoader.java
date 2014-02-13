@@ -16,7 +16,7 @@ public class BiggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<Big
 		cpd_stga.setDescription( cpd.getDescription());
 		cpd_stga.setClass_( cpd.getMetaboliteClass());
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroup( this.generateXrefGroup(cpd.getCrossReferences()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
 		
 		return cpd_stga;
 	}

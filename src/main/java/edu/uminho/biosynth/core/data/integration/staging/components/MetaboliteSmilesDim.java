@@ -1,15 +1,12 @@
 package edu.uminho.biosynth.core.data.integration.staging.components;
 
-// Generated 12-Feb-2014 16:59:46 by Hibernate Tools 4.0.0
+// Generated 13-Feb-2014 16:16:06 by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -41,7 +38,6 @@ public class MetaboliteSmilesDim implements java.io.Serializable {
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
@@ -51,7 +47,7 @@ public class MetaboliteSmilesDim implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "smiles", unique = true)
+	@Column(name = "smiles", unique = true, length = 65534)
 	public String getSmiles() {
 		return this.smiles;
 	}

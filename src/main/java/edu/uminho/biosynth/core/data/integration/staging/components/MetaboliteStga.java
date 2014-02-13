@@ -1,12 +1,10 @@
 package edu.uminho.biosynth.core.data.integration.staging.components;
 
-// Generated 12-Feb-2014 16:59:46 by Hibernate Tools 4.0.0
+// Generated 13-Feb-2014 16:16:06 by Hibernate Tools 4.0.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,12 +17,9 @@ import javax.persistence.Table;
 @Table(name = "metabolite_stga")
 public class MetaboliteStga implements java.io.Serializable {
 
-	private static final long serialVersionUID = -588617301617248103L;
-	
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
-	private MetaboliteXrefGroup metaboliteXrefGroup;
-	private MetaboliteNameGroup metaboliteNameGroup;
+	private MetaboliteXrefGroupDim metaboliteXrefGroupDim;
+	private MetaboliteNameGroupDim metaboliteNameGroupDim;
 	private MetaboliteInchiDim metaboliteInchiDim;
 	private MetaboliteSmilesDim metaboliteSmilesDim;
 	private MetaboliteFormulaDim metaboliteFormulaDim;
@@ -35,6 +30,8 @@ public class MetaboliteStga implements java.io.Serializable {
 	private String remark;
 	private String description;
 	private String formula;
+	private String gibbs;
+	private String mass;
 	private String class_;
 
 	public MetaboliteStga() {
@@ -44,17 +41,18 @@ public class MetaboliteStga implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public MetaboliteStga(int id, MetaboliteXrefGroup metaboliteXrefGroup,
-			MetaboliteNameGroup metaboliteNameGroup,
+	public MetaboliteStga(int id,
+			MetaboliteXrefGroupDim metaboliteXrefGroupDim,
+			MetaboliteNameGroupDim metaboliteNameGroupDim,
 			MetaboliteInchiDim metaboliteInchiDim,
 			MetaboliteSmilesDim metaboliteSmilesDim,
 			MetaboliteFormulaDim metaboliteFormulaDim,
 			MetaboliteServiceDim metaboliteServiceDim, Integer numeryKey,
 			String textKey, String comment, String remark, String description,
-			String formula, String class_) {
+			String formula, String gibbs, String mass, String class_) {
 		this.id = id;
-		this.metaboliteXrefGroup = metaboliteXrefGroup;
-		this.metaboliteNameGroup = metaboliteNameGroup;
+		this.metaboliteXrefGroupDim = metaboliteXrefGroupDim;
+		this.metaboliteNameGroupDim = metaboliteNameGroupDim;
 		this.metaboliteInchiDim = metaboliteInchiDim;
 		this.metaboliteSmilesDim = metaboliteSmilesDim;
 		this.metaboliteFormulaDim = metaboliteFormulaDim;
@@ -65,11 +63,12 @@ public class MetaboliteStga implements java.io.Serializable {
 		this.remark = remark;
 		this.description = description;
 		this.formula = formula;
+		this.gibbs = gibbs;
+		this.mass = mass;
 		this.class_ = class_;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
@@ -81,22 +80,24 @@ public class MetaboliteStga implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "xref_group_id")
-	public MetaboliteXrefGroup getMetaboliteXrefGroup() {
-		return this.metaboliteXrefGroup;
+	public MetaboliteXrefGroupDim getMetaboliteXrefGroupDim() {
+		return this.metaboliteXrefGroupDim;
 	}
 
-	public void setMetaboliteXrefGroup(MetaboliteXrefGroup metaboliteXrefGroup) {
-		this.metaboliteXrefGroup = metaboliteXrefGroup;
+	public void setMetaboliteXrefGroupDim(
+			MetaboliteXrefGroupDim metaboliteXrefGroupDim) {
+		this.metaboliteXrefGroupDim = metaboliteXrefGroupDim;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "name_group_id")
-	public MetaboliteNameGroup getMetaboliteNameGroup() {
-		return this.metaboliteNameGroup;
+	public MetaboliteNameGroupDim getMetaboliteNameGroupDim() {
+		return this.metaboliteNameGroupDim;
 	}
 
-	public void setMetaboliteNameGroup(MetaboliteNameGroup metaboliteNameGroup) {
-		this.metaboliteNameGroup = metaboliteNameGroup;
+	public void setMetaboliteNameGroupDim(
+			MetaboliteNameGroupDim metaboliteNameGroupDim) {
+		this.metaboliteNameGroupDim = metaboliteNameGroupDim;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -159,7 +160,7 @@ public class MetaboliteStga implements java.io.Serializable {
 		this.textKey = textKey;
 	}
 
-	@Column(name = "comment", length = 16384)
+	@Column(name = "comment", length = 65534)
 	public String getComment() {
 		return this.comment;
 	}
@@ -168,7 +169,7 @@ public class MetaboliteStga implements java.io.Serializable {
 		this.comment = comment;
 	}
 
-	@Column(name = "remark", length = 16384)
+	@Column(name = "remark", length = 65534)
 	public String getRemark() {
 		return this.remark;
 	}
@@ -177,7 +178,7 @@ public class MetaboliteStga implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	@Column(name = "description", length = 16384)
+	@Column(name = "description", length = 65534)
 	public String getDescription() {
 		return this.description;
 	}
@@ -193,6 +194,24 @@ public class MetaboliteStga implements java.io.Serializable {
 
 	public void setFormula(String formula) {
 		this.formula = formula;
+	}
+
+	@Column(name = "gibbs")
+	public String getGibbs() {
+		return this.gibbs;
+	}
+
+	public void setGibbs(String gibbs) {
+		this.gibbs = gibbs;
+	}
+
+	@Column(name = "mass")
+	public String getMass() {
+		return this.mass;
+	}
+
+	public void setMass(String mass) {
+		this.mass = mass;
 	}
 
 	@Column(name = "class")

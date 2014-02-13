@@ -15,7 +15,7 @@ public class MnxMetaboliteStageLoader extends AbstractMetaboliteStageLoader<MnxM
 		cpd_stga.setDescription( cpd.getDescription());
 		cpd_stga.setClass_( cpd.getMetaboliteClass());
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroup( this.generateXrefGroup(cpd.getCrossReferences()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
 		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInChI()));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(cpd.getSmiles()));
 		

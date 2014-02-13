@@ -1,15 +1,12 @@
 package edu.uminho.biosynth.core.data.integration.staging.components;
 
-// Generated 12-Feb-2014 16:59:46 by Hibernate Tools 4.0.0
+// Generated 13-Feb-2014 16:16:06 by Hibernate Tools 4.0.0
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,7 +20,8 @@ public class MetaboliteNameDim implements java.io.Serializable {
 
 	private int id;
 	private String name;
-	private Set<MetaboliteNameGroup> metaboliteNameGroups = new HashSet<MetaboliteNameGroup>(
+	private Boolean iupac;
+	private Set<MetaboliteNameBridge> metaboliteNameBridges = new HashSet<MetaboliteNameBridge>(
 			0);
 
 	public MetaboliteNameDim() {
@@ -33,15 +31,15 @@ public class MetaboliteNameDim implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public MetaboliteNameDim(int id, String name,
-			Set<MetaboliteNameGroup> metaboliteNameGroups) {
+	public MetaboliteNameDim(int id, String name, Boolean iupac,
+			Set<MetaboliteNameBridge> metaboliteNameBridges) {
 		this.id = id;
 		this.name = name;
-		this.metaboliteNameGroups = metaboliteNameGroups;
+		this.iupac = iupac;
+		this.metaboliteNameBridges = metaboliteNameBridges;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
@@ -51,7 +49,7 @@ public class MetaboliteNameDim implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "name", length = 2048)
+	@Column(name = "name", length = 65534)
 	public String getName() {
 		return this.name;
 	}
@@ -60,14 +58,23 @@ public class MetaboliteNameDim implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "metaboliteNameDim")
-	public Set<MetaboliteNameGroup> getMetaboliteNameGroups() {
-		return this.metaboliteNameGroups;
+	@Column(name = "iupac")
+	public Boolean getIupac() {
+		return this.iupac;
 	}
 
-	public void setMetaboliteNameGroups(
-			Set<MetaboliteNameGroup> metaboliteNameGroups) {
-		this.metaboliteNameGroups = metaboliteNameGroups;
+	public void setIupac(Boolean iupac) {
+		this.iupac = iupac;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "metaboliteNameDim")
+	public Set<MetaboliteNameBridge> getMetaboliteNameBridges() {
+		return this.metaboliteNameBridges;
+	}
+
+	public void setMetaboliteNameBridges(
+			Set<MetaboliteNameBridge> metaboliteNameBridges) {
+		this.metaboliteNameBridges = metaboliteNameBridges;
 	}
 
 }

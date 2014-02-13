@@ -14,7 +14,7 @@ import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFo
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroup;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStageLoader<T> {
@@ -79,8 +79,8 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 		return smiles_;
 	}
 	
-	protected MetaboliteXrefGroup generateXrefGroup(List<X> xrefs) {
-		MetaboliteXrefGroup xrefGroup = null;
+	protected MetaboliteXrefGroupDim generateXrefGroup(List<X> xrefs) {
+		MetaboliteXrefGroupDim xrefGroup = null;
 		
 		List<MetaboliteXrefDim> xref_ = new ArrayList<> ();
 		Set<Integer> xrefIdSet = new HashSet<> ();

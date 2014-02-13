@@ -13,7 +13,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroup;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
 
 public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity>{
 	
@@ -21,13 +21,13 @@ public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<Keg
 	private Map<Integer, Set<Integer>> groupToxrefsId = new HashMap<> ();
 	
 	public void generateXref() {
-		for (MetaboliteXrefGroup xrefGroup : dao.findAll(MetaboliteXrefGroup.class)) {
+		for (MetaboliteXrefGroupDim xrefGroup : dao.findAll(MetaboliteXrefGroupDim.class)) {
 			Integer groupId = xrefGroup.getId();
 			if (!groupToxrefsId.containsKey(groupId)) {
 				Set<Integer> setOfXrefIds = new HashSet<> ();
 				groupToxrefsId.put(groupId, setOfXrefIds);
 			}
-			groupToxrefsId.get(groupId).add(xrefGroup.getMetaboliteXrefDim().getId());
+//			groupToxrefsId.get(groupId).add(xrefGroup.getMetgetId());
 		}
 		
 		for (Integer groupId : groupToxrefsId.keySet()) {
@@ -46,7 +46,7 @@ public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<Keg
 		cpd_stga.setDescription( cpd.getDescription());
 		cpd_stga.setClass_( cpd.getMetaboliteClass());
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroup( this.generateXrefGroup(cpd.getCrossReferences()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
 		
 		
 		return cpd_stga;
