@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.data.integration.metabolite;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,14 @@ import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteC
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.data.integration.DefaultMetaboliteIntegrationStrategy;
+import edu.uminho.biosynth.core.data.integration.IIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
+import edu.uminho.biosynth.core.data.integration.components.IntegratedMetabolite;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
@@ -160,17 +165,32 @@ public class TestIntegrateMetabolite {
 		for (String clusterId : clusterAlgorithm.getClustersToListOfVertex().keySet()) {
 			System.out.println(clusterId + ":");
 			System.out.println(clusterAlgorithm.getClustersToListOfVertex().get(clusterId));
+			List<GenericMetabolite> cluster = new ArrayList<> ();
 			for (ReferenceNode node : clusterAlgorithm.getClustersToListOfVertex().get(clusterId)) {
 				String entry = node.getEntryTypePair().getFirst();
 				for (String serviceId : node.getRelatedServiceIds()) {
 					if (serviceMap.containsKey(serviceId)) {
-						GenericMetabolite obj = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
-						System.out.println(obj.getEntry() + ":" + serviceId);
+						GenericMetabolite cpd = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
+						cluster.add(cpd);
+						System.out.println(cpd.getEntry() + ":" + serviceId);
 					} else {
 						System.out.println("No Service For: " + entry);
 					}
 				}
 			}
+			
+			IKeyGenerator<String> generator = new IKeyGenerator<String>() {
+				@Override
+				public String generateKey() {
+					return "CPD-0";
+				}
+			};
+			
+			IIntegrationStrategy<GenericMetabolite, IntegratedMetabolite> integrationStrategy =
+					new DefaultMetaboliteIntegrationStrategy();
+			((DefaultMetaboliteIntegrationStrategy)integrationStrategy).setEntryGenerator(generator);
+			
+			System.out.println(integrationStrategy.integrate(cluster));
 		}
 		
 //		System.out.println(clusterAlgorithm.getClustersToListOfVertex().keySet());
