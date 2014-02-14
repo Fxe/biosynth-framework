@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
@@ -79,7 +80,9 @@ public class TestStagingInsertion {
 
 	@Test 
 	public void testStageKeggMetabolite() {
+		TransformKeggMetaboliteCrossReference transformer = new TransformKeggMetaboliteCrossReference();
 		KeggMetaboliteStageLoader keggStageLoader = new KeggMetaboliteStageLoader();
+		keggStageLoader.setTransformer(transformer);
 		keggStageLoader.setDao(dao);
 		KeggMetaboliteEntity cpdKegg1 = new KeggMetaboliteEntity();
 		cpdKegg1.setId(283);
