@@ -2,8 +2,12 @@ package edu.uminho.biosynth.core.data.integration.staging;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,6 +17,7 @@ import org.junit.Test;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -55,6 +60,17 @@ public class TestStageBigg {
 
 	@Test
 	public void testStageBigg() {
+		HbmMetaboliteStagingManagerImpl manager = new HbmMetaboliteStagingManagerImpl();
+		manager.setDao(dao_stga);
+		MetaboliteServiceDim service = new MetaboliteServiceDim("BiGG_FILE", "0.0.1-SNAPSHOT", null);
+		service = manager.createOrGetService(service);
+		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
+		
+		Set<String> skipEntries = new HashSet<> ();
+		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
+			skipEntries.add(cpd.getTextKey());
+		}
+		
 		TransformBiggMetaboliteCrossReference biggXrefTrans = new TransformBiggMetaboliteCrossReference();
 		biggXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
 		
@@ -64,14 +80,18 @@ public class TestStageBigg {
 		
 		int counter = 0;
 		for (BiggMetaboliteEntity cpdBigg : dao_bigg.findAll(BiggMetaboliteEntity.class)) {
-			System.out.println(cpdBigg.getEntry());
-			System.out.println(cpdBigg.getFormula());
-			MetaboliteStga cpd_stga = loader.stageMetabolite(cpdBigg);
-			dao_stga.save(cpd_stga);			
-			counter++;
-			if (counter % 50 == 0) {
-				tx_stga.commit();
-				tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+			if ( !skipEntries.contains(cpdBigg.getEntry())) {
+				System.out.println(cpdBigg.getEntry());
+				System.out.println(cpdBigg.getFormula());
+				MetaboliteStga cpd_stga = loader.stageMetabolite(cpdBigg);
+				cpd_stga.setMetaboliteServiceDim(service);
+				dao_stga.save(cpd_stga);
+			
+				counter++;
+				if (counter % 50 == 0) {
+					tx_stga.commit();
+					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+				}
 			}
 		}
 		

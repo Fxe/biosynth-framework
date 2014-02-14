@@ -9,6 +9,14 @@
 
   <name>biosynth-integration</name>
   <url>http://maven.apache.org</url>
+  
+  <repositories>
+    <repository>
+      <id>jni-inchi</id>
+      <name>JNI-InChI Maven Repository</name>
+      <url>http://jni-inchi.sourceforge.net/m2repo</url>
+    </repository>
+  </repositories>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +34,13 @@
       <groupId>edu.uminho.biosynthframework</groupId>
       <artifactId>biosynth-algorithms</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sf.jni-inchi</groupId>
+      <artifactId>jni-inchi</artifactId>
+      <version>0.7</version>
+      <scope>test</scope>
     </dependency>
     
     <dependency>

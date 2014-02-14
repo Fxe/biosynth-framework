@@ -3,8 +3,10 @@ package edu.uminho.biosynth.core.data.integration.staging;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,6 +20,7 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -62,6 +65,25 @@ public class TestStageBiocyc {
 
 	@Test
 	public void testStageBiocyc() {
+		MetaboliteServiceDim service = null;
+		String serviceName = "BioCyc_LIVE";
+		String serviceVersion = "0.0.1-SNAPSHOT";
+		service = dao_stga.find(MetaboliteServiceDim.class, serviceName);
+		if (service == null) {
+			System.out.println("Adding Service ... ");
+			service = new MetaboliteServiceDim();
+			service.setServiceVersion(serviceVersion);
+			service.setServiceName(serviceName);
+			dao_stga.save(service);
+			tx_stga.commit();
+			tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+		}
+		
+		Set<String> skipEntries = new HashSet<> ();
+		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
+			skipEntries.add(cpd.getTextKey());
+		}
+		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
 		
 		IMetaboliteService<BiggMetaboliteEntity> biggService = new BiggService(dao_biocyc);
 		TransformBiocycMetaboliteCrossReference biocycXrefTrans =  new TransformBiocycMetaboliteCrossReference();
@@ -83,14 +105,18 @@ public class TestStageBiocyc {
 		
 		int counter = 0;
 		for (BioCycMetaboliteEntity cpdBiocyc : dao_biocyc.findAll(BioCycMetaboliteEntity.class)) {
-			System.out.println(cpdBiocyc.getEntry());
-			System.out.println(cpdBiocyc.getFormula());
-			MetaboliteStga cpd_stga = loader.stageMetabolite(cpdBiocyc);
-			dao_stga.save(cpd_stga);
-			counter++;
-			if (counter % 50 == 0) {
-				tx_stga.commit();
-				tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+			if ( !skipEntries.contains(cpdBiocyc.getEntry())) {
+				System.out.println(cpdBiocyc.getEntry());
+				System.out.println(cpdBiocyc.getFormula());
+				MetaboliteStga cpd_stga = loader.stageMetabolite(cpdBiocyc);
+				cpd_stga.setMetaboliteServiceDim(service);
+				
+				dao_stga.save(cpd_stga);
+				counter++;
+				if (counter % 50 == 0) {
+					tx_stga.commit();
+					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+				}
 			}
 		}
 		

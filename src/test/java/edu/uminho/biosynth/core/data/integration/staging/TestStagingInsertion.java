@@ -13,6 +13,7 @@ import org.junit.Test;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;

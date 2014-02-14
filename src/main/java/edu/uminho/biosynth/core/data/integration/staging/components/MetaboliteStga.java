@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.staging.components;
 
-// Generated 13-Feb-2014 16:16:06 by Hibernate Tools 4.0.0
+// Generated 14-Feb-2014 20:21:31 by Hibernate Tools 4.0.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

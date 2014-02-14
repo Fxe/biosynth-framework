@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jniinchi.JniInchiException;
+import net.sf.jniinchi.JniInchiOutputKey;
+import net.sf.jniinchi.JniInchiWrapper;
+
 import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
@@ -23,22 +27,20 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 	
 	protected IGenericDao dao;
 	protected IReferenceTransformer<X> transformer;
+	protected IMetaboliteStagingManager manager;
 	
 	public IGenericDao getDao() { return dao;}
 	public void setDao(IGenericDao dao) { this.dao = dao;}
 	
+	public IMetaboliteStagingManager getManager() {return manager; }
+	public void setManager(IMetaboliteStagingManager manager) {this.manager = manager; }
+	
 	public IReferenceTransformer<X> getTransformer() { return transformer;}
-	public void setTransformer(IReferenceTransformer<X> transformer) {this.transformer = transformer;}
-	
-	//STORE THE NULL FORMULA, INCHI, SMILE
-	private MetaboliteInchiDim nullInchi = null;
-	private MetaboliteSmilesDim nullSmiles = null;
-	private MetaboliteFormulaDim nullFormula = null;
-	
+	public void setTransformer(IReferenceTransformer<X> transformer) {this.transformer = transformer;}	
 	
 	protected MetaboliteFormulaDim generateFormula(String formula) {
 		if (formula == null || formula.replaceAll("\\s+", "").trim().length() < 1) {
-			return nullFormula;
+			return manager.getNullFormulaDim();
 		}
 		
 		MetaboliteFormulaDim formula_ = null;
@@ -59,7 +61,10 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 	
 	protected MetaboliteInchiDim generateInChI(String inchi) {
 		if (inchi == null || inchi.replaceAll("\\s+", "").trim().length() < 1) {
-			return nullInchi;
+			return manager.getNullInchiDim();
+		}
+		if (!inchi.startsWith("InChI=")) {
+			inchi = "InChI=".concat(inchi);
 		}
 		
 		MetaboliteInchiDim inchi_ = null;
@@ -72,6 +77,23 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 		if (inchi_ == null) {
 			inchi_ = new MetaboliteInchiDim();
 			inchi_.setInchi(inchi);
+			JniInchiOutputKey out;
+			String inchiKey = null;
+			try {
+				out = JniInchiWrapper.getInchiKey(inchi);
+				switch (out.getReturnStatus()) {
+					case OK:
+						inchiKey = out.getKey();
+						break;
+					default:
+						//RETURN INVALID INCHI
+						return manager.getInvalidInchiDim(out.getReturnStatus().toString(), out.getReturnStatus().toString());
+				}
+			} catch (JniInchiException e) {
+				//RETURN ERROR STATE INCHI
+				return manager.getInvalidInchiDim("EXCEPTION", e.getMessage());
+			}
+			inchi_.setInchiKey(inchiKey);
 			dao.save(inchi_);
 		}
 		
@@ -80,7 +102,7 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 	
 	protected MetaboliteSmilesDim generateSmiles(String smiles) {
 		if (smiles == null || smiles.replaceAll("\\s+", "").trim().length() < 1) {
-			return nullSmiles;
+			return manager.getNullSmilesDim();
 		}
 		
 		MetaboliteSmilesDim smiles_ = null;
@@ -102,6 +124,7 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 	protected MetaboliteNameGroupDim generateNames(List<String> names) {
 		MetaboliteNameGroupDim nameGroup = null;
 		
+		Set<Integer> nameIdSet = new HashSet<> ();
 		for (String name : names) {
 			MetaboliteNameDim name_dim = null;
 			
@@ -118,6 +141,8 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 				
 				dao.save(name_dim);
 			}
+			
+			nameIdSet.add(name_dim.getId());
 		}
 		
 		return nameGroup;
