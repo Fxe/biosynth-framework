@@ -4,9 +4,12 @@ package edu.uminho.biosynth.core.data.integration.staging.components;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -37,6 +40,7 @@ public class MetaboliteServiceDim implements java.io.Serializable {
 	}
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "service_name", unique = true, nullable = false)
 	public String getServiceName() {
 		return this.serviceName;
