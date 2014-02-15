@@ -63,7 +63,7 @@ public class TestStagingInsertion {
 	}
 	
 	@Test
-	public void testAddMetaboliteWithSingle() {
+	public void testAddMetaboliteWithSingleDimention() {
 		MetaboliteStga cpdStaging = new MetaboliteStga();
 		cpdStaging.setNumeryKey(0);
 		cpdStaging.setTextKey("C00001");

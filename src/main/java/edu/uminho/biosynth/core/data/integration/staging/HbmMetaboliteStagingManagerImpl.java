@@ -1,14 +1,22 @@
 package edu.uminho.biosynth.core.data.integration.staging;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameBridge;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameBridgeId;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameGroupDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefBridge;
+import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefBridgeId;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
@@ -20,9 +28,17 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 	private MetaboliteSmilesDim nullSmiles = null;
 	private MetaboliteFormulaDim nullFormula = null;
 	
+	private Map<Set<Integer>, Integer> nameSetToGroupId = new HashMap<> ();
+	private Map<Integer, Set<Integer>> groupIdToNameSet = new HashMap<> ();
+	
+	private Map<Set<Integer>, Integer> xrefSetToGroupId = new HashMap<> ();
+	private Map<Integer, Set<Integer>> groupIdToXrefSet = new HashMap<> ();
+	
 	public IGenericDao getDao() { return dao;}
 	public void setDao(IGenericDao dao) { this.dao = dao;}
 
+	
+	
 	@Override
 	public MetaboliteServiceDim createOrGetService(MetaboliteServiceDim service) {
 		MetaboliteServiceDim res = dao.find(MetaboliteServiceDim.class, service.getServiceName());
@@ -104,17 +120,99 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 		}
 		return nullFormula;
 	}
-
-	@Override
-	public MetaboliteXrefGroupDim createOrGetXrefGroupDim(Set<Integer> xrefIds) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private void initializeNameGroupSearch() {
+		this.nameSetToGroupId.clear();
+		this.groupIdToNameSet.clear();
+		
+		for (MetaboliteNameBridge bridge : dao.findAll(MetaboliteNameBridge.class)) {
+			Integer groupId = bridge.getId().getNameGroupId();
+			Integer nameId = bridge.getId().getNameId();
+			if (groupIdToNameSet.containsKey(groupId)) {
+				groupIdToNameSet.put(groupId, new HashSet<Integer> ());
+			}
+			
+			groupIdToNameSet.get(groupId).add(nameId);
+		}
+		
+		for (Integer groupId : groupIdToNameSet.keySet()) {
+			if (nameSetToGroupId.put(groupIdToNameSet.get(groupId), groupId) != null) {
+				//ERROR
+			}
+		}
+	}
+	
+	private void initializeXrefGroupSearch() {
+		this.xrefSetToGroupId.clear();
+		this.groupIdToXrefSet.clear();
+		
+		for (MetaboliteXrefBridge bridge : dao.findAll(MetaboliteXrefBridge.class)) {
+			Integer groupId = bridge.getId().getXrefGroupId();
+			Integer xrefId = bridge.getId().getXrefId();
+			if (groupIdToXrefSet.containsKey(groupId)) {
+				groupIdToXrefSet.put(groupId, new HashSet<Integer> ());
+			}
+			
+			groupIdToXrefSet.get(groupId).add(xrefId);
+		}
+		
+		for (Integer groupId : groupIdToXrefSet.keySet()) {
+			if (xrefSetToGroupId.put(groupIdToXrefSet.get(groupId), groupId) != null) {
+				//ERROR GROUP AND SETS
+			}
+		}
 	}
 
 	@Override
-	public MetaboliteXrefGroupDim createOrGetNameGroupDim(Set<Integer> namesIds) {
-		// TODO Auto-generated method stub
-		return null;
+	public MetaboliteXrefGroupDim createOrGetXrefGroupDim(Set<Integer> xrefIds) {
+		MetaboliteXrefGroupDim xrefGroupDim = null;
+		
+		synchronized (xrefSetToGroupId) {
+			if (this.xrefSetToGroupId.isEmpty()) {
+				this.initializeXrefGroupSearch();
+			}
+			
+			if (this.xrefSetToGroupId.containsKey(xrefIds)) {
+				xrefGroupDim = this.dao.getReference(MetaboliteXrefGroupDim.class, this.xrefSetToGroupId.get(xrefIds));
+			} else {
+				xrefGroupDim = new MetaboliteXrefGroupDim();
+				this.dao.save(xrefGroupDim);
+				this.xrefSetToGroupId.put(xrefIds, xrefGroupDim.getId());
+				for (Integer xrefId : xrefIds) {
+					MetaboliteXrefBridge nameBridge = new MetaboliteXrefBridge();
+					nameBridge.setId(new MetaboliteXrefBridgeId(xrefGroupDim.getId(), xrefId));
+					this.dao.save(nameBridge);
+				}
+			}
+		}
+		
+		return xrefGroupDim;
+	}
+
+	@Override
+	public MetaboliteNameGroupDim createOrGetNameGroupDim(Set<Integer> namesIds) {
+		MetaboliteNameGroupDim nameGroupDim = null;
+		
+		synchronized (nameSetToGroupId) {
+			if (nameSetToGroupId.isEmpty()) {
+				this.initializeNameGroupSearch();
+			}
+			
+			if (nameSetToGroupId.containsKey(namesIds)) {
+				nameGroupDim = dao.getReference(MetaboliteNameGroupDim.class, nameSetToGroupId.get(namesIds));
+			} else {
+				nameGroupDim = new MetaboliteNameGroupDim();
+				dao.save(nameGroupDim);
+				nameSetToGroupId.put(namesIds, nameGroupDim.getId());
+				for (Integer nameId : namesIds) {
+					MetaboliteNameBridge nameBridge = new MetaboliteNameBridge();
+					nameBridge.setId(new MetaboliteNameBridgeId(nameId, nameGroupDim.getId()));
+					dao.save(nameBridge);
+				}
+			}
+		}
+		
+		return nameGroupDim;
 	}
 
 }

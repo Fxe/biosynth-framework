@@ -81,6 +81,7 @@ public class TestStageKegg {
 		int counter = 0;
 		int total = 0;
 		for (KeggMetaboliteEntity cpdKegg : dao_kegg.findAll(KeggMetaboliteEntity.class)) {
+//			if ( cpdKegg.getEntry().equals("C00001"))
 			if ( !skipEntries.contains(cpdKegg.getEntry())) {
 				System.out.println(cpdKegg.getEntry());
 				System.out.println(cpdKegg.getFormula());

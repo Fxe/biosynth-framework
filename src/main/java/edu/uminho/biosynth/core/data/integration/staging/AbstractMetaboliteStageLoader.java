@@ -145,6 +145,8 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 			nameIdSet.add(name_dim.getId());
 		}
 		
+		nameGroup = this.manager.createOrGetNameGroupDim(nameIdSet);
+		
 		return nameGroup;
 	}
 	
@@ -178,7 +180,7 @@ public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite,
 			xrefIdSet.add(xref_dim.getId());
 		}
 		
-		
+		xrefGroup = this.manager.createOrGetXrefGroupDim(xrefIdSet);
 		//find a group with all the xrefs that were assembled
 		//if group was found then return the group otherwise generate new group
 //		if (xrefsToGroupId.containsKey(xrefIdSet)) {

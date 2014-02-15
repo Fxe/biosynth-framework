@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -77,8 +76,10 @@ public class TestStageBigg {
 		BiggMetaboliteStageLoader loader = new BiggMetaboliteStageLoader();
 		loader.setDao(dao_stga);
 		loader.setTransformer(biggXrefTrans);
+		loader.setManager(manager);
 		
 		int counter = 0;
+		int total = 0;
 		for (BiggMetaboliteEntity cpdBigg : dao_bigg.findAll(BiggMetaboliteEntity.class)) {
 			if ( !skipEntries.contains(cpdBigg.getEntry())) {
 				System.out.println(cpdBigg.getEntry());
@@ -93,9 +94,10 @@ public class TestStageBigg {
 					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
 				}
 			}
+			total++;
 		}
 		
-		fail("Not yet implemented");
+		assertEquals(2835, total);
 	}
 
 }

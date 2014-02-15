@@ -1,5 +1,8 @@
 package edu.uminho.biosynth.core.data.integration.staging;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
@@ -18,7 +21,11 @@ public class MnxMetaboliteStageLoader extends AbstractMetaboliteStageLoader<MnxM
 		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
 		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInChI()));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(cpd.getSmiles()));
+		List<String> names = new ArrayList<> ();
+		//add name if not null or contains at least one character
+		if (cpd.getName() != null && cpd.getName().trim().length() > 0) names.add(cpd.getName());
 		
+		cpd_stga.setMetaboliteNameGroupDim( this.generateNames(names));
 		return cpd_stga;
 	}
 

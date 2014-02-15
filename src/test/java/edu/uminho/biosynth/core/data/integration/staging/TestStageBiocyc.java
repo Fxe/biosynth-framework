@@ -65,25 +65,16 @@ public class TestStageBiocyc {
 
 	@Test
 	public void testStageBiocyc() {
-		MetaboliteServiceDim service = null;
-		String serviceName = "BioCyc_LIVE";
-		String serviceVersion = "0.0.1-SNAPSHOT";
-		service = dao_stga.find(MetaboliteServiceDim.class, serviceName);
-		if (service == null) {
-			System.out.println("Adding Service ... ");
-			service = new MetaboliteServiceDim();
-			service.setServiceVersion(serviceVersion);
-			service.setServiceName(serviceName);
-			dao_stga.save(service);
-			tx_stga.commit();
-			tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
-		}
+		HbmMetaboliteStagingManagerImpl manager = new HbmMetaboliteStagingManagerImpl();
+		manager.setDao(dao_stga);
+		MetaboliteServiceDim service = new MetaboliteServiceDim("BioCyc_LIVE", "0.0.1-SNAPSHOT", null);
+		service = manager.createOrGetService(service);
+		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
 		
 		Set<String> skipEntries = new HashSet<> ();
 		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
 			skipEntries.add(cpd.getTextKey());
 		}
-		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
 		
 		IMetaboliteService<BiggMetaboliteEntity> biggService = new BiggService(dao_biocyc);
 		TransformBiocycMetaboliteCrossReference biocycXrefTrans =  new TransformBiocycMetaboliteCrossReference();
@@ -102,8 +93,10 @@ public class TestStageBiocyc {
 		BiocycMetaboliteStageLoader loader = new BiocycMetaboliteStageLoader();
 		loader.setDao(dao_stga);
 		loader.setTransformer(biocycXrefTrans);
+		loader.setManager(manager);
 		
 		int counter = 0;
+		int total = 0;
 		for (BioCycMetaboliteEntity cpdBiocyc : dao_biocyc.findAll(BioCycMetaboliteEntity.class)) {
 			if ( !skipEntries.contains(cpdBiocyc.getEntry())) {
 				System.out.println(cpdBiocyc.getEntry());
@@ -118,9 +111,10 @@ public class TestStageBiocyc {
 					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
 				}
 			}
+			total++;
 		}
 		
-		fail("Not yet implemented");
+		assertEquals(2835, total);
 	}
 
 }

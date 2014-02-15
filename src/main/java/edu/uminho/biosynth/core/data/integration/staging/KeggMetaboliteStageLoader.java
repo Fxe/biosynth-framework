@@ -1,5 +1,8 @@
 package edu.uminho.biosynth.core.data.integration.staging;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
@@ -37,6 +40,12 @@ public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<Keg
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(null));
 		cpd_stga.setMetaboliteInchiDim( this.generateInChI(null));
+		List<String> names = new ArrayList<> ();
+		if (cpd.getName() != null && cpd.getName().trim().length() > 0)
+		for (String name : cpd.getName().split(";")) {
+			if (name.trim().length() > 0) names.add(name);
+		}
+		cpd_stga.setMetaboliteNameGroupDim( this.generateNames(names));
 		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
 		
 		return cpd_stga;
