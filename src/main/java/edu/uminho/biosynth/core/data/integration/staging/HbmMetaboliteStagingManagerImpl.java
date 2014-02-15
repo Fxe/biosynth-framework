@@ -27,6 +27,8 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 	private MetaboliteInchiDim nullInchi = null;
 	private MetaboliteSmilesDim nullSmiles = null;
 	private MetaboliteFormulaDim nullFormula = null;
+	private MetaboliteXrefGroupDim nullXrefGroup = null;
+	private MetaboliteNameGroupDim nullNameGroup = null;
 	
 	private Map<Set<Integer>, Integer> nameSetToGroupId = new HashMap<> ();
 	private Map<Integer, Set<Integer>> groupIdToNameSet = new HashMap<> ();
@@ -213,6 +215,27 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 		}
 		
 		return nameGroupDim;
+	}
+	@Override
+	public MetaboliteXrefGroupDim getNullXrefGroupDim() {
+		if (nullXrefGroup == null) {
+			List<MetaboliteXrefGroupDim> res = dao.query(""); 
+					dao.criteria(MetaboliteXrefGroupDim.class, Restrictions.eq("smiles", NULL_SMILES));
+			if (res.size() < 1) {
+				nullXrefGroup = new MetaboliteXrefGroupDim();
+				dao.save(nullXrefGroup);
+			} else {
+				//SHOULD WARNING IF MORE THAN 2
+				//  ^ THIS IMPOSSIBLE SINCE SMILES IS UNIQUE !
+				nullXrefGroup = res.iterator().next();
+			}
+		}
+		return nullXrefGroup;
+	}
+	@Override
+	public MetaboliteNameGroupDim getNullNameGroupDim() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -20,6 +20,8 @@ public interface IMetaboliteStagingManager {
 	public MetaboliteInchiDim getNullInchiDim();
 	public MetaboliteInchiDim getInvalidInchiDim(String errorType, String longMsg);
 	public MetaboliteFormulaDim getNullFormulaDim();
+	public MetaboliteXrefGroupDim getNullXrefGroupDim();
+	public MetaboliteNameGroupDim getNullNameGroupDim();
 	public MetaboliteXrefGroupDim createOrGetXrefGroupDim(Set<Integer> xrefIds);
 	public MetaboliteNameGroupDim createOrGetNameGroupDim(Set<Integer> namesIds);
 }
