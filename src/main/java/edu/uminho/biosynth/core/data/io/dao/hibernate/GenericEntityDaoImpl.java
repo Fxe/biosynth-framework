@@ -31,7 +31,7 @@ public class GenericEntityDaoImpl implements IGenericDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T find(Class<T> type, Serializable id) {
-		return (T) this.currentSession().load(type, id);
+		return (T) this.currentSession().get(type, id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,11 +43,11 @@ public class GenericEntityDaoImpl implements IGenericDao {
 		}
 		return (T[]) res;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getReference(Class<T> type, Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		return (T) this.currentSession().load(type, id);
 	}
 
 	@Override
