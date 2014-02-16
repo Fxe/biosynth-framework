@@ -1,5 +1,6 @@
-package edu.uminho.biosynth.core.data.integration.staging;
+package edu.uminho.biosynth.core.data.integration.etl.staging;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,16 +9,16 @@ import java.util.Set;
 
 import org.hibernate.criterion.Restrictions;
 
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameBridge;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameBridgeId;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameGroupDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefBridge;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefBridgeId;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameBridge;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameBridgeId;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameGroupDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefBridge;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefBridgeId;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManager {
@@ -219,23 +220,35 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 	@Override
 	public MetaboliteXrefGroupDim getNullXrefGroupDim() {
 		if (nullXrefGroup == null) {
-			List<MetaboliteXrefGroupDim> res = dao.query(""); 
-					dao.criteria(MetaboliteXrefGroupDim.class, Restrictions.eq("smiles", NULL_SMILES));
+			List<Object[]> res = dao.query("SELECT XrefGroup.id FROM MetaboliteXrefGroupDim XrefGroup WHERE XrefGroup.id NOT IN (SELECT Bridge.id.xrefGroupId FROM MetaboliteXrefBridge Bridge)"); 
+			
 			if (res.size() < 1) {
 				nullXrefGroup = new MetaboliteXrefGroupDim();
 				dao.save(nullXrefGroup);
 			} else {
-				//SHOULD WARNING IF MORE THAN 2
-				//  ^ THIS IMPOSSIBLE SINCE SMILES IS UNIQUE !
-				nullXrefGroup = res.iterator().next();
+				//THIS IS DANGEROUS !
+				Serializable id = Integer.class.cast(res.iterator().next());
+				nullXrefGroup = dao.find(MetaboliteXrefGroupDim.class, id);
 			}
 		}
 		return nullXrefGroup;
 	}
+	
 	@Override
 	public MetaboliteNameGroupDim getNullNameGroupDim() {
-		// TODO Auto-generated method stub
-		return null;
+		if (nullNameGroup == null) {
+			List<Object[]> res = dao.query("SELECT NameGroup.id FROM MetaboliteNameGroupDim NameGroup WHERE NameGroup.id NOT IN (SELECT Bridge.id.nameGroupId FROM MetaboliteNameBridge Bridge)"); 
+			
+			if (res.size() < 1) {
+				nullNameGroup = new MetaboliteNameGroupDim();
+				dao.save(nullNameGroup);
+			} else {
+				//THIS IS DANGEROUS !
+				Serializable id = Integer.class.cast(res.iterator().next());
+				nullNameGroup = dao.find(MetaboliteNameGroupDim.class, id);
+			}
+		}
+		return nullNameGroup;
 	}
 
 }

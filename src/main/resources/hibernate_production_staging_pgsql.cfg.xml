@@ -18,16 +18,16 @@
         
         <property name="show_sql">true</property>
         
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameGroupDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameBridge" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefBridge" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefDim" />
-        <mapping class="edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameGroupDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameBridge" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefBridge" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefDim" />
+        <mapping class="edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim" />
     </session-factory>
 </hibernate-configuration>

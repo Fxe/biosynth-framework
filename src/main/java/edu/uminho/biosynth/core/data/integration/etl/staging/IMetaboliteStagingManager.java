@@ -1,13 +1,13 @@
-package edu.uminho.biosynth.core.data.integration.staging;
+package edu.uminho.biosynth.core.data.integration.etl.staging;
 
 import java.util.Set;
 
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameGroupDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameGroupDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 
 public interface IMetaboliteStagingManager {
 	

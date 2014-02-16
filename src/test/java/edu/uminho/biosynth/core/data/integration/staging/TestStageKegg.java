@@ -15,9 +15,11 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStageLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.test.config.TestConfig;
@@ -85,7 +87,7 @@ public class TestStageKegg {
 			if ( !skipEntries.contains(cpdKegg.getEntry())) {
 				System.out.println(cpdKegg.getEntry());
 				System.out.println(cpdKegg.getFormula());
-				MetaboliteStga cpd_stga = loader.stageMetabolite(cpdKegg);
+				MetaboliteStga cpd_stga = loader.etlTransform(cpdKegg);
 				cpd_stga.setMetaboliteServiceDim(service);
 				
 				dao_stga.save(cpd_stga);			

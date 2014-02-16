@@ -1,13 +1,13 @@
-package edu.uminho.biosynth.core.data.integration.staging;
+package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity>{
+public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageTransform<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity>{
 	
 //	private Map<Set<Integer>, Integer> xrefsToGroupId = new HashMap<> ();
 //	private Map<Integer, Set<Integer>> groupToxrefsId = new HashMap<> ();
@@ -28,7 +28,7 @@ public class KeggMetaboliteStageLoader extends AbstractMetaboliteStageLoader<Keg
 //	}
 
 	@Override
-	public MetaboliteStga stageMetabolite(KeggMetaboliteEntity cpd) {
+	public MetaboliteStga etlTransform(KeggMetaboliteEntity cpd) {
 		MetaboliteStga cpd_stga = new MetaboliteStga();
 		cpd_stga.setNumeryKey(cpd.getId());
 		cpd_stga.setTextKey(cpd.getEntry());

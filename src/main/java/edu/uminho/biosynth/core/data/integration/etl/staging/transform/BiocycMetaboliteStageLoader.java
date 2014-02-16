@@ -1,16 +1,16 @@
-package edu.uminho.biosynth.core.data.integration.staging;
+package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class BiocycMetaboliteStageLoader extends AbstractMetaboliteStageLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> {
+public class BiocycMetaboliteStageLoader extends AbstractMetaboliteStageTransform<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> {
 	
 	@Override
-	public MetaboliteStga stageMetabolite(BioCycMetaboliteEntity cpd) {
+	public MetaboliteStga etlTransform(BioCycMetaboliteEntity cpd) {
 		MetaboliteStga cpd_stga = new MetaboliteStga();
 		cpd_stga.setNumeryKey(cpd.getId());
 		cpd_stga.setTextKey(cpd.getEntry());

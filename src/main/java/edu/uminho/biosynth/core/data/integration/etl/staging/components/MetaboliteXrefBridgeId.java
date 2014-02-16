@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.staging.components;
+package edu.uminho.biosynth.core.data.integration.etl.staging.components;
 
 // Generated 14-Feb-2014 20:21:31 by Hibernate Tools 4.0.0
 

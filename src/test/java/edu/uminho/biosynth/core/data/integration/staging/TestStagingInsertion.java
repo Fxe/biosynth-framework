@@ -11,10 +11,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStageLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteServiceDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.test.config.TestConfig;
@@ -93,7 +94,7 @@ public class TestStagingInsertion {
 		cpdKegg1.setComment("manual");
 		cpdKegg1.setDescription("fake");
 		cpdKegg1.setName("some crazy compound; compound xpto;");
-		MetaboliteStga cpd_stga = keggStageLoader.stageMetabolite(cpdKegg1);
+		MetaboliteStga cpd_stga = keggStageLoader.etlTransform(cpdKegg1);
 		
 		dao.save(cpd_stga);
 	}

@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.staging;
+package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,17 +13,18 @@ import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
+import edu.uminho.biosynth.core.data.integration.etl.staging.IMetaboliteStagingManager;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameGroupDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefDim;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteFormulaDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteInchiDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteNameGroupDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteSmilesDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefDim;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
-public abstract class AbstractMetaboliteStageLoader<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStageLoader<T> {
+public abstract class AbstractMetaboliteStageTransform<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStageTransform<T> {
 	
 	protected IGenericDao dao;
 	protected IReferenceTransformer<X> transformer;

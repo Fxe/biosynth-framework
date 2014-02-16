@@ -12,8 +12,9 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.MnxMetaboliteStageLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformMnxMetaboliteCrossReference;
-import edu.uminho.biosynth.core.data.integration.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.test.config.TestConfig;
@@ -66,7 +67,7 @@ public class TestStageMnx {
 		for (MnxMetaboliteEntity cpdMnx : dao_mnx.findAll(MnxMetaboliteEntity.class)) {
 			System.out.println(cpdMnx.getEntry());
 			System.out.println(cpdMnx.getFormula());
-			MetaboliteStga cpd_stga = loader.stageMetabolite(cpdMnx);
+			MetaboliteStga cpd_stga = loader.etlTransform(cpdMnx);
 			dao_stga.save(cpd_stga);
 			counter++;
 			if (counter % 50 == 0) {
