@@ -131,7 +131,7 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 		for (MetaboliteNameBridge bridge : dao.findAll(MetaboliteNameBridge.class)) {
 			Integer groupId = bridge.getId().getNameGroupId();
 			Integer nameId = bridge.getId().getNameId();
-			if (groupIdToNameSet.containsKey(groupId)) {
+			if ( !groupIdToNameSet.containsKey(groupId)) {
 				groupIdToNameSet.put(groupId, new HashSet<Integer> ());
 			}
 			
@@ -152,7 +152,7 @@ public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManage
 		for (MetaboliteXrefBridge bridge : dao.findAll(MetaboliteXrefBridge.class)) {
 			Integer groupId = bridge.getId().getXrefGroupId();
 			Integer xrefId = bridge.getId().getXrefId();
-			if (groupIdToXrefSet.containsKey(groupId)) {
+			if ( !groupIdToXrefSet.containsKey(groupId)) {
 				groupIdToXrefSet.put(groupId, new HashSet<Integer> ());
 			}
 			

@@ -24,7 +24,7 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
-public abstract class AbstractMetaboliteStageTransform<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStageTransform<T> {
+public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStagingTransform<T> {
 	
 	protected IGenericDao dao;
 	protected IReferenceTransformer<X> transformer;
@@ -123,6 +123,8 @@ public abstract class AbstractMetaboliteStageTransform<T extends GenericMetaboli
 	}
 	
 	protected MetaboliteNameGroupDim generateNames(List<String> names) {
+		System.out.println("NAMES: " + names);
+		if (names.isEmpty()) return this.manager.getNullNameGroupDim();
 		MetaboliteNameGroupDim nameGroup = null;
 		
 		Set<Integer> nameIdSet = new HashSet<> ();
@@ -152,6 +154,8 @@ public abstract class AbstractMetaboliteStageTransform<T extends GenericMetaboli
 	}
 	
 	protected MetaboliteXrefGroupDim generateXrefGroup(List<X> xrefs) {
+		System.out.println("XREFS: " + xrefs);
+		if (xrefs.isEmpty()) return this.manager.getNullXrefGroupDim();
 		MetaboliteXrefGroupDim xrefGroup = null;
 		
 		List<MetaboliteXrefDim> xref_ = new ArrayList<> ();
@@ -174,6 +178,7 @@ public abstract class AbstractMetaboliteStageTransform<T extends GenericMetaboli
 				xref_dim = new MetaboliteXrefDim();
 				xref_dim.setSource(xref_gen.getRef());
 				xref_dim.setValue(xref_gen.getValue());
+				xref_dim.setType(xref.getType().toString());
 				dao.save(xref_dim);
 			}
 			xref_.add(xref_dim);

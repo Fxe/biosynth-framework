@@ -22,7 +22,7 @@ import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiocycMetaboliteStageLoader;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiocycMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -92,7 +92,7 @@ public class TestStageBiocyc {
 		}
 		biocycXrefTrans.setValueTransformMap(biggIdToEntryDictionary);
 		
-		BiocycMetaboliteStageLoader loader = new BiocycMetaboliteStageLoader();
+		BiocycMetaboliteStagingTransform loader = new BiocycMetaboliteStagingTransform();
 		loader.setDao(dao_stga);
 		loader.setTransformer(biocycXrefTrans);
 		loader.setManager(manager);
@@ -116,7 +116,7 @@ public class TestStageBiocyc {
 			total++;
 		}
 		
-		assertEquals(2835, total);
+		assertEquals(10856, total);
 	}
 
 }

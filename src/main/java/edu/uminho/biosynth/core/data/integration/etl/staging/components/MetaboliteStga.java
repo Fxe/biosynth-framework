@@ -30,6 +30,12 @@ public class MetaboliteStga implements java.io.Serializable {
 	private String textKey;
 	private String comment;
 	private String remark;
+	
+	@Column(name = "charge", length=255)
+	private String charge;
+	public String getCharge() { return charge;}
+	public void setCharge(String charge) { this.charge = charge;}
+
 	private String description;
 	private String formula;
 	private String gibbs;

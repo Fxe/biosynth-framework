@@ -39,6 +39,14 @@ public class UnnamedClass {
 		clusters.clear();
 	}
 	
+	public void slice() {
+		
+	}
+	
+	public void dice() {
+		
+	}
+	
 	public void someMethod() {
 		resetMe();
 		Integer clusterId = 0;
