@@ -24,9 +24,9 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="CHARGE")
-	private int charge;
-	public int getCharge() { return charge; }
-	public void setCharge(int charge) { this.charge = charge; }
+	private Integer charge;
+	public Integer getCharge() { return charge; }
+	public void setCharge(Integer charge) { this.charge = charge; }
 	
 	@ElementCollection
 	@CollectionTable(name="BIGG_METABOLITE_COMPARTMENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))

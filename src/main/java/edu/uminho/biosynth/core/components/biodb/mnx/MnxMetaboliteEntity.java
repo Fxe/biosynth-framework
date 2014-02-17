@@ -18,19 +18,19 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="CHARGE") private int charge;
+	@Column(name="CHARGE") private Integer charge;
     @Column(name="O_SOURCE", length=255) private String originalSource;
     @Column(name="SMILES", length=16383) private String smiles;
     @Column(name="INCHI", length=16383) private String inChI;
-    @Column(name="MASS") private double mass;
+    @Column(name="MASS") private Double mass;
     
     @OneToMany(mappedBy = "mnxMetaboliteEntity", cascade = CascadeType.ALL)
     private List<MnxMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<>();
 
-	public int getCharge() {
+	public Integer getCharge() {
 		return charge;
 	}
-	public void setCharge(int charge) {
+	public void setCharge(Integer charge) {
 		this.charge = charge;
 	}
 
@@ -55,10 +55,10 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 		this.inChI = inChI;
 	}
 
-	public double getMass() {
+	public Double getMass() {
 		return mass;
 	}
-	public void setMass(double mass) {
+	public void setMass(Double mass) {
 		this.mass = mass;
 	}
 	

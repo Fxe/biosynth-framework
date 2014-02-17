@@ -22,11 +22,11 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="MOLW") private Double molWeight;
-	public double getMolWeight() { return molWeight;}
+	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
 	
 	@Column(name="CMLMOLW") private Double cmlMolWeight;
-	public double getCmlMolWeight() { return cmlMolWeight;}
+	public Double getCmlMolWeight() { return cmlMolWeight;}
 	public void setCmlMolWeight(Double cmlMolWeight) { this.cmlMolWeight = cmlMolWeight;}
 
 	@Column(name="INCHI", length=16383) private String inChI;
@@ -38,11 +38,11 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public void setSmiles(String smiles) { this.smiles = smiles;}
 
 	@Column(name="GIBBS") private Double gibbs;
-	public double getGibbs() { return gibbs;}
+	public Double getGibbs() { return gibbs;}
 	public void setGibbs(Double gibbs) { this.gibbs = gibbs;}
 	
 	@Column(name="CHARGE") private Integer charge;
-	public int getCharge() { return charge; }
+	public Integer getCharge() { return charge; }
 	public void setCharge(Integer charge) { this.charge = charge; }
 	
 	@Column(name="B_COMMENT", length=16383) private String comment;
