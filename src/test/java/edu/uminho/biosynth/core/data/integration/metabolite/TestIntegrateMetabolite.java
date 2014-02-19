@@ -184,6 +184,12 @@ public class TestIntegrateMetabolite {
 				public String generateKey() {
 					return "CPD-0";
 				}
+
+				@Override
+				public void reset() {
+					// TODO Auto-generated method stub
+					
+				}
 			};
 			
 			IIntegrationStrategy<GenericMetabolite, IntegratedMetabolite> integrationStrategy =
