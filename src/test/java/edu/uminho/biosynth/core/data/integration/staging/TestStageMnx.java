@@ -2,6 +2,9 @@ package edu.uminho.biosynth.core.data.integration.staging;
 
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
@@ -12,8 +15,10 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
+import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.core.data.integration.etl.staging.transform.MnxMetaboliteStageLoader;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.MnxMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformMnxMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -56,25 +61,45 @@ public class TestStageMnx {
 
 	@Test
 	public void testStageMnx() {
+		HbmMetaboliteStagingManagerImpl manager = new HbmMetaboliteStagingManagerImpl();
+		manager.setDao(dao_stga);
+		MetaboliteServiceDim service = new MetaboliteServiceDim("MNX_FILE", "0.0.1-SNAPSHOT", null);
+		service = manager.createOrGetService(service);
+		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
+		
+		Set<String> skipEntries = new HashSet<> ();
+		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
+			skipEntries.add(cpd.getTextKey());
+		}
+		
 		TransformMnxMetaboliteCrossReference mnxXrefTrans =  new TransformMnxMetaboliteCrossReference();
 		mnxXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
 		
-		MnxMetaboliteStageLoader loader = new MnxMetaboliteStageLoader();
+		MnxMetaboliteStagingTransform loader = new MnxMetaboliteStagingTransform();
 		loader.setDao(dao_stga);
 		loader.setTransformer(mnxXrefTrans);
+		loader.setManager(manager);
 		
 		int counter = 0;
+		int total = 0;
 		for (MnxMetaboliteEntity cpdMnx : dao_mnx.findAll(MnxMetaboliteEntity.class)) {
-			System.out.println(cpdMnx.getEntry());
-			System.out.println(cpdMnx.getFormula());
-			MetaboliteStga cpd_stga = loader.etlTransform(cpdMnx);
-			dao_stga.save(cpd_stga);
-			counter++;
-			if (counter % 50 == 0) {
-				tx_stga.commit();
-				tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+			if ( !skipEntries.contains(cpdMnx.getEntry())) {
+				System.out.println(cpdMnx.getEntry());
+				System.out.println(cpdMnx.getFormula());
+				MetaboliteStga cpd_stga = loader.etlTransform(cpdMnx);
+				cpd_stga.setMetaboliteServiceDim(service);
+				
+				dao_stga.save(cpd_stga);
+				counter++;
+				if (counter % 50 == 0) {
+					tx_stga.commit();
+					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+				}
 			}
+			total++;
 		}
+		
+		assertEquals(124834, total);
 	}
 
 }

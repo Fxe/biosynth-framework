@@ -4,4 +4,5 @@ import java.io.Serializable;
 
 public interface IKeyGenerator<T extends Serializable> {
 	public T generateKey();
+	public void reset();
 }

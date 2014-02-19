@@ -52,9 +52,11 @@ public class TestStagingSelection {
 	public void test() {
 		JniInchiOutputKey out;
 		try {
-			out = JniInchiWrapper.getInchiKey("InChI=1S/H3O/h1H3");
+			String inchi = "InChI=1S/5C7H12N2O4.3Al.4H2O/c5*1-4(10)9-5(7(12)13)2-3-6(8)11;;;;;;;/h5*5H,2-3H2,1H3,(H2,8,11)(H,9,10)(H,12,13);;;;4*1H2/q;;;;;3*+3;;;;/p-9/t5*5-;;;;;;;/m00000......./s1";
+			out = JniInchiWrapper.getInchiKey(inchi);
 			System.out.println(out.getReturnStatus().toString());
 			String key = out.getKey();
+			System.out.println(inchi);
 			System.out.println(key);
 		} catch (JniInchiException e) {
 			// TODO Auto-generated catch block

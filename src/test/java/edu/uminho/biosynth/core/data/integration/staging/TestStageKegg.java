@@ -18,7 +18,7 @@ import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStageLoader;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -75,7 +75,7 @@ public class TestStageKegg {
 		TransformKeggMetaboliteCrossReference keggXrefTrans = new TransformKeggMetaboliteCrossReference();
 		keggXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
 		
-		KeggMetaboliteStageLoader loader = new KeggMetaboliteStageLoader();
+		KeggMetaboliteStagingTransform loader = new KeggMetaboliteStagingTransform();
 		loader.setManager(manager);
 		loader.setDao(dao_stga);
 		loader.setTransformer(keggXrefTrans);

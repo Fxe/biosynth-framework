@@ -18,7 +18,7 @@ import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiggMetaboliteStageLoader;
+import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiggMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -75,7 +75,7 @@ public class TestStageBigg {
 		TransformBiggMetaboliteCrossReference biggXrefTrans = new TransformBiggMetaboliteCrossReference();
 		biggXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
 		
-		BiggMetaboliteStageLoader loader = new BiggMetaboliteStageLoader();
+		BiggMetaboliteStagingTransform loader = new BiggMetaboliteStagingTransform();
 		loader.setDao(dao_stga);
 		loader.setTransformer(biggXrefTrans);
 		loader.setManager(manager);
