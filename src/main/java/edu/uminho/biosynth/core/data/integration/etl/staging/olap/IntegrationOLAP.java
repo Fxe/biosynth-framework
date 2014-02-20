@@ -34,7 +34,7 @@ public class IntegrationOLAP {
 	
 	private int numberOfRecords;
 	
-	private ScoreMap scoreMap = new ScoreMap();
+	private ScoreMap<Integer, MetaboliteStga> scoreMap = new ScoreMap<>(MetaboliteStga.class);
 
 	public IKeyGenerator<Integer> getIdGenerator() { return idGenerator;}
 	public void setIdGenerator(IKeyGenerator<Integer> idGenerator) { this.idGenerator = idGenerator;}

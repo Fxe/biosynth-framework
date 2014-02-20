@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface IAttributeEvaluator<T> {
 	public double score(List<T> values);
+	public T consensus(List<T> values);
 }
