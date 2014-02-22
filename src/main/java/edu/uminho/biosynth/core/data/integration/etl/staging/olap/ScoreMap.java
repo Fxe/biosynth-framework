@@ -13,6 +13,7 @@ public class ScoreMap<ID extends Serializable, T> {
 	//Map<ClusterId, Map<TargetClusterId, ScoreValue>>
 	IGenericDao dao;
 	private Map<ID, Map<ID, Double>> scoringMap = new HashMap<> ();
+	private Map<Integer, Set<Integer>> clusterMap = new HashMap<> ();
 	
 	IClusterEvaluator<T> clusterEval;
 	Class<T> klass;
