@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.hibernate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -28,26 +29,25 @@ public class GenericEntityDaoImpl implements IGenericDao {
 		return this.sessionFactory.getCurrentSession();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T find(Class<T> type, Serializable id) {
-		return (T) this.currentSession().get(type, id);
+		System.out.println(type.getClass().toString());
+		return type.cast(this.currentSession().get(type, id));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T[] find(Class<T> type, Serializable... ids) {
-		Object[] res = new Object[ids.length];
+	public <T> List<T> find(Class<T> type, Serializable... ids) {
+		List<T> res = new ArrayList<> ();
 		for (int i = 0; i < ids.length; i++) {
-			res[i] = find(type, ids[i]);
+			res.add(find(type, ids[i]));
+			System.out.println(res);
 		}
-		return (T[]) res;
+		return res;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getReference(Class<T> type, Serializable id) {
-		return (T) this.currentSession().load(type, id);
+		return type.cast(this.currentSession().load(type, id));
 	}
 
 	@Override
@@ -140,6 +140,10 @@ public class GenericEntityDaoImpl implements IGenericDao {
 	@Override
 	public List<Object[]> query(String queryString) {
 		Query query = this.sessionFactory.getCurrentSession().createQuery(queryString);
+//		Set<Integer> aux = new HashSet<> ();
+//		aux.add(317772);
+//		aux.add(1017310);aux.add(839831);
+//		query.setParameterList("cpdIdList", aux);
 		return query.list();
 	}
 	
@@ -148,6 +152,9 @@ public class GenericEntityDaoImpl implements IGenericDao {
 		this.sessionFactory.getCurrentSession().saveOrUpdate(entity);
 	}
 	
-	
+	@Override
+	public Query createQuery(String query) {
+		return this.sessionFactory.getCurrentSession().createQuery(query);
+	}
 
 }

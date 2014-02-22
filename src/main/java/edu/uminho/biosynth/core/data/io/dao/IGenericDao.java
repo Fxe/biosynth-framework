@@ -3,18 +3,20 @@ package edu.uminho.biosynth.core.data.io.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projection;
 
 public interface IGenericDao {
 	
 	public <T> T find(Class<T> type, Serializable id);
-    public <T> T[] find(Class<T> type, Serializable... ids);
+    public <T> List<T> find(Class<T> type, Serializable... ids);
     
     public <T> List<T> criteria(Class<T> type, Criterion criterion);
     public <T> List<T> projection(Class<T> type, Projection projection);
     
     public List<Object[]> query(String queryString);
+    public Query createQuery(String query);
     
     public <T> T getReference(Class<T> type, Serializable id);
     public <T> T[] getReferences(Class<T> type, Serializable... ids);

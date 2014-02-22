@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.io.dao.seed;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projection;
 
@@ -17,7 +18,7 @@ public class SeedMetaboliteDaoImpl implements IGenericDao{
 	}
 
 	@Override
-	public <T> T[] find(Class<T> type, Serializable... ids) {
+	public <T> List<T> find(Class<T> type, Serializable... ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -114,6 +115,12 @@ public class SeedMetaboliteDaoImpl implements IGenericDao{
 
 	@Override
 	public <T> List<T> projection(Class<T> type, Projection projection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Query createQuery(String query) {
 		// TODO Auto-generated method stub
 		return null;
 	}
