@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.data.integration.etl.staging.olap.evalutation.IClusterEvaluator;
+import edu.uminho.biosynth.core.data.integration.etl.staging.olap.evalutation.IClusterConsensus;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class ScoreMap<ID extends Serializable, T> {
@@ -15,7 +15,7 @@ public class ScoreMap<ID extends Serializable, T> {
 	private Map<ID, Map<ID, Double>> scoringMap = new HashMap<> ();
 	private Map<Integer, Set<Integer>> clusterMap = new HashMap<> ();
 	
-	IClusterEvaluator<T> clusterEval;
+	IClusterConsensus<T> clusterEval;
 	Class<T> klass;
 	
 	
