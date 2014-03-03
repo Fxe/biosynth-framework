@@ -20,6 +20,7 @@ public class MetaboliteServiceDim implements java.io.Serializable {
 
 	private String serviceName;
 	private String serviceVersion;
+	private String dbType;
 	private Set<MetaboliteStga> metaboliteStgas = new HashSet<MetaboliteStga>(0);
 
 	public MetaboliteServiceDim() {
@@ -44,6 +45,15 @@ public class MetaboliteServiceDim implements java.io.Serializable {
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	@Column(name = "db_type")
+	public String getDbType() {
+		return this.dbType;
+	}
+	
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
 	}
 
 	@Column(name = "service_version")

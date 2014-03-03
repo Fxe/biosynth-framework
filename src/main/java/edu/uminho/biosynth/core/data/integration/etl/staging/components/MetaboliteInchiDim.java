@@ -25,6 +25,9 @@ public class MetaboliteInchiDim implements java.io.Serializable {
 	private int id;
 	private String inchi;
 	private String inchiKey;
+	private Boolean standard;
+	private String version;
+	private String inchiCharge;
 	private Set<MetaboliteStga> metaboliteStgas = new HashSet<MetaboliteStga>(0);
 
 	public MetaboliteInchiDim() {
@@ -69,6 +72,33 @@ public class MetaboliteInchiDim implements java.io.Serializable {
 
 	public void setInchiKey(String inchiKey) {
 		this.inchiKey = inchiKey;
+	}
+	
+	@Column(name = "inchi_charge", length = 10)
+	public String getInchiCharge() {
+		return this.inchiCharge;
+	}
+
+	public void setInchiCharge(String inchiCharge) {
+		this.inchiCharge = inchiCharge;
+	}
+	
+	@Column(name = "standard")
+	public Boolean getStandard() {
+		return this.standard;
+	}
+
+	public void setStandard(Boolean standard) {
+		this.standard = standard;
+	}
+	
+	@Column(name = "version", length = 255)
+	public String getVersion() {
+		return this.version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "metaboliteInchiDim")
