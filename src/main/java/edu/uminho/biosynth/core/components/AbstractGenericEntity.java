@@ -7,12 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @MappedSuperclass
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractGenericEntity implements Serializable {
 
 	private static final long serialVersionUID = 353453463465587L;
@@ -22,11 +26,13 @@ public abstract class AbstractGenericEntity implements Serializable {
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
     @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
 	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
+	@XmlAttribute(name="id")
 	protected Integer id;
 	public Integer getId() { return this.id; }
 	public void setId(Integer id) { this.id = id; }
 	
 	@Column(name="ENTRY", unique=true, length=255, nullable=false)
+	@XmlAttribute(name="entry")
 	protected String entry;
 
 	@Column(name="E_NAME", length=2047)

@@ -30,6 +30,8 @@ public class GenericCrossReference implements Serializable {
 	@Column(name="REFSOURCE", length=255) protected String ref;
 	@Column(name="REFVALUE", length=255) protected String value;
 	
+	public GenericCrossReference() { }
+	
 	public GenericCrossReference(GenericCrossReference.Type type, String reference, String value) {
 		this.type = type;
 		this.ref = reference;

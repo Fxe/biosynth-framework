@@ -17,6 +17,7 @@ public class GenericEnzyme extends AbstractGenericEntity implements Serializable
 	/*
 	 * Here Enzymes maps to genes Map<Gene, Organism>
 	 */
+	public GenericEnzyme() { }
 	
 	public GenericEnzyme(String id) {
 		super(id);

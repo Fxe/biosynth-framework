@@ -11,12 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
 
 @Entity
 @Table(name="KEGG_METABOLITE")
+@XmlRootElement(name="KeggCompound")
 public class KeggMetaboliteEntity extends GenericMetabolite{
 	
 	private static final long serialVersionUID = 1L;
