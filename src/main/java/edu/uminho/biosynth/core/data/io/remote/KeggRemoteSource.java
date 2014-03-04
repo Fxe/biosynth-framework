@@ -196,7 +196,12 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		
 		String flatFile = null;
 		try {
-			flatFile = getLocalOrWeb(db, cpdId); //HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", db, cpdId));
+			if (LOCALCACHE == null) {
+				flatFile =  HttpRequest.get(restGet + String.format("%s:%s", db, cpdId));
+			} else {
+				flatFile = getLocalOrWeb(db, cpdId); //HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", db, cpdId));
+			}
+			
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "IO: " + e.getMessage());
 			return null;

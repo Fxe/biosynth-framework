@@ -140,7 +140,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 					break;
 			}
 			
-			return formula;
+			return formula.isEmpty()?null:formula;
 		} catch (JSONException ex) {
 			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage());
 			return null;

@@ -197,7 +197,12 @@ public class BioCycRemoteSource implements IRemoteSource {
 		
 		String xmlDoc = null;
 		try {
-			xmlDoc = getLocalOrWeb("compound", orgId, cpdId);
+			if (LOCALCACHE == null) {
+				String arg = String.format("%s:%s", orgId, cpdId);
+				xmlDoc = HttpRequest.get(xmlGet + arg);
+			} else {
+				xmlDoc = getLocalOrWeb("compound", orgId, cpdId);
+			}
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "IO: " + e.getMessage());
 			return null;
