@@ -23,8 +23,8 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="MASS") private double mass;
-	@Column(name="MOLW") private double molWeight;
+	@Column(name="MASS") private Double mass;
+	@Column(name="MOLW") private Double molWeight;
 	
 	@Column(name="K_COMMENT", length=2047) private String comment;
 	@Column(name="REMARK", length=1023) private String remark;
@@ -49,17 +49,28 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	@Column(name="ENZYME", length=15)
 	protected List<String> enzymes = new ArrayList<> ();
 	
-	public double getMass() {
+	public Double getMass() {
 		return mass;
 	}
-	public void setMass(double mass) {
+	public void setMass(Double mass) {
 		this.mass = mass;
 	}
 	
-	public double getMolWeight() {
+	public List<String> getNames() {
+		List<String> names = new ArrayList<> ();
+		for (String str : this.name.split("[\\s+]*;[\\s+]*")) {
+			String s = str.trim(); 
+			if (!s.isEmpty()) {
+				names.add(s);
+			}
+		}
+		return names;
+	}
+	
+	public Double getMolWeight() {
 		return molWeight;
 	}
-	public void setMolWeight(double molWeight) {
+	public void setMolWeight(Double molWeight) {
 		this.molWeight = molWeight;
 	}
 	

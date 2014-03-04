@@ -52,6 +52,14 @@ public class MultiLayerGraph<V, E, L> {
 		}
 	}
 	
+//	public void getEdges()
+	
+	public void merge(V v1, V v2, L layer) {
+		if (this.contains(v1, layer) && this.contains(v2, layer)) {
+//			for (this.getE)
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
