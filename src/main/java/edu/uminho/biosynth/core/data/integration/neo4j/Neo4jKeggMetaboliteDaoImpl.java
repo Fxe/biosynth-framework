@@ -1,13 +1,18 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
@@ -17,17 +22,23 @@ import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMetaboliteDao<KeggMetaboliteEntity>{
 	
 	private static Label compoundLabel = CompoundNodeLabel.KEGG;
-
+	private ExecutionEngine engine;
 	
 //	private String nullToString(Object obj) {
 //		return obj==null?"null":obj.toString();
 //	}
+	
+	public Neo4jKeggMetaboliteDaoImpl() { }
+	public Neo4jKeggMetaboliteDaoImpl(GraphDatabaseService graphdb) { 
+		engine = new ExecutionEngine(graphdb);
+	}
+	
+	
 
 	@Override
 	public KeggMetaboliteEntity find(Serializable id) {
 		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
-		cpd.setId((Integer) node.getProperty("id"));
+		KeggMetaboliteEntity cpd = nodeToKeggMetaboliteEntity(node);
 		return cpd;
 	}
 
@@ -42,24 +53,27 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 		params.put("comment", cpd.getComment());
 		params.put("molWeight", cpd.getMolWeight());
 		params.put("remark", cpd.getRemark());
+		params.put("mass", cpd.getMass());
 		
-		ExecutionEngine engine = new ExecutionEngine(graphdb);
+		
 		engine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
-				+ "cpd.name={name}, cpd.formula={formula}, "
+				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}"
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
-				+ "cpd.name={name}, cpd.formula={formula}, "
+				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}"
 				, params);
 		
 		//MERGE (t:Test {entry:"K"}) ON MATCH SET t.formula="foo"
 		//
 		
-		engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
-
-		engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+		if (cpd.getFormula() != null) {
+			engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
+			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+		}
+		
 		for (String name : cpd.getNames()) {
 			params.put("name", name.toLowerCase());
 			engine.execute("MERGE (m:Name {name:{name}}) ", params);
@@ -76,10 +90,28 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 		
 		return null;
 	}
+	
+	private KeggMetaboliteEntity nodeToKeggMetaboliteEntity(Node node) {
+		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry( (String) node.getProperty("entry"));
+		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
+		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
+		if (node.hasProperty("remark")) cpd.setRemark( (String) node.getProperty("remark"));
+		if (node.hasProperty("mass")) cpd.setMass((Double) node.getProperty("mass"));
+		return cpd;
+	}
 
 	@Override
 	public List<KeggMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ExecutionResult result = engine.execute("MATCH (cpd:KEGG) RETURN cpd");
+		Iterator<Node> iterator = result.columnAs("cpd");
+		List<Node> nodes = IteratorUtil.asList(iterator);
+		List<KeggMetaboliteEntity> res = new ArrayList<> ();
+		for (Node node : nodes) {
+			KeggMetaboliteEntity cpd = this.nodeToKeggMetaboliteEntity(node);
+			if (cpd != null) res.add(cpd);
+		}
+		return res;
 	}
 }

@@ -4,32 +4,26 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.bigg.CsvBiggMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;
 
 public class Neo4jLoadDatabases {
 
-	private static String DB_PATH = "D:/home/data/neo4j/integration";
+//	private static String DB_PATH = "D:/home/data/neo4j/integration";
+	private static String DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db";
 	private static GraphDatabaseService db;
 	
 	@BeforeClass
@@ -42,51 +36,35 @@ public class Neo4jLoadDatabases {
 		db.shutdown();
 	}
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
-//	@Test
-	public void testKegg() {
-		KeggRemoteSource.LOCALCACHE = "D:/home/data/kegg";
-		KeggRemoteSource keggRemoteDao = new KeggRemoteSource();
-		Neo4jKeggMetaboliteDaoImpl keggDao = new Neo4jKeggMetaboliteDaoImpl();
-		keggDao.setGraphdb(db);
+	@Test
+	public void testMetaCyc() {
+		//BIOCYC needs to translate BiGG xref Value or not ...
+		BioCycRemoteSource.LOCALCACHE = "D:/home/data/biocyc";
+		BioCycRemoteSource biocycRemoteDao = new BioCycRemoteSource("META");
+		Neo4jBioCycMetaboiteDaoImpl biocycNeo4jDao = new Neo4jBioCycMetaboiteDaoImpl(db);
 		
+		List<String> skipEntries = new ArrayList<> ();
 		try ( Transaction tx = db.beginTx()) {
-			KeggMetaboliteEntity keggCpd1 = keggRemoteDao.getMetaboliteInformation("C00001");
-			keggDao.save(keggCpd1);
-			KeggMetaboliteEntity keggCpd2 = keggRemoteDao.getMetaboliteInformation("C16844");
-			keggDao.save(keggCpd2);
-			KeggMetaboliteEntity keggCpd3 = keggRemoteDao.getMetaboliteInformation("C01328");
-			keggDao.save(keggCpd3);
+			for (BioCycMetaboliteEntity cpd : biocycNeo4jDao.findAll()) {
+				skipEntries.add(cpd.getEntry());
+			}
 			tx.success();
 		}
-	}
-	
-	@Test
-	public void testBigg() {
-		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
-		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
-		biggCsvDao.setBiggMetaboliteTsv(csv);
-		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl();
-		biggNeo4jDao.setGraphdb(db);
+		
+		List<BioCycMetaboliteEntity> batch = new ArrayList<> ();
 		int i = 0;
-
-		List<BiggMetaboliteEntity> batch = new ArrayList<> ();
-		for (BiggMetaboliteEntity cpd : biggCsvDao.findAll()) {
+		for (String cpdId : biocycRemoteDao.getAllMetabolitesIds()) {
+			System.out.println(cpdId);
 			
-			batch.add(cpd);
-			System.out.println(cpd);
-			
-			
+			if (!skipEntries.contains(cpdId)) batch.add(biocycRemoteDao.getMetaboliteInformation(cpdId));
 			if (i % 10 == 0) {
+				if (!batch.isEmpty())
 				try ( Transaction tx = db.beginTx()) {
-					for (BiggMetaboliteEntity b : batch) biggNeo4jDao.save(b);
+					for (BioCycMetaboliteEntity b : batch) {
+						System.out.println("SAVE:" + b.getEntry());
+						System.out.println(b.getCrossReferences());
+						biocycNeo4jDao.save(b);
+					}
 					tx.success();
 					batch.clear();
 				}
@@ -96,11 +74,106 @@ public class Neo4jLoadDatabases {
 		}
 		if (!batch.isEmpty()) {
 			try ( Transaction tx = db.beginTx()) {
-				for (BiggMetaboliteEntity b : batch) biggNeo4jDao.save(b);
+				for (BioCycMetaboliteEntity b : batch)  biocycNeo4jDao.save(b);
+				tx.success();
+			}
+		}
+		
+		assertEquals(10856, i);
+	}
+	
+	@Test
+	public void testKegg() {
+		KeggRemoteSource.LOCALCACHE = "D:/home/data/kegg";
+		KeggRemoteSource keggRemoteDao = new KeggRemoteSource();
+		Neo4jKeggMetaboliteDaoImpl keggNeo4jDao = new Neo4jKeggMetaboliteDaoImpl(db);
+		
+		List<String> skipEntries = new ArrayList<> ();
+		try ( Transaction tx = db.beginTx()) {
+			for (KeggMetaboliteEntity cpd : keggNeo4jDao.findAll()) {
+				skipEntries.add(cpd.getEntry());
+			}
+			tx.success();
+		}
+		
+		System.out.println(skipEntries);
+		List<KeggMetaboliteEntity> batch = new ArrayList<> ();
+		int i = 0;
+		for (String cpdId : keggRemoteDao.getAllMetabolitesIds()) {
+			System.out.println(cpdId);
+			if (!skipEntries.contains(cpdId)) batch.add(keggRemoteDao.getMetaboliteInformation(cpdId));
+				
+			if (i % 10 == 0) {
+				if (!batch.isEmpty())
+				try ( Transaction tx = db.beginTx()) {
+					for (KeggMetaboliteEntity b : batch) {
+						System.out.println("SAVE:" + b.getEntry());
+						keggNeo4jDao.save(b);
+					}
+					tx.success();
+					batch.clear();
+				}
+				System.out.println(i);
+			}
+			i++;
+		}
+		if (!batch.isEmpty()) {
+			try ( Transaction tx = db.beginTx()) {
+				for (KeggMetaboliteEntity b : batch) keggNeo4jDao.save(b);
 				tx.success();
 				batch.clear();
 			}
 		}
 		
+		assertEquals(28170, i);
+	}
+	
+	@Test
+	public void testBigg() {
+		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
+		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
+		biggCsvDao.setBiggMetaboliteTsv(csv);
+		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl(db);
+		int i = 0;
+		int limitSave = 1000;
+		int saves = 0;
+		List<BiggMetaboliteEntity> batch = new ArrayList<> ();
+		List<String> skipEntries = new ArrayList<> ();
+		try ( Transaction tx = db.beginTx()) {
+			for (BiggMetaboliteEntity cpd : biggNeo4jDao.findAll()) {
+				skipEntries.add(cpd.getEntry());
+			}
+			tx.success();
+		}
+		for (BiggMetaboliteEntity cpd : biggCsvDao.findAll()) {
+			
+			if ( !skipEntries.contains(cpd.getEntry())) batch.add(cpd);
+			System.out.println(cpd.getEntry());
+			
+			if (i % 10 == 0) {
+				if (!batch.isEmpty())
+				try ( Transaction tx = db.beginTx()) {
+					for (BiggMetaboliteEntity b : batch) {
+						System.out.println("SAVE:" + b.getEntry());
+						biggNeo4jDao.save(b);
+						saves++;
+					}
+					tx.success();
+					batch.clear();
+				}
+				System.out.println(i);
+			}
+			i++;
+			
+			if (saves > limitSave) break;
+		}
+		if (!batch.isEmpty()) {
+			try ( Transaction tx = db.beginTx()) {
+				for (BiggMetaboliteEntity b : batch) biggNeo4jDao.save(b);
+				tx.success();
+				batch.clear();
+			}
+		}
+		assertEquals(2835, i);
 	}
 }

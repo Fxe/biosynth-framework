@@ -1,11 +1,18 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
+import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
@@ -14,16 +21,47 @@ import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
 public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMetaboliteDao<BioCycMetaboliteEntity> {
 
+	private static Label compoundLabel = CompoundNodeLabel.BioCyc;
+	private Label subDb = CompoundNodeLabel.MetaCyc;
+	private ExecutionEngine engine;
+	
+	public Neo4jBioCycMetaboiteDaoImpl() { }
+	public Neo4jBioCycMetaboiteDaoImpl(GraphDatabaseService graphdb) {
+		engine = new ExecutionEngine(graphdb);
+	}
+	
+	private BioCycMetaboliteEntity nodeToBioCycMetaboliteEntity(Node node) {
+		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
+		BioCycMetaboliteEntity cpd = new BioCycMetaboliteEntity();
+		cpd.setEntry( (String) node.getProperty("entry"));
+		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
+		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
+		if (node.hasProperty("charge")) cpd.setCharge((Integer) node.getProperty("charge"));
+		if (node.hasProperty("cmlMolWeight")) cpd.setCmlMolWeight((Double) node.getProperty("cmlMolWeight"));
+		if (node.hasProperty("molWeight")) cpd.setMolWeight((Double) node.getProperty("molWeight"));
+		if (node.hasProperty("inchi")) cpd.setInChI((String) node.getProperty("inchi"));
+		if (node.hasProperty("smiles")) cpd.setSmiles((String) node.getProperty("smiles"));
+		return cpd;
+	}
+	
 	@Override
 	public BioCycMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		Node node = graphdb.findNodesByLabelAndProperty(subDb, "entry", id).iterator().next();
+		BioCycMetaboliteEntity cpd = nodeToBioCycMetaboliteEntity(node);
+		return cpd;
 	}
 
 	@Override
 	public List<BioCycMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ExecutionResult result = engine.execute("MATCH (cpd:" + compoundLabel + ":" + subDb + ") RETURN cpd");
+		Iterator<Node> iterator = result.columnAs("cpd");
+		List<Node> nodes = IteratorUtil.asList(iterator);
+		List<BioCycMetaboliteEntity> res = new ArrayList<> ();
+		for (Node node : nodes) {
+			BioCycMetaboliteEntity cpd = this.nodeToBioCycMetaboliteEntity(node);
+			if (cpd != null) res.add(cpd);
+		}
+		return res;
 	}
 	
 	private String translateDb(String db) {
@@ -44,7 +82,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 
 	@Override
 	public Serializable save(BioCycMetaboliteEntity cpd) {
-		ExecutionEngine engine = new ExecutionEngine(graphdb);
+		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("entry", cpd.getEntry());
 		params.put("name", cpd.getName().toLowerCase());
@@ -68,10 +106,10 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, cpd.molWeight={molWeight}"
 				, params);
 		
-		
-		engine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
-		engine.execute("MERGE (n:Name {name:{name}}) ", params);
-		
+		if (params.get("charge") != null) {
+			engine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
+			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+		}
 		if (params.get("formula") != null) {
 			engine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
 			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
@@ -85,7 +123,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		
-		engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (c:Charge {formula:{formula}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+		engine.execute("MERGE (n:Name {name:{name}}) ", params);
 		engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		
 		for (String synonym : cpd.getSynonyms()) {
@@ -98,8 +136,17 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
-			engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+			if (dbLabel.equals(CompoundNodeLabel.BiGG.toString())) {
+				System.out.println("saving bigg xref");
+				params.put("dbEntry", Integer.parseInt(dbEntry));
+				//BiGG xrefs in BioCyc are match with id not the entry (which is the abbreviation)
+				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ", params);
+				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {id:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);	
+			} else {
+				System.out.println("saving other xref");
+				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+			}
 		}
 		
 		for (String rxnId : cpd.getReactions()) {

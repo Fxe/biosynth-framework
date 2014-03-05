@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class BioDbDictionary {
 	
@@ -25,7 +26,7 @@ public class BioDbDictionary {
 		
 		//BioCyc
 		dictionary.put("METACYC", "BioCyc:MetaCyc");
-		
+		dictionary.put("BIGG", CompoundNodeLabel.BiGG.toString());
 		dictionary.put("LIGAND-CPD", "KEGG");
 		dictionary.put("KEGG", "KEGG");
 		//KEGG
