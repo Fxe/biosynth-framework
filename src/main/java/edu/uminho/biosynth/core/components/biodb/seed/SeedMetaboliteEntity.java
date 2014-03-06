@@ -19,14 +19,14 @@ import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundPkE
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
 
 @Entity
-@Table(name="SEED_COMPOUND")
+@Table(name="SEED_METABOLITE")
 public class SeedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="DEFAULTCHARGE") private int defaultCharge;
-    @Column(name="DELTAG") private double deltaG;
-    @Column(name="DELTAGERR") private double deltaGErr;
+	@Column(name="DEFAULTCHARGE") private Integer defaultCharge;
+    @Column(name="DELTAG") private Double deltaG;
+    @Column(name="DELTAGERR") private Double deltaGErr;
     @Column(name="UUID") private String uuid;
     @Column(name="CKSUM") private String cksum;
     @Column(name="LOCKED") private short locked;

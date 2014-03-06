@@ -23,10 +23,10 @@ public class SeedCompoundPkEntity {
     private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_COMPOUND")
+	@JoinColumn(name="ID_METABOLITE")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
-	@Column(name="PK") private double pk;
+	@Column(name="PK") private Double pk;
 	@Column(name="ATOM") private short atom;
 	@Column(name="PK_TYPE") private String type;
 

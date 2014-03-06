@@ -20,7 +20,7 @@ public class SeedCompoundStructureEntity {
     private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_COMPOUND")
+	@JoinColumn(name="ID_METABOLITE")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
 	@Column(name="STRUCTURE") private String structure;

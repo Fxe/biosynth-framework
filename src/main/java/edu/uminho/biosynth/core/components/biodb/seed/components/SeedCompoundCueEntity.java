@@ -14,7 +14,7 @@ public class SeedCompoundCueEntity extends AbstractSeedCue {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_COMPOUND")
+	@JoinColumn(name="ID_METABOLITE")
 	private SeedMetaboliteEntity seedCompoundEntity;
 
 	public SeedMetaboliteEntity getSeedCompoundEntity() {

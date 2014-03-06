@@ -24,6 +24,9 @@ public class SeedReactionCrossReferenceEntity extends GenericCrossReference{
 	public SeedReactionCrossReferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
+	public SeedReactionCrossReferenceEntity(GenericCrossReference crossReference) {
+		super(crossReference.getType(), crossReference.getRef(), crossReference.getValue());
+	}
 
 	public SeedReactionEntity getSeedReactionEntity() {
 		return seedReactionEntity;
