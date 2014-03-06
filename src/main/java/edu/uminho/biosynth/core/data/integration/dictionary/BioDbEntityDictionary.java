@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.dictionary;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.brenda.BrendaMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.ChEbiMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.pubchem.PubchemMetaboliteEntity;
@@ -32,7 +32,7 @@ public class BioDbEntityDictionary {
 				clazz = SeedMetaboliteEntity.class;
 				break;
 			case "CHEBI":
-				clazz = ChEbiMetaboliteEntity.class;
+				clazz = ChebiMetaboliteEntity.class;
 				break;
 			case "CAS":
 				clazz = java.lang.String.class;

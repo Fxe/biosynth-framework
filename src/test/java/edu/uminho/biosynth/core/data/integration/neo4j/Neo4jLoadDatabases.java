@@ -16,7 +16,9 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.bigg.CsvBiggMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.seed.JsonSeedMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;
 
@@ -34,6 +36,51 @@ public class Neo4jLoadDatabases {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		db.shutdown();
+	}
+	
+	@Test
+	public void testSeed() {
+		File json = new File("D:/home/data/seed/seed.json");
+		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
+		jsonSeedDao.setJsonFile(json);
+		jsonSeedDao.initialize();
+		
+		Neo4jSeedMetaboliteDaoImpl seedNeo4jDao = new Neo4jSeedMetaboliteDaoImpl(db);
+		List<String> skipEntries = new ArrayList<> ();
+		try ( Transaction tx = db.beginTx()) {
+			for (SeedMetaboliteEntity cpd : seedNeo4jDao.findAll()) {
+				skipEntries.add(cpd.getEntry());
+			}
+			tx.success();
+		}
+		List<SeedMetaboliteEntity> batch = new ArrayList<> ();
+		
+		int i = 0;
+		for (SeedMetaboliteEntity cpd : jsonSeedDao.findAll()) {
+			if ( !skipEntries.contains(cpd.getEntry())) batch.add(cpd);
+			if (i % 10 == 0) {
+				if (!batch.isEmpty())
+				try ( Transaction tx = db.beginTx()) {
+					for (SeedMetaboliteEntity b : batch) {
+						System.out.println("SAVE:" + b.getEntry());
+						System.out.println(b.getCrossReferences());
+						seedNeo4jDao.save(b);
+					}
+					tx.success();
+					batch.clear();
+				}
+				System.out.println(i);
+			}
+			i++;
+		}
+		if (!batch.isEmpty()) {
+			try ( Transaction tx = db.beginTx()) {
+				for (SeedMetaboliteEntity b : batch)  seedNeo4jDao.save(b);
+				tx.success();
+			}
+		}
+		
+		assertEquals(16996, i);
 	}
 
 	@Test
@@ -132,7 +179,7 @@ public class Neo4jLoadDatabases {
 	public void testBigg() {
 		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
 		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
-		biggCsvDao.setBiggMetaboliteTsv(csv);
+		biggCsvDao.setCsvFile(csv);
 		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl(db);
 		int i = 0;
 		int limitSave = 1000;

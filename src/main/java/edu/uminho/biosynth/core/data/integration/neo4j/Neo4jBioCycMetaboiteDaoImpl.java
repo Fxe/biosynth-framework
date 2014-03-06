@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -19,35 +18,19 @@ import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetabol
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
-public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMetaboliteDao<BioCycMetaboliteEntity> {
+public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboliteEntity> implements IMetaboliteDao<BioCycMetaboliteEntity> {
 
 	private static Label compoundLabel = CompoundNodeLabel.BioCyc;
 	private Label subDb = CompoundNodeLabel.MetaCyc;
-	private ExecutionEngine engine;
-	
-	public Neo4jBioCycMetaboiteDaoImpl() { }
+
 	public Neo4jBioCycMetaboiteDaoImpl(GraphDatabaseService graphdb) {
-		engine = new ExecutionEngine(graphdb);
-	}
-	
-	private BioCycMetaboliteEntity nodeToBioCycMetaboliteEntity(Node node) {
-		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
-		BioCycMetaboliteEntity cpd = new BioCycMetaboliteEntity();
-		cpd.setEntry( (String) node.getProperty("entry"));
-		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
-		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
-		if (node.hasProperty("charge")) cpd.setCharge((Integer) node.getProperty("charge"));
-		if (node.hasProperty("cmlMolWeight")) cpd.setCmlMolWeight((Double) node.getProperty("cmlMolWeight"));
-		if (node.hasProperty("molWeight")) cpd.setMolWeight((Double) node.getProperty("molWeight"));
-		if (node.hasProperty("inchi")) cpd.setInChI((String) node.getProperty("inchi"));
-		if (node.hasProperty("smiles")) cpd.setSmiles((String) node.getProperty("smiles"));
-		return cpd;
+		super(graphdb);
 	}
 	
 	@Override
 	public BioCycMetaboliteEntity find(Serializable id) {
 		Node node = graphdb.findNodesByLabelAndProperty(subDb, "entry", id).iterator().next();
-		BioCycMetaboliteEntity cpd = nodeToBioCycMetaboliteEntity(node);
+		BioCycMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
@@ -58,7 +41,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<BioCycMetaboliteEntity> res = new ArrayList<> ();
 		for (Node node : nodes) {
-			BioCycMetaboliteEntity cpd = this.nodeToBioCycMetaboliteEntity(node);
+			BioCycMetaboliteEntity cpd = this.nodeToObject(node);
 			if (cpd != null) res.add(cpd);
 		}
 		return res;
@@ -162,6 +145,22 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao implements IMe
 		}
 		
 		return null;
+	}
+
+	@Override
+	protected BioCycMetaboliteEntity nodeToObject(Node node) {
+		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
+		BioCycMetaboliteEntity cpd = new BioCycMetaboliteEntity();
+		cpd.setEntry( (String) node.getProperty("entry"));
+		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
+		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
+		if (node.hasProperty("charge")) cpd.setCharge((Integer) node.getProperty("charge"));
+		if (node.hasProperty("cmlMolWeight")) cpd.setCmlMolWeight((Double) node.getProperty("cmlMolWeight"));
+		if (node.hasProperty("molWeight")) cpd.setMolWeight((Double) node.getProperty("molWeight"));
+		if (node.hasProperty("inchi")) cpd.setInChI((String) node.getProperty("inchi"));
+		if (node.hasProperty("smiles")) cpd.setSmiles((String) node.getProperty("smiles"));
+		
+		return cpd;
 	}
 
 }

@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -18,14 +17,10 @@ import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteC
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
-public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMetaboliteDao<BiggMetaboliteEntity> {
+public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteEntity> implements IMetaboliteDao<BiggMetaboliteEntity> {
 
-	private ExecutionEngine engine;
-	
-	public Neo4jBiggMetaboliteDaoImpl() {}
-	
 	public Neo4jBiggMetaboliteDaoImpl(GraphDatabaseService graphdb) {
-		engine = new ExecutionEngine(graphdb);
+		super(graphdb);
 	}
 	
 	@Override
@@ -114,18 +109,9 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<BiggMetaboliteEntity> res = new ArrayList<> ();
 		for (Node node : nodes) {
-			res.add(this.nodeToBiggMetaboliteEntity(node));
+			res.add(this.nodeToObject(node));
 		}
 		return res;
-	}
-	
-	private BiggMetaboliteEntity nodeToBiggMetaboliteEntity(Node node) {
-		BiggMetaboliteEntity cpd = new BiggMetaboliteEntity();
-		cpd.setId( (Integer) node.getProperty("id"));
-		cpd.setEntry( (String) node.getProperty("entry"));
-		cpd.setFormula( (String) node.getProperty("formula"));
-		cpd.setCharge( (Integer) node.getProperty("charge"));
-		return cpd;
 	}
 
 	@Override
@@ -178,6 +164,16 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 
 		}
 		return null;
+	}
+
+	@Override
+	protected BiggMetaboliteEntity nodeToObject(Node node) {
+		BiggMetaboliteEntity cpd = new BiggMetaboliteEntity();
+		cpd.setId( (Integer) node.getProperty("id"));
+		cpd.setEntry( (String) node.getProperty("entry"));
+		cpd.setFormula( (String) node.getProperty("formula"));
+		cpd.setCharge( (Integer) node.getProperty("charge"));
+		return cpd;
 	}
 
 }

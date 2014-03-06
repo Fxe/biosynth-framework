@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -19,18 +18,15 @@ import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteC
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
-public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMetaboliteDao<KeggMetaboliteEntity>{
+public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteEntity> implements IMetaboliteDao<KeggMetaboliteEntity>{
 	
 	private static Label compoundLabel = CompoundNodeLabel.KEGG;
-	private ExecutionEngine engine;
 	
 //	private String nullToString(Object obj) {
 //		return obj==null?"null":obj.toString();
 //	}
-	
-	public Neo4jKeggMetaboliteDaoImpl() { }
 	public Neo4jKeggMetaboliteDaoImpl(GraphDatabaseService graphdb) { 
-		engine = new ExecutionEngine(graphdb);
+		super(graphdb);
 	}
 	
 	
@@ -38,7 +34,7 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 	@Override
 	public KeggMetaboliteEntity find(Serializable id) {
 		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
-		KeggMetaboliteEntity cpd = nodeToKeggMetaboliteEntity(node);
+		KeggMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
@@ -90,17 +86,6 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 		
 		return null;
 	}
-	
-	private KeggMetaboliteEntity nodeToKeggMetaboliteEntity(Node node) {
-		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
-		cpd.setEntry( (String) node.getProperty("entry"));
-		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
-		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
-		if (node.hasProperty("remark")) cpd.setRemark( (String) node.getProperty("remark"));
-		if (node.hasProperty("mass")) cpd.setMass((Double) node.getProperty("mass"));
-		return cpd;
-	}
 
 	@Override
 	public List<KeggMetaboliteEntity> findAll() {
@@ -109,9 +94,23 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao implements IMet
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<KeggMetaboliteEntity> res = new ArrayList<> ();
 		for (Node node : nodes) {
-			KeggMetaboliteEntity cpd = this.nodeToKeggMetaboliteEntity(node);
+			KeggMetaboliteEntity cpd = this.nodeToObject(node);
 			if (cpd != null) res.add(cpd);
 		}
 		return res;
+	}
+
+
+
+	@Override
+	protected KeggMetaboliteEntity nodeToObject(Node node) {
+		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
+		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		cpd.setEntry( (String) node.getProperty("entry"));
+		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
+		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
+		if (node.hasProperty("remark")) cpd.setRemark( (String) node.getProperty("remark"));
+		if (node.hasProperty("mass")) cpd.setMass((Double) node.getProperty("mass"));
+		return cpd;
 	}
 }

@@ -32,8 +32,7 @@ public class TestNeo4jExplore {
 //		CsvBiggMetaboliteDaoImpl daoCsv = new CsvBiggMetaboliteDaoImpl();
 //		daoCsv.setBiggMetaboliteTsv(csv);
 		
-		Neo4jBiggMetaboliteDaoImpl dao = new Neo4jBiggMetaboliteDaoImpl();
-		dao.setGraphdb(db);
+		Neo4jBiggMetaboliteDaoImpl dao = new Neo4jBiggMetaboliteDaoImpl(db);
 		
 		
 		BiggMetaboliteEntity cpd = null;

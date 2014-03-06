@@ -23,8 +23,10 @@ public class BioDbDictionary {
 		 *    Only characters and '_'
 		 */
 		Map<String, String> dictionary = new HashMap<> ();
-		
+		//PlantCyc
+		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
 		//BioCyc
+		dictionary.put("BIOCYC:ARA", "BioCyc:AraCyc");
 		dictionary.put("METACYC", "BioCyc:MetaCyc");
 		dictionary.put("BIGG", CompoundNodeLabel.BiGG.toString());
 		dictionary.put("LIGAND-CPD", "KEGG");

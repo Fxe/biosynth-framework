@@ -93,8 +93,7 @@ public class TestNeo4jBasic {
 	public void testKegg() {
 		KeggRemoteSource.LOCALCACHE = "D:/home/data/kegg";
 		KeggRemoteSource keggRemoteDao = new KeggRemoteSource();
-		Neo4jKeggMetaboliteDaoImpl keggDao = new Neo4jKeggMetaboliteDaoImpl();
-		keggDao.setGraphdb(db);
+		Neo4jKeggMetaboliteDaoImpl keggDao = new Neo4jKeggMetaboliteDaoImpl(db);
 		
 		try ( Transaction tx = db.beginTx()) {
 			KeggMetaboliteEntity keggCpd1 = keggRemoteDao.getMetaboliteInformation("C00001");
@@ -120,9 +119,9 @@ public class TestNeo4jBasic {
 	public void testBigg() {
 		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
 		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
-		biggCsvDao.setBiggMetaboliteTsv(csv);
-		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl();
-		biggNeo4jDao.setGraphdb(db);
+		biggCsvDao.setCsvFile(csv);
+		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl(db);
+		
 		try ( Transaction tx = db.beginTx()) {
 			BiggMetaboliteEntity biggCpd1 = biggCsvDao.find("h2o");
 			System.out.println(biggCpd1);
@@ -141,8 +140,8 @@ public class TestNeo4jBasic {
 	public void testMetaCyc() {
 		BioCycRemoteSource.LOCALCACHE = "D:/home/data/biocyc";
 		BioCycRemoteSource biocycRemoteDao = new BioCycRemoteSource("META");
-		Neo4jBioCycMetaboiteDaoImpl biocycNeo4jDao = new Neo4jBioCycMetaboiteDaoImpl();
-		biocycNeo4jDao.setGraphdb(db);
+		Neo4jBioCycMetaboiteDaoImpl biocycNeo4jDao = new Neo4jBioCycMetaboiteDaoImpl(db);
+		
 		try ( Transaction tx = db.beginTx()) {
 			BioCycMetaboliteEntity cpd1 = biocycRemoteDao.getMetaboliteInformation("BUTANAL");
 			System.out.println(cpd1);
