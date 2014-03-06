@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,12 +32,16 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     @Column(name="DELTAGERR") private Double deltaGErr;
     @Column(name="UUID") private String uuid;
     @Column(name="CKSUM") private String cksum;
-    @Column(name="LOCKED") private short locked;
-    @Column(name="MASS") private int mass;
+    @Column(name="LOCKED") private Short locked;
+    @Column(name="MASS") private Integer mass;
     @Column(name="ABBREVIATION") private String abbreviation;
     @Column(name="UNCHARGEDFORMULA") private String unchargedFormula;
+    @Column(name="OBSOLETE") private Boolean obsolete = false;
     
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    public Boolean getObsolete() { return obsolete;}
+	public void setObsolete(Boolean obsolete) { this.obsolete = obsolete;}
+
+	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="MODDATE") private DateTime modDate;
 	
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
@@ -48,6 +55,13 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedCompoundCrossReferenceEntity> crossReferences = new ArrayList<>();
+    
+	@ElementCollection
+	@CollectionTable(name="SEED_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@Column(name="SYNONYM", length=255)
+	private List<String> synonyms = new ArrayList<> ();
+	public List<String> getSynonyms() { return synonyms;}
+	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
 	
 	public int getDefaultCharge() {
 		return defaultCharge;
@@ -56,17 +70,17 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		this.defaultCharge = defaultCharge;
 	}
 	
-	public double getDeltaG() {
+	public Double getDeltaG() {
 		return deltaG;
 	}
-	public void setDeltaG(double deltaG) {
+	public void setDeltaG(Double deltaG) {
 		this.deltaG = deltaG;
 	}
 
-	public double getDeltaGErr() {
+	public Double getDeltaGErr() {
 		return deltaGErr;
 	}
-	public void setDeltaGErr(double deltaGErr) {
+	public void setDeltaGErr(Double deltaGErr) {
 		this.deltaGErr = deltaGErr;
 	}
 
@@ -91,17 +105,17 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		this.cksum = cksum;
 	}
 
-	public short getLocked() {
+	public Short getLocked() {
 		return locked;
 	}
-	public void setLocked(short locked) {
+	public void setLocked(Short locked) {
 		this.locked = locked;
 	}
 
-	public int getMass() {
+	public Integer getMass() {
 		return mass;
 	}
-	public void setMass(int mass) {
+	public void setMass(Integer mass) {
 		this.mass = mass;
 	}
 
