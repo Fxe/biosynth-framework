@@ -35,6 +35,25 @@ public class KeggRemoteSource implements IRemoteSource {
 //	private static final String restList = "http://rest.kegg.jp/list/";
 	private static final String restGet = "http://rest.kegg.jp/get/";
 	
+	private String getLocalOrWeb(String entityType, String entry) throws IOException {
+		String entryFlatFile = null;
+		
+		String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
+		if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
+		String dataFileStr = baseDirectory  + entityType + "/" + entry + ".txt";
+		File dataFile = new File(dataFileStr);
+		
+		System.out.println(dataFile);
+		if ( !dataFile.exists()) {
+			entryFlatFile =  HttpRequest.get(restGet + String.format("%s:%s", entityType, entry));
+			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryFlatFile, dataFileStr);
+		} else {
+			entryFlatFile = BioSynthUtilsIO.readFromFile(dataFileStr);
+		}
+		
+		return entryFlatFile;
+	}
+	
 	@Override
 	public Set<String> getAllReactionIds() {
 		Set<String> rxnIds = new HashSet<String>(); 
@@ -47,8 +66,17 @@ public class KeggRemoteSource implements IRemoteSource {
 		return rxnIds;
 	}
 	public Set<String> getAllCompoundIds(boolean includeGlycans) {
-		Set<String> cpdIDs = new HashSet<String>(); 
-		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd")); // keggAPIList("rn");
+		Set<String> cpdIDs = new HashSet<String>();
+		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd"));
+//		if (LOCALCACHE == null) {
+//			flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd")); // keggAPIList("rn");
+//		} else {
+//			String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
+//			if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
+//			String dataFileStr = baseDirectory  + "query" + "/" + "compoud" + ".txt";
+//			flat_string = BioSynthUtilsIO.readFromFile(dataFileStr);
+//		}
+				
 		String[] compound_array = flat_string.split("\n");
 		for ( int i = 0; i < compound_array.length; i++) {
 			String[] values = compound_array[i].split("\\t");
@@ -171,24 +199,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		return rxn;
 	}
 	
-	private String getLocalOrWeb(String entityType, String entry) throws IOException {
-		String entryFlatFile = null;
-		
-		String baseDirectory = LOCALCACHE.trim().replaceAll("\\\\", "/");
-		if ( !baseDirectory.endsWith("/")) baseDirectory = baseDirectory.concat("/");
-		String dataFileStr = baseDirectory  + entityType + "/" + entry + ".txt";
-		File dataFile = new File(dataFileStr);
-		
-		System.out.println(dataFile);
-		if ( !dataFile.exists()) {
-			entryFlatFile =  HttpRequest.get(restGet + String.format("%s:%s", entityType, entry));
-			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryFlatFile, dataFileStr);
-		} else {
-			entryFlatFile = BioSynthUtilsIO.readFromFile(dataFileStr);
-		}
-		
-		return entryFlatFile;
-	}
+
 	
 	@Override
 	public KeggMetaboliteEntity getMetaboliteInformation(String cpdId) {

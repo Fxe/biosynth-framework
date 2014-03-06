@@ -134,12 +134,13 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 						formula = this.base.getJSONObject("cml")
 						.getJSONObject("molecule").getJSONObject("formula").getString("concise");
 						formula = formula.replaceAll(" ", "");
+					} else {
+						return null;
 					}
 					break;
 				default:
 					break;
 			}
-			
 			return formula.isEmpty()?null:formula;
 		} catch (JSONException ex) {
 			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage());

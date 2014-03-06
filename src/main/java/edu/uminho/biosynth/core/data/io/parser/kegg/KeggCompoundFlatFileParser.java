@@ -31,7 +31,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 	public String getName() {
 		int tabIndex = this.getTabIndex("NAME");
 		String content = this.tabContent_.get(tabIndex);
-		if (content == null || content.isEmpty()) return this.getEntry();
+		if (content == null || content.isEmpty()) return null;
 		
 		String[] names = content.split(";");
 		StringBuilder sb = new StringBuilder();

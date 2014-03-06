@@ -43,5 +43,4 @@ public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEn
 	public Serializable save(BiggMetaboliteEntity entity) {
 		throw new RuntimeException("Not Supported Operation");
 	}
-
 }
