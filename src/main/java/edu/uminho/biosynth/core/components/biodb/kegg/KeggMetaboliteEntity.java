@@ -58,10 +58,12 @@ public class KeggMetaboliteEntity extends GenericMetabolite{
 	
 	public List<String> getNames() {
 		List<String> names = new ArrayList<> ();
-		for (String str : this.name.split("[\\s+]*;[\\s+]*")) {
-			String s = str.trim(); 
-			if (!s.isEmpty()) {
-				names.add(s);
+		if (this.name != null) {
+			for (String str : this.name.split("[\\s+]*;[\\s+]*")) {
+				String s = str.trim(); 
+				if (!s.isEmpty()) {
+					names.add(s);
+				}
 			}
 		}
 		return names;
