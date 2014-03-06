@@ -53,16 +53,6 @@ public class TestParseCsvSeedMetabolite {
 				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
 		sessionFactory = config.buildSessionFactory(servReg);
 		
-		ObjectMapper m = new ObjectMapper();
-		rootNode = m.readTree(new File("C:/Users/Filipe/Dropbox/workspace/data/seed/seed.txt"));
-		
-		refMap = new HashMap<> ();
-		
-		buildXRefMap(rootNode.get("aliasSets").get(2) .get("aliases"), GenericCrossReference.Type.ECNUMBER, refMap, "SEED");
-		buildXRefMap(rootNode.get("aliasSets").get(1) .get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "SEED");
-		buildXRefMap(rootNode.get("aliasSets").get(0) .get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "SEED");
-		buildXRefMap(rootNode.get("aliasSets").get(22).get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "KEGG");
-		buildXRefMap(rootNode.get("aliasSets").get(52).get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "KEGG");
 	}
 	
 	@AfterClass
@@ -80,29 +70,7 @@ public class TestParseCsvSeedMetabolite {
 		sessionFactory.getCurrentSession().close();
 	}
 	
-	public static void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
-		Iterator<String> fields = node.getFieldNames();
-		while (fields.hasNext()) {
-			String field = fields.next();
-			JsonNode uuid_array = node.get(field);
-			for (int i = 0; i < uuid_array.size(); i++) {
-				String uuid = uuid_array.get(i).asText();
-//				System.out.println(uuid + " -> " + field.trim());
-				GenericCrossReference xref = new GenericCrossReference(type, ref, field.trim());
-				if (!map.containsKey(uuid)) {
-					List<GenericCrossReference> xrefs = new ArrayList<> ();
-					map.put(uuid, xrefs);
-				}
-				
-				map.get(uuid).add(xref);
-			}
-		}
-//		for (int i = 0; i < node.size(); i++) {
-//			JsonNode elem = node.get(i);
-//			System.out.println(elem);
-//			CrossReference xref = new CrossReference(type, null, null);
-//		}
-	}
+
 
 	public static void printJsonKeySet(JsonNode node) {
 		Iterator<String> fields = node.getFieldNames();
@@ -123,12 +91,7 @@ public class TestParseCsvSeedMetabolite {
 		}
 	}
 	
-	public static SeedMetaboliteEntity parseJsonSeedCompound(JsonNode node) 
-			throws JsonMappingException, JsonParseException, IOException {
-		
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(node, SeedMetaboliteEntity.class);
-	}
+
 	
 	public static SeedReactionEntity parseJsonSeedReaction(JsonNode node) 
 			throws JsonMappingException, JsonParseException, IOException {
@@ -138,39 +101,30 @@ public class TestParseCsvSeedMetabolite {
 
 	@Test
 	public void testCompounds() {
-		try {
-			JsonNode compounds = rootNode.get("compounds");
-			IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
-			
+
+		File csv = new File("D:/home/data/seed/seed.json");
+		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
+		jsonSeedDao.setJsonFile(csv);
+		jsonSeedDao.initialize();
+		
+		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
+		
 //			printJsonValues(compounds.get(16983));
 //			System.exit(0);
-			int k = 0;
-			Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
-			for (int i = 0; i < compounds.size(); i++ ) {
-				System.out.println(i);
-				SeedMetaboliteEntity compound = parseJsonSeedCompound(compounds.get(i));
-				List<SeedCompoundCrossReferenceEntity> xrefs = new ArrayList<> ();
-				if (refMap.containsKey(compound.getUuid())) {
-					for (GenericCrossReference xref : refMap.get(compound.getUuid())) {
-						xrefs.add(new SeedCompoundCrossReferenceEntity(xref));
-					}
-				}
-				compound.setCrossReferences(xrefs);
-				compound.setEntry(Integer.toString(k++));
-				dao.save(compound);
-				if (i % 100 == 0) {
-					tx.commit();
-					tx = sessionFactory.getCurrentSession().beginTransaction();
-				}
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
+		List<SeedMetaboliteEntity> res = jsonSeedDao.findAll();
+		int i = 0;
+		for (SeedMetaboliteEntity cpd : res) {
+			System.out.println(i);
+			dao.save(cpd);
+			if (i % 100 == 0) {
+				tx.commit();
+				tx = sessionFactory.getCurrentSession().beginTransaction();
 			}
-			tx.commit();
-			
-		} catch (JsonProcessingException jpEx) {
-			System.out.println(jpEx.getMessage());
-		} catch (IOException ioEx) {
-			System.out.println(ioEx.getMessage());
+			i++;
 		}
-		
+		tx.commit();
+
 		assertEquals(true, true);
 //		fail("Not yet implemented");
 	}

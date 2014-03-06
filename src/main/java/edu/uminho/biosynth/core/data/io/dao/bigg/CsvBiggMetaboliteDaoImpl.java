@@ -10,15 +10,10 @@ import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
 public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEntity>{
 
-	private File biggMetaboliteTsv;
+	private File csvFile;
 	
-	public File getBiggMetaboliteTsv() {
-		return biggMetaboliteTsv;
-	}
-
-	public void setBiggMetaboliteTsv(File biggMetaboliteTsv) {
-		this.biggMetaboliteTsv = biggMetaboliteTsv;
-	}
+	public File getCsvFile() { return csvFile;}
+	public void setCsvFile(File csvFile) { this.csvFile = csvFile;}
 
 	@Override
 	public BiggMetaboliteEntity find(Serializable id) {
@@ -32,7 +27,7 @@ public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEn
 	public List<BiggMetaboliteEntity> findAll() {
 		List<BiggMetaboliteEntity> cpdList = null;
 		try {
-			cpdList = DefaultBiggMetaboliteParser.parseMetabolites(biggMetaboliteTsv);
+			cpdList = DefaultBiggMetaboliteParser.parseMetabolites(csvFile);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
