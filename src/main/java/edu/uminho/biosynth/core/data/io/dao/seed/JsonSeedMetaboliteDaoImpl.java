@@ -201,4 +201,9 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(node, SeedMetaboliteEntity.class);
 	}
+	@Override
+	public List<Serializable> getAllMetaboliteIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

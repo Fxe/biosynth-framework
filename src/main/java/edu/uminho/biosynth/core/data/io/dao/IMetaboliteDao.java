@@ -7,6 +7,7 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 public interface IMetaboliteDao<C extends GenericMetabolite> {
 	public C find(Serializable id);
+	public List<Serializable> getAllMetaboliteIds();
 	public List<C> findAll();
 	public Serializable save(C entity);
 }
