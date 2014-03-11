@@ -138,4 +138,10 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		return cpd;
 	}
 
+	@Override
+	public List<Serializable> getAllMetaboliteIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

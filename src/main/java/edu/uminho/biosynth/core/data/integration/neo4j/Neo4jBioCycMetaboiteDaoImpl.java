@@ -163,4 +163,10 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		return cpd;
 	}
 
+	@Override
+	public List<Serializable> getAllMetaboliteIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

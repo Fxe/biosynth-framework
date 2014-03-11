@@ -113,4 +113,12 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 		if (node.hasProperty("mass")) cpd.setMass((Double) node.getProperty("mass"));
 		return cpd;
 	}
+
+
+
+	@Override
+	public List<Serializable> getAllMetaboliteIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

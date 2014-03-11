@@ -9,9 +9,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-
-public class TestNeo4jExplore {
+public class TestNeo4jMetaboliteIntegration {
 
 	private static String DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db";
 	private static GraphDatabaseService db;
@@ -26,24 +24,22 @@ public class TestNeo4jExplore {
 		db.shutdown();
 	}
 
+
 	@Test
-	public void testBiGG() {
-//		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
-//		CsvBiggMetaboliteDaoImpl daoCsv = new CsvBiggMetaboliteDaoImpl();
-//		daoCsv.setBiggMetaboliteTsv(csv);
+	public void test() {
+		Neo4jMetaboliteIntegration integrarion = new Neo4jMetaboliteIntegration("IntegrateIdentity", db);
 		
-		Neo4jBiggMetaboliteDaoImpl dao = new Neo4jBiggMetaboliteDaoImpl(db);
-		
-		
-		BiggMetaboliteEntity cpd = null;
-		try (Transaction tx = db.beginTx()) {
-			cpd = dao.find(33474);
-			System.out.println(cpd);
-			System.out.println(dao.getAllMetaboliteIds());
+		try ( Transaction tx = db.beginTx()) {
+			integrarion.initialize();
+			
+			integrarion.getAllMetaboliteId();
+			
+//			integrarion.resetIntegration();
 			tx.success();
 		}
 		
-		assertEquals(true, cpd != null);
+		
+		assertEquals(true, true);
 	}
 
 }

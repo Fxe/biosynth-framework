@@ -176,4 +176,16 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		return cpd;
 	}
 
+	@Override
+	public List<Serializable> getAllMetaboliteIds() {
+		List<Serializable> res = new ArrayList<> ();
+		Iterator<List<String>> iterator = engine.execute(
+				"MATCH (cpd:BiGG) RETURN collect(cpd.entry) AS entries;").columnAs("entries");
+		while (iterator.hasNext()) {
+			List<String> entries = iterator.next();
+			res.addAll(entries);
+		}
+		return res;
+	}
+
 }
