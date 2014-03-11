@@ -20,7 +20,7 @@ public class GenericReaction extends AbstractGenericEntity implements Serializab
 	public static String LEFT_TO_RIGHT = "LR";
 	public static String RIGHT_TO_LEFT = "RL";
 
-	@Column(name="REV") protected int orientation;	
+	@Column(name="REV") protected int orientation;
 	
 	@Transient private Set<String> similarRxn;
 	
