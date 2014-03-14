@@ -15,7 +15,7 @@ public class GenericCrossReference implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		DATABASE, MODEL, ECNUMBER, NAME, OBSOLETE, SELF
+		DATABASE, MODEL, ECNUMBER, NAME, OBSOLETE, SELF, PATENT, GENE, UNKNOWN, REACTION, CITATION
 	}
 	
 	@Id
@@ -23,12 +23,12 @@ public class GenericCrossReference implements Serializable {
     @GeneratedValue
     protected Integer id;
 	
-	@Column(name="REFTYPE", length=15)
+	@Column(name="REFTYPE", length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	protected Type type;
 	
-	@Column(name="REFSOURCE", length=255) protected String ref;
-	@Column(name="REFVALUE", length=255) protected String value;
+	@Column(name="REFSOURCE", length=255, nullable=false) protected String ref;
+	@Column(name="REFVALUE", length=255, nullable=false) protected String value;
 	
 	public GenericCrossReference() { }
 	

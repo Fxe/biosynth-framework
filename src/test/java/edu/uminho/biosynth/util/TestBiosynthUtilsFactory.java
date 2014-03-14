@@ -6,27 +6,27 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class TestBiosynthUtilsFactory {
 	
 	@Test
 	public void testKeggCpd1() {
-		KeggMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
+		KeggCompoundMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
 				"C00001", "water", "a molecule", "H2O", "", null, 18, 18, new String[]{"biocyc", "WATER"});
 		assertEquals(1, cpd.getCrossReferences().size());
 	}
 
 	@Test
 	public void testKeggCpd2() {
-		KeggMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
+		KeggCompoundMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
 				"C00001", "water", "a molecule", "H2O", "", null, 18, 18, new String[]{"biocyc"});
 		assertEquals(0, cpd.getCrossReferences().size());
 	}
 	
 	@Test
 	public void testKeggCpd3() {
-		KeggMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
+		KeggCompoundMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
 				"C00001", "water", null, "H2O", "", "", 18, 18, 
 				new String[] {"metacyc", "WATER", "bigg", "h2o"});
 		System.out.println(cpd);

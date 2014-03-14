@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.components.biodb.chebi.components;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,11 +15,12 @@ import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 public class ChebiMetaboliteNameEntity {
 	
 	@Id
+	@GeneratedValue
 	@Column(name="id", nullable=false)
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="compound_id")
+	@JoinColumn(name="metabolite_id")
 	private ChebiMetaboliteEntity chebiMetaboliteEntity;
 	
 	@Column(name="name", nullable=false)

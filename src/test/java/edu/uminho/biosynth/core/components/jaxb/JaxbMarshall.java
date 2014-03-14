@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class JaxbMarshall {
 
@@ -40,8 +40,8 @@ public class JaxbMarshall {
 	@Test
 	public void test() {
 		try {
-			JAXBContext jc = JAXBContext.newInstance(KeggMetaboliteEntity.class);
-			KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+			JAXBContext jc = JAXBContext.newInstance(KeggCompoundMetaboliteEntity.class);
+			KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 			cpd.setId(23);
 			cpd.setEntry("CPD00002");
 			

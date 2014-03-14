@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 
 @Entity
@@ -57,6 +58,12 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiMetaboliteNameEntity> names = new ArrayList<> ();
 	
+	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
+	private List<ChebiMetaboliteCrossReferenceEntity> crossreferences = new ArrayList<> ();
+	
+	@Column(name="parent_id") public Integer parentId;
+	public Integer getParentId() { return parentId;}
+	public void setParentId(Integer parentId) { this.parentId = parentId;}
 	
 	public List<ChebiMetaboliteNameEntity> getNames() {
 		return names;
@@ -64,6 +71,16 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	public void setNames(List<ChebiMetaboliteNameEntity> names) {
 		this.names = names;
 	}
+	
+	
+	public List<ChebiMetaboliteCrossReferenceEntity> getCrossreferences() {
+		return crossreferences;
+	}
+	public void setCrossreferences(
+			List<ChebiMetaboliteCrossReferenceEntity> crossreferences) {
+		this.crossreferences = crossreferences;
+	}
+	
 	@Override
 	public String toString() {
 		final char sep = '\n';
@@ -72,11 +89,12 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 		sb.append("charge:").append(this.charge).append(sep);
 		sb.append("mass:").append(this.mass).append(sep);
 		sb.append("stars:").append(this.stars).append(sep);
-		
+		sb.append("parentId:").append(this.parentId).append(sep);
 		sb.append("Smiles:").append(this.smiles).append(sep);
 		sb.append("InChI:").append(this.inchi).append(sep);
 		sb.append("InChI Key:").append(this.inchiKey).append(sep);
 		sb.append("Names:").append(this.names).append(sep);
+		sb.append("Xrefs:").append(this.crossreferences).append(sep);
 		return sb.toString();
 	}
 }

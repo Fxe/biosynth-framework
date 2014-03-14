@@ -5,19 +5,19 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 
 public class BioSynthUtilsFactory {
 	
-	public static KeggMetaboliteEntity buildKegg(
+	public static KeggCompoundMetaboliteEntity buildKegg(
 			String entry, String name, String description,
 			String formula,
 			String comment, String remark,
 			double mass, double molWeight,
 			String[] xrefs) {
 		
-		KeggMetaboliteEntity cpdKegg = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpdKegg = new KeggCompoundMetaboliteEntity();
 		cpdKegg.setEntry(entry);
 		cpdKegg.setName(name);
 		cpdKegg.setFormula(formula);
@@ -31,7 +31,7 @@ public class BioSynthUtilsFactory {
 		
 		for (int i = 0; i < xrefs.length; i+=2) {
 			if (i + 1 < xrefs.length) {
-				KeggMetaboliteCrossReferenceEntity xref = new KeggMetaboliteCrossReferenceEntity();
+				KeggCompoundMetaboliteCrossreferenceEntity xref = new KeggCompoundMetaboliteCrossreferenceEntity();
 				xref.setType(GenericCrossReference.Type.DATABASE);
 				xref.setRef(xrefs[i]);
 				xref.setValue(xrefs[i+1]);

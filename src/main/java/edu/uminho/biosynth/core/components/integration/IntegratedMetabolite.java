@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class IntegratedMetabolite extends GenericMetabolite {
 
@@ -23,7 +23,7 @@ public class IntegratedMetabolite extends GenericMetabolite {
 		Class<?> cpdClass = cpd.getClass();
 		switch (cpdClass.getName()) {
 		case "edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity":
-			this.addKeggMetabolite((KeggMetaboliteEntity) cpd);
+			this.addKeggMetabolite((KeggCompoundMetaboliteEntity) cpd);
 			break;
 		default:
 			LOGGER.log(Level.SEVERE, "Metabolite class unmapped " + cpdClass.getName());
@@ -31,7 +31,7 @@ public class IntegratedMetabolite extends GenericMetabolite {
 		}
 	}
 	
-	public void addKeggMetabolite(KeggMetaboliteEntity cpdKegg) {
+	public void addKeggMetabolite(KeggCompoundMetaboliteEntity cpdKegg) {
 		this.referenceMetabolites.add(cpdKegg);
 	}
 
