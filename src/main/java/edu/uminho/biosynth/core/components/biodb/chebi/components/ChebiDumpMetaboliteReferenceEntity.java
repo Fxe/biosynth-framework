@@ -41,6 +41,68 @@ public class ChebiDumpMetaboliteReferenceEntity {
 	@Column(name="reference_name", nullable=false, length=512)
 	private String referenceName;
 	
+	
+	
+	public Integer getId() {
+		return id;
+	}
+
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+
+	public String getReferenceId() {
+		return referenceId;
+	}
+
+
+
+	public void setReferenceId(String referenceId) {
+		this.referenceId = referenceId;
+	}
+
+
+
+	public String getReferenceDbName() {
+		return referenceDbName;
+	}
+
+
+
+	public void setReferenceDbName(String referenceDbName) {
+		this.referenceDbName = referenceDbName;
+	}
+
+
+
+	public String getLocationInRef() {
+		return locationInRef;
+	}
+
+
+
+	public void setLocationInRef(String locationInRef) {
+		this.locationInRef = locationInRef;
+	}
+
+
+
+	public String getReferenceName() {
+		return referenceName;
+	}
+
+
+
+	public void setReferenceName(String referenceName) {
+		this.referenceName = referenceName;
+	}
+
+
+
 	@Override
 	public String toString() {
 		final char sep = ',';

@@ -1,16 +1,24 @@
 package edu.uminho.biosynth.core.data.io.dao.chebi;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteChemicalDataEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteNameEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
@@ -18,6 +26,10 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 
 	private SessionFactory sessionFactory;
 	
+	private static final Set<String> validDbEntries = new HashSet<> (Arrays.asList(new String[]{
+			"kegg compound accession", "cas registry number", "lipid maps instance accession", 
+			"kegg drug accession", "kegg glycan accession", "metacyc accession", "hmdb accession",
+			"pubchem accession", "chemspider accession", "drugbank accession"}));
 	
 	
 	public SessionFactory getSessionFactory() {
@@ -60,6 +72,7 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 		res.setCreatedBy(cpd.getCreatedBy());
 		res.setStars(cpd.getStar());
 		res.setSource(cpd.getSource());
+		res.setParentId(cpd.getParentId());
 		
 		for (ChebiDumpMetaboliteNameEntity name : cpd.getNames()) {
 			ChebiMetaboliteNameEntity resName = new ChebiMetaboliteNameEntity();
@@ -112,7 +125,79 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 					throw new RuntimeException("Unsupported Type: " + structure);
 			}
 		}
+		
+		for (ChebiDumpMetaboliteReferenceEntity reference: cpd.getReferences()) {
+//			System.out.println(reference);
+			ChebiMetaboliteCrossReferenceEntity xref = new ChebiMetaboliteCrossReferenceEntity();
+			GenericCrossReference.Type type = referenceDbToType(reference.getReferenceDbName().toLowerCase());
+			if ( !type.equals(GenericCrossReference.Type.UNKNOWN)) {
+				xref.setType(type);
+				xref.setRef(reference.getReferenceDbName());
+				xref.setValue(reference.getReferenceId());
+				xref.setLocationInReference(reference.getLocationInRef().trim().isEmpty()?null:reference.getLocationInRef());
+				xref.setReferenceName(reference.getReferenceName().trim().isEmpty()?null:reference.getReferenceName());
+				
+				xref.setChebiMetaboliteEntity(res);
+				
+				res.getCrossreferences().add(xref);
+			}
+
+		}
+		
+		for (ChebiDumpMetaboliteDatabaseAccession reference: cpd.getAccessions()) {
+			ChebiMetaboliteCrossReferenceEntity xref = new ChebiMetaboliteCrossReferenceEntity();
+			GenericCrossReference.Type type = referenceDbToType(reference.getType().toLowerCase());
+			if ( !type.equals(GenericCrossReference.Type.UNKNOWN)) {
+				xref.setType(type);
+				xref.setRef(reference.getType());
+				xref.setValue(reference.getAccessionNumber());
+				xref.setReferenceName(reference.getSource());
+				
+				xref.setChebiMetaboliteEntity(res);
+				
+				res.getCrossreferences().add(xref);
+			}
+		}
 		return res;
+	}
+	
+	private GenericCrossReference.Type referenceDbToType(String db) {
+		System.out.println(db);
+		
+		if (validDbEntries.contains(db)) return GenericCrossReference.Type.DATABASE;
+		
+		GenericCrossReference.Type type = null;
+		switch (db) {
+			case "pubmed citation":
+				type = GenericCrossReference.Type.CITATION;
+				break;			
+			case "pubMed central citation":
+				type = GenericCrossReference.Type.CITATION;
+				break;
+			case "citexplore citation":
+				type = GenericCrossReference.Type.CITATION;
+				break;
+//			case "patent":
+//				type = GenericCrossReference.Type.PATENT;
+//				break;
+			case "pubchem":
+				type = GenericCrossReference.Type.DATABASE;
+				break;
+			case "uniprot":
+				type = GenericCrossReference.Type.GENE;
+				break;
+			case "rhea":
+				type = GenericCrossReference.Type.REACTION;
+				break;
+			case "brenda":
+				type = GenericCrossReference.Type.ECNUMBER;
+				break;
+			default:
+				type = GenericCrossReference.Type.UNKNOWN;
+				break;
+		}
+		
+		return type;
 	}
 	
 	private ChebiDumpMetaboliteEntity chebiToDump(ChebiMetaboliteEntity cpd) {
@@ -126,6 +211,23 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
+		Query query = this.getSession().createQuery("SELECT cpd.id FROM ChebiDumpMetaboliteEntity cpd");
+		@SuppressWarnings("unchecked")
+		List<Serializable> res = query.list();
+		return res;
+	}
+
+
+	@Override
+	public ChebiMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ChebiMetaboliteEntity saveMetaboliteInformation(
+			ChebiMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
 	}

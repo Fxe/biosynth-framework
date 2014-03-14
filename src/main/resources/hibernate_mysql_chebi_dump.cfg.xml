@@ -12,7 +12,7 @@
         <property name="hibernate.default_schema">chebi_dump</property>
         <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
         
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
 
 	    <mapping class="edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity" />
 	    <mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteChemicalDataEntity"/>
@@ -20,6 +20,7 @@
 		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteNameEntity"/>
 		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity"/>
 		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity"/>
+		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession"/>
 		
     </session-factory>
 </hibernate-configuration>

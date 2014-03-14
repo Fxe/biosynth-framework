@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteChemicalDataEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteCommentEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteNameEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity;
@@ -50,6 +51,8 @@ public class ChebiDumpMetaboliteEntity {
 	
     @Column(name="created_by") private String createdBy;
     
+    @Column(name="definition") private String definition;
+    
 //    private DateTime created_at;
 	
 	@OneToMany(mappedBy = "chebiDumpMetaboliteEntity", cascade = CascadeType.ALL)
@@ -66,6 +69,9 @@ public class ChebiDumpMetaboliteEntity {
 	
 	@OneToMany(mappedBy = "chebiDumpMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiDumpMetaboliteReferenceEntity> references = new ArrayList<> ();
+	
+	@OneToMany(mappedBy = "chebiDumpMetaboliteEntity", cascade = CascadeType.ALL)
+	private List<ChebiDumpMetaboliteDatabaseAccession> accessions = new ArrayList<> ();
 	
 	public Integer getId() { return id;}
 	public void setId(Integer id) { this.id = id;}
@@ -91,6 +97,8 @@ public class ChebiDumpMetaboliteEntity {
 	public String getCreatedBy() { return createdBy;}
 	public void setCreatedBy(String createdBy) { this.createdBy = createdBy;}
 
+	public String getDefinition() { return definition;}
+	public void setDefinition(String definition) { this.definition = definition;}	
 
 //	public DateTime getCreated_at() { return created_at;}
 //	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -116,6 +124,9 @@ public class ChebiDumpMetaboliteEntity {
 	public List<ChebiDumpMetaboliteReferenceEntity> getReferences() { return references;}
 	public void setReferences(List<ChebiDumpMetaboliteReferenceEntity> references) { this.references = references;}
 	
+	public List<ChebiDumpMetaboliteDatabaseAccession> getAccessions() { return accessions;}
+	public void setAccessions(List<ChebiDumpMetaboliteDatabaseAccession> accessions) { this.accessions = accessions;}
+	
 	@Override
 	public String toString() {
 		final char sep = '\n';
@@ -133,7 +144,8 @@ public class ChebiDumpMetaboliteEntity {
 		sb.append("comments:").append(this.comments).append(sep);
 		sb.append("names:").append(this.names).append(sep);
 		sb.append("structures:").append(this.structures).append(sep);
-		if (references.size() > 10) {
+		sb.append("accessions:").append(this.accessions).append(sep);
+		if (references.size() > 100) {
 			sb.append("references:")
 			  .append(this.references.get(0))
 			  .append(this.references.get(1))
