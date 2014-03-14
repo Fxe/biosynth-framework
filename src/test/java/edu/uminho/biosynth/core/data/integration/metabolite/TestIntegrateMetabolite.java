@@ -23,8 +23,8 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
@@ -94,7 +94,7 @@ public class TestIntegrateMetabolite {
 		IMetaboliteService<BiggMetaboliteEntity> biggService = new BiggService(dao);
 		IMetaboliteService<BiggMetaboliteEntity> biggService2 = new BiggService(dao);
 		biggService2.setServiceId("bigg personal");
-		IMetaboliteService<KeggMetaboliteEntity> keggService = new KeggService(dao);
+		IMetaboliteService<KeggCompoundMetaboliteEntity> keggService = new KeggService(dao);
 		IMetaboliteService<MnxMetaboliteEntity> mxnService = new MnxService(dao);
 		
 		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> biocycLoader = 
@@ -113,8 +113,8 @@ public class TestIntegrateMetabolite {
 		biggLoader2.setService(biggService2);
 		biggLoader2.setReferenceTransformer(biggXrefTrans);
 		
-		ReferenceLoader<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity> keggLoader =
-				new ReferenceLoader<>(KeggMetaboliteEntity.class, KeggMetaboliteCrossReferenceEntity.class, keggXrefTrans);
+		ReferenceLoader<KeggCompoundMetaboliteEntity, KeggCompoundMetaboliteCrossreferenceEntity> keggLoader =
+				new ReferenceLoader<>(KeggCompoundMetaboliteEntity.class, KeggCompoundMetaboliteCrossreferenceEntity.class, keggXrefTrans);
 		keggLoader.setReferenceTransformer(keggXrefTrans);
 		keggLoader.setService(keggService);
 		

@@ -6,7 +6,7 @@ import java.util.Map;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
@@ -18,7 +18,7 @@ public class ReferenceNodeVertexTransformer implements IVertexTransformer<Refere
 	static {
 		dbColor.put(BiggMetaboliteEntity.class.getName(), "blue");
 		dbColor.put(BioCycMetaboliteEntity.class.getName(), "orange");
-		dbColor.put(KeggMetaboliteEntity.class.getName(), "green");
+		dbColor.put(KeggCompoundMetaboliteEntity.class.getName(), "green");
 		dbColor.put(MnxMetaboliteEntity.class.getName(), "gray");
 		dbColor.put(SeedMetaboliteEntity.class.getName(), "red");
 		dbColor.put(ChebiMetaboliteEntity.class.getName(), "purple");

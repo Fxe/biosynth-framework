@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
@@ -82,7 +82,7 @@ public class TestStageKegg {
 		
 		int counter = 0;
 		int total = 0;
-		for (KeggMetaboliteEntity cpdKegg : dao_kegg.findAll(KeggMetaboliteEntity.class)) {
+		for (KeggCompoundMetaboliteEntity cpdKegg : dao_kegg.findAll(KeggCompoundMetaboliteEntity.class)) {
 //			if ( cpdKegg.getEntry().equals("C00001"))
 			if ( !skipEntries.contains(cpdKegg.getEntry())) {
 				System.out.println(cpdKegg.getEntry());

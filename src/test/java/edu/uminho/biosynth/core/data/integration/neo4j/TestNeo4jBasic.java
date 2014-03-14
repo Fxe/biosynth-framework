@@ -23,7 +23,7 @@ import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;
@@ -96,19 +96,19 @@ public class TestNeo4jBasic {
 		Neo4jKeggMetaboliteDaoImpl keggDao = new Neo4jKeggMetaboliteDaoImpl(db);
 		
 		try ( Transaction tx = db.beginTx()) {
-			KeggMetaboliteEntity keggCpd1 = keggRemoteDao.getMetaboliteInformation("C00001");
+			KeggCompoundMetaboliteEntity keggCpd1 = keggRemoteDao.getMetaboliteInformation("C00001");
 			System.out.println(keggCpd1);
 			keggDao.save(keggCpd1);
-			KeggMetaboliteEntity keggCpd2 = keggRemoteDao.getMetaboliteInformation("C16844");
+			KeggCompoundMetaboliteEntity keggCpd2 = keggRemoteDao.getMetaboliteInformation("C16844");
 			System.out.println(keggCpd2);
 			keggDao.save(keggCpd2);
-			KeggMetaboliteEntity keggCpd3 = keggRemoteDao.getMetaboliteInformation("C01328");
+			KeggCompoundMetaboliteEntity keggCpd3 = keggRemoteDao.getMetaboliteInformation("C01328");
 			System.out.println(keggCpd3);
 			keggDao.save(keggCpd3);
-			KeggMetaboliteEntity keggCpd4 = keggRemoteDao.getMetaboliteInformation("C00226");
+			KeggCompoundMetaboliteEntity keggCpd4 = keggRemoteDao.getMetaboliteInformation("C00226");
 			System.out.println(keggCpd4);
 			keggDao.save(keggCpd4);
-			KeggMetaboliteEntity keggCpd5 = keggRemoteDao.getMetaboliteInformation("C06142");
+			KeggCompoundMetaboliteEntity keggCpd5 = keggRemoteDao.getMetaboliteInformation("C06142");
 			System.out.println(keggCpd5);
 			keggDao.save(keggCpd5);
 			tx.success();

@@ -169,4 +169,17 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		return null;
 	}
 
+	@Override
+	public BioCycMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BioCycMetaboliteEntity saveMetaboliteInformation(
+			BioCycMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

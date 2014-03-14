@@ -188,4 +188,17 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		return res;
 	}
 
+	@Override
+	public BiggMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BiggMetaboliteEntity saveMetaboliteInformation(
+			BiggMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

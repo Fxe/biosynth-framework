@@ -1,18 +1,18 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 
-public class TransformKeggMetaboliteCrossReference extends AbstractTransformCrossReference<KeggMetaboliteCrossReferenceEntity>{
+public class TransformKeggMetaboliteCrossReference extends AbstractTransformCrossReference<KeggCompoundMetaboliteCrossreferenceEntity>{
 
 	@Override
-	public Class<KeggMetaboliteCrossReferenceEntity> getTransformerEntityClass() {
-		return KeggMetaboliteCrossReferenceEntity.class;
+	public Class<KeggCompoundMetaboliteCrossreferenceEntity> getTransformerEntityClass() {
+		return KeggCompoundMetaboliteCrossreferenceEntity.class;
 	}
 
 	@Override
 	public GenericCrossReference transform(
-			KeggMetaboliteCrossReferenceEntity crossReference) {
+			KeggCompoundMetaboliteCrossreferenceEntity crossReference) {
 		String originalRef = crossReference.getRef().toUpperCase();
 		String originalValue = crossReference.getValue().toUpperCase();
 		

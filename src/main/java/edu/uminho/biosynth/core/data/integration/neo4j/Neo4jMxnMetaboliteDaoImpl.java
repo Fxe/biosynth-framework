@@ -120,4 +120,17 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		return null;
 	}
 
+	@Override
+	public MnxMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MnxMetaboliteEntity saveMetaboliteInformation(
+			MnxMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

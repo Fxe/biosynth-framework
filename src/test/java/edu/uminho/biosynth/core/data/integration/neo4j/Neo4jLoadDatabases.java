@@ -15,7 +15,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.seed.JsonSeedMetaboliteDaoImpl;
@@ -137,14 +137,14 @@ public class Neo4jLoadDatabases {
 		
 		List<String> skipEntries = new ArrayList<> ();
 		try ( Transaction tx = db.beginTx()) {
-			for (KeggMetaboliteEntity cpd : keggNeo4jDao.findAll()) {
+			for (KeggCompoundMetaboliteEntity cpd : keggNeo4jDao.findAll()) {
 				skipEntries.add(cpd.getEntry());
 			}
 			tx.success();
 		}
 		
 		System.out.println(skipEntries);
-		List<KeggMetaboliteEntity> batch = new ArrayList<> ();
+		List<KeggCompoundMetaboliteEntity> batch = new ArrayList<> ();
 		int i = 0;
 		for (String cpdId : keggRemoteDao.getAllMetabolitesIds()) {
 			System.out.println(cpdId);
@@ -153,7 +153,7 @@ public class Neo4jLoadDatabases {
 			if (i % 10 == 0) {
 				if (!batch.isEmpty())
 				try ( Transaction tx = db.beginTx()) {
-					for (KeggMetaboliteEntity b : batch) {
+					for (KeggCompoundMetaboliteEntity b : batch) {
 						System.out.println("SAVE:" + b.getEntry());
 						keggNeo4jDao.save(b);
 					}
@@ -166,7 +166,7 @@ public class Neo4jLoadDatabases {
 		}
 		if (!batch.isEmpty()) {
 			try ( Transaction tx = db.beginTx()) {
-				for (KeggMetaboliteEntity b : batch) keggNeo4jDao.save(b);
+				for (KeggCompoundMetaboliteEntity b : batch) keggNeo4jDao.save(b);
 				tx.success();
 				batch.clear();
 			}

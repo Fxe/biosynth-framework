@@ -89,4 +89,17 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		return null;
 	}
 
+	@Override
+	public ChebiMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ChebiMetaboliteEntity saveMetaboliteInformation(
+			ChebiMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

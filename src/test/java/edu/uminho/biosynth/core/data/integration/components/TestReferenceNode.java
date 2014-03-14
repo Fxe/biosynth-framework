@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class TestReferenceNode {
 
@@ -22,10 +22,10 @@ public class TestReferenceNode {
 	public void testCreateReferenceNode() {
 		ReferenceNode node = new ReferenceNode(null, null);
 		node.setEntry("C00001");
-		node.setEntityType(KeggMetaboliteEntity.class);
+		node.setEntityType(KeggCompoundMetaboliteEntity.class);
 		node.addIdServicePair(123456, "KEGG Live Service");
 		assertEquals("C00001", node.getEntry());
-		assertEquals(KeggMetaboliteEntity.class, node.getEntityType());
+		assertEquals(KeggCompoundMetaboliteEntity.class, node.getEntityType());
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class TestReferenceNode {
 	public void testSetContainsTrue() {
 		ReferenceNode node0 = new ReferenceNode(null, null);
 		node0.setEntry("C00001");
-		node0.setEntityType(KeggMetaboliteEntity.class);
+		node0.setEntityType(KeggCompoundMetaboliteEntity.class);
 		node0.addIdServicePair(123456, "KEGG Live Service");
 		
 		Set<ReferenceNode> set = new HashSet<> ();
@@ -55,7 +55,7 @@ public class TestReferenceNode {
 		
 		ReferenceNode node1 = new ReferenceNode(null, null);
 		node1.setEntry("C00001");
-		node1.setEntityType(KeggMetaboliteEntity.class);
+		node1.setEntityType(KeggCompoundMetaboliteEntity.class);
 		node1.addIdServicePair(45645, "KEGG Static Service");
 		
 		assertEquals(true, set.contains(node0));

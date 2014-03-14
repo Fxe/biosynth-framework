@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
@@ -86,7 +86,7 @@ public class TestStagingInsertion {
 		KeggMetaboliteStagingTransform keggStageLoader = new KeggMetaboliteStagingTransform();
 		keggStageLoader.setTransformer(transformer);
 		keggStageLoader.setDao(dao);
-		KeggMetaboliteEntity cpdKegg1 = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpdKegg1 = new KeggCompoundMetaboliteEntity();
 		cpdKegg1.setId(283);
 		cpdKegg1.setEntry("C98222");
 		cpdKegg1.setFormula("H20C90O100");

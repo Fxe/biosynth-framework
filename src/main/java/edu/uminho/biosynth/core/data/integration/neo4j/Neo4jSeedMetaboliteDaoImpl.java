@@ -144,4 +144,17 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		return null;
 	}
 
+	@Override
+	public SeedMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SeedMetaboliteEntity saveMetaboliteInformation(
+			SeedMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

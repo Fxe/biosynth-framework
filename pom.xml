@@ -37,6 +37,11 @@
     </dependency>
     <dependency>
       <groupId>edu.uminho.biosynthframework</groupId>
+      <artifactId>biosynth-data-chebi-dump</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.uminho.biosynthframework</groupId>
       <artifactId>biosynth-algorithms</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>

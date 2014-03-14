@@ -3,11 +3,11 @@ package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<KeggMetaboliteEntity, KeggMetaboliteCrossReferenceEntity>{
+public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<KeggCompoundMetaboliteEntity, KeggCompoundMetaboliteCrossreferenceEntity>{
 	
 //	private Map<Set<Integer>, Integer> xrefsToGroupId = new HashMap<> ();
 //	private Map<Integer, Set<Integer>> groupToxrefsId = new HashMap<> ();
@@ -28,7 +28,7 @@ public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTra
 //	}
 
 	@Override
-	public MetaboliteStga etlTransform(KeggMetaboliteEntity cpd) {
+	public MetaboliteStga etlTransform(KeggCompoundMetaboliteEntity cpd) {
 		MetaboliteStga cpd_stga = new MetaboliteStga();
 		cpd_stga.setNumeryKey(cpd.getId());
 		cpd_stga.setTextKey(cpd.getEntry());

@@ -4,7 +4,7 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.brenda.BrendaMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.pubchem.PubchemMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.reactome.ReactomeMetaboliteEntity;
@@ -17,7 +17,7 @@ public class BioDbEntityDictionary {
 		
 		switch (value.toUpperCase()) {
 			case "KEGG":
-				clazz = KeggMetaboliteEntity.class;
+				clazz = KeggCompoundMetaboliteEntity.class;
 				break;
 			case "BIOCYC":
 				clazz = BioCycMetaboliteEntity.class;

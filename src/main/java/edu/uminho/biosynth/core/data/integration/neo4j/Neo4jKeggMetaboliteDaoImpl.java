@@ -13,12 +13,12 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
-public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteEntity> implements IMetaboliteDao<KeggMetaboliteEntity>{
+public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMetaboliteEntity> implements IMetaboliteDao<KeggCompoundMetaboliteEntity>{
 	
 	private static Label compoundLabel = CompoundNodeLabel.KEGG;
 	
@@ -32,14 +32,14 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 	
 
 	@Override
-	public KeggMetaboliteEntity find(Serializable id) {
+	public KeggCompoundMetaboliteEntity find(Serializable id) {
 		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
-		KeggMetaboliteEntity cpd = nodeToObject(node);
+		KeggCompoundMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
 	@Override
-	public Serializable save(KeggMetaboliteEntity cpd) {
+	public Serializable save(KeggCompoundMetaboliteEntity cpd) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 //		params.put("cpdAttributes", attributes);
@@ -76,7 +76,7 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
-		for (KeggMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
+		for (KeggCompoundMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);
@@ -88,13 +88,13 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 	}
 
 	@Override
-	public List<KeggMetaboliteEntity> findAll() {
+	public List<KeggCompoundMetaboliteEntity> findAll() {
 		ExecutionResult result = engine.execute("MATCH (cpd:KEGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
-		List<KeggMetaboliteEntity> res = new ArrayList<> ();
+		List<KeggCompoundMetaboliteEntity> res = new ArrayList<> ();
 		for (Node node : nodes) {
-			KeggMetaboliteEntity cpd = this.nodeToObject(node);
+			KeggCompoundMetaboliteEntity cpd = this.nodeToObject(node);
 			if (cpd != null) res.add(cpd);
 		}
 		return res;
@@ -103,9 +103,9 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 
 
 	@Override
-	protected KeggMetaboliteEntity nodeToObject(Node node) {
+	protected KeggCompoundMetaboliteEntity nodeToObject(Node node) {
 		if (IteratorUtil.asList(node.getPropertyKeys()).size() == 1) return null;
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( (String) node.getProperty("entry"));
 		if (node.hasProperty("formula")) cpd.setFormula( (String) node.getProperty("formula"));
 		if (node.hasProperty("comment")) cpd.setComment( (String) node.getProperty("comment"));
@@ -118,6 +118,23 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggMetaboliteE
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public KeggCompoundMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public KeggCompoundMetaboliteEntity saveMetaboliteInformation(
+			KeggCompoundMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
 	}
