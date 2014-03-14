@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
@@ -53,7 +53,7 @@ public class TestKeggDao {
 	public void testSaveMetabolite() {
 		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry("T00755");
 		cpd.setName("4-Hydroxy-3-methoxy-benzaldehyde;Vanillin;Vanillaldehyde;4-Hydroxy-3-methoxybenzaldehyde");
 		cpd.setFormula("C8H8O3");
@@ -76,8 +76,8 @@ public class TestKeggDao {
 	public void testLoadMetabolite() {
 		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
-		KeggMetaboliteEntity cpd1 = dao.find(KeggMetaboliteEntity.class, 1);
-		KeggMetaboliteEntity cpd2 = dao.criteria(KeggMetaboliteEntity.class, Restrictions.eq("entry", "T00755")).get(0);
+		KeggCompoundMetaboliteEntity cpd1 = dao.find(KeggCompoundMetaboliteEntity.class, 1);
+		KeggCompoundMetaboliteEntity cpd2 = dao.criteria(KeggCompoundMetaboliteEntity.class, Restrictions.eq("entry", "T00755")).get(0);
 		System.out.println(cpd1.getFormula());
 		System.out.println(cpd2.getName());
 		tx.commit();

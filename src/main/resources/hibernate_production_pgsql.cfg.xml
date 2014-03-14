@@ -27,6 +27,9 @@
 	
 	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity"></mapping>
 	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity"></mapping>
+	    
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity" />
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity" />
 	   
 	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity"></mapping>
 	   

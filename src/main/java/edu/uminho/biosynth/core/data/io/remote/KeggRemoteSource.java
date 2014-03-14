@@ -13,7 +13,7 @@ import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericOrganism;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
@@ -202,7 +202,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 
 	
 	@Override
-	public KeggMetaboliteEntity getMetaboliteInformation(String cpdId) {
+	public KeggCompoundMetaboliteEntity getMetaboliteInformation(String cpdId) {
 		final String db = cpdId.charAt(0) == 'C' ? "cpd" : "gl"; 
 		
 		String flatFile = null;
@@ -225,7 +225,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		
 		KeggCompoundFlatFileParser parser = new KeggCompoundFlatFileParser(flatFile);
 
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
 		cpd.setName( parser.getName());
 		cpd.setMass( parser.getMass());

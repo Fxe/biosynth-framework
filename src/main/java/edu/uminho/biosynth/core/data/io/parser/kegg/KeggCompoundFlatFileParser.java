@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
 public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser implements IGenericMetaboliteParser {
@@ -61,18 +61,18 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		return content;
 	}
 	
-	public double getMass() {
+	public Double getMass() {
 		int tabIndex = this.getTabIndex("EXACT_MASS");
 		String value = this.tabContent_.get(tabIndex);
-		if (value == null) return Double.MIN_VALUE;
+		if (value == null) return null;
 		double v = Double.parseDouble(value);
 		return v;
 	}
 	
-	public double getMolWeight() {
+	public Double getMolWeight() {
 		int tabIndex = this.getTabIndex("MOL_WEIGHT");
 		String value = this.tabContent_.get(tabIndex);
-		if (value == null) return Double.MIN_VALUE;
+		if (value == null) return null;
 		double v = Double.parseDouble(value);
 		return v;
 	}
@@ -91,8 +91,8 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		return content;
 	}
 	
-	public List<KeggMetaboliteCrossReferenceEntity> getCrossReferences() {
-		List<KeggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
+	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossReferences() {
+		List<KeggCompoundMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
 		int tabIndex = this.getTabIndex("DBLINKS");
 		String content = this.tabContent_.get(tabIndex);
 		if (content == null) return crossReferences;
@@ -100,7 +100,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 		for (int i = 0; i < xrefs.length; i++) {
 			String[] xrefPair = xrefs[i].trim().split(": ");
 			for (String refValue : xrefPair[1].trim().split(" +")) {
-				KeggMetaboliteCrossReferenceEntity xref = new KeggMetaboliteCrossReferenceEntity(
+				KeggCompoundMetaboliteCrossreferenceEntity xref = new KeggCompoundMetaboliteCrossreferenceEntity(
 						GenericCrossReference.Type.DATABASE, xrefPair[0], refValue);
 				crossReferences.add(xref);
 			}

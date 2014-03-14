@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 
 public class TestKeggCompoundFlatFileParser {
@@ -20,7 +20,7 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00007"));
 		
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
 		cpd.setName( parser.getName());
 		cpd.setMass( parser.getMass());
@@ -41,7 +41,7 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00755"));
 
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
 		cpd.setName( parser.getName());
 		cpd.setMass( parser.getMass());
@@ -62,7 +62,7 @@ public class TestKeggCompoundFlatFileParser {
 		KeggCompoundFlatFileParser parser = 
 				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C01245"));
 
-		KeggMetaboliteEntity cpd = new KeggMetaboliteEntity();
+		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
 		cpd.setName( parser.getName());
 		cpd.setMass( parser.getMass());

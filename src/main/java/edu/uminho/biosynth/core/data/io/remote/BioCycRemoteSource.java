@@ -3,7 +3,6 @@ package edu.uminho.biosynth.core.data.io.remote;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

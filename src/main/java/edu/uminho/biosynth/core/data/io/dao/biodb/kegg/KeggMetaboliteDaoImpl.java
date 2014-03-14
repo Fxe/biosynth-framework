@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.kegg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class KeggMetaboliteDaoImpl {

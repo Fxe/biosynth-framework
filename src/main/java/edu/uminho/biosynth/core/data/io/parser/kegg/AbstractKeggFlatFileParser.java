@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +80,10 @@ public abstract class AbstractKeggFlatFileParser {
 	
 	public String getContent( int index) {
 		return this.tabContent_.get( index);
+	}
+	
+	public List<String> getTabs() {
+		return new ArrayList<> (this.tabName_.values());
 	}
 	
 	public void readFile( String filepath) {

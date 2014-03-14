@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
@@ -31,8 +31,8 @@ public class CascadeByReference implements ICascadeStrategy {
 		switch (type.getName()) {
 		case "edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity": {
 			LOGGER.log(Level.INFO, entity.getEntry() + " type of " + type.getName());
-			KeggMetaboliteEntity cpd = (KeggMetaboliteEntity) entity;
-			for (KeggMetaboliteCrossReferenceEntity crossReference : cpd.getCrossReferences()) {
+			KeggCompoundMetaboliteEntity cpd = (KeggCompoundMetaboliteEntity) entity;
+			for (KeggCompoundMetaboliteCrossreferenceEntity crossReference : cpd.getCrossReferences()) {
 				result.addAll( this.lookupReference(crossReference));
 			}
 		}

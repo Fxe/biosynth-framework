@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 
 public class TestKeggRemoteSource {
@@ -32,7 +32,7 @@ public class TestKeggRemoteSource {
 	public void tearDown() throws Exception {
 	}
 	
-	private String keggMetaboliteEntityToString(KeggMetaboliteEntity cpd) {
+	private String keggMetaboliteEntityToString(KeggCompoundMetaboliteEntity cpd) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ID:\t\t").append(cpd.getId()).append('\n');
 		sb.append("ENTRY:\t\t").append(cpd.getEntry()).append('\n');
@@ -60,14 +60,14 @@ public class TestKeggRemoteSource {
 	
 	@Test
 	public void testGetG10608() {
-		KeggMetaboliteEntity cpd = remote.getMetaboliteInformation("G10608");
+		KeggCompoundMetaboliteEntity cpd = remote.getMetaboliteInformation("G10608");
 		System.out.println(keggMetaboliteEntityToString(cpd));
 		assertEquals(true, cpd != null);
 	}
 
 	@Test
 	public void testGetC00001() {
-		KeggMetaboliteEntity cpd = remote.getMetaboliteInformation("C00001");
+		KeggCompoundMetaboliteEntity cpd = remote.getMetaboliteInformation("C00001");
 		System.out.println(keggMetaboliteEntityToString(cpd));
 		cpd = remote.getMetaboliteInformation("C00755");
 		System.out.println(keggMetaboliteEntityToString(cpd));

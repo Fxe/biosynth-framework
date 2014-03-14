@@ -43,4 +43,16 @@ public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEn
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public BiggMetaboliteEntity getMetaboliteInformation(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public BiggMetaboliteEntity saveMetaboliteInformation(
+			BiggMetaboliteEntity metabolite) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
