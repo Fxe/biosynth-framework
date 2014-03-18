@@ -81,12 +81,11 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 	public String toString() {
 		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString()).append(sep);
 		sb.append("Charge:").append(charge).append(sep);
 		sb.append("Original Source:").append(originalSource).append(sep);
 		sb.append("Smiles:").append(smiles).append(sep);
-		sb.append("name:").append(name).append(sep);
 		sb.append("InChI:").append(inChI).append(sep);
-		sb.append("formula:").append(formula).append(sep);
 		sb.append("mass:").append(mass).append(sep);
 		sb.append("xrefs:").append(crossReferences);
 		return sb.toString();

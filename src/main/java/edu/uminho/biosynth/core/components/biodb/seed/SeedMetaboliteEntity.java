@@ -199,6 +199,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		sb.append("unchargedFormula:").append(unchargedFormula).append(sep);
 		sb.append("compoundCues:").append(compoundCues).append(sep);
 		sb.append("deltaGErr:").append(deltaGErr).append(sep);
+		sb.append("xref:").append(crossReferences);
 		return sb.toString();
 	}
 }
