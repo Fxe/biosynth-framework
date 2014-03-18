@@ -82,7 +82,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 			engine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("name") != null) {
-			engine.execute("MERGE (n:name {name:{name}}) ", params);
+			engine.execute("MERGE (n:Name {name:{name}}) ", params);
 			engine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (n:name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		if (params.get("smiles") != null) {
@@ -96,6 +96,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		}
 		
 		for (SeedCompoundCrossReferenceEntity xref : cpd.getCrossReferences()) {
+//			System.out.println(xref);
 			switch (xref.getType()) {
 				case DATABASE:
 					String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
@@ -105,10 +106,12 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 					engine.execute("MATCH (cpd1:Seed:Compound {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 					break;
 				case MODEL:
-					String modelId = xref.getValue();
+					String modelId = xref.getRef();
+					String value = xref.getValue();
 					params.put("modelId", modelId);
+					params.put("refId", value);
 					engine.execute("MERGE (m:Model {id:{modelId}}) ", params);
-					engine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (m:Model {id:{modelId}}) MERGE (cpd)-[r:FoundIn]->(m)", params);
+					engine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (m:Model {id:{modelId}}) MERGE (cpd)-[r:FoundIn {id:{refId}}]->(m)", params);
 					break;
 				default:
 					throw new RuntimeException("unsupported type " + xref.getType());

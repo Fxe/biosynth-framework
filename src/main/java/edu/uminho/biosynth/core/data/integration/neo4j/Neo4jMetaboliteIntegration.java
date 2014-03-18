@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
@@ -73,6 +74,11 @@ public class Neo4jMetaboliteIntegration {
 		engine.execute("MATCH (c:IntegrationSet {label:{label}}) DELETE c", params);
 	}
 	
+	public Set<Set<Long>> cluster(String property, String comparator) {
+		
+		return null;
+	}
+	
 	public void generateSingleTonCluster(CompoundNodeLabel compoundDb, String entry) {
 		//IF node exists and has no integrate link then create a new cluster and links to it
 		Map<String, Object> params = new HashMap<> ();
@@ -87,7 +93,9 @@ public class Neo4jMetaboliteIntegration {
 	}
 	
 	public void clusterNodeToIntegratedMetabolite(Long id) {
-		
+//		START i=node({id}) 
+//		MATCH path=(cpd:BiGG {entry:"udpglcur"})-[:HasCrossreferenceTo*]-(end) 
+//		FOREACH (k IN nodes(path) | MERGE (k)<-[:Integrates]-(i)) RETURN i, path
 	}
 }
 
