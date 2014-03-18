@@ -51,8 +51,21 @@ public class KeggDrugMetaboliteEntity extends AbstractKeggMetabolite {
 	
 	@Column(name="dr_source")
 	private String drugSource;
-//	String interaction;~
 	
+	@Column(name="inchi") private String inchi;
+	public String getInchi() { return inchi;}
+	public void setInchi(String inchi) { this.inchi = inchi;}
+	
+	@Column(name="inchi_key") private String inchiKey;
+	public String getInchiKey() { return inchiKey;}
+	public void setInchiKey(String inchiKey) { this.inchiKey = inchiKey;}
+	
+	@Column(name="smiles") private String smiles;
+	public String getSmiles() { return smiles;}
+	public void setSmiles(String smiles) { this.smiles = smiles;}
+	
+//	String interaction;~
+
 	public Double getMass() { return mass;}
 	public void setMass(Double mass) { this.mass = mass;}
 	

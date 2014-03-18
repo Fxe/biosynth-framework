@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 
 @Entity
@@ -30,6 +29,18 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	@Column(name="MOLW") private Double molWeight;
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
+	
+	@Column(name="inchi") private String inchi;
+	public String getInchi() { return inchi;}
+	public void setInchi(String inchi) { this.inchi = inchi;}
+	
+	@Column(name="inchi_key") private String inchiKey;
+	public String getInchiKey() { return inchiKey;}
+	public void setInchiKey(String inchiKey) { this.inchiKey = inchiKey;}
+	
+	@Column(name="smiles") private String smiles;
+	public String getSmiles() { return smiles;}
+	public void setSmiles(String smiles) { this.smiles = smiles;}
 	
 	@OneToMany(mappedBy = "keggMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<KeggCompoundMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
