@@ -32,6 +32,7 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 	
 	private JsonNode rootNode;
 	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
+	private Map<Serializable, SeedMetaboliteEntity> metaboliteMap;
 	
 	public File getJsonFile() { return jsonFile;}
 	public void setJsonFile(File jsonFile) { this.jsonFile = jsonFile;}
@@ -70,6 +71,7 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 
 	@Override
 	public List<SeedMetaboliteEntity> findAll() {
+		this.metaboliteMap = new HashMap<> ();
 		List<SeedMetaboliteEntity> res = new ArrayList<> ();
 		JsonNode compounds = rootNode.get("compounds");
 		for (int i = 0; i < compounds.size(); i++ ) {
@@ -110,6 +112,7 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 				}
 				cpd.setCrossReferences(xrefs);
 				res.add(cpd);
+				this.metaboliteMap.put(cpd.getEntry(), cpd);
 			} catch (IOException e) {
 				System.err.println(i + " :: " + e.getMessage());
 			}
@@ -201,20 +204,29 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(node, SeedMetaboliteEntity.class);
 	}
+	
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.metaboliteMap == null) {
+			this.findAll();
+		}
+		return new ArrayList<>(this.metaboliteMap.keySet());
 	}
+	
 	@Override
 	public SeedMetaboliteEntity getMetaboliteInformation(Serializable id) {
-		// TODO Auto-generated method stub
+		if (this.metaboliteMap == null) {
+			this.findAll();
+		}
+		if (this.metaboliteMap.containsKey(id)) {
+			return this.metaboliteMap.get(id);
+		}
 		return null;
 	}
+	
 	@Override
 	public SeedMetaboliteEntity saveMetaboliteInformation(
 			SeedMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
 	}
 }

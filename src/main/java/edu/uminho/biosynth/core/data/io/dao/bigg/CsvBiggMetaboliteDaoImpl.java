@@ -46,9 +46,12 @@ public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEn
 	
 	@Override
 	public BiggMetaboliteEntity getMetaboliteInformation(Serializable id) {
-		// TODO Auto-generated method stub
+		for (BiggMetaboliteEntity c : this.findAll()) {
+			if (c.getEntry().equals(id)) return c;
+		}
 		return null;
 	}
+	
 	@Override
 	public BiggMetaboliteEntity saveMetaboliteInformation(
 			BiggMetaboliteEntity metabolite) {
