@@ -22,8 +22,8 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 	private File metaboliteCsvFile;
 	private File crossreferenceCsvFile;
 	
-	private Map<String, Integer> entrySeekPosition = new HashMap<> ();
-	private Map<String, List<MnxMetaboliteCrossReferenceEntity>> xrefMap;
+	private Map<Serializable, Integer> entrySeekPosition = new HashMap<> ();
+	private Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap;
 	
 	private String seekFileLine(File file, int pos) throws IOException{
 		if (pos < 0) return null;
@@ -57,7 +57,7 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 		this.crossreferenceCsvFile = crossreferenceCsvFile;
 	}
 
-	public void parseMetaboliteCrossReference(Map<String, List<MnxMetaboliteCrossReferenceEntity>> xrefMap, String record) {
+	public void parseMetaboliteCrossReference(Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap, String record) {
 		/* Example Record
 		 * REFERENCE : ENTRY | MAPS TO  | 
 		 * bigg:14glucan     | MNXM2905 | inferred | 1,4-alpha-D-glucan
@@ -76,8 +76,8 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 		xrefMap.get(key).add(xref);
 	}
 	
-	public Map<String, List<MnxMetaboliteCrossReferenceEntity>> parseMetaboliteCrossReferences() throws FileNotFoundException, IOException {
-		Map<String, List<MnxMetaboliteCrossReferenceEntity>> xrefMap = new TreeMap<> ();
+	public Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> parseMetaboliteCrossReferences() throws FileNotFoundException, IOException {
+		Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap = new TreeMap<> ();
 		
 		BufferedReader br = new BufferedReader(new FileReader(crossreferenceCsvFile));
 		String readLine = null;
@@ -110,7 +110,7 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 		cpd.setFormula(values[2].trim());
 		cpd.setCharge(values[3].trim().length() > 0 ? Integer.parseInt(values[3].trim()) : null);
 		String mass = values[4].trim();
-		double massValue;
+		Double massValue;
 		try {
 			massValue = mass.trim().length() > 0 ? Double.parseDouble(mass) : null;
 		} catch (NumberFormatException nfEx) {
@@ -153,7 +153,7 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 		}
 		MnxMetaboliteEntity cpd = null;
 		try {
-			if (this.entrySeekPosition.containsKey(id)) {
+			if (this.entrySeekPosition.containsKey(id.toString())) {
 				if (this.xrefMap == null) {
 					this.xrefMap = parseMetaboliteCrossReferences();
 				}
