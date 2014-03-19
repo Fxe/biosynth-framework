@@ -28,13 +28,15 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
 	
 	@Override
-	public void createNewIntegrationSet(String name, String description) {
+	public IntegrationSet createNewIntegrationSet(String name, String description) {
 		//check if name exists
 		//whine if exists
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName(name);
 		integrationSet.setDescription(description);
 		meta.saveIntegrationSet(integrationSet);
+		
+		return integrationSet;
 	}
 
 	@Override
@@ -45,10 +47,13 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 
 	@Override
 	public void resetIntegrationSet() {
-		for (Long clusterId : this.currentIntegrationSet.getIntegratedClustersMap().keySet()){
-			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().get(clusterId);
+		List<Long> clusters = new ArrayList<> (this.currentIntegrationSet.getIntegratedClustersMap().keySet());
+		for (Long clusterId : clusters){
+			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().remove(clusterId);
 			this.meta.deleteCluster(cluster);
 		}
+		
+//		this.meta.saveIntegrationSet(currentIntegrationSet);
 	}
 
 	@Override
@@ -83,5 +88,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public void mergeCluster(String query) {
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
 		this.meta.createCluster(clusterElements, query, currentIntegrationSet);
+		
+	}
+	@Override
+	public void mergeCluster(ClusteringStrategy strategy) {
+		List<Long> clusterElements = strategy.execute();
+		this.meta.createCluster(clusterElements, strategy.toString(), currentIntegrationSet);
 	}
 }

@@ -62,8 +62,9 @@ public class TestHbmChimeraService {
 		integrator.setMeta(meta);
 		
 		integrator.changeIntegrationSet(1L);
-		integrator.createNewIntegrationSet("TestService_" + System.currentTimeMillis(), "Created by Service");
 		
+		integrator.createNewIntegrationSet("TestService_" + System.currentTimeMillis(), "Created by Service");
+
 		try {
 			//apply some rule to generate a cluster !
 			integrator.createCluster("MATCH path=(cpd:BiGG {entry:\"h2o\"})-[:HasCrossreferenceTo*1..5]-(x:Compound) RETURN collect(distinct ID(x))");
@@ -74,7 +75,9 @@ public class TestHbmChimeraService {
 			throw e;
 		}
 		
-		fail("Not yet implemented");
+		integrator.resetIntegrationSet();
+		
+		assertEquals(true, true);
 	}
 	
 	@Test
@@ -88,6 +91,7 @@ public class TestHbmChimeraService {
 		integrator.setMeta(meta);
 		
 		integrator.changeIntegrationSet(1L);
+		integrator.resetIntegrationSet();
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))

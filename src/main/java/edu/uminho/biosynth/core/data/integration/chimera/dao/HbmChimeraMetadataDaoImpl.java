@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.chimera.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -78,7 +79,15 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 
 	@Override
 	public void deleteCluster(IntegratedCluster cluster) {
-		this.getSession().delete(cluster);
+		Query query;
+		
+		query = this.getSession().createQuery("DELETE FROM IntegratedClusterMember m WHERE m.integratedCluster.id = :cid");
+		query.setParameter("cid", cluster.getId());
+		query.executeUpdate();
+		
+		query = this.getSession().createQuery("DELETE FROM IntegratedCluster m WHERE m.id = :cid");
+		query.setParameter("cid", cluster.getId());
+		query.executeUpdate();
 	}
 
 	@Override
