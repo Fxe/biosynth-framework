@@ -87,7 +87,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 				cpd.setSource(this.currentIntegrationSet.getName());
 				
 				for (Serializable memberId: cluster.getMemberMap().keySet()) {
-					Map<String, Object> nodeProps = this.data.getEntry((Long) memberId);
+					Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
 					if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
 					System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));
 					Map<String, List<Object>> data = this.data.getCompositeNode((Long)memberId);

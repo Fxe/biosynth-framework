@@ -16,6 +16,14 @@ public class BioDbDictionary {
 		return "NOTFOUND";
 	}
 	
+	public static String translateToLabel(String db) {
+		if (getDbLabel().containsKey(db)) {
+			return getDbLabel().get(db);
+		}
+		System.err.println(db + " not found in translation dictionary");
+		return "NOTFOUND";
+	}
+	
 	public static Map<String, String> getDbDictionary() {
 		/**
 		 * Some Rules:
@@ -48,6 +56,50 @@ public class BioDbDictionary {
 		dictionary.put("ChEBI", CompoundNodeLabel.ChEBI.toString());
 		dictionary.put("CHEBI", CompoundNodeLabel.ChEBI.toString());
 		dictionary.put("CAS", "CAS");
+		dictionary.put("NIKKAJI", "NIKKAJI");
+		dictionary.put("3DMET", "MET3D");
+		dictionary.put("seed", CompoundNodeLabel.Seed.toString());
+		
+		dictionary.put("hmdb", CompoundNodeLabel.HMDB.toString());
+		
+		dictionary.put("reactome", CompoundNodeLabel.Reactome.toString());
+		
+		dictionary.put("brenda", CompoundNodeLabel.BRENDA.toString());
+		return dictionary;
+	}
+	
+	public static Map<String, String> getDbLabel() {
+		/**
+		 * Some Rules:
+		 *    Labels cannot start with Numbers or have symbols
+		 *    Only characters and '_'
+		 */
+		Map<String, String> dictionary = new HashMap<> ();
+		dictionary.put("biopath", CompoundNodeLabel.BioPath.toString());
+		dictionary.put("upa", CompoundNodeLabel.UniPathway.toString());
+		//PlantCyc
+		dictionary.put("PLANTCYC:MAIZE", CompoundNodeLabel.MaizeCyc.toString());
+		//BioCyc
+		dictionary.put("KNApSAcK", CompoundNodeLabel.KNApSAcK.toString());
+		dictionary.put("BIOCYC:ARA", CompoundNodeLabel.AraCyc.toString());
+		dictionary.put("METACYC", CompoundNodeLabel.MetaCyc.toString());
+		dictionary.put("metacyc", CompoundNodeLabel.MetaCyc.toString());
+		dictionary.put("BIGG", CompoundNodeLabel.BiGG.toString());
+		dictionary.put("bigg", CompoundNodeLabel.BiGG.toString());
+		dictionary.put("LIGAND-CPD", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("KEGG", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("kegg", CompoundNodeLabel.KEGG.toString());
+		//KEGG
+		dictionary.put("JCGGDB", "JCGGDB");
+		dictionary.put("GlycomeDB", "GlycomeDB");
+		dictionary.put("CCSD", "CCSD");
+		dictionary.put("PUBCHEM", "PubChem");
+		dictionary.put("PubChem", "PubChem");
+		dictionary.put("PDB-CCD", "PDB");
+		dictionary.put("chebi", CompoundNodeLabel.ChEBI.toString());
+		dictionary.put("ChEBI", CompoundNodeLabel.ChEBI.toString());
+		dictionary.put("CHEBI", CompoundNodeLabel.ChEBI.toString());
+		dictionary.put("CAS", CompoundNodeLabel.CAS.toString());
 		dictionary.put("NIKKAJI", "NIKKAJI");
 		dictionary.put("3DMET", "MET3D");
 		dictionary.put("seed", CompoundNodeLabel.Seed.toString());

@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,11 +13,13 @@ import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
@@ -32,6 +35,22 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	public void setGraphdb(GraphDatabaseService graphdb) {
 		this.graphdb = graphdb;
 		this.engine = new ExecutionEngine(graphdb);
+	}
+	
+	public Node getMetaboliteNodeByEntry(String entry, CompoundNodeLabel type) {
+		Node node = null;
+		ResourceIterable<Node> res = this.graphdb.findNodesByLabelAndProperty(type, "entry", entry);
+		Iterator<Node> i = res.iterator();
+		while (i.hasNext()) {
+			//entry should have unique constraint therefore no more 
+			//than one node should be found per compoud label
+			if (node != null) {
+				System.err.println("error duplicate entry missing unique constraint");
+			}
+			node = i.next();
+		}
+		
+		return node;
 	}
 
 	@Override
@@ -71,7 +90,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	public Map<String, List<Object>> getCompositeNode(Long id) {
 		System.out.println("Loading composite node -> " + id);
 		//Build Self Node
-		Map<String, Object> root = this.getEntry(id);
+		Map<String, Object> root = this.getEntryProperties(id);
 		String sourceEntry = (String) root.get("entry");
 		
 		
@@ -139,7 +158,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	}
 
 	@Override
-	public Map<String, Object> getEntry(Long id) {
+	public Map<String, Object> getEntryProperties(Long id) {
 		Map<String, Object> propsMap = new HashMap<> ();
 		ExecutionResult res = this.engine.execute(String.format(
 				"START cpd=node(%d) RETURN cpd;", id));
