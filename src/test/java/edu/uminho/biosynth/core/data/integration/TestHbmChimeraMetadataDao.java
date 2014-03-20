@@ -70,7 +70,7 @@ public class TestHbmChimeraMetadataDao {
 		list.add(1L);
 		list.add(13L);
 		list.add(11L);
-		IntegratedCluster cluster = dao.createCluster(list, "member", integrationSet);
+		IntegratedCluster cluster = dao.createCluster("C_1", list, "member", integrationSet);
 
 		assertEquals(true, !cluster.getMemberMap().isEmpty());
 	}

@@ -48,5 +48,8 @@ public class IntegrationSet {
 		this.integratedClustersMap = integratedClustersMap;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return String.format("IntegratedSet[%d] %s [%s]", id, name, description);
+	}
 }

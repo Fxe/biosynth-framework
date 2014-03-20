@@ -83,7 +83,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 				System.out.println("Creating compound " + cluster.getId());
 				IntegratedMetaboliteEntity cpd = new IntegratedMetaboliteEntity();
 				
-				cpd.setEntry(entryGenerator.generateKey());
+				cpd.setEntry(cluster.getName());
 				cpd.setSource(this.currentIntegrationSet.getName());
 				
 				for (Serializable memberId: cluster.getMemberMap().keySet()) {

@@ -10,6 +10,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
 public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
@@ -21,11 +22,16 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
 	private IntegrationSet currentIntegrationSet;
 	
+	private IKeyGenerator<String> clusterIdGenerator;
+	
 	public ChimeraDataDao getData() { return data;}
 	public void setData(ChimeraDataDao data) { this.data = data;}
 
 	public ChimeraMetadataDao getMeta() { return meta;}
 	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
+	
+	public IKeyGenerator<String> getClusterIdGenerator() { return clusterIdGenerator;}
+	public void setClusterIdGenerator(IKeyGenerator<String> clusterIdGenerator) { this.clusterIdGenerator = clusterIdGenerator;}
 	
 	@Override
 	public IntegrationSet createNewIntegrationSet(String name, String description) {
@@ -44,7 +50,13 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
 		this.currentIntegrationSet = integrationSet;
 	}
-
+	
+	@Override
+	public void changeIntegrationSet(String id) {
+		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
+		this.currentIntegrationSet = integrationSet;
+	}
+	
 	@Override
 	public void resetIntegrationSet() {
 		List<Long> clusters = new ArrayList<> (this.currentIntegrationSet.getIntegratedClustersMap().keySet());
@@ -60,12 +72,26 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public void deleteIntegrationSet() {
 		this.meta.deleteIntegrationSet(this.currentIntegrationSet);
 	}
+	
+	public IntegratedCluster createCluster(String name, List<Long> elements, String description) {
+		if (elements.isEmpty()) return null;
+//		IntegratedCluster cluster = new IntegratedCluster();
+//		cluster.setIntegrationSet(currentIntegrationSet);
+//		
+//		for (Long elementId : elements) {
+//			IntegratedClusterMember member = new IntegratedClusterMember();
+//			member.setIntegratedCluster(cluster);
+//			member.setId(elementId);
+//		}
+		
+		return this.meta.createCluster(name, elements, description, this.currentIntegrationSet);
+	}
 
 	@Override
 	public void createCluster(String query) {
 		//error id merge !
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		this.meta.createCluster(clusterElements, query, currentIntegrationSet);
+		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query, currentIntegrationSet);
 	}
 	
 	public void createClusterCascade(String query) {
@@ -77,7 +103,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 				System.out.println(query_);
 				List<Long> clusterElements = this.data.getClusterByQuery(query_);
 				visitedIds.addAll(clusterElements);
-				this.meta.createCluster(clusterElements, query_, currentIntegrationSet);
+				this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_, currentIntegrationSet);
 				System.out.println("Generated Cluster: root -> " + id + " size -> " + clusterElements.size());
 			}
 		}
@@ -87,12 +113,12 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	@Override
 	public void mergeCluster(String query) {
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		this.meta.createCluster(clusterElements, query, currentIntegrationSet);
+		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query, currentIntegrationSet);
 		
 	}
 	@Override
 	public void mergeCluster(ClusteringStrategy strategy) {
 		List<Long> clusterElements = strategy.execute();
-		this.meta.createCluster(clusterElements, strategy.toString(), currentIntegrationSet);
+		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString(), currentIntegrationSet);
 	}
 }

@@ -1,12 +1,13 @@
 package edu.uminho.biosynth.core.data.integration.chimera.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
@@ -59,10 +60,11 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	}
 
 	@Override
-	public IntegratedCluster createCluster(List<Long> ids, String description,
+	public IntegratedCluster createCluster(String name, List<Long> ids, String description,
 			IntegrationSet integrationSet) {
 		
 		IntegratedCluster cluster = new IntegratedCluster();
+		cluster.setName(name);
 		cluster.setIntegrationSet(integrationSet);
 		for (Long id: ids) {
 			IntegratedClusterMember member = new IntegratedClusterMember();
@@ -93,6 +95,20 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	@Override
 	public void deleteIntegrationSet(IntegrationSet integrationSet) {
 		this.getSession().delete(integrationSet);
+	}
+
+	@Override
+	public IntegrationSet getIntegrationSet(String id) {
+		IntegrationSet integratedSet = null;
+		
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(IntegrationSet.class);
+		criteria.add(Restrictions.eq("name", id));
+		List<?> res = criteria.list();
+		for (Object o : res) {
+			integratedSet = IntegrationSet.class.cast(o);
+		}
+		
+		return integratedSet;
 	}
 
 }
