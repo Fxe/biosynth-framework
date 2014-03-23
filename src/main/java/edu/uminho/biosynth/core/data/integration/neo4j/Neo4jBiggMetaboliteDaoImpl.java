@@ -257,4 +257,9 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {		
+		return this.save(BiggMetaboliteEntity.class.cast(entity));
+	}
+
 }

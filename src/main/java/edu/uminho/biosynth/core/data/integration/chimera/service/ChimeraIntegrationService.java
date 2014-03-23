@@ -14,8 +14,9 @@ public interface ChimeraIntegrationService {
 	public void resetIntegrationSet();
 	public void deleteIntegrationSet();
 	public IntegratedCluster createCluster(String query);
-	public void mergeCluster(String query);
-	public void mergeCluster(ClusteringStrategy generator);
+	public IntegratedCluster createCluster(ClusteringStrategy strategy);
+	public IntegratedCluster mergeCluster(String query);
+	public IntegratedCluster mergeCluster(ClusteringStrategy strategy);
 	public IntegrationSet getCurrentIntegrationSet();
 	public Map<String, Integer> getDataStatistics();
 }

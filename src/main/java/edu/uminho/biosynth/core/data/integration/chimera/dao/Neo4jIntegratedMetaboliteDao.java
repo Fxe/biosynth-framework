@@ -56,5 +56,10 @@ public class Neo4jIntegratedMetaboliteDao implements IMetaboliteDao<IntegratedMe
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Serializable save(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

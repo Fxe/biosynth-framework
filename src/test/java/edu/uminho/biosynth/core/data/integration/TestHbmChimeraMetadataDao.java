@@ -2,6 +2,9 @@ package edu.uminho.biosynth.core.data.integration;
 
 import static org.junit.Assert.*;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
@@ -81,7 +84,9 @@ public class TestHbmChimeraMetadataDao {
 		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
-		IntegrationSet integrationSet = dao.getIntegrationSet(1L);
+		List<Serializable> integrationSetIds = dao.getAllIntegrationSetsId();
+		if (integrationSetIds.isEmpty()) fail("No integration sets");
+		IntegrationSet integrationSet = dao.getIntegrationSet( integrationSetIds.iterator().next());
 		System.out.println(integrationSet);
 		
 		IntegratedMember m1 = new IntegratedMember(); m1.setId(1L);

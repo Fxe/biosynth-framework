@@ -13,7 +13,9 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraIntegrationServiceImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.service.CrossreferenceTraversalStrategyImpl;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
@@ -71,10 +73,12 @@ public class TestHbmChimeraService {
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
 		integrator.setMeta(meta);
+		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
+				"TestService_SingleCluster_" + System.currentTimeMillis(), "Created by Service");
 		
-		integrator.changeIntegrationSet(1L);
+		integrator.changeIntegrationSet(integrationSet.getId());
 		
-		integrator.createNewIntegrationSet("TestService_" + System.currentTimeMillis(), "Created by Service");
+		
 
 		try {
 			//apply some rule to generate a cluster !
@@ -109,8 +113,9 @@ public class TestHbmChimeraService {
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
 		integrator.setMeta(meta);
-		
-		integrator.changeIntegrationSet(1L);
+		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
+				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
+		integrator.changeIntegrationSet(integrationSet.getId());
 		integrator.resetIntegrationSet();
 		
 		try {
@@ -123,4 +128,75 @@ public class TestHbmChimeraService {
 		}
 	}
 
+	@Test
+	public void testCreateClusterByClusteringStrategy() {
+		ChimeraIntegrationServiceImpl integrator = new ChimeraIntegrationServiceImpl();
+		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
+			private Integer base = 0;
+			
+			@Override
+			public void reset() { base = 0;}
+			
+			@Override
+			public String generateKey() { return "GEN_" + base++;}
+		});
+		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
+		data.setGraphdb(db);
+		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
+		meta.setSessionFactory(sessionFactory);
+		integrator.setData(data);
+		integrator.setMeta(meta);
+		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
+				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
+		integrator.changeIntegrationSet(integrationSet.getId());
+		integrator.resetIntegrationSet();
+		
+		try {
+			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
+			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl();
+			strategy.setDb(db);
+			System.out.println(db.getNodeById(0).getProperty("entry"));
+			strategy.setInitialNode(db.getNodeById(0));
+			integrator.mergeCluster(strategy);
+			
+		} catch (Exception e) {
+			db.shutdown();
+			throw e;
+		}
+	}
+	
+	@Test
+	public void testCreateClusterByClusteringStrategyCascade() {
+		ChimeraIntegrationServiceImpl integrator = new ChimeraIntegrationServiceImpl();
+		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
+			private Integer base = 0;
+			
+			@Override
+			public void reset() { base = 0;}
+			
+			@Override
+			public String generateKey() { return "GEN_" + base++;}
+		});
+		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
+		data.setGraphdb(db);
+		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
+		meta.setSessionFactory(sessionFactory);
+		integrator.setData(data);
+		integrator.setMeta(meta);
+		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
+				"TestService_CascadeCluster_Cascade_" + System.currentTimeMillis(), "Created by Test Unit");
+		integrator.changeIntegrationSet(integrationSet.getId());
+		integrator.resetIntegrationSet();
+		
+		try {
+			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
+			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl();
+			strategy.setDb(db);
+			integrator.createClusterCascade(strategy);
+			
+		} catch (Exception e) {
+			db.shutdown();
+			throw e;
+		}
+	}
 }

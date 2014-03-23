@@ -160,4 +160,9 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(SeedMetaboliteEntity.class.cast(entity));
+	}
+
 }

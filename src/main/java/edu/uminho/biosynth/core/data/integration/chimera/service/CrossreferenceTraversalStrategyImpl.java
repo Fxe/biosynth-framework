@@ -15,6 +15,7 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 
 	@Autowired
 	private GraphDatabaseService db;
+	
 	private Node initialNode;
 	
 	public Node getInitialNode() {
@@ -51,5 +52,10 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 	@Override
 	public String toString() {
 		return String.format("CrossreferenceTraversalStrategyImpl.initial(%d)", initialNode==null? -1L : initialNode.getId());
+	}
+
+	@Override
+	public void setInitialNode(Long id) {
+		this.initialNode = db.getNodeById(id);
 	}
 }

@@ -138,4 +138,11 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(KeggCompoundMetaboliteEntity.class.cast(entity));
+	}
 }

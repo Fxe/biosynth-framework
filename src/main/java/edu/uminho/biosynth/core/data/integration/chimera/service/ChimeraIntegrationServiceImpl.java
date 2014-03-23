@@ -143,18 +143,35 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		}
 		//error id merge !
 	}
+	
+	public void createClusterCascade(ClusteringStrategy strategy) {
+		List<Long> compoundIds = this.data.getAllMetaboliteIds();
+		List<Long> visitedIds = new ArrayList<> ();
+		for (Long id: compoundIds) {
+			if (!visitedIds.contains(id)) {
+				strategy.setInitialNode(id);
+				IntegratedCluster cluster = this.createCluster(strategy);
+				for (IntegratedClusterMember elements:cluster.getMembers()) {
+					visitedIds.add(elements.getMember().getId());
+				}
+//				this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_);
+				System.out.println("Generated Cluster: root -> " + id + " size -> " + cluster.getMembers().size());
+			}
+		}
+	}
 
 	@Override
-	public void mergeCluster(String query) {
+	public IntegratedCluster mergeCluster(String query) {
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
+		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
 //		this.meta.createCluster(, clusterElements, query, currentIntegrationSet);
 		
 	}
 	@Override
-	public void mergeCluster(ClusteringStrategy strategy) {
+	public IntegratedCluster mergeCluster(ClusteringStrategy strategy) {
 		List<Long> clusterElements = strategy.execute();
-		this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString());
+		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
+		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
 	}
 	
 	@Override
@@ -173,5 +190,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 //			res.put(property, this.data.listAllPropertyIds(property).size());
 //		}
 		return res;
+	}
+	@Override
+	public IntegratedCluster createCluster(ClusteringStrategy strategy) {
+		List<Long> clusterElements = strategy.execute();
+		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
+		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
 	}
 }

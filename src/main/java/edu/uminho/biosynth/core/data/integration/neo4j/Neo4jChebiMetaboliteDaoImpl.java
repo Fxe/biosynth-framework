@@ -139,4 +139,9 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(ChebiMetaboliteEntity.class.cast(entity));
+	}
+
 }

@@ -133,4 +133,9 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(MnxMetaboliteEntity.class.cast(entity));
+	}
+
 }

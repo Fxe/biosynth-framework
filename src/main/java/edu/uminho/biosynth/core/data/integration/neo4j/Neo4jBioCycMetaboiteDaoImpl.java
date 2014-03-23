@@ -185,4 +185,9 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(BioCycMetaboliteEntity.class.cast(entity));
+	}
+
 }
