@@ -6,9 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
@@ -22,8 +26,11 @@ import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetabolit
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
+@Repository
 public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity> {
 
+	private static Logger LOGGER = Logger.getLogger(HbmChebiDumpDaoImpl.class);
+	
 	private SessionFactory sessionFactory;
 	
 	private static final Set<String> validDbEntries = new HashSet<> (Arrays.asList(new String[]{
@@ -65,10 +72,12 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 	
 	
 	private ChebiMetaboliteEntity dumpToChebi(ChebiDumpMetaboliteEntity cpd) {
+		if (cpd == null) return null;
+		
 		ChebiMetaboliteEntity res = new ChebiMetaboliteEntity();
 		res.setId(cpd.getId());
 		res.setName(cpd.getName());
-		res.setEntry(cpd.getChebiAccession());
+		res.setEntry(cpd.getChebiAccession().replace("CHEBI:", ""));
 		res.setCreatedBy(cpd.getCreatedBy());
 		res.setStars(cpd.getStar());
 		res.setSource(cpd.getSource());
@@ -161,9 +170,7 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 		return res;
 	}
 	
-	private GenericCrossReference.Type referenceDbToType(String db) {
-		System.out.println(db);
-		
+	private GenericCrossReference.Type referenceDbToType(String db) {		
 		if (validDbEntries.contains(db)) return GenericCrossReference.Type.DATABASE;
 		
 		GenericCrossReference.Type type = null;
@@ -220,15 +227,35 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 
 	@Override
 	public ChebiMetaboliteEntity getMetaboliteInformation(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		ChebiDumpMetaboliteEntity cpd = null;
+		if (id instanceof String) {
+			String chebiAccession = ((String)id).startsWith("CHEBI:")?(String)id:"CHEBI:".concat((String)id);
+			Criteria criteria = this.getSession().createCriteria(ChebiDumpMetaboliteEntity.class);
+			criteria.add(Restrictions.eq("chebiAccession", chebiAccession));
+			List<?> res = criteria.list();
+			for (Object o: res) {
+				if (cpd != null) {
+					LOGGER.warn(String.format("Multiple compounds found for %s", id));
+				}
+				cpd = (ChebiDumpMetaboliteEntity) o;
+			}
+		} else {
+			cpd = ChebiDumpMetaboliteEntity.class.cast(this.getSession().get(ChebiDumpMetaboliteEntity.class, id));
+		}
+		
+		return this.dumpToChebi(cpd);
 	}
 
 
 	@Override
 	public ChebiMetaboliteEntity saveMetaboliteInformation(
 			ChebiMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
+	}
+
+
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
 	}
 }
