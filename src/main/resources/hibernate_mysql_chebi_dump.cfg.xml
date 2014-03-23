@@ -22,5 +22,9 @@
 		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity"/>
 		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession"/>
 		
+		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyEntity"/>
+		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyVertexEntity"/>
+		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyRelationEntity"/>
+		
     </session-factory>
 </hibernate-configuration>

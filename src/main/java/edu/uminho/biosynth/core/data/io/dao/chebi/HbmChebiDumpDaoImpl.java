@@ -167,6 +167,18 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 				res.getCrossreferences().add(xref);
 			}
 		}
+		
+		
+		// Generate the single internal cross reference to the parent
+		if (cpd.getParentId() != null) {
+			ChebiMetaboliteCrossReferenceEntity parentXref = new ChebiMetaboliteCrossReferenceEntity();
+			parentXref.setType(GenericCrossReference.Type.DATABASE);
+			parentXref.setRef("chebi");
+			parentXref.setValue(cpd.getParentId().toString());
+			parentXref.setChebiMetaboliteEntity(res);
+			res.getCrossreferences().add(parentXref);
+		}
+		
 		return res;
 	}
 	
