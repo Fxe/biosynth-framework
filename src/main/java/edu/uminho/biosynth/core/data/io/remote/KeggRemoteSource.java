@@ -23,6 +23,7 @@ import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
+@Deprecated
 public class KeggRemoteSource implements IRemoteSource {
 	
 	private final static Logger LOGGER = Logger.getLogger(KeggRemoteSource.class.getName());

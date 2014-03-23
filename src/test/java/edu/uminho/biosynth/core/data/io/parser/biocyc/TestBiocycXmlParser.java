@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycMetaboliteXMLParser;
-import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycReactionXMLParser;
+import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
+import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycReactionXMLParser;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
 public class TestBiocycXmlParser {

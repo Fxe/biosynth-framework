@@ -15,6 +15,7 @@ import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.ISource;
 
+@Deprecated
 public class MultiThreadRemote {
 	
 	/*************************************************************/

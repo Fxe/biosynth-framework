@@ -5,11 +5,13 @@ import static org.junit.Assert.*;
 import java.io.Serializable;
 
 import org.junit.Test;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
+
 
 public class TestRestKeggCompoundMetaboliteDaoImpl {
 

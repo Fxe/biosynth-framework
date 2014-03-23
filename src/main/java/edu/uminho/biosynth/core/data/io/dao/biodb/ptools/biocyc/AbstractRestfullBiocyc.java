@@ -1,17 +1,17 @@
-package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.AbstractKeggMetabolite;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
-public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMetabolite> implements IMetaboliteDao<M> {
-	
+public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMetaboliteEntity> {
+
 	private String localStorage;
 	private boolean useLocalStorage = false;
 	private boolean saveLocalStorage = false;
@@ -38,7 +38,6 @@ public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMet
 			didFetch = true;
 		}
 		
-		if (httpResponseString.isEmpty()) return null;
 		
 		if (saveLocalStorage && didFetch) {
 //			System.out.println("SAVING !" + localPath);
@@ -55,22 +54,22 @@ public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMet
 	public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
 	
 	@Override
-	public abstract M getMetaboliteInformation(Serializable id);
+	public abstract BioCycMetaboliteEntity getMetaboliteInformation(Serializable id);
 
 	@Override
-	public abstract M saveMetaboliteInformation(M metabolite);
-
-	@Override
-	public abstract M find(Serializable id);
+	public abstract BioCycMetaboliteEntity saveMetaboliteInformation(
+			BioCycMetaboliteEntity metabolite);
 
 	@Override
 	public abstract List<Serializable> getAllMetaboliteIds();
 
 	@Override
-	public abstract List<M> findAll();
+	public abstract BioCycMetaboliteEntity find(Serializable id);
 
 	@Override
-	public abstract Serializable save(M entity);
-	
+	public abstract List<BioCycMetaboliteEntity> findAll();
+
+	@Override
+	public abstract Serializable save(BioCycMetaboliteEntity entity);
 
 }

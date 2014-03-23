@@ -21,16 +21,14 @@ import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
+import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycEnzymeXMLParser;
+import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
+import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycReactionXMLParser;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
-import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycEnzymeXMLParser;
-import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycMetaboliteXMLParser;
-import edu.uminho.biosynth.core.data.io.parser.biocyc.BioCycReactionXMLParser;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
-import edu.uminho.biosynth.util.EquationParser;
 
+@Deprecated
 public class BioCycRemoteSource implements IRemoteSource {
 
 	private final static Logger LOGGER = Logger.getLogger(BioCycRemoteSource.class.getName());
@@ -138,24 +136,24 @@ public class BioCycRemoteSource implements IRemoteSource {
 			rxn.setDirection( parser.getOrientationString());
 //			rxn.setEquation( parser.getEquation());
 			rxn.setEnzyme( parser.getEnzymes().iterator().next());;
-			EquationParser eqp = new EquationParser( "123456789012345");
-			String[][] left = eqp.getLeftTriplet();
-			String[][] right = eqp.getRightTriplet();
+//			EquationParser eqp = new EquationParser( "123456789012345");
+//			String[][] left = eqp.getLeftTriplet();
+//			String[][] right = eqp.getRightTriplet();
 //			rxn.setGeneric( eqp.isVariable());
-			for (String[] l : left) {
-				BioCycReactionLeftEntity leftPair = new BioCycReactionLeftEntity();
-				leftPair.setValue(0.00000000000);
-				leftPair.setCpdEntry("AAAAAAAAA");
-				leftPair.setBioCycReactionEntity(rxn);
-				rxn.getLeft().add(leftPair);
-			}
-			for (String[] r : right) {
-				BioCycReactionRightEntity rightPair = new BioCycReactionRightEntity();
-				rightPair.setValue(0.00000000000);
-				rightPair.setCpdEntry("AAAAAAAAA");
-				rightPair.setBioCycReactionEntity(rxn);
-				rxn.getRight().add(rightPair);
-			}
+//			for (String[] l : left) {
+//				BioCycReactionLeftEntity leftPair = new BioCycReactionLeftEntity();
+//				leftPair.setValue(0.00000000000);
+//				leftPair.setCpdEntry("AAAAAAAAA");
+//				leftPair.setBioCycReactionEntity(rxn);
+//				rxn.getLeft().add(leftPair);
+//			}
+//			for (String[] r : right) {
+//				BioCycReactionRightEntity rightPair = new BioCycReactionRightEntity();
+//				rightPair.setValue(0.00000000000);
+//				rightPair.setCpdEntry("AAAAAAAAA");
+//				rightPair.setBioCycReactionEntity(rxn);
+//				rxn.getRight().add(rightPair);
+//			}
 			rxn.setOrientation( parser.getOrientation());
 
 		} catch (IllegalArgumentException e) {

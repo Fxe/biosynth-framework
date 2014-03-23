@@ -5,9 +5,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.parser.kegg.KeggCompoundFlatFileParser;
 
+@Repository
 public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetaboliteDao<KeggCompoundMetaboliteEntity> {
 
 	private static final String restCpdQuery = "http://rest.kegg.jp/get/cpd:%s";
@@ -24,6 +27,8 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 		String cpdMolFile = null;
 		try {
 			cpdFlatFile = getLocalOrWeb(restCpdQuery, localPath + ".txt");
+			if (cpdFlatFile == null) return null;
+			
 			cpdMolFile = getLocalOrWeb(restCpdMolQuery, localPath + ".mol");
 			
 //			System.out.println(drFlatFile);
@@ -68,8 +73,7 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 	@Override
 	public KeggCompoundMetaboliteEntity saveMetaboliteInformation(
 			KeggCompoundMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.parser.biocyc;
+package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser;
 
 import java.util.HashMap;
 import java.util.HashSet;

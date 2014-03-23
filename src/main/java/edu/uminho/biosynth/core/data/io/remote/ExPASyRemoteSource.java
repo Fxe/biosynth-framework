@@ -1,8 +1,6 @@
 package edu.uminho.biosynth.core.data.io.remote;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,6 +18,7 @@ import edu.uminho.biosynth.core.data.io.parser.swissprot.ExPASyEnzymeFlatFilePar
 //import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
 //import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
 
+@Deprecated
 public class ExPASyRemoteSource implements IRemoteSource{
 
 	public static boolean VERBOSE = false;
@@ -49,7 +48,7 @@ public class ExPASyRemoteSource implements IRemoteSource{
 		ecn = new GenericEnzyme(parser.getId());
 		ecn.setName( parser.getName());
 		
-		List<String> entryList = new ArrayList<String> ( parser.getGeneEntrys());
+//		List<String> entryList = new ArrayList<String> ( parser.getGeneEntrys());
 //	    Query query = UniProtQueryBuilder.buildIDListQuery( entryList);
 //	    UniProtQueryService uniProtQueryService = UniProtJAPI.factory.getUniProtQueryService();
 //	    EntryIterator<UniProtEntry> entries = uniProtQueryService.getEntryIterator(query);
