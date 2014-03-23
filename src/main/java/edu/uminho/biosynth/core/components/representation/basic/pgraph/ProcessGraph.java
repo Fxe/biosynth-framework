@@ -40,6 +40,9 @@ public class ProcessGraph<T> implements IGraph {
 		this.M_ = buildM();
 	}
 	
+	public void addMaterials(Set<T> materials) {
+		for (T t: materials) this.M_.add(t);
+	}
 
 	@Override
 	public int size() {
