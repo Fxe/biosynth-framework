@@ -112,4 +112,9 @@ public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboli
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
+
 }

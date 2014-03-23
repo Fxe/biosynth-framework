@@ -14,4 +14,5 @@ public interface IMetaboliteDao<M extends GenericMetabolite> {
 	
 	public List<M> findAll();
 	public Serializable save(M entity);
+	public Serializable save(Object entity);
 }

@@ -60,4 +60,9 @@ public class HbmKeggGlycanMetaboliteDaoImpl implements IMetaboliteDao<KeggDrugMe
 		return this.getSession().save(metabolite);
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		return this.save(KeggDrugMetaboliteEntity.class.cast(entity));
+	}
+
 }

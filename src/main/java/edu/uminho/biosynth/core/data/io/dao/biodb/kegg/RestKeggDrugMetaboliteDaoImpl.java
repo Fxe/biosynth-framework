@@ -117,4 +117,9 @@ public class RestKeggDrugMetaboliteDaoImpl extends AbstractRestfulKeggMetabolite
 		return null;
 	}
 
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
+
 }

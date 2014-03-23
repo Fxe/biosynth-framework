@@ -229,4 +229,9 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 			SeedMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
+	
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
 }

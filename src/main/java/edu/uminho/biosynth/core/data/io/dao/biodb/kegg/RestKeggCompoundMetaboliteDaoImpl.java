@@ -46,7 +46,7 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 		cpd.setMass(parser.getMass());
 		cpd.setRemark(parser.getRemark());
 		cpd.setComment(parser.getComment());
-		if (!cpdMolFile.isEmpty()) {
+		if (cpdMolFile != null && !cpdMolFile.isEmpty()) {
 			cpd.setMol2d(cpdMolFile);
 		}
 		cpd.setCrossReferences(parser.getCrossReferences());
@@ -108,13 +108,17 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 
 	@Override
 	public Serializable save(KeggCompoundMetaboliteEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
 	}
 //}
 //	
 //	private static final String restDrQuery = "http://rest.kegg.jp/get/dr:%s";
 //	private static final String restDrMolQuery = "http://rest.kegg.jp/get/dr:%s/mol";
+
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
 
 
 }

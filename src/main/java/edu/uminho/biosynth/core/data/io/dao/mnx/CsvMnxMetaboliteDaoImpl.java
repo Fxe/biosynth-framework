@@ -214,8 +214,12 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 
 	@Override
 	public Serializable save(MnxMetaboliteEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
 	}
 
 }

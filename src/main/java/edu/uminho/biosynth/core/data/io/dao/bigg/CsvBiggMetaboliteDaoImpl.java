@@ -55,7 +55,10 @@ public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEn
 	@Override
 	public BiggMetaboliteEntity saveMetaboliteInformation(
 			BiggMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not Supported Operation");
+	}
+	@Override
+	public Serializable save(Object entity) {
+		throw new RuntimeException("Not Supported Operation");
 	}
 }
