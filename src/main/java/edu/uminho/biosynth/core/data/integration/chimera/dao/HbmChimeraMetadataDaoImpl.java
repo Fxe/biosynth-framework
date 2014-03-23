@@ -9,11 +9,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
+@Repository
 public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 
 	@Autowired

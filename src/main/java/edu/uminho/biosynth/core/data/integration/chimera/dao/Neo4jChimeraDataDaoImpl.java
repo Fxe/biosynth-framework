@@ -16,6 +16,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
@@ -23,23 +24,26 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
-	private GraphDatabaseService graphdb;
-	private ExecutionEngine engine;
+	
+	@Autowired
+	private GraphDatabaseService graphDatabaseService;
+	
+	private ExecutionEngine executionEngine;
 	
 	public Neo4jChimeraDataDaoImpl() { }
 
 	public GraphDatabaseService getGraphdb() {
-		return graphdb;
+		return graphDatabaseService;
 	}
 
 	public void setGraphdb(GraphDatabaseService graphdb) {
-		this.graphdb = graphdb;
-		this.engine = new ExecutionEngine(graphdb);
+		this.graphDatabaseService = graphdb;
+		this.executionEngine = new ExecutionEngine(graphdb);
 	}
 	
 	public Node getMetaboliteNodeByEntry(String entry, CompoundNodeLabel type) {
 		Node node = null;
-		ResourceIterable<Node> res = this.graphdb.findNodesByLabelAndProperty(type, "entry", entry);
+		ResourceIterable<Node> res = this.graphDatabaseService.findNodesByLabelAndProperty(type, "entry", entry);
 		Iterator<Node> i = res.iterator();
 		while (i.hasNext()) {
 			//entry should have unique constraint therefore no more 
@@ -56,7 +60,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<Long> getClusterByQuery(String query) {
 		List<Long> clusterElements = new ArrayList<> ();
-		ExecutionResult res = this.engine.execute(query);
+		ExecutionResult res = this.executionEngine.execute(query);
 		List<Object> nodeList = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
 		for (Object obj: nodeList) {
 			if (obj instanceof SeqWrapper) {
@@ -98,7 +102,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 //		data.put("Model", new ArrayList<> ());
 		//START cpd=node(0) MATCH composite=(cpd)-[*1..1]->(c) RETURN nodes(composite);
 		//START cpd=node(0) MATCH path=(cpd)-[*1..1]->(c) RETURN collect(c)
-		ExecutionResult res = this.engine.execute(String.format(
+		ExecutionResult res = this.executionEngine.execute(String.format(
 				"START cpd=node(%d) MATCH path=(cpd)-[*1..1]->(c) RETURN collect(c);", id));
 //		ExecutionResult res = this.engine.execute(String.format(
 //				"START cpd=node(%d) MATCH composite=(cpd)-[*1..1]->(c) RETURN distinct nodes(composite);", id));
@@ -160,7 +164,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public Map<String, Object> getEntryProperties(Long id) {
 		Map<String, Object> propsMap = new HashMap<> ();
-		ExecutionResult res = this.engine.execute(String.format(
+		ExecutionResult res = this.executionEngine.execute(String.format(
 				"START cpd=node(%d) RETURN cpd;", id));
 		
 		List<?> list = IteratorUtil.asList(res.columnAs("cpd"));
@@ -196,12 +200,26 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<Long> getAllMetaboliteIds() {
 		List<Long> idList = new ArrayList<> ();
-		ExecutionResult res = this.engine.execute("MATCH (cpd:Compound) RETURN ID(cpd) AS id");
+		ExecutionResult res = this.executionEngine.execute("MATCH (cpd:Compound) RETURN ID(cpd) AS id");
 		List<?> list = IteratorUtil.asList(res.columnAs("id"));
 		for (Object id : list) {
 			idList.add((Long) id);
 		}
 		return idList;
+	}
+
+	@Override
+	public List<String> getAllProperties() {
+		List<String> res = new ArrayList<> ();
+		// TODO Auto-generated method stub
+		return res;
+	}
+
+	@Override
+	public List<Long> listAllPropertyIds(String property) {
+		List<Long> res = new ArrayList<> ();
+		// TODO Auto-generated method stub
+		return res;
 	}
 
 }

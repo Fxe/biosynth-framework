@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
@@ -19,7 +20,8 @@ public class TestNeo4jChimeraDataDao {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		db = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
+		GraphDatabaseBuilder builder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(DB_PATH);
+		db = builder.newGraphDatabase();
 	}
 
 	@AfterClass
