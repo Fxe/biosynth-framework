@@ -11,7 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
@@ -60,30 +60,10 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	}
 
 	@Override
-	public IntegratedCluster createCluster(String name, List<Long> ids, String description,
-			IntegrationSet integrationSet) {
-		
-		IntegratedCluster cluster = new IntegratedCluster();
-		cluster.setName(name);
-		cluster.setIntegrationSet(integrationSet);
-		for (Long id: ids) {
-			IntegratedClusterMember member = new IntegratedClusterMember();
-			member.setDescription(description);
-			member.setId(id);
-			member.setIntegratedCluster(cluster);
-			cluster.getMemberMap().put(id, member);
-		}
-		
-		this.getSession().save(cluster);
-		
-		return cluster;
-	}
-
-	@Override
 	public void deleteCluster(IntegratedCluster cluster) {
 		Query query;
 		
-		query = this.getSession().createQuery("DELETE FROM IntegratedClusterMember m WHERE m.integratedCluster.id = :cid");
+		query = this.getSession().createQuery("DELETE FROM IntegratedClusterMember m WHERE m.pk.cluster.id = :cid");
 		query.setParameter("cid", cluster.getId());
 		query.executeUpdate();
 		
@@ -109,6 +89,31 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		}
 		
 		return integratedSet;
+	}
+
+	@Override
+	public IntegratedMember getIntegratedMember(Long id) {
+		return IntegratedMember.class.cast(this.getSession().get(IntegratedMember.class, id));
+	}
+
+	@Override
+	public void saveIntegratedMember(IntegratedMember member) {
+		IntegratedMember m = this.getIntegratedMember(member.getId());
+		if (m == null) this.getSession().save(member);
+//		this.getSession().saveOrUpdate(member);
+	}
+
+	@Override
+	public void saveIntegratedCluster(IntegratedCluster cluster) {
+		this.getSession().save(cluster);
+	}
+
+	@Override
+	public List<Long> getAllIntegratedMembersId() {
+		Query query = this.getSession().createQuery("SELECT m.id FROM IntegratedMember m");
+		@SuppressWarnings("unchecked")
+		List<Long> res = query.list();
+		return res;
 	}
 
 }

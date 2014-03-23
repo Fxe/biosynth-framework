@@ -84,7 +84,7 @@ public class TestHbmChimeraBuilderService {
 			public String generateKey() { return base + counter++;}
 		});
 		
-		builder.changeIntegrationSet(24L);
+		builder.changeIntegrationSet(11L);
 		builder.generateIntegratedDatabase();
 		
 		fail("Not yet implemented");

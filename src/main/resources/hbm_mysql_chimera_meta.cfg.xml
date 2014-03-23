@@ -12,11 +12,12 @@
         <property name="hibernate.default_schema">integration_metadata</property>
         <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
         
-        <property name="show_sql">false</property>
+        <property name="show_sql">true</property>
 
 	    <mapping class="edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet" />
 	    <mapping class="edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster"/>
 	    <mapping class="edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember"/>
+	    <mapping class="edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -1,8 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,11 +32,26 @@ public class IntegratedCluster {
 	@ManyToOne
 	@JoinColumn(name="integration_id")
 	private IntegrationSet integrationSet;
+	public IntegrationSet getIntegrationSet() { return integrationSet;}
+	public void setIntegrationSet(IntegrationSet integrationSet) { this.integrationSet = integrationSet;}
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
-	@MapKey(name="id")
-	private Map<Serializable, IntegratedClusterMember> memberMap = new HashMap<> ();
-
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
+	private List<IntegratedClusterMember> members = new ArrayList<> ();
+	public List<IntegratedClusterMember> getMembers() { return members;}
+	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
+	
+	
+//	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
+//	@MapKey(name="id")
+//	private Map<Serializable, IntegratedClusterMember> memberMap = new HashMap<> ();
+//	public Map<Serializable, IntegratedClusterMember> getMemberMap() {
+//		return memberMap;
+//	}
+//
+//	public void setMemberMap(Map<Serializable, IntegratedClusterMember> memberMap) {
+//		this.memberMap = memberMap;
+//	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -63,21 +76,9 @@ public class IntegratedCluster {
 		this.description = description;
 	}
 
-	public IntegrationSet getIntegrationSet() {
-		return integrationSet;
-	}
 
-	public void setIntegrationSet(IntegrationSet integrationSet) {
-		this.integrationSet = integrationSet;
-	}
 
-	public Map<Serializable, IntegratedClusterMember> getMemberMap() {
-		return memberMap;
-	}
 
-	public void setMemberMap(Map<Serializable, IntegratedClusterMember> memberMap) {
-		this.memberMap = memberMap;
-	}
 	
 	
 }

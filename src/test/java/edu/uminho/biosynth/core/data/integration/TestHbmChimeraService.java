@@ -14,6 +14,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraIntegrationServiceImpl;
+import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraService {
@@ -57,6 +58,16 @@ public class TestHbmChimeraService {
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphdb(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
+		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
+			private Integer base = 0;
+			
+			@Override
+			public void reset() { base = 0;}
+			
+			@Override
+			public String generateKey() { return "GEN_" + base++;}
+		});
+		
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
 		integrator.setMeta(meta);
@@ -75,7 +86,7 @@ public class TestHbmChimeraService {
 			throw e;
 		}
 		
-		integrator.resetIntegrationSet();
+//		integrator.resetIntegrationSet();
 		
 		assertEquals(true, true);
 	}
@@ -83,6 +94,15 @@ public class TestHbmChimeraService {
 	@Test
 	public void testCreateClusterByCascade() {
 		ChimeraIntegrationServiceImpl integrator = new ChimeraIntegrationServiceImpl();
+		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
+			private Integer base = 0;
+			
+			@Override
+			public void reset() { base = 0;}
+			
+			@Override
+			public String generateKey() { return "GEN_" + base++;}
+		});
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphdb(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();

@@ -1,15 +1,16 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
@@ -18,6 +19,8 @@ import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
 public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilderService{
 
+	private static Logger LOGGER = Logger.getLogger(ChimeraDatabaseBuilderServiceImpl.class);
+	
 	@Autowired
 	private ChimeraDataDao data;
 	@Autowired
@@ -79,14 +82,16 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		for (Long id: this.currentIntegrationSet.getIntegratedClustersMap().keySet()) {			
 			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().get(id);
 			
-			if (!cluster.getMemberMap().isEmpty()) {
-				System.out.println("Creating compound " + cluster.getId());
+			if (!cluster.getMembers().isEmpty()) {
 				IntegratedMetaboliteEntity cpd = new IntegratedMetaboliteEntity();
 				
 				cpd.setEntry(cluster.getName());
 				cpd.setSource(this.currentIntegrationSet.getName());
 				
-				for (Serializable memberId: cluster.getMemberMap().keySet()) {
+				LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from Cluster[%d]", cpd.getEntry(), cluster.getId())));
+				
+				for (IntegratedClusterMember member: cluster.getMembers()) {
+					Long memberId = member.getMember().getId();
 					Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
 					if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
 					System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));
@@ -110,6 +115,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 				}
 //				System.out.println(cpd);
 				res.add(cpd);
+			} else {
+				LOGGER.warn(String.format("Skipped Cluster[%d] - Empty", cluster.getId()));
 			}
 			
 		}
@@ -119,7 +126,12 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	
 	@Override
 	public void generateIntegratedDatabase() {
+		if (this.currentIntegrationSet == null) {
+			LOGGER.warn("No Integration Set selected - operation aborted");
+			return;
+		}
 		List<IntegratedMetaboliteEntity> cpdList = this.generateIntegratedMetabolites();
+		
 		for(IntegratedMetaboliteEntity cpd: cpdList) {
 			System.out.println(cpd);
 		}

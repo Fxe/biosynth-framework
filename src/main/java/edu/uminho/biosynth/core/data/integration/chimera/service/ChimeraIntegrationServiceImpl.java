@@ -3,17 +3,22 @@ package edu.uminho.biosynth.core.data.integration.chimera.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
 public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
+	
+	private static Logger LOGGER = Logger.getLogger(ChimeraIntegrationServiceImpl.class);
 	
 	@Autowired
 	private ChimeraDataDao data;
@@ -49,6 +54,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public void changeIntegrationSet(Long id) {
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
 		this.currentIntegrationSet = integrationSet;
+		LOGGER.info(String.format("Current Integration Set changed to %s", this.currentIntegrationSet));
 	}
 	
 	@Override
@@ -59,9 +65,16 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
 	@Override
 	public void resetIntegrationSet() {
+		if (this.currentIntegrationSet == null) {
+			LOGGER.warn("No Integration Set selected - operation aborted");
+			return;
+		}
+		LOGGER.info(String.format("Reset atempt to Integration Set %s", this.currentIntegrationSet));
+		
 		List<Long> clusters = new ArrayList<> (this.currentIntegrationSet.getIntegratedClustersMap().keySet());
 		for (Long clusterId : clusters){
 			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().remove(clusterId);
+			LOGGER.info(String.format("Removing cluster %s", cluster));
 			this.meta.deleteCluster(cluster);
 		}
 		
@@ -75,23 +88,35 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
 	public IntegratedCluster createCluster(String name, List<Long> elements, String description) {
 		if (elements.isEmpty()) return null;
-//		IntegratedCluster cluster = new IntegratedCluster();
-//		cluster.setIntegrationSet(currentIntegrationSet);
-//		
-//		for (Long elementId : elements) {
-//			IntegratedClusterMember member = new IntegratedClusterMember();
-//			member.setIntegratedCluster(cluster);
-//			member.setId(elementId);
-//		}
+
+		List<Long> clusterElements = elements;
+		IntegratedCluster cluster = new IntegratedCluster();
+		cluster.setIntegrationSet(this.currentIntegrationSet);
+		cluster.setName(name);
+		cluster.setDescription(description);
 		
-		return this.meta.createCluster(name, elements, description, this.currentIntegrationSet);
+		for (Long memberId: clusterElements) {
+			IntegratedMember member = new IntegratedMember();
+			member.setId(memberId);
+			this.meta.saveIntegratedMember(member);
+			
+			IntegratedClusterMember clusterMember = new IntegratedClusterMember();
+			clusterMember.setCluster(cluster);
+			clusterMember.setMember(member);
+			
+			cluster.getMembers().add(clusterMember);
+		}
+		
+		this.meta.saveIntegratedCluster(cluster);
+		
+		return cluster;
 	}
 
 	@Override
-	public void createCluster(String query) {
-		//error id merge !
+	public IntegratedCluster createCluster(String query) {
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query, currentIntegrationSet);
+		//error id merge !
+		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
 	}
 	
 	public void createClusterCascade(String query) {
@@ -103,7 +128,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 				System.out.println(query_);
 				List<Long> clusterElements = this.data.getClusterByQuery(query_);
 				visitedIds.addAll(clusterElements);
-				this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_, currentIntegrationSet);
+				this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_);
 				System.out.println("Generated Cluster: root -> " + id + " size -> " + clusterElements.size());
 			}
 		}
@@ -113,12 +138,13 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	@Override
 	public void mergeCluster(String query) {
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, query, currentIntegrationSet);
+		this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
+//		this.meta.createCluster(, clusterElements, query, currentIntegrationSet);
 		
 	}
 	@Override
 	public void mergeCluster(ClusteringStrategy strategy) {
 		List<Long> clusterElements = strategy.execute();
-		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString(), currentIntegrationSet);
+		this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString());
 	}
 }

@@ -1,5 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 
@@ -9,7 +10,7 @@ public interface ChimeraIntegrationService {
 	public void changeIntegrationSet(String id);
 	public void resetIntegrationSet();
 	public void deleteIntegrationSet();
-	public void createCluster(String query);
+	public IntegratedCluster createCluster(String query);
 	public void mergeCluster(String query);
 	public void mergeCluster(ClusteringStrategy generator);
 }
