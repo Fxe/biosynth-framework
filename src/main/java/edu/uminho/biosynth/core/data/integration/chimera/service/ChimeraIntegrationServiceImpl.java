@@ -1,10 +1,14 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
@@ -13,15 +17,20 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
+@Transactional(readOnly=true, value="chimerametadata")
 public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
-	@Autowired
+//	@Autowired
 	private ChimeraDataDao data;
 	@Autowired
 	private ChimeraMetadataDao meta;
 	
 	private IntegrationSet currentIntegrationSet;
 	
+	@Override
+	public IntegrationSet getCurrentIntegrationSet() { return currentIntegrationSet;}
+	public void setCurrentIntegrationSet(IntegrationSet currentIntegrationSet) { this.currentIntegrationSet = currentIntegrationSet;}
+
 	private IKeyGenerator<String> clusterIdGenerator;
 	
 	public ChimeraDataDao getData() { return data;}
@@ -120,5 +129,23 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public void mergeCluster(ClusteringStrategy strategy) {
 		List<Long> clusterElements = strategy.execute();
 		this.meta.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString(), currentIntegrationSet);
+	}
+	
+	@Override
+	public List<IntegrationSet> getAllIntegrationSets() {
+		List<IntegrationSet> res = new ArrayList<> ();
+		for (Serializable id: this.meta.getAllIntegrationSetsId()) {
+			res.add(this.meta.getIntegrationSet(id));
+		}
+		return res;
+	}
+	
+	@Override
+	public Map<String, Integer> getDataStatistics() {
+		Map<String, Integer> res = new HashMap<> ();
+//		for (String property: this.data.getAllProperties()) {
+//			res.put(property, this.data.listAllPropertyIds(property).size());
+//		}
+		return res;
 	}
 }

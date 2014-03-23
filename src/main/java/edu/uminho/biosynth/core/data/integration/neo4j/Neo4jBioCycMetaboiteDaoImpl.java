@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -20,6 +21,8 @@ import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
 public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboliteEntity> implements IMetaboliteDao<BioCycMetaboliteEntity> {
 
+	private static Logger LOGGER = Logger.getLogger(Neo4jBioCycMetaboiteDaoImpl.class);
+	
 	private static Label compoundLabel = CompoundNodeLabel.BioCyc;
 	private Label subDb = CompoundNodeLabel.MetaCyc;
 
@@ -120,13 +123,13 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);
 			if (dbLabel.equals(CompoundNodeLabel.BiGG.toString())) {
-				System.out.println("saving bigg xref");
 				params.put("dbEntry", Integer.parseInt(dbEntry));
+				LOGGER.debug(String.format("Generating Crossreference to %s - id:%s", dbLabel, dbEntry));
 				//BiGG xrefs in BioCyc are match with id not the entry (which is the abbreviation)
 				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ", params);
 				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {id:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);	
 			} else {
-				System.out.println("saving other xref");
+				LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
 				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
 				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 			}

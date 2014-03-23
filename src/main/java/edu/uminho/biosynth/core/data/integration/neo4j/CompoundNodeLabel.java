@@ -5,6 +5,6 @@ import org.neo4j.graphdb.Label;
 public enum CompoundNodeLabel implements Label {
 	Compound,
 	KEGG, BioCyc, MetaCyc, BiGG, MetaNetX, Seed, MaizeCyc, PlantCyc, AraCyc, ChEBI, HMDB,
-	Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS
+	Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS, DrugBank
 	
 }

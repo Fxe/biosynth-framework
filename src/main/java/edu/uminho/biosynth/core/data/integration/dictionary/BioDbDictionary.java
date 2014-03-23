@@ -31,20 +31,26 @@ public class BioDbDictionary {
 		 *    Only characters and '_'
 		 */
 		Map<String, String> dictionary = new HashMap<> ();
+		dictionary.put("CHEMSPIDER", "ChemSpider");
+		dictionary.put("DrugBank accession", CompoundNodeLabel.DrugBank.toString());
 		dictionary.put("biopath", "BioPath");
 		dictionary.put("upa", "UniPathway");
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
 		//BioCyc
+		dictionary.put("KNAPSACK", "KNApSAcK");
 		dictionary.put("KNApSAcK", "KNApSAcK");
 		dictionary.put("BIOCYC:ARA", "BioCyc:AraCyc");
 		dictionary.put("METACYC", "BioCyc:MetaCyc");
 		dictionary.put("metacyc", "BioCyc:MetaCyc");
+		dictionary.put("MetaCyc accession", "BioCyc:MetaCyc");
 		dictionary.put("BIGG", CompoundNodeLabel.BiGG.toString());
 		dictionary.put("bigg", CompoundNodeLabel.BiGG.toString());
 		dictionary.put("LIGAND-CPD", CompoundNodeLabel.KEGG.toString());
 		dictionary.put("KEGG", CompoundNodeLabel.KEGG.toString());
 		dictionary.put("kegg", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("KEGG COMPOUND accession", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("KEGG DRUG accession", CompoundNodeLabel.KEGG.toString());
 		//KEGG
 		dictionary.put("JCGGDB", "JCGGDB");
 		dictionary.put("GlycomeDB", "GlycomeDB");
@@ -55,12 +61,14 @@ public class BioDbDictionary {
 		dictionary.put("chebi", CompoundNodeLabel.ChEBI.toString());
 		dictionary.put("ChEBI", CompoundNodeLabel.ChEBI.toString());
 		dictionary.put("CHEBI", CompoundNodeLabel.ChEBI.toString());
-		dictionary.put("CAS", "CAS");
+		dictionary.put("CAS", CompoundNodeLabel.CAS.toString());
+		dictionary.put("CAS Registry Number", CompoundNodeLabel.CAS.toString());
 		dictionary.put("NIKKAJI", "NIKKAJI");
 		dictionary.put("3DMET", "MET3D");
 		dictionary.put("seed", CompoundNodeLabel.Seed.toString());
 		
 		dictionary.put("hmdb", CompoundNodeLabel.HMDB.toString());
+		dictionary.put("HMDB accession", CompoundNodeLabel.HMDB.toString());
 		
 		dictionary.put("reactome", CompoundNodeLabel.Reactome.toString());
 		

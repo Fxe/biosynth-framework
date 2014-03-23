@@ -5,15 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
+import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
 public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetaboliteEntity> implements IMetaboliteDao<ChebiMetaboliteEntity>{
 
+	private static Logger LOGGER = Logger.getLogger(Neo4jChebiMetaboliteDaoImpl.class);
+	
 	public Neo4jChebiMetaboliteDaoImpl(GraphDatabaseService graphdb) {
 		super(graphdb);
 		// TODO Auto-generated constructor stub
@@ -73,6 +78,38 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 			params.put("name", name.getName().toLowerCase());
 			engine.execute("MERGE (n:Name {name:{name}}) ", params);
 			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+		}
+		for (ChebiMetaboliteCrossReferenceEntity xref: cpd.getCrossreferences()) {
+
+			switch (xref.getType()) {
+				case DATABASE:
+					String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
+					String dbEntry = xref.getValue();
+					
+					LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
+					
+					params.put("dbEntry", dbEntry);
+					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+					engine.execute("MATCH (cpd1:ChEBI:Compound {entry:{entry}}), "
+							+ "(cpd2:" + dbLabel + " {entry:{dbEntry}}) "
+							+ "MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+					break;
+				case ECNUMBER:
+					//TODO: implement ec numbers
+					break;
+				case CITATION:
+					//TODO: implement citations
+					break;
+				case GENE:
+					//TODO: implement genes
+					break;
+				case REACTION:
+					//TODO: implement reactions
+					break;
+				default:
+					LOGGER.warn(String.format("Unsupported crossreferecen type[%s] of %s", xref.getType(), xref));
+					break;
+			}
 		}
 		return null;
 	}

@@ -8,4 +8,6 @@ public interface ChimeraDataDao {
 	public Map<String, Object> getEntryProperties(Long id);
 	public List<Long> getClusterByQuery(String query);
 	public Map<String, List<Object>> getCompositeNode(Long id);
+	public List<String> getAllProperties();
+	public List<Long> listAllPropertyIds(String property);
 }
