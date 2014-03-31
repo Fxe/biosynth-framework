@@ -66,11 +66,13 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		engine.execute("MERGE (cpd:Seed:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.defaultCharge={defaultCharge}, cpd.mass={mass}, "
-				+ "cpd.deltaG={deltaG}, cpd.deltaGErr={deltaGErr}, cpd.abbreviation={abbreviation}, cpd.smiles={smiles} "
+				+ "cpd.deltaG={deltaG}, cpd.deltaGErr={deltaGErr}, cpd.abbreviation={abbreviation}, "
+				+ "cpd.smiles={smiles}, cpd.proxy=false "
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.defaultCharge={defaultCharge}, cpd.mass={mass}, "
-				+ "cpd.deltaG={deltaG}, cpd.deltaGErr={deltaGErr}, cpd.abbreviation={abbreviation}, cpd.smiles={smiles} "
+				+ "cpd.deltaG={deltaG}, cpd.deltaGErr={deltaGErr}, cpd.abbreviation={abbreviation}, "
+				+ "cpd.smiles={smiles}, cpd.proxy=false"
 				, params);
 		
 		if (params.get("defaultCharge") != null) {
@@ -102,7 +104,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 					String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 					String dbEntry = xref.getValue(); //Also need to translate if necessary
 					params.put("dbEntry", dbEntry);
-					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 					engine.execute("MATCH (cpd1:Seed:Compound {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 					break;
 				case MODEL:
@@ -143,26 +145,48 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
+		List<Serializable> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:Seed) RETURN cpd.id AS ids").columnAs("ids");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
+	}
+
+	@Override
+	public SeedMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public SeedMetaboliteEntity getMetaboliteInformation(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SeedMetaboliteEntity saveMetaboliteInformation(
+	public SeedMetaboliteEntity saveMetabolite(
 			SeedMetaboliteEntity metabolite) {
+		this.save(metabolite);
+		return metabolite;
+	}
+
+	@Override
+	public Serializable saveMetabolite(Object entity) {
+		return this.save(SeedMetaboliteEntity.class.cast(entity));
+	}
+
+	@Override
+	public SeedMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
-		return this.save(SeedMetaboliteEntity.class.cast(entity));
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:Seed) RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 
 }

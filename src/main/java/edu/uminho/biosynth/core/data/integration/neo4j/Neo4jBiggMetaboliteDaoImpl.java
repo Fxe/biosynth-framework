@@ -158,27 +158,35 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			if (this.hasProxy(cpd.getId())) {
 				LOGGER.debug(String.format("Merge BiGG node from id:%d", cpd.getId()));
 				cypherQuery = "MERGE (cpd:BiGG:Compound {id:{id}}) ON CREATE SET "
-						+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
-						+ "cpd.charge={charge}, cpd.entry={entry}"
-						+ "ON MATCH SET "
-						+ "cpd.updated_at=timestamp(), cpd.entry={entry}, cpd.name={name}, cpd.formula={formula}, "
-						+ "cpd.charge={charge}";
+					+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false "
+					+ "ON MATCH SET "
+					+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false, cpd.entry={entry}";
 			} else if (this.hasProxy(cpd.getEntry())) {
 				LOGGER.debug(String.format("Merge BiGG node from entry:\"%s\"", cpd.getEntry()));
 				cypherQuery = "MERGE (cpd:BiGG:Compound {entry:{entry}}) ON CREATE SET "
-						+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
-						+ "cpd.charge={charge}, cpd.id={id}"
-						+ "ON MATCH SET "
-						+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
-						+ "cpd.charge={charge}, cpd.id={id}";
+					+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false "
+					+ "ON MATCH SET "
+					+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false, cpd.id={id}";
 			} else {
 				LOGGER.debug(String.format("Create new BiGG node id:%d, entry:\"%s\"", cpd.getId(), cpd.getEntry()));
 				cypherQuery = "MERGE (cpd:BiGG:Compound {entry:{entry}, id:{id}}) ON CREATE SET "
-						+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
-						+ "cpd.charge={charge}"
-						+ "ON MATCH SET "
-						+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, cpd.charge={charge}";
+					+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false "
+					+ "ON MATCH SET "
+					+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+					+ "cpd.charge={charge}, cpd.proxy=false";
 			}
+			
+//			cypherQuery = cypherQuery.concat("ON CREATE SET "
+//					+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+//					+ "cpd.charge={charge}, cpd.proxy=false "
+//					+ "ON MATCH SET "
+//					+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
+//					+ "cpd.charge={charge}, cpd.proxy=false");
 			
 			engine.execute(cypherQuery, params);
 			
@@ -191,7 +199,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			
 			for (String cmp : cpd.getCompartments()) {
 				params.put("compartment", cmp);
-				engine.execute("MERGE (c:Compartment {compartment:{compartment}}) ", params);
+				engine.execute("MERGE (c:Compartment {compartment:{compartment}})", params);
 				engine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Compartment {compartment:{compartment}}) MERGE (cpd)-[r:FoundIn]->(c)", params);
 			}
 			
@@ -201,7 +209,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 						String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 						String dbEntry = xref.getValue(); //Also need to translate if necessary
 						params.put("dbEntry", dbEntry);
-						engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+						engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 						engine.execute("MATCH (cpd1:BiGG {id:{id}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 						break;
 					case MODEL:
@@ -235,31 +243,47 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		List<Serializable> res = new ArrayList<> ();
-		Iterator<List<String>> iterator = engine.execute(
-				"MATCH (cpd:BiGG) RETURN collect(cpd.entry) AS entries;").columnAs("entries");
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:BiGG) RETURN cpd.id AS ids").columnAs("ids");
 		while (iterator.hasNext()) {
-			List<String> entries = iterator.next();
-			res.addAll(entries);
+			res.add(iterator.next());
 		}
 		return res;
 	}
 
 	@Override
-	public BiggMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public BiggMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BiggMetaboliteEntity saveMetaboliteInformation(
+	public BiggMetaboliteEntity saveMetabolite(
 			BiggMetaboliteEntity metabolite) {
+		this.save(metabolite);
+		return null;
+	}
+
+	@Override
+	public Serializable saveMetabolite(Object entity) {		
+		return this.save(BiggMetaboliteEntity.class.cast(entity));
+	}
+
+	@Override
+	public BiggMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {		
-		return this.save(BiggMetaboliteEntity.class.cast(entity));
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:BiGG) RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 
 }

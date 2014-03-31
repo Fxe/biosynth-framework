@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,12 +56,12 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.stars={stars}, cpd.inchi={inchi}, cpd.inchikey={inchikey}, "
-				+ "cpd.smiles={smiles}, cpd.source={source} "
+				+ "cpd.smiles={smiles}, cpd.source={source}, cpd.proxy=false "
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.stars={stars}, cpd.inchi={inchi}, cpd.inchikey={inchikey}, "
-				+ "cpd.smiles={smiles}, cpd.source={source} "
+				+ "cpd.smiles={smiles}, cpd.source={source}, cpd.proxy=false"
 				, params);
 		
 		if (params.get("charge") != null) {
@@ -89,7 +91,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 					LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
 					
 					params.put("dbEntry", dbEntry);
-					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 					engine.execute("MATCH (cpd1:ChEBI:Compound {entry:{entry}}), "
 							+ "(cpd2:" + dbLabel + " {entry:{dbEntry}}) "
 							+ "MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
@@ -127,21 +129,38 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 	}
 
 	@Override
-	public ChebiMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public ChebiMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ChebiMetaboliteEntity saveMetaboliteInformation(
+	public ChebiMetaboliteEntity saveMetabolite(
 			ChebiMetaboliteEntity metabolite) {
+		this.save(metabolite);
+		return null;
+	}
+
+	@Override
+	public Serializable saveMetabolite(Object entity) {
+		return this.save(ChebiMetaboliteEntity.class.cast(entity));
+	}
+
+	@Override
+	public ChebiMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
-		return this.save(ChebiMetaboliteEntity.class.cast(entity));
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:ChEBI {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 
 }

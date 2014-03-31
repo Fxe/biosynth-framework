@@ -31,7 +31,10 @@ public class BioDbDictionary {
 		 *    Only characters and '_'
 		 */
 		Map<String, String> dictionary = new HashMap<> ();
+		dictionary.put("lipidmaps", "LipidMAPS");
+		dictionary.put("LIPID MAPS instance accession", "LipidMAPS");
 		dictionary.put("CHEMSPIDER", "ChemSpider");
+		dictionary.put("Chemspider accession", "ChemSpider");
 		dictionary.put("DrugBank accession", CompoundNodeLabel.DrugBank.toString());
 		dictionary.put("biopath", "BioPath");
 		dictionary.put("upa", "UniPathway");
@@ -51,11 +54,13 @@ public class BioDbDictionary {
 		dictionary.put("kegg", CompoundNodeLabel.KEGG.toString());
 		dictionary.put("KEGG COMPOUND accession", CompoundNodeLabel.KEGG.toString());
 		dictionary.put("KEGG DRUG accession", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("KEGG GLYCAN accession", CompoundNodeLabel.KEGG.toString());
 		//KEGG
 		dictionary.put("JCGGDB", "JCGGDB");
 		dictionary.put("GlycomeDB", "GlycomeDB");
 		dictionary.put("CCSD", "CCSD");
 		dictionary.put("PUBCHEM", "PubChem");
+		dictionary.put("Pubchem accession", "PubChem");
 		dictionary.put("PubChem", "PubChem");
 		dictionary.put("PDB-CCD", "PDB");
 		dictionary.put("chebi", CompoundNodeLabel.ChEBI.toString());

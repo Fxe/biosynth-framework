@@ -43,7 +43,7 @@ public class TestNeo4jChimeraDataDao {
 	@Test
 	public void testAllMetaboliteIds() {
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
-		data.setGraphdb(db);
+		data.setGraphDatabaseService(db);
 		
 		assertEquals(false, data.getAllMetaboliteIds().isEmpty());
 	}

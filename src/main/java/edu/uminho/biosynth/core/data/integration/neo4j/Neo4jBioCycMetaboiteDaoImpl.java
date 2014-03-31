@@ -85,11 +85,13 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		engine.execute("MERGE (cpd:BioCyc:" + biocycSubDb +":Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.cmlMolWeight={cmlMolWeight}, cpd.gibbs={gibbs}, "
-				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, cpd.molWeight={molWeight} "
+				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, "
+				+ "cpd.molWeight={molWeight}, cpd.proxy=false "
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.cmlMolWeight={cmlMolWeight}, cpd.gibbs={gibbs}, "
-				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, cpd.molWeight={molWeight}"
+				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, "
+				+ "cpd.molWeight={molWeight}, cpd.proxy=false"
 				, params);
 		
 		if (params.get("charge") != null) {
@@ -126,24 +128,26 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 				params.put("dbEntry", Integer.parseInt(dbEntry));
 				LOGGER.debug(String.format("Generating Crossreference to %s - id:%s", dbLabel, dbEntry));
 				//BiGG xrefs in BioCyc are match with id not the entry (which is the abbreviation)
-				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ", params);
+				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {id:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);	
 			} else {
 				LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
-				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 			}
 		}
 		
 		for (String rxnId : cpd.getReactions()) {
 			params.put("rxnId", rxnId);
-			engine.execute("MERGE (rxn:" + biocycSubDb + ":Reaction {entry:{rxnId}}) ", params);
+			LOGGER.debug(String.format("Generating Reference to reaction; %s", rxnId));
+			engine.execute("MERGE (rxn:" + biocycSubDb + ":Reaction {entry:{rxnId}}) ON CREATE SET rxn.proxy=true", params);
 			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (rxn:" + biocycSubDb + " {entry:{rxnId}}) MERGE (cpd)-[r:ParticipatesIn]->(rxn)", params);
 		}
 		
 		for (String cpdId : cpd.getParents()) {
 			params.put("parentId", cpdId);
-			engine.execute("MERGE (cpd:" + biocycSubDb + ":Compound {entry:{parentId}}) ", params);
+			LOGGER.debug(String.format("Generating Reference to Parent Compound; %s", cpdId));
+			engine.execute("MERGE (cpd:" + biocycSubDb + ":Compound {entry:{parentId}}) ON CREATE SET cpd.proxy=true", params);
 			engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + biocycSubDb + " {entry:{parentId}}) MERGE (cpd1)-[r:InstanseOf]->(cpd2)", params);
 		}
 		
@@ -173,21 +177,38 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 	}
 
 	@Override
-	public BioCycMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BioCycMetaboliteEntity saveMetaboliteInformation(
+	public BioCycMetaboliteEntity saveMetabolite(
 			BioCycMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		return this.save(BioCycMetaboliteEntity.class.cast(entity));
+	}
+
+	@Override
+	public BioCycMetaboliteEntity getMetaboliteByEntry(String entry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:" + subDb + ") RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 
 }

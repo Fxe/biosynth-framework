@@ -3,8 +3,10 @@ package edu.uminho.biosynth.core.data.integration.chimera.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,8 +125,15 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 
 	@Override
 	public IntegratedCluster createCluster(String query) {
+		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
+		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
 		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		//error id merge !
+		memberIdList.retainAll(clusterElements);
+		if (!memberIdList.isEmpty()) {
+			LOGGER.warn(String.format("Create Cluster [%s] FAILED. Membership conflict %s", query, memberIdList));
+			return null;
+		}
+		LOGGER.debug(String.format("[%s] generated %d elements", query, clusterElements.size()));
 		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
 	}
 	
@@ -144,7 +153,9 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		//error id merge !
 	}
 	
-	public void createClusterCascade(ClusteringStrategy strategy) {
+	public List<IntegratedCluster> createClusterCascade(ClusteringStrategy strategy) {
+		List<IntegratedCluster> res = new ArrayList<> ();
+		
 		List<Long> compoundIds = this.data.getAllMetaboliteIds();
 		List<Long> visitedIds = new ArrayList<> ();
 		for (Long id: compoundIds) {
@@ -154,10 +165,13 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 				for (IntegratedClusterMember elements:cluster.getMembers()) {
 					visitedIds.add(elements.getMember().getId());
 				}
+				res.add(cluster);
 //				this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_);
 				System.out.println("Generated Cluster: root -> " + id + " size -> " + cluster.getMembers().size());
 			}
 		}
+		
+		return res;
 	}
 
 	@Override
@@ -169,9 +183,27 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 	@Override
 	public IntegratedCluster mergeCluster(ClusteringStrategy strategy) {
+		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
+		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
 		List<Long> clusterElements = strategy.execute();
+		memberIdList.retainAll(clusterElements);
+		Set<Long> joinClusterList = new HashSet<> ();
+		if (!memberIdList.isEmpty()) {
+			LOGGER.warn(String.format("Merge Cluster [%s] WITH. Membership conflict %s performing cluster join.", strategy.toString(), memberIdList));
+			
+			for (Long memberId: memberIdList) {
+				joinClusterList.add(assignedMembers.get(memberId));
+//				LOGGER.warn(String.format("Cluster %d marked as candidate", memberIdList));
+			}
+			for (Long clusterId: joinClusterList) {
+//				IntegratedCluster cluster = this.meta.getIntegratedCluster();
+				//ADD ALL IDS TO clusterElements
+				//DELETE CLUSTER
+			}
+			
+		}
 		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
-		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
+		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString());
 	}
 	
 	@Override
@@ -186,15 +218,24 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	@Override
 	public Map<String, Integer> getDataStatistics() {
 		Map<String, Integer> res = new HashMap<> ();
-//		for (String property: this.data.getAllProperties()) {
-//			res.put(property, this.data.listAllPropertyIds(property).size());
-//		}
+		for (String property: this.data.getAllProperties()) {
+			res.put(property, this.data.listAllPropertyIds(property).size());
+		}
+		System.out.println("RETURNED THIS $$$$$$$$$$" + res);
 		return res;
 	}
+	
 	@Override
 	public IntegratedCluster createCluster(ClusteringStrategy strategy) {
+		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
+		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
 		List<Long> clusterElements = strategy.execute();
-		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
+		memberIdList.retainAll(clusterElements);
+		if (!memberIdList.isEmpty()) {
+			LOGGER.warn(String.format("Create Cluster [%s] FAILED. Membership conflict %s", strategy.toString(), memberIdList));
+			return null;
+		}
+		LOGGER.debug(String.format("[%s] generated %d elements", strategy, clusterElements.size()));
 		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
 	}
 }

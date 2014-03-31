@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.chimera.dao;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
@@ -116,6 +119,28 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		@SuppressWarnings("unchecked")
 		List<Long> res = query.list();
 		return res;
+	}
+	
+
+	@Override
+	public Map<Long, Long> getAllAssignedIntegratedMembers(Long integrationSetId) {
+		Map<Long, Long> res = new HashMap<> ();
+		IntegrationSet integrationSet = IntegrationSet.class.cast(this.getSession().get(IntegrationSet.class, integrationSetId));
+		for (IntegratedCluster cluster: integrationSet.getIntegratedClustersMap().values()) {
+			for (IntegratedClusterMember member: cluster.getMembers()) {
+				res.put(member.getMember().getId(), member.getCluster().getId());
+			}
+		}
+		return res;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Long> getAllIntegratedClusterIds(Long integrationSetId) {
+		Query query = this.getSession().createQuery(
+				"SELECT c.id FROM IntegratedCluster c WHERE c.integrationSet.id = :sid");
+		query.setParameter("sid", integrationSetId);
+		return (List<Long>)query.list();
 	}
 
 }

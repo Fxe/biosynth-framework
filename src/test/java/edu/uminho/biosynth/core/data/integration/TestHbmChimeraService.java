@@ -2,6 +2,8 @@ package edu.uminho.biosynth.core.data.integration;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -13,6 +15,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraIntegrationServiceImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.service.CrossreferenceTraversalStrategyImpl;
@@ -58,7 +61,7 @@ public class TestHbmChimeraService {
 	public void testCreateSingleCluster() {
 		ChimeraIntegrationServiceImpl integrator = new ChimeraIntegrationServiceImpl();
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
-		data.setGraphdb(db);
+		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
 		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
 			private Integer base = 0;
@@ -108,7 +111,7 @@ public class TestHbmChimeraService {
 			public String generateKey() { return "GEN_" + base++;}
 		});
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
-		data.setGraphdb(db);
+		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
@@ -141,7 +144,7 @@ public class TestHbmChimeraService {
 			public String generateKey() { return "GEN_" + base++;}
 		});
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
-		data.setGraphdb(db);
+		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
@@ -178,7 +181,7 @@ public class TestHbmChimeraService {
 			public String generateKey() { return "GEN_" + base++;}
 		});
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
-		data.setGraphdb(db);
+		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
@@ -192,8 +195,8 @@ public class TestHbmChimeraService {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
 			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl();
 			strategy.setDb(db);
-			integrator.createClusterCascade(strategy);
-			
+			List<IntegratedCluster> res = integrator.createClusterCascade(strategy);
+			System.out.println(res.size());
 		} catch (Exception e) {
 			db.shutdown();
 			throw e;

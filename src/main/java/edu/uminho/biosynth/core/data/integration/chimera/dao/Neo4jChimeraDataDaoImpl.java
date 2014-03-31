@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -25,20 +28,30 @@ import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	
+	private static Logger LOGGER = Logger.getLogger(Neo4jChimeraDataDaoImpl.class);
+	
 	@Autowired
 	private GraphDatabaseService graphDatabaseService;
 	
 	private ExecutionEngine executionEngine;
 	
 	public Neo4jChimeraDataDaoImpl() { }
+	
+	@PostConstruct
+	public void initialize() {
+		if (executionEngine == null) {
+			this.setGraphDatabaseService(graphDatabaseService);
+		}
+		LOGGER.info(String.format("%s initialized !", this));
+	}
 
-	public GraphDatabaseService getGraphdb() {
+	public GraphDatabaseService getGraphDatabaseService() {
 		return graphDatabaseService;
 	}
 
-	public void setGraphdb(GraphDatabaseService graphdb) {
-		this.graphDatabaseService = graphdb;
-		this.executionEngine = new ExecutionEngine(graphdb);
+	public void setGraphDatabaseService(GraphDatabaseService graphDatabaseService) {
+		this.graphDatabaseService = graphDatabaseService;
+		this.executionEngine = new ExecutionEngine(graphDatabaseService);
 	}
 	
 	public Node getMetaboliteNodeByEntry(String entry, CompoundNodeLabel type) {
@@ -200,7 +213,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<Long> getAllMetaboliteIds() {
 		List<Long> idList = new ArrayList<> ();
-		ExecutionResult res = this.executionEngine.execute("MATCH (cpd:Compound) RETURN ID(cpd) AS id");
+		ExecutionResult res = this.executionEngine.execute("MATCH (cpd:Compound {proxy:false}) RETURN ID(cpd) AS id");
 		List<?> list = IteratorUtil.asList(res.columnAs("id"));
 		for (Object id : list) {
 			idList.add((Long) id);
@@ -211,7 +224,8 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<String> getAllProperties() {
 		List<String> res = new ArrayList<> ();
-		// TODO Auto-generated method stub
+		ExecutionResult execRes = executionEngine.execute("START n=node(*) RETURN DISTINCT labels(n)");
+		System.out.println(execRes.dumpToString());
 		return res;
 	}
 

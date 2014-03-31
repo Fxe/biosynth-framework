@@ -21,13 +21,13 @@ public class Neo4jIntegratedMetaboliteDao implements IMetaboliteDao<IntegratedMe
 	}
 
 	@Override
-	public IntegratedMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public IntegratedMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IntegratedMetaboliteEntity saveMetaboliteInformation(
+	public IntegratedMetaboliteEntity saveMetabolite(
 			IntegratedMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
@@ -57,7 +57,17 @@ public class Neo4jIntegratedMetaboliteDao implements IMetaboliteDao<IntegratedMe
 		return null;
 	}
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public IntegratedMetaboliteEntity getMetaboliteByEntry(String entry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<String> getAllMetaboliteEntries() {
 		// TODO Auto-generated method stub
 		return null;
 	}

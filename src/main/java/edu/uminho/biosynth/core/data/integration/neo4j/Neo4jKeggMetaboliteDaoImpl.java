@@ -55,11 +55,11 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 		engine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
-				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}"
+				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}, cpd.proxy=false "
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
-				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}"
+				+ "cpd.comment={comment}, cpd.molWeight={molWeight}, cpd.remark={remark}, cpd.proxy=false"
 				, params);
 		
 		//MERGE (t:Test {entry:"K"}) ON MATCH SET t.formula="foo"
@@ -80,7 +80,7 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 			engine.execute("MATCH (cpd1:KEGG {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 		}
 		
@@ -125,7 +125,7 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 
 
 	@Override
-	public KeggCompoundMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public KeggCompoundMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -133,7 +133,7 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 
 
 	@Override
-	public KeggCompoundMetaboliteEntity saveMetaboliteInformation(
+	public KeggCompoundMetaboliteEntity saveMetabolite(
 			KeggCompoundMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
@@ -142,7 +142,28 @@ public class Neo4jKeggMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMet
 
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		return this.save(KeggCompoundMetaboliteEntity.class.cast(entity));
+	}
+
+
+
+	@Override
+	public KeggCompoundMetaboliteEntity getMetaboliteByEntry(String entry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:KEGG) RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 }

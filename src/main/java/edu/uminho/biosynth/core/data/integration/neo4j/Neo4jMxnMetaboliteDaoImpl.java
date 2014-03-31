@@ -61,11 +61,11 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		engine.execute("MERGE (cpd:MetaNetX:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, cpd.charge={charge},"
-				+ "cpd.inchi={inchi}, cpd.smiles={smiles}, cpd.originalSource={originalSource}"
+				+ "cpd.inchi={inchi}, cpd.smiles={smiles}, cpd.originalSource={originalSource}, cpd.proxy=false "
 				+ "ON MATCH SET "
 				+ "cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, cpd.charge={charge},"
-				+ "cpd.inchi={inchi}, cpd.smiles={smiles}, cpd.originalSource={originalSource}"
+				+ "cpd.inchi={inchi}, cpd.smiles={smiles}, cpd.originalSource={originalSource}, cpd.proxy=false"
 				, params);
 		
 		if (params.get("formula") != null) {
@@ -92,7 +92,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue();
 			params.put("dbEntry", dbEntry);
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ", params);
+			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
 			engine.execute("MATCH (cpd1:MetaNetX:Compound {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 		}
 		
@@ -121,21 +121,38 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 	}
 
 	@Override
-	public MnxMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public MnxMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public MnxMetaboliteEntity saveMetaboliteInformation(
+	public MnxMetaboliteEntity saveMetabolite(
 			MnxMetaboliteEntity metabolite) {
+		this.save(metabolite);
+		return null;
+	}
+
+	@Override
+	public Serializable saveMetabolite(Object entity) {
+		return this.save(MnxMetaboliteEntity.class.cast(entity));
+	}
+
+	@Override
+	public MnxMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
-		return this.save(MnxMetaboliteEntity.class.cast(entity));
+	public List<String> getAllMetaboliteEntries() {
+		List<String> res = new ArrayList<> ();
+		Iterator<String> iterator = engine.execute(
+				"MATCH (cpd:MetaNetX) RETURN cpd.entry AS entries").columnAs("entries");
+		while (iterator.hasNext()) {
+			res.add(iterator.next());
+		}
+		return res;
 	}
 
 }
