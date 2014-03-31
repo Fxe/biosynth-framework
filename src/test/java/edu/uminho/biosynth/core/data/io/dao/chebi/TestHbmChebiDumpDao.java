@@ -58,7 +58,7 @@ public class TestHbmChebiDumpDao {
 	public void getChebi15377() {
 		HbmChebiDumpDaoImpl dao = new HbmChebiDumpDaoImpl();
 		dao.setSessionFactory(sessionFactory);
-		ChebiMetaboliteEntity cpd = dao.getMetaboliteInformation(15377);
+		ChebiMetaboliteEntity cpd = dao.getMetaboliteById(15377);
 		
 		assertEquals("15377", cpd.getEntry());
 	}
@@ -67,7 +67,7 @@ public class TestHbmChebiDumpDao {
 	public void getChebi5585() {
 		HbmChebiDumpDaoImpl dao = new HbmChebiDumpDaoImpl();
 		dao.setSessionFactory(sessionFactory);
-		ChebiMetaboliteEntity cpd = dao.getMetaboliteInformation(5585);
+		ChebiMetaboliteEntity cpd = dao.getMetaboliteById(5585);
 		
 		assertEquals("5585", cpd.getEntry());
 		assertEquals(3, cpd.getCrossreferences().size());

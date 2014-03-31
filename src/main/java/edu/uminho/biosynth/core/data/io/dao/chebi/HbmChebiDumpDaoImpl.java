@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.chebi;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -238,7 +239,7 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 
 
 	@Override
-	public ChebiMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public ChebiMetaboliteEntity getMetaboliteById(Serializable id) {
 		ChebiDumpMetaboliteEntity cpd = null;
 		if (id instanceof String) {
 			String chebiAccession = ((String)id).startsWith("CHEBI:")?(String)id:"CHEBI:".concat((String)id);
@@ -260,14 +261,35 @@ public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity
 
 
 	@Override
-	public ChebiMetaboliteEntity saveMetaboliteInformation(
+	public ChebiMetaboliteEntity saveMetabolite(
 			ChebiMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
 
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		throw new RuntimeException("Unsupported Operation");
+	}
+
+
+	@Override
+	public ChebiMetaboliteEntity getMetaboliteByEntry(String entry) {
+		throw new RuntimeException("Not implememted yet");
+	}
+
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		Query query = this.getSession().createQuery("SELECT cpd.accessionNumber FROM ChebiDumpMetaboliteEntity cpd");
+		@SuppressWarnings("unchecked")
+		List<String> accessions = query.list();
+		Set<String> entries = new HashSet<> ();
+		for (String accession:accessions) {
+			if (!entries.add(accession.replace("CHEBI:", ""))) {
+				LOGGER.warn(String.format("Duplicated Accession [%s] Found in the ChEBI dump library", accession));
+			}
+		}
+		return new ArrayList<String> (entries);
 	}
 }
