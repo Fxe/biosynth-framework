@@ -15,7 +15,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteInformation("D00066");
+		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteById("D00066");
 
 		System.out.println(cpd);
 		assertEquals("D00066", cpd.getEntry());
@@ -35,7 +35,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteInformation("D00063");
+		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteById("D00063");
 
 		System.out.println(cpd);
 		assertEquals("D00063", cpd.getEntry());
@@ -55,7 +55,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteInformation("D00092");
+		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteById("D00092");
 
 		System.out.println(cpd);
 		assertEquals("D00092", cpd.getEntry());
@@ -64,7 +64,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		assertEquals(null, cpd.getTarget());
 		assertEquals(null, cpd.getMetabolism());
 		assertEquals(null, cpd.getProduct());
-		assertEquals(true, cpd.getMol2d() != null);
+		assertEquals(true, cpd.getMol2d() == null);
 		assertEquals("Coptis japonica [TAX:3442], Coptis chinensis [TAX:261450], Coptis deltoidea [TAX:261449], Coptis teeta [TAX:261448]", cpd.getDrugSource());
 		assertEquals("Berberine [CPD:C00757], Palmatine [CPD:C05315], Jateorrhizine [CPD:C09553], Coptisine [CPD:C16938], Worenine [CPD:C17083], Magnoflorine [CPD:C09581], Ferulic acid [CPD:C01494], Chlorogenic acid [CPD:C00852], Tetrahydroberberine [CPD:C03329], Tetrahydropalmatine [CPD:C02890]", cpd.getComponent());
 	}
@@ -77,7 +77,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteInformation("D00085");
+		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteById("D00085");
 
 		System.out.println(cpd);
 		assertEquals("D00085", cpd.getEntry());
@@ -86,7 +86,7 @@ public class TestRestKeggDrugMetaboliteDaoImpl {
 		assertEquals(true, cpd.getTarget() != null);
 		assertEquals(null, cpd.getMetabolism());
 		assertEquals(null, cpd.getProduct());
-		assertEquals(true, cpd.getMol2d() != null);
+		assertEquals(true, cpd.getMol2d() == null);
 		assertEquals(true, cpd.getSequence() != null);
 		assertEquals(null, cpd.getDrugSource());
 		assertEquals(null, cpd.getComponent());

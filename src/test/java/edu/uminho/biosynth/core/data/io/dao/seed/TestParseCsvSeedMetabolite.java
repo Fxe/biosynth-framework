@@ -35,6 +35,7 @@ import edu.uminho.biosynth.core.components.biodb.seed.SeedReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
+import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class TestParseCsvSeedMetabolite {

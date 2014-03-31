@@ -44,7 +44,7 @@ public class TestRestKeggGlycanMetaboliteDaoImpl {
 			System.out.println(ff);
 			KeggGlycanMetaboliteFlatFileParser parser = new KeggGlycanMetaboliteFlatFileParser(ff);
 			System.out.println(parser.getTabs());
-			KeggGlycanMetaboliteEntity cpd = dao.getMetaboliteInformation(cpdId);
+			KeggGlycanMetaboliteEntity cpd = dao.getMetaboliteById(cpdId);
 			System.out.println(cpd);
 		}
 	}

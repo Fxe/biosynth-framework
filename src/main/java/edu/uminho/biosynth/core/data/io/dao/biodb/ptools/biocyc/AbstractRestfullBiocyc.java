@@ -11,7 +11,7 @@ import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
 public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMetaboliteEntity> {
-
+	
 	private String localStorage;
 	private boolean useLocalStorage = false;
 	private boolean saveLocalStorage = false;
@@ -26,7 +26,6 @@ public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMet
 		String httpResponseString = null;
 //		String dataFileStr = localStorage  + entityType + "/" + entry + "." + extension;
 		File dataFile = new File(localPath);
-		System.out.println(dataFile);
 		boolean didFetch = false;
 		//check local file
 		if (useLocalStorage && dataFile.exists()) {
@@ -54,10 +53,10 @@ public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMet
 	public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
 	
 	@Override
-	public abstract BioCycMetaboliteEntity getMetaboliteInformation(Serializable id);
+	public abstract BioCycMetaboliteEntity getMetaboliteById(Serializable id);
 
 	@Override
-	public abstract BioCycMetaboliteEntity saveMetaboliteInformation(
+	public abstract BioCycMetaboliteEntity saveMetabolite(
 			BioCycMetaboliteEntity metabolite);
 
 	@Override

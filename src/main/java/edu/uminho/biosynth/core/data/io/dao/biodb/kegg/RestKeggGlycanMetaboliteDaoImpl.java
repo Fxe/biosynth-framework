@@ -53,7 +53,7 @@ public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboli
 	}
 
 	@Override
-	public KeggGlycanMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public KeggGlycanMetaboliteEntity getMetaboliteById(Serializable id) {
 		String restGlQuery = String.format(RestKeggGlycanMetaboliteDaoImpl.restGlQuery, id);
 		String restGlMolQuery = String.format(RestKeggGlycanMetaboliteDaoImpl.restGlMolQuery, id);
 		
@@ -81,7 +81,7 @@ public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboli
 		cpd.setCompoundClass(parser.getMetaboliteClass());
 		cpd.setRemark(parser.getRemark());
 		cpd.setComment(parser.getComment());
-		if (!glMolFile.isEmpty()) {
+		if (glMolFile != null && !glMolFile.isEmpty()) {
 			cpd.setMol2d(glMolFile);
 		}
 		cpd.setCrossReferences(parser.getCrossReferences());
@@ -106,15 +106,41 @@ public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboli
 	}
 
 	@Override
-	public KeggGlycanMetaboliteEntity saveMetaboliteInformation(
+	public KeggGlycanMetaboliteEntity saveMetabolite(
 			KeggGlycanMetaboliteEntity metabolite) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public KeggGlycanMetaboliteEntity getMetaboliteByEntry(String entry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		List<String> cpdIds = new ArrayList<>();
+		String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "gl");
+		String localPath = this.getLocalStorage() + "query" + "/glycan.txt";
+		try {
+			String httpResponseString = getLocalOrWeb(restListDrQuery, localPath);
+			String[] httpResponseLine = httpResponseString.split("\n");
+			for ( int i = 0; i < httpResponseLine.length; i++) {
+//				dr:D10517\tCrisantaspase (JAN)
+				String[] values = httpResponseLine[i].split("\\t");
+//				remove dr:
+				cpdIds.add(values[0].substring(3));
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		return cpdIds;
 	}
 
 }

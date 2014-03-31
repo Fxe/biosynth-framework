@@ -55,10 +55,10 @@ public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMet
 	public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
 	
 	@Override
-	public abstract M getMetaboliteInformation(Serializable id);
+	public abstract M getMetaboliteById(Serializable id);
 
 	@Override
-	public abstract M saveMetaboliteInformation(M metabolite);
+	public abstract M saveMetabolite(M metabolite);
 
 	@Override
 	public abstract M find(Serializable id);

@@ -6,6 +6,7 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@Deprecated
 public class BiggHbmDaoImpl extends GenericEntityDaoImpl {
 
 	public Serializable save(BiggMetaboliteEntity entity) {

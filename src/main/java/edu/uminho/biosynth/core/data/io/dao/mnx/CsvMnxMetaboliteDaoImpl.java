@@ -23,8 +23,21 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 	private File crossreferenceCsvFile;
 	
 	private Map<Serializable, Integer> entrySeekPosition = new HashMap<> ();
-	private Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap;
+	private Map<String, MnxMetaboliteEntity> cachedData = new HashMap<> ();
+	private Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap = new HashMap<> ();
 	
+	private boolean bulkAccess = false;
+	
+	
+	
+	public boolean isBulkAccess() {
+		return bulkAccess;
+	}
+
+	public void setBulkAccess(boolean bulkAccess) {
+		this.bulkAccess = bulkAccess;
+	}
+
 	private String seekFileLine(File file, int pos) throws IOException{
 		if (pos < 0) return null;
 		
@@ -55,6 +68,12 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 
 	public void setCrossreferenceCsvFile(File crossreferenceCsvFile) {
 		this.crossreferenceCsvFile = crossreferenceCsvFile;
+		this.xrefMap.clear();
+		try {
+			this.xrefMap = parseMetaboliteCrossReferences();
+		} catch (IOException e) {
+			//TODO: LOGGER
+		}
 	}
 
 	public void parseMetaboliteCrossReference(Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap, String record) {
@@ -147,16 +166,33 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 	}
 	
 	@Override
-	public MnxMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public MnxMetaboliteEntity getMetaboliteById(Serializable id) {
+		if(this.bulkAccess && cachedData.isEmpty()) {
+			try {
+				for (MnxMetaboliteEntity cpd: this.parseMetabolites()) {
+					this.cachedData.put(cpd.getEntry(), cpd);
+				}
+			} catch (IOException e) {
+				//TODO: LOGGER
+			}
+		}
+		
+		if (cachedData.containsKey(id)) {
+			MnxMetaboliteEntity cpd = cachedData.get(id);
+			for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(id)) {
+				xref.setMnxMetaboliteEntity(cpd);
+				cpd.addCrossReference(xref);
+			}
+			
+			return cpd;
+		}
+		
 		if (!this.entrySeekPosition.containsKey(id)) {
 			this.getAllMetaboliteIds();
 		}
 		MnxMetaboliteEntity cpd = null;
 		try {
 			if (this.entrySeekPosition.containsKey(id.toString())) {
-				if (this.xrefMap == null) {
-					this.xrefMap = parseMetaboliteCrossReferences();
-				}
 				String record = this.seekFileLine(metaboliteCsvFile, this.entrySeekPosition.get(id));
 				cpd = this.parseMetabolite(record);
 				for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(id)) {
@@ -171,7 +207,7 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 	}
 
 	@Override
-	public MnxMetaboliteEntity saveMetaboliteInformation(
+	public MnxMetaboliteEntity saveMetabolite(
 			MnxMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
@@ -218,8 +254,73 @@ public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEnti
 	}
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public MnxMetaboliteEntity getMetaboliteByEntry(String entry) {
+		if(this.bulkAccess && cachedData.isEmpty()) {
+			try {
+				for (MnxMetaboliteEntity cpd: this.parseMetabolites()) {
+					this.cachedData.put(cpd.getEntry(), cpd);
+				}
+			} catch (IOException e) {
+				//TODO: LOGGER
+			}
+		}
+		
+		if (cachedData.containsKey(entry)) {
+			MnxMetaboliteEntity cpd = cachedData.get(entry);
+			for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(entry)) {
+				xref.setMnxMetaboliteEntity(cpd);
+				cpd.addCrossReference(xref);
+			}
+			
+			return cpd;
+		}
+		
+		if (!this.entrySeekPosition.containsKey(entry)) {
+			this.getAllMetaboliteIds();
+		}
+		MnxMetaboliteEntity cpd = null;
+		try {
+			if (this.entrySeekPosition.containsKey(entry.toString())) {
+				String record = this.seekFileLine(metaboliteCsvFile, this.entrySeekPosition.get(entry));
+				cpd = this.parseMetabolite(record);
+				for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(entry)) {
+					xref.setMnxMetaboliteEntity(cpd);
+					cpd.addCrossReference(xref);
+				}
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		return cpd;
+	}
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		List<String> idList = new ArrayList<> ();
+		int line = 0;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(metaboliteCsvFile));
+			String readLine = null;
+			while ( (readLine = br.readLine()) != null) {
+				if (readLine.trim().charAt(0) != '#') {
+					String[] values = readLine.split("\t");
+					String entry = values[0].trim(); 
+					idList.add(entry);
+					this.entrySeekPosition.put(entry, line);
+				}
+				line++;
+			}
+			br.close();
+		} catch(IOException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		return idList;
 	}
 
 }

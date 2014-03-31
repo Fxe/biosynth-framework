@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.seed;
+package edu.uminho.biosynth.core.data.io.dao.biodb.seed;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 	
 	private JsonNode rootNode;
 	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
-	private Map<Serializable, SeedMetaboliteEntity> metaboliteMap;
+	private Map<String, SeedMetaboliteEntity> metaboliteMap;
 	
 	public File getJsonFile() { return jsonFile;}
 	public void setJsonFile(File jsonFile) { this.jsonFile = jsonFile;}
@@ -210,11 +210,11 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 		if (this.metaboliteMap == null) {
 			this.findAll();
 		}
-		return new ArrayList<>(this.metaboliteMap.keySet());
+		return new ArrayList<Serializable>(this.metaboliteMap.keySet());
 	}
 	
 	@Override
-	public SeedMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public SeedMetaboliteEntity getMetaboliteById(Serializable id) {
 		if (this.metaboliteMap == null) {
 			this.findAll();
 		}
@@ -225,13 +225,27 @@ public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteE
 	}
 	
 	@Override
-	public SeedMetaboliteEntity saveMetaboliteInformation(
+	public SeedMetaboliteEntity saveMetabolite(
 			SeedMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
 	
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		throw new RuntimeException("Unsupported Operation");
+	}
+	
+	@Override
+	public SeedMetaboliteEntity getMetaboliteByEntry(String entry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		if (this.metaboliteMap == null) {
+			this.findAll();
+		}
+		return new ArrayList<String>(this.metaboliteMap.keySet());
 	}
 }

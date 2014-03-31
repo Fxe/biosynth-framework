@@ -67,18 +67,18 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocyc {
 	public void setPgdb(String pgdb) { this.pgdb = pgdb;}
 
 	@Override
-	public BioCycMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
 		String restCpdQuery = String.format(RestBiocycMetaboliteDaoImpl.xmlGet, pgdb, id);
 		BioCycMetaboliteEntity cpd = null;
 		
-		LOGGER.debug(String.format("Query - %s", restCpdQuery));
 		
+		LOGGER.debug(String.format("Query: %s", restCpdQuery));
 		try {
 			String localPath = String.format("%scompound/%s/%s", this.getLocalStorage(), pgdb, id);
 			
 			String xmlDoc = null;
 			
-			
+			LOGGER.debug(String.format("Local Path: %s", localPath));
 			xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
 			BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
 			
@@ -131,7 +131,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocyc {
 	}
 
 	@Override
-	public BioCycMetaboliteEntity saveMetaboliteInformation(
+	public BioCycMetaboliteEntity saveMetabolite(
 			BioCycMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
@@ -172,13 +172,24 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocyc {
 
 	@Override
 	public Serializable save(BioCycMetaboliteEntity entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public Serializable saveMetabolite(Object entity) {
+		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public BioCycMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(Object entity) {
-		throw new RuntimeException("Unsupported Operation");
+	public List<String> getAllMetaboliteEntries() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
