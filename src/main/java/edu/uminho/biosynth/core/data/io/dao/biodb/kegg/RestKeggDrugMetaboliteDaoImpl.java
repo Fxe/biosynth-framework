@@ -113,19 +113,17 @@ public class RestKeggDrugMetaboliteDaoImpl extends AbstractRestfulKeggMetabolite
 	@Override
 	public KeggDrugMetaboliteEntity saveMetabolite(
 			KeggDrugMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Unsupported Operation");
 	}
 
 	@Override
-	public Serializable saveMetabolite(Object entity) {
+	public Serializable saveMetabolite(Object metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
 
 	@Override
 	public KeggDrugMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getMetaboliteById(entry);
 	}
 
 	@Override

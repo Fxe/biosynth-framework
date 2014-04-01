@@ -119,8 +119,7 @@ public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboli
 
 	@Override
 	public KeggGlycanMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getMetaboliteById(entry);
 	}
 
 	@Override

@@ -122,8 +122,7 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 
 	@Override
 	public KeggCompoundMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getMetaboliteById(entry);
 	}
 
 	@Override
