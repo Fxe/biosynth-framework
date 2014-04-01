@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.mnx;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,11 +9,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 
-public class HbmKeggDrugMetaboliteDaoImpl implements IMetaboliteDao<KeggDrugMetaboliteEntity> {
+@Repository
+public class HbmMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEntity> {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -26,62 +28,64 @@ public class HbmKeggDrugMetaboliteDaoImpl implements IMetaboliteDao<KeggDrugMeta
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
 	@Override
-	public KeggDrugMetaboliteEntity getMetaboliteById(Serializable id) {
-		return KeggDrugMetaboliteEntity.class.cast(this.getSession().get(KeggDrugMetaboliteEntity.class, id));
+	public MnxMetaboliteEntity getMetaboliteById(Serializable id) {
+		Object cpd = this.getSession().get(MnxMetaboliteEntity.class, id);
+		return MnxMetaboliteEntity.class.cast(cpd);
 	}
 
 	@Override
-	public KeggDrugMetaboliteEntity saveMetabolite(
-			KeggDrugMetaboliteEntity metabolite) {
+	public MnxMetaboliteEntity saveMetabolite(MnxMetaboliteEntity metabolite) {
 		this.getSession().save(metabolite);
-		return null;
-	}
-
-	@Override
-	public KeggDrugMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		return metabolite;
 	}
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
-		Query query = this.getSession().createQuery("SELECT cpd.id FROM KeggDrugMetaboliteEntity cpd");
+		Query query = this.getSession().createQuery("SELECT cpd.id FROM MnxMetaboliteEntity cpd");
 		@SuppressWarnings("unchecked")
 		List<Serializable> res = query.list();
 		return res;
 	}
 
 	@Override
-	public List<KeggDrugMetaboliteEntity> findAll() {
+	public MnxMetaboliteEntity find(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Serializable save(KeggDrugMetaboliteEntity metabolite) {
-		return this.getSession().save(metabolite);
+	public List<MnxMetaboliteEntity> findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public Serializable saveMetabolite(Object entity) {
-		return this.save(KeggDrugMetaboliteEntity.class.cast(entity));
+	public Serializable save(MnxMetaboliteEntity entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public KeggDrugMetaboliteEntity getMetaboliteByEntry(String entry) {
-		KeggDrugMetaboliteEntity cpd = null;
-		Criteria criteria = this.getSession().createCriteria(KeggDrugMetaboliteEntity.class);
+	public Serializable saveMetabolite(Object metabolite) {
+		this.getSession().save(metabolite);
+		return null;
+	}
+
+	@Override
+	public MnxMetaboliteEntity getMetaboliteByEntry(String entry) {
+		MnxMetaboliteEntity cpd = null;
+		Criteria criteria = this.getSession().createCriteria(MnxMetaboliteEntity.class);
 		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
 		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
 		for (Object o: res) {
-			cpd = KeggDrugMetaboliteEntity.class.cast(o);
+			cpd = MnxMetaboliteEntity.class.cast(o);
 		}
 		return cpd;
 	}
 
 	@Override
 	public List<String> getAllMetaboliteEntries() {
-		Query query = this.getSession().createQuery("SELECT cpd.entry FROM KeggDrugMetaboliteEntity cpd");
+		Query query = this.getSession().createQuery("SELECT cpd.entry FROM MnxMetaboliteEntity cpd");
 		@SuppressWarnings("unchecked")
 		List<String> res = query.list();
 		return res;

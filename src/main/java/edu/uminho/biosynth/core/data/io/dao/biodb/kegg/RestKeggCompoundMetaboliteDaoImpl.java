@@ -17,7 +17,7 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 	private static final String restCpdMolQuery = "http://rest.kegg.jp/get/cpd:%s/mol";
 	
 	@Override
-	public KeggCompoundMetaboliteEntity getMetaboliteInformation(Serializable id) {
+	public KeggCompoundMetaboliteEntity getMetaboliteById(Serializable id) {
 		String restCpdQuery = String.format(RestKeggCompoundMetaboliteDaoImpl.restCpdQuery, id);
 		String restCpdMolQuery = String.format(RestKeggCompoundMetaboliteDaoImpl.restCpdMolQuery, id);
 		
@@ -71,7 +71,7 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 	}
 
 	@Override
-	public KeggCompoundMetaboliteEntity saveMetaboliteInformation(
+	public KeggCompoundMetaboliteEntity saveMetabolite(
 			KeggCompoundMetaboliteEntity metabolite) {
 		throw new RuntimeException("Unsupported Operation");
 	}
@@ -116,8 +116,31 @@ public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetabo
 //	private static final String restDrMolQuery = "http://rest.kegg.jp/get/dr:%s/mol";
 
 	@Override
-	public Serializable save(Object entity) {
+	public Serializable saveMetabolite(Object entity) {
 		throw new RuntimeException("Unsupported Operation");
+	}
+
+	@Override
+	public KeggCompoundMetaboliteEntity getMetaboliteByEntry(String entry) {
+		return this.getMetaboliteById(entry);
+	}
+
+	@Override
+	public List<String> getAllMetaboliteEntries() {
+		List<String> cpdIds = new ArrayList<>();
+		String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "cpd");
+		String localPath = this.getLocalStorage() + "query" + "/compound.txt";
+		try {
+			String httpResponseString = getLocalOrWeb(restListDrQuery, localPath);
+			String[] httpResponseLine = httpResponseString.split("\n");
+			for ( int i = 0; i < httpResponseLine.length; i++) {
+				String[] values = httpResponseLine[i].split("\\t");
+				cpdIds.add(values[0].substring(4));
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		return cpdIds;
 	}
 
 

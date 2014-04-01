@@ -15,7 +15,7 @@ public class TestRestBiocycMetaCycMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		BioCycMetaboliteEntity cpd = dao.getMetaboliteInformation("WATER");
+		BioCycMetaboliteEntity cpd = dao.getMetaboliteById("WATER");
 
 		assertEquals("WATER", cpd.getEntry());
 		assertEquals("H2O1", cpd.getFormula());
@@ -29,7 +29,7 @@ public class TestRestBiocycMetaCycMetaboliteDaoImpl {
 		dao.setSaveLocalStorage(true);
 		dao.setUseLocalStorage(true);
 		
-		BioCycMetaboliteEntity cpd = dao.getMetaboliteInformation("CPD-10773");
+		BioCycMetaboliteEntity cpd = dao.getMetaboliteById("CPD-10773");
 		
 		assertEquals("CPD-10773", cpd.getEntry());
 		assertEquals("C5H8O4", cpd.getFormula());
