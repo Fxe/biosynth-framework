@@ -31,7 +31,7 @@ public class GenericEntityDaoImpl implements IGenericDao {
 
 	@Override
 	public <T> T find(Class<T> type, Serializable id) {
-		System.out.println(type.getClass().toString());
+//		System.out.println(type.getClass().toString());
 		return type.cast(this.currentSession().get(type, id));
 	}
 
