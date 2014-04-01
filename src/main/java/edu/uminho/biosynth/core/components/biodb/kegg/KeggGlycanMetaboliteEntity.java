@@ -21,7 +21,7 @@ public class KeggGlycanMetaboliteEntity extends AbstractKeggMetabolite {
 	
 	private static final long serialVersionUID = 3012848505621097134L;
 
-	@Column(name="mass")
+	@Column(name="mass", length=255)
 	private String mass;
 	public String getMass() { return mass;}
 	public void setMass(String mass) { this.mass = mass;}

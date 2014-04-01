@@ -22,11 +22,11 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="MASS") private Double mass;
+	@Column(name="mass") private Double mass;
 	public Double getMass() { return mass;}
 	public void setMass(Double mass) { this.mass = mass;}
 	
-	@Column(name="MOLW") private Double molWeight;
+	@Column(name="molw") private Double molWeight;
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
 	

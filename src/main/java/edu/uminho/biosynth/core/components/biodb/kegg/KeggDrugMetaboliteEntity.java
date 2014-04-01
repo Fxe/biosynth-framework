@@ -20,7 +20,7 @@ public class KeggDrugMetaboliteEntity extends AbstractKeggMetabolite {
 //	String component;
 //	String source;
 	
-	@Column(name="MASS") private Double mass;
+	@Column(name="mass") private Double mass;
 	
 	@Column(name="molw")
 	private Double molWeight;
