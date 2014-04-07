@@ -1,0 +1,102 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_STACK_OVERFLOW (0xc00000fd) at pc=0x7790f2cc, pid=11620, tid=12220
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0-b132) (build 1.8.0-b132)
+# Java VM: Java HotSpot(TM) Client VM (25.0-b70 mixed mode windows-x86 )
+# Problematic frame:
+# C  [ntdll.dll+0x3f2cc]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x02c5c000):  JavaThread "main" [_thread_in_native, id=12220, stack(0x01030000,0x01080000)]
+
+siginfo: ExceptionCode=0xc00000fd, ExceptionInformation=0x00000001 0x01030fb0 
+
+Registers:
+EAX=0x02c527e0, EBX=0x02c50000, ECX=0x00fb0000, EDX=0x00000001
+ESP=0x01030fb4, EBP=0x01031000, ESI=0x00000004, EDI=0x00000000
+EIP=0x7790f2cc, EFLAGS=0x00010216
+
+Top of Stack: (sp=0x01030fb4)
+0x01030fb4:   00000000 00000000 00000000 00000000
+0x01030fc4:   00000000 00000000 00000000 00000000
+0x01030fd4:   00000000 00000000 00000000 00000000
+0x01030fe4:   00000000 00000000 00000000 00000000
+0x01030ff4:   00000000 00000000 00000000 01031088
+0x01031004:   7790e9b1 00000004 00000000 3fffffff
+0x01031014:   01031174 00000004 00000000 00000000
+0x01031024:   00000002 00000002 00000000 00000000 
+
+Instructions: (pc=0x7790f2cc)
+0x7790f2ac:   ff ff ff f0 0f b1 0f 8b d8 83 fb fe 0f 85 4e 4e
+0x7790f2bc:   fc ff c3 90 90 90 90 90 8b ff 55 8b ec 83 ec 4c
+0x7790f2cc:   53 0f b7 c2 83 c0 6e 56 8b f1 33 c9 57 89 75 e0
+0x7790f2dc:   89 4d e8 8d 3c 86 64 a1 18 00 00 00 89 7d cc 0f 
+
+
+Register to memory mapping:
+
+EAX=0x02c527e0 is an unknown value
+EBX=0x02c50000 is an unknown value
+ECX=0x00fb0000 is an unknown value
+EDX=0x00000001 is an unknown value
+ESP=0x01030fb4 is pointing into the stack for thread: 0x02c5c000
+EBP=0x01031000 is pointing into the stack for thread: 0x02c5c000
+ESI=0x00000004 is an unknown value
+EDI=0x00000000 is an unknown value
+
+
+Stack: [0x01030000,0x01080000],  sp=0x01030fb4,  free space=3k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [ntdll.dll+0x3f2cc]
+C  [ntdll.dll+0x3e9b1]
+C  [msvcr100.dll+0x10269]
+C  [msvcr100.dll+0x1233b]
+C  [openbabel-2.dll+0xbea14]
+C  [openbabel-2.dll+0x8bee2]
+C  [openbabel-2.dll+0x70c17]
+C  [openbabel-2.dll+0xa960]
+C  [openbabel-2.dll+0x393f6]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38bfa]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C  [openbabel-2.dll+0x394cc]
+C  [openbabel-2.dll+0x38da0]
+C  [openbabel-2.dll+0x394fc]
+C

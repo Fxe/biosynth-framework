@@ -5,8 +5,12 @@ import org.openbabel.OBMol;
 
 public class OpenBabelWrapper {
 	
+//	public static boolean INITIALIZED = false;
+	
 	public static void initializeLibrary() {
+//		System.out.println(System.getProperty("java.library.path"));
 		System.loadLibrary("openbabel_java");
+//		INITIALIZED = true;
 	}
 	
 	public static String convert(String data, String in, String out) {
