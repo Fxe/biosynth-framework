@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 
 public interface ChimeraIntegrationService {
 	public IntegrationSet createNewIntegrationSet(String name, String description);

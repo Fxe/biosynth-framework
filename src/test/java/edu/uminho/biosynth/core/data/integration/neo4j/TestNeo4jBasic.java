@@ -93,7 +93,7 @@ public class TestNeo4jBasic {
 	public void testKegg() {
 		KeggRemoteSource.LOCALCACHE = "D:/home/data/kegg";
 		KeggRemoteSource keggRemoteDao = new KeggRemoteSource();
-		Neo4jKeggMetaboliteDaoImpl keggDao = new Neo4jKeggMetaboliteDaoImpl(db);
+		Neo4jKeggCompoundMetaboliteDaoImpl keggDao = new Neo4jKeggCompoundMetaboliteDaoImpl(db);
 		
 		try ( Transaction tx = db.beginTx()) {
 			KeggCompoundMetaboliteEntity keggCpd1 = keggRemoteDao.getMetaboliteInformation("C00001");

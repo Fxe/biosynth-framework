@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
@@ -82,43 +85,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		for (Long id: this.currentIntegrationSet.getIntegratedClustersMap().keySet()) {			
 			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().get(id);
 			
-			if (!cluster.getMembers().isEmpty()) {
-				IntegratedMetaboliteEntity cpd = new IntegratedMetaboliteEntity();
-				
-				cpd.setEntry(cluster.getName());
-				cpd.setSource(this.currentIntegrationSet.getName());
-				
-				LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from Cluster[%d]", cpd.getEntry(), cluster.getId())));
-				
-				for (IntegratedClusterMember member: cluster.getMembers()) {
-					Long memberId = member.getMember().getId();
-					Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
-					if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
-					System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));
-					Map<String, List<Object>> data = this.data.getCompositeNode((Long)memberId);
-//					System.out.println("DATA -> " + data);
-					if (data.containsKey("crossreferences")) {
-						for (Object xrefObj : data.get("crossreferences")) {
-							IntegratedMetaboliteCrossreferenceEntity xref = (IntegratedMetaboliteCrossreferenceEntity) xrefObj;
-//							IntegratedMetaboliteCrossreferenceEntity xref = 
-//									new IntegratedMetaboliteCrossreferenceEntity(xref_);
-							xref.setIntegratedMetaboliteEntity(cpd);
-							cpd.getCrossreferences().add(xref);
-						}
-						data.remove("crossreferences");
-					}
-//					System.out.println(data);
-					for (String property : data.keySet()) {
-						for (Object value: data.get(property)) addPropertyToIntegratedMetabolite(cpd, property, value);
-//						System.out.println("PROPERTY -> " + property);
-					}
-				}
-//				System.out.println(cpd);
-				res.add(cpd);
-			} else {
-				LOGGER.warn(String.format("Skipped Cluster[%d] - Empty", cluster.getId()));
-			}
-			
+			IntegratedMetaboliteEntity cpd = this.buildCompound(cluster);
+			if (cpd != null) res.add(cpd);
 		}
 		
 		return res;
@@ -142,10 +110,90 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void changeIntegrationSet(Long id) {
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
 		this.currentIntegrationSet = integrationSet;
 	}
+	
+	@Override
+	public IntegratedMetaboliteEntity buildCompoundByClusterId(Long id) {
+		IntegratedCluster cluster = this.meta.getIntegratedClusterById(id);
+		return this.buildCompound(cluster);
+	}
+	
+	@Override
+	public IntegratedMetaboliteEntity buildCompoundByClusterName(String cpdId) {
+		IntegratedCluster cluster = this.meta.getIntegratedClusterByName(cpdId);
+		System.out.println(cluster);
+		return this.buildCompound(cluster);
+	}
 
+	@Override
+	public IntegratedMetaboliteEntity buildCompoundByClusterMemberId(Long id) {
+		IntegratedMember member = this.meta.getIntegratedMember(id);
+		if (member == null) {
+			LOGGER.warn(String.format("Member not found [%d]", id));
+			return null;
+		}
+		
+		if (member.getClusters().isEmpty()) return null;
+		if (member.getClusters().size() > 1) {
+			LOGGER.warn(String.format("Integrity fault - multiple clusters for member [%d]", id));
+		}
+		
+		IntegratedCluster cluster = member.getClusters().iterator().next().getCluster();
+		
+		
+		return this.buildCompound(cluster);
+	}
+	
+	public IntegratedMetaboliteEntity buildCompound(String entry, Label...labels) {
+		Node node = this.data.getCompositeNode(entry, labels);
+
+		return this.buildCompoundByClusterMemberId(node.getId());
+	}
+
+	private IntegratedMetaboliteEntity buildCompound(IntegratedCluster cluster) {
+		IntegratedMetaboliteEntity cpd = null;
+		
+		if (!cluster.getMembers().isEmpty()) {
+			cpd = new IntegratedMetaboliteEntity();
+			
+			cpd.setEntry(cluster.getName());
+			cpd.setSource(this.currentIntegrationSet.getName());
+			
+			LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from Cluster[%d]", cpd.getEntry(), cluster.getId())));
+			
+			for (IntegratedClusterMember member: cluster.getMembers()) {
+				Long memberId = member.getMember().getId();
+				Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
+				if (!(Boolean)nodeProps.get("proxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
+//				if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
+//				System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));
+				Map<String, List<Object>> data = this.data.getCompositeNode((Long)memberId);
+//				System.out.println("DATA -> " + data);
+				if (data.containsKey("crossreferences")) {
+					for (Object xrefObj : data.get("crossreferences")) {
+						IntegratedMetaboliteCrossreferenceEntity xref = (IntegratedMetaboliteCrossreferenceEntity) xrefObj;
+//						IntegratedMetaboliteCrossreferenceEntity xref = 
+//								new IntegratedMetaboliteCrossreferenceEntity(xref_);
+						xref.setIntegratedMetaboliteEntity(cpd);
+						cpd.getCrossreferences().add(xref);
+					}
+					data.remove("crossreferences");
+				}
+//				System.out.println(data);
+				for (String property : data.keySet()) {
+					for (Object value: data.get(property)) addPropertyToIntegratedMetabolite(cpd, property, value);
+//					System.out.println("PROPERTY -> " + property);
+				}
+			}
+//			System.out.println(cpd);
+		} else {
+			LOGGER.warn(String.format("Skipped Cluster[%d] - Empty", cluster.getId()));
+		}
+		return cpd;
+	}
 }

@@ -133,7 +133,7 @@ public class Neo4jLoadDatabases {
 	public void testKegg() {
 		KeggRemoteSource.LOCALCACHE = "D:/home/data/kegg";
 		KeggRemoteSource keggRemoteDao = new KeggRemoteSource();
-		Neo4jKeggMetaboliteDaoImpl keggNeo4jDao = new Neo4jKeggMetaboliteDaoImpl(db);
+		Neo4jKeggCompoundMetaboliteDaoImpl keggNeo4jDao = new Neo4jKeggCompoundMetaboliteDaoImpl(db);
 		
 		List<String> skipEntries = new ArrayList<> ();
 		try ( Transaction tx = db.beginTx()) {

@@ -31,6 +31,7 @@ public class BioDbDictionary {
 		 *    Only characters and '_'
 		 */
 		Map<String, String> dictionary = new HashMap<> ();
+		dictionary.put("LipidBank", "LipidBank");
 		dictionary.put("lipidmaps", "LipidMAPS");
 		dictionary.put("LIPID MAPS instance accession", "LipidMAPS");
 		dictionary.put("CHEMSPIDER", "ChemSpider");

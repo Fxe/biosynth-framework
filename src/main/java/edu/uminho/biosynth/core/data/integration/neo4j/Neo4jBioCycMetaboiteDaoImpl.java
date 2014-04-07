@@ -140,14 +140,14 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		for (String rxnId : cpd.getReactions()) {
 			params.put("rxnId", rxnId);
 			LOGGER.debug(String.format("Generating Reference to reaction; %s", rxnId));
-			engine.execute("MERGE (rxn:" + biocycSubDb + ":Reaction {entry:{rxnId}}) ON CREATE SET rxn.proxy=true", params);
+			engine.execute("MERGE (rxn:" + biocycSubDb + ":BioCyc:Reaction {entry:{rxnId}}) ON CREATE SET rxn.proxy=true", params);
 			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (rxn:" + biocycSubDb + " {entry:{rxnId}}) MERGE (cpd)-[r:ParticipatesIn]->(rxn)", params);
 		}
 		
 		for (String cpdId : cpd.getParents()) {
 			params.put("parentId", cpdId);
 			LOGGER.debug(String.format("Generating Reference to Parent Compound; %s", cpdId));
-			engine.execute("MERGE (cpd:" + biocycSubDb + ":Compound {entry:{parentId}}) ON CREATE SET cpd.proxy=true", params);
+			engine.execute("MERGE (cpd:" + biocycSubDb + ":BioCyc:Compound {entry:{parentId}}) ON CREATE SET cpd.proxy=true", params);
 			engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + biocycSubDb + " {entry:{parentId}}) MERGE (cpd1)-[r:InstanseOf]->(cpd2)", params);
 		}
 		
@@ -185,7 +185,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 	@Override
 	public BioCycMetaboliteEntity saveMetabolite(
 			BioCycMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
+		this.save(metabolite);
 		return null;
 	}
 
@@ -204,7 +204,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
 		Iterator<String> iterator = engine.execute(
-				"MATCH (cpd:" + subDb + ") RETURN cpd.entry AS entries").columnAs("entries");
+				"MATCH (cpd:" + subDb + " {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());
 		}

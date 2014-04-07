@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.service;
+package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
 import java.util.List;
 

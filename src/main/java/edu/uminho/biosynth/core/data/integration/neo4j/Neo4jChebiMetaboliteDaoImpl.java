@@ -51,14 +51,15 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		params.put("inchikey", cpd.getInchiKey());
 		params.put("smiles", cpd.getSmiles());
 		params.put("source", cpd.getSource());
+		params.put("parent", cpd.getParentId());
 		
 		engine.execute("MERGE (cpd:ChEBI:Compound {entry:{entry}}) ON CREATE SET "
-				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
+				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.parent={parent}, "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.stars={stars}, cpd.inchi={inchi}, cpd.inchikey={inchikey}, "
 				+ "cpd.smiles={smiles}, cpd.source={source}, cpd.proxy=false "
 				+ "ON MATCH SET "
-				+ "cpd.updated_at=timestamp(), "
+				+ "cpd.updated_at=timestamp(), cpd.parent={parent}, "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.stars={stars}, cpd.inchi={inchi}, cpd.inchikey={inchikey}, "
 				+ "cpd.smiles={smiles}, cpd.source={source}, cpd.proxy=false"
@@ -71,6 +72,10 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		if (params.get("formula") != null) {
 			engine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
 			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+		}
+		if (params.get("inchi") != null) {
+			engine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
+			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		if (params.get("smiles") != null) {
 			engine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);

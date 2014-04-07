@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,6 +21,8 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 @Repository
 public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
+	
+	private static final Logger LOGGER = Logger.getLogger(HbmChimeraMetadataDaoImpl.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -141,6 +144,24 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 				"SELECT c.id FROM IntegratedCluster c WHERE c.integrationSet.id = :sid");
 		query.setParameter("sid", integrationSetId);
 		return (List<Long>)query.list();
+	}
+
+	@Override
+	public IntegratedCluster getIntegratedClusterByName(String name) {
+		List<?> res = this.getSession().createCriteria(IntegratedCluster.class)
+				.add(Restrictions.eq("name", name)).list();
+		
+		if (res.isEmpty()) return null;
+		if (res.size() > 1) {
+			LOGGER.warn(String.format("Integrity fault - duplicate name [%s]", name));
+		}
+
+		return IntegratedCluster.class.cast(res.iterator().next());
+	}
+
+	@Override
+	public IntegratedCluster getIntegratedClusterById(Long id) {
+		return IntegratedCluster.class.cast(this.getSession().get(IntegratedCluster.class, id));
 	}
 
 }

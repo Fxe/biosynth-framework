@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.service;
+package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,21 +18,11 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 	
 	private Node initialNode;
 	
-	public Node getInitialNode() {
-		return initialNode;
-	}
+	public Node getInitialNode() { return initialNode;}
+	public void setInitialNode(Node initialNode) { this.initialNode = initialNode;}
 
-	public void setInitialNode(Node initialNode) {
-		this.initialNode = initialNode;
-	}
-
-	public GraphDatabaseService getDb() {
-		return db;
-	}
-
-	public void setDb(GraphDatabaseService db) {
-		this.db = db;
-	}
+	public GraphDatabaseService getDb() { return db;}
+	public void setDb(GraphDatabaseService db) { this.db = db;}
 
 	@Override
 	public List<Long> execute() {

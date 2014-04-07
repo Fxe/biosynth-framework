@@ -10,20 +10,24 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
+import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
@@ -105,7 +109,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	
 	@Override
 	public Map<String, List<Object>> getCompositeNode(Long id) {
-		System.out.println("Loading composite node -> " + id);
+//		System.out.println("Loading composite node -> " + id);
 		//Build Self Node
 		Map<String, Object> root = this.getEntryProperties(id);
 		String sourceEntry = (String) root.get("entry");
@@ -123,7 +127,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		for (Object obj: list) {
 			if (obj instanceof SeqWrapper) {
 				for (Object node: (SeqWrapper<?>) obj) {
-					System.out.println(node);
+//					System.out.println(node);
 					NodeProxy proxy = (NodeProxy) node;
 //					System.out.println(proxy.getId() + " -> " +  proxy.getLabels());
 					if (id.equals(proxy.getId())) {
@@ -177,27 +181,29 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public Map<String, Object> getEntryProperties(Long id) {
 		Map<String, Object> propsMap = new HashMap<> ();
-		ExecutionResult res = this.executionEngine.execute(String.format(
-				"START cpd=node(%d) RETURN cpd;", id));
+		ExecutionResult res = this.executionEngine.execute(
+				String.format("START cpd=node(%d) RETURN cpd;", id));
 		
 		List<?> list = IteratorUtil.asList(res.columnAs("cpd"));
-		String labels = "";
+		Node node = Node.class.cast(list.iterator().next());
+		String labels = StringUtils.join(node.getLabels(), ":");
 		
-		for (Object obj : list) {
-			Node node = (Node)obj;
-			for (String prop : node.getPropertyKeys()) {
-				propsMap.put(prop, node.getProperty(prop));
-			}
-			for (Label label : node.getLabels()) {
-				labels = labels.concat(label.name()).concat(":");
-			}
+		for (String prop : node.getPropertyKeys()) {
+			propsMap.put(prop, node.getProperty(prop));
 		}
 		
+//		for (Object obj : list) {
+//			Node node = (Node)obj;
+//			for (String prop : node.getPropertyKeys()) {
+//				propsMap.put(prop, node.getProperty(prop));
+//			}
+//			labels = StringUtils.join(node.getLabels(), ":");
+////			for (Label label : node.getLabels()) {
+////				labels = labels.concat(label.name()).concat(":");
+////			}
+//		}
 		
-		
-		labels = labels.substring(0, labels.length() - 1);
-		
-		
+//		labels = labels.substring(0, labels.length() - 1);
 		
 		propsMap.put("labels", labels);
 		propsMap.put("isProxy", false);
@@ -234,6 +240,53 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		List<Long> res = new ArrayList<> ();
 		// TODO Auto-generated method stub
 		return res;
+	}
+
+	@Override
+	public Node getCompositeNode(String entry, Label... labels) {
+		String labelString = StringUtils.join(labels, ":");
+		String query = String.format("MATCH cpd:%s {entry:{entry}} RETURN cpd", labelString);
+		Map<String, Object> params = new HashMap<> ();
+		params.put("entry", entry);
+		ExecutionResult res = this.executionEngine.execute(query, params );
+
+		List<Object> nodes = IteratorUtil.asList(res.columnAs("cpd"));
+		
+		if (nodes.isEmpty()) return null;
+		if (nodes.size() > 1) {
+			LOGGER.warn(String.format("Multiple Records for [%s, %s]", entry, labels));
+		}
+		
+		return Node.class.cast(nodes.iterator().next());
+	}
+
+	@Override
+	public CompositeMetaboliteEntity getCompositeMetabolite(Long id) {
+		Node node = this.graphDatabaseService.getNodeById(id);
+		if (!node.hasLabel(CompoundNodeLabel.Compound)) {
+			LOGGER.warn(String.format("[%d] not a metabolite record", id));
+			return null;
+		}
+		if ((Boolean)node.getProperty("proxy")) return null;
+		CompositeMetaboliteEntity cpd = new CompositeMetaboliteEntity();
+		String entry = (String) node.getProperty("entry");
+		cpd.setEntry(entry);
+		
+		for (String p:node.getPropertyKeys()) cpd.getFields().put(p, node.getProperty(p));
+		for (Relationship r:node.getRelationships()) {
+			Node n = r.getEndNode();
+			
+			if (r.getType().equals(CompoundRelationshipType.HasCrossreferenceTo)) {
+				
+			} else {
+				Label label = n.getLabels().iterator().next();
+				Map<String, Object> data = new HashMap<> ();
+				for (String p:n.getPropertyKeys()) data.put(p, n.getProperty(p));
+				cpd.getProperties().put(label.toString(), data);
+			}
+		}
+		
+		return cpd;
 	}
 
 }

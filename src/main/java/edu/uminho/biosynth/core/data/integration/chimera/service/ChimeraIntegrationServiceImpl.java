@@ -15,10 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
@@ -153,12 +155,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		//error id merge !
 	}
 	
-	public List<IntegratedCluster> createClusterCascade(ClusteringStrategy strategy) {
+	public List<IntegratedCluster> createClusterCascade(ClusteringStrategy strategy, List<Long> elementsToCascade) {
 		List<IntegratedCluster> res = new ArrayList<> ();
-		
-		List<Long> compoundIds = this.data.getAllMetaboliteIds();
+
 		List<Long> visitedIds = new ArrayList<> ();
-		for (Long id: compoundIds) {
+		for (Long id: elementsToCascade) {
 			if (!visitedIds.contains(id)) {
 				strategy.setInitialNode(id);
 				IntegratedCluster cluster = this.createCluster(strategy);
@@ -237,5 +238,26 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		}
 		LOGGER.debug(String.format("[%s] generated %d elements", strategy, clusterElements.size()));
 		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
+	}
+	
+	
+	public List<IntegratedCluster> splitClusterByProperty(Long clusterId, String property, String field) {
+		List<IntegratedCluster> res = new ArrayList<> ();
+		IntegratedCluster cluster = this.meta.getIntegratedClusterById(clusterId);
+		Map<Object, Set<Long>> propertyMemberMap = new HashMap<> ();
+		for (IntegratedClusterMember members : cluster.getMembers()) {
+			Long memberId = members.getMember().getId();
+			CompositeMetaboliteEntity cpd = this.data.getCompositeMetabolite(memberId);
+			if (cpd.getProperties().containsKey(property)) {
+				String value = (String) cpd.getProperties().get(property).get(field);
+				if (!propertyMemberMap.containsKey(value)) {
+					propertyMemberMap.put(value, new HashSet<Long> ());
+				}
+				propertyMemberMap.get(value).add(memberId);
+			}
+		}
+		
+		System.out.println(propertyMemberMap);
+		return res;
 	}
 }
