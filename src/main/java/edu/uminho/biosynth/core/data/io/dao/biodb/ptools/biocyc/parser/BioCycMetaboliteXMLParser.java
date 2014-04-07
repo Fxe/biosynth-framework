@@ -153,7 +153,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 		try {
 			if (this.base.has("inchi")) {
 				inchi = this.base.getJSONObject("inchi").getString("content");
-				inchi = inchi.replace("InChI=", "");
+//				inchi = inchi.replace("InChI=", "");
 			}
 			
 			return inchi;
@@ -215,6 +215,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 				default:
 					break;
 			}
+			if (smiles.trim().isEmpty()) return null;
 			
 			return smiles;
 		} catch (JSONException ex) {
