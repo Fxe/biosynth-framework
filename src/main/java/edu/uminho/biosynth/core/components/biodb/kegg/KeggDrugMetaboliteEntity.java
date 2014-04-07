@@ -132,7 +132,10 @@ public class KeggDrugMetaboliteEntity extends AbstractKeggMetabolite {
 		sb.append("source:").append(drugSource).append(sep);
 		sb.append("strMap:").append(strMap).append(sep);
 		sb.append("otherMap:").append(otherMap).append(sep);
-		sb.append("crossReferences:").append(crossReferences).append(sep);
+		sb.append("source:").append(drugSource).append(sep);
+		sb.append("smiles:").append(smiles).append(sep);
+		sb.append("inchi:").append(inchi).append(sep);
+		sb.append("inchiKey:").append(inchiKey).append(sep);
 		return sb.toString();
 	}
 }

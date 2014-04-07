@@ -61,19 +61,6 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	@CollectionTable(name="kegg_compound_metabolite_enzyme", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="enzyme_id", length=15)
 	protected List<String> enzymes = new ArrayList<> ();
-	
-	public List<String> getNames() {
-		List<String> names = new ArrayList<> ();
-		if (this.name != null) {
-			for (String str : this.name.split("[\\s+]*;[\\s+]*")) {
-				String s = str.trim(); 
-				if (!s.isEmpty()) {
-					names.add(s);
-				}
-			}
-		}
-		return names;
-	}
 
 	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossReferences() {
 		return crossReferences;
