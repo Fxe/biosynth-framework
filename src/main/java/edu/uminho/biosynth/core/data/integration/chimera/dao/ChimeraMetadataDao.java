@@ -23,7 +23,10 @@ public interface ChimeraMetadataDao {
 	public void mergeCluster(List<Long> ids, Serializable integrationId);
 	public IntegratedCluster getIntegratedClusterByName(String name);
 	public IntegratedCluster getIntegratedClusterById(Long id);
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
 	public void deleteCluster(IntegratedCluster cluster);
+	
+	public List<Long> getAllIntegratedClusterMembersId();
 	
 	public IntegratedMember getIntegratedMember(Long id);
 	public void saveIntegratedMember(IntegratedMember member);

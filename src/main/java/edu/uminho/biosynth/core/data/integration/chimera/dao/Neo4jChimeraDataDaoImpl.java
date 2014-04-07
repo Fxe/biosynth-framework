@@ -21,6 +21,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
+import org.neo4j.tooling.GlobalGraphOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
@@ -219,10 +220,10 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<Long> getAllMetaboliteIds() {
 		List<Long> idList = new ArrayList<> ();
-		ExecutionResult res = this.executionEngine.execute("MATCH (cpd:Compound {proxy:false}) RETURN ID(cpd) AS id");
-		List<?> list = IteratorUtil.asList(res.columnAs("id"));
-		for (Object id : list) {
-			idList.add((Long) id);
+		for (Node n : GlobalGraphOperations.at(graphDatabaseService)
+				.getAllNodesWithLabel(CompoundNodeLabel.Compound)) {
+			
+			if (!((Boolean) n.getProperty("proxy"))) idList.add(n.getId());
 		}
 		return idList;
 	}

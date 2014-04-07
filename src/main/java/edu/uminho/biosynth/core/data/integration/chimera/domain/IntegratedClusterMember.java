@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -20,13 +21,13 @@ public class IntegratedClusterMember {
 		
 		private static final long serialVersionUID = -63654766199161L;
 		
-		@ManyToOne(cascade=CascadeType.ALL)
+		@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 		@JoinColumn(name="integrated_cluster_id")
 		private IntegratedCluster cluster;
 		public IntegratedCluster getCluster() { return cluster;}
 		public void setCluster(IntegratedCluster cluster) { this.cluster = cluster;}
 		
-		@ManyToOne(cascade=CascadeType.ALL)
+		@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 		@JoinColumn(name="integrated_member_id")
 		private IntegratedMember member;
 		public IntegratedMember getMember() { return member;}
