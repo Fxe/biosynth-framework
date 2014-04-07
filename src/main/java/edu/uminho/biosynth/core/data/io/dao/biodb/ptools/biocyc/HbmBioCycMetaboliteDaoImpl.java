@@ -3,9 +3,11 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +23,9 @@ public class HbmBioCycMetaboliteDaoImpl implements IMetaboliteDao<BioCycMetaboli
 	private Session getSession() {
 		return this.sessionFactory.getCurrentSession();
 	}
+	
+	public SessionFactory getSessionFactory() { return sessionFactory;}
+	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
@@ -69,8 +74,14 @@ public class HbmBioCycMetaboliteDaoImpl implements IMetaboliteDao<BioCycMetaboli
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		BioCycMetaboliteEntity cpd = null;
+		Criteria criteria = this.getSession().createCriteria(BioCycMetaboliteEntity.class);
+		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
+		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
+		for (Object o: res) {
+			cpd = BioCycMetaboliteEntity.class.cast(o);
+		}
+		return cpd;
 	}
 
 	@Override

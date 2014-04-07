@@ -14,16 +14,14 @@ public class HttpRequest {
 	private final static Logger LOGGER = Logger.getLogger(HttpRequest.class);
 	
 	public static String get(String url) {
+		StringBuilder ret = new StringBuilder();
+		
 		LOGGER.info(String.format("HttpRequest - %s", url));
 		
 		HttpClient client = HttpClientBuilder.create().build();
-
-		HttpGet httpGet = new HttpGet(url);
-		StringBuilder ret = new StringBuilder();
-		
-		
-		
 		try {
+			HttpGet httpGet = new HttpGet(url);
+
 			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));
 			String line;
 			while ( (line = buffer.readLine()) != null) {

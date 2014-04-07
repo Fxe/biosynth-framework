@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -87,6 +88,15 @@ public class HbmKeggCompoundMetaboliteDaoImpl implements IMetaboliteDao<KeggComp
 	public Serializable save(KeggCompoundMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<KeggCompoundMetaboliteEntity> getAllMetabolites() {
+		List<KeggCompoundMetaboliteEntity> cpdList = new ArrayList<> ();
+		List<?> res = this.getSession().createCriteria(KeggCompoundMetaboliteEntity.class).list();
+		for (Object o: res) {
+			cpdList.add(KeggCompoundMetaboliteEntity.class.cast(o));
+		}
+		return cpdList;
 	}
 
 }
