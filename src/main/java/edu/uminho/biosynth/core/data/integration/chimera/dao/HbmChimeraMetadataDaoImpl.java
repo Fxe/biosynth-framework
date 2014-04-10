@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.chimera.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +164,38 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	@Override
 	public IntegratedCluster getIntegratedClusterById(Long id) {
 		return IntegratedCluster.class.cast(this.getSession().get(IntegratedCluster.class, id));
+	}
+
+	@Override
+	public List<Long> getAllIntegratedClusterMembersId() {
+		Query query = this.getSession().createQuery("SELECT DISTINCT m.pk.member.id FROM IntegratedClusterMember m");
+		@SuppressWarnings("unchecked")
+		List<Long> res = query.list();
+		return res;
+	}
+
+	@Override
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
+			Long... memberIds) {
+		
+		System.out.println("Here !");
+		
+		List<IntegratedCluster> integratedClusters = new ArrayList<> ();
+		Query query = this.getSession().createQuery("SELECT DISTINCT m.pk.cluster.id FROM IntegratedClusterMember m WHERE m.pk.member.id IN (:ids)");
+		query.setParameterList("ids", memberIds);
+		
+		@SuppressWarnings("unchecked")
+		List<Long> clusterIds = query.list();
+		
+		System.out.println("Query Done");
+		
+		for (Long id : clusterIds) {
+			IntegratedCluster integratedCluster = this.getIntegratedClusterById(id);
+			integratedClusters.add(integratedCluster);
+		}
+
+		System.out.println("Done !");
+		return integratedClusters;
 	}
 
 }

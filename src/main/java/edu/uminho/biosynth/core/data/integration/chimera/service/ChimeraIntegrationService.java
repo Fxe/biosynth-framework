@@ -14,10 +14,18 @@ public interface ChimeraIntegrationService {
 	public void changeIntegrationSet(String id);
 	public void resetIntegrationSet();
 	public void deleteIntegrationSet();
+	
 	public IntegratedCluster createCluster(String query);
 	public IntegratedCluster createCluster(ClusteringStrategy strategy);
+	public IntegratedCluster createCluster(String name, List<Long> elements, String description);
+	
 	public IntegratedCluster mergeCluster(String query);
 	public IntegratedCluster mergeCluster(ClusteringStrategy strategy);
+	public IntegratedCluster mergeCluster(String name, List<Long> elements, String description);
+	
+	public List<Long> listAllIntegratedCompounds();
+	public List<Long> listAllUnintegratedCompounds();
+	
 	public IntegrationSet getCurrentIntegrationSet();
 	public Map<String, Integer> getDataStatistics();
 }

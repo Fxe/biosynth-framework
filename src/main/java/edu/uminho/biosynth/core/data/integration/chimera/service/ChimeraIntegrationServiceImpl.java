@@ -175,36 +175,197 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		return res;
 	}
 
+	private IntegratedCluster mergeCluster(IntegratedCluster integratedCluster) {
+		if (integratedCluster == null) return null;
+		
+		Set<Long> clusterMembers = new HashSet<> (integratedCluster.listAllIntegratedMemberIds());
+		
+		//Detect Collisions
+		List<IntegratedCluster> collision = 
+				this.meta.getIntegratedClusterByMemberIds(clusterMembers.toArray(new Long[0]));
+		//Union All Collisions
+		if (collision.isEmpty()) return integratedCluster;
+		
+		LOGGER.warn(String.format("MERGE with Membership conflict %s performing cluster join.", collision));
+		
+		if (collision.size() == 1) {
+			IntegratedCluster cluster = collision.iterator().next();
+			if (cluster.listAllIntegratedMemberIds().containsAll(clusterMembers)) {
+				return cluster;
+			}
+		}
+		
+		for (IntegratedCluster c : collision) {
+			clusterMembers.addAll(c.listAllIntegratedMemberIds());
+			this.meta.deleteCluster(c);
+		}
+		
+		IntegratedCluster union = this.generateCluster(integratedCluster.getName(), new ArrayList<> (clusterMembers), integratedCluster.getDescription());
+		this.meta.saveIntegratedCluster(union);
+		
+		return union;
+	}
+	
 	@Override
 	public IntegratedCluster mergeCluster(String query) {
-		List<Long> clusterElements = this.data.getClusterByQuery(query);
-		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query);
-//		this.meta.createCluster(, clusterElements, query, currentIntegrationSet);
+		IntegratedCluster integratedCluster = this.generateCluster(query);
 		
+		return this.mergeCluster(integratedCluster);
 	}
+	
 	@Override
 	public IntegratedCluster mergeCluster(ClusteringStrategy strategy) {
-		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
-		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
-		List<Long> clusterElements = strategy.execute();
-		memberIdList.retainAll(clusterElements);
-		Set<Long> joinClusterList = new HashSet<> ();
-		if (!memberIdList.isEmpty()) {
-			LOGGER.warn(String.format("Merge Cluster [%s] WITH. Membership conflict %s performing cluster join.", strategy.toString(), memberIdList));
-			
-			for (Long memberId: memberIdList) {
-				joinClusterList.add(assignedMembers.get(memberId));
-//				LOGGER.warn(String.format("Cluster %d marked as candidate", memberIdList));
+		IntegratedCluster integratedCluster = this.generateCluster(strategy);
+		
+		return this.mergeCluster(integratedCluster);
+		
+		
+//		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
+//		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
+//		List<Long> clusterElements = strategy.execute();
+//		memberIdList.retainAll(clusterElements);
+//		Set<Long> joinClusterList = new HashSet<> ();
+//		if (!memberIdList.isEmpty()) {
+//			LOGGER.warn(String.format("Merge Cluster [%s] WITH. Membership conflict %s performing cluster join.", strategy.toString(), memberIdList));
+//			
+//			for (Long memberId: memberIdList) {
+//				joinClusterList.add(assignedMembers.get(memberId));
+////				LOGGER.warn(String.format("Cluster %d marked as candidate", memberIdList));
+//			}
+//			for (Long clusterId: joinClusterList) {
+////				IntegratedCluster cluster = this.meta.getIntegratedCluster();
+//				//ADD ALL IDS TO clusterElements
+//				//DELETE CLUSTER
+//			}
+//			
+//		}
+//		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
+//		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString());
+	}
+	
+	@Override
+	public IntegratedCluster mergeCluster(String name, List<Long> elements,
+			String description) {
+		IntegratedCluster integratedCluster = this.generateCluster(name, elements, description);
+		
+		return this.mergeCluster(integratedCluster);
+	}
+	
+	public List<IntegratedCluster> mergeClusterCascade(String query, List<Long> elementsToCascade) {
+		List<Long> clusterIds = new ArrayList<> ();
+		
+		List<Long> visitedIds = new ArrayList<> ();
+		for (Long id: elementsToCascade) {
+			if (!visitedIds.contains(id)) {
+				String query_ = String.format(query, id);
+				IntegratedCluster integratedCluster = this.mergeCluster(query_);
+				if (integratedCluster != null) {
+					visitedIds.addAll(integratedCluster.listAllIntegratedMemberIds());
+					clusterIds.add(integratedCluster.getId());
+				}
 			}
-			for (Long clusterId: joinClusterList) {
-//				IntegratedCluster cluster = this.meta.getIntegratedCluster();
-				//ADD ALL IDS TO clusterElements
-				//DELETE CLUSTER
-			}
-			
 		}
-		LOGGER.debug(String.format("%s obtained %d elements", strategy, clusterElements.size()));
-		return this.createCluster(clusterIdGenerator.generateKey(), clusterElements, strategy.toString());
+		
+		List<IntegratedCluster> res = new ArrayList<> ();
+		for (Long clusterId : clusterIds) {
+			IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(clusterId);
+			if (integratedCluster != null) res.add(integratedCluster);
+		}
+		
+		return res;
+	}
+	
+	public List<IntegratedCluster> mergeClusterCascade(ClusteringStrategy strategy, List<Long> elementsToCascade) {
+		Map<Long, List<Long>> clusterIdToClusterElements = new HashMap<> ();
+		//Newly generated Clusters
+		Map<Long, Set<Long>> elementsToClusterIds_ = new HashMap<> ();
+		//Previous generated Clusters shouldbe Long x Long
+		Map<Long, Long> elementsToClusterIds = new HashMap<> ();
+		
+		Set<Long> visitedIds = new HashSet<> ();
+		
+		long i = 0;
+		for (Long elementId : elementsToCascade) {
+			
+			if (!visitedIds.contains(elementId)) {
+				strategy.setInitialNode(elementId);
+				List<Long> clusterElements = strategy.execute();
+				
+				if (!clusterElements.isEmpty()) {
+				
+						visitedIds.addAll(clusterElements);
+						clusterIdToClusterElements.put(i++, clusterElements);
+						for (Long eid : clusterElements) {
+							elementsToClusterIds_.put(eid, new HashSet<Long> ());
+						}
+				
+				}
+//				LOGGER.trace(String.format("%d/%d", visitedIds.size(), elementsToCascade.size()));
+			}
+		}
+		
+		System.out.println("Done !");
+		System.out.println("Solving Query Conflicts");
+		
+		for (Long cid : clusterIdToClusterElements.keySet()) {
+			for (Long eid : clusterIdToClusterElements.get(cid)) {
+				elementsToClusterIds_.get(eid).add(cid);
+			}
+		}
+		
+		for (Long eid : elementsToClusterIds_.keySet()) {
+			if (elementsToClusterIds_.get(eid).size() > 1) {
+				System.out.println("AI !");
+			}
+		}
+		
+		for (Long integratedClusterId : this.meta.getAllIntegratedClusterIds(this.currentIntegrationSet.getId())) {
+			IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(integratedClusterId);
+			for (Long eid : integratedCluster.listAllIntegratedMemberIds()) {
+				elementsToClusterIds.put(eid, integratedClusterId);
+			}
+		}
+		
+		System.out.println(String.format("ElementsToClusterIds Size %d", elementsToClusterIds.size()));
+		
+		for (Long generatedClusterId : clusterIdToClusterElements.keySet()) {
+			Set<Long> clustersToJoin = new HashSet<> ();
+			for (Long eid : clusterIdToClusterElements.get(generatedClusterId)) {
+				if (elementsToClusterIds.containsKey(eid)) {
+					clustersToJoin.add(elementsToClusterIds.get(eid));
+				}
+			}
+			
+			if (!clustersToJoin.isEmpty()) {
+				
+				System.out.println("Join " + clustersToJoin);
+			}
+		}
+//		int progress = 0;
+//		int total = elementsToCascade.size();
+//		
+//		List<Long> clusterIds = new ArrayList<> ();
+//		
+//		List<Long> visitedIds = new ArrayList<> ();
+//		for (Long id: elementsToCascade) {
+//			LOGGER.trace(String.format("%d/%d", ++progress, total));
+//			if (!visitedIds.contains(id)) {
+//				strategy.setInitialNode(id);
+//				IntegratedCluster integratedCluster = this.mergeCluster(strategy);
+//				if (integratedCluster != null) {
+//					visitedIds.addAll(integratedCluster.listAllIntegratedMemberIds());
+//					clusterIds.add(integratedCluster.getId());
+//				}
+//			}
+//		}
+//		
+//		List<IntegratedCluster> res = new ArrayList<> ();
+//		for (Long clusterId : clusterIds) {
+//			IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(clusterId);
+//			if (integratedCluster != null) res.add(integratedCluster);
+//		}
+		
+		return null;
 	}
 	
 	@Override
@@ -260,4 +421,60 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		System.out.println(propertyMemberMap);
 		return res;
 	}
+	
+	@Override
+	public List<Long> listAllIntegratedCompounds() {
+		return this.meta.getAllIntegratedClusterMembersId();
+	}
+	
+	@Override
+	public List<Long> listAllUnintegratedCompounds() {
+		Set<Long> res = new HashSet<> (this.data.getAllMetaboliteIds());
+		Set<Long> integrated = new HashSet<> (this.listAllIntegratedCompounds());
+		res.removeAll(integrated);
+		return new ArrayList<> (res);
+	}
+	
+	
+	public IntegratedCluster generateCluster(String name, List<Long> elements, String description) {
+		List<Long> clusterElements = elements;
+		
+		if (clusterElements.isEmpty()) return null;
+		
+		IntegratedCluster integratedCluster = new IntegratedCluster();
+		integratedCluster.setIntegrationSet(this.currentIntegrationSet);
+		integratedCluster.setName(name);
+		integratedCluster.setDescription(description);
+		
+		for (Long memberId: clusterElements) {
+			IntegratedMember member = new IntegratedMember();
+			member.setId(memberId);
+			this.meta.saveIntegratedMember(member);
+			
+			IntegratedClusterMember clusterMember = new IntegratedClusterMember();
+			clusterMember.setCluster(integratedCluster);
+			clusterMember.setMember(member);
+			
+			integratedCluster.getMembers().add(clusterMember);
+		}
+		
+		return integratedCluster; 
+	}
+	
+	public IntegratedCluster generateCluster(ClusteringStrategy clusteringStrategy) {
+		List<Long> clusterElements = clusteringStrategy.execute();
+		
+		if (clusterElements.isEmpty()) return null;
+		
+		return this.generateCluster( this.clusterIdGenerator.generateKey(), clusterElements, clusteringStrategy.toString()); 
+	}
+	
+	public IntegratedCluster generateCluster(String query) {
+		List<Long> clusterElements = this.data.getClusterByQuery(query);
+		
+		if (clusterElements.isEmpty()) return null;
+
+		return this.generateCluster( this.clusterIdGenerator.generateKey(), clusterElements, query); 
+	}
+
 }

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -65,8 +66,19 @@ public class IntegratedCluster {
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
 
+	@Transient
+	public List<Long> listAllIntegratedMemberIds() {
+		List<Long> res = new ArrayList<> ();
+		for (IntegratedClusterMember integratedClusterMember : this.getMembers()) {
+			res.add(integratedClusterMember.getMember().getId());
+		}
+		
+		return res;
+	}
+	
 	@Override
 	public String toString() {
-		return String.format("IntegratedCluster[%d]", this.id);
+		return String.format("IntegratedCluster[%d:%s]", id, name);
 	}
+
 }
