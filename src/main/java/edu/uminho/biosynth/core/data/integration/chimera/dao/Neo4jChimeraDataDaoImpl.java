@@ -186,6 +186,7 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		
 		List<?> list = IteratorUtil.asList(res.columnAs("cpd"));
 		Node node = Node.class.cast(list.iterator().next());
+//		System.out.println(node);
 		String labels = StringUtils.join(node.getLabels(), ":");
 		
 		for (String prop : node.getPropertyKeys()) {

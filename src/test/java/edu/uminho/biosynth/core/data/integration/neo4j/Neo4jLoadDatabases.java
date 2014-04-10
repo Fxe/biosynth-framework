@@ -17,7 +17,7 @@ import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.bigg.CsvBiggMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;

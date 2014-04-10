@@ -27,8 +27,6 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	
-	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
@@ -147,12 +145,15 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	}
 
 	@Override
-	public IntegratedCluster getIntegratedClusterByName(String name) {
+	public IntegratedCluster getIntegratedClusterByName(String name, Long integrationSetId) {
 		List<?> res = this.getSession().createCriteria(IntegratedCluster.class)
-				.add(Restrictions.eq("name", name)).list();
+				.add(Restrictions.and(
+						Restrictions.eq("name", name), 
+						Restrictions.eq("integrationSet.id", integrationSetId))).list();
 		
 		if (res.isEmpty()) return null;
 		if (res.size() > 1) {
+//			for (Object o : res) System.out.println(IntegratedCluster.class.cast(o).getName());
 			LOGGER.warn(String.format("Integrity fault - duplicate name [%s]", name));
 		}
 

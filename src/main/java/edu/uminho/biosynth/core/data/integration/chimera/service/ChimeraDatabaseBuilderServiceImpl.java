@@ -125,8 +125,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	
 	@Override
 	public IntegratedMetaboliteEntity buildCompoundByClusterName(String cpdId) {
-		IntegratedCluster cluster = this.meta.getIntegratedClusterByName(cpdId);
-		System.out.println(cluster);
+		IntegratedCluster cluster = this.meta.getIntegratedClusterByName(cpdId, this.currentIntegrationSet.getId());
+		if (cluster == null) return null;
 		return this.buildCompound(cluster);
 	}
 
@@ -164,7 +164,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 			cpd.setEntry(cluster.getName());
 			cpd.setSource(this.currentIntegrationSet.getName());
 			
-			LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from Cluster[%d]", cpd.getEntry(), cluster.getId())));
+			LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from %s", cpd.getEntry(), cluster)));
 			
 			for (IntegratedClusterMember member: cluster.getMembers()) {
 				Long memberId = member.getMember().getId();

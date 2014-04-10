@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name="integrated_cluster")
 public class IntegratedCluster {
@@ -36,6 +39,7 @@ public class IntegratedCluster {
 	public void setIntegrationSet(IntegrationSet integrationSet) { this.integrationSet = integrationSet;}
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
+	@Fetch(FetchMode.SELECT)
 	private List<IntegratedClusterMember> members = new ArrayList<> ();
 	public List<IntegratedClusterMember> getMembers() { return members;}
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
@@ -52,33 +56,17 @@ public class IntegratedCluster {
 //		this.memberMap = memberMap;
 //	}
 	
-	public Long getId() {
-		return id;
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id;}
+
+	public String getName() { return name;}
+	public void setName(String name) { this.name = name;}
+
+	public String getDescription() { return description;}
+	public void setDescription(String description) { this.description = description;}
+
+	@Override
+	public String toString() {
+		return String.format("IntegratedCluster[%d]", this.id);
 	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
-
-
-	
-	
 }
