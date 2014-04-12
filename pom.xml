@@ -27,6 +27,10 @@
       <name>ch.cam.ac.uk</name>
       <url>https://maven.ch.cam.ac.uk/content/repositories/releases/</url>
     </repository>
+    <repository>
+      <id>ebi-repo</id>
+      <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -62,6 +66,63 @@
       <artifactId>opsin-inchi</artifactId>
       <version>1.2.0</version>
     </dependency>
+    
+<dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-core</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-silent</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-formula</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-smiles</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-inchi</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-io</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-render</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-renderbasic</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-renderextra</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+    <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-renderawt</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+       <dependency>
+		<groupId>org.openscience.cdk</groupId>
+		<artifactId>cdk-sdg</artifactId>
+		<version>1.5.5</version>
+    </dependency>
+
     
     <dependency>
       <groupId>junit</groupId>
