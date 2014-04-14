@@ -1,5 +1,6 @@
 package edu.uminho.biosynth.chemanalysis.cdk;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -11,6 +12,8 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
  *
  */
 public class CdkWrapper {
+	
+	private static final Logger LOGGER = Logger.getLogger(CdkWrapper.class);
 
 	/**
 	 * Wraps the CDK MolecularFormulaManipulator getString method. Uses the 
@@ -24,12 +27,25 @@ public class CdkWrapper {
 	 * @see {@link org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator#getString(IMolecularFormula, boolean)}
 	 */
 	public static String convertToIsotopeMolecularFormula(String formula, boolean setOne) {
-		IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-		IMolecularFormula molecularFormula = MolecularFormulaManipulator
-				.getMajorIsotopeMolecularFormula(formula, builder);
+		
+		try {
+		
+			IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+			IMolecularFormula molecularFormula = MolecularFormulaManipulator
+					.getMajorIsotopeMolecularFormula(formula, builder);
+	
+			String ret = MolecularFormulaManipulator.getString(molecularFormula, setOne);
+			
+			return ret;
+		
+		} catch (NullPointerException e) {
+			LOGGER.error(e.getMessage()); 
+		} catch (StringIndexOutOfBoundsException e) {
+			LOGGER.error(e.getMessage()); 
+		} catch (NumberFormatException e) {
+			LOGGER.error(e.getMessage()); 
+		}
 
-		String ret = MolecularFormulaManipulator.getString(molecularFormula, setOne);
-
-		return ret;
+		return null;
 	}
 }

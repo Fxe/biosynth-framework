@@ -2,7 +2,6 @@ package edu.uminho.biosynth.chemanalysis.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,9 +10,8 @@ import javax.persistence.Table;
 public class ChemicalFormula {
 	
 	@Id
-	@GeneratedValue
 	@Column(name="id", nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@Column(name="formula", length=255, nullable=false, unique=true)
 	private String formula;
@@ -27,11 +25,13 @@ public class ChemicalFormula {
 	@Column(name="valid", nullable=true)
 	private Boolean valid;
 
-	public Integer getId() {
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -67,5 +67,8 @@ public class ChemicalFormula {
 		this.valid = valid;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return String.format("ChemicalFormula[%s]<%s>", this.id, this.formula);
+	}
 }
