@@ -11,9 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class HbmChebiMetaboliteDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity> {
+public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity> {
 
 	@Autowired
 	private SessionFactory sessionFactory;

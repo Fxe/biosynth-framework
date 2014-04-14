@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 @Repository
-public class HbmMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEntity> {
+public class HbmMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntity> {
 
 	@Autowired
 	private SessionFactory sessionFactory;

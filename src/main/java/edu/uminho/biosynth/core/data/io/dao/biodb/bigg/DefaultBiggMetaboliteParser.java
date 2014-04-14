@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.bigg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import java.io.BufferedReader;
 import java.io.File;

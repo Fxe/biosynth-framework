@@ -2,15 +2,11 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
-public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMetaboliteEntity> {
+public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 	
 	private String localStorage;
 	private boolean useLocalStorage = false;
@@ -52,24 +48,5 @@ public abstract class AbstractRestfullBiocyc implements IMetaboliteDao<BioCycMet
 
 	public boolean isSaveLocalStorage() { return saveLocalStorage;}
 	public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
-	
-	@Override
-	public abstract BioCycMetaboliteEntity getMetaboliteById(Serializable id);
-
-	@Override
-	public abstract BioCycMetaboliteEntity saveMetabolite(
-			BioCycMetaboliteEntity metabolite);
-
-	@Override
-	public abstract List<Serializable> getAllMetaboliteIds();
-
-	@Override
-	public abstract BioCycMetaboliteEntity find(Serializable id);
-
-	@Override
-	public abstract List<BioCycMetaboliteEntity> findAll();
-
-	@Override
-	public abstract Serializable save(BioCycMetaboliteEntity entity);
 
 }

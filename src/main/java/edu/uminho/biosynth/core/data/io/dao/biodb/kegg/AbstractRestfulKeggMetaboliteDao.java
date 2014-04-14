@@ -6,11 +6,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.AbstractKeggMetabolite;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
-public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMetabolite> implements IMetaboliteDao<M> {
+public abstract class AbstractRestfulKeggMetaboliteDao<M extends AbstractKeggMetabolite> implements MetaboliteDao<M> {
 	
 	private String localStorage;
 	private boolean useLocalStorage = false;

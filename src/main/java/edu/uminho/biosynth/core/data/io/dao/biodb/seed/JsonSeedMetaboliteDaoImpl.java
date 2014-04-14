@@ -22,9 +22,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class JsonSeedMetaboliteDaoImpl implements IMetaboliteDao<SeedMetaboliteEntity>{
+public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEntity>{
 
 	public static int INITIAL_GEN_KEY = 0;
 	

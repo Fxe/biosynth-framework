@@ -11,9 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class HbmKeggGlycanMetaboliteDaoImpl implements IMetaboliteDao<KeggGlycanMetaboliteEntity> {
+public class HbmKeggGlycanMetaboliteDaoImpl implements MetaboliteDao<KeggGlycanMetaboliteEntity> {
 
 	@Autowired
 	private SessionFactory sessionFactory;
