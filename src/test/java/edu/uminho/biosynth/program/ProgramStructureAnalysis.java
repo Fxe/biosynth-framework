@@ -2,9 +2,7 @@ package edu.uminho.biosynth.program;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -29,8 +27,8 @@ public class ProgramStructureAnalysis {
 	private static SessionFactory sessionFactory;
 	private static String DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.central";
 	
-	private static Map<Integer, ChemicalStructureCore> idToChemicalStructureCore = new HashMap<> ();
-	private static Map<String, Integer> inchiToChemicalStructureCoreId = new HashMap<> ();
+//	private static Map<Integer, ChemicalStructureCore> idToChemicalStructureCore = new HashMap<> ();
+//	private static Map<String, Integer> inchiToChemicalStructureCoreId = new HashMap<> ();
 	
 	
 	public static void loadCentralDataContent() {
