@@ -1,33 +1,26 @@
 package edu.uminho.biosynth.program;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import edu.uminho.biosynth.chemanalysis.domain.ChemicalSmiles;
-import edu.uminho.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class ProgramCentralDataAnalysis {
 	
-	private static final Long[] failToConvert = { 171377L, 172059L, 175446L, 179124L, 179827L, 186699L, 198733L, 198837L, 234836L, 248303L, 259719L, 262488L,
-		264295L, 264301L, 270286L, 270292L, 273342L, 287571L, 287627L, 287708L, 293246L, 312469L, 414518L, 434089L, 484755L, 
-		488812L, 488817L, 526756L, 530823L, 534613L, 538705L, 538710L, 550938L};
+//	private static final Long[] failToConvert = { 171377L, 172059L, 175446L, 179124L, 179827L, 186699L, 198733L, 198837L, 234836L, 248303L, 259719L, 262488L,
+//		264295L, 264301L, 270286L, 270292L, 273342L, 287571L, 287627L, 287708L, 293246L, 312469L, 414518L, 434089L, 484755L, 
+//		488812L, 488817L, 526756L, 530823L, 534613L, 538705L, 538710L, 550938L};
 	
 	private static final String HBM_STRUCTURE_DB_CFG = "D:/home/data/java_config/chem_structure.cfg.xml";
 	private static SessionFactory sessionFactory;
