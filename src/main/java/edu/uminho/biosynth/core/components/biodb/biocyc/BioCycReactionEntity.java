@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 
@@ -75,13 +76,33 @@ public class BioCycReactionEntity extends GenericReaction {
 	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
 	private List<BioCycReactionLeftEntity> left = new ArrayList<> ();
 	public List<BioCycReactionLeftEntity> getLeft() { return left;}
-	public void setLeft(List<BioCycReactionLeftEntity> left) { this.left = left;}
+	public void setLeft(List<BioCycReactionLeftEntity> left) {
+		for (BioCycReactionLeftEntity entity : left) {
+			entity.setBioCycReactionEntity(this);
+		}
+		this.left = left;
+	}
 
 	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
 	private List<BioCycReactionRightEntity> right = new ArrayList<> ();
 	public List<BioCycReactionRightEntity> getRight() { return right;}
-	public void setRight(List<BioCycReactionRightEntity> right) { this.right = right;}
+	public void setRight(List<BioCycReactionRightEntity> right) {
+		for (BioCycReactionRightEntity entity : right) {
+			entity.setBioCycReactionEntity(this);
+		}
+		this.right = right;
+	}
 	
+	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
+	private List<BioCycReactionEcNumberEntity> ecNumbers = new ArrayList<> ();
+	public List<BioCycReactionEcNumberEntity> getEcNumbers() { return ecNumbers;}
+	public void setEcNumbers(List<BioCycReactionEcNumberEntity> ecNumbers) {
+		for (BioCycReactionEcNumberEntity entity : ecNumbers) {
+			entity.setBioCycReactionEntity(this);
+		}
+		this.ecNumbers = ecNumbers;
+	}
+
 	private List<BioCycReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	public List<BioCycReactionCrossReferenceEntity> getCrossReferences() {
 		return crossReferences;
@@ -97,8 +118,7 @@ public class BioCycReactionEntity extends GenericReaction {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString()).append(sep);
 		sb.append("physio. rel.:").append(this.getPhysiologicallyRelevant()).append(sep);
-//		sb.append("ecn:").append(this.getEcNumber()).append(sep);
-//		sb.append("offical:").append(this.getEcNumberOfficial()).append(sep);
+		sb.append("ecn:").append(this.getEcNumbers()).append(sep);
 		sb.append("orphan:").append(this.getOrphan()).append(sep);
 		sb.append("left:").append(this.getLeft()).append(sep);
 		sb.append("right:").append(this.getRight()).append(sep);

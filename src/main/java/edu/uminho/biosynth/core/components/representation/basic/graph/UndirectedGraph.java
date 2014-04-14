@@ -62,13 +62,19 @@ public class UndirectedGraph<V, E> implements IBinaryGraph<V, E> {
 	@Override
 	public Set<V> getAdjacentVertices(V vertex) {
 		Set<V> adj = new HashSet<> ();
-		
-		for (IBinaryEdge<E, V> e : this.vertexEdgesMap.get(vertex)) {
-			if (e.getLeft().equals(vertex)) {
-				adj.add(e.getRight());
-			} else {
-				adj.add(e.getLeft());
+		try {
+			for (IBinaryEdge<E, V> e : this.vertexEdgesMap.get(vertex)) {
+				if (e.getLeft().equals(vertex)) {
+					adj.add(e.getRight());
+				} else {
+					adj.add(e.getLeft());
+				}
 			}
+		} catch (NullPointerException e) {
+			System.out.println(vertex);
+			System.out.println(this.vertexes.contains(vertex));
+			System.out.println(this.vertexEdgesMap.containsKey(vertex));
+			throw e;
 		}
 		
 		return adj;
