@@ -26,7 +26,20 @@ public class HelperHbmConfigInitializer {
 	
 	public static SessionFactory initializeHibernateSession(File cfg) {
 		Configuration config = new Configuration().configure(cfg);
-//		Configuration config = new Configuration().configure("hibernate_debug_mysql.cfg.xml");
+		LOGGER.info(config.getProperty("hibernate.dialect"));
+		
+		ServiceRegistry servReg = 
+				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
+		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
+		
+		return sessionFactory;
+	}
+	
+	public static SessionFactory initializeHibernateSession(File cfg, Class<?>...classes) {
+		Configuration config = new Configuration().configure(cfg);
+		for (Class<?> c : classes) {
+			config.addAnnotatedClass(c);
+		}
 		LOGGER.info(config.getProperty("hibernate.dialect"));
 		
 		ServiceRegistry servReg = 
