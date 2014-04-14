@@ -120,10 +120,17 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 //		data.put("Model", new ArrayList<> ());
 		//START cpd=node(0) MATCH composite=(cpd)-[*1..1]->(c) RETURN nodes(composite);
 		//START cpd=node(0) MATCH path=(cpd)-[*1..1]->(c) RETURN collect(c)
-		ExecutionResult res = this.executionEngine.execute(String.format(
-				"START cpd=node(%d) MATCH path=(cpd)-[*1..1]->(c) RETURN collect(c);", id));
+//		ExecutionResult res = this.executionEngine.execute(String.format(
+//				"START cpd=node(%d) MATCH path=(cpd)-[*1..1]->(c)-[:Isomorphic]->(i) RETURN collect(c);", id));
 //		ExecutionResult res = this.engine.execute(String.format(
 //				"START cpd=node(%d) MATCH composite=(cpd)-[*1..1]->(c) RETURN distinct nodes(composite);", id));
+		
+		String query = 
+		String.format("START cpd=node(2905) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
+				+ "UNION START cpd=node(2905) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret, args", id, id);
+		
+		ExecutionResult res = this.executionEngine.execute(query);
+		
 		List<Object> list = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
 		for (Object obj: list) {
 			if (obj instanceof SeqWrapper) {
@@ -190,6 +197,18 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 //		System.out.println(node);
 		String labels = StringUtils.join(node.getLabels(), ":");
 		
+//		String isoFormula = null;
+//		for (Relationship r : node.getRelationships(CompoundRelationshipType.HasFormula)) {
+//			Node formulaNode = r.getOtherNode(node);
+//			for (Relationship r_ : formulaNode.getRelationships(CompoundRelationshipType.Isomorphic)) {
+//				Node isoFormulaNode = r_.getOtherNode(formulaNode);
+//				isoFormula = (String) isoFormulaNode.getProperty("formula");
+//			}
+//		}
+//		
+//		if (isoFormula != null) {
+//			propsMap.put("isoFormula", isoFormula);
+//		}
 		for (String prop : node.getPropertyKeys()) {
 			propsMap.put(prop, node.getProperty(prop));
 		}

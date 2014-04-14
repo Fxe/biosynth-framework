@@ -23,18 +23,20 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (f:Formula) ASSERT f.formula IS UNIQUE",
 		"CREATE CONSTRAINT ON (i:InChI) ASSERT i.inchi IS UNIQUE",
 		"CREATE CONSTRAINT ON (s:CanSMILES) ASSERT s.can IS UNIQUE",
+		"CREATE CONSTRAINT ON (if:IsotopeFormula) ASSERT if.formula IS UNIQUE",
 		"CREATE CONSTRAINT ON (s:SMILES) ASSERT s.smiles IS UNIQUE",
 		"CREATE CONSTRAINT ON (c:Charge) ASSERT c.charge IS UNIQUE",
 		"CREATE CONSTRAINT ON (c:Compartment) ASSERT c.compartment IS UNIQUE",
 		"CREATE CONSTRAINT ON (m:Model) ASSERT m.id IS UNIQUE",
 	};
 	
-	public static void initializeNeo4jDatabaseConstraints(String databasePath) {
-		GraphDatabaseService db = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
-		ExecutionEngine engine = new ExecutionEngine(db);
+	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
 		for (String query: contraints) {
 			engine.execute(query);
 		}
-		db.shutdown();
+		
+		return graphDatabaseService;
 	}
 }

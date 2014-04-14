@@ -32,6 +32,11 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	private Set<String> names = new HashSet<> ();
 	
 	@ElementCollection
+	@CollectionTable(name="integrated_metabolite_isotope_formula", joinColumns=@JoinColumn(name="metabolite_id"))
+	@Column(name="iso_formula", length=255, nullable=false)
+	private Set<String> isoFormulas = new HashSet<> ();
+	
+	@ElementCollection
 	@CollectionTable(name="integrated_metabolite_formula", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="formula", length=255, nullable=false)
 	private Set<String> formulas = new HashSet<> ();
@@ -40,6 +45,11 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	@CollectionTable(name="integrated_metabolite_charge", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="charge", nullable=false)
 	private Set<Integer> charges = new HashSet<> ();
+	
+	@ElementCollection
+	@CollectionTable(name="integrated_metabolite_can_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
+	@Column(name="can_smiles", nullable=false)
+	private Set<String> canSmiles = new HashSet<> ();
 	
 	@ElementCollection
 	@CollectionTable(name="integrated_metabolite_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
@@ -75,73 +85,35 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		this.crossreferences = crossreferences;
 	}
 
-	public Set<String> getNames() {
-		return names;
-	}
+	public Set<String> getNames() { return names;}
+	public void setNames(Set<String> names) { this.names = names;}
 
-	public void setNames(Set<String> names) {
-		this.names = names;
-	}
+	public Set<String> getFormulas() { return formulas;}
+	public void setFormulas(Set<String> formulas) { this.formulas = formulas;}
 
-	public Set<String> getFormulas() {
-		return formulas;
-	}
+	public Set<Integer> getCharges() { return charges;}
+	public void setCharges(Set<Integer> charges) { this.charges = charges;}
 
-	public void setFormulas(Set<String> formulas) {
-		this.formulas = formulas;
-	}
+	public Set<String> getCanSmiles() { return canSmiles;}
+	public void setCanSmiles(Set<String> canSmiles) { this.canSmiles = canSmiles;}
 
-	public Set<Integer> getCharges() {
-		return charges;
-	}
+	public Set<String> getSmiles() { return smiles;}
+	public void setSmiles(Set<String> smiles) { this.smiles = smiles;}
 
-	public void setCharges(Set<Integer> charges) {
-		this.charges = charges;
-	}
-
-	public Set<String> getSmiles() {
-		return smiles;
-	}
-
-	public void setSmiles(Set<String> smiles) {
-		this.smiles = smiles;
-	}
-
-	public Set<String> getInchis() {
-		return inchis;
-	}
-
-	public void setInchis(Set<String> inchis) {
-		this.inchis = inchis;
-	}
+	public Set<String> getInchis() { return inchis;}
+	public void setInchis(Set<String> inchis) { this.inchis = inchis;}
 	
+	public Set<String> getModels() { return models;}
+	public void setModels(Set<String> models) { this.models = models;}
+
+	public Set<String> getIsoFormulas() { return isoFormulas;}
+	public void setIsoFormulas(Set<String> isoFormulas) { this.isoFormulas = isoFormulas;}
+
+	public Set<String> getCompartments() { return compartments;}
+	public void setCompartments(Set<String> compartments) { this.compartments = compartments;}
 	
-	
-	public Set<String> getModels() {
-		return models;
-	}
-
-	public void setModels(Set<String> models) {
-		this.models = models;
-	}
-
-	public Set<String> getCompartments() {
-		return compartments;
-	}
-
-	public void setCompartments(Set<String> compartments) {
-		this.compartments = compartments;
-	}
-	
-	
-
-	public Set<String> getSources() {
-		return sources;
-	}
-
-	public void setSources(Set<String> sources) {
-		this.sources = sources;
-	}
+	public Set<String> getSources() { return sources;}
+	public void setSources(Set<String> sources) { this.sources = sources;}
 
 	@Override
 	public String toString() {

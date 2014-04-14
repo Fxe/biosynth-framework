@@ -62,11 +62,17 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 			case "compartment":
 				cpd.getCompartments().add((String)value);
 				break;
+			case "isoFormula":
+				cpd.getIsoFormulas().add((String) value);
+				break;
 			case "formula":
 				cpd.getFormulas().add((String)value);
 				break;
 			case "smiles":
 				cpd.getSmiles().add((String)value);
+				break;
+			case "canSmiles":
+				cpd.getCanSmiles().add((String) value);
 				break;
 			case "inchi":
 				cpd.getInchis().add((String)value);
