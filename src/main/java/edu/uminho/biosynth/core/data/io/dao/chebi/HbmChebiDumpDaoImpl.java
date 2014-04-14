@@ -25,10 +25,10 @@ import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetab
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 @Repository
-public class HbmChebiDumpDaoImpl implements IMetaboliteDao<ChebiMetaboliteEntity> {
+public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity> {
 
 	private static Logger LOGGER = Logger.getLogger(HbmChebiDumpDaoImpl.class);
 	
