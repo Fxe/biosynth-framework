@@ -15,9 +15,9 @@ import java.util.TreeMap;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class CsvMnxMetaboliteDaoImpl implements IMetaboliteDao<MnxMetaboliteEntity> {
+public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntity> {
 
 	private File metaboliteCsvFile;
 	private File crossreferenceCsvFile;

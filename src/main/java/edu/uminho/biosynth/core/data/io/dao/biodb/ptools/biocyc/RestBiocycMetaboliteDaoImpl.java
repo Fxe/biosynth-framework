@@ -5,10 +5,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,57 +14,18 @@ import org.json.XML;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
-import edu.uminho.biosynth.core.data.io.http.HttpRequest;
 
-public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocyc {
+public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao 
+		implements MetaboliteDao<BioCycMetaboliteEntity> {
 
 	private static Logger LOGGER = Logger.getLogger(RestBiocycMetaboliteDaoImpl.class);
 	
-	private String pgdb = "META";
-	
-	private final static String xmlGet = "http://biocyc.org/getxml?%s:%s";
-	private final String xmlquery = "http://biocyc.org/xmlquery?%s";
+
 //	private final String urlRxnGeneAPI = "http://biocyc.org/apixml?fn=genes-of-reaction&id=META:";
 //	private final String urlRxnEnzymeAPI = "http://biocyc.org/apixml?fn=enzymes-of-reaction&id=%s:%s&detail=full";
-	
-	
-	
-	public Set<String> getAllBioCycPGDB() {
-		try {
-			//TODO: apply local caching if enabled
-			//String xmlDoc = edu.uminho.biosynth.util.BioSynthUtilsIO.readFromFile("./input/xml/xmlqueryDBS.xml"); 
-			String xmlDoc = HttpRequest.get(xmlquery + "dbs");
-			if ( xmlDoc == null) {
-				LOGGER.error("Error Retrieve - pgdbs");
-				return null;
-			}
-			
-			JSONObject obj = XML.toJSONObject(xmlDoc).getJSONObject("ptools-xml");
-			JSONObject metaData = obj.getJSONObject("metadata");
-			Set<String> pgdbs = new HashSet<String> ();
-			
-			JSONArray pgdbsArray;
-			Object pgdbsObj = metaData.get("PGDB");
-			if ( pgdbsObj instanceof JSONArray) {
-				pgdbsArray = (JSONArray) pgdbsObj;
-			} else {
-				pgdbsArray = new JSONArray ();
-				pgdbsArray.put(pgdbsObj);
-			}
-			for (int i = 0; i < pgdbsArray.length(); i++) {
-				pgdbs.add( pgdbsArray.getJSONObject(i).getString("orgid"));
-			}
-			//System.out.println(obj);
-			return pgdbs;
-		} catch (JSONException e) {
-			LOGGER.error(String.format("JSONException - %s", e.getMessage()));
-			return null;
-		}
-	}
-	
-	public String getPgdb() { return pgdb;}
-	public void setPgdb(String pgdb) { this.pgdb = pgdb;}
+
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {

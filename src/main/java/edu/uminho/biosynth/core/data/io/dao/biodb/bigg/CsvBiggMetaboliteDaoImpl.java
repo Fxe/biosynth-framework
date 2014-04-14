@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.bigg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class CsvBiggMetaboliteDaoImpl implements IMetaboliteDao<BiggMetaboliteEntity>{
+/**
+ * 
+ * @author Filipe Liu
+ *
+ */
+public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity>{
 
+	@Autowired
 	private File csvFile;
 	
 	public File getCsvFile() { return csvFile;}

@@ -12,9 +12,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class HbmKeggCompoundMetaboliteDaoImpl implements IMetaboliteDao<KeggCompoundMetaboliteEntity> {
+public class HbmKeggCompoundMetaboliteDaoImpl implements MetaboliteDao<KeggCompoundMetaboliteEntity> {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

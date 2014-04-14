@@ -1,27 +1,62 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.data.io.parser.IGenericReactionParser;
 
-public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements IGenericReactionParser {
+public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser 
+	implements IGenericReactionParser  {
 
-	private final static Logger LOGGER = Logger.getLogger(BioCycReactionXMLParser.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(BioCycReactionXMLParser.class);
 	public static boolean VERBOSE = false;
 
 	private final JSONObject base;
 	private Map<String, String> leftEq;
 	private Map<String, String> rightEq;
+	
+	private JSONArray getJsonArray(JSONObject obj, String key) {
+		JSONArray jsonArray;
+		Object o = obj.get(key);
+
+		if (o instanceof JSONArray) {
+			jsonArray = (JSONArray) o;
+		} else {
+			jsonArray = new JSONArray();
+			jsonArray.put(o);
+		}
+		
+		return jsonArray;
+	}
+	
+	private JSONObject getJsonObject(JSONObject obj, String key) {
+		JSONObject jsonObject;
+		Object o = obj.get(key);
+
+		if (o instanceof JSONObject) {
+			jsonObject = (JSONObject) o;
+		} else {
+			jsonObject = new JSONObject();
+			jsonObject.put("content", o);
+		}
+		
+		return jsonObject;
+	}
 	
 	public BioCycReactionXMLParser(String xmlDocument) throws JSONException {
 		super(xmlDocument);
@@ -33,7 +68,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 		try {
 			jsRxn = super.content.getJSONObject("ptools-xml").getJSONObject("Reaction");
 		} catch(JSONException jsEx) {
-			LOGGER.log(Level.SEVERE, jsEx.getMessage());
+			LOGGER.error(jsEx.getMessage());
 		}
 		this.base = jsRxn;
 	}
@@ -56,7 +91,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 			if ( orientation.equals("IRREVERSIBLE-RIGHT-TO-LEFT")) return -2;
 			System.err.println(this.getEntry() + " => " + orientation);
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error(ex.getMessage());
 		}
 		return 9999;
 	}
@@ -67,12 +102,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 	
 	@Override
 	public String getEntry() {
-		try {
-			return base.getString("frameid");		
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
-			return null;
-		}
+		return base.getString("frameid");
 	}
 
 	@Override
@@ -129,7 +159,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 	
 			return retMap;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error(ex.getMessage());
 			return null;
 		}
 	}
@@ -178,7 +208,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 	
 			return sb.toString();
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error(ex.getMessage());
 			return null;
 		}
 	}
@@ -205,7 +235,7 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 			}
 			return keggLink;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error(ex.getMessage());
 			return null;
 		}
 	}
@@ -248,9 +278,230 @@ public class BioCycReactionXMLParser extends AbstractBioCycXMLParser implements 
 			}
 			return ecn;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error(ex.getMessage());
 			return null;
 		}
 	}
+	
+	public List<BioCycReactionEcNumberEntity> getEcNumbers() {
+
+		if ( base.has("ec-number")) {
+			List<BioCycReactionEcNumberEntity> res = new ArrayList<> ();
+			
+			JSONObject ecnJsonObject = this.getJsonObject(this.base, "ec-number");
+			JSONArray ecnJsonArray = this.getJsonArray(ecnJsonObject, "content");
+			for (int i = 0; i < ecnJsonArray.length(); i++) {
+				BioCycReactionEcNumberEntity ecn = new BioCycReactionEcNumberEntity();
+				Object o = ecnJsonArray.get(i);
+				if (o instanceof JSONObject) {
+					JSONObject ecnInnerJsonObject = (JSONObject) o;
+					ecn.setEcNumber(ecnInnerJsonObject.getString("content"));
+					//TODO: ADD OFFCIAL STATUS
+				} else {
+					ecn.setEcNumber((String) o);
+				}
+				res.add(ecn);
+			}
+
+			return res;
+		}
+		
+		return null;
+	}
+	
+	public Boolean isPhysiologicallyRelevant() {
+		
+		if ( base.has("physiologically-relevant")) {
+			JSONObject physioJsonObject = this.base.getJSONObject("physiologically-relevant");
+			System.out.println(physioJsonObject);
+			Boolean physio = physioJsonObject.getBoolean("content");
+			return physio;
+		}
+		
+		return null;
+	}
+	
+	public Map<String, String> getStoichiometry(Object stoichObj) {
+		Map<String, String> properties = new HashMap<> ();
+		properties.put("cpdEntry", null);
+		properties.put("coefficient", "1");
+		properties.put("compartmentEntry", null);
+		System.out.println(stoichObj);
+
+		if (stoichObj instanceof JSONObject) {
+			JSONObject stoichiometryJsonObject = (JSONObject) stoichObj;
+			String type = null;
+			for (Object entityType : stoichiometryJsonObject.keySet()) {
+				type = entityType.toString();
+				System.out.println(type);
+				if (type.equals("compartment")) {
+					
+				} else if (type.equals("coefficient")) {
+					JSONObject coefficientJsonObject = this.getJsonObject(stoichiometryJsonObject, "coefficient");
+					String coefficient = coefficientJsonObject.get("content").toString();
+					properties.put("coefficient", coefficient);
+				} else if (type.equals("Compound") || type.equals("Protein") || type.equals("RNA")) {
+					String cpdEntry = stoichiometryJsonObject.getJSONObject(type).getString("frameid");
+					properties.put("cpdEntry", cpdEntry);
+				} else {
+					LOGGER.warn(String.format("[%s] unknown stoichiometry type [%s]", this.getEntry(), stoichObj));
+				}
+			}
+		} else {
+			String cpdEntry = (String) stoichObj;
+			properties.put("cpdEntry", cpdEntry);
+		}
+				
+		return properties;
+	}
+	
+	public List<BioCycReactionLeftEntity> getLeft() throws JSONException {
+		List<BioCycReactionLeftEntity> leftEntities = new ArrayList<> ();
+		
+		if ( base.has("left")) {
+			JSONArray leftJsonArray = this.getJsonArray(this.base, "left");
+			for (int i = 0; i < leftJsonArray.length(); i++) {
+				Map<String, String> properties = this.getStoichiometry(leftJsonArray.get(i));
+				
+				BioCycReactionLeftEntity bioCycReactionLeftEntity = new BioCycReactionLeftEntity();
+				try {
+					bioCycReactionLeftEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+				} catch (NumberFormatException e) {
+					bioCycReactionLeftEntity.setValue(Double.NaN);
+				}
+				bioCycReactionLeftEntity.setCoefficient(properties.get("coefficient"));
+				bioCycReactionLeftEntity.setCpdEntry(properties.get("cpdEntry"));
+				leftEntities.add(bioCycReactionLeftEntity);
+			}
+		}
+		
+		return leftEntities;
+	}
+	
+	public List<BioCycReactionRightEntity> getRight() throws JSONException {
+		List<BioCycReactionRightEntity> rightEntities = new ArrayList<> ();
+		
+		if ( base.has("right")) {
+			JSONArray rightJsonArray = this.getJsonArray(this.base, "right");
+			for (int i = 0; i < rightJsonArray.length(); i++) {
+				Map<String, String> properties = this.getStoichiometry(rightJsonArray.get(i));
+
+				BioCycReactionRightEntity bioCycReactionRightEntity = new BioCycReactionRightEntity();
+				try {
+					bioCycReactionRightEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+				} catch (NumberFormatException e) {
+					bioCycReactionRightEntity.setValue(Double.NaN);
+				}
+				bioCycReactionRightEntity.setCoefficient(properties.get("coefficient"));
+				bioCycReactionRightEntity.setCpdEntry(properties.get("cpdEntry"));
+				rightEntities.add(bioCycReactionRightEntity);
+			}
+		}
+		
+		return rightEntities;
+	}
+	
+	public List<BioCycReactionCrossReferenceEntity> getCrossReferences() throws JSONException {
+		List<BioCycReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
+		
+		if (this.base.has("dblink")) {
+			JSONArray dblinkJsArray = null;
+			Object dblinkObj = this.base.get("dblink");
+			if (dblinkObj instanceof JSONArray) {
+				dblinkJsArray = (JSONArray) dblinkObj;
+			} else {
+				dblinkJsArray = new JSONArray();
+				dblinkJsArray.put(dblinkObj);
+			}
+			for (int i = 0; i < dblinkJsArray.length(); i++) {
+				JSONObject dblinkJsObj = dblinkJsArray.getJSONObject(i);
+				BioCycReactionCrossReferenceEntity crossReference = new BioCycReactionCrossReferenceEntity();
+				//XXX: must change type for genes
+				crossReference.setType(GenericCrossReference.Type.DATABASE);
+				if (dblinkJsObj.has("dblink-db"))
+					crossReference.setRef(dblinkJsObj.getString("dblink-db"));
+				if (dblinkJsObj.has("dblink-oid"))
+					crossReference.setValue(dblinkJsObj.get("dblink-oid").toString());
+				if (dblinkJsObj.has("unification"))
+					crossReference.setRelationship(dblinkJsObj.getString("unification"));
+				if (dblinkJsObj.has("dblink-URL"))
+					crossReference.setUrl(dblinkJsObj.getString("dblink-URL"));
+				crossReferences.add(crossReference);
+			}
+		}
+			
+		return crossReferences;
+	}
+
+	public List<String> getParents() {
+		List<String> parentStrings = new ArrayList<> ();
+		
+		if (this.base.has("parent")) {
+			JSONArray parentJsonArray = this.getJsonArray(this.base, "parent");
+			for (int i = 0; i < parentJsonArray.length(); i++) {
+				JSONObject parentJsonObject = parentJsonArray.getJSONObject(i);
+				String parentEntry = parentJsonObject.getJSONObject("Reaction").getString("frameid");
+				parentStrings.add(parentEntry.trim());
+			}
+		}
+		
+		return parentStrings;
+	}
+	
+	public List<String> getPathways() {
+		List<String> pathwayStrings = new ArrayList<> ();
+		
+		if (this.base.has("in-pathway")) {
+			JSONArray pathwayJsonArray = this.getJsonArray(this.base, "in-pathway");
+			
+			for (int i = 0; i < pathwayJsonArray.length(); i++) {
+				JSONArray pathwayInnerJsonArray = null;
+				System.out.println(pathwayJsonArray.getJSONObject(i));
+				if (pathwayJsonArray.getJSONObject(i).has("Pathway"))
+					pathwayInnerJsonArray = this.getJsonArray(pathwayJsonArray.getJSONObject(i), "Pathway");
+				if (pathwayJsonArray.getJSONObject(i).has("Reaction"))
+					pathwayInnerJsonArray = this.getJsonArray(pathwayJsonArray.getJSONObject(i), "Reaction");
+				
+				
+				for (int j = 0; j < pathwayInnerJsonArray.length(); j++) {
+					String pathwayEntry = pathwayInnerJsonArray.getJSONObject(j).getString("frameid");
+					pathwayStrings.add(pathwayEntry.trim());
+				}
+			}
+		}
+		
+		return pathwayStrings;
+	}
+	
+	public List<String> getEnzymaticReactions() {
+		List<String> enzymaticReactionStrings = new ArrayList<> ();
+		
+		if (this.base.has("enzymatic-reaction")) {
+			JSONArray enzymaticReactionJsonArray = this.getJsonArray(this.base, "enzymatic-reaction");
+			for (int i = 0; i < enzymaticReactionJsonArray.length(); i++) {
+				JSONArray enzymaticReactionInnerJsonArray = this.getJsonArray(
+						enzymaticReactionJsonArray.getJSONObject(i), "Enzymatic-Reaction");
+				
+				for (int j = 0; j < enzymaticReactionInnerJsonArray.length(); j++) {
+					String enzymaticEntry = enzymaticReactionInnerJsonArray.getJSONObject(j).getString("frameid");
+					enzymaticReactionStrings.add(enzymaticEntry.trim());
+				}
+			}
+		}
+		
+		return enzymaticReactionStrings;
+	}
+	
+	public Boolean isOrphan() {
+		if (this.base.has("orphan")) {
+			String content = this.base.getString("orphan");
+			if (content.equals("NO")) return false;
+			
+			System.out.println("WHAT IS " + this.base.get("orphan") + "??????????????");
+		}
+		
+		return null;
+	}
+	
 
 }
