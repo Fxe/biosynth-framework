@@ -17,9 +17,9 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteEntity> implements IMetaboliteDao<BiggMetaboliteEntity> {
+public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteEntity> implements MetaboliteDao<BiggMetaboliteEntity> {
 
 	private static Logger LOGGER = Logger.getLogger(Neo4jBiggMetaboliteDaoImpl.class);
 	

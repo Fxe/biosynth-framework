@@ -255,6 +255,11 @@ public class IntegrationOLAP {
 			public Integer generateKey() {
 				return seq++;
 			}
+
+			@Override
+			public void generateFromLastElement(Integer key) {
+				System.out.println("bzbzbbzbzb");
+			}
 		};
 		olap.setDao(dao_stga);
 		olap.setIdGenerator(generator);

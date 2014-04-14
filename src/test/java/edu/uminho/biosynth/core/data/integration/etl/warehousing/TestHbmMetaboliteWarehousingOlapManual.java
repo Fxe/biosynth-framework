@@ -68,6 +68,11 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 			public Integer generateKey() {
 				return seq++;
 			}
+
+			@Override
+			public void generateFromLastElement(Integer key) {
+				System.out.println(":):):):):)");
+			}
 		};
 		olap.setDao(dao_stga);
 		olap.setIdGenerator(generator);

@@ -190,6 +190,11 @@ public class TestIntegrateMetabolite {
 					// TODO Auto-generated method stub
 					
 				}
+				
+				@Override
+				public void generateFromLastElement(String key) {
+					System.out.println("bzbzbbzbzb");
+				}
 			};
 			
 			IIntegrationStrategy<GenericMetabolite, IntegratedMetabolite> integrationStrategy =

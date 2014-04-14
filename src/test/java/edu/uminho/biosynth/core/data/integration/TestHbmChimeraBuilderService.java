@@ -16,6 +16,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDao
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jIntegratedMetaboliteDao;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraDatabaseBuilderServiceImpl;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
+import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraBuilderService {
@@ -72,17 +73,7 @@ public class TestHbmChimeraBuilderService {
 		builder.setData(data);
 		builder.setMeta(meta);
 		builder.setTarget(target);
-		builder.setEntryGenerator(new IKeyGenerator<String>() {
-			
-			private String base = "IM";
-			private int counter = 1;
-			
-			@Override
-			public void reset() { this.counter = 1;}
-			
-			@Override
-			public String generateKey() { return base + counter++;}
-		});
+		builder.setEntryGenerator(new PrefixKeyGenerator("IM_"));
 		
 		builder.changeIntegrationSet(1L);
 		builder.generateIntegratedDatabase();

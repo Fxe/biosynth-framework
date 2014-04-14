@@ -80,15 +80,7 @@ public class TestHbmChimeraService {
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
-		integrator.setClusterIdGenerator(new IKeyGenerator<String>() {
-			private Integer base = 0;
-			
-			@Override
-			public void reset() { base = 0;}
-			
-			@Override
-			public String generateKey() { return "GEN_" + base++;}
-		});
+		integrator.setClusterIdGenerator(new PrefixKeyGenerator("GEN_"));
 		
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);

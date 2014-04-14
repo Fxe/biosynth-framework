@@ -16,9 +16,9 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEntity> implements IMetaboliteDao<MnxMetaboliteEntity> {
+public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEntity> implements MetaboliteDao<MnxMetaboliteEntity> {
 
 	private static Label compoundLabel = CompoundNodeLabel.MetaNetX;
 	

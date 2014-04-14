@@ -7,9 +7,9 @@ import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jIntegratedMetaboliteDao implements IMetaboliteDao<IntegratedMetaboliteEntity> {
+public class Neo4jIntegratedMetaboliteDao implements MetaboliteDao<IntegratedMetaboliteEntity> {
 
 	private GraphDatabaseService graphdb;
 	private ExecutionEngine engine;

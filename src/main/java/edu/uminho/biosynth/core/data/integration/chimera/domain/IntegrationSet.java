@@ -28,6 +28,9 @@ public class IntegrationSet {
 	@Column(name="description", nullable=true, length=255)
 	private String description;
 	
+	@Column(name="last_cluster_entry", nullable=true, length=255)
+	private String lastClusterEntry;
+	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integrationSet")
 	@MapKey(name="id")
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();
@@ -37,6 +40,9 @@ public class IntegrationSet {
 	
 	public String getName() { return name;}
 	public void setName(String name) { this.name = name;}
+	
+	public String getLastClusterEntry() { return lastClusterEntry;}
+	public void setLastClusterEntry(String lastClusterEntry) { this.lastClusterEntry = lastClusterEntry;}
 	
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}

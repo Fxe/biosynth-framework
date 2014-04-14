@@ -18,13 +18,17 @@ public interface ChimeraMetadataDao {
 	public IntegrationSet getIntegrationSet(Serializable id);
 	public IntegrationSet getIntegrationSet(String id);
 	
+	public IntegratedCluster getIntegratedClusterByEntry(String entry, Long integrationSetId);
+	public IntegratedCluster getIntegratedClusterById(Long id);
+	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId);
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId);
+	
 	public void saveIntegratedCluster(IntegratedCluster cluster);
 	public void mergeCluster(List<Long> ids, Serializable integrationId);
-	public IntegratedCluster getIntegratedClusterByName(String name, Long integrationSetId);
-	public IntegratedCluster getIntegratedClusterById(Long id);
-	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
+	
 	public void deleteCluster(IntegratedCluster cluster);
+	public String getLastClusterEntry(Long integrationSetId);
 	
 	public List<Long> getAllIntegratedClusterMembersId();
 	

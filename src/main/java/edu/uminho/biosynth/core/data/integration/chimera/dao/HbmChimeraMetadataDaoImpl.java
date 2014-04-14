@@ -146,7 +146,7 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	}
 
 	@Override
-	public IntegratedCluster getIntegratedClusterByName(String name, Long integrationSetId) {
+	public IntegratedCluster getIntegratedClusterByEntry(String name, Long integrationSetId) {
 		List<?> res = this.getSession().createCriteria(IntegratedCluster.class)
 				.add(Restrictions.and(
 						Restrictions.eq("name", name), 
@@ -196,6 +196,21 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 
 		System.out.println("Done !");
 		return integratedClusters;
+	}
+
+	@Override
+	public String getLastClusterEntry(Long integrationSetId) {
+		IntegrationSet integrationSet = IntegrationSet.class.cast(
+				this.getSession().get(IntegrationSet.class, integrationSetId));
+		return integrationSet.getLastClusterEntry();
+	}
+
+	@Override
+	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId) {
+		@SuppressWarnings("unchecked")
+		List<IntegratedCluster> res = this.getSession().createCriteria(IntegratedCluster.class)
+				.add(Restrictions.eq("integrationSet.id", integrationSetId)).list();
+		return res;
 	}
 
 }

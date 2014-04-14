@@ -16,9 +16,9 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlycanMetaboliteEntity> implements IMetaboliteDao<KeggGlycanMetaboliteEntity>{
+public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlycanMetaboliteEntity> implements MetaboliteDao<KeggGlycanMetaboliteEntity>{
 	
 	private static Label compoundLabel = CompoundNodeLabel.KEGG;
 	

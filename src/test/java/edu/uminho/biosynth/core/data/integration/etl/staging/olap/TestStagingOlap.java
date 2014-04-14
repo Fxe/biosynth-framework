@@ -71,6 +71,11 @@ public class TestStagingOlap {
 			public Integer generateKey() {
 				return seq++;
 			}
+			
+			@Override
+			public void generateFromLastElement(Integer key) {
+				System.out.println(":):):):):)");
+			}
 		};
 		System.out.println(initialCube.size());
 		

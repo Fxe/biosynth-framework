@@ -15,9 +15,9 @@ import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetaboliteEntity> implements IMetaboliteDao<ChebiMetaboliteEntity>{
+public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetaboliteEntity> implements MetaboliteDao<ChebiMetaboliteEntity>{
 
 	private static Logger LOGGER = Logger.getLogger(Neo4jChebiMetaboliteDaoImpl.class);
 	

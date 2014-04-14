@@ -18,7 +18,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetabo
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilderService{
 
@@ -29,7 +29,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	@Autowired
 	private ChimeraMetadataDao meta;
 	@Autowired
-	private IMetaboliteDao<IntegratedMetaboliteEntity> target;
+	private MetaboliteDao<IntegratedMetaboliteEntity> target;
 	
 	private IKeyGenerator<String> entryGenerator;
 	
@@ -41,8 +41,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	public ChimeraMetadataDao getMeta() { return meta;}
 	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
 	
-	public IMetaboliteDao<IntegratedMetaboliteEntity> getTarget() { return target;}
-	public void setTarget(IMetaboliteDao<IntegratedMetaboliteEntity> target) { this.target = target;}
+	public MetaboliteDao<IntegratedMetaboliteEntity> getTarget() { return target;}
+	public void setTarget(MetaboliteDao<IntegratedMetaboliteEntity> target) { this.target = target;}
 	
 	public IKeyGenerator<String> getEntryGenerator() { return entryGenerator;}
 	public void setEntryGenerator(IKeyGenerator<String> entryGenerator) { this.entryGenerator = entryGenerator;}
@@ -125,7 +125,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	
 	@Override
 	public IntegratedMetaboliteEntity buildCompoundByClusterName(String cpdId) {
-		IntegratedCluster cluster = this.meta.getIntegratedClusterByName(cpdId, this.currentIntegrationSet.getId());
+		IntegratedCluster cluster = this.meta.getIntegratedClusterByEntry(cpdId, this.currentIntegrationSet.getId());
 		if (cluster == null) return null;
 		return this.buildCompound(cluster);
 	}

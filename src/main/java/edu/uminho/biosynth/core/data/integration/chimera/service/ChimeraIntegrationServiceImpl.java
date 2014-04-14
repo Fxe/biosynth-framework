@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
@@ -275,8 +276,66 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		return res;
 	}
 	
+	public List<IntegratedCluster> ai(ClusteringStrategy strategy, List<Long> elementsToCascade) {
+		long start, end;
+		Map<String, Set<Long>> tempClustersGenerated = new HashMap<> ();
+		
+System.out.println("Generating New Clusters");
+		start = System.currentTimeMillis();
+		Set<Long> visitedIds = new HashSet<> ();
+		for (Long elementId : elementsToCascade) {
+			if (!visitedIds.contains(elementId)) {
+				strategy.setInitialNode(elementId);
+				List<Long> clusterElements = strategy.execute();
+				if (!clusterElements.isEmpty()) {
+					visitedIds.addAll(clusterElements);
+					String clusterEntry = this.clusterIdGenerator.generateKey();
+					System.out.println(clusterEntry);
+					tempClustersGenerated.put(clusterEntry, new HashSet<> (clusterElements));
+				}
+			}
+		}
+end = System.currentTimeMillis();
+System.out.println("Ok ! [" + (end - start) + "]");
+		
+System.out.println("Resolving Conflicts");
+System.out.println("Before " + tempClustersGenerated.keySet().size());
+start = System.currentTimeMillis();
+		Map<String, Set<Long>> resolvedClusters = IntegrationCollectionUtilities.resolveConflicts2(
+				tempClustersGenerated);
+		end = System.currentTimeMillis();
+System.out.println("After " + resolvedClusters.keySet().size());
+System.out.println("Ok ! [" + (end - start) + "]");
+
+System.out.println("Loading Prev Clusters");
+start = System.currentTimeMillis();
+		for (IntegratedCluster integratedCluster : this.meta.getAllIntegratedClusters(this.currentIntegrationSet.getId())) {
+			String clusterEntry = integratedCluster.getName();
+			Set<Long> clustersElements = new HashSet<> (integratedCluster.listAllIntegratedMemberIds());
+			resolvedClusters.put(clusterEntry, clustersElements);
+		}
+end = System.currentTimeMillis();
+System.out.println("Ok ! [" + (end - start) + "]");
+
+System.out.println("Resolving Db Conflicts");
+System.out.println("Before " + resolvedClusters.keySet().size());
+start = System.currentTimeMillis();
+		Map<String, Set<Long>> finalClusters = IntegrationCollectionUtilities.resolveConflicts2(
+				resolvedClusters);
+end = System.currentTimeMillis();
+System.out.println("After " + finalClusters.keySet().size());
+System.out.println("Ok ! [" + (end - start) + "]");
+		
+System.out.println("Update Clusters");
+start = System.currentTimeMillis();
+		
+end = System.currentTimeMillis();
+System.out.println("Ok ! [" + (end - start) + "]");
+		return null;
+	}
+	
 	public List<IntegratedCluster> mergeClusterCascade(ClusteringStrategy strategy, List<Long> elementsToCascade) {
-		Map<Long, List<Long>> clusterIdToClusterElements = new HashMap<> ();
+		Map<Long, Set<Long>> clusterIdToClusterElements = new HashMap<> ();
 		//Newly generated Clusters
 		Map<Long, Set<Long>> elementsToClusterIds_ = new HashMap<> ();
 		//Previous generated Clusters shouldbe Long x Long
@@ -284,7 +343,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		
 		Set<Long> visitedIds = new HashSet<> ();
 		
-		long i = 0;
+		long i = 0; //this.meta.getLastClusterEntry(this.currentIntegrationSet.getId());
 		for (Long elementId : elementsToCascade) {
 			
 			if (!visitedIds.contains(elementId)) {
@@ -294,7 +353,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 				if (!clusterElements.isEmpty()) {
 				
 						visitedIds.addAll(clusterElements);
-						clusterIdToClusterElements.put(i++, clusterElements);
+						clusterIdToClusterElements.put(i++, new HashSet<> (clusterElements));
 						for (Long eid : clusterElements) {
 							elementsToClusterIds_.put(eid, new HashSet<Long> ());
 						}
@@ -307,17 +366,10 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		System.out.println("Done !");
 		System.out.println("Solving Query Conflicts");
 		
-		for (Long cid : clusterIdToClusterElements.keySet()) {
-			for (Long eid : clusterIdToClusterElements.get(cid)) {
-				elementsToClusterIds_.get(eid).add(cid);
-			}
-		}
-		
-		for (Long eid : elementsToClusterIds_.keySet()) {
-			if (elementsToClusterIds_.get(eid).size() > 1) {
-				System.out.println("AI !");
-			}
-		}
+		Set<Long> deleted = new HashSet<> ();
+		Map<Long, Long> elementsToClustersFixed = IntegrationCollectionUtilities.resolveConflicts(
+				clusterIdToClusterElements, null, deleted);
+		System.out.println("These died ... " + deleted);
 		
 		for (Long integratedClusterId : this.meta.getAllIntegratedClusterIds(this.currentIntegrationSet.getId())) {
 			IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(integratedClusterId);
@@ -328,19 +380,24 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		
 		System.out.println(String.format("ElementsToClusterIds Size %d", elementsToClusterIds.size()));
 		
-		for (Long generatedClusterId : clusterIdToClusterElements.keySet()) {
-			Set<Long> clustersToJoin = new HashSet<> ();
-			for (Long eid : clusterIdToClusterElements.get(generatedClusterId)) {
-				if (elementsToClusterIds.containsKey(eid)) {
-					clustersToJoin.add(elementsToClusterIds.get(eid));
-				}
-			}
-			
-			if (!clustersToJoin.isEmpty()) {
-				
-				System.out.println("Join " + clustersToJoin);
-			}
+		Map<Long, Set<Long>> conflictMapDbVsGenerated = new HashMap<> ();
+		for (Long eid : elementsToClusterIds.keySet()) {
+			conflictMapDbVsGenerated.put(eid, new HashSet<Long> ());
 		}
+		for (Long eid : elementsToClustersFixed.keySet()) {
+			conflictMapDbVsGenerated.put(eid, new HashSet<Long> ());
+		}
+		for (Long eid : elementsToClusterIds.keySet()) {
+			conflictMapDbVsGenerated.get(eid).add(elementsToClusterIds.get(eid));
+		}
+		for (Long eid : elementsToClustersFixed.keySet()) {
+			conflictMapDbVsGenerated.get(eid).add(elementsToClustersFixed.get(eid));
+		}
+		
+//		Map<Long, Long> finalClusters = IntegrationCollectionUtilities.resolveConflicts(
+//				clusterIdToClusterElements, null, deleted);
+//		System.out.println("These died ... " + deleted);
+
 //		int progress = 0;
 //		int total = elementsToCascade.size();
 //		

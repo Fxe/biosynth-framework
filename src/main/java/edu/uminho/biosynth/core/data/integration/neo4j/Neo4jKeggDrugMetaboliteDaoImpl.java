@@ -17,9 +17,9 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jKeggDrugMetaboliteDaoImpl extends AbstractNeo4jDao<KeggDrugMetaboliteEntity> implements IMetaboliteDao<KeggDrugMetaboliteEntity>{
+public class Neo4jKeggDrugMetaboliteDaoImpl extends AbstractNeo4jDao<KeggDrugMetaboliteEntity> implements MetaboliteDao<KeggDrugMetaboliteEntity>{
 	
 	private static final Logger LOGGER = Logger.getLogger(Neo4jKeggDrugMetaboliteDaoImpl.class);
 	

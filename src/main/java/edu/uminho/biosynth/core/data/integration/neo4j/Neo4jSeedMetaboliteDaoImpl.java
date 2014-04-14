@@ -17,9 +17,9 @@ import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.data.io.dao.IMetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
-public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteEntity> implements IMetaboliteDao<SeedMetaboliteEntity> {
+public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteEntity> implements MetaboliteDao<SeedMetaboliteEntity> {
 
 	private static Label compoundLabel = CompoundNodeLabel.Seed;
 	
