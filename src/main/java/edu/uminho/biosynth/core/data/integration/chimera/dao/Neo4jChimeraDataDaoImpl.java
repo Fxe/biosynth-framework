@@ -126,53 +126,63 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 //				"START cpd=node(%d) MATCH composite=(cpd)-[*1..1]->(c) RETURN distinct nodes(composite);", id));
 		
 		String query = 
-		String.format("START cpd=node(2905) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
-				+ "UNION START cpd=node(2905) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret, args", id, id);
+		String.format("START cpd=node(%d) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
+				+ "UNION START cpd=node(%d) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret", id, id);
 		
 		ExecutionResult res = this.executionEngine.execute(query);
 		
 		List<Object> list = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
 		for (Object obj: list) {
+			NodeProxy proxy = null;
 			if (obj instanceof SeqWrapper) {
 				for (Object node: (SeqWrapper<?>) obj) {
 //					System.out.println(node);
-					NodeProxy proxy = (NodeProxy) node;
-//					System.out.println(proxy.getId() + " -> " +  proxy.getLabels());
-					if (id.equals(proxy.getId())) {
-						for (Label label : proxy.getLabels()) {
-							sourceEntry = sourceEntry.concat(label.name()).concat(":");
-						}
-						sourceEntry = sourceEntry.concat((String) proxy.getProperty("entry"));
-//						System.out.println("SELF !");
-					} else {
-//						System.out.println(proxy.getLabels());
-//						System.out.println(proxy.getPropertyKeys());
-						Set<String> labels = new HashSet<> ();
-						for (Label label: IteratorUtil.asSet(proxy.getLabels()))
-							labels.add(label.toString());
-						if (labels.contains("Compound")) {
-							labels.remove("Compound");
-//							System.out.println("Adding Crossreference");
-							//These Compound Labels -> Crossreferences !
-							IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
-//							GenericCrossReference xref = new GenericCrossReference();
-							xref.setType(GenericCrossReference.Type.DATABASE);
-							xref.setRef(labels.iterator().next());
-							
-							xref.setValue((String)proxy.getProperty("entry"));
-							createAndAdd(data, "crossreferences", xref);
-						} else {
-//							System.out.println("Adding Property");
-							String property = proxy.getPropertyKeys().iterator().next();
-							Object value = proxy.getProperty(property);
-							createAndAdd(data, property, value);
-							//Other Labels -> Properties
-						}
-					}
-//					clusterElements.add(proxy.getId());
+					proxy = (NodeProxy) node;
 				}
+			} else if (obj instanceof NodeProxy) {
+				proxy = (NodeProxy) obj;
 			} else {
-				throw new RuntimeException("Error query result: id=" + id);
+				throw new RuntimeException("Error query result: id=" + id + " " + obj.getClass().getSimpleName());
+			}
+			
+			if (proxy != null) {
+//				System.out.println(proxy.getId() + " -> " +  proxy.getLabels());
+				if (id.equals(proxy.getId())) {
+					for (Label label : proxy.getLabels()) {
+						sourceEntry = sourceEntry.concat(label.name()).concat(":");
+					}
+					sourceEntry = sourceEntry.concat((String) proxy.getProperty("entry"));
+//					System.out.println("SELF !");
+				} else {
+//					System.out.println(proxy.getLabels());
+//					System.out.println(proxy.getPropertyKeys());
+					Set<String> labels = new HashSet<> ();
+					for (Label label: IteratorUtil.asSet(proxy.getLabels()))
+						labels.add(label.toString());
+					if (labels.contains("Compound")) {
+						labels.remove("Compound");
+//						System.out.println("Adding Crossreference");
+						//These Compound Labels -> Crossreferences !
+						IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
+//						GenericCrossReference xref = new GenericCrossReference();
+						xref.setType(GenericCrossReference.Type.DATABASE);
+						xref.setRef(labels.iterator().next());
+						
+						xref.setValue((String)proxy.getProperty("entry"));
+						createAndAdd(data, "crossreferences", xref);
+					} else if (labels.contains("IsotopeFormula")) {
+						String property = "isoFormula";
+						Object value = proxy.getProperty("formula");
+						createAndAdd(data, property, value);
+					} else {
+//						System.out.println("Adding Property");
+						String property = proxy.getPropertyKeys().iterator().next();
+						Object value = proxy.getProperty(property);
+						createAndAdd(data, property, value);
+						//Other Labels -> Properties
+					}
+				}
+//				clusterElements.add(proxy.getId());
 			}
 			
 			if (data.containsKey("crossreferences")) {

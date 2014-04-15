@@ -35,6 +35,14 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	
 	private IntegrationSet currentIntegrationSet;
 	
+	
+	
+	public IntegrationSet getCurrentIntegrationSet() {
+		return currentIntegrationSet;
+	}
+	public void setCurrentIntegrationSet(IntegrationSet currentIntegrationSet) {
+		this.currentIntegrationSet = currentIntegrationSet;
+	}
 	public ChimeraDataDao getData() { return data;}
 	public void setData(ChimeraDataDao data) { this.data = data;}
 
@@ -71,7 +79,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 			case "smiles":
 				cpd.getSmiles().add((String)value);
 				break;
-			case "canSmiles":
+			case "can":
 				cpd.getCanSmiles().add((String) value);
 				break;
 			case "inchi":

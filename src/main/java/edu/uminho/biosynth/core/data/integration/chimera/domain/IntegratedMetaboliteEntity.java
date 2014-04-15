@@ -121,8 +121,10 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString()).append(sep);
 		sb.append("names:").append(names).append(sep);
+		sb.append("iso formulas:").append(isoFormulas).append(sep);
 		sb.append("formulas:").append(formulas).append(sep);
 		sb.append("charges:").append(charges).append(sep);
+		sb.append("can:").append(canSmiles).append(sep);
 		sb.append("smiles:").append(smiles).append(sep);
 		sb.append("inchis:").append(inchis).append(sep);
 		sb.append("compartments:").append(compartments).append(sep);
