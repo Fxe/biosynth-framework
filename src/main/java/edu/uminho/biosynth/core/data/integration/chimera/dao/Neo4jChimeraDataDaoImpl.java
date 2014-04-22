@@ -261,8 +261,10 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 	@Override
 	public List<String> getAllProperties() {
 		List<String> res = new ArrayList<> ();
-		ExecutionResult execRes = executionEngine.execute("START n=node(*) RETURN DISTINCT labels(n)");
-		System.out.println(execRes.dumpToString());
+		for (Label label : GlobalGraphOperations.at(graphDatabaseService)
+				.getAllLabels()) {
+			res.add(label.toString());
+		}
 		return res;
 	}
 

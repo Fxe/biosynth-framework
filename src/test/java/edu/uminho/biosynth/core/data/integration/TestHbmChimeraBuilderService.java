@@ -72,7 +72,7 @@ public class TestHbmChimeraBuilderService {
 		ChimeraDatabaseBuilderServiceImpl builder = new ChimeraDatabaseBuilderServiceImpl();
 		builder.setData(data);
 		builder.setMeta(meta);
-		builder.setTarget(target);
+//		builder.setTarget(target);
 		builder.setEntryGenerator(new PrefixKeyGenerator("IM_"));
 		
 		builder.changeIntegrationSet(1L);
