@@ -9,6 +9,7 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
@@ -45,7 +46,14 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 				.relationships(CompoundRelationshipType.HasInChI)
 				.evaluator(Evaluators.all()).traverse(initialNode)) {
 			
-			nodes.add(position.endNode().getId());
+			if (position.startNode().getId() != initialNode.getId() && 
+					position.startNode().hasLabel(CompoundNodeLabel.Compound)) {
+				nodes.add(position.startNode().getId());
+			}
+			if (position.endNode().getId() != initialNode.getId() && 
+					position.endNode().hasLabel(CompoundNodeLabel.Compound)) {
+				nodes.add(position.endNode().getId());
+			}
 		}
 		
 		return nodes;
