@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.components.optimization;
 
 import java.util.Iterator;
 
-public class IterableSolutionSetImpl<S> implements ISolutionSet<S>, Iterable<S> {
+public class IterableSolutionSetImpl<S extends Solution> implements SolutionSet<S>, Iterable<S> {
 
 	
 	
