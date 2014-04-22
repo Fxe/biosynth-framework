@@ -21,6 +21,7 @@ public interface ChimeraMetadataDao {
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, Long integrationSetId);
 	public IntegratedCluster getIntegratedClusterById(Long id);
 	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId);
+	public List<IntegratedCluster> getIntegratedClustersByPage(Long integrationSetId, int firstResult, int maxResults);
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId);
 	

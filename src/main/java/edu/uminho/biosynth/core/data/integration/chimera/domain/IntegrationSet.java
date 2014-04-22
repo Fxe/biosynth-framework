@@ -31,7 +31,7 @@ public class IntegrationSet {
 	@Column(name="last_cluster_entry", nullable=true, length=255)
 	private String lastClusterEntry;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integrationSet")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY , mappedBy="integrationSet")
 	@MapKey(name="id")
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();
 

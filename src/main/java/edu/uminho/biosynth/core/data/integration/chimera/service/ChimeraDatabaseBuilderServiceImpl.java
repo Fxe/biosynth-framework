@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
@@ -18,8 +21,10 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetabo
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+//import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
+@Service
+@Transactional(value="integrationTransactionManager")
 public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilderService{
 
 	private static Logger LOGGER = Logger.getLogger(ChimeraDatabaseBuilderServiceImpl.class);
@@ -28,8 +33,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	private ChimeraDataDao data;
 	@Autowired
 	private ChimeraMetadataDao meta;
-	@Autowired
-	private MetaboliteDao<IntegratedMetaboliteEntity> target;
+//	@Autowired
+//	private MetaboliteDao<IntegratedMetaboliteEntity> target;
 	
 	private IKeyGenerator<String> entryGenerator;
 	
@@ -49,8 +54,8 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	public ChimeraMetadataDao getMeta() { return meta;}
 	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
 	
-	public MetaboliteDao<IntegratedMetaboliteEntity> getTarget() { return target;}
-	public void setTarget(MetaboliteDao<IntegratedMetaboliteEntity> target) { this.target = target;}
+//	public MetaboliteDao<IntegratedMetaboliteEntity> getTarget() { return target;}
+//	public void setTarget(MetaboliteDao<IntegratedMetaboliteEntity> target) { this.target = target;}
 	
 	public IKeyGenerator<String> getEntryGenerator() { return entryGenerator;}
 	public void setEntryGenerator(IKeyGenerator<String> entryGenerator) { this.entryGenerator = entryGenerator;}
@@ -132,6 +137,13 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	}
 	
 	@Override
+	public IntegratedMetaboliteEntity buildCompoundByClusterId(Long iid,
+			String centry) {
+		IntegratedCluster cluster = this.meta.getIntegratedClusterByEntry(centry, iid);
+		return this.buildCompound(cluster);
+	}
+	
+	@Override
 	public IntegratedMetaboliteEntity buildCompoundByClusterId(Long id) {
 		IntegratedCluster cluster = this.meta.getIntegratedClusterById(id);
 		return this.buildCompound(cluster);
@@ -176,14 +188,21 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 			cpd = new IntegratedMetaboliteEntity();
 			
 			cpd.setEntry(cluster.getName());
-			cpd.setSource(this.currentIntegrationSet.getName());
+			cpd.setSource(cluster.getIntegrationSet().getName());
 			
 			LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from %s", cpd.getEntry(), cluster)));
 			
 			for (IntegratedClusterMember member: cluster.getMembers()) {
 				Long memberId = member.getMember().getId();
 				Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
-				if (!(Boolean)nodeProps.get("proxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
+				if (!(Boolean)nodeProps.get("proxy")) {
+					String label = (String)nodeProps.get("labels");
+					if (!cpd.getSources().containsKey(label)) {
+						cpd.getSources().put(label, new HashSet<String> ());
+					}
+
+					cpd.getSources().get(label).add((String)nodeProps.get("entry"));
+				}
 //				if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
 //				System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));
 				Map<String, List<Object>> data = this.data.getCompositeNode((Long)memberId);
@@ -210,4 +229,6 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		}
 		return cpd;
 	}
+	
+
 }

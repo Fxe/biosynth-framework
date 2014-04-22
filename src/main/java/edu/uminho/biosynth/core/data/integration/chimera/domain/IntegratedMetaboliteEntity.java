@@ -1,8 +1,10 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -74,7 +76,7 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	@ElementCollection
 	@CollectionTable(name="integrated_metabolite_sources", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="source", nullable=false)
-	private Set<String> sources = new HashSet<> ();
+	private Map<String, Set<String>> sources = new HashMap<> ();
 
 	public List<IntegratedMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossreferences;
@@ -112,8 +114,8 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	public Set<String> getCompartments() { return compartments;}
 	public void setCompartments(Set<String> compartments) { this.compartments = compartments;}
 	
-	public Set<String> getSources() { return sources;}
-	public void setSources(Set<String> sources) { this.sources = sources;}
+	public Map<String, Set<String>> getSources() { return sources;}
+	public void setSources(Map<String, Set<String>> sources) { this.sources = sources;}
 
 	@Override
 	public String toString() {

@@ -213,4 +213,17 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		return res;
 	}
 
+	@Override
+	public List<IntegratedCluster> getIntegratedClustersByPage(
+			Long integrationSetId, int firstResult, int maxResults) {
+		Criteria criteria = this.getSession().createCriteria(IntegratedCluster.class);
+		criteria.add(Restrictions.eq("integrationSet.id", integrationSetId));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(maxResults);
+		
+		@SuppressWarnings("unchecked")
+		List<IntegratedCluster> list = criteria.list();
+		return list;
+	}
+
 }

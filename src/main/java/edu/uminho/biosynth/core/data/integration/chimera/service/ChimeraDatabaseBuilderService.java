@@ -9,4 +9,5 @@ public interface ChimeraDatabaseBuilderService {
 	public IntegratedMetaboliteEntity buildCompoundByClusterName(String clusterName);
 	public IntegratedMetaboliteEntity buildCompoundByClusterMemberId(Long memberId);
 	public IntegratedMetaboliteEntity buildCompoundByClusterId(Long id);
+	public IntegratedMetaboliteEntity buildCompoundByClusterId(Long iid, String centry);
 }

@@ -65,16 +65,33 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 
 	@Override
-	public void changeIntegrationSet(Long id) {
+	public IntegrationSet changeIntegrationSet(Long id) {
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
+		
+		if (integrationSet == null) {
+			LOGGER.warn(String.format("Integration Set [%d] not found", id));
+			return null;
+		}
+		
 		this.currentIntegrationSet = integrationSet;
 		LOGGER.info(String.format("Current Integration Set changed to %s", this.currentIntegrationSet));
+		
+		return integrationSet;
 	}
 	
 	@Override
-	public void changeIntegrationSet(String id) {
+	public IntegrationSet changeIntegrationSet(String id) {
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
+		
+		if (integrationSet == null) {
+			LOGGER.warn(String.format("Integration Set [%s] not found", id));
+			return null;
+		}
+		
 		this.currentIntegrationSet = integrationSet;
+		LOGGER.info(String.format("Current Integration Set changed to %s", this.currentIntegrationSet));
+		
+		return integrationSet;
 	}
 	
 	@Override
@@ -124,6 +141,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		this.meta.saveIntegratedCluster(cluster);
 		
 		return cluster;
+	}
+	
+	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults) {
+		List<IntegratedCluster> clusters = this.meta.getIntegratedClustersByPage(iid, firstResult, maxResults);
+		return clusters;
 	}
 
 	@Override
@@ -532,6 +554,10 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		if (clusterElements.isEmpty()) return null;
 
 		return this.generateCluster( this.clusterIdGenerator.generateKey(), clusterElements, query); 
+	}
+	@Override
+	public int countIntegratedClustersByIntegrationId(Long iid) {
+		return this.meta.getIntegrationSet(iid).getIntegratedClustersMap().size();
 	}
 
 }

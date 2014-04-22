@@ -10,10 +10,13 @@ import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStra
 public interface ChimeraIntegrationService {
 	public IntegrationSet createNewIntegrationSet(String name, String description);
 	public List<IntegrationSet> getAllIntegrationSets();
-	public void changeIntegrationSet(Long id);
-	public void changeIntegrationSet(String id);
+	public IntegrationSet changeIntegrationSet(Long id);
+	public IntegrationSet changeIntegrationSet(String id);
 	public void resetIntegrationSet();
 	public void deleteIntegrationSet();
+	
+	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults);
+	public int countIntegratedClustersByIntegrationId(Long iid);
 	
 	public IntegratedCluster createCluster(String query);
 	public IntegratedCluster createCluster(ClusteringStrategy strategy);
