@@ -25,7 +25,7 @@ public interface ChimeraMetadataDao {
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId);
 	
-	public void saveIntegratedCluster(IntegratedCluster cluster);
+	public IntegratedCluster saveIntegratedCluster(IntegratedCluster cluster);
 	public void mergeCluster(List<Long> ids, Serializable integrationId);
 	
 	public void deleteCluster(IntegratedCluster cluster);

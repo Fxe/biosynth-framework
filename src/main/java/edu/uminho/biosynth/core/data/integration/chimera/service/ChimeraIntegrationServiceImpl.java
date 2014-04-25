@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.uminho.biosynth.core.algorithm.graph.BreadthFirstSearch;
+import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
+import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
@@ -51,6 +54,30 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
 	public IKeyGenerator<String> getClusterIdGenerator() { return clusterIdGenerator;}
 	public void setClusterIdGenerator(IKeyGenerator<String> clusterIdGenerator) { this.clusterIdGenerator = clusterIdGenerator;}
+	
+	@Override
+	public IntegrationSet getIntegrationSetByEntry(String entry) {
+		IntegrationSet integrationSet = this.meta.getIntegrationSet(entry);
+		
+		if (integrationSet == null) {
+			LOGGER.warn(String.format("Integration Set [%s] not found", entry));
+			return null;
+		}
+		
+		return integrationSet;
+	}
+	
+	@Override
+	public IntegrationSet getIntegrationSetById(Long id) {
+		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
+		
+		if (integrationSet == null) {
+			LOGGER.warn(String.format("Integration Set [%d] not found", id));
+			return null;
+		}
+		
+		return integrationSet;
+	}
 	
 	@Override
 	public IntegrationSet createNewIntegrationSet(String name, String description) {
@@ -95,16 +122,16 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 	
 	@Override
-	public void resetIntegrationSet() {
-		if (this.currentIntegrationSet == null) {
-			LOGGER.warn("No Integration Set selected - operation aborted");
+	public void resetIntegrationSet(IntegrationSet integrationSet) {
+		if (integrationSet == null) {
+//			LOGGER.warn("No Integration Set selected - operation aborted");
 			return;
 		}
 		LOGGER.info(String.format("Reset atempt to Integration Set %s", this.currentIntegrationSet));
 		
-		List<Long> clusters = new ArrayList<> (this.currentIntegrationSet.getIntegratedClustersMap().keySet());
+		List<Long> clusters = new ArrayList<> (integrationSet.getIntegratedClustersMap().keySet());
 		for (Long clusterId : clusters){
-			IntegratedCluster cluster = this.currentIntegrationSet.getIntegratedClustersMap().remove(clusterId);
+			IntegratedCluster cluster = integrationSet.getIntegratedClustersMap().remove(clusterId);
 			LOGGER.info(String.format("Removing cluster %s", cluster));
 			this.meta.deleteCluster(cluster);
 		}
@@ -113,14 +140,14 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 
 	@Override
-	public void deleteIntegrationSet() {
-		this.meta.deleteIntegrationSet(this.currentIntegrationSet);
+	public void deleteIntegrationSet(IntegrationSet integrationSet) {
+		this.meta.deleteIntegrationSet(integrationSet);
 	}
 	
-	public IntegratedCluster createCluster(String name, List<Long> elements, String description) {
+	public IntegratedCluster createCluster(String name, Set<Long> elements, String description) {
 		if (elements.isEmpty()) return null;
 
-		List<Long> clusterElements = elements;
+		Set<Long> clusterElements = elements;
 		IntegratedCluster cluster = new IntegratedCluster();
 		cluster.setIntegrationSet(this.currentIntegrationSet);
 		cluster.setName(name);
@@ -143,6 +170,49 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		return cluster;
 	}
 	
+	public IntegratedCluster updateCluster(IntegratedCluster integratedCluster, String name, Set<Long> elements, String description, Long iid) {
+		LOGGER.debug(String.format("Updated Integrated Cluster[%d]", integratedCluster.getId()));
+		
+		return integratedCluster;
+	}
+	
+	public IntegratedCluster mergeCluster(Set<Long> cidList, String name, Set<Long> elements, String description, Long iid) {
+//		for ()
+//		IntegratedCluster cluster = this.meta.getIntegratedClusterById(cid);
+		
+		LOGGER.debug(String.format("Merged Integrated Clusterd%s", cidList));
+		
+		return null;
+	}
+	
+	public IntegratedCluster createCluster(String name, Set<Long> elements, String description, Long iid) {
+		if (elements.isEmpty()) return null;
+
+		Set<Long> clusterElements = elements;
+		IntegratedCluster cluster = new IntegratedCluster();
+		cluster.setIntegrationSet(this.meta.getIntegrationSet(iid));
+		cluster.setName(name);
+		cluster.setDescription(description);
+		
+		for (Long memberId: clusterElements) {
+			IntegratedMember member = new IntegratedMember();
+			member.setId(memberId);
+			this.meta.saveIntegratedMember(member);
+			
+			IntegratedClusterMember clusterMember = new IntegratedClusterMember();
+			clusterMember.setCluster(cluster);
+			clusterMember.setMember(member);
+			
+			cluster.getMembers().add(clusterMember);
+		}
+		
+		this.meta.saveIntegratedCluster(cluster);
+		
+		LOGGER.debug(String.format("Created Integrated Cluster[%d]", cluster.getId()));
+		
+		return cluster;
+	}
+	
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults) {
 		List<IntegratedCluster> clusters = this.meta.getIntegratedClustersByPage(iid, firstResult, maxResults);
 		return clusters;
@@ -152,7 +222,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	public IntegratedCluster createCluster(String query) {
 		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
 		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
-		List<Long> clusterElements = this.data.getClusterByQuery(query);
+		Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query));
 		memberIdList.retainAll(clusterElements);
 		if (!memberIdList.isEmpty()) {
 			LOGGER.warn(String.format("Create Cluster [%s] FAILED. Membership conflict %s", query, memberIdList));
@@ -169,7 +239,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 			if (!visitedIds.contains(id)) {
 				String query_ = String.format(query, id);
 				System.out.println(query_);
-				List<Long> clusterElements = this.data.getClusterByQuery(query_);
+				Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query_));
 				visitedIds.addAll(clusterElements);
 				this.createCluster(clusterIdGenerator.generateKey(), clusterElements, query_);
 				System.out.println("Generated Cluster: root -> " + id + " size -> " + clusterElements.size());
@@ -223,7 +293,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 			this.meta.deleteCluster(c);
 		}
 		
-		IntegratedCluster union = this.generateCluster(integratedCluster.getName(), new ArrayList<> (clusterMembers), integratedCluster.getDescription());
+		IntegratedCluster union = this.generateCluster(integratedCluster.getName(), clusterMembers, integratedCluster.getDescription());
 		this.meta.saveIntegratedCluster(union);
 		
 		return union;
@@ -267,7 +337,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 	
 	@Override
-	public IntegratedCluster mergeCluster(String name, List<Long> elements,
+	public IntegratedCluster mergeCluster(String name, Set<Long> elements,
 			String description) {
 		IntegratedCluster integratedCluster = this.generateCluster(name, elements, description);
 		
@@ -308,7 +378,7 @@ System.out.println("Generating New Clusters");
 		for (Long elementId : elementsToCascade) {
 			if (!visitedIds.contains(elementId)) {
 				strategy.setInitialNode(elementId);
-				List<Long> clusterElements = strategy.execute();
+				Set<Long> clusterElements = strategy.execute();
 				if (!clusterElements.isEmpty()) {
 					visitedIds.addAll(clusterElements);
 					String clusterEntry = this.clusterIdGenerator.generateKey();
@@ -370,7 +440,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 			
 			if (!visitedIds.contains(elementId)) {
 				strategy.setInitialNode(elementId);
-				List<Long> clusterElements = strategy.execute();
+				Set<Long> clusterElements = strategy.execute();
 				
 				if (!clusterElements.isEmpty()) {
 				
@@ -470,7 +540,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	public IntegratedCluster createCluster(ClusteringStrategy strategy) {
 		Map<Long, Long> assignedMembers = this.meta.getAllAssignedIntegratedMembers(this.currentIntegrationSet.getId());
 		List<Long> memberIdList = new ArrayList<> (assignedMembers.keySet());
-		List<Long> clusterElements = strategy.execute();
+		Set<Long> clusterElements = strategy.execute();
 		memberIdList.retainAll(clusterElements);
 		if (!memberIdList.isEmpty()) {
 			LOGGER.warn(String.format("Create Cluster [%s] FAILED. Membership conflict %s", strategy.toString(), memberIdList));
@@ -515,8 +585,8 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	
 	
-	public IntegratedCluster generateCluster(String name, List<Long> elements, String description) {
-		List<Long> clusterElements = elements;
+	public IntegratedCluster generateCluster(String name, Set<Long> elements, String description) {
+		Set<Long> clusterElements = elements;
 		
 		if (clusterElements.isEmpty()) return null;
 		
@@ -541,7 +611,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	
 	public IntegratedCluster generateCluster(ClusteringStrategy clusteringStrategy) {
-		List<Long> clusterElements = clusteringStrategy.execute();
+		Set<Long> clusterElements = clusteringStrategy.execute();
 		
 		if (clusterElements.isEmpty()) return null;
 		
@@ -549,7 +619,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	
 	public IntegratedCluster generateCluster(String query) {
-		List<Long> clusterElements = this.data.getClusterByQuery(query);
+		Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query));
 		
 		if (clusterElements.isEmpty()) return null;
 
@@ -559,5 +629,270 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	public int countIntegratedClustersByIntegrationId(Long iid) {
 		return this.meta.getIntegrationSet(iid).getIntegratedClustersMap().size();
 	}
+	
+	@Override
+	public List<IntegratedCluster> generateIntegratedClusters(
+			Long iid,
+			ClusteringStrategy clusteringStrategy,
+			Set<Long> initial, Set<Long> domain,
+			ConflictDecision conflictDecision) {
+		
+		
+		
+		//Generate Clusters
+		List<Set<Long>> generatedClusters = this.generateClusters(clusteringStrategy, initial, domain);
+		LOGGER.info(String.format("Generated an initial of %d clusters.", generatedClusters.size()));
+		//Fix Membership Conflict
+		List<Set<Long>> uniqueMembershipClusters = this.resolveMembershipConflict(generatedClusters);
+		LOGGER.info(String.format("Resolved initial clusters merge. Clusters reduced to %d from %d", uniqueMembershipClusters.size(), generatedClusters.size()));
+		//Load database clusters
+		Map<Long, Set<Long>> prevClusters = new HashMap<> ();
+		for (IntegratedCluster integratedCluster : this.meta.getAllIntegratedClusters(iid)) {
+			Long cid = integratedCluster.getId();
+			Set<Long> clustersElements = new HashSet<> (integratedCluster.listAllIntegratedMemberIds());
+			prevClusters.put(cid, clustersElements);
+		}
+		LOGGER.info(String.format("Resolved initial clusters merge. Clusters reduced to %d from %d", uniqueMembershipClusters.size(), generatedClusters.size()));
+		
+		//Apply conflict decision
+		List<Set<Long>> newClusters = new ArrayList<> ();
+		Map<Set<Long>, Set<Long>> toMerge = new HashMap<> ();
+		Set<Long> unaffected = new HashSet<> ();
+		
+		this.resolveMerging(uniqueMembershipClusters, prevClusters, newClusters, toMerge, unaffected);
+		
+		LOGGER.info(String.format("Resolved merging sets. New Clusters %d. Unaffected %d. To merged %d.", 
+				newClusters.size(), unaffected.size(), toMerge.size()));
+		
+		switch (conflictDecision) {
+			case ABORT:
+				//Warn conflict case and abort operation
+				if (!toMerge.isEmpty()) {
+					return null;
+				}
+				break;
+				
+			case SKIP:
+				//Warn skipped clusters
+				break;
+			case UPDATE:
+				//Warn merge
+				//Update Clusters
+				for (Set<Long> cidList : toMerge.keySet()) {
+					if (cidList.size() > 1) {
+						LOGGER.warn(String.format("", cidList));
+					} else if (cidList.size() == 1) {
+						
+					} else {
+						LOGGER.error(String.format("ZERO ELEMENT !", cidList));
+					}
+				}
+				break;
+			case MERGE:
+				//Update And Merge Clusters
+				for (Set<Long> cidList : toMerge.keySet()) {
+					if (cidList.size() > 0) {
+						if (cidList.size() == 1) {
+							IntegratedCluster cluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
+							this.updateCluster(cluster, cluster.getName(), toMerge.get(cidList), cluster.getDescription(), iid);
+						} else {
+							IntegratedCluster cluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
+							this.mergeCluster(cidList, cluster.getName(), toMerge.get(cidList), cluster.getDescription(), iid);
+						}
+						//SOME MERGE FUNCTION (select a single CID join rest and delete prevs)
+					} else {
+						LOGGER.error(String.format("ZERO ELEMENT !", cidList));
+					}
+				}
+				break;
+			default:
+				throw new RuntimeException(String.format("Unimplemented Decision %s", conflictDecision));
+		}
+		
+		//Create New Clusters
+		for (Set<Long> cluster : newClusters) {
+			String entry = this.clusterIdGenerator.generateKey();
+//			System.out.println("CREATE " + entry);
+			this.createCluster(entry, cluster, String.format("%s[%s]", "strategy", "initialNode"), iid);
+		}
+		
+		return null;
+	}
+	
+	
+	private void resolveMerging(
+			//Input
+			List<Set<Long>> uniqueMembershipClusters,
+			Map<Long, Set<Long>> prevClusters,
+			//Output Collections
+			List<Set<Long>> newClusters, 
+			Map<Set<Long>, Set<Long>> toMerge, 
+			Set<Long> unaffected) {
+		
+		System.out.println("prev clusters " + prevClusters.size());
+		
+		Map<Long, Long> elementToClusterId = new HashMap<> ();
+		for (Long cid : prevClusters.keySet()) {
+			for (Long eid : prevClusters.get(cid)) {
+				if (cid == null || eid == null) {
+					throw new RuntimeException("Error null id found " + cid + prevClusters.get(cid));
+				}
+				elementToClusterId.put(eid, cid);
+			}
+		}
+		
+		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
+		Integer counter = 0;
+		Set<Long> eids = new HashSet<> ();
+		for (Set<Long> cluster : uniqueMembershipClusters) {
+			Long prev = null;
+			for (Long eid : cluster) {
+				eids.add(eid);
+				if (prev != null) {
+					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+					graph.addEdge(edge);
+				} else if (cluster.size() < 2) {
+					graph.addVertex(eid);
+				}
+				prev = eid;
+			}
+		}
+		
+		
+		Set<Set<Long>> oldClusters = new HashSet<> ();
+		Set<Long> oldElements = new HashSet<> ();
+		for (Set<Long> cluster : prevClusters.values()) {
+			oldClusters.add(cluster);
+			oldElements.addAll(cluster);
+			Long prev = null;
+			for (Long eid : cluster) {
+				eids.add(eid);
+				if (prev != null) {
+					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+					graph.addEdge(edge);
+				} else if (cluster.size() < 2) {
+					graph.addVertex(eid);
+				}
+				prev = eid;
+			}
+		}
+		
+		Set<Long> eidsProcessed = new HashSet<> ();
+		for (Long eid : eids) {
+			if (!eidsProcessed.contains(eid)) {
+				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+				
+				if (!cluster.isEmpty()) {
+					eidsProcessed.addAll(cluster);
+					
+					Set<Long> aux_ = new HashSet<> (cluster);
+					aux_.retainAll(oldElements);
+					
+					//Unaffected if ALL COLOR BLACK
+					//New if ALL COLOR RED
+					//Merge if Mixed Color
+					
+					//Test if the cluster have previous elements
+					if (aux_.isEmpty()) {
+						//if all elements are new then the entire cluster is new
+						newClusters.add(cluster);
+					} else if (oldClusters.contains(cluster)){
+						//if previous clusters have an identical cluster
+						unaffected.add(elementToClusterId.get(cluster.iterator().next()));
+					} else {
+						//Else there are elements from previous clusters
+						//if can be either an update
+						//or update and delete (if more than one CID is present)
+						Set<Long> cidList = new HashSet<> ();
+						for (Long eid_ : cluster) {
+							Long cid_;
+							if ((cid_ = elementToClusterId.get(eid_)) != null) {
+								cidList.add(cid_);
+							}
+						}
+						toMerge.put(cidList, cluster);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Given a list of clusters (sets) merge clusters that share common elements.
+	 * @param clusterList a list of clusters (sets)
+	 * @return a list of clusters such that each element belongs to only a single element.
+	 */
+	private List<Set<Long>> resolveMembershipConflict(List<Set<Long>> clusterList) {
+		List<Set<Long>> uniqueMembershipClusters = new ArrayList<> ();
+		
+		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
+		Integer counter = 0;
+		Set<Long> eids = new HashSet<> ();
+		for (Set<Long> cluster : clusterList) {
+			Long prev = null;
+			if (cluster.size() > 1) {
+				for (Long eid : cluster) {
+					eids.add(eid);
+					if (prev != null) {
+						DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+						graph.addEdge(edge);
+					}
+					prev = eid;
+				}
+			} else {
+				for (Long eid : cluster) {
+					eids.add(eid);
+					graph.addVertex(eid);
+				}
+			}
+		}
+		
+		Set<Long> eidsProcessed = new HashSet<> ();
+		for (Long eid : eids) {
+			if (!eidsProcessed.contains(eid)) {
+				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+				eidsProcessed.addAll(cluster);
+				uniqueMembershipClusters.add(cluster);
+//				CID cid = eidToCid.get(cluster.iterator().next()).iterator().next();
+//				cidsSurvived.add(cid);
+//				for (EID eid_ : cluster) {
+//					res.put(eid_, cid);
+//				}
+//				System.out.println(cluster);
+			}
+		}
+		
+		return uniqueMembershipClusters;
+	}
+	
+	/**
+	 * For each element <i>i</i> in initial, apply <i>clusteringStrategy</i> to generate the corresponding cluster.
+	 * @param clusteringStrategy algorithm to perform the clustering decision
+	 * @param initial the initial element
+	 * @param domain the domain of the decision
+	 * @return a set of clusters (sets)
+	 */
+	private List<Set<Long>> generateClusters(
+			ClusteringStrategy clusteringStrategy,
+			Set<Long> initial, Set<Long> domain) {
+		
+		List<Set<Long>> generatedClusters = new ArrayList<> ();
+		
+		Set<Long> visitedIds = new HashSet<> ();
+		for (Long i : initial) {
+			if (!visitedIds.contains(i)) {
+				clusteringStrategy.setInitialNode(i);
+				Set<Long> clusterElements = clusteringStrategy.execute();
+				clusterElements.retainAll(domain);
+				if (!clusterElements.isEmpty()) {
+					visitedIds.addAll(clusterElements);
+					generatedClusters.add(clusterElements);
+				}
+			}
+		}
+		
+		return generatedClusters;
+	}
+
 
 }

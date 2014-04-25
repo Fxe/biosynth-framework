@@ -42,7 +42,7 @@ public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 	}
 
 	@Override
-	public List<Long> execute() {
+	public Set<Long> execute() {
 		Set<Long> nodes = new HashSet<> ();
 		Set<Long> isomorphicProperties = new HashSet<> ();
 		for (Path position: db.traversalDescription()
@@ -66,7 +66,7 @@ public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 				}
 			}
 		}
-		return new ArrayList<Long> (nodes);
+		return nodes;
 	}
 
 }

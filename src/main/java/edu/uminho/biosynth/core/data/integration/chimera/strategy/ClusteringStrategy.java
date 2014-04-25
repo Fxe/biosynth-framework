@@ -1,8 +1,8 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ClusteringStrategy {
 	public void setInitialNode(Long id);
-	public List<Long> execute();
+	public Set<Long> execute();
 }

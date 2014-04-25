@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -35,12 +37,12 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 	}
 
 	@Override
-	public List<Long> execute() {
+	public Set<Long> execute() {
 		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
 			throw new RuntimeException("Invalid Node - not a inchi node");
 		}
 
-		List<Long> nodes = new ArrayList<> ();
+		Set<Long> nodes = new HashSet<> ();
 		for (Path position: db.traversalDescription()
 				.depthFirst()
 				.relationships(CompoundRelationshipType.HasInChI)

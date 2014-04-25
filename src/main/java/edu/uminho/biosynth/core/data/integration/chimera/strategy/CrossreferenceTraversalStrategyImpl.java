@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -25,9 +27,9 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 	public void setDb(GraphDatabaseService db) { this.db = db;}
 
 	@Override
-	public List<Long> execute() {
+	public Set<Long> execute() {
 		
-		List<Long> nodes = new ArrayList<> ();
+		Set<Long> nodes = new HashSet<> ();
 		for (Path position: db.traversalDescription()
 				.depthFirst()
 				.relationships(CompoundRelationshipType.HasCrossreferenceTo)
