@@ -269,6 +269,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	@Override
 	public IntegratedCluster mergeCluster(String name, List<Long> elements,
 			String description) {
+		
 		IntegratedCluster integratedCluster = this.generateCluster(name, elements, description);
 		
 		return this.mergeCluster(integratedCluster);
@@ -555,9 +556,113 @@ System.out.println("Ok ! [" + (end - start) + "]");
 
 		return this.generateCluster( this.clusterIdGenerator.generateKey(), clusterElements, query); 
 	}
+	
 	@Override
 	public int countIntegratedClustersByIntegrationId(Long iid) {
 		return this.meta.getIntegrationSet(iid).getIntegratedClustersMap().size();
 	}
+	
+	@Override
+	public void updateCluster(Long cid, String name, String description,
+			Set<Long> elements ) {
+		
+//		IntegratedCluster integratedClusterOld = this.meta.getIntegratedClusterById(cid);
+		IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cid);
+//		integratedCluster.setIntegrationSet(integratedClusterOld.getIntegrationSet());
+		integratedCluster.setId(cid);
+		integratedCluster.setDescription(description);
+		integratedCluster.setName(name);
+		
+		for (IntegratedClusterMember integratedClusterMember : integratedCluster.getMembers()) {
+			
+		}
+		
+		for (Long memberId : elements) {
+			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
+			IntegratedMember integratedMember = this.meta.getIntegratedMember(memberId);
+			integratedClusterMember.setCluster(integratedCluster);
+			integratedClusterMember.setMember(integratedMember);
+			integratedCluster.getMembers().add(integratedClusterMember);
+		}
+		
+		this.meta.updateCluster(integratedCluster);
+		
+////		IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cid);
+////		if (integratedCluster == null) {
+////			return;
+////		}
+//
+//		System.out.println("UPDATE TO " + elements);
+//		System.out.println("FROM " + integratedCluster.getMembers());
+//		
+//		Set<Long> elements_ = new HashSet<> (elements);
+//
+//		Set<IntegratedClusterMember> toKeep = new HashSet<> ();
+//		Set<IntegratedClusterMember> toDelete = new HashSet<> ();
+//		integratedCluster.setDescription(description);
+//		for (IntegratedClusterMember member: integratedClu       ster.getMembers()) {
+//			if (elements.contains(member.getMember().getId())) {
+//				toDelete.add(member);
+//			} else {
+//				toKeep.add(member);
+//				elements_.remove(member.getMember().getId());
+//			}
+//		}
+//		
+//		
+//
+//		
+//		
+//		//Delete the members not found in list
+//		integratedCluster.getMembers().clear();
+//		for (IntegratedClusterMember integratedClusterMember : toKeep) {
+//			integratedCluster.getMembers().add(integratedClusterMember);
+//		}
+//		
+//		for (IntegratedClusterMember integratedClusterMember : toDelete) {
+//			this.meta.deleteClusterMember(integratedClusterMember);
+//		}
+//		
+////		Add the members in list but not found in cluster
+//		for (Long memberId : elements_) {
+//			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
+//			IntegratedMember integratedMember = this.meta.getIntegratedMember(memberId);
+//			integratedClusterMember.setCluster(integratedCluster);
+//			integratedClusterMember.setMember(integratedMember);
+//			
+//			integratedCluster.getMembers().add(integratedClusterMember);
+//		}
+//		
+//		System.out.println(integratedCluster.getMembers());
+//		this.meta.updateCluster(integratedCluster);
+	}
+	@Override
+	public Map<Long, IntegratedCluster> splitCluster(Long cid,
+			Set<Long> keep, String entry, String description) {
+		
+		IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cid);
+		Set<Long> elements_ = new HashSet<> ();
+		for (IntegratedClusterMember member: integratedCluster.getMembers()) {
+			Long memberId = member.getMember().getId();
+			if (!keep.contains(memberId)) {
+				elements_.add(memberId);
+			}
+		}
+		
+		if (elements_.isEmpty()) return null;
+		
+		this.updateCluster(cid, integratedCluster.getName(), description, keep);
+		
+		IntegratedCluster integratedCluster2 = this.generateCluster(
+				entry, new ArrayList<> (keep), description);
+		
+		Map<Long, IntegratedCluster> result = new HashMap<> ();
+		
+		result.put(integratedCluster.getId(), integratedCluster);
+		result.put(integratedCluster2.getId(), integratedCluster2);
+		
+		return result;
+	}
+
 
 }

@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
@@ -25,6 +26,10 @@ public interface ChimeraIntegrationService {
 	public IntegratedCluster mergeCluster(String query);
 	public IntegratedCluster mergeCluster(ClusteringStrategy strategy);
 	public IntegratedCluster mergeCluster(String name, List<Long> elements, String description);
+	
+	public Map<Long, IntegratedCluster> splitCluster(Long cid, Set<Long> keep, String entry, String description);
+	
+	public void updateCluster(Long cid, String entry, String description, Set<Long> elements);
 	
 	public List<Long> listAllIntegratedCompounds();
 	public List<Long> listAllUnintegratedCompounds();

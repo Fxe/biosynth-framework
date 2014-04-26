@@ -226,4 +226,25 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		return list;
 	}
 
+	@Override
+	public void updateCluster(IntegratedCluster cluster) {
+////		if (cluster.getMembers().isEmpty())
+//		Query query = this.getSession().createQuery(
+//				"update IntegratedCluster set description = :description where id = :id");
+//		query.setParameter("description", cluster.getDescription());
+//		query.setParameter("id", cluster.getId());
+//		query.executeUpdate();
+
+		this.getSession().update(cluster);
+	}
+	
+	@Override
+	public void deleteClusterMember(IntegratedClusterMember member) {
+		Query query = this.getSession().createQuery(
+				"delete IntegratedClusterMember where pk.cluster.id = :cid and pk.member.id = :eid");
+		query.setParameter("cid", member.getCluster().getId());
+		query.setParameter("eid", member.getMember().getId());
+		query.executeUpdate();
+	}
+
 }

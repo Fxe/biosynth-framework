@@ -30,7 +30,7 @@ public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTra
 	@Override
 	public MetaboliteStga etlTransform(KeggCompoundMetaboliteEntity cpd) {
 		MetaboliteStga cpd_stga = new MetaboliteStga();
-		cpd_stga.setNumeryKey(cpd.getId());
+//		cpd_stga.setNumeryKey(cpd.getId());
 		cpd_stga.setTextKey(cpd.getEntry());
 		cpd_stga.setFormula(cpd.getFormula());
 		cpd_stga.setRemark( cpd.getRemark());

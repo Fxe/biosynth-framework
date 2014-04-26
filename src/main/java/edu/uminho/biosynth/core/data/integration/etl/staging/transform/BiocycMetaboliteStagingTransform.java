@@ -12,7 +12,7 @@ public class BiocycMetaboliteStagingTransform extends AbstractMetaboliteStagingT
 	@Override
 	public MetaboliteStga etlTransform(BioCycMetaboliteEntity cpd) {
 		MetaboliteStga cpd_stga = new MetaboliteStga();
-		cpd_stga.setNumeryKey(cpd.getId());
+//		cpd_stga.setNumeryKey(cpd.getId());
 		cpd_stga.setTextKey(cpd.getEntry());
 		
 		String mass = null;

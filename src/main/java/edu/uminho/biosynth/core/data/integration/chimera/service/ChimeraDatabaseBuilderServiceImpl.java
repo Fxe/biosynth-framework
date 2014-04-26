@@ -1,9 +1,11 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Label;
@@ -20,6 +22,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteSourceProxy;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 //import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
@@ -196,12 +199,21 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 				Long memberId = member.getMember().getId();
 				Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
 				if (!(Boolean)nodeProps.get("proxy")) {
-					String label = (String)nodeProps.get("labels");
-					if (!cpd.getSources().containsKey(label)) {
-						cpd.getSources().put(label, new HashSet<String> ());
+					IntegratedMetaboliteSourceProxy proxy = new IntegratedMetaboliteSourceProxy();
+					proxy.setIntegratedMetaboliteEntity(cpd);
+					proxy.setEntry((String)nodeProps.get("entry"));
+					proxy.setId(memberId);
+					Set<String> labels = new HashSet<> (Arrays.asList(((String)nodeProps.get("labels")).split(":")));
+					Set<String> labels_ = new HashSet<> (labels);
+					labels_.remove("Compound");
+					labels_.remove("BioCyc");
+					proxy.setMajorLabel(labels_.iterator().next());
+					if (labels_.size() != 1) {
+						LOGGER.warn("MULTIPLE LABELS ARE SO MESSY ! " + labels_);
 					}
-
-					cpd.getSources().get(label).add((String)nodeProps.get("entry"));
+					proxy.setLabels(labels);
+					
+					cpd.getSources().add(proxy);
 				}
 //				if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
 //				System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));

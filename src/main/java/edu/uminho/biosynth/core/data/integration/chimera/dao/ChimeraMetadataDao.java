@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
@@ -28,9 +29,11 @@ public interface ChimeraMetadataDao {
 	public void saveIntegratedCluster(IntegratedCluster cluster);
 	public void mergeCluster(List<Long> ids, Serializable integrationId);
 	
+	public void updateCluster(IntegratedCluster cluster);
 	public void deleteCluster(IntegratedCluster cluster);
 	public String getLastClusterEntry(Long integrationSetId);
 	
+	public void deleteClusterMember(IntegratedClusterMember member);
 	public List<Long> getAllIntegratedClusterMembersId();
 	
 	public IntegratedMember getIntegratedMember(Long id);

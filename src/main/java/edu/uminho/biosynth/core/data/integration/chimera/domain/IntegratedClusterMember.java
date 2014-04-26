@@ -32,6 +32,27 @@ public class IntegratedClusterMember {
 		private IntegratedMember member;
 		public IntegratedMember getMember() { return member;}
 		public void setMember(IntegratedMember member) { this.member = member;}
+		
+		@Override
+		public boolean equals(Object other) {
+			if (this == other) return true;
+	        if ( !(other instanceof IntegratedClusterMemberPk) ) return false;
+
+	        final IntegratedClusterMemberPk pk_ = (IntegratedClusterMemberPk) other;
+
+	        if ( !pk_.getCluster().equals( getCluster() ) ) return false;
+	        if ( !pk_.getMember().equals( getMember() ) ) return false;
+
+	        return true;
+		}
+		
+		@Override
+		public int hashCode() {
+			int result;
+			result = this.cluster.hashCode();
+			result = result + 31 * this.getMember().hashCode();
+			return result;
+		}
 	}
 	
 	@EmbeddedId
@@ -47,4 +68,9 @@ public class IntegratedClusterMember {
 	private String description;
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
+	
+	@Override
+	public String toString() {
+		return String.format("[%d, %d]",  this.pk.cluster.getId(), this.pk.member.getId());
+	}
 }

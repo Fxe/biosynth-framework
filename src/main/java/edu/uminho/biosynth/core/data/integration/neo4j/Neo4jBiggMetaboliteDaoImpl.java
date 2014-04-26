@@ -79,7 +79,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		for (Node node : nodes) {
 //			System.out.println(node);
 			cpd = new BiggMetaboliteEntity();
-			cpd.setId( (Integer) node.getProperty("id"));
+			cpd.setId( (Long) node.getProperty("id"));
 			cpd.setEntry( (String) node.getProperty("entry"));
 			cpd.setFormula( (String) node.getProperty("formula"));
 			cpd.setCharge( (Integer) node.getProperty("charge"));
@@ -233,7 +233,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 	@Override
 	protected BiggMetaboliteEntity nodeToObject(Node node) {
 		BiggMetaboliteEntity cpd = new BiggMetaboliteEntity();
-		cpd.setId( (Integer) node.getProperty("id"));
+		cpd.setId( (Long) node.getProperty("id"));
 		cpd.setEntry( (String) node.getProperty("entry"));
 		cpd.setFormula( (String) node.getProperty("formula"));
 		cpd.setCharge( (Integer) node.getProperty("charge"));

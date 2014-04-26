@@ -87,7 +87,7 @@ public class TestStagingInsertion {
 		keggStageLoader.setTransformer(transformer);
 		keggStageLoader.setDao(dao);
 		KeggCompoundMetaboliteEntity cpdKegg1 = new KeggCompoundMetaboliteEntity();
-		cpdKegg1.setId(283);
+		cpdKegg1.setId(283L);
 		cpdKegg1.setEntry("C98222");
 		cpdKegg1.setFormula("H20C90O100");
 		cpdKegg1.setRemark(":)");

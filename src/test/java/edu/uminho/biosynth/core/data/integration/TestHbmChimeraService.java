@@ -3,7 +3,9 @@ package edu.uminho.biosynth.core.data.integration;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.junit.After;
@@ -171,9 +173,42 @@ public class TestHbmChimeraService {
 		}
 	}
 	
+//	@Test
+//	public void testSplitCluster() {
+//		integrationService.changeIntegrationSet(1L);
+//		integrationService.splitClusterByProperty(64564L, "Name", "name");
+//	}
+	
+	@Test
+	public void testUpdateCluster() {
+		integrationService.changeIntegrationSet(1L);
+		IntegratedCluster cluster = meta.getIntegratedClusterById(3L);
+		System.out.println(cluster);
+		System.out.println(cluster.getMembers());
+
+		Set<Long> values = new HashSet<> ();
+		values.add(167084L);
+		values.add(757391L);
+		values.add(167107L);
+		integrationService.updateCluster(3L, "CPD_2", "CHANGED !", values);
+		
+	}
+	
 	@Test
 	public void testSplitCluster() {
-		integrationService.changeIntegrationSet(1L);
-		integrationService.splitClusterByProperty(64564L, "Name", "name");
+//		integrationService.changeIntegrationSet(1L);
+//		Set<Long> values = new HashSet<> ();
+//		values.add(167615L);
+//		values.add(204271L);
+//		integrationService.splitCluster(89L, values, "SPLITED", "NEW_GUY");
 	}
+	
+//	@Test
+//	public void basic() {
+//		IntegrationSet integrationSet = new IntegrationSet();
+//		integrationSet.setName("SET_ABC");
+//		integrationSet.setDescription("A B C");
+//		
+//		s
+//	}
 }

@@ -1,10 +1,8 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +16,7 @@ import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteSourceProxy;
 
 @Entity
 @Table(name="integrated_metabolite")
@@ -76,7 +75,7 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	@ElementCollection
 	@CollectionTable(name="integrated_metabolite_sources", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="source", nullable=false)
-	private Map<String, Set<String>> sources = new HashMap<> ();
+	private List<IntegratedMetaboliteSourceProxy> sources = new ArrayList<> ();
 
 	public List<IntegratedMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossreferences;
@@ -114,8 +113,26 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	public Set<String> getCompartments() { return compartments;}
 	public void setCompartments(Set<String> compartments) { this.compartments = compartments;}
 	
-	public Map<String, Set<String>> getSources() { return sources;}
-	public void setSources(Map<String, Set<String>> sources) { this.sources = sources;}
+	
+
+	public List<IntegratedMetaboliteSourceProxy> getSources() {
+		return sources;
+	}
+
+	public void setSources(List<IntegratedMetaboliteSourceProxy> sources) {
+		this.sources = sources;
+	}
+	
+	
+	public Set<String> getProxyMajorDatabaseLabels() {
+		Set<String> labels = new HashSet<> ();
+		
+		for (IntegratedMetaboliteSourceProxy proxy : this.sources) {
+			labels.add(proxy.getMajorLabel());
+		}
+		
+		return labels;
+	}
 
 	@Override
 	public String toString() {
@@ -136,3 +153,4 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		return sb.toString();
 	}
 }
+ 

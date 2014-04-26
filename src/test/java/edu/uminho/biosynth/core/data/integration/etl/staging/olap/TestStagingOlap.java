@@ -54,9 +54,9 @@ public class TestStagingOlap {
 		
 		IntegrationOLAP olap = new IntegrationOLAP();
 		olap.setDao(dao_stga);
-		Set<Integer> initialCube = new HashSet<> ();
+		Set<Long> initialCube = new HashSet<> ();
 		for (Object o : dao_stga.query("SELECT cpd.id FROM MetaboliteStga cpd")) {
-			initialCube.add((Integer) o) ;
+			initialCube.add((Long) o) ;
 		}
 		IKeyGenerator<Integer> generator= new IKeyGenerator<Integer>() {
 			

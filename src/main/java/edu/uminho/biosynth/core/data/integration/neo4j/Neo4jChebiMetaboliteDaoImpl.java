@@ -43,6 +43,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", cpd.getId());
 		params.put("entry", cpd.getEntry());
+		params.put("charge", cpd.getCharge());
 		params.put("name", cpd.getName().toLowerCase());
 		params.put("formula", cpd.getFormula());
 		params.put("stars", cpd.getStars());

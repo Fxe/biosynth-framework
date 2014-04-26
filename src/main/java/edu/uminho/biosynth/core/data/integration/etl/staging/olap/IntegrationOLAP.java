@@ -36,15 +36,15 @@ public class IntegrationOLAP {
 	private boolean destroyInactiveClusters = true;
 	
 	private IGenericDao dao;
-	private IKeyGenerator<Integer> idGenerator;
+	private IKeyGenerator<Long> idGenerator;
 	
-	private IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
-	private Map<Integer, Set<Integer>> clusters = new HashMap<> ();
+	private IBinaryGraph<Long, Long> graph = new DefaultGraphImpl<>();
+	private Map<Long, Set<Long>> clusters = new HashMap<> ();
 	
 	private int numberOfRecords;
 
-	public IKeyGenerator<Integer> getIdGenerator() { return idGenerator;}
-	public void setIdGenerator(IKeyGenerator<Integer> idGenerator) { this.idGenerator = idGenerator;}
+	public IKeyGenerator<Long> getIdGenerator() { return idGenerator;}
+	public void setIdGenerator(IKeyGenerator<Long> idGenerator) { this.idGenerator = idGenerator;}
 	
 	public IGenericDao getDao() { return dao;}
 	public void setDao(IGenericDao dao) { this.dao = dao;}
@@ -55,8 +55,8 @@ public class IntegrationOLAP {
 		this.clusters.clear();
 		this.idGenerator.reset();
 		
-		Integer initialCluster = idGenerator.generateKey();
-		Set<Integer> initialElements = new HashSet<> ();
+		Long initialCluster = idGenerator.generateKey();
+		Set<Long> initialElements = new HashSet<> ();
 		
 		//OPTIMIZATION: GET ONLY IDS VS FINDALL (SPEED ?)
 		for (MetaboliteStga cpdId : dao.findAll(MetaboliteStga.class)) {
@@ -67,7 +67,7 @@ public class IntegrationOLAP {
 		this.clusters.put( initialCluster, initialElements);
 	}
 	
-	public void slice(String property, Integer clustersId) {
+	public void slice(String property, Long clustersId) {
 		//SLICE ONLY EXISTING CLUSTERS WITH SIZE > 1
 		if (this.clusters.containsKey(clustersId) && this.clusters.get(clustersId).size() > 1) {
 			this.slice(property, this.clusters.get(clustersId));
@@ -79,7 +79,7 @@ public class IntegrationOLAP {
 	}
 	
 	//Set<Integer> to describe a olap cube is pretty stupid ! must redesign this part
-	public Set<Serializable> slice(String property, Serializable slice, Set<Integer> cube) {
+	public Set<Serializable> slice(String property, Serializable slice, Set<Long> cube) {
 		Set<Serializable> res = new HashSet<> ();
 		List<MetaboliteStga> elements = null;
 		if (cube.size() == numberOfRecords) {
@@ -96,7 +96,7 @@ public class IntegrationOLAP {
 		return res;
 	}
 	
-	public Set<Serializable> getDimensionElements(String property, Set<Integer> cube) {
+	public Set<Serializable> getDimensionElements(String property, Set<Long> cube) {
 		Set<Serializable> res = new HashSet<> ();
 		
 		try {
@@ -127,7 +127,7 @@ public class IntegrationOLAP {
 		return res;
 	}
 	
-	public void slice(String property, Set<Integer> metaboliteIdSet) {
+	public void slice(String property, Set<Long> metaboliteIdSet) {
 		
 		
 		
@@ -160,8 +160,8 @@ public class IntegrationOLAP {
 			for (Object clustersNew : elements) {
 				PersistentSet cpdInClusers = (PersistentSet) getMetaboliteStgas.invoke(clustersNew);
 				
-				Integer clusterId = idGenerator.generateKey();
-				Set<Integer> clusterElements = new HashSet<> ();
+				Long clusterId = idGenerator.generateKey();
+				Set<Long> clusterElements = new HashSet<> ();
 				for (Object obj : cpdInClusers) {
 					MetaboliteStga cpd = MetaboliteStga.class.cast(obj);
 					if (metaboliteIdSet.contains(cpd.getId())) clusterElements.add( cpd.getId());
@@ -181,13 +181,13 @@ public class IntegrationOLAP {
 		
 	}
 	
-	public Set<Integer> getClusters() {
-		Set<Integer> clusterIdSet = new HashSet<> (this.clusters.keySet());
+	public Set<Long> getClusters() {
+		Set<Long> clusterIdSet = new HashSet<> (this.clusters.keySet());
 		
 		return clusterIdSet;
 	}
 	
-	public Set<Integer> getCluster(Integer clusterId) {
+	public Set<Long> getCluster(Integer clusterId) {
 		return this.clusters.get(clusterId);
 	}
 	
@@ -199,10 +199,10 @@ public class IntegrationOLAP {
 	
 	public void someMethod() {
 //		resetMe();
-		Integer clusterId = 0;
+		Long clusterId = 0L;
 		
 		for (MetaboliteFormulaDim dimElement: dao.findAll(MetaboliteFormulaDim.class)) {
-			Set<Integer> clusterElements = new HashSet<> ();
+			Set<Long> clusterElements = new HashSet<> ();
 			for (MetaboliteStga cpd : dimElement.getMetaboliteStgas()) {
 				clusterElements.add(cpd.getId());
 			}
@@ -220,7 +220,7 @@ public class IntegrationOLAP {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Elements:").append( this.numberOfRecords).append('\n');
-		for (Integer id : this.clusters.keySet()) {
+		for (Long id : this.clusters.keySet()) {
 			sb.append("Cluster ").append(id).append(" -> ").append( this.clusters.get(id).size()).append('\n');
 		}
 		return sb.toString();
@@ -242,9 +242,9 @@ public class IntegrationOLAP {
 		
 		tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
 		IntegrationOLAP olap = new IntegrationOLAP();
-		IKeyGenerator<Integer> generator= new IKeyGenerator<Integer>() {
+		IKeyGenerator<Long> generator= new IKeyGenerator<Long>() {
 			
-			private int seq = 0;
+			private long seq = 0;
 			
 			@Override
 			public void reset() {
@@ -252,12 +252,12 @@ public class IntegrationOLAP {
 			}
 			
 			@Override
-			public Integer generateKey() {
+			public Long generateKey() {
 				return seq++;
 			}
 
 			@Override
-			public void generateFromLastElement(Integer key) {
+			public void generateFromLastElement(Long key) {
 				System.out.println("bzbzbbzbzb");
 			}
 		};
@@ -267,21 +267,21 @@ public class IntegrationOLAP {
 		
 		System.out.println(olap);
 		
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim", 0);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim", 0L);
 		
 		System.out.println(olap);
 		
 		System.out.println(olap.getCluster(3));
 
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim", 3);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim", 3L);
 		
 		System.out.println(olap);
 		
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim", 2);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim", 2L);
 
 		System.out.println(olap);
 		
-		for (Integer clusterId : olap.getClusters()) {
+		for (Long clusterId : olap.getClusters()) {
 			
 		}
 		

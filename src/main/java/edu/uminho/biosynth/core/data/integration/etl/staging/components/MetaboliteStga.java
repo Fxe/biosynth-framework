@@ -19,7 +19,9 @@ import javax.persistence.Table;
 @Table(name = "metabolite_stga")
 public class MetaboliteStga implements java.io.Serializable {
 
-	private int id;
+	private static final long serialVersionUID = -1930706943643869966L;
+	
+	private Long id;
 	private MetaboliteXrefGroupDim metaboliteXrefGroupDim;
 	private MetaboliteNameGroupDim metaboliteNameGroupDim;
 	private MetaboliteInchiDim metaboliteInchiDim;
@@ -45,11 +47,11 @@ public class MetaboliteStga implements java.io.Serializable {
 	public MetaboliteStga() {
 	}
 
-	public MetaboliteStga(int id) {
+	public MetaboliteStga(Long id) {
 		this.id = id;
 	}
 
-	public MetaboliteStga(int id,
+	public MetaboliteStga(Long id,
 			MetaboliteXrefGroupDim metaboliteXrefGroupDim,
 			MetaboliteNameGroupDim metaboliteNameGroupDim,
 			MetaboliteInchiDim metaboliteInchiDim,
@@ -79,11 +81,11 @@ public class MetaboliteStga implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id", unique = true, nullable = false)
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

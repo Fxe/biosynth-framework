@@ -55,9 +55,9 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 	@Test
 	public void test() {
 		IntegrationOLAP olap = new IntegrationOLAP();
-		IKeyGenerator<Integer> generator= new IKeyGenerator<Integer>() {
+		IKeyGenerator<Long> generator= new IKeyGenerator<Long>() {
 			
-			private int seq = 0;
+			private long seq = 0;
 			
 			@Override
 			public void reset() {
@@ -65,12 +65,12 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 			}
 			
 			@Override
-			public Integer generateKey() {
+			public Long generateKey() {
 				return seq++;
 			}
 
 			@Override
-			public void generateFromLastElement(Integer key) {
+			public void generateFromLastElement(Long key) {
 				System.out.println(":):):):):)");
 			}
 		};
@@ -80,17 +80,17 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 		
 		System.out.println(olap);
 		
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim", 0);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim", 0L);
 		
 		System.out.println(olap);
 		
 		System.out.println(olap.getCluster(3));
 
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim", 3);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim", 3L);
 		
 		System.out.println(olap);
 		
-		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim", 2);
+		olap.slice("edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim", 2L);
 
 		System.out.println(olap);
 	}
