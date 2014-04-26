@@ -5,17 +5,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
+import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 
-public class InchiClusterStrategy implements ClusteringStrategy {
+public class IsoFormulaClusterStrategy implements ClusteringStrategy {
+	
+	private static final Logger LOGGER = Logger.getLogger(IsoFormulaClusterStrategy.class);
 	
 	@Autowired
 	private GraphDatabaseService db;
@@ -31,42 +36,37 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 	@Override
 	public void setInitialNode(Long id) {
 		this.initialNode = db.getNodeById(id);
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
-			throw new RuntimeException("Invalid Node - not a inchi node");
+		if (!this.initialNode.hasLabel(CompoundPropertyLabel.IsotopeFormula)) {
+			throw new RuntimeException();
 		}
 	}
 
 	@Override
 	public Set<Long> execute() {
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
-			throw new RuntimeException("Invalid Node - not a inchi node");
-		}
-
 		Set<Long> nodes = new HashSet<> ();
+		Set<Long> isomorphicProperties = new HashSet<> ();
 		for (Path position: db.traversalDescription()
 				.depthFirst()
-				.relationships(CompoundRelationshipType.HasInChI)
+				.relationships(PropertyRelationshipType.Isomorphic)
 				.evaluator(Evaluators.all()).traverse(initialNode)) {
 			
-			if (position.startNode().getId() != initialNode.getId() && 
-					position.startNode().hasLabel(CompoundNodeLabel.Compound)) {
-				nodes.add(position.startNode().getId());
-			}
-			if (position.endNode().getId() != initialNode.getId() && 
-					position.endNode().hasLabel(CompoundNodeLabel.Compound)) {
-				nodes.add(position.endNode().getId());
-			}
+			isomorphicProperties.add(position.endNode().getId());
 		}
 		
-		return nodes;
-	}
-	
-	@Override
-	public String toString() {
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
-			throw new RuntimeException("Invalid Node - not a inchi node");
+		for (Long isoNodeId: isomorphicProperties) {
+			Node isoNode = db.getNodeById(isoNodeId);
+			
+			for (Relationship r: isoNode.getRelationships(CompoundRelationshipType.HasFormula)) {
+				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {
+					nodes.add(r.getStartNode().getId());
+				} else if (r.getEndNode().hasLabel(CompoundNodeLabel.Compound)) {
+					nodes.add(r.getEndNode().getId());
+				} else {
+					LOGGER.warn(String.format("%s matches incorrect link between nodes %s -> %s", r, r.getStartNode(), r.getEndNode()));
+				}
+			}
 		}
-		return "InchiClusterStrategy " + initialNode.getProperty("inchi");
+		return nodes;
 	}
 
 }

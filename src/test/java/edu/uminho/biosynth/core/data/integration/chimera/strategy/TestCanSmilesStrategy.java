@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -66,7 +67,7 @@ public class TestCanSmilesStrategy {
 		CanSmileClusterStrategy strategy = new CanSmileClusterStrategy();
 		strategy.setDb(graphDatabaseService);
 		strategy.setInitialNode(1236473L);
-		List<Long> compoundNodeIds = strategy.execute();
+		Set<Long> compoundNodeIds = strategy.execute();
 		List<String> entries = new ArrayList<> ();
 		
 		for (Long id:compoundNodeIds) {
@@ -85,7 +86,7 @@ public class TestCanSmilesStrategy {
 		CanSmileClusterStrategy strategy = new CanSmileClusterStrategy();
 		strategy.setDb(graphDatabaseService);
 		strategy.setInitialNode(1251857L);
-		List<Long> compoundNodeIds = strategy.execute();
+		Set<Long> compoundNodeIds = strategy.execute();
 		List<String> entries = new ArrayList<> ();
 		
 		for (Long id:compoundNodeIds) {

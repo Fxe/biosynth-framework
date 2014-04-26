@@ -111,8 +111,10 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	}
 
 	@Override
-	public void saveIntegratedCluster(IntegratedCluster cluster) {
+	public IntegratedCluster saveIntegratedCluster(IntegratedCluster cluster) {
 		this.getSession().save(cluster);
+		
+		return cluster;
 	}
 
 	@Override

@@ -198,6 +198,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 			for (IntegratedClusterMember member: cluster.getMembers()) {
 				Long memberId = member.getMember().getId();
 				Map<String, Object> nodeProps = this.data.getEntryProperties((Long) memberId);
+
 				if (!(Boolean)nodeProps.get("proxy")) {
 					IntegratedMetaboliteSourceProxy proxy = new IntegratedMetaboliteSourceProxy();
 					proxy.setIntegratedMetaboliteEntity(cpd);
@@ -211,9 +212,11 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 					if (labels_.size() != 1) {
 						LOGGER.warn("MULTIPLE LABELS ARE SO MESSY ! " + labels_);
 					}
-					proxy.setLabels(labels);
 					
-					cpd.getSources().add(proxy);
+//					proxy.setLabels(labels);
+//					
+//					cpd.getSources().add(proxy);
+
 				}
 //				if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
 //				System.out.println(nodeProps.get("labels") + " " + nodeProps.get("entry"));

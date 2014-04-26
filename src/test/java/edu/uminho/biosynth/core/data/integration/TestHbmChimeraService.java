@@ -25,7 +25,6 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluste
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraIntegrationServiceImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.CrossreferenceTraversalStrategyImpl;
-import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
@@ -113,8 +112,8 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByCascade() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
-		integrationService.changeIntegrationSet(integrationSet.getId());
-		integrationService.resetIntegrationSet();
+		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
@@ -130,8 +129,8 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByClusteringStrategy() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
-		integrationService.changeIntegrationSet(integrationSet.getId());
-		integrationService.resetIntegrationSet();
+		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
@@ -151,8 +150,8 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByClusteringStrategyCascade() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_Cascade_" + System.currentTimeMillis(), "Created by Test Unit");
-		integrationService.changeIntegrationSet(integrationSet.getId());
-		integrationService.resetIntegrationSet();
+		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))

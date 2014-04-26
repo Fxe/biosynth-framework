@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -245,6 +246,17 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 //		System.out.println("PROPS " + propsMap);
 		
 		return propsMap;
+	}
+	
+	public List<Long> getAllPropertiesId(String propertyType) {
+		List<Long> result = new ArrayList<> ();
+		
+		for (Node node : GlobalGraphOperations.at(graphDatabaseService)
+				.getAllNodesWithLabel(DynamicLabel.label(propertyType))) {
+			result.add(node.getId());
+		}
+		
+		return result;
 	}
 
 	@Override
