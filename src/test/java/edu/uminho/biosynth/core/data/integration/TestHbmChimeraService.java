@@ -89,7 +89,7 @@ public class TestHbmChimeraService {
 		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
 				"TestService_SingleCluster_" + System.currentTimeMillis(), "Created by Service");
 		
-		integrator.changeIntegrationSet(integrationSet.getId());
+//		integrator.changeIntegrationSet(integrationSet.getId());
 		
 		
 
@@ -112,7 +112,7 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByCascade() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
-		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+//		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
@@ -129,7 +129,7 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByClusteringStrategy() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
-		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+//		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
@@ -150,7 +150,7 @@ public class TestHbmChimeraService {
 	public void testCreateClusterByClusteringStrategyCascade() {
 		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
 				"TestService_CascadeCluster_Cascade_" + System.currentTimeMillis(), "Created by Test Unit");
-		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
+//		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);
 		
 		try {
@@ -180,7 +180,7 @@ public class TestHbmChimeraService {
 	
 	@Test
 	public void testUpdateCluster() {
-		integrationService.changeIntegrationSet(1L);
+//		integrationService.changeIntegrationSet(1L);
 		IntegratedCluster cluster = meta.getIntegratedClusterById(3L);
 		System.out.println(cluster);
 		System.out.println(cluster.getMembers());

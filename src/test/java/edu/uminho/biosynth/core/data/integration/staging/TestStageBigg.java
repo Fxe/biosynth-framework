@@ -20,9 +20,9 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiggMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestStageBigg {
 
@@ -35,9 +35,9 @@ public class TestStageBigg {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory_stga = TestConfig.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
+		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
 		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
-		sessionFactory_bigg = TestConfig.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
+		sessionFactory_bigg = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
 		dao_bigg = new GenericEntityDaoImpl(sessionFactory_bigg);
 	}
 

@@ -12,7 +12,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,6 +36,7 @@ import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetabol
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformMnxMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.BiggService;
@@ -44,7 +44,6 @@ import edu.uminho.biosynth.core.data.service.BiocycService;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
 import edu.uminho.biosynth.core.data.service.KeggService;
 import edu.uminho.biosynth.core.data.service.MnxService;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 import edu.uminho.biosynth.util.BioSynthUtilsIO;
 import edu.uminho.biosynth.util.GraphDotUtil;
 import edu.uminho.biosynth.util.ReferenceNodeVertexTransformer;
@@ -57,14 +56,13 @@ public class TestReferenceGraphBuilder {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		TestConfig.initializeHibernateSession();
-		sessionFactory = TestConfig.sessionFactory;
-		dao = TestConfig.dao;
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
+//		dao = TestConfig.dao;
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		TestConfig.closeHibernateSession();
+		sessionFactory.close();
 	}
 
 	@Before

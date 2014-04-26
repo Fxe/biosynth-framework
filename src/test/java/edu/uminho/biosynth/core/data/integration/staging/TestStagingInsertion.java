@@ -16,9 +16,9 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestStagingInsertion {
 	
@@ -28,7 +28,7 @@ public class TestStagingInsertion {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = TestConfig.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
 		dao = new GenericEntityDaoImpl(sessionFactory);
 	}
 

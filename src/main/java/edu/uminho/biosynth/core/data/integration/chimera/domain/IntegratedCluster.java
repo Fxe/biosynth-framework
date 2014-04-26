@@ -66,6 +66,29 @@ public class IntegratedCluster {
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
 
+	public void addMember(IntegratedMember integratedMember) {
+		if (!this.containsMember(integratedMember)) {
+			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
+			integratedClusterMember.setCluster(this);
+			integratedClusterMember.setMember(integratedMember);
+			
+			this.getMembers().add(integratedClusterMember);
+		}
+	}
+	
+	public boolean containsMember(IntegratedMember integratedMember) {
+		if (integratedMember == null) return false;
+		if (integratedMember.getId() == null) return false;
+		
+		Long id = integratedMember.getId();
+		
+		for (IntegratedClusterMember clusterMember : this.members) {
+			if (clusterMember.getMember().getId() == id) return true;
+		}
+		
+		return false;
+	}
+	
 	@Transient
 	public List<Long> listAllIntegratedMemberIds() {
 		List<Long> res = new ArrayList<> ();

@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.data.integration.etl.staging.olap.IntegrationOLAP;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestHbmMetaboliteWarehousingOlapManual {
 
@@ -27,7 +27,7 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory_wh = TestConfig.initializeHibernateSession("hibernate_production_warehouse_pgsql.cfg.xml");
+		sessionFactory_wh = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml"); 
 //		sessionFactory_stga = TestConfig.initializeHibernateSession("hibernate_production_staging_example_pgsql.cfg.xml");
 		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
 		
@@ -72,6 +72,12 @@ public class TestHbmMetaboliteWarehousingOlapManual {
 			@Override
 			public void generateFromLastElement(Long key) {
 				System.out.println(":):):):):)");
+			}
+
+			@Override
+			public Long getCurrentKey() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		olap.setDao(dao_stga);

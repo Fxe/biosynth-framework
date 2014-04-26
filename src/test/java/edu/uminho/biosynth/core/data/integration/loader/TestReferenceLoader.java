@@ -4,9 +4,6 @@ import static org.junit.Assert.*;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,6 +18,7 @@ import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.BiocycService;
@@ -34,13 +32,7 @@ public class TestReferenceLoader {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		
-		Configuration config = new Configuration().configure("hibernate_debug_pgsql.cfg.xml");
-		System.out.println(config.getProperty("hibernate.dialect"));
-		
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_debug_pgsql.cfg.xml");
 		dao = new GenericEntityDaoImpl(sessionFactory);
 	}
 

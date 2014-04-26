@@ -17,9 +17,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestStagingOlap {
 
@@ -29,7 +29,7 @@ public class TestStagingOlap {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory_stga = TestConfig.initializeHibernateSession("hibernate_production_staging_example_pgsql.cfg.xml");
+		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_example_pgsql.cfg.xml");
 		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
 
 	}
@@ -75,6 +75,12 @@ public class TestStagingOlap {
 			@Override
 			public void generateFromLastElement(Integer key) {
 				System.out.println(":):):):):)");
+			}
+
+			@Override
+			public Integer getCurrentKey() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		System.out.println(initialCube.size());

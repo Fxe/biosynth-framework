@@ -3,8 +3,10 @@ package edu.uminho.biosynth.core.data.integration.chimera.dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -145,6 +147,18 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 				"SELECT c.id FROM IntegratedCluster c WHERE c.integrationSet.id = :sid");
 		query.setParameter("sid", integrationSetId);
 		return (List<Long>)query.list();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<Long> getAllIntegratedClusterIds(IntegrationSet integrationSetId) {
+		if (integrationSetId == null || integrationSetId.getId() == null) return null;
+		
+		Query query = this.getSession().createQuery(
+				"SELECT c.id FROM IntegratedCluster c WHERE c.integrationSet.id = :iid");
+		query.setParameter("iid", integrationSetId.getId());
+		return new HashSet<> (query.list());
 	}
 
 	@Override

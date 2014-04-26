@@ -24,11 +24,11 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiocycMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.BiggService;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestStageBiocyc {
 
@@ -41,9 +41,9 @@ public class TestStageBiocyc {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory_stga = TestConfig.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
+		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
 		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
-		sessionFactory_biocyc = TestConfig.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
+		sessionFactory_biocyc = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
 		dao_biocyc = new GenericEntityDaoImpl(sessionFactory_biocyc);
 	}
 

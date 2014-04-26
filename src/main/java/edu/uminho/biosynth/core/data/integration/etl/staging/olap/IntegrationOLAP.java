@@ -26,6 +26,7 @@ import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGra
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
@@ -231,13 +232,9 @@ public class IntegrationOLAP {
 		IGenericDao dao_stga;
 		Transaction tx_stga;
 		
-		Configuration config = new Configuration().configure("hibernate_production_staging_example_pgsql.cfg.xml");
 //		Configuration config = new Configuration().configure("hibernate_debug_mysql.cfg.xml");
-		System.out.println(config.getProperty("hibernate.dialect"));
-		
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory_stga = config.buildSessionFactory(servReg);
+
+		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_example_pgsql.cfg.xml");
 		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
 		
 		tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
@@ -259,6 +256,12 @@ public class IntegrationOLAP {
 			@Override
 			public void generateFromLastElement(Long key) {
 				System.out.println("bzbzbbzbzb");
+			}
+
+			@Override
+			public Long getCurrentKey() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		olap.setDao(dao_stga);

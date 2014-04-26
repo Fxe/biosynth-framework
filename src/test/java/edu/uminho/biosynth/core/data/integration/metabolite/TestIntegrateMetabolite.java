@@ -47,7 +47,6 @@ import edu.uminho.biosynth.core.data.service.BiocycService;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
 import edu.uminho.biosynth.core.data.service.KeggService;
 import edu.uminho.biosynth.core.data.service.MnxService;
-import edu.uminho.biosynth.core.test.config.TestConfig;
 
 public class TestIntegrateMetabolite {
 
@@ -57,14 +56,12 @@ public class TestIntegrateMetabolite {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		TestConfig.initializeHibernateSession();
-		sessionFactory = TestConfig.sessionFactory;
-		dao = TestConfig.dao;
+
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		TestConfig.closeHibernateSession();
+		sessionFactory.close();
 	}
 
 	@Before
@@ -194,6 +191,12 @@ public class TestIntegrateMetabolite {
 				@Override
 				public void generateFromLastElement(String key) {
 					System.out.println("bzbzbbzbzb");
+				}
+
+				@Override
+				public String getCurrentKey() {
+					// TODO Auto-generated method stub
+					return null;
 				}
 			};
 			

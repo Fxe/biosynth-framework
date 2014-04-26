@@ -38,4 +38,9 @@ public class PrefixKeyGenerator implements IKeyGenerator<String> {
 		}
 	}
 
+	@Override
+	public String getCurrentKey() {
+		return prefix + "_" + counter;
+	}
+
 }

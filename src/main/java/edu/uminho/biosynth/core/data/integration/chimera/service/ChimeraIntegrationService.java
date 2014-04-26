@@ -17,30 +17,59 @@ public interface ChimeraIntegrationService {
 	public void deleteIntegrationSet(IntegrationSet integrationSet);
 	public List<IntegrationSet> getAllIntegrationSets();
 	
-	public IntegrationSet changeIntegrationSet(Long id);
-	public IntegrationSet changeIntegrationSet(String id);
-	
-	
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults);
 	public int countIntegratedClustersByIntegrationId(Long iid);
 	
 	public List<IntegratedCluster> generateIntegratedClusters(Long iid, ClusteringStrategy clusteringStrategy, 
 			Set<Long> initial, Set<Long> domain, ConflictDecision conflictDecision);
 	
-	public IntegratedCluster createCluster(String query);
-	public IntegratedCluster createCluster(ClusteringStrategy strategy);
-	public IntegratedCluster createCluster(String name, Set<Long> elements, String description);
+	public IntegratedCluster createCluster(
+			IntegrationSet integrationSet, 
+			String name, Set<Long> members, 
+			String description);
 	
+	public List<IntegratedCluster> createCluster(
+			IntegrationSet integrationSet,
+			ClusteringStrategy clusteringStrategy,
+			Set<Long> initial, Set<Long> domain,
+			ConflictDecision conflictDecision, Long limit);
+	
+	public IntegratedCluster updateCluster(
+			IntegrationSet integrationSet, 
+			IntegratedCluster integratedCluster, 
+			String name, 
+			Set<Long> members, 
+			String description);
+	
+	public IntegratedCluster mergeCluster(
+			IntegrationSet integrationSet, 
+			Set<Long> cidList, 
+			String name, 
+			Set<Long> members, 
+			String description);
+	
+	public List<Long> listAllIntegratedCompounds(IntegrationSet integrationSet);
+	public List<Long> listAllUnintegratedCompounds(IntegrationSet integrationSet);
+	
+	@Deprecated
+	public IntegratedCluster createCluster(String query);
+	@Deprecated
+	public IntegratedCluster createCluster(IntegrationSet integrationSet, ClusteringStrategy strategy);
+	
+	@Deprecated
 	public IntegratedCluster mergeCluster(String query);
+	@Deprecated
 	public IntegratedCluster mergeCluster(ClusteringStrategy strategy);
+	@Deprecated
 	public IntegratedCluster mergeCluster(String name, Set<Long> elements, String description);
 	
+	@Deprecated
 	public Map<Long, IntegratedCluster> splitCluster(Long cid, Set<Long> keep, String entry, String description);
 	
+	@Deprecated
 	public void updateCluster(Long cid, String entry, String description, Set<Long> elements);
 	
-	public List<Long> listAllIntegratedCompounds();
-	public List<Long> listAllUnintegratedCompounds();
+
 	
 	public IntegrationSet getCurrentIntegrationSet();
 	public Map<String, Integer> getDataStatistics();
