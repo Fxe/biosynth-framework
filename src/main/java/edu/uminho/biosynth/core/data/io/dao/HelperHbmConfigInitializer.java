@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 public class HelperHbmConfigInitializer {
 
@@ -18,7 +18,7 @@ public class HelperHbmConfigInitializer {
 		LOGGER.info(config.getProperty("hibernate.dialect"));
 		
 		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
+				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
 		
 		return sessionFactory;
@@ -29,7 +29,7 @@ public class HelperHbmConfigInitializer {
 		LOGGER.info(config.getProperty("hibernate.dialect"));
 		
 		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
+				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
 		
 		return sessionFactory;
@@ -43,7 +43,7 @@ public class HelperHbmConfigInitializer {
 		LOGGER.info(config.getProperty("hibernate.dialect"));
 		
 		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
+				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
 		
 		return sessionFactory;

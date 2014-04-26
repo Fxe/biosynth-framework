@@ -7,10 +7,7 @@ import java.util.Arrays;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -27,11 +24,7 @@ public class TestKeggDao {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Configuration config = new Configuration();
-		config.configure();
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
 	}
 
 	@AfterClass

@@ -10,11 +10,8 @@ import java.util.Map;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,6 +23,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 //import edu.uminho.biosynth.optflux.ContainerLoader;
@@ -1178,11 +1176,7 @@ public class TestSBMLMapping {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Configuration config = new Configuration();
-		config.configure();
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
 	}
 
 	@AfterClass

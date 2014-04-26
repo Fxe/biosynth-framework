@@ -9,12 +9,10 @@ import java.util.logging.Logger;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.integration.IntegratedMetabolite;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.cascade.CascadeByReference;
 import edu.uminho.biosynth.core.data.service.cascade.ICascadeStrategy;
@@ -89,11 +87,7 @@ public class IntegratedService implements IMetaboliteService<IntegratedMetabolit
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) {
 		SessionFactory sessionFactory;
-		Configuration config = new Configuration();
-		config.configure();
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
 		GenericEntityDaoImpl dao = new GenericEntityDaoImpl(sessionFactory);
 		MnxService mnxSrv = new MnxService(dao);
 		BiggService biggService = new BiggService(dao);

@@ -22,6 +22,7 @@ import edu.uminho.biosynth.core.components.DefaultGenericReaction;
 import edu.uminho.biosynth.core.components.StoichiometryPair;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
@@ -35,11 +36,7 @@ public class TestModelReactionMap {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Configuration config = new Configuration();
-		config.configure();
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
 	}
 
 	@AfterClass

@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +18,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,8 +28,8 @@ import org.junit.Test;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -46,13 +42,7 @@ public class TestParseCsvSeedMetabolite {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Configuration config = new Configuration().configure("seed.cfg.xml");
-//		Configuration config = new Configuration().configure("hibernate_debug_mysql.cfg.xml");
-		System.out.println(config.getProperty("hibernate.dialect"));
-		
-		ServiceRegistry servReg = 
-				new ServiceRegistryBuilder().applySettings(config.getProperties()).buildServiceRegistry();
-		sessionFactory = config.buildSessionFactory(servReg);
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("seed.cfg.xml");
 		
 	}
 	
