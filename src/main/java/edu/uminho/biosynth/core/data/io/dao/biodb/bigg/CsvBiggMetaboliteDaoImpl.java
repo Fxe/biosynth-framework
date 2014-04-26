@@ -26,7 +26,7 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	public File getCsvFile() { return csvFile;}
 	public void setCsvFile(File csvFile) { this.csvFile = csvFile;}
 	
-	private Map<Integer, String> idToEntry = new HashMap<> ();
+	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<String, BiggMetaboliteEntity> cachedData = new HashMap<> ();
 
 	@Override

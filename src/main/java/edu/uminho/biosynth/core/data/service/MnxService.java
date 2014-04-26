@@ -53,7 +53,7 @@ public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	}
 	
 	public MnxMetaboliteEntity getMnxMetaboliteFromCrossReference(String value) {
-		int cpdId = this.dao.criteria(MnxMetaboliteCrossReferenceEntity.class, Restrictions.eq("value", value)).get(0).getMnxMetaboliteEntity().getId();
+		long cpdId = this.dao.criteria(MnxMetaboliteCrossReferenceEntity.class, Restrictions.eq("value", value)).get(0).getMnxMetaboliteEntity().getId();
 		
 		return this.dao.find(MnxMetaboliteEntity.class, cpdId);
 	}

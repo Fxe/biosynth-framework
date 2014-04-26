@@ -7,7 +7,7 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 /**
  * 
- * @author Filipe
+ * @author Filipe Liu
  *
  * @param <M> a GenericMetabolite entity.
  */

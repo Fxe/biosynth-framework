@@ -65,7 +65,7 @@ public class TestCsvBiggReactionDaoImpl {
 	public void testGetValidReaction1() {
 		BiggReactionEntity rxn = reactionDao.getReactionByEntry("LCYSTAT");
 
-		assertEquals(2418755, (int) rxn.getId());
+		assertEquals(2418755L, (long) rxn.getId());
 		assertEquals("LCYSTAT", rxn.getEntry());
 		assertEquals("L-Cysteate:2-oxoglutarate aminotransferase", rxn.getName());
 		assertEquals("[c] : Lcyst + akg <==> 3spyr + glu-L", rxn.getEquation());

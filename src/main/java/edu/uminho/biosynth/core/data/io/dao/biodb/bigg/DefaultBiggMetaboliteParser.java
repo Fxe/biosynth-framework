@@ -54,7 +54,7 @@ public class DefaultBiggMetaboliteParser {
 			cpd.addCrossReference(xrefCas);			
 		}
 
-		cpd.setId(Integer.parseInt( values[7]));
+		cpd.setId(Long.parseLong( values[7]));
 		cpd.setSource("BIGG");
 		for (String modelIntValue : values[8].split(",")) {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));

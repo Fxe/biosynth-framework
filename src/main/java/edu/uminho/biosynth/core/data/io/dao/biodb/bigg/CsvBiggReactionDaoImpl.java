@@ -33,7 +33,7 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	public Resource getCsvFile() { return csvFile;}
 	public void setCsvFile(Resource csvFile) { this.csvFile = csvFile;}
 	
-	private Map<Integer, String> idToEntry = new HashMap<> ();
+	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<String, BiggReactionEntity> cachedData = new HashMap<> ();
 
 	@Override
