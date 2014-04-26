@@ -35,7 +35,7 @@ public class ChebiDumpMetaboliteEntity {
 //			  PRIMARY KEY (`id`)
 //			) ENGINE=InnoDB;
 
-	@Id @Column(name="id", nullable=false) private Integer id;
+	@Id @Column(name="id", nullable=false) private Long id;
 	
 	@Column(name="name", nullable=false, length=255) private String name;
 	
@@ -73,8 +73,8 @@ public class ChebiDumpMetaboliteEntity {
 	@OneToMany(mappedBy = "chebiDumpMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiDumpMetaboliteDatabaseAccession> accessions = new ArrayList<> ();
 	
-	public Integer getId() { return id;}
-	public void setId(Integer id) { this.id = id;}
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id;}
 
 	public String getName() { return name;}
 	public void setName(String name) { this.name = name;}
