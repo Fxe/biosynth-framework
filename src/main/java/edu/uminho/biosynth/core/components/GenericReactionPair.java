@@ -17,7 +17,7 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	
 	public GenericReactionPair(String id) {
 		super(id);
-		this.id = 0;
+		this.id = 0L;
 		this.name = "unnamed";
 		this.type = "undefined";
 		this.relatedPairs = new HashSet<String> ();
@@ -26,7 +26,7 @@ public class GenericReactionPair extends AbstractGenericEntity implements Serial
 	
 	public GenericReactionPair(String id, String name, String type) {
 		super(id);
-		this.id = 0;
+		this.id = 0L;
 		this.name = name;
 		this.type = type;
 		this.relatedPairs = new HashSet<String> ();

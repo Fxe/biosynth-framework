@@ -19,7 +19,7 @@ public class TestBiggMetaboliteEntity {
 	@Test
 	public void test36436() {
 		BiggMetaboliteEntity cpd = new BiggMetaboliteEntity();
-		cpd.setId(36436);
+		cpd.setId(36436L);
 		cpd.setCharge(-1);
 		cpd.setName("3-Dehydroquinate");
 		cpd.setEntry("3dhq");
@@ -44,7 +44,7 @@ public class TestBiggMetaboliteEntity {
 		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
 				GenericCrossReference.Type.MODEL, "iNJ661", "3dhq"));
 		
-		assertEquals(36436, (int)cpd.getId());
+		assertEquals(36436L, (long)cpd.getId());
 		assertEquals(9, cpd.getCrossReferences().size());
 		
 	}

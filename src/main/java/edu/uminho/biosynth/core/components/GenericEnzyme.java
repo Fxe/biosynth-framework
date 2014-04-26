@@ -21,12 +21,12 @@ public class GenericEnzyme extends AbstractGenericEntity implements Serializable
 	
 	public GenericEnzyme(String id) {
 		super(id);
-		this.id = 0;
+		this.id = 0L;
 		this.name = "unnamed";
 		this.organismGeneMap = new HashMap<String, String> ();
 	}
 	
-	public GenericEnzyme(String id, int key) {
+	public GenericEnzyme(String id, Long key) {
 		super(id);
 		this.id = key;
 		this.name = "unnamed";

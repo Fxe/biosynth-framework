@@ -26,10 +26,10 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 	
 	public GenericMetabolite(String id) {
 		super(id);
-		this.id = 0;
+		this.id = 0L;
 	}
 	
-	public GenericMetabolite(String id, int key) {
+	public GenericMetabolite(String id, Long key) {
 		super(id);
 		this.id = key;
 	}

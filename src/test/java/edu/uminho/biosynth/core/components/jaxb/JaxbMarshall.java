@@ -42,7 +42,7 @@ public class JaxbMarshall {
 		try {
 			JAXBContext jc = JAXBContext.newInstance(KeggCompoundMetaboliteEntity.class);
 			KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
-			cpd.setId(23);
+			cpd.setId(23L);
 			cpd.setEntry("CPD00002");
 			
 			Marshaller marshaller = jc.createMarshaller();
