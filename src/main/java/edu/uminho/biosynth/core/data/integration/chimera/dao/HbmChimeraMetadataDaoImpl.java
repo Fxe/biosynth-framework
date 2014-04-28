@@ -104,6 +104,19 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 	public IntegratedMember getIntegratedMember(Long id) {
 		return IntegratedMember.class.cast(this.getSession().get(IntegratedMember.class, id));
 	}
+	
+	@Override
+	public IntegratedMember getOrCreateIntegratedMember(Long id) {
+		IntegratedMember integratedMember = this.getIntegratedMember(id);
+		if (integratedMember == null) {
+			integratedMember = new IntegratedMember();
+			integratedMember.setId(id);
+			
+			this.saveIntegratedMember(integratedMember);
+		}
+		
+		return integratedMember;
+	}
 
 	@Override
 	public void saveIntegratedMember(IntegratedMember member) {

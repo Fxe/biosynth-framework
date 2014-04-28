@@ -163,12 +163,14 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		for (Long eid : toDelete) {
 			IntegratedClusterMember integratedClusterMember = integratedCluster.removeMember(eid);
 			this.meta.deleteClusterMember(integratedClusterMember);
+			LOGGER.trace(String.format("DELETED Member %d TO Cluster %d", eid, integratedCluster.getId()));
 		}
 		
 		for (Long eid : toAdd) {
-			IntegratedMember integratedMember = new IntegratedMember();
-			integratedMember.setId(eid);
+			
+			IntegratedMember integratedMember = this.meta.getOrCreateIntegratedMember(eid);
 			integratedCluster.addMember(integratedMember);
+			LOGGER.trace(String.format("ADDED Member %d TO Cluster %d", eid, integratedCluster.getId()));
 		}
 		
 		this.meta.saveIntegratedCluster(integratedCluster);
@@ -769,6 +771,9 @@ System.out.println("Ok ! [" + (end - start) + "]");
 			Set<Long> initial, Set<Long> domain,
 			ConflictDecision conflictDecision, Long limit) {
 		
+		if (limit == null) limit = Long.MAX_VALUE;
+		int i = 0;
+		
 		List<IntegratedCluster> integratedClusters = new ArrayList<> ();
 		
 		//Generate Clusters
@@ -800,23 +805,40 @@ System.out.println("Ok ! [" + (end - start) + "]");
 			case ABORT:
 				//Warn conflict case and abort operation
 				if (!toMerge.isEmpty()) {
+					System.out.println("OPERATION ABORT");
 					return null;
 				}
 				break;
 				
 			case SKIP:
 				//Warn skipped clusters
+				System.out.println("OPERATION SKIP");
 				break;
 			case UPDATE:
 				//Warn merge
 				//Update Clusters
 				for (Set<Long> cidList : toMerge.keySet()) {
 					if (cidList.size() > 1) {
-						LOGGER.warn(String.format("", cidList));
+						LOGGER.warn(String.format("MERGE SKIP %s", cidList));
 					} else if (cidList.size() == 1) {
-						
+						if (i < limit) {
+							IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
+							
+							System.out.println("UPDATE " + integratedCluster);
+							System.out.println("BEFORE" + integratedCluster.getMembers());
+							System.out.println("\tTO " + toMerge.get(cidList));
+							
+							
+							this.updateCluster(integratedCluster, 
+									integratedCluster.getName(), toMerge.get(cidList), integratedCluster.getDescription());
+							integratedClusters.add(integratedCluster);
+							
+							System.out.println("AFTER" + integratedCluster.getMembers());
+							
+							i++;
+						}
 					} else {
-						LOGGER.error(String.format("ZERO ELEMENT !", cidList));
+						LOGGER.error(String.format("ZERO ELEMENT ! %s", cidList));
 					}
 				}
 				break;
@@ -845,8 +867,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 				throw new RuntimeException(String.format("Unimplemented Decision %s", conflictDecision));
 		}
 		
-		if (limit == null) limit = Long.MAX_VALUE;
-		int i = 0;
+
 		//Create New Clusters
 		for (Set<Long> cluster : newClusters) {
 			String entry = this.clusterIdGenerator.generateKey();

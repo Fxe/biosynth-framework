@@ -41,6 +41,7 @@ public interface ChimeraMetadataDao {
 	public List<Long> getAllIntegratedClusterMembersId();
 	
 	public IntegratedMember getIntegratedMember(Long id);
+	public IntegratedMember getOrCreateIntegratedMember(Long id);
 	public void saveIntegratedMember(IntegratedMember member);
 	public List<Long> getAllIntegratedMembersId();
 	public Map<Long, Long> getAllAssignedIntegratedMembers(Long integrationSetId);

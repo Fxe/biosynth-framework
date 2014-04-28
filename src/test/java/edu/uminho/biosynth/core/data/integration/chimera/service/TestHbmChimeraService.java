@@ -14,9 +14,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
@@ -28,7 +26,7 @@ import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 public class TestHbmChimeraService {
 
 	private static SessionFactory sessionFactory;
@@ -124,7 +122,7 @@ public class TestHbmChimeraService {
 		assertEquals(null, integratedCluster);
 	}
 	
-//	@Test
+	@Test
 	public void testCreateIntegratedClusterWithStrategy() {
 		IntegrationSet integrationSet = 
 				integrationService.createNewIntegrationSet("TEST", null);
@@ -145,146 +143,5 @@ public class TestHbmChimeraService {
 						ConflictDecision.ABORT, 10L);
 	
 		assertEquals(10, integratedClusters.size());
-	}
-	
-	@Test
-	public void testSetA1_Create_Integration() {
-		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST_RUN", "TEST");
-		
-		assertNotEquals(null, integrationSet.getId());
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA2_Add_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		
-		Set<Long> allNodes = new HashSet<> (data.getAllMetaboliteIds());
-		Iterator<Long> iterator = allNodes.iterator();
-		for (int i = 0; i < 10; i++) {
-			Set<Long> members = new HashSet<> ();
-			for (int j = 0; j < 10; j++) {
-				members.add(iterator.next());
-			}
-			integrationService.createCluster(integrationSet, String.format("C%d", i), members, String.format("cluster [%d]", i), ConflictDecision.ABORT);
-		}
-		
-		assertEquals(10, integrationSet.getIntegratedClustersMap().size());
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA3_Split_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-	
-//		integrationService.splitCluster(cid, keep, entry, description)
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA4_Merge_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		
-		int before = integrationSet.getIntegratedClustersMap().size();
-		
-		Iterator<Long> iterator = integrationSet.getIntegratedClustersMap().keySet().iterator();
-		Long cid1 = iterator.next();
-		Long cid2 = iterator.next();
-		String name = integrationSet.getIntegratedClustersMap().get(cid1).getName();
-		String description = integrationSet.getIntegratedClustersMap().get(cid1).getDescription();
-		Set<Long> cidList = new HashSet<> ();
-		cidList.add(cid1); cidList.add(cid2);
-		Set<Long> elementList = new HashSet<> ();
-		
-		elementList.addAll(integrationSet.getIntegratedClustersMap().get(cid1).listAllIntegratedMemberIds());
-		elementList.addAll(integrationSet.getIntegratedClustersMap().get(cid2).listAllIntegratedMemberIds());
-		Set<Long> assertList = new HashSet<> (elementList);
-		IntegratedCluster integratedCluster = integrationService.mergeCluster(integrationSet, cidList, name, elementList, description);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-		
-		assertEquals(before - 1, integrationSet.size());
-		assertEquals(name, integratedCluster.getName());
-		assertEquals(description, integratedCluster.getDescription());
-		assertEquals(elementList, new HashSet<> (integratedCluster.listAllIntegratedMemberIds()));
-	}
-	
-	@Test
-	public void testSetA5_Delete_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		
-		int before = integrationSet.getIntegratedClustersMap().size();
-		
-		Long cid = integrationSet.getIntegratedClustersMap().keySet().iterator().next();
-		
-		integrationService.deleteCluster(integrationSet, cid);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-		
-		assertEquals(before - 1, integrationSet.size());
-	}
-	
-	@Test
-	public void testSetA6_Update_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA7_Reset_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		integrationService.resetIntegrationSet(integrationSet);
-		assertEquals(0, integrationSet.getIntegratedClustersMap().size());
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA8_Strategy_Clusters() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertNotEquals(null, integrationSet);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA9_Delete_Integration() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		
-		assertNotEquals(null, integrationSet);
-		
-		integrationService.deleteIntegrationSet(integrationSet);
-		integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertEquals(null, integrationSet);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-	
-	@Test
-	public void testSetA10_Integration_Not_Found() {
-		IntegrationSet integrationSet = integrationService.getIntegrationSetByEntry("TEST_RUN");
-		assertEquals(null, integrationSet);
-		
-		meta_tx.commit();
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
 	}
 }
