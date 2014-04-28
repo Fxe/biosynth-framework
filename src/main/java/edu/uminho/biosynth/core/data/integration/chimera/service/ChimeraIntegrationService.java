@@ -7,6 +7,7 @@ import java.util.Set;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
 
 public interface ChimeraIntegrationService {
 	
@@ -26,7 +27,7 @@ public interface ChimeraIntegrationService {
 	public IntegratedCluster createCluster(
 			IntegrationSet integrationSet, 
 			String name, Set<Long> members, 
-			String description);
+			String description, ConflictDecision conflictDecision);
 	
 	public List<IntegratedCluster> createCluster(
 			IntegrationSet integrationSet,
@@ -34,8 +35,14 @@ public interface ChimeraIntegrationService {
 			Set<Long> initial, Set<Long> domain,
 			ConflictDecision conflictDecision, Long limit);
 	
+	public List<IntegratedCluster> splitCluster(
+			IntegrationSet integrationSet,
+			IntegratedCluster integratedCluster,
+			SplitStrategy splitStrategy,
+			String name, String description
+			);
+	
 	public IntegratedCluster updateCluster(
-			IntegrationSet integrationSet, 
 			IntegratedCluster integratedCluster, 
 			String name, 
 			Set<Long> members, 
@@ -47,6 +54,8 @@ public interface ChimeraIntegrationService {
 			String name, 
 			Set<Long> members, 
 			String description);
+	
+	public void deleteCluster(IntegrationSet integrationSet, Long cid);
 	
 	public List<Long> listAllIntegratedCompounds(IntegrationSet integrationSet);
 	public List<Long> listAllUnintegratedCompounds(IntegrationSet integrationSet);
@@ -70,7 +79,7 @@ public interface ChimeraIntegrationService {
 	public void updateCluster(Long cid, String entry, String description, Set<Long> elements);
 	
 
-	
+	@Deprecated
 	public IntegrationSet getCurrentIntegrationSet();
 	public Map<String, Integer> getDataStatistics();
 }

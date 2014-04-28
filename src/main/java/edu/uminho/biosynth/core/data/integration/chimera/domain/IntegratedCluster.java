@@ -66,6 +66,22 @@ public class IntegratedCluster {
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
 
+	public IntegratedClusterMember removeMember(Long eid) {
+		IntegratedClusterMember toRemove = null;
+		for (IntegratedClusterMember clusterMember : this.members) {
+			if (clusterMember.getMember().getId().equals(eid)) {
+				toRemove = clusterMember;
+				break;
+			}
+		}
+		
+		if (toRemove != null) {
+			this.members.remove(toRemove);
+		}
+		
+		return toRemove;
+	}
+	
 	public void addMember(IntegratedMember integratedMember) {
 		if (!this.containsMember(integratedMember)) {
 			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();

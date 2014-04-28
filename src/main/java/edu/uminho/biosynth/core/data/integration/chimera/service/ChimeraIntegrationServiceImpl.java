@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluste
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
-import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")
@@ -76,8 +77,6 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	
 	@Override
 	public IntegrationSet createNewIntegrationSet(String name, String description) {
-		//check if name exists
-		//whine if exists
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName(name);
 		integrationSet.setDescription(description);
@@ -111,7 +110,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 	
 	@Override
-	public IntegratedCluster createCluster(IntegrationSet integrationSet, String name, Set<Long> members, String description) {
+	public IntegratedCluster createCluster(
+			IntegrationSet integrationSet, 
+			String name, Set<Long> members, String description,
+			ConflictDecision conflictDecision
+			) {
 		if (members.isEmpty() || integrationSet == null) return null;
 
 		IntegratedCluster cluster = new IntegratedCluster();
@@ -133,14 +136,43 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 		
 		this.meta.saveIntegratedCluster(cluster);
 		
+		if (cluster.getId() != null) {
+			integrationSet.getIntegratedClustersMap().put(cluster.getId(), cluster);
+		}
+		
+		
 		return cluster;
 	}
 	
 	@Override
-	public IntegratedCluster updateCluster(
-			IntegrationSet integrationSet, 
+	public IntegratedCluster updateCluster( 
 			IntegratedCluster integratedCluster, 
 			String name, Set<Long> elements, String description) {
+		
+		
+		integratedCluster.setName(name);
+		integratedCluster.setDescription(description);
+		
+		this.meta.updateCluster(integratedCluster);
+		Set<Long> toDelete = new HashSet<> (integratedCluster.listAllIntegratedMemberIds());
+		Set<Long> toAdd = new HashSet<> (elements);
+		toAdd.removeAll(toDelete);
+		
+		toDelete.removeAll(elements);
+		
+		for (Long eid : toDelete) {
+			IntegratedClusterMember integratedClusterMember = integratedCluster.removeMember(eid);
+			this.meta.deleteClusterMember(integratedClusterMember);
+		}
+		
+		for (Long eid : toAdd) {
+			IntegratedMember integratedMember = new IntegratedMember();
+			integratedMember.setId(eid);
+			integratedCluster.addMember(integratedMember);
+		}
+		
+		this.meta.saveIntegratedCluster(integratedCluster);
+		
 		LOGGER.debug(String.format("Updated Integrated Cluster[%d]", integratedCluster.getId()));
 		
 		return integratedCluster;
@@ -151,12 +183,26 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 			IntegrationSet integrationSet, 
 			Set<Long> cidList, String name, 
 			Set<Long> elements, String description) {
-//		for ()
-//		IntegratedCluster cluster = this.meta.getIntegratedClusterById(cid);
+		
+		LOGGER.trace(String.format("Merge %s with %s", cidList, elements));
+//		for (Long cid : cidList) {
+//			LOGGER.trace(String.format("[%d] - %s", cid, ));
+//		}
+//		LOGGER.trace(String.format("Merge %d", args));
+		
+		Long cid = cidList.iterator().next();
+		IntegratedCluster primaryIntegratedCluster = this.meta.getIntegratedClusterById(cid);
+		for (Long cid_ : cidList) {
+			if (cid_ != cid) {
+				this.deleteCluster(integrationSet, cid_);
+			}
+		}
+		
+		this.updateCluster(primaryIntegratedCluster, name, elements, description);
 		
 		LOGGER.debug(String.format("Merged Integrated Clusterd%s", cidList));
 		
-		return null;
+		return primaryIntegratedCluster;
 	}
 	
 //	public IntegratedCluster createCluster(String name, Set<Long> elements, String description, Long iid) {
@@ -216,7 +262,7 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 				System.out.println(query_);
 				Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query_));
 				visitedIds.addAll(clusterElements);
-				this.createCluster(null, clusterIdGenerator.generateKey(), clusterElements, query_);
+				this.createCluster(null, clusterIdGenerator.generateKey(), clusterElements, query_, ConflictDecision.ABORT);
 				System.out.println("Generated Cluster: root -> " + id + " size -> " + clusterElements.size());
 			}
 		}
@@ -525,7 +571,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 			return null;
 		}
 		LOGGER.debug(String.format("[%s] generated %d elements", strategy, clusterElements.size()));
-		return this.createCluster(integrationSet, clusterIdGenerator.generateKey(), clusterElements, strategy.toString()); 
+		return this.createCluster(integrationSet, clusterIdGenerator.generateKey(), clusterElements, strategy.toString(), ConflictDecision.ABORT); 
 	}
 	
 	
@@ -589,7 +635,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	
 	public IntegratedCluster generateCluster(ClusteringStrategy clusteringStrategy) {
-		Set<Long> clusterElements = clusteringStrategy.execute();
+//		Set<Long> clusterElements = clusteringStrategy.execute();
 		
 //		if (clusterElements.isEmpty()) return null;
 //		
@@ -599,7 +645,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	
 	public IntegratedCluster generateCluster(String query) {
-		Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query));
+//		Set<Long> clusterElements = new HashSet<> (this.data.getClusterByQuery(query));
 		
 //		if (clusterElements.isEmpty()) return null;
 //
@@ -780,7 +826,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 					if (cidList.size() > 0) {
 						if (cidList.size() == 1) {
 							IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
-							this.updateCluster(integrationSet, integratedCluster, 
+							this.updateCluster(integratedCluster, 
 									integratedCluster.getName(), toMerge.get(cidList), integratedCluster.getDescription());
 							integratedClusters.add(integratedCluster);
 						} else {
@@ -812,7 +858,8 @@ System.out.println("Ok ! [" + (end - start) + "]");
 								integrationSet, 
 								entry, 
 								cluster, 
-								String.format("%s[%s]", "strategy", "initialNode"));
+								String.format("%s[%s]", "strategy", "initialNode"),
+								ConflictDecision.ABORT);
 				integratedClusters.add(integratedCluster);
 			}
 			i++;
@@ -1019,6 +1066,36 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	@Override
 	public IntegrationSet getCurrentIntegrationSet() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void deleteCluster(IntegrationSet integrationSet, Long cid) {
+		if (!integrationSet.getIntegratedClustersMap().containsKey(cid)) return;
+		integrationSet.getIntegratedClustersMap().remove(cid);
+		IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cid);
+		if (integratedCluster != null) {
+			this.meta.deleteCluster(integratedCluster);
+		}
+	}
+	@Override
+	public List<IntegratedCluster> splitCluster(
+			IntegrationSet integrationSet,
+			IntegratedCluster integratedCluster,
+			SplitStrategy splitStrategy, String name, String description) {
+		
+		List<IntegratedCluster> result = new ArrayList<> ();
+		result.add(integratedCluster);
+		Set<Long> elementsToTake = splitStrategy.execute(integratedCluster);
+		if (elementsToTake.size() == integratedCluster.getMembers().size()
+				|| elementsToTake.isEmpty()) {
+			
+			LOGGER.warn("IDENTITY CLUSTER RETURN NO CHANGES TAKEN");
+			return result;
+		}
+		
+		this.createCluster(integrationSet, name, elementsToTake, description, ConflictDecision.ABORT);
+		this.meta.removeMembersFromIntegratedCluster(integratedCluster, elementsToTake);
+		
 		return null;
 	}
 

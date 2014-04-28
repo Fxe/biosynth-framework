@@ -11,16 +11,13 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestHbmChimeraDaoImpl {
 	
 	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
@@ -276,55 +273,5 @@ public class TestHbmChimeraDaoImpl {
 		clusterIds = dao.getAllIntegratedClusterIds(integrationSet);
 		assertEquals(0, clusterIds.size());
 
-	}
-	
-	@Test
-	public void testSetA1_Create_Integration() {
-		
-	}
-	
-	@Test
-	public void testSetA2_Add_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA3_Split_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA4_Merge_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA5_Delete_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA6_Update_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA7_Reset_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA8_Strategy_Clusters() {
-		
-	}
-	
-	@Test
-	public void testSetA9_Delete_Integration() {
-		
-	}
-	
-	@Test
-	public void testSetA10_Integration_Not_Found() {
-		
 	}
 }

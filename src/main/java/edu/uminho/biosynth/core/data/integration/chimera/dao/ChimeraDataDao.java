@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -19,4 +20,7 @@ public interface ChimeraDataDao {
 	
 	//TEMPORARY METHOD MISSING POJO FOR COMPOSE ENTRY
 	public Node getCompositeNode(String entry, Label...labels);
+	
+	public int countByLabel(String label);
+	public Set<String> getAllMajorMetaboliteLabels();
 }

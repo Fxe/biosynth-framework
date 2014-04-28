@@ -30,6 +30,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetabol
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
+import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
@@ -332,6 +333,28 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		}
 		
 		return cpd;
+	}
+
+	@Override
+	public int countByLabel(String label) {
+		int count = 0;
+		Label l = DynamicLabel.label(label);
+		for (Node n : GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(l)) {
+			if (n.hasProperty("proxy") && !n.hasProperty("proxy")) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public Set<String> getAllMajorMetaboliteLabels() {
+		Set<String> majorLabels = new HashSet<> ();
+		for (MetaboliteMajorLabel majorLabel : MetaboliteMajorLabel.values()) {
+			majorLabels.add(majorLabel.toString());
+		}
+		
+		return majorLabels;
 	}
 
 }

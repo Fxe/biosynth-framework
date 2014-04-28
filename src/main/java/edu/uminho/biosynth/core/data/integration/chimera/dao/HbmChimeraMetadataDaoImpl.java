@@ -263,4 +263,14 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		query.executeUpdate();
 	}
 
+	@Override
+	public void removeMembersFromIntegratedCluster(
+			IntegratedCluster integratedCluster, Set<Long> toRemove) {
+		
+		for (Long eid : toRemove) {
+			IntegratedClusterMember integratedClusterMember = integratedCluster.removeMember(eid);
+			this.getSession().delete(integratedClusterMember);
+		}
+	}
+
 }
