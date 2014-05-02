@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.io.parser.kegg.AbstractKeggFlatFileParser;
 
 public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser {
 

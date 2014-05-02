@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
 
 
-public class RestKeggGlycanMetaboliteDaoImpl extends AbstractRestfulKeggMetaboliteDao<KeggGlycanMetaboliteEntity>{
+public class RestKeggGlycanMetaboliteDaoImpl 
+extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEntity> {
 
 	private static final String restGlQuery = "http://rest.kegg.jp/get/gl:%s";
 	private static final String restGlMolQuery = "http://rest.kegg.jp/get/gl:%s/mol";

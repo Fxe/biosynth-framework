@@ -8,10 +8,12 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.parser.kegg.KeggCompoundFlatFileParser;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFileParser;
 
 @Repository
-public class RestKeggCompoundMetaboliteDaoImpl extends AbstractRestfulKeggMetaboliteDao<KeggCompoundMetaboliteEntity> {
+public class RestKeggCompoundMetaboliteDaoImpl 
+extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEntity> {
 
 	private static final String restCpdQuery = "http://rest.kegg.jp/get/cpd:%s";
 	private static final String restCpdMolQuery = "http://rest.kegg.jp/get/cpd:%s/mol";

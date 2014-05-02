@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.AbstractKeggFlatFileParser;
 import edu.uminho.biosynth.core.data.io.parser.IGenericReactionParser;
 
 public class KEGGReactionFlatFileParser extends AbstractKeggFlatFileParser implements IGenericReactionParser {

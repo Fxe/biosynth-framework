@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.parser.kegg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser;
 
 import java.util.ArrayList;
 import java.util.HashSet;

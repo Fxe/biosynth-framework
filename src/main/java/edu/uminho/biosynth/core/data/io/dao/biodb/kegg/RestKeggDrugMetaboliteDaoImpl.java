@@ -5,11 +5,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggDrugMetaboliteFlatFileParser;
 
-public class RestKeggDrugMetaboliteDaoImpl extends AbstractRestfulKeggMetaboliteDao<KeggDrugMetaboliteEntity>{
+public class RestKeggDrugMetaboliteDaoImpl
+extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity>{
 
+	private static final Logger LOGGER = Logger.getLogger(RestKeggDrugMetaboliteDaoImpl.class);
 	private static final String restDrQuery = "http://rest.kegg.jp/get/dr:%s";
 	private static final String restDrMolQuery = "http://rest.kegg.jp/get/dr:%s/mol";
 	
@@ -58,6 +63,8 @@ public class RestKeggDrugMetaboliteDaoImpl extends AbstractRestfulKeggMetabolite
 		
 		String localPath = this.getLocalStorage()  + "dr" + "/" + id;
 		
+		KeggDrugMetaboliteEntity cpd = null;
+		
 		String drFlatFile = null;
 		String drMolFile = null;
 		try {
@@ -65,34 +72,38 @@ public class RestKeggDrugMetaboliteDaoImpl extends AbstractRestfulKeggMetabolite
 			drMolFile = getLocalOrWeb(restDrMolQuery, localPath + ".mol");
 			
 //			System.out.println(drFlatFile);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
+
 		
-		KeggDrugMetaboliteFlatFileParser parser = new KeggDrugMetaboliteFlatFileParser(drFlatFile);
+			KeggDrugMetaboliteFlatFileParser parser = new KeggDrugMetaboliteFlatFileParser(drFlatFile);
 //		System.out.println(parser.getTabs());
-		KeggDrugMetaboliteEntity cpd = new KeggDrugMetaboliteEntity();
-		
-		cpd.setEntry(parser.getEntry());
-		cpd.setName(parser.getName());
-		cpd.setFormula(parser.getFormula());
-		cpd.setMass(parser.getMass());
-		cpd.setMolWeight(parser.getMolWeight());
-		cpd.setActivity(parser.getActivity());
-		cpd.setTarget(parser.getTarget());
-		cpd.setMetabolism(parser.getMetabolism());
-		cpd.setRemark(parser.getRemark());
-		cpd.setComment(parser.getComment());
-		if (drMolFile != null && !drMolFile.isEmpty()) {
-			cpd.setMol2d(drMolFile);
+			cpd = new KeggDrugMetaboliteEntity();
+			
+			cpd.setEntry(parser.getEntry());
+			cpd.setName(parser.getName());
+			cpd.setFormula(parser.getFormula());
+			cpd.setMass(parser.getMass());
+			cpd.setMolWeight(parser.getMolWeight());
+			cpd.setActivity(parser.getActivity());
+			cpd.setTarget(parser.getTarget());
+			cpd.setMetabolism(parser.getMetabolism());
+			cpd.setRemark(parser.getRemark());
+			cpd.setComment(parser.getComment());
+			if (drMolFile != null && !drMolFile.isEmpty()) {
+				cpd.setMol2d(drMolFile);
+			}
+			cpd.setCrossReferences(parser.getCrossReferences());
+			cpd.setProduct(parser.getProduct());
+			cpd.setSequence(parser.getSequence());
+			cpd.setDrugSource(parser.getSource());
+			cpd.setStrMap(parser.getStructureMap());
+			cpd.setOtherMap(parser.getOtherMap());
+			cpd.setComponent(parser.getComponent());
+			
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.debug(e.getStackTrace());
+			return null;
 		}
-		cpd.setCrossReferences(parser.getCrossReferences());
-		cpd.setProduct(parser.getProduct());
-		cpd.setSequence(parser.getSequence());
-		cpd.setDrugSource(parser.getSource());
-		cpd.setStrMap(parser.getStructureMap());
-		cpd.setOtherMap(parser.getOtherMap());
-		cpd.setComponent(parser.getComponent());
 		return cpd;
 	}
 	

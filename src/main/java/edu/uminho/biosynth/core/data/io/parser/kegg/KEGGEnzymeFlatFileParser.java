@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.AbstractKeggFlatFileParser;
+
 public class KEGGEnzymeFlatFileParser extends AbstractKeggFlatFileParser {
 	
 	private final String geneRegex = "(\\w+):\\s+([a-zA-Z0-9-_ ()\\.]+)?";

@@ -4,8 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import java.util.Arrays;
+
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.AbstractKeggFlatFileParser;
 
 public class KEGGRPairFlatFileParser extends AbstractKeggFlatFileParser{
 

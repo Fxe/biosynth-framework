@@ -3,6 +3,8 @@ package edu.uminho.biosynth.core.data.io.parser.kegg;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.AbstractKeggFlatFileParser;
+
 public class KEGGOrganismFlatFileParser extends AbstractKeggFlatFileParser{
 
 	private static String _TAX_TAB = "TAXONOMY";
