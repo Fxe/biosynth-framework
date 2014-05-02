@@ -13,54 +13,54 @@ import javax.persistence.Table;
 import edu.uminho.biosynth.core.components.GenericReaction;
 
 @Entity
-@Table(name="KEGG_REACTION")
+@Table(name="kegg_reaction")
 public class KeggReactionEntity extends GenericReaction {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="DEFINITION", length=2047) private String definition;
+	@Column(name="definition", length=2047) private String definition;
 	public String getDefinition() { return definition; }
 	public void setDefinition(String definition) { this.definition = definition; }
 	
-	@Column(name="EQUATION", length=2047) private String equation;
+	@Column(name="equation", length=2047) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }
 
-	@Column(name="K_COMMENT", length=2047) private String comment;
+	@Column(name="k_comment", length=2047) private String comment;
 	public String getComment() { return comment; }
 	public void setComment(String comment) { this.comment = comment; }
 	
-	@Column(name="REMARK", length=1047) private String remark;
+	@Column(name="remark", length=1047) private String remark;
 	public String getRemark() { return remark; }
 	public void setRemark(String remark) { this.remark = remark; }
 	
 	@ElementCollection
-	@CollectionTable(name="KEGG_REACTION_ENZYME", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="ENZYME", length=31)
+	@CollectionTable(name="kegg_reaction_enzyme", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="enzyme", length=31)
 	protected List<String> enzymes = new ArrayList<> ();
 	public List<String> getEnzymes() { return enzymes; }
 	public void addEnzyme(String enzyme) { this.enzymes.add(enzyme); }
 	public void setEnzymes(List<String> enzymes) { this.enzymes = enzymes; }
 
 	@ElementCollection
-	@CollectionTable(name="KEGG_REACTION_RPAIR", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="RPAIR", length=15)
+	@CollectionTable(name="kegg_reaction_rpair", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="rpair", length=15)
 	protected List<String> rpairs = new ArrayList<> ();
 	public List<String> getRpairs() { return rpairs; }
 	public void addRpair(String rpair) { this.rpairs.add(rpair); }
 	public void setRpairs(List<String> rpairs) { this.rpairs = rpairs; }
 	
 	@ElementCollection
-	@CollectionTable(name="KEGG_REACTION_ORTHOLOGY", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="ORTHOLOGY", length=15)
+	@CollectionTable(name="kegg_reaction_orthology", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="orthology", length=15)
 	protected List<String> orthologies = new ArrayList<> ();
 	public List<String> getOrthologies() { return orthologies; }
 	public void addOrthology(String orthology) { this.orthologies.add(orthology); }
 	public void setOrthologies(List<String> orthologies) { this.orthologies = orthologies; }
 	
 	@ElementCollection
-	@CollectionTable(name="KEGG_REACTION_PATHWAY", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="PATHWAY", length=15)
+	@CollectionTable(name="kegg_reaction_pathway", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="pathway", length=15)
 	protected List<String> pathways = new ArrayList<> ();
 	public List<String> getPathways() { return pathways; }
 	public void setPathways(List<String> pathways) { this.pathways = pathways; }
@@ -83,18 +83,18 @@ public class KeggReactionEntity extends GenericReaction {
 	public String toString() {
 		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();
-		sb.append("Entry:").append(this.entry).append(sep);
-		sb.append("Name:").append(this.name).append(sep);
-		sb.append("Source:").append(this.source).append(sep);
-		sb.append("Description:").append(this.description).append(sep);
-		sb.append("Comment:").append(this.comment).append(sep);
-		sb.append("Remark").append(this.remark).append(sep);
-		sb.append("Definition").append(this.definition).append(sep);
-		sb.append("Equation").append(this.equation).append(sep);
-		sb.append("Rpairs").append(this.rpairs).append(sep);
-		sb.append("Enzymes").append(this.enzymes).append(sep);
-		sb.append("Pathways").append(this.pathways).append(sep);
-		sb.append("Orthologies").append(this.orthologies);
+		sb.append("Entry: ").append(this.entry).append(sep);
+		sb.append("Name: ").append(this.name).append(sep);
+		sb.append("Source: ").append(this.source).append(sep);
+		sb.append("Description: ").append(this.description).append(sep);
+		sb.append("Comment: ").append(this.comment).append(sep);
+		sb.append("Remark: ").append(this.remark).append(sep);
+		sb.append("Definition: ").append(this.definition).append(sep);
+		sb.append("Equation: ").append(this.equation).append(sep);
+		sb.append("Rpairs: ").append(this.rpairs).append(sep);
+		sb.append("Enzymes: ").append(this.enzymes).append(sep);
+		sb.append("Pathways: ").append(this.pathways).append(sep);
+		sb.append("Orthologies: ").append(this.orthologies);
 		return sb.toString();
 	}
 }
