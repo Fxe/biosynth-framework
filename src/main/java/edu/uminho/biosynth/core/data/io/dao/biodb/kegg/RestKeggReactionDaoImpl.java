@@ -30,6 +30,8 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 		
 		String rnFlatFile = null;
 		try {
+			LOGGER.info(restRxnQuery);
+			LOGGER.info(localPath);
 			rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath);
 			
 			KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
@@ -43,6 +45,8 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 			rxn.setPathways(parser.getPathways());
 			rxn.setRpairs(parser.getRPairs());
 			rxn.setOrthologies(parser.getOrthologies());
+			rxn.setLeft(parser.getLeft());
+			rxn.setRight(parser.getRight());
 			
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());

@@ -36,6 +36,8 @@ public class TestRestKeggReactionDaoImpl {
 		assertEquals(0, rxn.getPathways().size());
 		assertEquals(1, rxn.getEnzymes().size());
 		assertEquals(0, rxn.getOrthologies().size());
+		assertEquals(2, rxn.getLeft().size());
+		assertEquals(1, rxn.getRight().size());
 	}
 	
 	@Test
@@ -52,6 +54,8 @@ public class TestRestKeggReactionDaoImpl {
 		assertEquals(0, rxn.getPathways().size());
 		assertEquals(1, rxn.getEnzymes().size());
 		assertEquals(0, rxn.getOrthologies().size());
+		assertEquals(3, rxn.getLeft().size());
+		assertEquals(4, rxn.getRight().size());
 	}
 	
 	@Test
@@ -68,6 +72,8 @@ public class TestRestKeggReactionDaoImpl {
 		assertEquals(2, rxn.getPathways().size());
 		assertEquals(1, rxn.getEnzymes().size());
 		assertEquals(1, rxn.getOrthologies().size());
+		assertEquals(2, rxn.getLeft().size());
+		assertEquals(1, rxn.getRight().size());
 	}
 	
 	@Test(expected=RuntimeException.class)

@@ -22,7 +22,7 @@ public abstract class AbstractRestfulKeggDao {
 		String httpResponseString = null;
 //		String dataFileStr = localStorage  + entityType + "/" + entry + "." + extension;
 		File dataFile = new File(localPath);
-		System.out.println(dataFile);
+
 		boolean didFetch = false;
 		//check local file
 		if (useLocalStorage && dataFile.exists()) {
