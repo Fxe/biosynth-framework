@@ -3,14 +3,19 @@ package edu.uminho.biosynth.core.components.biodb.kegg;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericReaction;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
 
 @Entity
 @Table(name="kegg_reaction")
@@ -64,6 +69,26 @@ public class KeggReactionEntity extends GenericReaction {
 	protected List<String> pathways = new ArrayList<> ();
 	public List<String> getPathways() { return pathways; }
 	public void setPathways(List<String> pathways) { this.pathways = pathways; }
+	
+	@OneToMany(mappedBy = "keggReactionEntity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<KeggReactionLeftEntity> left = new ArrayList<> ();
+	public List<KeggReactionLeftEntity> getLeft() { return left;}
+	public void setLeft(List<KeggReactionLeftEntity> left) {
+		for (KeggReactionLeftEntity entity : left) {
+			entity.setKeggReactionEntity(this);
+		}
+		this.left = left;
+	}
+	
+	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<KeggReactionRightEntity> right = new ArrayList<> ();
+	public List<KeggReactionRightEntity> getRight() { return right;}
+	public void setRight(List<KeggReactionRightEntity> right) {
+		for (KeggReactionRightEntity entity : right) {
+			entity.setKeggReactionEntity(this);
+		}
+		this.right = right;
+	}
 	
 //	@OneToMany(mappedBy = "keggReactionEntity")
 //	private List<KeggReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
