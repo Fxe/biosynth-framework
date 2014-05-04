@@ -10,13 +10,13 @@ import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 
 @Entity
-@Table(name="BIOCYC_REACTION_CROSSREF")
+@Table(name="biocyc_reaction_crossref")
 public class BioCycReactionCrossReferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 2935318839395889046L;
 
 	@ManyToOne
-	@JoinColumn(name="id_reaction")
+	@JoinColumn(name="reaction_id")
 	private BioCycReactionEntity bioCycReactionEntity;
 	public BioCycReactionEntity getBioCycReactionEntity() { return bioCycReactionEntity; }
 	public void setBioCycReactionEntity(BioCycReactionEntity bioCycReactionEntity) {

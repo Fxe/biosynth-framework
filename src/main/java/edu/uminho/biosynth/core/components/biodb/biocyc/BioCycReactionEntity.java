@@ -19,7 +19,7 @@ import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactio
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 
 @Entity
-@Table(name="BIOCYC_REACTION")
+@Table(name="biocyc_reaction")
 public class BioCycReactionEntity extends GenericReaction {
 
 	private static final long serialVersionUID = 1L;
@@ -43,6 +43,16 @@ public class BioCycReactionEntity extends GenericReaction {
 	private Boolean physiologicallyRelevant;
 	public Boolean getPhysiologicallyRelevant() { return physiologicallyRelevant;}
 	public void setPhysiologicallyRelevant(Boolean physiologicallyRelevant) { this.physiologicallyRelevant = physiologicallyRelevant;}
+
+	@Column(name="reaction_direction", nullable=true, length=127)
+	private String reactionDirection;
+	public String getReactionDirection() { return reactionDirection;}
+	public void setReactionDirection(String reactionDirection) { this.reactionDirection = reactionDirection;}
+	
+	@Column(name="gibbs", nullable=true)
+	private Double gibbs;
+	public Double getGibbs() { return gibbs;}
+	public void setGibbs(Double gibbs) { this.gibbs = gibbs;}
 
 	@ElementCollection
 	@CollectionTable(name="biocyc_reaction_parent", joinColumns=@JoinColumn(name="reaction_id"))
@@ -103,12 +113,16 @@ public class BioCycReactionEntity extends GenericReaction {
 		this.ecNumbers = ecNumbers;
 	}
 
+	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
 	private List<BioCycReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
 	public List<BioCycReactionCrossReferenceEntity> getCrossReferences() {
 		return crossReferences;
 	}
 	public void setCrossReferences(
 			List<BioCycReactionCrossReferenceEntity> crossReferences) {
+		for (BioCycReactionCrossReferenceEntity entity : crossReferences) {
+			entity.setBioCycReactionEntity(this);
+		}
 		this.crossReferences = crossReferences;
 	}
 	

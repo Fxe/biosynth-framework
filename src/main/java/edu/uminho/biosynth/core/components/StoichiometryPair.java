@@ -15,13 +15,13 @@ public class StoichiometryPair implements Serializable{
 	@Id
     @Column(name="id")
     @GeneratedValue
-	private Integer id;
-	public Integer getId() { return id;}
-	public void setId(Integer id) { this.id = id;}
+	private Long id;
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id;}
 	
-    @Column(name="value") protected Double value;
-	public Double getValue() { return value;}
-	public void setValue(Double value) { this.value = value;}
+    @Column(name="coefficient") protected double value;
+	public double getValue() { return value;}
+	public void setValue(double value) { this.value = value;}
 	
     @Column(name="metabolite_id") protected Integer cpdKey;
     @Column(name="metabolite_entry") protected String cpdEntry;

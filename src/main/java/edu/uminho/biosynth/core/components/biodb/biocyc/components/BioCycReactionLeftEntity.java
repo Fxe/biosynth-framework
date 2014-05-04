@@ -15,7 +15,7 @@ public class BioCycReactionLeftEntity extends StoichiometryPair {
 
 	private static final long serialVersionUID = 1L;
 
-    @Column(name="coefficient") protected String coefficient;
+    @Column(name="coefficient_str") protected String coefficient;
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
