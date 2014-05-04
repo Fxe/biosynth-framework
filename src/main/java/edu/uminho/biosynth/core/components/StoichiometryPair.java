@@ -24,7 +24,7 @@ public class StoichiometryPair implements Serializable{
 	public void setValue(double value) { this.value = value;}
 	
     @Column(name="metabolite_id") protected Integer cpdKey;
-    @Column(name="metabolite_entry") protected String cpdEntry;
+    @Column(name="metabolite_entry", nullable=false) protected String cpdEntry;
 
 	public Integer getCpdKey() {
 		return cpdKey;

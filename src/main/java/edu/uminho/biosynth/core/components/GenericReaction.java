@@ -1,6 +1,8 @@
 package edu.uminho.biosynth.core.components;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -24,10 +26,30 @@ public class GenericReaction extends AbstractGenericEntity implements Serializab
 	
 	@Transient private Set<String> similarRxn;
 	
+	@Transient
+	private Map<String, Double> reactantStoichiometry = new HashMap<> ();
+	
+	@Transient
+	private Map<String, Double> productStoichiometry = new HashMap<> ();
+	
+	
+	
 //	private Map<String, GenericMetabolite>		cpdMap;
 //	private Map<String, GenericEnzyme>			ecnMap;
 //	private Map<String, GenericReactionPair>	rprMap;
 	
+	public Map<String, Double> getReactantStoichiometry() {
+		return reactantStoichiometry;
+	}
+	public void setReactantStoichiometry(Map<String, Double> reactantStoichiometry) {
+		this.reactantStoichiometry = reactantStoichiometry;
+	}
+	public Map<String, Double> getProductStoichiometry() {
+		return productStoichiometry;
+	}
+	public void setProductStoichiometry(Map<String, Double> productStoichiometry) {
+		this.productStoichiometry = productStoichiometry;
+	}
 	public int getOrientation() {
 		return this.orientation;
 	}
