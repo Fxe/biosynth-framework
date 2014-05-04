@@ -11,7 +11,6 @@ import java.util.Map;
 import edu.uminho.biosynth.core.components.UnreversibleReaction;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
-import edu.uminho.biosynth.util.BioSynthUtilsIO;
 
 public class GraphVizGenerator {
 	
@@ -102,8 +101,6 @@ public class GraphVizGenerator {
 	}
 	
 	public static String generateSvg(String dotStr) throws IOException {
-			dotStr = BioSynthUtilsIO.readFromFile("D:/example.dot");
-
 		String[] output = executeGraphviz(dotStr, "dot", "-Tsvg");
 
 		return output[0];
