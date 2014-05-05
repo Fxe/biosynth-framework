@@ -32,7 +32,6 @@ public interface ChimeraMetadataDao {
 	public void removeMembersFromIntegratedCluster(IntegratedCluster integratedCluster, Set<Long> toRemove);
 	
 	public void mergeCluster(List<Long> ids, Serializable integrationId);
-	
 	public void updateCluster(IntegratedCluster cluster);
 	public void deleteCluster(IntegratedCluster cluster);
 	public String getLastClusterEntry(Long integrationSetId);
@@ -44,6 +43,8 @@ public interface ChimeraMetadataDao {
 	public IntegratedMember getOrCreateIntegratedMember(Long id);
 	public void saveIntegratedMember(IntegratedMember member);
 	public List<Long> getAllIntegratedMembersId();
+	public List<Long> getAllIntegratedMembersId(IntegrationSet integrationSet, boolean distinct);
 	public Map<Long, Long> getAllAssignedIntegratedMembers(Long integrationSetId);
 	
+	public int countIntegratedMembers(IntegrationSet integrationSet, boolean distinct);
 }

@@ -286,4 +286,34 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		}
 	}
 
+	@Override
+	public int countIntegratedMembers(IntegrationSet integrationSet,
+			boolean distinct) {
+		
+		//Maybe using query count is faster ?
+		
+		return getAllIntegratedMembersId(integrationSet, distinct).size();
+	}
+
+	@Override
+	public List<Long> getAllIntegratedMembersId(IntegrationSet integrationSet,
+			boolean distinct) {
+		
+		Query query = null;
+		if (distinct) {
+			query = this.getSession().createQuery(
+				"select c.pk.member.id from IntegratedClusterMember c "
+				+ "where c.pk.cluster.integrationSet.id = :iid");
+		} else {
+			query = this.getSession().createQuery(
+				"select distinct c.pk.member.id from IntegratedClusterMember c "
+				+ "where c.pk.cluster.integrationSet.id = :iid");
+		}
+		query.setParameter("iid", integrationSet.getId());
+		
+		@SuppressWarnings("unchecked")
+		List<Long> list = query.list();
+		return list;
+	}
+
 }

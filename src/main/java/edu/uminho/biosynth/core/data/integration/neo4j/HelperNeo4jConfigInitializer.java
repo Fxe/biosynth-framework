@@ -28,6 +28,7 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (c:Charge) ASSERT c.charge IS UNIQUE",
 		"CREATE CONSTRAINT ON (c:Compartment) ASSERT c.compartment IS UNIQUE",
 		"CREATE CONSTRAINT ON (m:Model) ASSERT m.id IS UNIQUE",
+		"CREATE INDEX ON :Compound(proxy)",
 	};
 	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {

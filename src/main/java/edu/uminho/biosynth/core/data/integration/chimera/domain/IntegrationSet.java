@@ -13,6 +13,8 @@ import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 @Entity
 @Table(name="integration")
 public class IntegrationSet {
@@ -33,6 +35,7 @@ public class IntegrationSet {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY , mappedBy="integrationSet")
 	@MapKey(name="id")
+	@BatchSize(size=100)
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();
 
 	public Long getId() { return id;}

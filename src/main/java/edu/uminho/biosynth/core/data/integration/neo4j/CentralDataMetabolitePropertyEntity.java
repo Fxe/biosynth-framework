@@ -13,6 +13,8 @@ public class CentralDataMetabolitePropertyEntity {
 	
 	private String uniqueKey;
 	
+	private Object uniqueKeyValue;
+	
 	private Set<String> labels = new HashSet<> ();
 	
 	private String relationshipType;
@@ -69,6 +71,17 @@ public class CentralDataMetabolitePropertyEntity {
 	public void setUniqueKey(String uniqueKey) {
 		this.uniqueKey = uniqueKey;
 	}
+
+	public Object getUniqueKeyValue() {
+		return uniqueKeyValue;
+	}
+
+	public void setUniqueKeyValue(Object uniqueKeyValue) {
+		this.uniqueKeyValue = uniqueKeyValue;
+	}
 	
-	
+	@Override
+	public String toString() {
+		return uniqueKeyValue.toString();
+	}
 }

@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
@@ -337,14 +338,42 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 
 	@Override
 	public int countByLabel(String label) {
-		int count = 0;
-		Label l = DynamicLabel.label(label);
-		for (Node n : GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(l)) {
-			if (n.hasProperty("proxy") && !n.hasProperty("proxy")) {
-				count++;
-			}
+//		int count = 0;
+//		Label l = DynamicLabel.label(label);
+//		for (Node n : GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(l)) {
+//			if (n.hasProperty("proxy") && !(boolean) n.getProperty("proxy")) {
+//				count++;
+//			}
+//		}
+		
+		return this.getEntitiesByLabel(label).size();
+	}
+	
+	@Override
+	public Set<Long> getEntitiesByLabel(String label) {
+		Set<Long> set = new HashSet<> ();
+		
+		String cypherQuery = String.format("MATCH (cpd:%s {proxy:false}) RETURN ID(cpd) AS id", label);
+		
+		ExecutionResult executionResult = executionEngine.execute(cypherQuery);
+		while (executionResult.columnAs("id").hasNext()) {
+			set.add((Long)executionResult.columnAs("id").next());
 		}
-		return count;
+
+//		set = (Set<Long>) IteratorUtil.asSet(executionResult.columnAs("id"));
+//		for (Object id : ) {
+//			set.add((Long) id);
+//		}
+		
+//		Label l = DynamicLabel.label(label);
+		
+//		for (Node n : GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(l)) {
+//			if (n.hasProperty("proxy") && !(boolean) n.getProperty("proxy")) {
+//				set.add(n.getId());
+//			}
+//		}
+		
+		return set;
 	}
 
 	@Override
@@ -355,6 +384,35 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		}
 		
 		return majorLabels;
+	}
+
+	@Override
+	public List<CentralDataMetabolitePropertyEntity> collectAllPropertyFromIds(
+			String major, String uniqueKey, Long... ids) {
+		List<CentralDataMetabolitePropertyEntity> propertyEntities = new ArrayList<> ();
+		
+		Label label = DynamicLabel.label(major);
+		
+		for (Long nodeId : ids) {
+			Node node = this.graphDatabaseService.getNodeById(nodeId);
+			for (Relationship relationship : node.getRelationships()) {
+				Node nodeProp = relationship.getOtherNode(node);
+				if (nodeProp.hasLabel(label)) {
+					CentralDataMetabolitePropertyEntity propertyEntity = new CentralDataMetabolitePropertyEntity();
+					
+					propertyEntity.setId(nodeProp.getId());
+					propertyEntity.setUniqueKey(uniqueKey);
+					propertyEntity.setUniqueKeyValue(nodeProp.getProperty(uniqueKey));
+					propertyEntity.setMajorLabel(major);
+					
+					for (Label l : nodeProp.getLabels()) propertyEntity.getLabels().add(l.toString());
+					for (String key : nodeProp.getPropertyKeys()) propertyEntity.getProperties().put(key, nodeProp.getProperty(key));
+					
+					propertyEntities.add(propertyEntity);
+				}
+			}
+		}
+		return propertyEntities;
 	}
 
 }
