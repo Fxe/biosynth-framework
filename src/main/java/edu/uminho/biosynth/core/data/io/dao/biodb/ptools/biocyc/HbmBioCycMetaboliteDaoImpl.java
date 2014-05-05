@@ -5,32 +5,21 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.hibernate.AbstractHibernateDao;
 
 @Repository
-public class HbmBioCycMetaboliteDaoImpl implements MetaboliteDao<BioCycMetaboliteEntity>{
+public class HbmBioCycMetaboliteDaoImpl 
+extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 
-	@Autowired
-	private SessionFactory sessionFactory;
-	
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	public SessionFactory getSessionFactory() { return sessionFactory;}
-	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
-	
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
-		Object cpd = this.getSession().get(BioCycMetaboliteEntity.class, id);
-		return BioCycMetaboliteEntity.class.cast(cpd);
+		Object cpdObj = this.getSession().get(BioCycMetaboliteEntity.class, id);
+		return BioCycMetaboliteEntity.class.cast(cpdObj);
 	}
 
 	@Override

@@ -65,7 +65,11 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			List<String> enzymaticReactionStrings = parser.getEnzymaticReactions();
 			Boolean orphan = parser.isOrphan();
 			Boolean physioRel = parser.isPhysiologicallyRelevant();
-
+			Double gibbs = parser.getGibbs();
+			String direction = parser.getReactionDirection();
+			
+			rxn.setReactionDirection(direction);
+			rxn.setGibbs(gibbs);
 			rxn.setEcNumbers(ecNumberEntities);
 			rxn.setPhysiologicallyRelevant(physioRel);
 			rxn.setParents(parentStrings);
@@ -76,6 +80,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn.setLeft(leftEntities);
 			rxn.setRight(rightEntities);
 			rxn.setCrossReferences(crossReferences);
+			rxn.setSource(pgdb);
 
 			
 		} catch (IOException e) {

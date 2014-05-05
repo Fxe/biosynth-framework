@@ -89,7 +89,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			if ( orientation.equals("PHYSIOL-RIGHT-TO-LEFT")) return -3;
 			if ( orientation.equals("IRREVERSIBLE-LEFT-TO-RIGHT")) return 2;
 			if ( orientation.equals("IRREVERSIBLE-RIGHT-TO-LEFT")) return -2;
-			System.err.println(this.getEntry() + " => " + orientation);
+//			System.err.println(this.getEntry() + " => " + orientation);
 		} catch (JSONException ex) {
 			LOGGER.error(ex.getMessage());
 		}
@@ -284,29 +284,29 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 	}
 	
 	public List<BioCycReactionEcNumberEntity> getEcNumbers() {
-
+		List<BioCycReactionEcNumberEntity> res = new ArrayList<> ();
 		if ( base.has("ec-number")) {
-			List<BioCycReactionEcNumberEntity> res = new ArrayList<> ();
 			
 			JSONObject ecnJsonObject = this.getJsonObject(this.base, "ec-number");
+			System.out.println(ecnJsonObject);
 			JSONArray ecnJsonArray = this.getJsonArray(ecnJsonObject, "content");
 			for (int i = 0; i < ecnJsonArray.length(); i++) {
+				
 				BioCycReactionEcNumberEntity ecn = new BioCycReactionEcNumberEntity();
 				Object o = ecnJsonArray.get(i);
 				if (o instanceof JSONObject) {
 					JSONObject ecnInnerJsonObject = (JSONObject) o;
 					ecn.setEcNumber(ecnInnerJsonObject.getString("content"));
+					System.out.println("ssssssssssss" + ecnInnerJsonObject);
 					//TODO: ADD OFFCIAL STATUS
 				} else {
 					ecn.setEcNumber((String) o);
 				}
 				res.add(ecn);
 			}
-
-			return res;
 		}
 		
-		return null;
+		return res;
 	}
 	
 	public Boolean isPhysiologicallyRelevant() {
@@ -326,14 +326,16 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		properties.put("cpdEntry", null);
 		properties.put("coefficient", "1");
 		properties.put("compartmentEntry", null);
-		System.out.println(stoichObj);
-
+		
+		
 		if (stoichObj instanceof JSONObject) {
 			JSONObject stoichiometryJsonObject = (JSONObject) stoichObj;
 			String type = null;
-			for (Object entityType : stoichiometryJsonObject.keySet()) {
+			Iterator<?> iterator = stoichiometryJsonObject.keys();
+			while (iterator.hasNext()) {
+				Object entityType = iterator.next();
 				type = entityType.toString();
-				System.out.println(type);
+//				System.out.println(type);
 				if (type.equals("compartment")) {
 					
 				} else if (type.equals("coefficient")) {
@@ -342,6 +344,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 					properties.put("coefficient", coefficient);
 				} else if (type.equals("Compound") || type.equals("Protein") || type.equals("RNA")) {
 					String cpdEntry = stoichiometryJsonObject.getJSONObject(type).getString("frameid");
+					properties.put("cpdEntry", cpdEntry);
+				} else if (type.equals("content")) {
+					String cpdEntry = stoichiometryJsonObject.getString("content");
 					properties.put("cpdEntry", cpdEntry);
 				} else {
 					LOGGER.warn(String.format("[%s] unknown stoichiometry type [%s]", this.getEntry(), stoichObj));
@@ -360,6 +365,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		
 		if ( base.has("left")) {
 			JSONArray leftJsonArray = this.getJsonArray(this.base, "left");
+			
 			for (int i = 0; i < leftJsonArray.length(); i++) {
 				Map<String, String> properties = this.getStoichiometry(leftJsonArray.get(i));
 				
@@ -367,7 +373,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				try {
 					bioCycReactionLeftEntity.setValue(Double.parseDouble(properties.get("coefficient")));
 				} catch (NumberFormatException e) {
-					bioCycReactionLeftEntity.setValue(Double.NaN);
+					bioCycReactionLeftEntity.setValue(-1);
 				}
 				bioCycReactionLeftEntity.setCoefficient(properties.get("coefficient"));
 				bioCycReactionLeftEntity.setCpdEntry(properties.get("cpdEntry"));
@@ -390,7 +396,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				try {
 					bioCycReactionRightEntity.setValue(Double.parseDouble(properties.get("coefficient")));
 				} catch (NumberFormatException e) {
-					bioCycReactionRightEntity.setValue(Double.NaN);
+					bioCycReactionRightEntity.setValue(-1);
 				}
 				bioCycReactionRightEntity.setCoefficient(properties.get("coefficient"));
 				bioCycReactionRightEntity.setCpdEntry(properties.get("cpdEntry"));
@@ -456,7 +462,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			
 			for (int i = 0; i < pathwayJsonArray.length(); i++) {
 				JSONArray pathwayInnerJsonArray = null;
-				System.out.println(pathwayJsonArray.getJSONObject(i));
+//				System.out.println(pathwayJsonArray.getJSONObject(i));
 				if (pathwayJsonArray.getJSONObject(i).has("Pathway"))
 					pathwayInnerJsonArray = this.getJsonArray(pathwayJsonArray.getJSONObject(i), "Pathway");
 				if (pathwayJsonArray.getJSONObject(i).has("Reaction"))
@@ -500,6 +506,23 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			System.out.println("WHAT IS " + this.base.get("orphan") + "??????????????");
 		}
 		
+		return null;
+	}
+
+	public String getReactionDirection() {
+		if (this.base.has("reaction-direction")) {
+			String content = this.base.getString("reaction-direction");
+			return content;
+		}
+		return null;
+	}
+
+	public Double getGibbs() {
+		if (this.base.has("gibbs-0")) {
+			JSONObject jsonObject = this.base.getJSONObject("gibbs-0"); 
+			Double value = jsonObject.getDouble("content");
+			return value;
+		}
 		return null;
 	}
 	

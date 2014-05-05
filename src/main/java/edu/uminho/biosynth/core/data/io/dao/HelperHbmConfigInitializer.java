@@ -48,4 +48,24 @@ public class HelperHbmConfigInitializer {
 		
 		return sessionFactory;
 	}
+	
+	@Deprecated
+	public static SessionFactory initializeMySQLHibernateSession(
+			File cfg, Class<?>...classes) {
+		
+		Configuration config = new Configuration().configure(cfg);
+		for (Class<?> c : classes) {
+			config.setProperty("", "");
+			config.setProperty("", "");
+			config.setProperty("", "");
+			config.addAnnotatedClass(c);
+		}
+		LOGGER.info(config.getProperty("hibernate.dialect"));
+		
+		ServiceRegistry servReg = 
+				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
+		
+		return sessionFactory;
+	}
 }
