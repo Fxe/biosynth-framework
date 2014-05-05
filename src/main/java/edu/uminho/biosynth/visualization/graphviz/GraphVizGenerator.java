@@ -14,7 +14,7 @@ import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGra
 
 public class GraphVizGenerator {
 	
-	
+	public static String GRAPH_VIZ_BIN_PATH = ""; 
 	
 	public static String[] executeGraphviz(String stdin, String...args) throws IOException {
 		StringBuilder stdout = new StringBuilder();
@@ -101,7 +101,7 @@ public class GraphVizGenerator {
 	}
 	
 	public static String generateSvg(String dotStr) throws IOException {
-		String[] output = executeGraphviz(dotStr, "dot", "-Tsvg");
+		String[] output = executeGraphviz(dotStr, GRAPH_VIZ_BIN_PATH + "dot", "-Tsvg");
 
 		return output[0];
 	}
