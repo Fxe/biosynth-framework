@@ -44,11 +44,6 @@
       <artifactId>biosynth-data</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
-      <artifactId>biosynth-integration</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
     
     <dependency>
       <groupId>net.sf.jni-inchi</groupId>
@@ -117,12 +112,16 @@
 		<artifactId>cdk-renderawt</artifactId>
 		<version>1.5.5</version>
     </dependency>
-       <dependency>
-		<groupId>org.openscience.cdk</groupId>
-		<artifactId>cdk-sdg</artifactId>
-		<version>1.5.5</version>
+    <dependency>
+      <groupId>org.openscience.cdk</groupId>
+      <artifactId>cdk-sdg</artifactId>
+      <version>1.5.5</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.openscience.jchempaint</groupId>
+      <artifactId>jchempaint-hotfix</artifactId>
+      <version>3.4</version>
+    </dependency>
     
     <dependency>
       <groupId>junit</groupId>

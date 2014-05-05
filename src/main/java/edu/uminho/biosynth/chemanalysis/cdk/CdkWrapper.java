@@ -48,4 +48,16 @@ public class CdkWrapper {
 
 		return null;
 	}
+	
+	public static void generateSvg() {
+//		IAtomContainer molecule;
+//		
+//		SVGGenerator svgGenerator = new SVGGenerator();
+//		StructureDiagramGenerator structureDiagramGenerator = new StructureDiagramGenerator();
+//		structureDiagramGenerator.setMolecule(molecule);
+//		structureDiagramGenerator.generateCoordinates();
+//		
+//		AtomContainerRenderer atomContainerRenderer = new AtomContainerRenderer(generators, fontManager)
+//		atomContainerRenderer.paintMolecule(molecule, svgGenerator, bounds, resetCenter);
+	}
 }
