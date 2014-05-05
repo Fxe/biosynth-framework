@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.parser.kegg;
+package edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
