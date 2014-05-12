@@ -1,8 +1,10 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,7 +12,9 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,59 +27,66 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.components.Integ
 public class IntegratedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = -6116044461015672826L;
-
+	
 	@OneToMany(mappedBy = "integratedMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<IntegratedMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="name", length=2000, nullable=false)
-	private Set<String> names = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="name", length=2000, nullable=false)
+	private Map<Long, List<String>> names = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_isotope_formula", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="iso_formula", length=255, nullable=false)
-	private Set<String> isoFormulas = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_isotope_formula", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="iso_formula", length=255, nullable=false)
+	private Map<Long, String> isoFormulas = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_formula", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="formula", length=255, nullable=false)
-	private Set<String> formulas = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_formula", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="formula", length=255, nullable=false)
+	private Map<Long, String> formulas = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_charge", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="charge", nullable=false)
-	private Set<Integer> charges = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_charge", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="charge", nullable=false)
+	private Map<Long, Integer> charges = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_can_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="can_smiles", nullable=false)
-	private Set<String> canSmiles = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_can_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="can_smiles", nullable=false)
+	private Map<Long, String> canSmiles = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="smiles", nullable=false)
-	private Set<String> smiles = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="smiles", nullable=false)
+	private Map<Long, String> smiles = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_inchi", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="inchi", nullable=false)
-	private Set<String> inchis = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_inchi", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="inchi", nullable=false)
+	private Map<Long, String> inchis = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_models", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="model", nullable=false)
-	private Set<String> models = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_models", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="model", nullable=false)
+	private Map<Long, List<String>> models = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_compartments", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="compartment", nullable=false)
-	private Set<String> compartments = new HashSet<> ();
+//	@ElementCollection
+//	@CollectionTable(name="integrated_metabolite_compartments", joinColumns=@JoinColumn(name="metabolite_id"))
+//	@Column(name="compartment", nullable=false)
+	private Map<Long, List<String>> compartments = new HashMap<> ();
 	
-	@ElementCollection
-	@CollectionTable(name="integrated_metabolite_sources", joinColumns=@JoinColumn(name="metabolite_id"))
-	@Column(name="source", nullable=false)
-	private List<IntegratedMetaboliteSourceProxy> sources = new ArrayList<> ();
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="integratedMetaboliteEntity")
+	@MapKey(name="id")
+	private Map<Long, IntegratedMetaboliteSourceProxy> sources = new HashMap<> ();
+	public Map<Long, IntegratedMetaboliteSourceProxy> getSources() { return sources;}
+	public void setSources(Map<Long, IntegratedMetaboliteSourceProxy> sources) {
+		for (IntegratedMetaboliteSourceProxy proxy : sources.values()) {
+			proxy.setIntegratedMetaboliteEntity(this);
+		}
+		this.sources = sources;
+	}
 
 	public List<IntegratedMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossreferences;
@@ -86,48 +97,64 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		this.crossreferences = crossreferences;
 	}
 
-	public Set<String> getNames() { return names;}
-	public void setNames(Set<String> names) { this.names = names;}
-
-	public Set<String> getFormulas() { return formulas;}
-	public void setFormulas(Set<String> formulas) { this.formulas = formulas;}
-
-	public Set<Integer> getCharges() { return charges;}
-	public void setCharges(Set<Integer> charges) { this.charges = charges;}
-
-	public Set<String> getCanSmiles() { return canSmiles;}
-	public void setCanSmiles(Set<String> canSmiles) { this.canSmiles = canSmiles;}
-
-	public Set<String> getSmiles() { return smiles;}
-	public void setSmiles(Set<String> smiles) { this.smiles = smiles;}
-
-	public Set<String> getInchis() { return inchis;}
-	public void setInchis(Set<String> inchis) { this.inchis = inchis;}
-	
-	public Set<String> getModels() { return models;}
-	public void setModels(Set<String> models) { this.models = models;}
-
-	public Set<String> getIsoFormulas() { return isoFormulas;}
-	public void setIsoFormulas(Set<String> isoFormulas) { this.isoFormulas = isoFormulas;}
-
-	public Set<String> getCompartments() { return compartments;}
-	public void setCompartments(Set<String> compartments) { this.compartments = compartments;}
-	
-	
-
-	public List<IntegratedMetaboliteSourceProxy> getSources() {
-		return sources;
+	public Map<Long, List<String>> getNames() {
+		return names;
 	}
-
-	public void setSources(List<IntegratedMetaboliteSourceProxy> sources) {
-		this.sources = sources;
+	public void setNames(Map<Long, List<String>> names) {
+		this.names = names;
 	}
-	
-	
+	public Map<Long, String> getIsoFormulas() {
+		return isoFormulas;
+	}
+	public void setIsoFormulas(Map<Long, String> isoFormulas) {
+		this.isoFormulas = isoFormulas;
+	}
+	public Map<Long, String> getFormulas() {
+		return formulas;
+	}
+	public void setFormulas(Map<Long, String> formulas) {
+		this.formulas = formulas;
+	}
+	public Map<Long, Integer> getCharges() {
+		return charges;
+	}
+	public void setCharges(Map<Long, Integer> charges) {
+		this.charges = charges;
+	}
+	public Map<Long, String> getCanSmiles() {
+		return canSmiles;
+	}
+	public void setCanSmiles(Map<Long, String> canSmiles) {
+		this.canSmiles = canSmiles;
+	}
+	public Map<Long, String> getSmiles() {
+		return smiles;
+	}
+	public void setSmiles(Map<Long, String> smiles) {
+		this.smiles = smiles;
+	}
+	public Map<Long, String> getInchis() {
+		return inchis;
+	}
+	public void setInchis(Map<Long, String> inchis) {
+		this.inchis = inchis;
+	}
+	public Map<Long, List<String>> getModels() {
+		return models;
+	}
+	public void setModels(Map<Long, List<String>> models) {
+		this.models = models;
+	}
+	public Map<Long, List<String>> getCompartments() {
+		return compartments;
+	}
+	public void setCompartments(Map<Long, List<String>> compartments) {
+		this.compartments = compartments;
+	}
 	public Set<String> getProxyMajorDatabaseLabels() {
 		Set<String> labels = new HashSet<> ();
 		
-		for (IntegratedMetaboliteSourceProxy proxy : this.sources) {
+		for (IntegratedMetaboliteSourceProxy proxy : this.sources.values()) {
 			labels.add(proxy.getMajorLabel());
 		}
 		

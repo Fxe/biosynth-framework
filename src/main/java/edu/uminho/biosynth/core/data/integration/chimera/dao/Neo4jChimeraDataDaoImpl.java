@@ -111,6 +111,37 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		map.get(key).add(value);
 	}
 	
+	public Map<String, List<Object>> getCompositeNode2(Long id) {
+		Map<String, List<Object>> data = new HashMap<> ();
+		
+		Node root = graphDatabaseService.getNodeById(id);
+		if (!root.hasLabel(CompoundNodeLabel.Compound)) {
+			throw new RuntimeException("Invalid Node " + id + " " + root.getLabels());
+		}
+		
+		for (Relationship relationship : root.getRelationships()) {
+			
+			Node other = relationship.getOtherNode(root);
+			Set<String> labels = new HashSet<> ();
+			for (Label label: IteratorUtil.asSet(other.getLabels())) labels.add(label.toString());
+			if (other.hasLabel(CompoundNodeLabel.Compound)) {
+				labels.remove("Compound");
+				IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
+//				GenericCrossReference xref = new GenericCrossReference();
+				xref.setType(GenericCrossReference.Type.DATABASE);
+				xref.setRef(labels.iterator().next());
+				xref.setValue((String)other.getProperty("entry"));
+				createAndAdd(data, "crossreferences", xref);
+			} else {
+				String property = other.getPropertyKeys().iterator().next();
+				Object value = other.getProperty(property);
+				createAndAdd(data, property, value);
+			}
+		}
+		System.out.println("DATA: " + data);
+		return data;
+	}
+	
 	@Override
 	public Map<String, List<Object>> getCompositeNode(Long id) {
 //		System.out.println("Loading composite node -> " + id);
@@ -118,8 +149,14 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		Map<String, Object> root = this.getEntryProperties(id);
 		String sourceEntry = (String) root.get("entry");
 		
+		Node tempNode = graphDatabaseService.getNodeById(id);
+		System.out.println("NODE -> " + tempNode);
+		System.out.println("     -> " + tempNode.getProperty("entry") + tempNode.getLabels());
+		System.out.println("     -> " + IteratorUtil.asList(tempNode.getRelationships()));
 		
 		Map<String, List<Object>> data = new HashMap<> ();
+//		Map<String, List<Object>> data = this.getCompositeNode2(id);
+		
 //		data.put("Model", new ArrayList<> ());
 		//START cpd=node(0) MATCH composite=(cpd)-[*1..1]->(c) RETURN nodes(composite);
 		//START cpd=node(0) MATCH path=(cpd)-[*1..1]->(c) RETURN collect(c)
@@ -131,10 +168,11 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		String query = 
 		String.format("START cpd=node(%d) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
 				+ "UNION START cpd=node(%d) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret", id, id);
-		
+		System.out.println(query);
 		ExecutionResult res = this.executionEngine.execute(query);
 		
 		List<Object> list = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
+		System.out.println("Found " + list.size());
 		for (Object obj: list) {
 			NodeProxy proxy = null;
 			if (obj instanceof SeqWrapper) {

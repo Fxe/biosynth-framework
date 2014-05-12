@@ -131,16 +131,63 @@ public class TestClusteringStrategy {
 	}
 	
 	@Test
-	public void generateAllCluster() {
-		for (Node biggNode : GlobalGraphOperations.at(graphDatabaseService)
-				.getAllNodesWithLabel(CompoundNodeLabel.BiGG)) {
-			Node initialNode = biggNode;
-			BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-			strategy.setDb(graphDatabaseService);
-			strategy.setInitialNode(initialNode);
-			
-			Set<Long> result = strategy.execute();
-			this.printCluster(result);
-		}
+	public void generateChEBI_16908_Main() {
+		Node initialNode = graphDatabaseService.getNodeById(167069L);
+		ChebiParentClusteringStrategy strategy = new ChebiParentClusteringStrategy();
+		strategy.setDb(graphDatabaseService);
+		strategy.setInitialNode(initialNode);
+		
+		Set<Long> result = strategy.execute();
+		this.printCluster(result);
+		
+		assertEquals(6, result.size());
 	}
+	
+	@Test
+	public void generateChEBI_7423_Parent_16908() {
+		Node initialNode = graphDatabaseService.getNodeById(167071L);
+		ChebiParentClusteringStrategy strategy = new ChebiParentClusteringStrategy();
+		strategy.setDb(graphDatabaseService);
+		strategy.setInitialNode(initialNode);
+		
+		Set<Long> result = strategy.execute();
+		
+		assertEquals(0, result.size());
+	}
+	
+	@Test
+	public void generateMetaCycWATER_Cluster() {
+		Node initialNode = graphDatabaseService.getNodeById(436046L);
+		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = new BiocycFirstDegreeCrossreferenceClusteringStrategy();
+		strategy.setDb(graphDatabaseService);
+		strategy.setInitialNode(initialNode);
+		
+		Set<Long> result = strategy.execute();
+		this.printCluster(result);
+	}
+	
+	@Test
+	public void generateMetaCycPROTON_Cluster() {
+		Node initialNode = graphDatabaseService.getNodeById(167042L);
+		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = new BiocycFirstDegreeCrossreferenceClusteringStrategy();
+		strategy.setDb(graphDatabaseService);
+		strategy.setInitialNode(initialNode);
+		
+		Set<Long> result = strategy.execute();
+		this.printCluster(result);
+	}
+	
+//	@Test
+//	public void generateAllCluster() {
+//		for (Node biggNode : GlobalGraphOperations.at(graphDatabaseService)
+//				.getAllNodesWithLabel(CompoundNodeLabel.BiGG)) {
+//			Node initialNode = biggNode;
+//			BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
+//			strategy.setDb(graphDatabaseService);
+//			strategy.setInitialNode(initialNode);
+//			
+//			Set<Long> result = strategy.execute();
+//			this.printCluster(result);
+//		}
+//	}
 }

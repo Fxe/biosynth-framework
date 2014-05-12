@@ -15,7 +15,6 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataD
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jIntegratedMetaboliteDao;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraDatabaseBuilderServiceImpl;
-import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
@@ -23,7 +22,6 @@ public class TestHbmChimeraBuilderService {
 	
 	private static SessionFactory sessionFactory;
 	private static String DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db";
-	private static String DB_TARGET = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.target";
 	private static GraphDatabaseService db;
 	private static GraphDatabaseService db_target;
 	private static org.hibernate.Transaction meta_tx;
@@ -33,7 +31,6 @@ public class TestHbmChimeraBuilderService {
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hbm_mysql_chimera_meta.cfg.xml");
 		db = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
-		db_target = new GraphDatabaseFactory().newEmbeddedDatabase( DB_TARGET );
 		sessionFactory.openSession();
 	}
 
@@ -43,7 +40,6 @@ public class TestHbmChimeraBuilderService {
 		sessionFactory.close();
 		
 		db.shutdown();
-		db_target.shutdown();
 	}
 
 	@Before
@@ -62,8 +58,6 @@ public class TestHbmChimeraBuilderService {
 
 	@Test
 	public void testBuilderService() {
-		Neo4jIntegratedMetaboliteDao target = new Neo4jIntegratedMetaboliteDao();
-		target.setGraphdb(db_target);
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
 		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
@@ -75,8 +69,9 @@ public class TestHbmChimeraBuilderService {
 //		builder.setTarget(target);
 		builder.setEntryGenerator(new PrefixKeyGenerator("IM_"));
 		
-		builder.changeIntegrationSet(1L);
-		builder.generateIntegratedDatabase();
+		builder.changeIntegrationSet(2L);
+		
+		System.out.println(builder.buildCompoundByClusterName("MNXM2"));
 		
 		assertEquals(true, true);
 	}
