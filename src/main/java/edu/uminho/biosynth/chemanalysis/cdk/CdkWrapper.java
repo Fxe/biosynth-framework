@@ -1,10 +1,16 @@
 package edu.uminho.biosynth.chemanalysis.cdk;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.CDK;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.io.Mol2Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+
+import edu.uminho.biosynth.program.InchiToCan;
 
 /**
  * 
@@ -46,6 +52,15 @@ public class CdkWrapper {
 			LOGGER.error(e.getMessage()); 
 		}
 
+		return null;
+	}
+	
+	public static String molToInChI(String mol2d) {
+//		InChIGeneratorFactory factory = new InChIGeneratorFactory().
+//		InChIToStructure a = new InChIToStructure(i)
+//		Mol2Reader mol2Reader = new Mol2Reader(null);
+//		mol2Reader.
+//		CDK
 		return null;
 	}
 	
