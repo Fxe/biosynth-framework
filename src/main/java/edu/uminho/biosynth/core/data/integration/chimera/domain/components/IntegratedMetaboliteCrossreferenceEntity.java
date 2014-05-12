@@ -20,6 +20,23 @@ public class IntegratedMetaboliteCrossreferenceEntity extends GenericCrossRefere
 	public String getSource() { return source;}
 	public void setSource(String source) { this.source = source;}
 	
+	private String internalEntry;
+	
+	private Long internalId;
+	
+	public String getInternalEntry() {
+		return internalEntry;
+	}
+	public void setInternalEntry(String internalEntry) {
+		this.internalEntry = internalEntry;
+	}
+	public Long getInternalId() {
+		return internalId;
+	}
+	public void setInternalId(Long internalId) {
+		this.internalId = internalId;
+	}
+
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
 	private IntegratedMetaboliteEntity integratedMetaboliteEntity;
@@ -39,16 +56,6 @@ public class IntegratedMetaboliteCrossreferenceEntity extends GenericCrossRefere
 	
 	@Override
 	public String toString() {
-		final char sep = ',';
-		final char ini = '<';
-		final char end = '>';
-		StringBuilder sb = new StringBuilder();
-		sb.append(ini);
-		sb.append(type).append(sep);
-		sb.append(ref).append(sep);
-		sb.append(value).append(sep);
-		sb.append(source);
-		sb.append(end);
-		return sb.toString();
+		return String.format("<%s[%d], %s, %s, %s, %s>", internalEntry, internalId, type, ref, value , source);
 	}
 }

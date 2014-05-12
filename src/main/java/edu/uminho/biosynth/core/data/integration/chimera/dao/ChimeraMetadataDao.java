@@ -39,6 +39,14 @@ public interface ChimeraMetadataDao {
 	public void deleteClusterMember(IntegratedClusterMember member);
 	public List<Long> getAllIntegratedClusterMembersId();
 	
+	/**
+	 * 
+	 * @param iid integration set id
+	 * @param eid integrated member id
+	 * @return map with integrated cluster cid and entry
+	 */
+	public Map<Long, String> getIntegratedClusterWithElement(Long iid, Long eid);
+	
 	public IntegratedMember getIntegratedMember(Long id);
 	public IntegratedMember getOrCreateIntegratedMember(Long id);
 	public void saveIntegratedMember(IntegratedMember member);

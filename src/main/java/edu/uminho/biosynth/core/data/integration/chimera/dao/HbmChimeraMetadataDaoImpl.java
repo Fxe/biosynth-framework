@@ -316,4 +316,25 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		return list;
 	}
 
+	@Override
+	public Map<Long, String> getIntegratedClusterWithElement(Long iid, Long eid) {
+		Map<Long, String> idEntryMap = new HashMap<> ();
+		
+		Query query = this.getSession().createQuery("select M.pk.cluster.id, M.pk.cluster.name "
+				+ "from IntegratedClusterMember M "
+				+ "where M.pk.member.id = :eid and M.pk.cluster.integrationSet.id = :iid");
+		
+		query.setParameter("iid", iid)
+			 .setParameter("eid", eid);
+		
+		List<?> list = query.list();
+		
+		for (Object object : list) {
+			Object[] data = (Object[]) object;
+			idEntryMap.put((Long) data[0], (String) data[1]);
+		}
+		
+		return idEntryMap;
+	}
+
 }

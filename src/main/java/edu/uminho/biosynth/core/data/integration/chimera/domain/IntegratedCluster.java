@@ -1,7 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -46,9 +49,15 @@ public class IntegratedCluster {
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
-	private List<IntegratedClusterMeta> meta = new ArrayList<> ();
-	public List<IntegratedClusterMeta> getMeta() { return meta;}
-	public void setMeta(List<IntegratedClusterMeta> meta) { this.meta = meta;}
+	@MapKey(name="metaType")
+	private Map<String, IntegratedClusterMeta> meta = new HashMap<> ();
+	public Map<String, IntegratedClusterMeta> getMeta() { return meta;}
+	public void setMeta(Map<String, IntegratedClusterMeta> meta) {
+		for (IntegratedClusterMeta integratedClusterMeta : meta.values()) {
+			integratedClusterMeta.setIntegratedCluster(this);
+		}
+		this.meta = meta;
+	}
 	
 	
 //	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
@@ -62,6 +71,7 @@ public class IntegratedCluster {
 //		this.memberMap = memberMap;
 //	}
 	
+
 
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}

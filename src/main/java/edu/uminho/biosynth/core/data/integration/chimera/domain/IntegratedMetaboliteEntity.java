@@ -160,6 +160,8 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		
 		return labels;
 	}
+	
+	
 
 	@Override
 	public String toString() {

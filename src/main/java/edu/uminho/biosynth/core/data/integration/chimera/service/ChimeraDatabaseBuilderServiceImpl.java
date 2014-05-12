@@ -233,6 +233,17 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 				if (data.containsKey("crossreferences")) {
 					for (Object xrefObj : data.get("crossreferences")) {
 						IntegratedMetaboliteCrossreferenceEntity xref = (IntegratedMetaboliteCrossreferenceEntity) xrefObj;
+						Map<Long, String> internalIds = this.meta.getIntegratedClusterWithElement(cluster.getIntegrationSet().getId(), memberId);
+						if (internalIds.size() > 1) {
+							LOGGER.warn(String.format("Found multiple memberships for %s - %s", memberId, internalIds));
+						}
+						if (!internalIds.isEmpty()) {
+							Long internalId = internalIds.keySet().iterator().next();
+							String internalEntry = internalIds.get(internalId);
+							xref.setInternalEntry(internalEntry);
+							xref.setInternalId(internalId);
+						}
+						 
 //						IntegratedMetaboliteCrossreferenceEntity xref = 
 //								new IntegratedMetaboliteCrossreferenceEntity(xref_);
 						xref.setIntegratedMetaboliteEntity(cpd);

@@ -1,7 +1,11 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.uminho.biosynth.core.data.integration.chimera.IntegratedClusterMetaGenerator;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
@@ -62,7 +66,31 @@ public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 
 	@Override
 	public void updatedMeta(IntegratedCluster integratedCluster, List<IntegratedClusterMeta> integratedClusterMetas) {
+		Map<String, IntegratedClusterMeta> metaMap = new HashMap<> ();
+		for (IntegratedClusterMeta integratedClusterMeta : integratedClusterMetas) {
+			metaMap.put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
+		}
 		
+		Set<String> unmodified = new HashSet<> ();
+		Set<String> delete = new HashSet<> ();
+		for (String metaType : integratedCluster.getMeta().keySet()) {
+			if (metaMap.containsKey(metaType)) {
+				unmodified.add(metaType);
+			} else {
+				delete.add(metaType);
+			}
+		}
+		
+		for (String metaType : unmodified) metaMap.remove(metaType);
+		for (String metaType : delete) integratedCluster.getMeta().remove(metaType);
+		
+		for (String metaType : metaMap.keySet()) {
+			IntegratedClusterMeta integratedClusterMeta = metaMap.get(metaType); 
+			integratedClusterMeta.setIntegratedCluster(integratedCluster);
+			integratedCluster.getMeta().put(metaType, integratedClusterMeta);
+		}
+		
+		this.meta.saveIntegratedCluster(integratedCluster);
 	}
 
 	@Override

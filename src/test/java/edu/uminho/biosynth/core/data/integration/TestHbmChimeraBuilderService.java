@@ -2,6 +2,8 @@ package edu.uminho.biosynth.core.data.integration;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,13 +17,13 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataD
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jIntegratedMetaboliteDao;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraDatabaseBuilderServiceImpl;
-import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraBuilderService {
 	
+	private static final String INTEGRATION_CENTRAL_DATA = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.central";
+	private static final String INTEGRATION_META_DATA = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
 	private static SessionFactory sessionFactory;
-	private static String DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db";
 	private static GraphDatabaseService db;
 	private static GraphDatabaseService db_target;
 	private static org.hibernate.Transaction meta_tx;
@@ -29,8 +31,8 @@ public class TestHbmChimeraBuilderService {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hbm_mysql_chimera_meta.cfg.xml");
-		db = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
+		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File( INTEGRATION_META_DATA ));
+		db = new GraphDatabaseFactory().newEmbeddedDatabase( INTEGRATION_CENTRAL_DATA );
 		sessionFactory.openSession();
 	}
 
@@ -66,12 +68,10 @@ public class TestHbmChimeraBuilderService {
 		ChimeraDatabaseBuilderServiceImpl builder = new ChimeraDatabaseBuilderServiceImpl();
 		builder.setData(data);
 		builder.setMeta(meta);
-//		builder.setTarget(target);
-		builder.setEntryGenerator(new PrefixKeyGenerator("IM_"));
 		
-		builder.changeIntegrationSet(2L);
+		builder.changeIntegrationSet(1L);
 		
-		System.out.println(builder.buildCompoundByClusterName("MNXM2"));
+		System.out.println(builder.buildCompoundByClusterId(226L));
 		
 		assertEquals(true, true);
 	}
