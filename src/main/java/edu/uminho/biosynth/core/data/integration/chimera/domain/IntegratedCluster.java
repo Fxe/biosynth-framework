@@ -45,6 +45,11 @@ public class IntegratedCluster {
 	public List<IntegratedClusterMember> getMembers() { return members;}
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
 	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
+	private List<IntegratedClusterMeta> meta = new ArrayList<> ();
+	public List<IntegratedClusterMeta> getMeta() { return meta;}
+	public void setMeta(List<IntegratedClusterMeta> meta) { this.meta = meta;}
+	
 	
 //	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
 //	@MapKey(name="id")
@@ -57,6 +62,7 @@ public class IntegratedCluster {
 //		this.memberMap = memberMap;
 //	}
 	
+
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 
