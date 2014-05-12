@@ -43,8 +43,6 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	
 	private IntegrationSet currentIntegrationSet;
 	
-	
-	
 	public IntegrationSet getCurrentIntegrationSet() {
 		return currentIntegrationSet;
 	}
@@ -63,35 +61,44 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 	public IKeyGenerator<String> getEntryGenerator() { return entryGenerator;}
 	public void setEntryGenerator(IKeyGenerator<String> entryGenerator) { this.entryGenerator = entryGenerator;}
 	
-	private void addPropertyToIntegratedMetabolite(IntegratedMetaboliteEntity cpd, String prop, Object value) {
+	private void addPropertyToIntegratedMetabolite(IntegratedMetaboliteEntity cpd, Long eid, String prop, Object value) {
 		//THIS METHDO IS DUMB MAKE ANNOTATION + JAVA REFLEX !??!! :-(
 		switch (prop) {
 			case "id": //This prop is even dumber ! D-:
-				cpd.getModels().add((String)value);
+				if (!cpd.getModels().containsKey(eid)) {
+					cpd.getModels().put(eid, new ArrayList<String> ());
+				}
+				cpd.getModels().get(eid).add((String)value);
 				break;
 			case "charge":
-				cpd.getCharges().add((Integer)value);
+				cpd.getCharges().put(eid,(Integer)value);
 				break;
 			case "name":
-				cpd.getNames().add((String)value);
+				if (!cpd.getNames().containsKey(eid)) {
+					cpd.getNames().put(eid, new ArrayList<String> ());
+				}
+				cpd.getNames().get(eid).add((String)value);
 				break;
 			case "compartment":
-				cpd.getCompartments().add((String)value);
+				if (!cpd.getCompartments().containsKey(eid)) {
+					cpd.getCompartments().put(eid, new ArrayList<String> ());
+				}
+				cpd.getCompartments().get(eid).add((String)value);
 				break;
 			case "isoFormula":
-				cpd.getIsoFormulas().add((String) value);
+				cpd.getIsoFormulas().put(eid,(String)value);
 				break;
 			case "formula":
-				cpd.getFormulas().add((String)value);
+				cpd.getFormulas().put(eid,(String)value);
 				break;
 			case "smiles":
-				cpd.getSmiles().add((String)value);
+				cpd.getSmiles().put(eid,(String)value);
 				break;
 			case "can":
-				cpd.getCanSmiles().add((String) value);
+				cpd.getCanSmiles().put(eid,(String)value);
 				break;
 			case "inchi":
-				cpd.getInchis().add((String)value);
+				cpd.getInchis().put(eid,(String)value);
 				break;
 			case "entry":
 				//THIS IS A BUG !
@@ -201,6 +208,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 
 				if (!(Boolean)nodeProps.get("proxy")) {
 					IntegratedMetaboliteSourceProxy proxy = new IntegratedMetaboliteSourceProxy();
+					
 					proxy.setIntegratedMetaboliteEntity(cpd);
 					proxy.setEntry((String)nodeProps.get("entry"));
 					proxy.setId(memberId);
@@ -212,10 +220,10 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 					if (labels_.size() != 1) {
 						LOGGER.warn("MULTIPLE LABELS ARE SO MESSY ! " + labels_);
 					}
-					
+					System.out.println("Adding " + proxy);
 //					proxy.setLabels(labels);
 //					
-//					cpd.getSources().add(proxy);
+					cpd.getSources().put(proxy.getId(), proxy);
 
 				}
 //				if (!(Boolean)nodeProps.get("isProxy")) cpd.getSources().add((String)nodeProps.get("labels") + ":" + (String)nodeProps.get("entry"));
@@ -233,8 +241,10 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 					data.remove("crossreferences");
 				}
 //				System.out.println(data);
+				System.out.println(data);
 				for (String property : data.keySet()) {
-					for (Object value: data.get(property)) addPropertyToIntegratedMetabolite(cpd, property, value);
+					for (Object value: data.get(property)) 
+						addPropertyToIntegratedMetabolite(cpd, memberId, property, value);
 //					System.out.println("PROPERTY -> " + property);
 				}
 			}
