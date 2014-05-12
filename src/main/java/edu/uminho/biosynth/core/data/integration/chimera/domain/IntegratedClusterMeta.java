@@ -1,11 +1,19 @@
 package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
+
+@Entity
+@Table(name="integrated_cluster_meta")
 public class IntegratedClusterMeta {
 
 	@Id
@@ -19,8 +27,12 @@ public class IntegratedClusterMeta {
 	@Column(name="message", length=255, nullable=false)
 	private String message;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name="level", length=15, nullable=false)
+	private IntegrationMessageLevel level;
+	
 	@Column(name="meta_type", length=255, nullable=false)
-	private String type;
+	private String metaType;
 	
 	@ManyToOne
 	@JoinColumn(name="integrated_cluster_id")
@@ -40,12 +52,23 @@ public class IntegratedClusterMeta {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getType() {
-		return type;
+	
+	public IntegrationMessageLevel getLevel() {
+		return level;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setLevel(IntegrationMessageLevel level) {
+		this.level = level;
 	}
 	
+	public String getMetaType() {
+		return metaType;
+	}
+	public void setMetaType(String metaType) {
+		this.metaType = metaType;
+	}
 	
+	@Override
+	public String toString() {
+		return String.format("%s:%s - %s", metaType, level, message);
+	}
 }

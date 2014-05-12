@@ -149,10 +149,11 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		Map<String, Object> root = this.getEntryProperties(id);
 		String sourceEntry = (String) root.get("entry");
 		
-		Node tempNode = graphDatabaseService.getNodeById(id);
-		System.out.println("NODE -> " + tempNode);
-		System.out.println("     -> " + tempNode.getProperty("entry") + tempNode.getLabels());
-		System.out.println("     -> " + IteratorUtil.asList(tempNode.getRelationships()));
+//		Node tempNode = graphDatabaseService.getNodeById(id);
+		
+//		System.out.println("NODE -> " + tempNode);
+//		System.out.println("     -> " + tempNode.getProperty("entry") + tempNode.getLabels());
+//		System.out.println("     -> " + IteratorUtil.asList(tempNode.getRelationships()));
 		
 		Map<String, List<Object>> data = new HashMap<> ();
 //		Map<String, List<Object>> data = this.getCompositeNode2(id);
@@ -168,11 +169,11 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 		String query = 
 		String.format("START cpd=node(%d) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
 				+ "UNION START cpd=node(%d) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret", id, id);
-		System.out.println(query);
+//		System.out.println(query);
 		ExecutionResult res = this.executionEngine.execute(query);
 		
 		List<Object> list = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
-		System.out.println("Found " + list.size());
+//		System.out.println("Found " + list.size());
 		for (Object obj: list) {
 			NodeProxy proxy = null;
 			if (obj instanceof SeqWrapper) {

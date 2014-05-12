@@ -196,7 +196,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		
 		if (!cluster.getMembers().isEmpty()) {
 			cpd = new IntegratedMetaboliteEntity();
-			
+			cpd.setId(cluster.getId());
 			cpd.setEntry(cluster.getName());
 			cpd.setSource(cluster.getIntegrationSet().getName());
 			
@@ -220,7 +220,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 					if (labels_.size() != 1) {
 						LOGGER.warn("MULTIPLE LABELS ARE SO MESSY ! " + labels_);
 					}
-					System.out.println("Adding " + proxy);
+					LOGGER.trace((String.format("Adding %s", proxy)));
 //					proxy.setLabels(labels);
 //					
 					cpd.getSources().put(proxy.getId(), proxy);
@@ -241,7 +241,6 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 					data.remove("crossreferences");
 				}
 //				System.out.println(data);
-				System.out.println(data);
 				for (String property : data.keySet()) {
 					for (Object value: data.get(property)) 
 						addPropertyToIntegratedMetabolite(cpd, memberId, property, value);
