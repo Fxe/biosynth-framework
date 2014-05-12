@@ -4,53 +4,74 @@ import static org.junit.Assert.*;
 
 import java.io.Serializable;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 
 public class TestRestKeggCompoundMetaboliteDaoImpl {
 
-	@Test
-	public void testSomething() {
-		RestKeggCompoundMetaboliteDaoImpl dao = new RestKeggCompoundMetaboliteDaoImpl();
-		dao.setSaveLocalStorage(true);
-		dao.setUseLocalStorage(true);
-		dao.setLocalStorage("D:/home/data/kegg/");
+	private static double EPSILON = 0.00000001;
+	private static MetaboliteDao<KeggCompoundMetaboliteEntity> metaboliteDao;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		RestKeggCompoundMetaboliteDaoImpl metaboliteDaoImpl = new RestKeggCompoundMetaboliteDaoImpl();
+		metaboliteDaoImpl.setSaveLocalStorage(true);
+		metaboliteDaoImpl.setUseLocalStorage(true);
+		metaboliteDaoImpl.setLocalStorage("D:/home/data/kegg/");
 		
-		for (Serializable cpdId : dao.getAllMetaboliteIds()) {
-			String ff = dao.getMetaboliteFlatFile(cpdId);
-			System.out.println(ff);
-//			KeggGlycanMetaboliteFlatFileParser parser = new KeggGlycanMetaboliteFlatFileParser(ff);
-//			System.out.println(parser.getTabs());
-			KeggCompoundMetaboliteEntity cpd = dao.getMetaboliteById(cpdId);
-			System.out.println(cpd);
+		metaboliteDao = metaboliteDaoImpl;
+	}
+	
+	@Test
+	public void testParseAll() {
+
+		for (Serializable cpdId : metaboliteDao.getAllMetaboliteIds()) {
+			KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteById(cpdId);
+			assertNotEquals(null, cpd);
+			assertEquals(cpdId, cpd.getEntry());
+			System.out.println(cpd.getEntry());
 		}
 	}
 
-//	@Test
-//	public void testD00066() {
-//		RestKeggDrugMetaboliteDaoImpl dao = new RestKeggDrugMetaboliteDaoImpl();
-//		dao.setLocalStorage("D:/home/data/kegg/");
-//		dao.setSaveLocalStorage(true);
-//		dao.setUseLocalStorage(true);
-//		
-//		KeggDrugMetaboliteEntity cpd = dao.getMetaboliteInformation("D00066");
-//
-//		System.out.println(cpd);
-//		assertEquals("D00066", cpd.getEntry());
-//		assertEquals("C21H30O2", cpd.getFormula());
-//		assertEquals("Progestin", cpd.getActivity());
-//		assertEquals(true, cpd.getTarget() != null);
-//		assertEquals("Enzyme: CYP3A4 [HSA:1576], CYP2C19 [HSA:1557]", cpd.getMetabolism());
-//		assertEquals(true, cpd.getProduct() != null);
-//		assertEquals(true, cpd.getMol2d() != null);
-//		
-//	}
+	@Test
+	public void test_C00775() {
+		
+		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C00755");
+
+		assertEquals("C00755", cpd.getEntry());
+		assertEquals("4-Hydroxy-3-methoxy-benzaldehyde;Vanillin;Vanillaldehyde;4-Hydroxy-3-methoxybenzaldehyde", cpd.getName());
+		assertEquals("C8H8O3", cpd.getFormula());
+		assertEquals(152.0473, cpd.getMass(), EPSILON);
+		assertEquals(5, cpd.getEnzymes().size());
+		assertEquals("Same as: D00091", cpd.getRemark());
+		assertEquals(null, cpd.getComment());
+		assertEquals(null, cpd.getInchi());
+		assertEquals(6, cpd.getReactions().size());
+		assertEquals(8, cpd.getCrossReferences().size());
+		assertNotEquals(true, cpd.getMol2d());
+	}
+	
+	@Test
+	public void test_C01356() {
+		
+		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C01456");
+
+		assertEquals("C01456", cpd.getEntry());
+		assertEquals("Tropate;Tropic acid;alpha-(Hydroxymethyl)phenylacetic acid", cpd.getName());
+		assertEquals("C9H10O3", cpd.getFormula());
+		assertEquals(166.063, cpd.getMass(), EPSILON);
+		assertEquals(1, cpd.getEnzymes().size());
+		assertEquals(null, cpd.getRemark());
+		assertEquals(null, cpd.getComment());
+		assertEquals(null, cpd.getInchi());
+		assertEquals(3, cpd.getReactions().size());
+		assertEquals(8, cpd.getCrossReferences().size());
+		assertNotEquals(true, cpd.getMol2d());
+	}
 //	
 //	@Test
 //	public void testD00063() {
