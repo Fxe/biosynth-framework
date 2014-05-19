@@ -11,6 +11,10 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
 public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrategy {
 
+	public ChebiParentClusteringStrategy() {
+		this.initialNodeLabel = CompoundNodeLabel.ChEBI;
+	}
+	
 	@Override
 	public Set<Long> execute() {
 		Set<Long> ids = new HashSet<> ();

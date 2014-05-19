@@ -55,4 +55,6 @@ public interface ChimeraMetadataDao {
 	public Map<Long, Long> getAllAssignedIntegratedMembers(Long integrationSetId);
 	
 	public int countIntegratedMembers(IntegrationSet integrationSet, boolean distinct);
+	
+	public Map<String, Map<String, Integer>> countMeta(Long iid);
 }

@@ -7,16 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import edu.uminho.biosynth.core.data.integration.chimera.IntegratedClusterMetaGenerator;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMeta;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
+@Service
+@Transactional(readOnly=true, value="chimerametadata")
 public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 
+	@Autowired
 	private ChimeraDataDao data;
+	
+	@Autowired
 	private ChimeraMetadataDao meta;
 	
 	private List<IntegratedClusterMetaGenerator> generators = new ArrayList<> ();
@@ -98,6 +109,16 @@ public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 			IntegratedCluster integratedCluster) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Map<String, Integer> countWarnings(IntegrationSet integrationSet) {
+		Map<String, Map<String, Integer>> freqMap =  this.meta.countMeta(integrationSet.getId());
+		
+		if (freqMap.containsKey(IntegrationMessageLevel.WARNING.toString())) 
+				return freqMap.get(IntegrationMessageLevel.WARNING.toString());
+		
+		return new HashMap<String, Integer> ();
 	}
 
 }
