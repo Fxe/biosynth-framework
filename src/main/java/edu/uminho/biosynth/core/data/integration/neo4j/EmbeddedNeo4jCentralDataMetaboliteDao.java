@@ -105,7 +105,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 			Node propertyNode = this.getOrCreateNode(propertyMajor, uniqueKey, uniqueValue);
 			this.updateNode(propertyNode, propertyEntity.getProperties());
 			propertyEntity.setId(propertyNode.getId());
-			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipType());
+			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipLabels().iterator().next());
 			node.createRelationshipTo(propertyNode, relationshipType);
 		}
 		

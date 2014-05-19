@@ -5,7 +5,7 @@ import java.util.List;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMeta;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 
-public class CrossreferenceIntegratedClusterMetaGenerator implements IntegratedClusterMetaGenerator {
+public class SourceIntegratedClusterMetaGenerator implements IntegratedClusterMetaGenerator {
 
 	@Override
 	public List<IntegratedClusterMeta> generateMeta(
