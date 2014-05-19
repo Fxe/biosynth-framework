@@ -337,4 +337,32 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		return idEntryMap;
 	}
 
+	@Override
+	public Map<String, Map<String, Integer>> countMeta(Long iid) {
+		//Level X Meta_Type X Value
+		Map<String, Map<String, Integer>> countMap = new HashMap<> ();
+		
+		String sqlQuery = String.format(
+				"SELECT count(*) AS total, integrated_cluster_meta.meta_type, integrated_cluster_meta.level " +
+				"FROM integrated_cluster_meta " +
+				"INNER JOIN integrated_cluster " +
+				"ON integrated_cluster_meta.integrated_cluster_id = integrated_cluster.id " +
+				"INNER JOIN integration " +
+				"ON integrated_cluster.integration_id = integration.id WHERE integration.id = %d GROUP BY integrated_cluster_meta.meta_type;"
+				, iid);
+		
+		List<?> result = this.getSession().createSQLQuery(sqlQuery).list();
+		for (Object recordObj : result) {
+			Object[] record = (Object[])recordObj;
+			String level = record[2].toString();
+			String metaType = record[1].toString();
+			Integer freq = Integer.parseInt(record[0].toString());
+			
+			if (!countMap.containsKey(level)) countMap.put(level, new HashMap<String, Integer> ());
+			countMap.get(level).put(metaType, freq);
+		}
+		
+		return countMap;
+	}
+
 }

@@ -6,11 +6,16 @@ import java.util.Set;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
 public class BiocycFirstDegreeCrossreferenceClusteringStrategy extends AbstractNeo4jClusteringStrategy {
 
+	public BiocycFirstDegreeCrossreferenceClusteringStrategy() {
+		initialNodeLabel = CompoundNodeLabel.MetaCyc;
+	}
+	
 	private String getIsotopeFormula(Node node) {
 		Set<Node> formulaNodes = new HashSet<> ();
 		for (Relationship relationship : node.getRelationships(CompoundRelationshipType.HasFormula)) {
