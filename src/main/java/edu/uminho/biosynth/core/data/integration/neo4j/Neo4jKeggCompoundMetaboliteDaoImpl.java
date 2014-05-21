@@ -36,7 +36,7 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 
 	@Override
 	public KeggCompoundMetaboliteEntity find(Serializable id) {
-		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
+		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		KeggCompoundMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
@@ -58,7 +58,7 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 		params.put("smiles", cpd.getSmiles());
 		
 		
-		engine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
+		executionEngine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.inchi={inchi}, cpd.inchikey={inchikey}, cpd.smiles={smiles}, "
@@ -75,24 +75,24 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 		
 		if (cpd.getFormula() != null) {
 			LOGGER.debug(String.format("Relationship (%s)-[HasFormula]->(%s)", cpd.getEntry(), cpd.getFormula()));
-			engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
-			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("smiles") != null) {
 			LOGGER.debug(String.format("Relationship (%s)-[HasSMILES]->(%s)", cpd.getEntry(), cpd.getSmiles()));
-			engine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
-			engine.execute("MATCH (cpd:KEGG:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
+			executionEngine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
+			executionEngine.execute("MATCH (cpd:KEGG:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		if (params.get("inchi") != null) {
 			LOGGER.debug(String.format("Relationship (%s)-[HasInChI]->(%s)", cpd.getEntry(), cpd.getInchi()));
-			engine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
-			engine.execute("MATCH (cpd:KEGG:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}, inchikey:{inchikey}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
+			executionEngine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
+			executionEngine.execute("MATCH (cpd:KEGG:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}, inchikey:{inchikey}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		for (String name : cpd.getNames()) {
 			LOGGER.debug(String.format("Relationship (%s)-[HasName]->(%s)", cpd.getEntry(), name));
 			params.put("name", name.toLowerCase());
-			engine.execute("MERGE (m:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (m:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 
 		
@@ -104,8 +104,8 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 			
 			LOGGER.debug(String.format("Relationship (%s)-[HasCrossreferenceTo]->(%s:%s)", cpd.getEntry(), dbLabel, dbEntry));
 			
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-			engine.execute("MATCH (cpd1:KEGG {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+			executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+			executionEngine.execute("MATCH (cpd1:KEGG {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 		}
 		
 		return null;
@@ -113,7 +113,7 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 
 	@Override
 	public List<KeggCompoundMetaboliteEntity> findAll() {
-		ExecutionResult result = engine.execute("MATCH (cpd:KEGG) RETURN cpd");
+		ExecutionResult result = executionEngine.execute("MATCH (cpd:KEGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<KeggCompoundMetaboliteEntity> res = new ArrayList<> ();
@@ -183,7 +183,7 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:KEGG {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());

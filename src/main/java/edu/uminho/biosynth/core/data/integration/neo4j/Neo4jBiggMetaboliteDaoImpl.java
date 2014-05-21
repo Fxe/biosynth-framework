@@ -41,7 +41,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			return false;
 		}
 		
-		ExecutionResult result = engine.execute(query, params);
+		ExecutionResult result = executionEngine.execute(query, params);
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		
@@ -69,7 +69,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			return null;
 		}
 		
-		ExecutionResult result = engine.execute(query, params);
+		ExecutionResult result = executionEngine.execute(query, params);
 //		System.out.println(result.dumpToString());
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
@@ -103,7 +103,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			return;
 		}
 		
-		engine.execute(query, params);
+		executionEngine.execute(query, params);
 	}
 	
 	public boolean hasMetabolite(Serializable id) {
@@ -122,7 +122,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 			return false;
 		}
 		
-		ExecutionResult result = engine.execute(query, params);
+		ExecutionResult result = executionEngine.execute(query, params);
 		Iterator<Node> iterator = result.columnAs("c1");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		if (nodes.size() > 1) System.err.println("ERROR id not unique - integretity error");
@@ -133,7 +133,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 	@Override
 	public List<BiggMetaboliteEntity> findAll() {
 //		ExecutionEngine engine = new ExecutionEngine(graphdb);
-		ExecutionResult result = engine.execute("MATCH (cpd:BiGG) RETURN cpd");
+		ExecutionResult result = executionEngine.execute("MATCH (cpd:BiGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<BiggMetaboliteEntity> res = new ArrayList<> ();
@@ -188,19 +188,19 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 //					+ "cpd.updated_at=timestamp(), cpd.name={name}, cpd.formula={formula}, "
 //					+ "cpd.charge={charge}, cpd.proxy=false");
 			
-			engine.execute(cypherQuery, params);
+			executionEngine.execute(cypherQuery, params);
 			
-			engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
-			engine.execute("MERGE (m:Charge {charge:{charge}}) ", params);
-			engine.execute("MERGE (m:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:BiGG {id:{id}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
-			engine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
-			engine.execute("MATCH (cpd:BiGG {id:{id}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MERGE (m:Charge {charge:{charge}}) ", params);
+			executionEngine.execute("MERGE (m:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+			executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 			
 			for (String cmp : cpd.getCompartments()) {
 				params.put("compartment", cmp);
-				engine.execute("MERGE (c:Compartment {compartment:{compartment}})", params);
-				engine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Compartment {compartment:{compartment}}) MERGE (cpd)-[r:FoundIn]->(c)", params);
+				executionEngine.execute("MERGE (c:Compartment {compartment:{compartment}})", params);
+				executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Compartment {compartment:{compartment}}) MERGE (cpd)-[r:FoundIn]->(c)", params);
 			}
 			
 			for (BiggMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
@@ -209,14 +209,14 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 						String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 						String dbEntry = xref.getValue(); //Also need to translate if necessary
 						params.put("dbEntry", dbEntry);
-						engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-						engine.execute("MATCH (cpd1:BiGG {id:{id}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+						executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+						executionEngine.execute("MATCH (cpd1:BiGG {id:{id}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 						break;
 					case MODEL:
 						String modelId = xref.getValue();
 						params.put("modelId", modelId);
-						engine.execute("MERGE (m:Model {id:{modelId}}) ", params);
-						engine.execute("MATCH (cpd:BiGG {id:{id}}), (m:Model {id:{modelId}}) MERGE (cpd)-[r:FoundIn]->(m)", params);
+						executionEngine.execute("MERGE (m:Model {id:{modelId}}) ", params);
+						executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (m:Model {id:{modelId}}) MERGE (cpd)-[r:FoundIn]->(m)", params);
 						break;
 					default:
 						throw new RuntimeException("unsupported type " + xref.getType());
@@ -243,7 +243,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		List<Serializable> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:BiGG) RETURN cpd.id AS ids").columnAs("ids");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());
@@ -278,7 +278,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:BiGG {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());

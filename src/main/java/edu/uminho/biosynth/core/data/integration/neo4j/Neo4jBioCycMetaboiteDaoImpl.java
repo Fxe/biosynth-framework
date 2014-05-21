@@ -32,14 +32,14 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 	
 	@Override
 	public BioCycMetaboliteEntity find(Serializable id) {
-		Node node = graphdb.findNodesByLabelAndProperty(subDb, "entry", id).iterator().next();
+		Node node = graphDatabaseService.findNodesByLabelAndProperty(subDb, "entry", id).iterator().next();
 		BioCycMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
 	@Override
 	public List<BioCycMetaboliteEntity> findAll() {
-		ExecutionResult result = engine.execute("MATCH (cpd:" + compoundLabel + ":" + subDb + ") RETURN cpd");
+		ExecutionResult result = executionEngine.execute("MATCH (cpd:" + compoundLabel + ":" + subDb + ") RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<BioCycMetaboliteEntity> res = new ArrayList<> ();
@@ -82,7 +82,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		params.put("molWeight", cpd.getMolWeight());
 		String biocycSubDb = translateDb(cpd.getSource());
 		
-		engine.execute("MERGE (cpd:BioCyc:" + biocycSubDb +":Compound {entry:{entry}}) ON CREATE SET "
+		executionEngine.execute("MERGE (cpd:BioCyc:" + biocycSubDb +":Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.cmlMolWeight={cmlMolWeight}, cpd.gibbs={gibbs}, "
 				+ "cpd.charge={charge}, cpd.comment={comment}, cpd.smiles={smiles}, cpd.inchi={inchi}, "
@@ -95,29 +95,29 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 				, params);
 		
 		if (params.get("charge") != null) {
-			engine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
 		}
 		if (params.get("formula") != null) {
-			engine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("inchi") != null) {
-			engine.execute("MERGE (i:InChI {inchi:{inchi}}) ", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
+			executionEngine.execute("MERGE (i:InChI {inchi:{inchi}}) ", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		if (params.get("smiles") != null) {
-			engine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
+			executionEngine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		
-		engine.execute("MERGE (n:Name {name:{name}}) ", params);
-		engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+		executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
+		executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		
 		for (String synonym : cpd.getSynonyms()) {
 			params.put("name", synonym.toLowerCase());
-			engine.execute("MERGE (n:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
 		for (BioCycMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
@@ -128,27 +128,27 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 				params.put("dbEntry", Integer.parseInt(dbEntry));
 				LOGGER.debug(String.format("Generating Crossreference to %s - id:%s", dbLabel, dbEntry));
 				//BiGG xrefs in BioCyc are match with id not the entry (which is the abbreviation)
-				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {id:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);	
+				executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {id:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+				executionEngine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {id:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);	
 			} else {
 				LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
-				engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-				engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+				executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+				executionEngine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 			}
 		}
 		
 		for (String rxnId : cpd.getReactions()) {
 			params.put("rxnId", rxnId);
 			LOGGER.debug(String.format("Generating Reference to reaction; %s", rxnId));
-			engine.execute("MERGE (rxn:" + biocycSubDb + ":BioCyc:Reaction {entry:{rxnId}}) ON CREATE SET rxn.proxy=true", params);
-			engine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (rxn:" + biocycSubDb + " {entry:{rxnId}}) MERGE (cpd)-[r:ParticipatesIn]->(rxn)", params);
+			executionEngine.execute("MERGE (rxn:" + biocycSubDb + ":BioCyc:Reaction {entry:{rxnId}}) ON CREATE SET rxn.proxy=true", params);
+			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (rxn:" + biocycSubDb + " {entry:{rxnId}}) MERGE (cpd)-[r:ParticipatesIn]->(rxn)", params);
 		}
 		
 		for (String cpdId : cpd.getParents()) {
 			params.put("parentId", cpdId);
 			LOGGER.debug(String.format("Generating Reference to Parent Compound; %s", cpdId));
-			engine.execute("MERGE (cpd:" + biocycSubDb + ":BioCyc:Compound {entry:{parentId}}) ON CREATE SET cpd.proxy=true", params);
-			engine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + biocycSubDb + " {entry:{parentId}}) MERGE (cpd1)-[r:InstanseOf]->(cpd2)", params);
+			executionEngine.execute("MERGE (cpd:" + biocycSubDb + ":BioCyc:Compound {entry:{parentId}}) ON CREATE SET cpd.proxy=true", params);
+			executionEngine.execute("MATCH (cpd1:" + biocycSubDb + " {entry:{entry}}), (cpd2:" + biocycSubDb + " {entry:{parentId}}) MERGE (cpd1)-[r:InstanseOf]->(cpd2)", params);
 		}
 		
 		return null;
@@ -203,7 +203,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:" + subDb + " {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());

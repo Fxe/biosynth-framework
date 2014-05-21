@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * A generic property of the unified central data repository
  * 
@@ -43,6 +45,9 @@ public class GenericCentralEntityProperty {
 	}
 	
 	public Set<String> getLabels() { return labels;}
+	public String getConcatenatedLabel(char separator) {
+		return StringUtils.join(this.labels, separator);
+	}
 	public void setLabels(Set<String> labels) {this.labels = labels;}
 	public void addLabel(String label) { this.labels.add(label);}
 

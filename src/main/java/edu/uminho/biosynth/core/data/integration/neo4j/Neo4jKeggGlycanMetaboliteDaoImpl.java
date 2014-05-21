@@ -33,7 +33,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 
 	@Override
 	public KeggGlycanMetaboliteEntity find(Serializable id) {
-		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
+		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		KeggGlycanMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
@@ -56,7 +56,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 		params.put("mass", cpd.getMass());
 		
 		
-		engine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
+		executionEngine.execute("MERGE (cpd:KEGG:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.comment={comment}, cpd.compoundClass={compoundClass}, cpd.remark={remark}, cpd.proxy=false "
@@ -70,22 +70,22 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 		//
 		
 		if (cpd.getFormula() != null) {
-			engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
-			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MATCH (cpd:KEGG {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		
 		for (String name : cpd.getNames()) {
 			params.put("name", name.toLowerCase());
-			engine.execute("MERGE (m:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (m:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
 		for (KeggGlycanMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-			engine.execute("MATCH (cpd1:KEGG {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+			executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+			executionEngine.execute("MATCH (cpd1:KEGG {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 		}
 		
 		return null;
@@ -93,7 +93,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 
 	@Override
 	public List<KeggGlycanMetaboliteEntity> findAll() {
-		ExecutionResult result = engine.execute("MATCH (cpd:KEGG) RETURN cpd");
+		ExecutionResult result = executionEngine.execute("MATCH (cpd:KEGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<KeggGlycanMetaboliteEntity> res = new ArrayList<> ();
@@ -163,7 +163,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:KEGG {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());

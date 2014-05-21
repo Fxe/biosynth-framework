@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import edu.uminho.biosynth.core.components.GenericReaction;
 
 public class CentralDataReactionEntity extends GenericReaction {
@@ -34,13 +36,11 @@ public class CentralDataReactionEntity extends GenericReaction {
 		this.majorLabel = majorLabel;
 	}
 
-	public Set<String> getLabels() {
-		return labels;
+	public Set<String> getLabels() { return labels;}
+	public String getConcatenatedLabel(char separator) {
+		return StringUtils.join(this.labels, separator);
 	}
-
-	public void setLabels(Set<String> labels) {
-		this.labels = labels;
-	}
+	public void setLabels(Set<String> labels) { this.labels = labels;}
 
 	public Map<String, Object> getProperties() {
 		return properties;

@@ -20,11 +20,11 @@ public class Neo4jKeggReactionTransform implements IEtlTransform<KeggReactionEnt
 	public CentralDataReactionEntity etlTransform(KeggReactionEntity cpd) {
 		CentralDataReactionEntity entity = new CentralDataReactionEntity();
 		
-		entity.setMajorLabel(ReactionNodeLabel.Ligand.toString());
+		entity.setMajorLabel(ReactionNodeLabel.LigandReaction.toString());
 		
 		entity.addLabel(ReactionNodeLabel.Reaction.toString());
 		entity.addLabel(ReactionNodeLabel.KEGG.toString());
-		entity.addLabel(ReactionNodeLabel.Ligand.toString());
+		entity.addLabel(ReactionNodeLabel.LigandReaction.toString());
 		
 		entity.setEntry(cpd.getEntry());
 		Map<String, Object> properties = new HashMap<> ();

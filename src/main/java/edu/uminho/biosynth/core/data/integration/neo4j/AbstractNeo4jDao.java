@@ -6,22 +6,23 @@ import org.neo4j.graphdb.Node;
 
 public abstract class AbstractNeo4jDao<T> {
 	
-	protected GraphDatabaseService graphdb;
-	protected ExecutionEngine engine;
+	protected GraphDatabaseService graphDatabaseService;
+	protected ExecutionEngine executionEngine;
 	
-	
+	public AbstractNeo4jDao() { }
 	
 	public AbstractNeo4jDao(GraphDatabaseService graphdb) {
-		this.graphdb = graphdb;
-		this.engine = new ExecutionEngine(graphdb);
+		this.graphDatabaseService = graphdb;
+		this.executionEngine = new ExecutionEngine(graphdb);
 	}
 	
-	public GraphDatabaseService getGraphdb() {
-		return graphdb;
+	public GraphDatabaseService getGraphDatabaseService() {
+		return graphDatabaseService;
 	}
 
-	public void setGraphdb(GraphDatabaseService graphdb) {
-		this.graphdb = graphdb;
+	public void setGraphDatabaseService(GraphDatabaseService graphdb) {
+		this.graphDatabaseService = graphdb;
+		this.executionEngine = new ExecutionEngine(graphdb);
 	}
 	
 	protected abstract T nodeToObject(Node node);

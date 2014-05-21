@@ -28,14 +28,14 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 
 	@Override
 	public MnxMetaboliteEntity find(Serializable id) {
-		Node node = graphdb.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
+		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		MnxMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
 	@Override
 	public List<MnxMetaboliteEntity> findAll() {
-		ExecutionResult result = engine.execute("MATCH (cpd:MetaNetX) RETURN cpd");
+		ExecutionResult result = executionEngine.execute("MATCH (cpd:MetaNetX) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");
 		List<Node> nodes = IteratorUtil.asList(iterator);
 		List<MnxMetaboliteEntity> res = new ArrayList<> ();
@@ -58,7 +58,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		params.put("charge", cpd.getCharge());
 		params.put("mass", cpd.getMass());
 		
-		engine.execute("MERGE (cpd:MetaNetX:Compound {entry:{entry}}) ON CREATE SET "
+		executionEngine.execute("MERGE (cpd:MetaNetX:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, cpd.charge={charge},"
 				+ "cpd.inchi={inchi}, cpd.smiles={smiles}, cpd.originalSource={originalSource}, cpd.proxy=false "
@@ -69,31 +69,31 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 				, params);
 		
 		if (params.get("formula") != null) {
-			engine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
-			engine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MERGE (m:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("name") != null) {
-			engine.execute("MERGE (n:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		if (params.get("smiles") != null) {
-			engine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
-			engine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
+			executionEngine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
+			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		if (params.get("inchi") != null) {
-			engine.execute("MERGE (i:InChI {inchi:{inchi}}) ", params);
-			engine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
+			executionEngine.execute("MERGE (i:InChI {inchi:{inchi}}) ", params);
+			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		if (params.get("charge") != null) {
-			engine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
-			engine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);	
+			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
+			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);	
 		}
 		for (MnxMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue();
 			params.put("dbEntry", dbEntry);
-			engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-			engine.execute("MATCH (cpd1:MetaNetX:Compound {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
+			executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+			executionEngine.execute("MATCH (cpd1:MetaNetX:Compound {entry:{entry}}), (cpd2:" + dbLabel + " {entry:{dbEntry}}) MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 		}
 		
 		return null;
@@ -147,7 +147,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:MetaNetX) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());

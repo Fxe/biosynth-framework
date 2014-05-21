@@ -11,7 +11,10 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (cpd:BioPath) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:HMDB) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:KEGG) ASSERT cpd.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cpd:LigandCompound) ASSERT cpd.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cpd:LigandDrug) ASSERT cpd.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cpd:LigandGlycan) ASSERT cpd.entry IS UNIQUE",
+//		"CREATE CONSTRAINT ON (cpd:KEGG) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:MetaCyc) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:AraCyc) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:MaizeCyc) ASSERT cpd.entry IS UNIQUE",
@@ -29,6 +32,8 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (c:Compartment) ASSERT c.compartment IS UNIQUE",
 		"CREATE CONSTRAINT ON (m:Model) ASSERT m.id IS UNIQUE",
 		"CREATE INDEX ON :Compound(proxy)",
+		
+		"CREATE CONSTRAINT ON (rxn:LigandReaction) ASSERT rxn.entry IS UNIQUE",
 	};
 	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {

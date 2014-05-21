@@ -54,7 +54,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		params.put("source", cpd.getSource());
 		params.put("parent", cpd.getParentId());
 		
-		engine.execute("MERGE (cpd:ChEBI:Compound {entry:{entry}}) ON CREATE SET "
+		executionEngine.execute("MERGE (cpd:ChEBI:Compound {entry:{entry}}) ON CREATE SET "
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.parent={parent}, "
 				+ "cpd.name={name}, cpd.formula={formula}, cpd.mass={mass}, "
 				+ "cpd.stars={stars}, cpd.inchi={inchi}, cpd.inchikey={inchikey}, "
@@ -67,25 +67,25 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 				, params);
 		
 		if (params.get("charge") != null) {
-			engine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
-			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
+			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
 		}
 		if (params.get("formula") != null) {
-			engine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
-			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
+			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("inchi") != null) {
-			engine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
-			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
+			executionEngine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
+			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		if (params.get("smiles") != null) {
-			engine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
-			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
+			executionEngine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
+			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		for (ChebiMetaboliteNameEntity name : cpd.getNames()) {
 			params.put("name", name.getName().toLowerCase());
-			engine.execute("MERGE (n:Name {name:{name}}) ", params);
-			engine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
+			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		for (ChebiMetaboliteCrossReferenceEntity xref: cpd.getCrossreferences()) {
 
@@ -97,8 +97,8 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 					LOGGER.debug(String.format("Generating Crossreference to %s - entry:\"%s\"", dbLabel, dbEntry));
 					
 					params.put("dbEntry", dbEntry);
-					engine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
-					engine.execute("MATCH (cpd1:ChEBI:Compound {entry:{entry}}), "
+					executionEngine.execute("MERGE (cpd:" + dbLabel + ":Compound {entry:{dbEntry}}) ON CREATE SET cpd.proxy=true", params);
+					executionEngine.execute("MATCH (cpd1:ChEBI:Compound {entry:{entry}}), "
 							+ "(cpd2:" + dbLabel + " {entry:{dbEntry}}) "
 							+ "MERGE (cpd1)-[r:HasCrossreferenceTo]->(cpd2)", params);
 					break;
@@ -130,7 +130,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
-		engine.execute("MATCH (cpd:ChEBI) RETURN collect(cpd.entry);");
+		executionEngine.execute("MATCH (cpd:ChEBI) RETURN collect(cpd.entry);");
 		return null;
 	}
 
@@ -161,7 +161,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 	@Override
 	public List<String> getAllMetaboliteEntries() {
 		List<String> res = new ArrayList<> ();
-		Iterator<String> iterator = engine.execute(
+		Iterator<String> iterator = executionEngine.execute(
 				"MATCH (cpd:ChEBI {proxy:false}) RETURN cpd.entry AS entries").columnAs("entries");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());
