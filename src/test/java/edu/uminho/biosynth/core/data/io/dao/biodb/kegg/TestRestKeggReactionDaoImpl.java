@@ -2,6 +2,8 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
 import static org.junit.Assert.*;
 
+import java.util.Set;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -80,5 +82,15 @@ public class TestRestKeggReactionDaoImpl {
 	public void testGetById() {
 		reactionDao.getReactionById("OMG");
 	}
+	
+	@Test
+	public void testGetAllEntries() {
+		Set<String> entries = reactionDao.getAllReactionEntries();
+		assertEquals(false, entries.isEmpty());
+	}
 
+	@Test(expected=RuntimeException.class)
+	public void testGetAllIds() {
+		reactionDao.getAllReactionIds();
+	}
 }

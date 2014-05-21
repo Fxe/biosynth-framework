@@ -27,6 +27,10 @@ public class HelperHbmConfigInitializer {
 	public static SessionFactory initializeHibernateSession(File cfg) {
 		Configuration config = new Configuration().configure(cfg);
 		LOGGER.info(config.getProperty("hibernate.dialect"));
+//		Iterator<PersistentClass> iterator = config.getClassMappings();
+//		while (iterator.hasNext()) {
+//			LOGGER.trace(iterator.next());
+//		}
 		
 		ServiceRegistry servReg = 
 				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
