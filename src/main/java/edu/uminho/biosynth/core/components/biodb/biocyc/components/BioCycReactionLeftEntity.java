@@ -25,4 +25,8 @@ public class BioCycReactionLeftEntity extends StoichiometryPair {
 	public BioCycReactionEntity getBioCycReactionEntity() { return bioCycReactionEntity;}
 	public void setBioCycReactionEntity(BioCycReactionEntity bioCycReactionEntity) { this.bioCycReactionEntity = bioCycReactionEntity;}
 	
+	@Override
+	public String toString() {
+		return String.format("<%s, %s, %f>", this.cpdEntry, this.coefficient, this.value);
+	}
 }

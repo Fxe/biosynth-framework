@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
@@ -71,6 +74,7 @@ public class KeggReactionEntity extends GenericReaction {
 	public void setPathways(List<String> pathways) { this.pathways = pathways; }
 	
 	@OneToMany(mappedBy = "keggReactionEntity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<KeggReactionLeftEntity> left = new ArrayList<> ();
 	public List<KeggReactionLeftEntity> getLeft() { return left;}
 	public void setLeft(List<KeggReactionLeftEntity> left) {
@@ -80,7 +84,8 @@ public class KeggReactionEntity extends GenericReaction {
 		this.left = left;
 	}
 	
-	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "keggReactionEntity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<KeggReactionRightEntity> right = new ArrayList<> ();
 	public List<KeggReactionRightEntity> getRight() { return right;}
 	public void setRight(List<KeggReactionRightEntity> right) {

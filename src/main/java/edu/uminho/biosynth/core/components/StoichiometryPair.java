@@ -19,7 +19,7 @@ public class StoichiometryPair implements Serializable{
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
-    @Column(name="coefficient") protected double value;
+    @Column(name="value") protected double value;
 	public double getValue() { return value;}
 	public void setValue(double value) { this.value = value;}
 	

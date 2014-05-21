@@ -65,5 +65,11 @@ public class HbmOptimizationSolution implements Solution {
 	public void setSolutionSet(HbmOptimizationSolutionSet solutionSet) {
 		this.solutionSet = solutionSet;
 	}
+	
+	@Override
+	public void addProperty(String key, Object value) {
+		//Type Class
+		//Value jackson mapper
+	}
 
 }

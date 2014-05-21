@@ -22,7 +22,7 @@ public abstract class AbstractGenericEntity implements Serializable {
 	private static final long serialVersionUID = 353453463465587L;
 
 	@Id
-    @Column(name="ID", nullable=false)
+    @Column(name="id", nullable=false)
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
     @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
 	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
@@ -31,7 +31,7 @@ public abstract class AbstractGenericEntity implements Serializable {
 	public Long getId() { return this.id; }
 	public void setId(Long id) { this.id = id; }
 	
-	@Column(name="ENTRY", unique=true, length=255, nullable=false)
+	@Column(name="entry", unique=true, length=255, nullable=false)
 	@XmlAttribute(name="entry")
 	protected String entry;
 
