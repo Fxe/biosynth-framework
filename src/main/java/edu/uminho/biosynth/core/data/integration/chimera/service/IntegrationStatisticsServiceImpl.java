@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -94,5 +95,22 @@ public class IntegrationStatisticsServiceImpl implements IntegrationStatisticsSe
 			
 		}
 		return count;
+	}
+
+	@Override
+	public Map<Integer, Integer> getIntegratedClusterPropertyFrequency(
+			IntegrationSet integrationSet, String property) {
+		
+		IntegrationSet integrationSet_ = this.meta.getIntegrationSet(integrationSet.getId());
+		Map<Integer, Integer> frequency = new HashMap<> ();
+		
+		for (Long cid : integrationSet_.getIntegratedClustersMap().keySet()) {
+			System.out.println(cid);
+			List<Long> eids = integrationSet_.getIntegratedClustersMap().get(cid).listAllIntegratedMemberIds();
+			Set<Long> propIdList = this.data.collectEntityProperties(eids, property);
+			for (Long omg : propIdList) System.out.println(this.data.getMetaboliteProperty(omg));
+			System.out.println("==================================");
+		}
+		return frequency;
 	}
 }

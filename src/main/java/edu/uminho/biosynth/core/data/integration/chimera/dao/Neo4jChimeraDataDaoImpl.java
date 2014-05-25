@@ -29,6 +29,7 @@ import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
+import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
@@ -452,6 +453,41 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			}
 		}
 		return propertyEntities;
+	}
+
+	@Override
+	public Set<Long> collectEntityProperties(List<Long> entities,
+			String... properties) {
+		
+		Set<Long> propertyIdList = new HashSet<> ();
+		
+		for (Long nodeId : entities) {
+			Node node = this.graphDatabaseService.getNodeById(nodeId);
+			for (Relationship relationship : node.getRelationships()) {
+				Node propNode = relationship.getOtherNode(node);
+				for (String propLabel : properties) {
+					if (propNode.hasLabel(DynamicLabel.label(propLabel))) propertyIdList.add(propNode.getId());
+				}
+			}
+		}
+		
+		return propertyIdList;
+	}
+
+	@Override
+	public CentralDataReactionProperty getReactionProperty(Long id) {
+		throw new RuntimeException("AAAAHH !");
+	}
+
+	@Override
+	public CentralDataMetabolitePropertyEntity getMetaboliteProperty(Long id) {
+		Node node = this.graphDatabaseService.getNodeById(id);
+		CentralDataMetabolitePropertyEntity entity = new CentralDataMetabolitePropertyEntity();
+		for (Label label : node.getLabels()) entity.addLabel(label.toString());
+		for (String key : node.getPropertyKeys()) {
+			entity.getProperties().put(key, node.getProperty(key));
+		}
+		return entity;
 	}
 
 }

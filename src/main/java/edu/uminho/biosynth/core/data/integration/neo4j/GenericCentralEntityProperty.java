@@ -93,6 +93,6 @@ public class GenericCentralEntityProperty {
 
 	@Override
 	public String toString() {
-		return String.format("%s => %s -> %s => %s:%s", relationshipLabels, relationshipProperties, labels, uniqueKey, uniqueKeyValue);
+		return String.format("%s => %s -> %s => %s:%s %s", relationshipLabels, relationshipProperties, labels, uniqueKey, uniqueKeyValue, properties);
 	}
 }

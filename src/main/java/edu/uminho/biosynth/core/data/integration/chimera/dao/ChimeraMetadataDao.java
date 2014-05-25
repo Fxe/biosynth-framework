@@ -59,5 +59,7 @@ public interface ChimeraMetadataDao {
 	
 	public Map<String, Map<String, Integer>> countMeta(Long iid);
 	
+
 	public void saveCurationEdge(CurationEdge curationEdge);
+
 }

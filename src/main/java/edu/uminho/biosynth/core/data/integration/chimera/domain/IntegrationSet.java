@@ -34,6 +34,7 @@ public class IntegrationSet {
 	private String lastClusterEntry;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY , mappedBy="integrationSet")
+//	@LazyCollection(LazyCollectionOption.EXTRA)
 	@MapKey(name="id")
 	@BatchSize(size=100)
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();

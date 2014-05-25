@@ -11,6 +11,10 @@ public interface IntegrationStatisticsService {
 	public Map<String, Integer> countTotalMetaboliteMembersByMajor();
 	public Map<String, Integer> countIntegratedMetaboliteMembersByMajor(IntegrationSet integrationSet);
 	
+
+	public Map<Integer, Integer> getIntegratedClusterPropertyFrequency(
+			IntegrationSet integrationSet, String property);
+
 	
 	//CrossReferences ignored per db
 	
