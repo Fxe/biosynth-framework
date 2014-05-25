@@ -10,7 +10,7 @@ import org.neo4j.graphdb.Node;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
 
-public interface ChimeraDataDao {
+public interface IntegrationDataDao {
 	public List<Long> getAllMetaboliteIds();
 	public Map<String, Object> getEntryProperties(Long id);
 	public List<Long> getClusterByQuery(String query);

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import edu.uminho.biosynth.core.data.integration.chimera.IntegratedClusterMetaGenerator;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMeta;
@@ -25,18 +25,18 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 
 	@Autowired
-	private ChimeraDataDao data;
+	private IntegrationDataDao data;
 	
 	@Autowired
 	private ChimeraMetadataDao meta;
 	
 	private List<IntegratedClusterMetaGenerator> generators = new ArrayList<> ();
 	
-	public ChimeraDataDao getData() {
+	public IntegrationDataDao getData() {
 		return data;
 	}
 
-	public void setData(ChimeraDataDao data) {
+	public void setData(IntegrationDataDao data) {
 		this.data = data;
 	}
 

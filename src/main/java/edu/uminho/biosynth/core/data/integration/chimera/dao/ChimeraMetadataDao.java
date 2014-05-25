@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
@@ -57,4 +58,6 @@ public interface ChimeraMetadataDao {
 	public int countIntegratedMembers(IntegrationSet integrationSet, boolean distinct);
 	
 	public Map<String, Map<String, Integer>> countMeta(Long iid);
+	
+	public void saveCurationEdge(CurationEdge curationEdge);
 }

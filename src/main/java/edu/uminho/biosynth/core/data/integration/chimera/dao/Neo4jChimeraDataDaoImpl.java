@@ -34,7 +34,7 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
-public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
+public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Neo4jChimeraDataDaoImpl.class);
 	

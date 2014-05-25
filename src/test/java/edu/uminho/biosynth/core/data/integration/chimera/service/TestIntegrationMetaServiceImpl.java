@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
@@ -26,7 +26,7 @@ public class TestIntegrationMetaServiceImpl {
 	private static final String GRAPH_DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.central";
 	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
 	private static IntegrationMetaService integrationMetaService;
-	private static ChimeraDataDao data;
+	private static IntegrationDataDao data;
 	private static ChimeraMetadataDao meta;
 	private static SessionFactory sessionFactory;
 	private static GraphDatabaseService graphDatabaseService;
