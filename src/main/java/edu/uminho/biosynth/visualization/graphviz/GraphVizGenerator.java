@@ -1,12 +1,13 @@
 package edu.uminho.biosynth.visualization.graphviz;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import edu.uminho.biosynth.core.components.UnreversibleReaction;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
@@ -14,31 +15,56 @@ import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGra
 
 public class GraphVizGenerator {
 	
+	private static Logger LOGGER = Logger.getLogger(GraphVizGenerator.class);
+	
 	public static String GRAPH_VIZ_BIN_PATH = ""; 
 	
 	public static String[] executeGraphviz(String stdin, String...args) throws IOException {
+		
+		LOGGER.debug(StringUtils.join(args, ' '));
+		LOGGER.trace(stdin);
+		
 		StringBuilder stdout = new StringBuilder();
 		StringBuilder stderr = new StringBuilder();
 		
 		ProcessBuilder processBuilder = new ProcessBuilder(args);
 		final Process process = processBuilder.start();
 		
-		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(process.getOutputStream());
-		outputStreamWriter.write(stdin);
-		outputStreamWriter.write("\u001a");
-		outputStreamWriter.flush();
+//		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(process.getOutputStream());
+//		outputStreamWriter.write(stdin);
+//		outputStreamWriter.write("\u001a");
+//		outputStreamWriter.flush();
 		
-		InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
-		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 		
-		String readline;
-		while ((readline = bufferedReader.readLine()) != null) {
-			stdout.append(readline);
-		}
 		
-		outputStreamWriter.close();
-		inputStreamReader.close();
-		bufferedReader.close();
+//		InputStreamReader stdinStreamReader = new InputStreamReader(process.getInputStream());
+//		InputStreamReader stderrStreamReader = new InputStreamReader(process.getErrorStream());
+		
+		IOUtils.write(stdin, process.getOutputStream());
+		process.getOutputStream().close();
+		
+//		IOUtils.w
+		stdout.append(IOUtils.toString(process.getInputStream()));
+		stderr.append(IOUtils.toString(process.getErrorStream()));
+//		
+//		BufferedReader bufferedReader;
+//		bufferedReader = new BufferedReader(stdinStreamReader);
+//		
+//		String readline;
+//		while ((readline = bufferedReader.readLine()) != null) {
+//			stdout.append(readline);
+//		}
+//		
+//		outputStreamWriter.close();
+//		stdinStreamReader.close();
+//		bufferedReader.close();
+//		
+//		bufferedReader = new BufferedReader(stderrStreamReader);
+//		while ((readline = bufferedReader.readLine()) != null) {
+//			stderr.append(readline);
+//		}
+//		stderrStreamReader.close();
+//		bufferedReader.close();
 		
 //		Thread stdinWriter = new Thread(new Runnable() {
 //			@Override
@@ -91,6 +117,9 @@ public class GraphVizGenerator {
 		String[] output = new String[2];
 		output[0] = stdout.toString();
 		output[1] = stderr.toString();
+		
+		LOGGER.trace(output[0]);
+		LOGGER.trace(output[1]);
 		
 		return output;
 	}
