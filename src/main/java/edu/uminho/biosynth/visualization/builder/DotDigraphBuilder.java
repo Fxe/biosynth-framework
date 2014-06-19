@@ -27,6 +27,8 @@ public class DotDigraphBuilder {
 	
 	private Set<String> compoundIgnoreList = new HashSet<> ();
 	
+	private Map<String, String> nodeText = new HashMap<> ();
+	
 	public String getCompoundShape() { return compoundShape;}
 	public DotDigraphBuilder setCompoundShape(String compoundShape) {
 		this.compoundShape = compoundShape;
@@ -49,7 +51,15 @@ public class DotDigraphBuilder {
 		this.compoundIgnoreList = compoundIgnoreList;
 		return this;
 	}
-
+	
+	public Map<String, String> getNodeText() {
+		return nodeText;
+	}
+	public DotDigraphBuilder setNodeText(Map<String, String> nodeText) {
+		this.nodeText = nodeText;
+		return this;
+	}
+	
 	public DotDigraphBuilder() {
 
 	}
@@ -81,7 +91,8 @@ public class DotDigraphBuilder {
 					if (!compoundMap.containsKey(cpdEntry)) {
 						dotNode = new DotNode();
 						dotNode.setShape(compoundShape);
-						dotNode.setLabel(cpdEntry);
+						String label = this.getNodeText().get(cpdEntry);
+						dotNode.setLabel(label==null?cpdEntry:label);
 						compoundMap.put(cpdEntry, dotNode);
 					} else {
 						dotNode = compoundMap.get(cpdEntry);
@@ -109,6 +120,8 @@ public class DotDigraphBuilder {
 						dotNode = new DotNode();
 						dotNode.setShape(compoundShape);
 						dotNode.setLabel(cpdEntry);
+						String label = this.getNodeText().get(cpdEntry);
+						dotNode.setLabel(label==null?cpdEntry:label);
 						compoundMap.put(cpdEntry, dotNode);
 					} else {
 						dotNode = compoundMap.get(cpdEntry);
