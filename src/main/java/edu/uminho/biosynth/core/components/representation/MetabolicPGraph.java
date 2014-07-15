@@ -2,14 +2,21 @@ package edu.uminho.biosynth.core.components.representation;
 
 //import java.util.Set;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
+import edu.uminho.biosynth.core.components.representation.basic.pgraph.OperatingUnit;
 //import edu.uminho.biosynth.core.components.representation.basic.pgraph.OperatingUnit;
 import edu.uminho.biosynth.core.components.representation.basic.pgraph.ProcessGraph;
 
 public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicRepresentation {
 
+	public static final String normTag = "";
+	public static final String reveTag = "_R";
+	
 	@Override
 	public boolean isReactionPair() {
 		// TODO Auto-generated method stub
@@ -36,24 +43,29 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 	
 	@Override
 	public boolean addReaction(GenericReaction rxn, boolean duplicateForReverse) {
-//		Set<String> alpha = rxn.getReactantsID();
-//		Set<String> beta = rxn.getProductsID();
-//		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
-//		op.setID(rxn.getId());
-//		if ( duplicateForReverse ) {
-//			Set<String> alpha_ = rxn.getProductsID();
-//			Set<String> beta_ = rxn.getReactantsID();
-//			OperatingUnit<String> op_ = new OperatingUnit<String>(alpha_, beta_);
-//			op_.setID(rxn.getId() + "R");
-//			op.setOpposite(op_);
-//			op_.setOpposite(op);
-//			if ( !this.addOperatingUnit(op_)) {
-//				System.err.println("ERROR ADD REVERSE: " + rxn);
-//			}
-//		}
-//		return this.addOperatingUnit(op);
+		Set<String> alpha = new HashSet<> (rxn.getReactantStoichiometry().keySet());
+		Set<String> beta = new HashSet<> (rxn.getProductStoichiometry().keySet());
+		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
 		
-		return false;
+//		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
+		
+		op.setID(rxn.getEntry() + normTag);
+		System.out.println(op);
+		if ( duplicateForReverse ) {
+			Set<String> alpha_ = new HashSet<> (rxn.getProductStoichiometry().keySet());
+			Set<String> beta_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
+			OperatingUnit<String> op_ = new OperatingUnit<String>(alpha_, beta_);
+			op_.setID(rxn.getEntry() + reveTag);
+			op.setOpposite(op_);
+			op_.setOpposite(op);
+			System.out.println(op_);
+			if ( !this.addOperatingUnit(op_)) {
+				System.err.println("ERROR ADD REVERSE: " + rxn);
+			}
+		}
+		return this.addOperatingUnit(op);
+		
+//		return false;
 	}
 
 	@Override
