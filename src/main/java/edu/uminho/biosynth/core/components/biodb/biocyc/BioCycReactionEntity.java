@@ -87,8 +87,10 @@ public class BioCycReactionEntity extends GenericReaction {
 	private List<BioCycReactionLeftEntity> left = new ArrayList<> ();
 	public List<BioCycReactionLeftEntity> getLeft() { return left;}
 	public void setLeft(List<BioCycReactionLeftEntity> left) {
+		this.getReactantStoichiometry().clear();
 		for (BioCycReactionLeftEntity entity : left) {
 			entity.setBioCycReactionEntity(this);
+			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getValue());
 		}
 		this.left = left;
 	}
@@ -97,8 +99,10 @@ public class BioCycReactionEntity extends GenericReaction {
 	private List<BioCycReactionRightEntity> right = new ArrayList<> ();
 	public List<BioCycReactionRightEntity> getRight() { return right;}
 	public void setRight(List<BioCycReactionRightEntity> right) {
+		this.getProductStoichiometry().clear();
 		for (BioCycReactionRightEntity entity : right) {
 			entity.setBioCycReactionEntity(this);
+			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getValue());
 		}
 		this.right = right;
 	}

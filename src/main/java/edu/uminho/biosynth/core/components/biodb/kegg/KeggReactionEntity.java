@@ -78,8 +78,10 @@ public class KeggReactionEntity extends GenericReaction {
 	private List<KeggReactionLeftEntity> left = new ArrayList<> ();
 	public List<KeggReactionLeftEntity> getLeft() { return left;}
 	public void setLeft(List<KeggReactionLeftEntity> left) {
+		this.getReactantStoichiometry().clear();
 		for (KeggReactionLeftEntity entity : left) {
 			entity.setKeggReactionEntity(this);
+			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getValue());
 		}
 		this.left = left;
 	}
@@ -89,8 +91,10 @@ public class KeggReactionEntity extends GenericReaction {
 	private List<KeggReactionRightEntity> right = new ArrayList<> ();
 	public List<KeggReactionRightEntity> getRight() { return right;}
 	public void setRight(List<KeggReactionRightEntity> right) {
+		this.getProductStoichiometry().clear();
 		for (KeggReactionRightEntity entity : right) {
 			entity.setKeggReactionEntity(this);
+			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getValue());
 		}
 		this.right = right;
 	}

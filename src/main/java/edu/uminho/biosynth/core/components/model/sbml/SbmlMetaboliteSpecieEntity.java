@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SBML_SPECIE")
+@Table(name="sbml_specie")
 public class SbmlMetaboliteSpecieEntity {
 
 	@Id
