@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DiHyperEdge<V, E> {
-	private Set<V> head_;
-	private Set<V> tail_;
-	private E edge_;
+	protected Set<V> head_;
+	protected Set<V> tail_;
+	protected E edge_;
 	private DiHyperEdge<V, E> reverseEdge = null;;
 	
 	public DiHyperEdge(Set<V> in, Set<V> out, E body) {
