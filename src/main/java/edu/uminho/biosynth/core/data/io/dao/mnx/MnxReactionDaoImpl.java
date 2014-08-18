@@ -1,16 +1,10 @@
 package edu.uminho.biosynth.core.data.io.dao.mnx;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionProductEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionReactantEntity;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@Deprecated
 public class MnxReactionDaoImpl extends GenericEntityDaoImpl {
 
 	public MnxReactionDaoImpl(SessionFactory sessionFactory) {
