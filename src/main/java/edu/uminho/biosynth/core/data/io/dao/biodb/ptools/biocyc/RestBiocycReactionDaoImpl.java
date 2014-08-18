@@ -52,6 +52,9 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			xmlDoc = this.getLocalOrWeb(restRxnQuery, localPath);
 			BioCycReactionXMLParser parser = new BioCycReactionXMLParser(xmlDoc);
 			
+			if (!parser.isValid()) {
+				return null;
+			}
 			rxn = new BioCycReactionEntity();
 			
 //			String source = parser.getSource();

@@ -97,7 +97,13 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 	}
 	
 	public boolean isValid() {
-		return this.base != null;
+		if (this.base == null) return false;
+		
+		if (this.base.has("error")) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@Override

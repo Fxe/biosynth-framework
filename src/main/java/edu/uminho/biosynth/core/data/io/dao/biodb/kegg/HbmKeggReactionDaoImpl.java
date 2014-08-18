@@ -10,6 +10,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
@@ -17,6 +19,8 @@ import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
 
 public class HbmKeggReactionDaoImpl implements ReactionDao<KeggReactionEntity> {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(HbmKeggReactionDaoImpl.class);
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -38,7 +42,9 @@ public class HbmKeggReactionDaoImpl implements ReactionDao<KeggReactionEntity> {
 		KeggReactionEntity rxn = null;
 		Criteria criteria = this.getSession().createCriteria(KeggReactionEntity.class);
 		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
-		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
+		if (res.size() > 1) {
+			LOGGER.error("Entry uniqueness fail multiple records found for [" + entry + "]");
+		}
 		
 		for (Object o: res) rxn = KeggReactionEntity.class.cast(o);
 		
