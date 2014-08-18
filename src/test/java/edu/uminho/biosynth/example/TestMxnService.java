@@ -2,6 +2,7 @@ package edu.uminho.biosynth.example;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -15,9 +16,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggCompoundMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.service.MnxService;
 
@@ -62,6 +67,22 @@ public class TestMxnService {
 		}
 		tx.commit();
 		
+	}
+	
+	@Test
+	public void tmp() {
+		
+		
+		List<GenericMetabolite> list = new ArrayList<> ();
+		
+//		MetaboliteDao<?> dao = ;
+		MetaboliteDao<?> metaboliteDao = null;
+		
+		for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
+			list.add(metaboliteDao.getMetaboliteByEntry(entry));
+		}
+		
+		System.out.println(list.size());
 	}
 
 }
