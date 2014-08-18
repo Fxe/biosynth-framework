@@ -2,6 +2,8 @@ package edu.uminho.biosynth.util;
 
 public class BioSynthUtils {
 	
+	public static double EPSILON = 0;
+	
 	public static class Runtime {
 		
 		public static int getNumberOfCores() {
@@ -32,5 +34,10 @@ public class BioSynthUtils {
 	
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+	}
+
+	public static boolean isZero(double finalFluxValue) {
+		if (finalFluxValue < EPSILON || finalFluxValue > -EPSILON) return false;
+		return true;
 	}
 }

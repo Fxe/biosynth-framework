@@ -1,5 +1,5 @@
 package edu.uminho.biosynth.core.components.optimization;
 
-public interface Solution {
-	public void addProperty(String key, Object value);
+public interface Solution<V> {
+	public void setProperty(String key, V value);
 }

@@ -1,7 +1,6 @@
 package edu.uminho.biosynth.core.components.representation;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
@@ -12,10 +11,16 @@ import edu.uminho.biosynth.core.components.representation.basic.hypergraph.React
 
 public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements IMetabolicRepresentation {
 
-	private final static Logger LOGGER = Logger.getLogger(MetabolicHyperGraph.class.getName());
+	private static Logger LOGGER = Logger.getLogger(MetabolicHyperGraph.class);
 	
 	public static final String normTag = "";
 	public static final String reveTag = "R";
+	
+	public MetabolicHyperGraph() {}
+	
+	public MetabolicHyperGraph(MetabolicHyperGraph metabolicHyperGraph) {
+		super(metabolicHyperGraph);
+	}
 	
 	@Override
 	public boolean addMetabolite(GenericMetabolite cpd) {
@@ -27,12 +32,32 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
 		
 		ReactionEdge edge = null;
+		String[] in = new String[rxn.getReactantStoichiometry().size()];
+		String[] out = new String[rxn.getProductStoichiometry().size()];
+		Double[] inStoich  = new Double[in.length];
+		Double[] outStoich = new Double[out.length];
+		int ptr;
+		
+		ptr = 0;
+		for (String id : rxn.getReactantStoichiometry().keySet()) {
+			in[ptr] = id;
+			inStoich[ptr] = rxn.getReactantStoichiometry().get(id);
+			ptr++;
+		}
+		
+		ptr = 0;
+		for (String id : rxn.getProductStoichiometry().keySet()) {
+			out[ptr] = id;
+			outStoich[ptr] = rxn.getProductStoichiometry().get(id);
+			ptr++;
+		}
+		
 		if ( leftToRight) {
-			LOGGER.log(Level.INFO, "Creating EDGE " + edgeName + " => ");
-			edge = new ReactionEdge( rxn.getReactantStoichiometry().keySet() , rxn.getProductStoichiometry().keySet(), edgeName, rxn.getEntry());
+			LOGGER.trace("Creating EDGE " + edgeName + " => ");
+			edge = new ReactionEdge( in, out, inStoich, outStoich, edgeName, rxn.getEntry());
 		} else {
-			LOGGER.log(Level.INFO, "Creating EDGE " + edgeName + " <= ");
-			edge = new ReactionEdge( rxn.getProductStoichiometry().keySet(), rxn.getReactantStoichiometry().keySet(), edgeName, rxn.getEntry());
+			LOGGER.trace("Creating EDGE " + edgeName + " <= ");
+			edge = new ReactionEdge( out, in, outStoich, inStoich, edgeName, rxn.getEntry());
 		}
 		return edge;
 	}
@@ -44,21 +69,21 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	
 	@Override
 	public boolean addReaction(GenericReaction rxn, boolean duplicateForReverse) {
-		LOGGER.log(Level.INFO, "Add Reaction " + rxn.getEntry() + (duplicateForReverse? " WITH reverse span":" NO reverse span"));
+		LOGGER.trace("Add Reaction " + rxn.getEntry() + (duplicateForReverse? " WITH reverse span":" NO reverse span"));
 		
 //		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
 		ReactionEdge edge = this.createEdge(rxn, true);
 		
 		if ( duplicateForReverse) {
-			LOGGER.log(Level.INFO, "Add Reaction " + rxn.getEntry() + " is reversible");
+			LOGGER.trace("Add Reaction " + rxn.getEntry() + " is reversible");
 			// CREATE opposite Direction EDGE'
 			ReactionEdge edge_ = createEdge(rxn, false);
 			if ( !this.addEdge(edge_)) {
-				LOGGER.log(Level.SEVERE, "Error Adding Reverse Edge: " + rxn.getId());
+				LOGGER.warn("Error Adding Reverse Edge: " + rxn.getId());
 			}
 		}
 		if ( !this.addEdge(edge)) {
-			LOGGER.log(Level.SEVERE, "Error Adding Normal Edge: " + rxn.getId());
+			LOGGER.trace("Error Adding Normal Edge: " + rxn.getId());
 			return false;
 		}
 		return true;
@@ -100,5 +125,4 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 		sb.append("SIZE: ").append( this.size()).append(" ORDER: ").append( this.order());
 		return sb.toString();
 	}
-
 }

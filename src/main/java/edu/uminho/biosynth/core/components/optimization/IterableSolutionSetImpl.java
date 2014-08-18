@@ -36,4 +36,10 @@ public class IterableSolutionSetImpl<S extends Solution> implements SolutionSet<
 		
 	}
 
+	@Override
+	public S get(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

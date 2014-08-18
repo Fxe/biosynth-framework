@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="opt_solution")
-public class HbmOptimizationSolution implements Solution {
+public class HbmOptimizationSolution implements Solution<String> {
 
 	@Id
 	@GeneratedValue
@@ -67,7 +67,7 @@ public class HbmOptimizationSolution implements Solution {
 	}
 	
 	@Override
-	public void addProperty(String key, Object value) {
+	public void setProperty(String key, String value) {
 		//Type Class
 		//Value jackson mapper
 	}

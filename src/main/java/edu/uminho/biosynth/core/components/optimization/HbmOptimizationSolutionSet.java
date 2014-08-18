@@ -95,4 +95,9 @@ public class HbmOptimizationSolutionSet implements SolutionSet<HbmOptimizationSo
 		this.optimizationSolutions.clear();
 	}
 
+	@Override
+	public HbmOptimizationSolution get(Long id) {
+		return this.optimizationSolutions.get(Integer.parseInt(id.toString()));
+	}
+
 }

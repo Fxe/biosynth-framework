@@ -47,6 +47,16 @@ public class DiHyperGraph<V, E> {
 		}
 	}
 	
+	
+	
+	public Set<V> getVertices() {
+		return vertices_;
+	}
+
+	public void setVertices(Set<V> vertices) {
+		this.vertices_ = vertices;
+	}
+
 	public boolean addVertice( V vertice) {
 		return this.vertices_.add(vertice);
 	}
@@ -118,5 +128,4 @@ public class DiHyperGraph<V, E> {
 		}
 		return sb.toString();
 	}
-
 }
