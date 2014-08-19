@@ -1,10 +1,9 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +13,12 @@ import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteC
 
 public class DefaultBiggMetaboliteParser {
 	
-	public static List<BiggMetaboliteEntity> parseMetabolites(File file) throws FileNotFoundException, IOException {
+	public static String CSV_SEP = "\t";
+	
+	public static List<BiggMetaboliteEntity> parseMetabolites(InputStream inputStream) throws IOException {
 		List<BiggMetaboliteEntity> mnxMetabolites = new ArrayList<> ();
 		
-		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		
 		String readLine = br.readLine();
 //		System.out.println(readLine);
@@ -34,7 +35,7 @@ public class DefaultBiggMetaboliteParser {
 		 * ENTRY  | Name      | FORMULA | CHARGE | COMPARTMENT                                              | KEGG   | CAS      | ID    | MODEL REF
 		 * ala-D  | D-Alanine | C3H7NO2 | 0      | Peroxisome, Extra-organism, Cytosol, Periplasm, Lysosome | C00133 | 338-69-2 | 33977 | 1,10,2,3,4,5,7	
 		 */
-		String[] values = record.split("\t");
+		String[] values = record.split(CSV_SEP);
 		BiggMetaboliteEntity cpd = new BiggMetaboliteEntity();
 		cpd.setEntry( values[0]);
 		cpd.setName( values[1]);

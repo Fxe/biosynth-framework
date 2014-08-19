@@ -49,18 +49,6 @@ public class HbmSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEnt
 	}
 
 	@Override
-	public SeedMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<SeedMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(SeedMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;

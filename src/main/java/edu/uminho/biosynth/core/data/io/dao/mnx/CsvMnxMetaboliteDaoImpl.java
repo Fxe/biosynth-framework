@@ -213,12 +213,6 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 	}
 
 	@Override
-	public MnxMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		List<Serializable> idList = new ArrayList<> ();
 		int line = 0;
@@ -240,12 +234,6 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		}
 		
 		return idList;
-	}
-
-	@Override
-	public List<MnxMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

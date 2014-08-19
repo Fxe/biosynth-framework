@@ -15,12 +15,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 
 	private static final String restGlQuery = "http://rest.kegg.jp/get/gl:%s";
 	private static final String restGlMolQuery = "http://rest.kegg.jp/get/gl:%s/mol";
-	
-	@Override
-	public KeggGlycanMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
@@ -40,12 +34,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 			System.err.println(e.getMessage());
 		}
 		return cpdIds;
-	}
-
-	@Override
-	public List<KeggGlycanMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

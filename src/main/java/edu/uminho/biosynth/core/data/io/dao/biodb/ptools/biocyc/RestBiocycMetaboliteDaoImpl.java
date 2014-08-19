@@ -119,18 +119,6 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 	}
 
 	@Override
-	public BioCycMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<BioCycMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(BioCycMetaboliteEntity entity) {
 		throw new RuntimeException("Unsupported Operation");
 	}

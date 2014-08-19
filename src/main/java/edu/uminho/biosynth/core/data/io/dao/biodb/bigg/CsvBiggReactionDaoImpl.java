@@ -81,8 +81,8 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	
 	@Override
 	public Set<String> getAllReactionEntries() {
-		if (idToEntry.isEmpty()) {
-			this.initialize();
+		if (!idToEntry.isEmpty()) {
+			return new HashSet<String> (this.idToEntry.values());
 		}
 		
 		return new HashSet<String> (this.idToEntry.values());
@@ -95,7 +95,7 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 		try {
 			List<BiggReactionEntity> res = new ArrayList<> ();
 			InputStream in = csvFile.getInputStream();
-			res = DefaulBiggReactionParser.parseReactions(in);
+			res = DefaultBiggReactionParser.parseReactions(in);
 			
 			for (BiggReactionEntity rxn : res) {
 				this.cachedData.put(rxn.getEntry(), rxn);

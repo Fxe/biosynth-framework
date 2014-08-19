@@ -73,18 +73,6 @@ public class HbmKeggCompoundMetaboliteDaoImpl implements MetaboliteDao<KeggCompo
 	}
 
 	@Override
-	public KeggCompoundMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<KeggCompoundMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(KeggCompoundMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;

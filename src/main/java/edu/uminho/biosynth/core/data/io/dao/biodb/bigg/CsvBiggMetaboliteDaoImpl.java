@@ -1,14 +1,16 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
@@ -18,43 +20,21 @@ import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
  * @author Filipe Liu
  *
  */
-public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity>{
 
-	@Autowired
-	private File csvFile;
+@Repository
+public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity>{
 	
-	public File getCsvFile() { return csvFile;}
-	public void setCsvFile(File csvFile) { this.csvFile = csvFile;}
+	private static final Logger LOGGER = Logger.getLogger(CsvBiggMetaboliteDaoImpl.class);
+
+	private Resource csvFile;
+	
+	public Resource getCsvFile() { return csvFile;}
+	public void setCsvFile(Resource csvFile) { this.csvFile = csvFile;}
 	
 	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<String, BiggMetaboliteEntity> cachedData = new HashMap<> ();
 
-	@Override
-	public BiggMetaboliteEntity find(Serializable id) {
-		for (BiggMetaboliteEntity c : this.findAll()) {
-			if (c.getEntry().equals(id)) return c;
-		}
-		return null;
-	}
 
-	@Override
-	public List<BiggMetaboliteEntity> findAll() {
-		this.cachedData.clear();
-		this.idToEntry.clear();
-		
-		List<BiggMetaboliteEntity> cpdList = null;
-		try {
-			cpdList = DefaultBiggMetaboliteParser.parseMetabolites(csvFile);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
-		
-		for (BiggMetaboliteEntity cpd: cpdList) {
-			this.cachedData.put(cpd.getEntry(), cpd);
-			this.idToEntry.put(cpd.getId(), cpd.getEntry());
-		}
-		return cpdList;
-	}
 
 	@Override
 	public Serializable save(BiggMetaboliteEntity entity) {
@@ -63,27 +43,22 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
-		if (!idToEntry.isEmpty()) {
-			return new ArrayList<Serializable> (this.idToEntry.keySet());
+		if (idToEntry.isEmpty()) {
+			this.initialize();
 		}
 		
-		List<Serializable> res = new ArrayList<> ();
-		for (BiggMetaboliteEntity cpd : this.findAll()) {
-			res.add(cpd.getId());
-		}
-		return res;
+		return new ArrayList<Serializable> (this.idToEntry.keySet());
 	}
 	
 	@Override
 	public BiggMetaboliteEntity getMetaboliteById(Serializable id) {
-//		if (!idToEntry.isEmpty()) {
-//			return new ArrayList<Serializable> (this.idToEntry.keySet());
-//		}
-		
-		for (BiggMetaboliteEntity c : this.findAll()) {
-			if (c.getId().equals(id)) return c;
+		if (idToEntry.isEmpty()) {
+			this.initialize();
 		}
-		return null;
+		
+		if (!this.idToEntry.containsKey(id)) return null;
+		String entry = this.idToEntry.get(id);
+		return this.cachedData.get(entry);
 	}
 	
 	@Override
@@ -98,8 +73,13 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	
 	@Override
 	public BiggMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		if (idToEntry.isEmpty()) {
+			this.initialize();
+		}
+		
+		if (!this.cachedData.containsKey(entry)) return null;
+		
+		return this.cachedData.get(entry);
 	}
 	
 	@Override
@@ -108,10 +88,50 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 			return new ArrayList<String> (this.idToEntry.values());
 		}
 		
-		List<String> res = new ArrayList<> ();
-		for (BiggMetaboliteEntity cpd : this.findAll()) {
-			res.add(cpd.getEntry());
-		}
-		return res;
+		return new ArrayList<String> (this.idToEntry.values());
 	}
+	
+	public void initialize() {
+		this.cachedData.clear();
+		this.idToEntry.clear();
+		
+		try {
+			List<BiggMetaboliteEntity> res = new ArrayList<> ();
+			InputStream in = csvFile.getInputStream();
+			res = DefaultBiggMetaboliteParser.parseMetabolites(in);
+			
+			for (BiggMetaboliteEntity cpd : res) {
+				this.cachedData.put(cpd.getEntry(), cpd);
+				this.idToEntry.put(cpd.getId(), cpd.getEntry());
+			}
+		
+			in.close();
+		} catch (IOException e) {
+			LOGGER.error(String.format("IOException - [%s]", e.getMessage()));
+		}
+	}
+	
+//	@Deprecated
+//	public BiggMetaboliteEntity find(Serializable id) {
+//		for (BiggMetaboliteEntity c : this.findAll()) {
+//			if (c.getEntry().equals(id)) return c;
+//		}
+//		return null;
+//	}
+//
+//	@Deprecated
+//	public List<BiggMetaboliteEntity> findAll() {
+//		this.cachedData.clear();
+//		this.idToEntry.clear();
+//		
+//		List<BiggMetaboliteEntity> cpdList = null;
+//
+//		cpdList = null; //DefaultBiggMetaboliteParser.parseMetabolites(csvFile);
+//		
+//		for (BiggMetaboliteEntity cpd: cpdList) {
+//			this.cachedData.put(cpd.getEntry(), cpd);
+//			this.idToEntry.put(cpd.getId(), cpd.getEntry());
+//		}
+//		return cpdList;
+//	}
 }

@@ -48,18 +48,6 @@ public class HbmMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 	}
 
 	@Override
-	public MnxMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<MnxMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(MnxMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;

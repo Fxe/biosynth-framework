@@ -1,7 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,9 +11,11 @@ import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity;
 
-public class DefaulBiggReactionParser {
+public class DefaultBiggReactionParser {
+	
+	public static String CSV_SEP = "\t";
 
-	public static List<BiggReactionEntity> parseReactions(InputStream inputStream) throws FileNotFoundException, IOException {
+	public static List<BiggReactionEntity> parseReactions(InputStream inputStream) throws IOException {
 		List<BiggReactionEntity> rxnReactions = new ArrayList<> ();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -36,7 +37,7 @@ public class DefaulBiggReactionParser {
 		 * ENTRY  | NAME                                      | SYN | EQUATION                        | COMPARTMENT | ECN | REVERSIBLE   | TRANSLOCATION | ID      | MODEL REF
          * MTCMMT | Methylthiol: coenzyme M methyltransferase |     | [c] : com + dms --> ch4s + mcom | Cytosol     |     | Irreversible | N             | 1800860 | 9
 		 */
-		String[] values = record.split("\t");
+		String[] values = record.split(CSV_SEP);
 		
 		BiggReactionEntity rxn = new BiggReactionEntity();
 		rxn.setEntry(values[0]);

@@ -39,23 +39,11 @@ public class HbmKeggDrugMetaboliteDaoImpl implements MetaboliteDao<KeggDrugMetab
 	}
 
 	@Override
-	public KeggDrugMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		Query query = this.getSession().createQuery("SELECT cpd.id FROM KeggDrugMetaboliteEntity cpd");
 		@SuppressWarnings("unchecked")
 		List<Serializable> res = query.list();
 		return res;
-	}
-
-	@Override
-	public List<KeggDrugMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -17,12 +17,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
 	private static final Logger LOGGER = Logger.getLogger(RestKeggDrugMetaboliteDaoImpl.class);
 	private static final String restDrQuery = "http://rest.kegg.jp/get/dr:%s";
 	private static final String restDrMolQuery = "http://rest.kegg.jp/get/dr:%s/mol";
-	
-	@Override
-	public KeggDrugMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
@@ -42,12 +36,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
 			System.err.println(e.getMessage());
 		}
 		return cpdIds;
-	}
-
-	@Override
-	public List<KeggDrugMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

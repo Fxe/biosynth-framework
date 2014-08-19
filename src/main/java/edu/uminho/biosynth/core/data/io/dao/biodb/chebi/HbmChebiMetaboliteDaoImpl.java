@@ -72,18 +72,6 @@ public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteE
 	}
 
 	@Override
-	public ChebiMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ChebiMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(ChebiMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;

@@ -58,12 +58,7 @@ public interface MetaboliteDao<M extends GenericMetabolite> {
 	 * @return a set that contains all metabolite entries
 	 */
 	public List<String> getAllMetaboliteEntries();
-	
-	@Deprecated
-	public M find(Serializable id);
-	
-	@Deprecated
-	public List<M> findAll();
+
 	@Deprecated
 	public Serializable save(M entity);
 }

@@ -38,23 +38,11 @@ public class HbmKeggGlycanMetaboliteDaoImpl implements MetaboliteDao<KeggGlycanM
 	}
 
 	@Override
-	public KeggGlycanMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		Query query = this.getSession().createQuery("SELECT cpd.id FROM KeggGlycanMetaboliteEntity cpd");
 		@SuppressWarnings("unchecked")
 		List<Serializable> res = query.list();
 		return res;
-	}
-
-	@Override
-	public List<KeggGlycanMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -61,7 +61,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 //		}
 	}
 	
-	@Override
+	@Deprecated
 	public SeedMetaboliteEntity find(Serializable id) {
 		for (SeedMetaboliteEntity cpd : this.findAll()) {
 			if (cpd.getEntry().equals(id)) return cpd;
@@ -69,7 +69,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 		return null;
 	}
 
-	@Override
+	@Deprecated
 	public List<SeedMetaboliteEntity> findAll() {
 		this.metaboliteMap = new HashMap<> ();
 		List<SeedMetaboliteEntity> res = new ArrayList<> ();

@@ -79,12 +79,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 	}
 
 	@Override
-	public KeggCompoundMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		List<Serializable> cpdIds = new ArrayList<>();
 		String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "cpd");
@@ -100,12 +94,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 			System.err.println(e.getMessage());
 		}
 		return cpdIds;
-	}
-
-	@Override
-	public List<KeggCompoundMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

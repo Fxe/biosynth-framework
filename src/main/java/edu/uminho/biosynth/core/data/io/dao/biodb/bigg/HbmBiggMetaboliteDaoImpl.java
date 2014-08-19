@@ -49,13 +49,13 @@ public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 		return metabolite;
 	}
 
-	@Override
+	@Deprecated
 	public BiggMetaboliteEntity find(Serializable id) {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not implemented yet");
 	}
 
-	@Override
+	@Deprecated
 	public List<BiggMetaboliteEntity> findAll() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not implemented yet");

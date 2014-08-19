@@ -38,18 +38,6 @@ extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 	}
 
 	@Override
-	public BioCycMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<BioCycMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(BioCycMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
