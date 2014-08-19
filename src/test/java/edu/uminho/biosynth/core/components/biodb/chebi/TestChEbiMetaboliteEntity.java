@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.chebi;
+package edu.uminho.biosynth.core.components.biodb.chebi;
 
 import static org.junit.Assert.*;
 

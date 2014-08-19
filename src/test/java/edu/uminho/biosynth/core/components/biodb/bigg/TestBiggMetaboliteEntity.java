@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.bigg;
+package edu.uminho.biosynth.core.components.biodb.bigg;
 
 import static org.junit.Assert.*;
 
@@ -46,7 +46,6 @@ public class TestBiggMetaboliteEntity {
 		
 		assertEquals(36436L, (long)cpd.getId());
 		assertEquals(9, cpd.getCrossReferences().size());
-		
 	}
 
 }

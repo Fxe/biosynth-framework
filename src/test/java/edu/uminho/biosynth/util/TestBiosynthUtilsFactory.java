@@ -29,7 +29,6 @@ public class TestBiosynthUtilsFactory {
 		KeggCompoundMetaboliteEntity cpd = BioSynthUtilsFactory.buildKegg(
 				"C00001", "water", null, "H2O", "", "", 18, 18, 
 				new String[] {"metacyc", "WATER", "bigg", "h2o"});
-		System.out.println(cpd);
 		assertEquals(2, cpd.getCrossReferences().size());
 	}
 	
