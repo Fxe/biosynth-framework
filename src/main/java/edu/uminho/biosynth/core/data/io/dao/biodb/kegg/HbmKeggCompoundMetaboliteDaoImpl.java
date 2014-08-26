@@ -46,6 +46,7 @@ public class HbmKeggCompoundMetaboliteDaoImpl implements MetaboliteDao<KeggCompo
 	@Override
 	public KeggCompoundMetaboliteEntity saveMetabolite(
 			KeggCompoundMetaboliteEntity metabolite) {
+
 		this.getSession().save(metabolite);
 		return metabolite;
 	}

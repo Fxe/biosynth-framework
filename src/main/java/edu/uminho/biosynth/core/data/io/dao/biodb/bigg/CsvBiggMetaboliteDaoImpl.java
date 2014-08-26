@@ -111,6 +111,8 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 		}
 	}
 	
+
+	
 //	@Deprecated
 //	public BiggMetaboliteEntity find(Serializable id) {
 //		for (BiggMetaboliteEntity c : this.findAll()) {

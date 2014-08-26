@@ -12,10 +12,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
 
+@Repository
 public class HbmBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 
 	private static final Logger LOGGER = Logger.getLogger(HbmBiggReactionDaoImpl.class);

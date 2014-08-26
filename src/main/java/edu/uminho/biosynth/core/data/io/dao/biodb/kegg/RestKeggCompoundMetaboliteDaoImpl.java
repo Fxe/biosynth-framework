@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
@@ -15,6 +17,8 @@ import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFi
 public class RestKeggCompoundMetaboliteDaoImpl 
 extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEntity> {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggCompoundMetaboliteDaoImpl.class);
+	
 	private static final String restCpdQuery = "http://rest.kegg.jp/get/cpd:%s";
 	private static final String restCpdMolQuery = "http://rest.kegg.jp/get/cpd:%s/mol";
 	
@@ -120,6 +124,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 		List<String> cpdIds = new ArrayList<>();
 		String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "cpd");
 		String localPath = this.getLocalStorage() + "query" + "/compound.txt";
+		LOGGER.debug("LocalPath: " + localPath);
 		try {
 			String httpResponseString = getLocalOrWeb(restListDrQuery, localPath);
 			String[] httpResponseLine = httpResponseString.split("\n");

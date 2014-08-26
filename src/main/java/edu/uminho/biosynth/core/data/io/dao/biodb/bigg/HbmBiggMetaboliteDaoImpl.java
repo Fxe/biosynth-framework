@@ -9,10 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
+@Repository
 public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity> {
 
 	@Autowired
@@ -24,6 +26,10 @@ public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
+	public HbmBiggMetaboliteDaoImpl withSessionFactory(SessionFactory sessionFactory) {
+		this.setSessionFactory(sessionFactory);
+		return this;
+	}
 	
 	@Override
 	public BiggMetaboliteEntity getMetaboliteById(Serializable id) {
@@ -33,14 +39,11 @@ public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	
 	@Override
 	public BiggMetaboliteEntity getMetaboliteByEntry(String entry) {
-		BiggMetaboliteEntity cpd = null;
-		Criteria criteria = this.getSession().createCriteria(BiggMetaboliteEntity.class);
-		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
-		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
-		for (Object o: res) {
-			cpd = BiggMetaboliteEntity.class.cast(o);
-		}
-		return cpd;
+		Criteria criteria = this.getSession()
+				.createCriteria(BiggMetaboliteEntity.class)
+				.add(Restrictions.eq("entry", entry));
+
+		return (BiggMetaboliteEntity) criteria.uniqueResult();
 	}
 
 	@Override
@@ -50,17 +53,6 @@ public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	}
 
 	@Deprecated
-	public BiggMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet");
-	}
-
-	@Deprecated
-	public List<BiggMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet");
-	}
-
 	@Override
 	public Serializable save(BiggMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
