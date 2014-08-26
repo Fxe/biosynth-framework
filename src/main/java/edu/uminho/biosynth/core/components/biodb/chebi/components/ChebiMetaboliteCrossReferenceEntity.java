@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 
@@ -25,6 +27,7 @@ public class ChebiMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	public String getLocationInReference() { return locationInReference;}
 	public void setLocationInReference(String locationInReference) { this.locationInReference = locationInReference;}
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
 	private ChebiMetaboliteEntity chebiMetaboliteEntity;

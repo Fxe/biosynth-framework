@@ -1,7 +1,13 @@
 package edu.uminho.biosynth.core.components.representation.basic.graph;
 
-
-public interface IGraph {
+/**
+ * 
+ * @author Filipe Liu
+ *
+ * @param <V>
+ * @param <E>
+ */
+public interface Graph {
 	
 	/**
 	 * The size of a graph is the number of edges.
@@ -22,5 +28,8 @@ public interface IGraph {
 	 */
 	public void clear();
 	
+	/**
+	 * inverts the direction of all edges of this graph
+	 */
 	public void reverseGraph();
 }

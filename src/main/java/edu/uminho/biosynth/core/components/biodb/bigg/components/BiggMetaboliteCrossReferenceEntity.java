@@ -5,6 +5,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 
@@ -14,6 +16,7 @@ public class BiggMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="ID_METABOLITE")
 	private BiggMetaboliteEntity biggMetaboliteEntity;

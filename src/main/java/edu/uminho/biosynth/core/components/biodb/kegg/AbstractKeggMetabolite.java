@@ -16,7 +16,7 @@ public abstract class AbstractKeggMetabolite extends GenericMetabolite {
 	@Column(name="K_COMMENT", length=2047) private String comment;
 	@Column(name="REMARK", length=1023) private String remark;
 	
-	@Column(name="mol_file") private String mol2d;
+	@Column(name="mol_file", columnDefinition="text") private String mol2d;
 	
 	public String getComment() { return comment;}
 	public void setComment(String comment) { this.comment = comment;}

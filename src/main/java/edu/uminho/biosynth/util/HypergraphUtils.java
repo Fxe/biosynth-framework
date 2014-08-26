@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperEdge;
 import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperGraph;
 
@@ -96,7 +96,7 @@ public class HypergraphUtils {
 		}
 	}
 	
-	public static<V, E> IBinaryGraph<V, E> toBipartiteGraph(DiHyperGraph<V, E> hyperGraph, IBinaryGraph<V, E> graph) {
+	public static<V, E> BinaryGraph<V, E> toBipartiteGraph(DiHyperGraph<V, E> hyperGraph, BinaryGraph<V, E> graph) {
 		graph.clear();
 		
 		return graph;

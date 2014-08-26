@@ -28,7 +28,7 @@ public class TestDefaultGraph {
 
 	@Test
 	public void testEmptyGraph() {
-		IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
 		
 		assertEquals(0, graph.size());
 		assertEquals(0, graph.order());
@@ -36,7 +36,7 @@ public class TestDefaultGraph {
 
 	@Test
 	public void testGraphWithSingleVertex() {
-		IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		assertEquals(0, graph.size());
 		assertEquals(1, graph.order());
@@ -44,7 +44,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithManyVertexex() {
-		IBinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Integer> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(1);
 		graph.addVertex(4);
@@ -56,7 +56,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithSingleEdge() {
-		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
 		graph.addVertex(2);
@@ -67,7 +67,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithManyEdge() {
-		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
 		graph.addVertex(2);
@@ -80,7 +80,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithCollisionEdge() {
-		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
 		graph.addVertex(2);
@@ -94,7 +94,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithBidirectionalEdge() {
-		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(2);
 		graph.addEdge(new DefaultBinaryEdge<Character, Integer>('a', 5, 2));
@@ -105,7 +105,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphWithAllEdge() {
-		IBinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph = new DefaultGraphImpl<>();
 		graph.addVertex(5);
 		graph.addVertex(6);
 		graph.addVertex(2);
@@ -120,7 +120,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testGraphMergeSingleVertex() {
-		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
 		graph1.addVertex(2);
@@ -130,7 +130,7 @@ public class TestDefaultGraph {
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('a', 5, 2));
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('A', 2, 5));
 		
-		IBinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
 		graph2.addVertex(10);
 		
 		graph1.addAll(graph2);
@@ -141,7 +141,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testEmptyGraphMergeManyCollisionVertex() {
-		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
 		graph1.addVertex(2);
@@ -151,7 +151,7 @@ public class TestDefaultGraph {
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('a', 5, 2));
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('A', 2, 5));
 		
-		IBinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
 		graph2.addVertex(2);
 		graph2.addVertex(10);
 		graph2.addVertex(100);
@@ -164,7 +164,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testEmptyGraphMergeSingleEdge() {
-		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
 		graph1.addVertex(2);
@@ -174,7 +174,7 @@ public class TestDefaultGraph {
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('a', 5, 2));
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('A', 2, 5));
 		
-		IBinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
 		graph2.addVertex(10);
 		graph2.addVertex(2);
 		graph2.addEdge(new DefaultBinaryEdge<Character, Integer>('K', 5, 2));
@@ -187,7 +187,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testEmptyGraphMergeManyEdgeCollision() {
-		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
 		graph1.addVertex(2);
@@ -197,7 +197,7 @@ public class TestDefaultGraph {
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('a', 5, 2));
 		graph1.addEdge(new DefaultBinaryEdge<Character, Integer>('A', 2, 5));
 		
-		IBinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph2 = new DefaultGraphImpl<>();
 		graph2.addVertex(2);
 		graph2.addVertex(5);
 		graph2.addVertex(10);
@@ -215,7 +215,7 @@ public class TestDefaultGraph {
 	
 	@Test
 	public void testEmptyGraphMergeSelf() {
-		IBinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
+		BinaryGraph<Integer, Character> graph1 = new DefaultGraphImpl<>();
 		graph1.addVertex(5);
 		graph1.addVertex(6);
 		graph1.addVertex(2);

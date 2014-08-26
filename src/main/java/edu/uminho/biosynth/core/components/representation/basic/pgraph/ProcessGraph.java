@@ -3,9 +3,9 @@ package edu.uminho.biosynth.core.components.representation.basic.pgraph;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.IGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.Graph;
 
-public class ProcessGraph<T> implements IGraph {
+public class ProcessGraph<T> implements Graph {
 	private Set<T> P_;
 	private Set<T> R_;
 	private Set<T> M_;

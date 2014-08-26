@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
+public class DefaultGraphImpl<V, E> implements BinaryGraph<V, E> {
 	protected final Set<V> vertexes = new HashSet<V> ();
 	protected final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap = new HashMap< V, Set<IBinaryEdge<E, V>>> ();
 	
@@ -209,7 +209,7 @@ public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 			}
 			sb.append(" /\n");
 		}
-		System.out.println(this.edgeMap);
+//		System.out.println(this.edgeMap);
 //		sb.append("SIZE:" + this.size()).append('\n');
 //		sb.append("ORDER:" + this.order());
 		return sb.toString();
@@ -222,10 +222,21 @@ public class DefaultGraphImpl<V, E> implements IBinaryGraph<V, E> {
 	}
 
 	@Override
-	public void addAll(IBinaryGraph<V, E> graph) {
+	public void addAll(BinaryGraph<V, E> graph) {
 		this.vertexes.addAll(graph.getVertices());
 		for (IBinaryEdge<E, V> edge : graph.getEdges()) {
 			this.addEdge(edge);
 		}
+	}
+
+	@Override
+	public boolean addEdge(V src, V dst, E e) {
+		
+		return this.addEdge(new DefaultBinaryEdge<E, V>(e, src, dst));
+	}
+
+	@Override
+	public boolean addEdge(V src, V dst, E e, double w) {
+		return this.addEdge(new DefaultBinaryEdge<E, V>(e, src, dst, w));
 	}
 }

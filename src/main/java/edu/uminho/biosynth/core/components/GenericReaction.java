@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.components;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,7 +11,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
-public class GenericReaction extends AbstractGenericEntity implements Serializable{
+public class GenericReaction extends AbstractGenericEntity 
+implements ChemicalReaction<GenericMetabolite>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -71,6 +73,16 @@ public class GenericReaction extends AbstractGenericEntity implements Serializab
 		return ret.toString();
 	}
 	
+	@Override
+	public List<GenericMetabolite> getSubstrates() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<GenericMetabolite> getReactants() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public String toString() {
@@ -85,4 +97,5 @@ public class GenericReaction extends AbstractGenericEntity implements Serializab
 			.append(this.orientation == 0 ? "L <-> R" : (this.orientation < 0 ? "L <-- R" : "L --> R" ));
 		return sb.toString();
 	}
+
 }

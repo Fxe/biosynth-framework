@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 
 @Entity
@@ -31,6 +33,7 @@ public class BioCycReactionEcNumberEntity {
 	public Boolean getOfficial() { return official;}
 	public void setOfficial(Boolean official) { this.official = official;}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="reaction_id")
 	private BioCycReactionEntity bioCycReactionEntity;

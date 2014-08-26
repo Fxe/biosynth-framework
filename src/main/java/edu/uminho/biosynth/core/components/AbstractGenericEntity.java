@@ -23,9 +23,10 @@ public abstract class AbstractGenericEntity implements Serializable {
 
 	@Id
     @Column(name="id", nullable=false)
+	@GeneratedValue
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
-	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
+//    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
+//	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	@XmlAttribute(name="id")
 	protected Long id;
 	public Long getId() { return this.id; }

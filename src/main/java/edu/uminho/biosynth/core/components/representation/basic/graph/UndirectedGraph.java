@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class UndirectedGraph<V, E> implements IBinaryGraph<V, E> {
+public class UndirectedGraph<V, E> implements BinaryGraph<V, E> {
 
 	protected final Set<V> vertexes = new HashSet<> ();
 	protected final Map<V, Set<IBinaryEdge<E, V>>> vertexEdgesMap = new HashMap<> ();
@@ -113,7 +113,7 @@ public class UndirectedGraph<V, E> implements IBinaryGraph<V, E> {
 	}
 
 	@Override
-	public void addAll(IBinaryGraph<V, E> graph) {
+	public void addAll(BinaryGraph<V, E> graph) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -145,5 +145,17 @@ public class UndirectedGraph<V, E> implements IBinaryGraph<V, E> {
 			sb.append("\\\n");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public boolean addEdge(V src, V dst, E e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addEdge(V src, V dst, E e, double w) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -5,6 +5,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
 
@@ -14,6 +16,7 @@ public class KeggGlycanMetaboliteCrossreferenceEntity extends GenericCrossRefere
 
 	private static final long serialVersionUID = -5573712793876140763L;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
 	private KeggGlycanMetaboliteEntity keggGlycanMetaboliteEntity;

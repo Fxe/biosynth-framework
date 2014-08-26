@@ -5,6 +5,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 
@@ -14,6 +16,7 @@ public class BiggReactionCrossReferenceEntity extends GenericCrossReference {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="ID_REACTION")
 	private BiggReactionEntity biggReactionEntity;

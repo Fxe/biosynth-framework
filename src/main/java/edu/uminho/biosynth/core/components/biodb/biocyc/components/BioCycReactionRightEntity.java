@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.StoichiometryPair;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 
@@ -19,6 +21,7 @@ public class BioCycReactionRightEntity extends StoichiometryPair {
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="reaction_id")
 	private BioCycReactionEntity bioCycReactionEntity;
