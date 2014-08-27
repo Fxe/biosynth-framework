@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.DefaultMetaboliteFactory;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
-import edu.uminho.biosynth.integration.etl.EtlTransform;
 
 public class TestTransformBiggCentral {
 

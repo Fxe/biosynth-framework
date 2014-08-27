@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.integration;
+package pt.uminho.sysbio.biosynth.integration;
 
 import java.util.HashMap;
 import java.util.HashSet;

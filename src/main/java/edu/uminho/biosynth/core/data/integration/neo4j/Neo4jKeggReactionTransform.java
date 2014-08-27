@@ -3,10 +3,10 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
-import edu.uminho.biosynth.integration.etl.EtlTransform;
 
 public class Neo4jKeggReactionTransform implements EtlTransform<KeggReactionEntity, CentralDataReactionEntity>{
 

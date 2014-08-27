@@ -3,9 +3,9 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
-import edu.uminho.biosynth.integration.etl.EtlTransform;
 
 public class FixMe implements EtlTransform<BiggMetaboliteEntity, CentralMetaboliteEntity> {
 

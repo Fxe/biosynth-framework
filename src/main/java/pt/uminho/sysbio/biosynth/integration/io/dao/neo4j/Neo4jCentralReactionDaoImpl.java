@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.integration.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -8,9 +8,9 @@ import org.neo4j.graphdb.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
 import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
-import edu.uminho.biosynth.integration.CentralReactionEntity;
 
 public class Neo4jCentralReactionDaoImpl 
 extends AbstractNeo4jDao<CentralReactionEntity> 

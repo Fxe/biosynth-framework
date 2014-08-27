@@ -1,65 +1,44 @@
-package edu.uminho.biosynth.integration.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
-import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetaboliteProxyEntity;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
 
 public class Neo4jCentralMetaboliteDaoImpl 
 extends AbstractNeo4jDao<CentralMetaboliteEntity>
-implements MetaboliteDao<CentralMetaboliteEntity>{
+implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jCentralMetaboliteDaoImpl.class);
+	private static Label METABOLITE_LABLE = DynamicLabel.label("Metabolite");
 	
 	@Override
-	public CentralMetaboliteEntity getMetaboliteById(Serializable id) {
+	public CentralMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity getMetaboliteByEntry(String entry) {
+	public CentralMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity saveMetabolite(
-			CentralMetaboliteEntity metabolite) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Serializable saveMetabolite(Object metabolite) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Serializable> getAllMetaboliteIds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> getAllMetaboliteEntries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Serializable save(CentralMetaboliteEntity entity) {
+	public CentralMetaboliteEntity saveMetabolite(String tag, CentralMetaboliteEntity entity) {
 		boolean update = false;
 		
 //		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
@@ -83,7 +62,7 @@ implements MetaboliteDao<CentralMetaboliteEntity>{
 			for (String key : entity.getProperties().keySet())
 				node.setProperty(key, entity.getProperties().get(key));
 			
-			for (CentralDataMetaboliteProxyEntity proxy : entity.getCrossreferences()) {
+			for (CentralMetaboliteProxyEntity proxy : entity.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
 			}
 			
@@ -95,7 +74,7 @@ implements MetaboliteDao<CentralMetaboliteEntity>{
 		return entity;
 	}
 	
-	private void createOrLinkToProxy(Node parent, CentralDataMetaboliteProxyEntity proxy) {
+	private void createOrLinkToProxy(Node parent, CentralMetaboliteProxyEntity proxy) {
 		boolean create = true;
 		for (Node proxyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
@@ -125,6 +104,48 @@ implements MetaboliteDao<CentralMetaboliteEntity>{
 	protected CentralMetaboliteEntity nodeToObject(Node node) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public List<Long> getGlobalAllMetaboliteIds() {
+		List<Long> result = new ArrayList<> ();
+		for (Node node : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(METABOLITE_LABLE)) {
+			
+			result.add(node.getId());
+		}
+		return result;
+	}
+
+	@Override
+	public List<Long> getAllMetaboliteIds(String tag) {
+		//TODO: verify label if valid
+		
+		List<Long> result = new ArrayList<> ();
+		for (Node node : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(DynamicLabel.label(tag))) {
+			
+			result.add(node.getId());
+		}
+		return result;
+	}
+
+	@Override
+	public List<String> getAllMetaboliteEntries(String tag) {
+		//TODO: verify label if valid
+		
+		List<String> result = new ArrayList<> ();
+		for (Node node : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(DynamicLabel.label(tag))) {
+			
+			result.add((String)node.getProperty("entry"));
+		}
+		return result;
 	}
 
 }

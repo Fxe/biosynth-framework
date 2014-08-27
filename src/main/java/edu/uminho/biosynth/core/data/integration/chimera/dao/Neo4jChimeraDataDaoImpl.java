@@ -25,10 +25,10 @@ import org.neo4j.kernel.impl.core.NodeProxy;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
@@ -427,9 +427,9 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	}
 
 	@Override
-	public List<CentralDataMetabolitePropertyEntity> collectAllPropertyFromIds(
+	public List<CentralMetabolitePropertyEntity> collectAllPropertyFromIds(
 			String major, String uniqueKey, Long... ids) {
-		List<CentralDataMetabolitePropertyEntity> propertyEntities = new ArrayList<> ();
+		List<CentralMetabolitePropertyEntity> propertyEntities = new ArrayList<> ();
 		
 		Label label = DynamicLabel.label(major);
 		
@@ -438,7 +438,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			for (Relationship relationship : node.getRelationships()) {
 				Node nodeProp = relationship.getOtherNode(node);
 				if (nodeProp.hasLabel(label)) {
-					CentralDataMetabolitePropertyEntity propertyEntity = new CentralDataMetabolitePropertyEntity();
+					CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity();
 					
 					propertyEntity.setId(nodeProp.getId());
 					propertyEntity.setUniqueKey(uniqueKey);
@@ -480,9 +480,9 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	}
 
 	@Override
-	public CentralDataMetabolitePropertyEntity getMetaboliteProperty(Long id) {
+	public CentralMetabolitePropertyEntity getMetaboliteProperty(Long id) {
 		Node node = this.graphDatabaseService.getNodeById(id);
-		CentralDataMetabolitePropertyEntity entity = new CentralDataMetabolitePropertyEntity();
+		CentralMetabolitePropertyEntity entity = new CentralMetabolitePropertyEntity();
 		for (Label label : node.getLabels()) entity.addLabel(label.toString());
 		for (String key : node.getPropertyKeys()) {
 			entity.getProperties().put(key, node.getProperty(key));

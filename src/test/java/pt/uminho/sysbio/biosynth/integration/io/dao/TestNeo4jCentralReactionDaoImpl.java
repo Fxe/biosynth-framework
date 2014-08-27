@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import static org.junit.Assert.*;
 
@@ -14,11 +14,11 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 
+import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.factory.CentralReactionFactory;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jCentralReactionDaoImpl;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
-import edu.uminho.biosynth.integration.CentralReactionEntity;
-import edu.uminho.biosynth.integration.dao.Neo4jCentralReactionDaoImpl;
-import edu.uminho.biosynth.integration.factory.CentralReactionFactory;
 
 public class TestNeo4jCentralReactionDaoImpl {
 

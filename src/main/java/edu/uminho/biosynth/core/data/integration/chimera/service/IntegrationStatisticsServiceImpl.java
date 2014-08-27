@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
-import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 
 @Service
@@ -72,7 +72,7 @@ public class IntegrationStatisticsServiceImpl implements IntegrationStatisticsSe
 //		int count = 0;
 		
 		Set<Object> objects = new HashSet<> ();
-		for (CentralDataMetabolitePropertyEntity propertyEntity : this.data.collectAllPropertyFromIds(
+		for (CentralMetabolitePropertyEntity propertyEntity : this.data.collectAllPropertyFromIds(
 				property, 
 				uniqueKey, 
 				integratedCluster.listAllIntegratedMemberIds().toArray(new Long[0]))) {

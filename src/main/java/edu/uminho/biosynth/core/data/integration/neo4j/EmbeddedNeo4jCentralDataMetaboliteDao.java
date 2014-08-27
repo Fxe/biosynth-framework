@@ -16,8 +16,10 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
 
 /**
  * Embedded Neo4j DAO 
@@ -98,7 +100,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 		
 		metabolite.setId(node.getId());
 		
-		for (CentralDataMetabolitePropertyEntity propertyEntity : metabolite.getPropertyEntities()) {
+		for (CentralMetabolitePropertyEntity propertyEntity : metabolite.getPropertyEntities()) {
 			Label propertyMajor = DynamicLabel.label(propertyEntity.getMajorLabel());
 			String uniqueKey = propertyEntity.getUniqueKey();
 			String uniqueValue = (String) propertyEntity.getProperties().get(uniqueKey);
@@ -109,7 +111,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 			node.createRelationshipTo(propertyNode, relationshipType);
 		}
 		
-		for (CentralDataMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
+		for (CentralMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
 			Label xrefMajor = DynamicLabel.label(xref.getMajorLabel());
 			
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());

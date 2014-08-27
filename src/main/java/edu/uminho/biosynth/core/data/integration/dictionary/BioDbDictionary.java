@@ -12,7 +12,8 @@ public class BioDbDictionary {
 		if (getDbDictionary().containsKey(db)) {
 			return getDbDictionary().get(db);
 		}
-		System.err.println(db + " not found in translation dictionary");
+		
+		System.err.println(String.format("[%s] not found in translation dictionary", db));
 		return "NOTFOUND";
 	}
 	
@@ -20,7 +21,7 @@ public class BioDbDictionary {
 		if (getDbLabel().containsKey(db)) {
 			return getDbLabel().get(db);
 		}
-		System.err.println(db + " not found in translation dictionary");
+		System.err.println(String.format("[%s] not found in translation dictionary", db));
 		return "NOTFOUND";
 	}
 	

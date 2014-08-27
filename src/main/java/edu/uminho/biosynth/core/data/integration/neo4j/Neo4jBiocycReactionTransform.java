@@ -3,11 +3,11 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
-import edu.uminho.biosynth.integration.etl.EtlTransform;
 
 public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReactionEntity, CentralDataReactionEntity>{
 

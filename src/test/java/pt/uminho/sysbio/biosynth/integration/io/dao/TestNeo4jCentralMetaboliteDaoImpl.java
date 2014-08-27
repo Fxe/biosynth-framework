@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import static org.junit.Assert.*;
 
@@ -10,18 +10,17 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.tooling.GlobalGraphOperations;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.factory.CentralMetaboliteFactory;
+import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jCentralMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
-import edu.uminho.biosynth.integration.dao.Neo4jCentralMetaboliteDaoImpl;
-import edu.uminho.biosynth.integration.factory.CentralMetaboliteFactory;
-
 public class TestNeo4jCentralMetaboliteDaoImpl {
 
 	private static String DB_PATH = "D:/dev/null/test.db";
 	private static GraphDatabaseService db;
 	private static org.neo4j.graphdb.Transaction tx;
-	private MetaboliteDao<CentralMetaboliteEntity> metaboliteDao;
+	private MetaboliteHeterogeneousDao<CentralMetaboliteEntity> metaboliteDao;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -52,10 +51,10 @@ public class TestNeo4jCentralMetaboliteDaoImpl {
 	@Test
 	public void testSaveMetaboliteSuccess() {
 		CentralMetaboliteEntity entity = new CentralMetaboliteFactory()
-			.withEntry("neo4j_reaction_1")
+			.withEntry("neo4j_metabolite_1")
 			.build();
 		
-		metaboliteDao.saveMetabolite(entity);
+		metaboliteDao.saveMetabolite("d1", entity);
 		fail("Not yet implemented");
 	}
 

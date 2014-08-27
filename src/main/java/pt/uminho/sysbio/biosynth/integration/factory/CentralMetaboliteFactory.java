@@ -1,11 +1,11 @@
-package edu.uminho.biosynth.integration.factory;
+package pt.uminho.sysbio.biosynth.integration.factory;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 
 public class CentralMetaboliteFactory {
 	

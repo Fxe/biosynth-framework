@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.data.integration.etl;
 
 import java.io.Serializable;
 
-import edu.uminho.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 
 public abstract class AbstractEtlPipeline<SRC, DST> implements IEtlPipeline<SRC, DST> {
 

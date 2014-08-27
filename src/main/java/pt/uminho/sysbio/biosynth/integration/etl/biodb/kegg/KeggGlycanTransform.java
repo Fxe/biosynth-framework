@@ -1,8 +1,8 @@
-package edu.uminho.biosynth.integration.etl.biodb.kegg;
+package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
-import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
-import edu.uminho.biosynth.integration.etl.EtlTransform;
 
 public class KeggGlycanTransform 
 implements EtlTransform<KeggGlycanMetaboliteEntity, CentralMetaboliteEntity>{
