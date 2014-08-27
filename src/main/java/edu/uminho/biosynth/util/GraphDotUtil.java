@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
 
 public class GraphDotUtil {
 	
-	public static<V, E> String graphToDot(IBinaryGraph<V, E> graph, IVertexTransformer<V> vertexTransformer) {
+	public static<V, E> String graphToDot(BinaryGraph<V, E> graph, IVertexTransformer<V> vertexTransformer) {
 		Integer initialIndex = 1;
 		
 		Map<Integer, V> vertexMap = new HashMap<> ();
@@ -52,7 +52,7 @@ public class GraphDotUtil {
 		return ret.toString();
 	}
 	
-	public static<V, E> String graphToDot(IBinaryGraph<V, E> graph) {
+	public static<V, E> String graphToDot(BinaryGraph<V, E> graph) {
 		return graphToDot(graph, null);
 	}
 	

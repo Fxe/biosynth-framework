@@ -40,18 +40,6 @@ public class Neo4jIntegratedMetaboliteDao implements MetaboliteDao<IntegratedMet
 	}
 
 	@Override
-	public IntegratedMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<IntegratedMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Serializable save(IntegratedMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;

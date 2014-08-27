@@ -18,6 +18,7 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
 
 /**
  * Embedded Neo4j DAO 
@@ -25,7 +26,7 @@ import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
  * @author Filipe Liu
  *
  */
-public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<CentralDataMetaboliteEntity> {
+public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<CentralMetaboliteEntity> {
 
 	private static final Logger LOGGER = Logger.getLogger(EmbeddedNeo4jCentralDataMetaboliteDao.class);
 	
@@ -70,20 +71,20 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 	}
 	
 	@Override
-	public CentralDataMetaboliteEntity getMetaboliteById(Serializable id) {
+	public CentralMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralDataMetaboliteEntity getMetaboliteByEntry(String entry) {
+	public CentralMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralDataMetaboliteEntity saveMetabolite(
-			CentralDataMetaboliteEntity metabolite) {
+	public CentralMetaboliteEntity saveMetabolite(
+			CentralMetaboliteEntity metabolite) {
 		
 		Label major = DynamicLabel.label(metabolite.getMajorLabel());
 		Node node = this.getOrCreateNode(major, "entry", metabolite.getEntry());
@@ -142,19 +143,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 	}
 
 	@Override
-	public CentralDataMetaboliteEntity find(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<CentralDataMetaboliteEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Serializable save(CentralDataMetaboliteEntity entity) {
+	public Serializable save(CentralMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}

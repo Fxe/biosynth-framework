@@ -16,7 +16,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
+import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")
@@ -112,5 +112,55 @@ public class IntegrationStatisticsServiceImpl implements IntegrationStatisticsSe
 			System.out.println("==================================");
 		}
 		return frequency;
+	}
+	@Override
+	public Map<String, Integer> getIntegratedClusterDatabaseFreq(
+			IntegratedCluster integratedCluster) {
+		Map<String, Integer> res = new HashMap<> ();
+		
+		Set<String> majors = new HashSet<> ();
+		for (MetaboliteMajorLabel m : MetaboliteMajorLabel.values()) {
+			majors.add(m.toString());
+		}
+		
+		for (Long eid : integratedCluster.listAllIntegratedMemberIds()) {
+			Set<String> labels = this.data.collectEntityLabels(eid);
+			if (labels.contains("KEGG")) {
+				labels.remove("KEGG");
+				Map<String, Object> props = this.data.getEntryProperties(eid);
+				String entry = (String) props.get("entry");
+				switch (entry.charAt(0)) {
+					case 'C':
+						labels.add(MetaboliteMajorLabel.LigandCompound.toString());
+						break;
+					case 'D':
+						labels.add(MetaboliteMajorLabel.LigandDrug.toString());
+						break;
+					case 'G':
+						labels.add(MetaboliteMajorLabel.LigandGlycan.toString());
+						break;
+					default:
+						labels.add("KEGG");
+						break;
+				}
+			}
+			
+			labels.retainAll(majors);
+			
+			if (labels.size() > 1) {
+				LOGGER.warn("Multiple major labels found for " + eid);
+			} else if (labels.isEmpty()) {
+				LOGGER.warn("No major labels found for " + eid);
+				labels.add("Unknown");
+			}
+			String major = labels.iterator().next();
+			if (!res.containsKey(major)) {
+				res.put(major, 1);
+			} else {
+				res.put(major, res.get(major) + 1);
+			}
+		}
+		
+		return res;
 	}
 }

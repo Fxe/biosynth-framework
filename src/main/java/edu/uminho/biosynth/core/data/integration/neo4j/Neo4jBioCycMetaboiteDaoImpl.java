@@ -30,14 +30,14 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		super(graphdb);
 	}
 	
-	@Override
+//	@Override
 	public BioCycMetaboliteEntity find(Serializable id) {
 		Node node = graphDatabaseService.findNodesByLabelAndProperty(subDb, "entry", id).iterator().next();
 		BioCycMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
-	@Override
+//	@Override
 	public List<BioCycMetaboliteEntity> findAll() {
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:" + compoundLabel + ":" + subDb + ") RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");

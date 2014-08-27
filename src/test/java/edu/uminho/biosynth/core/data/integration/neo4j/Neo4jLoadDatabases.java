@@ -19,6 +19,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEnti
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.factory.BiggDaoFactory;
 import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
 import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;
 
@@ -178,8 +179,11 @@ public class Neo4jLoadDatabases {
 	@Test
 	public void testBigg() {
 		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
-		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
-		biggCsvDao.setCsvFile(csv);
+		CsvBiggMetaboliteDaoImpl biggCsvDao = new BiggDaoFactory()
+			.withFile(csv)
+			.buildCsvBiggMetaboliteDao();
+		
+			
 		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl(db);
 		int i = 0;
 		int limitSave = 1000;
@@ -192,8 +196,8 @@ public class Neo4jLoadDatabases {
 			}
 			tx.success();
 		}
-		for (BiggMetaboliteEntity cpd : biggCsvDao.findAll()) {
-			
+		for (String cpdEntry : biggCsvDao.getAllMetaboliteEntries()) {
+			BiggMetaboliteEntity cpd = biggCsvDao.getMetaboliteByEntry(cpdEntry);
 			if ( !skipEntries.contains(cpd.getEntry())) batch.add(cpd);
 			System.out.println(cpd.getEntry());
 			

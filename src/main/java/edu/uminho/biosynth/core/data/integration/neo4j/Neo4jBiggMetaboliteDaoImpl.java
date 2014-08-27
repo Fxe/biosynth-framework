@@ -52,7 +52,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		return !nodes.isEmpty();
 	}
 	
-	@Override
+//	@Override
 	public BiggMetaboliteEntity find(Serializable id) {
 //		ExecutionEngine engine = new ExecutionEngine(graphdb);
 
@@ -130,7 +130,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 		return false;
 	}
 
-	@Override
+//	@Override
 	public List<BiggMetaboliteEntity> findAll() {
 //		ExecutionEngine engine = new ExecutionEngine(graphdb);
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:BiGG) RETURN cpd");

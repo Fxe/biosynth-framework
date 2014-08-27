@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.uminho.biosynth.core.algorithm.graph.BreadthFirstSearch;
+import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;

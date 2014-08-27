@@ -17,6 +17,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
@@ -103,7 +104,17 @@ public class TestIntegrationStatisticsServiceImpl {
 	
 	@Test
 	public void testCountIntegratedClusterWithDuplicateProperty() {
-		integrationStatisticsService.getIntegratedClusterPropertyFrequency(integrationSet, CompoundPropertyLabel.Name.toString());
+//		integrationStatisticsService.getIntegratedClusterPropertyFrequency(integrationSet, CompoundPropertyLabel.Name.toString());
+	}
+	
+	@Test
+	public void testCountIntegratedClusterDatabaseFreq() {
+		for (Long cid : centralMetadataDao.getAllIntegratedClusterIds(integrationSet.getId())) {
+			IntegratedCluster integratedCluster = centralMetadataDao.getIntegratedClusterById(cid);
+			Map<String, Integer> mashup = integrationStatisticsService.getIntegratedClusterDatabaseFreq(integratedCluster);
+			System.out.println(mashup);
+		}
+		
 	}
 
 }

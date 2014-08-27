@@ -26,7 +26,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEnti
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
@@ -123,7 +123,7 @@ public class TestReferenceGraphBuilder {
 		xrefBuilder.getLoadersList().add(biocycLoader);
 		xrefBuilder.getLoadersList().add(biggLoader);
 		xrefBuilder.getLoadersList().add(keggLoader);
-		IBinaryGraph<ReferenceNode, ReferenceLink> graph = xrefBuilder.omg();
+		BinaryGraph<ReferenceNode, ReferenceLink> graph = xrefBuilder.omg();
 		
 		System.out.println(graph);
 		
@@ -193,7 +193,7 @@ public class TestReferenceGraphBuilder {
 		xrefBuilder.getLoadersList().add(biggLoader);
 		xrefBuilder.getLoadersList().add(keggLoader);
 		xrefBuilder.getLoadersList().add(mnxLoader);
-		IBinaryGraph<ReferenceNode, ReferenceLink> graph 
+		BinaryGraph<ReferenceNode, ReferenceLink> graph 
 			= xrefBuilder.extractReferenceGraph(new String[] {
 					"h2o", "oh1",
 					"WATER", "OH", "CPD-12377",

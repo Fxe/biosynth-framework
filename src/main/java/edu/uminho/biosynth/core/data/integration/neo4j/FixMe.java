@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.data.integration.etl.IEtlTransform;
+import edu.uminho.biosynth.integration.CentralMetaboliteEntity;
+import edu.uminho.biosynth.integration.etl.EtlTransform;
 
-public class FixMe implements IEtlTransform<BiggMetaboliteEntity, CentralDataMetaboliteEntity> {
+public class FixMe implements EtlTransform<BiggMetaboliteEntity, CentralMetaboliteEntity> {
 
 	@Override
-	public CentralDataMetaboliteEntity etlTransform(BiggMetaboliteEntity cpd) {
+	public CentralMetaboliteEntity etlTransform(BiggMetaboliteEntity cpd) {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("id", cpd.getId());
 		properties.put("entry", cpd.getEntry());
@@ -17,7 +18,7 @@ public class FixMe implements IEtlTransform<BiggMetaboliteEntity, CentralDataMet
 		properties.put("formula", cpd.getFormula());
 		properties.put("charge", cpd.getCharge());
 		
-		CentralDataMetaboliteEntity metaboliteEntity = new CentralDataMetaboliteEntity();
+		CentralMetaboliteEntity metaboliteEntity = new CentralMetaboliteEntity();
 		metaboliteEntity.setProperties(properties);
 		
 		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildFormula(cpd.getFormula()));

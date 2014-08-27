@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.algorithm.graph.BreadthFirstSearch;
+import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 

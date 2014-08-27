@@ -30,8 +30,10 @@ public interface IntegrationDataDao {
 	public Set<String> getAllMajorMetaboliteLabels();
 	
 	public Set<Long> collectEntityProperties(List<Long> entities, String...properties);
-	
+	public Set<String> collectEntityLabels(Long id); 
 	
 	public CentralDataReactionProperty getReactionProperty(Long id);
 	public CentralDataMetabolitePropertyEntity getMetaboliteProperty(Long id);
+	
+	
 }

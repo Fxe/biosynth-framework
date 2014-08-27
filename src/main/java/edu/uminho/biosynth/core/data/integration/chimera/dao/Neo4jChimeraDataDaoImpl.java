@@ -490,4 +490,14 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		return entity;
 	}
 
+	@Override
+	public Set<String> collectEntityLabels(Long id) {
+		Node node = this.graphDatabaseService.getNodeById(id);
+		Set<String> res = new HashSet<> ();
+		for (Label l : node.getLabels()) {
+			res.add(l.toString());
+		}
+		return res;
+	}
+
 }

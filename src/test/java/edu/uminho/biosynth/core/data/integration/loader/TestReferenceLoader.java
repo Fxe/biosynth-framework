@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
@@ -60,7 +60,7 @@ public class TestReferenceLoader {
 		IMetaboliteService<BioCycMetaboliteEntity> biocycService = new BiocycService(dao);
 		biocycLoader.setService(biocycService);
 		biocycLoader.setReferenceTransformer(biocycXrefTrans);
-		IBinaryGraph<ReferenceNode, ReferenceLink> refGraph = biocycLoader.getMetaboliteReferences("WATER");
+		BinaryGraph<ReferenceNode, ReferenceLink> refGraph = biocycLoader.getMetaboliteReferences("WATER");
 		
 		assertEquals(2, refGraph.size());
 		assertEquals(3, refGraph.order());

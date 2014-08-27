@@ -118,22 +118,21 @@ public class TestNeo4jBasic {
 	@Test
 	public void testBigg() {
 		File csv = new File("D:/home/data/bigg/BiGGmetaboliteList.tsv");
-		CsvBiggMetaboliteDaoImpl biggCsvDao = new CsvBiggMetaboliteDaoImpl();
-		biggCsvDao.setCsvFile(csv);
+		CsvBiggMetaboliteDaoImpl biggCsvDao = null;
 		Neo4jBiggMetaboliteDaoImpl biggNeo4jDao = new Neo4jBiggMetaboliteDaoImpl(db);
 		
-		try ( Transaction tx = db.beginTx()) {
-			BiggMetaboliteEntity biggCpd1 = biggCsvDao.find("h2o");
-			System.out.println(biggCpd1);
-			biggNeo4jDao.save(biggCpd1);
-			BiggMetaboliteEntity biggCpd2 = biggCsvDao.find("btal");
-			System.out.println(biggCpd2);
-			biggNeo4jDao.save(biggCpd2);
-			BiggMetaboliteEntity biggCpd3 = biggCsvDao.find("btcoa");
-			System.out.println(biggCpd3);
-			biggNeo4jDao.save(biggCpd3);
-			tx.success();
-		}
+//		try ( Transaction tx = db.beginTx()) {
+//			BiggMetaboliteEntity biggCpd1 = biggCsvDao.find("h2o");
+//			System.out.println(biggCpd1);
+//			biggNeo4jDao.save(biggCpd1);
+//			BiggMetaboliteEntity biggCpd2 = biggCsvDao.find("btal");
+//			System.out.println(biggCpd2);
+//			biggNeo4jDao.save(biggCpd2);
+//			BiggMetaboliteEntity biggCpd3 = biggCsvDao.find("btcoa");
+//			System.out.println(biggCpd3);
+//			biggNeo4jDao.save(biggCpd3);
+//			tx.success();
+//		}
 	}
 	
 	@Test

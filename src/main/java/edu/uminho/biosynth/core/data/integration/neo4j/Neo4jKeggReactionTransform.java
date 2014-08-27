@@ -6,9 +6,9 @@ import java.util.Map;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
-import edu.uminho.biosynth.core.data.integration.etl.IEtlTransform;
+import edu.uminho.biosynth.integration.etl.EtlTransform;
 
-public class Neo4jKeggReactionTransform implements IEtlTransform<KeggReactionEntity, CentralDataReactionEntity>{
+public class Neo4jKeggReactionTransform implements EtlTransform<KeggReactionEntity, CentralDataReactionEntity>{
 
 	private void addIfNotNull(String propertie, Object value, Map<String, Object> properties) {
 		if (value != null) {

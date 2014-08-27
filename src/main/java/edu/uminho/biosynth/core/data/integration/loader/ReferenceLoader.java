@@ -12,7 +12,7 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultGraphImpl;
 import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLinkType;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
@@ -46,11 +46,11 @@ public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCross
 		return service.getAllMetabolitesEntries();
 	}
 	
-	public IBinaryGraph<ReferenceNode, ReferenceLink> getMetaboliteReferences(String entry) {
+	public BinaryGraph<ReferenceNode, ReferenceLink> getMetaboliteReferences(String entry) {
 		LOGGER.log(Level.INFO, "BUILDING REFERENCES FOR " + entry); 
 		// returns a graph with metabolite and references
 		// this graph should be merged with main reference graph
-		IBinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = 
+		BinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = 
 				new DefaultGraphImpl<>();
 				
 		// querys the metabolite from the service
