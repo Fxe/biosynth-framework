@@ -1,7 +1,5 @@
 package edu.uminho.biosynth.core.data.service;
 
-import org.springframework.stereotype.Service;
-
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 

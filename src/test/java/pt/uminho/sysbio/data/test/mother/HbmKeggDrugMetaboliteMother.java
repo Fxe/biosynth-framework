@@ -1,8 +1,5 @@
 package pt.uminho.sysbio.data.test.mother;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Session;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
@@ -11,8 +8,8 @@ public class HbmKeggDrugMetaboliteMother extends AbstractHbmObjectMother<KeggDru
 
 	private String entry = "D99999";
 	private String name = "A KeGg Dr Metabolite";
-	private Integer charge = 0;
-	private List<String> compartments = new ArrayList<> ();
+//	private Integer charge = 0;
+//	private List<String> compartments = new ArrayList<> ();
 	private String formula = "A2B1C3";
 	private String description = "abcdef 123456 !<>%&/\\() .;,-_";
 	private String metaboliteClass = "Foo";
@@ -49,6 +46,7 @@ public class HbmKeggDrugMetaboliteMother extends AbstractHbmObjectMother<KeggDru
 		cpd.setFormula(formula);
 		cpd.setSource(source);
 		cpd.setDescription(description);
+		cpd.setMetaboliteClass(metaboliteClass);
 	}
 
 	public String getEntry() {

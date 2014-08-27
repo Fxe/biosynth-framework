@@ -23,7 +23,6 @@ import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.data.io.ILocalSource;
 import edu.uminho.biosynth.core.data.io.IPageableSource;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
-import edu.uminho.biosynth.util.EquationParser;
 
 @Deprecated
 public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource {
@@ -124,7 +123,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		return rxn;
 	}
 	
-	private Map<String, Double> getReactionProducts( String rcID) throws SQLException {
+	public Map<String, Double> getReactionProducts( String rcID) throws SQLException {
 		HashMap<String, Double> products = new HashMap<String, Double>();
 		String sql = "SELECT id_cp_p, stoich_p FROM reaction_product WHERE id_rc_p = ?;";
 		PreparedStatement sqlStatement = null;
@@ -140,7 +139,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		
 		return products;
 	}
-	private Map<String, Double> getReactionReactants( String rcID) throws SQLException {
+	public Map<String, Double> getReactionReactants( String rcID) throws SQLException {
 		HashMap<String, Double> reactants = new HashMap<String, Double>();
 		String sql = "SELECT id_cp_r, stoich_r FROM reaction_reactant WHERE id_rc_r = ?;";
 		PreparedStatement sqlStatement = null;
@@ -156,7 +155,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		
 		return reactants;
 	}
-	private List<String> getReactionSameAs( String rcID) throws SQLException {
+	public List<String> getReactionSameAs( String rcID) throws SQLException {
 		ArrayList<String> sameas = new ArrayList<String>();
 		String sql = "SELECT syn_rc FROM reaction_syn WHERE id_rc_s = ?;";
 		PreparedStatement sqlStatement = null;
@@ -172,7 +171,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		
 		return sameas;
 	}
-	private List<String> getReactionECNumbers( String rcID) throws SQLException {
+	public List<String> getReactionECNumbers( String rcID) throws SQLException {
 		ArrayList<String> ecnumbers = new ArrayList<String>();
 		String sql = "SELECT id_ec_r FROM reaction_enzyme WHERE id_rc_e = ?;";
 		PreparedStatement sqlStatement = null;
@@ -188,7 +187,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			
 		return ecnumbers;
 	}
-	private Set<String> getReactionRPairs(String rcnID) throws SQLException {
+	public Set<String> getReactionRPairs(String rcnID) throws SQLException {
 		Set<String> rpairsIDSet = new HashSet<String> ();
 		String sql = "SELECT id_rp_r FROM reaction_rpair WHERE id_rc_r = ?;";
 		PreparedStatement sqlStatement = null;
@@ -255,7 +254,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 		return cpInfo;
 	}
-	private TreeSet<String> getCompoundReactions(String cpID) {
+	public TreeSet<String> getCompoundReactions(String cpID) {
 		TreeSet<String> reactions = null;
 		String sql = getCompoundReactionsSQL;
 		PreparedStatement sqlStatement = null;
@@ -598,7 +597,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		
 		return retVal;
 	}
-	private int saveCompoundReactions(String cpID, Set<String> reactionSet) throws SQLException {
+	public int saveCompoundReactions(String cpID, Set<String> reactionSet) throws SQLException {
 		int retVal = -1;
 		String sqlInsert = "INSERT INTO compound_reaction ( id_cp, id_rc) VALUES ( ?, ?);";
 
@@ -626,7 +625,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 	}
 	
-	private int saveReactionData(String rxnId, String name, String equation, String description, String source,
+	public int saveReactionData(String rxnId, String name, String equation, String description, String source,
 			boolean generic, int orientation) throws SQLException {
 		
 		int retVal = -1;
@@ -644,7 +643,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 
 		return retVal;
 	}
-	private int saveReactionEnzymes(String rxnId, Set<String> ecnumbers) throws SQLException {
+	public int saveReactionEnzymes(String rxnId, Set<String> ecnumbers) throws SQLException {
 		int retVal = -1;
 		if ( ecnumbers != null) {
 			String sqlInsert = "INSERT INTO reaction_enzyme (id_rc_e, id_ec_r) VALUES ( ?, ?);";
@@ -659,7 +658,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 		return retVal;
 	}
-	private int saveReactionReactants(String rxnId, Map<String, Double> reactants, Map<String, String> genStoich) throws SQLException {
+	public int saveReactionReactants(String rxnId, Map<String, Double> reactants, Map<String, String> genStoich) throws SQLException {
 		int retVal = -1;
 		if (reactants != null) {
 			String sqlInsert = "INSERT INTO reaction_reactant ( id_rc_r, id_cp_r, stoich_r_s, stoich_r) VALUES ( ?, ?, ?, ?);";
@@ -676,7 +675,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 		return retVal;
 	}
-	private int saveReactionProducts(String rxnId, Map<String, Double> products, Map<String, String> genStoich) throws SQLException {
+	public int saveReactionProducts(String rxnId, Map<String, Double> products, Map<String, String> genStoich) throws SQLException {
 		int retVal = -1;
 		if (products != null) {
 			String sqlInsert = "INSERT INTO reaction_product ( id_rc_p, id_cp_p, stoich_p_s, stoich_p) VALUES ( ?, ?, ?, ?);";
@@ -693,7 +692,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 		return retVal;
 	}
-	private int saveReactionSameas(String rxnId, Set<String> sameas) throws SQLException {
+	public int saveReactionSameas(String rxnId, Set<String> sameas) throws SQLException {
 		int retVal = -1;
 		if ( sameas != null) {
 			String sqlInsert = "INSERT INTO reaction_syn ( id_rc_s, syn_rc) VALUES ( ?, ?);";
@@ -708,7 +707,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		}
 		return retVal;
 	}
-	private int saveReactionRPairs(String rxnID, Set<String> rpairSet) throws SQLException {
+	public int saveReactionRPairs(String rxnID, Set<String> rpairSet) throws SQLException {
 		int retVal = -1;
 		if ( rpairSet != null) {
 			String sqlInsert = "INSERT INTO reaction_rpair ( id_rc_r, id_rp_r) VALUES ( ?, ?);";
@@ -992,7 +991,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			int orientation = res.getInt( 2);
 			String source = res.getString( 3);
 			String name = res.getString( 4);
-			String equation = res.getString( 5);
+//			String equation = res.getString( 5);
 			String description = res.getString( 6);
 			GenericReaction rxn = new GenericReaction();
 			rxn.setEntry(id);
@@ -1018,9 +1017,11 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			pageElements = this.getByPageReactionData(page, pagesize);
 			Map<String, Map<String, Double>> pageProducts = this.getByBatchReactionProducts(pageElements.keySet());
 			Map<String, Map<String, Double>> pageReactants = this.getByBatchReactionReactants(pageElements.keySet());
-			
+			System.out.println(pageProducts.size());
+			System.out.println(pageReactants.size());
 			for (String rxnId : pageElements.keySet()) {
 				GenericReaction rxn = pageElements.get(rxnId);
+				System.out.println(rxn);
 //				rxn.addProducts(pageProducts.get(rxnId));
 //				rxn.addReactants(pageReactants.get(rxnId));
 			}
@@ -1097,8 +1098,9 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		try {
 			pageElements = this.getByPageMetaboliteData(page, pagesize);
 			Map<String, Set<String>> cpdReactionMap = this.getByBatchMetaboliteReactions(pageElements.keySet());
-			
+			System.out.println(cpdReactionMap);
 			for (String cpdId : pageElements.keySet()) {
+				System.out.println(cpdId);
 //				pageElements.get(cpdId).addReactions(cpdReactionMap.get(cpdId));
 			}
 			// TODO Auto-generated method stub

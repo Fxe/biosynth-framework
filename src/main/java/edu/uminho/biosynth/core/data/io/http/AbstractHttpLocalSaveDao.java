@@ -1,10 +1,6 @@
 package edu.uminho.biosynth.core.data.io.http;
 
-import java.io.File;
-import java.io.IOException;
-
-import edu.uminho.biosynth.util.BioSynthUtilsIO;
-
+@Deprecated
 public class AbstractHttpLocalSaveDao {
 	
 //	private String getLocalOrWeb(String restQuery, String localPath) throws IOException {

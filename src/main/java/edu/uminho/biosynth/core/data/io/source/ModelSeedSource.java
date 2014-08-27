@@ -1,20 +1,5 @@
 package edu.uminho.biosynth.core.data.io.source;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import edu.uminho.biosynth.core.components.GenericEnzyme;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.GenericReaction;
-import edu.uminho.biosynth.core.components.GenericReactionPair;
-import edu.uminho.biosynth.core.data.io.ISource;
 
 @Deprecated
 public class ModelSeedSource {
