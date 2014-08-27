@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
-public class GenericMetabolite extends AbstractGenericEntity implements Serializable {
+public class GenericMetabolite extends AbstractGenericEntity implements Metabolite, Serializable {
 
 	private static final long serialVersionUID = 134867731L;
 
@@ -34,12 +34,9 @@ public class GenericMetabolite extends AbstractGenericEntity implements Serializ
 		this.id = key;
 	}
 	
-	public void setFormula(String formula) {
-		this.formula = formula;
-	}
-	public String getFormula() {
-		return this.formula;
-	}
+	public void setFormula(String formula) { this.formula = formula;}
+	@Override
+	public String getFormula() { return this.formula;}
 	
 	public Map<Integer, GenericReaction> getReactionMap() {
 		return this.rxnMap;

@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.components;
 
 import java.io.Serializable;
 
-public class AbstractGenericMetabolite extends AbstractGenericEntity implements IMetaboliteEntity, Serializable {
+public class AbstractGenericMetabolite extends AbstractGenericEntity implements Metabolite, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	protected String formula;
@@ -11,6 +11,7 @@ public class AbstractGenericMetabolite extends AbstractGenericEntity implements 
 		super(id);
 	}
 
+	@Override
 	public String getFormula() {
 		return formula;
 	}
