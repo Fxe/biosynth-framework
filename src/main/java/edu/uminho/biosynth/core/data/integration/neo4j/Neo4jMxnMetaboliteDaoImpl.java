@@ -26,14 +26,14 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		super(graphdb);
 	}
 
-	@Override
+//	@Override
 	public MnxMetaboliteEntity find(Serializable id) {
 		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		MnxMetaboliteEntity cpd = nodeToObject(node);
 		return cpd;
 	}
 
-	@Override
+//	@Override
 	public List<MnxMetaboliteEntity> findAll() {
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:MetaNetX) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");

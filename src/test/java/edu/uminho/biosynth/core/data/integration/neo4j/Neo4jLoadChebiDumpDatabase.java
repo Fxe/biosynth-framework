@@ -44,8 +44,7 @@ public class Neo4jLoadChebiDumpDatabase {
 	public void test() {
 		HbmChebiDumpDaoImpl chebiDumpDao = new HbmChebiDumpDaoImpl();
 		chebiDumpDao.setSessionFactory(sessionFactory);
-		
-		System.out.println(chebiDumpDao.find(10440));
+		System.out.println(chebiDumpDao.getMetaboliteByEntry("10440"));
 	}
 
 }

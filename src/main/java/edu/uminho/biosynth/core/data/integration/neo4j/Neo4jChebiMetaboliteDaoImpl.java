@@ -26,13 +26,13 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+//	@Override
 	public ChebiMetaboliteEntity find(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+//	@Override
 	public List<ChebiMetaboliteEntity> findAll() {
 		// TODO Auto-generated method stub
 		return null;
@@ -68,24 +68,24 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 		
 		if (params.get("charge") != null) {
 			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
-			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
+			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);
 		}
 		if (params.get("formula") != null) {
 			executionEngine.execute("MERGE (f:Formula {formula:{formula}}) ", params);
-			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
+			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (f:Formula {formula:{formula}}) MERGE (cpd)-[r:HasFormula]->(f)", params);
 		}
 		if (params.get("inchi") != null) {
 			executionEngine.execute("MERGE (i:InChI {inchi:{inchi}}) ON CREATE SET i.inchikey={inchikey} ON MATCH SET i.inchikey={inchikey}", params);
-			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
+			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (i:InChI {inchi:{inchi}}) MERGE (cpd)-[r:HasInChI]->(i)", params);
 		}
 		if (params.get("smiles") != null) {
 			executionEngine.execute("MERGE (s:SMILES {smiles:{smiles}}) ", params);
-			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
+			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (s:SMILES {smiles:{smiles}}) MERGE (cpd)-[r:HasSMILES]->(s)", params);
 		}
 		for (ChebiMetaboliteNameEntity name : cpd.getNames()) {
 			params.put("name", name.getName().toLowerCase());
 			executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
-			executionEngine.execute("MATCH (cpd:ChEBI:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
+			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		for (ChebiMetaboliteCrossReferenceEntity xref: cpd.getCrossreferences()) {
 

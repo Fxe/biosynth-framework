@@ -34,7 +34,7 @@ public class Neo4jKeggDrugMetaboliteDaoImpl extends AbstractNeo4jDao<KeggDrugMet
 	
 	
 
-	@Override
+//	@Override
 	public KeggDrugMetaboliteEntity find(Serializable id) {
 		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		KeggDrugMetaboliteEntity cpd = nodeToObject(node);
@@ -111,7 +111,7 @@ public class Neo4jKeggDrugMetaboliteDaoImpl extends AbstractNeo4jDao<KeggDrugMet
 		return null;
 	}
 
-	@Override
+//	@Override
 	public List<KeggDrugMetaboliteEntity> findAll() {
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:KEGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");

@@ -21,8 +21,8 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultGraphImpl;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
@@ -39,7 +39,7 @@ public class IntegrationOLAP {
 	private IGenericDao dao;
 	private IKeyGenerator<Long> idGenerator;
 	
-	private IBinaryGraph<Long, Long> graph = new DefaultGraphImpl<>();
+	private BinaryGraph<Long, Long> graph = new DefaultGraphImpl<>();
 	private Map<Long, Set<Long>> clusters = new HashMap<> ();
 	
 	private int numberOfRecords;

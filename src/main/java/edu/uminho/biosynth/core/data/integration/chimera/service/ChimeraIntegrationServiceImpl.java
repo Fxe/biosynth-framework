@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.uminho.biosynth.core.algorithm.graph.BreadthFirstSearch;
+import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
@@ -36,14 +36,14 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	private static Logger LOGGER = Logger.getLogger(ChimeraIntegrationServiceImpl.class);
 	
 	@Autowired
-	private ChimeraDataDao data;
+	private IntegrationDataDao data;
 	@Autowired
 	private ChimeraMetadataDao meta;
 
 	private IKeyGenerator<String> clusterIdGenerator;
 	
-	public ChimeraDataDao getData() { return data;}
-	public void setData(ChimeraDataDao data) { this.data = data;}
+	public IntegrationDataDao getData() { return data;}
+	public void setData(IntegrationDataDao data) { this.data = data;}
 
 	public ChimeraMetadataDao getMeta() { return meta;}
 	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}

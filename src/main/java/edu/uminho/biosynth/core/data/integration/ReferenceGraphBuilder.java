@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UniqueEdgeGraphImpl;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
@@ -20,15 +20,15 @@ public class ReferenceGraphBuilder {
 	public List<IReferenceLoader> getLoadersList() { return loadersList;}
 	public void setLoadersList(List<IReferenceLoader> loadersList) { this.loadersList = loadersList;}
 	
-	public IBinaryGraph<ReferenceNode, ReferenceLink> omg() {
+	public BinaryGraph<ReferenceNode, ReferenceLink> omg() {
 		
-		IBinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = 
+		BinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = 
 				new UniqueEdgeGraphImpl<>();
 				
 		for (IReferenceLoader loader : loadersList) {
 			for (String cpdId : loader.getMetabolitesId()) {
 //				System.out.println(cpdId);
-				IBinaryGraph<ReferenceNode, ReferenceLink> xrefsGraph = loader.getMetaboliteReferences(cpdId);
+				BinaryGraph<ReferenceNode, ReferenceLink> xrefsGraph = loader.getMetaboliteReferences(cpdId);
 				referenceGraph.addAll(xrefsGraph);
 			}
 		}
@@ -36,11 +36,11 @@ public class ReferenceGraphBuilder {
 		return referenceGraph;
 	}
 	
-	public IBinaryGraph<ReferenceNode, ReferenceLink> extractReferenceGraph(String[] entries) {
+	public BinaryGraph<ReferenceNode, ReferenceLink> extractReferenceGraph(String[] entries) {
 		// save the services that returned the node so in future we can re-fetch the entities
 		Map<ReferenceNode, Set<String>> servicesRelatedToNodeMap = new HashMap<> ();
 		
-		IBinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = new UniqueEdgeGraphImpl<>();
+		BinaryGraph<ReferenceNode, ReferenceLink> referenceGraph = new UniqueEdgeGraphImpl<>();
 		Set<String> setOfEntries = new HashSet<> ();
 		for (int i = 0; i < entries.length; i++) {
 			setOfEntries.add(entries[i]);
@@ -50,7 +50,7 @@ public class ReferenceGraphBuilder {
 				if (setOfEntries.contains(cpdId)) {
 					System.out.println("===========================================");
 					System.out.println(cpdId);
-					IBinaryGraph<ReferenceNode, ReferenceLink> xrefsGraph = loader.getMetaboliteReferences(cpdId);
+					BinaryGraph<ReferenceNode, ReferenceLink> xrefsGraph = loader.getMetaboliteReferences(cpdId);
 					referenceGraph.addAll(xrefsGraph);
 					
 					for (ReferenceNode vertex : xrefsGraph.getVertices()) {

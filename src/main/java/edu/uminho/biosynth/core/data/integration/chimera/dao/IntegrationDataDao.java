@@ -11,7 +11,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetabol
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataMetabolitePropertyEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 
-public interface ChimeraDataDao {
+public interface IntegrationDataDao {
 	public List<Long> getAllMetaboliteIds();
 	public Map<String, Object> getEntryProperties(Long id);
 	public List<Long> getClusterByQuery(String query);
@@ -30,8 +30,10 @@ public interface ChimeraDataDao {
 	public Set<String> getAllMajorMetaboliteLabels();
 	
 	public Set<Long> collectEntityProperties(List<Long> entities, String...properties);
-	
+	public Set<String> collectEntityLabels(Long id); 
 	
 	public CentralDataReactionProperty getReactionProperty(Long id);
 	public CentralDataMetabolitePropertyEntity getMetaboliteProperty(Long id);
+	
+	
 }

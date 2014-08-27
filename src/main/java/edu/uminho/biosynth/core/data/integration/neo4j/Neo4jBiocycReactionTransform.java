@@ -7,9 +7,9 @@ import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
-import edu.uminho.biosynth.core.data.integration.etl.IEtlTransform;
+import edu.uminho.biosynth.integration.etl.EtlTransform;
 
-public class Neo4jBiocycReactionTransform implements IEtlTransform<BioCycReactionEntity, CentralDataReactionEntity>{
+public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReactionEntity, CentralDataReactionEntity>{
 
 	private void addIfNotNull(String propertie, Object value, Map<String, Object> properties) {
 		if (value != null) {

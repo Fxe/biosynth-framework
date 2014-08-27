@@ -31,7 +31,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 	
 	
 
-	@Override
+//	@Override
 	public KeggGlycanMetaboliteEntity find(Serializable id) {
 		Node node = graphDatabaseService.findNodesByLabelAndProperty(compoundLabel, "entry", id).iterator().next();
 		KeggGlycanMetaboliteEntity cpd = nodeToObject(node);
@@ -91,7 +91,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 		return null;
 	}
 
-	@Override
+//	@Override
 	public List<KeggGlycanMetaboliteEntity> findAll() {
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:KEGG) RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");

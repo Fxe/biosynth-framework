@@ -27,13 +27,13 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		super(graphdb);
 	}
 
-	@Override
+//	@Override
 	public SeedMetaboliteEntity find(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+//	@Override
 	public List<SeedMetaboliteEntity> findAll() {
 		ExecutionResult result = executionEngine.execute("MATCH (cpd:" + compoundLabel + ") RETURN cpd");
 		Iterator<Node> iterator = result.columnAs("cpd");

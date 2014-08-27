@@ -13,10 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
@@ -28,7 +29,7 @@ public class TestIntegrationStatisticsServiceImpl {
 	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
 	private static final Long IID = 1L;
 	
-	private static ChimeraDataDao centralDataDao;
+	private static IntegrationDataDao centralDataDao;
 	private static ChimeraMetadataDao centralMetadataDao;
 	private static IntegrationStatisticsService integrationStatisticsService;
 	private static GraphDatabaseService graphDatabaseService;
@@ -103,7 +104,17 @@ public class TestIntegrationStatisticsServiceImpl {
 	
 	@Test
 	public void testCountIntegratedClusterWithDuplicateProperty() {
-		integrationStatisticsService.getIntegratedClusterPropertyFrequency(integrationSet, CompoundPropertyLabel.Name.toString());
+//		integrationStatisticsService.getIntegratedClusterPropertyFrequency(integrationSet, CompoundPropertyLabel.Name.toString());
+	}
+	
+	@Test
+	public void testCountIntegratedClusterDatabaseFreq() {
+		for (Long cid : centralMetadataDao.getAllIntegratedClusterIds(integrationSet.getId())) {
+			IntegratedCluster integratedCluster = centralMetadataDao.getIntegratedClusterById(cid);
+			Map<String, Integer> mashup = integrationStatisticsService.getIntegratedClusterDatabaseFreq(integratedCluster);
+			System.out.println(mashup);
+		}
+		
 	}
 
 }

@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.algorithm.graph.GraphCluster;
+import pt.uminho.sysbio.metropolis.network.graph.algorithm.GraphCluster;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
@@ -27,7 +27,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEnti
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
+import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.DefaultMetaboliteIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.IIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
@@ -137,7 +137,7 @@ public class TestIntegrateMetabolite {
 		xrefBuilder.getLoadersList().add(keggLoader);
 		xrefBuilder.getLoadersList().add(mnxLoader);
 //		xrefBuilder.getLoadersList().add(biggLoader2);
-		IBinaryGraph<ReferenceNode, ReferenceLink> graph 
+		BinaryGraph<ReferenceNode, ReferenceLink> graph 
 			= xrefBuilder.extractReferenceGraph(new String[] {
 					"h2o", "oh1",
 					"WATER", "OH", "CPD-12377", "VANILLIN",

@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
@@ -363,6 +364,11 @@ public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
 		}
 		
 		return countMap;
+	}
+
+	@Override
+	public void saveCurationEdge(CurationEdge curationEdge) {
+		this.getSession().save(curationEdge);
 	}
 
 }

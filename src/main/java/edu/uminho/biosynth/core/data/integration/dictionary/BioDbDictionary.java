@@ -33,6 +33,7 @@ public class BioDbDictionary {
 		Map<String, String> dictionary = new HashMap<> ();
 		dictionary.put("LipidBank", "LipidBank");
 		dictionary.put("lipidmaps", "LipidMAPS");
+		dictionary.put("LIPIDMAPS", "LipidMAPS");
 		dictionary.put("LIPID MAPS instance accession", "LipidMAPS");
 		dictionary.put("CHEMSPIDER", "ChemSpider");
 		dictionary.put("Chemspider accession", "ChemSpider");

@@ -35,7 +35,7 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
-public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
+public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
 	private static Logger LOGGER = Logger.getLogger(Neo4jChimeraDataDaoImpl.class);
 	
@@ -488,6 +488,16 @@ public class Neo4jChimeraDataDaoImpl implements ChimeraDataDao {
 			entity.getProperties().put(key, node.getProperty(key));
 		}
 		return entity;
+	}
+
+	@Override
+	public Set<String> collectEntityLabels(Long id) {
+		Node node = this.graphDatabaseService.getNodeById(id);
+		Set<String> res = new HashSet<> ();
+		for (Label l : node.getLabels()) {
+			res.add(l.toString());
+		}
+		return res;
 	}
 
 }
