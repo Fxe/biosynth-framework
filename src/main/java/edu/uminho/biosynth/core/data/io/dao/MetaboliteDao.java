@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
+import edu.uminho.biosynth.core.components.Metabolite;
 
 /**
  * 
@@ -11,7 +12,7 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
  *
  * @param <M> a GenericMetabolite entity.
  */
-public interface MetaboliteDao<M extends GenericMetabolite> {
+public interface MetaboliteDao<M extends Metabolite> {
 	
 	/**
 	 * Looks up a metabolite entity by id. Note that the id is usually a 
