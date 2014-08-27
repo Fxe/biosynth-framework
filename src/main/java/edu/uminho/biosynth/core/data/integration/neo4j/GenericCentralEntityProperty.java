@@ -30,7 +30,7 @@ public class GenericCentralEntityProperty {
 	
 	private String relationshipMajorLabel;
 	
-	private Set<String> relationshipLabels = new HashSet<> ();
+//	private Set<String> relationshipLabels = new HashSet<> ();
 	
 	private Map<String, Object> relationshipProperties = new HashMap<> ();
 
@@ -74,14 +74,14 @@ public class GenericCentralEntityProperty {
 		this.relationshipMajorLabel = relationshipMajorLabel;
 	}
 
-	public Set<String> getRelationshipLabels() {
-		return relationshipLabels;
-	}
-
-	public void setRelationshipLabels(Set<String> relationshipLabels) {
-		this.relationshipLabels = relationshipLabels;
-	}
-	public void addRelationshipLabel(String label) { this.relationshipLabels.add(label);}
+//	public Set<String> getRelationshipLabels() {
+//		return relationshipLabels;
+//	}
+//
+//	public void setRelationshipLabels(Set<String> relationshipLabels) {
+//		this.relationshipLabels = relationshipLabels;
+//	}
+//	public void addRelationshipLabel(String label) { this.relationshipLabels.add(label);}
 
 	public Map<String, Object> getRelationshipProperties() {
 		return relationshipProperties;
@@ -93,6 +93,6 @@ public class GenericCentralEntityProperty {
 
 	@Override
 	public String toString() {
-		return String.format("%s => %s -> %s => %s:%s %s", relationshipLabels, relationshipProperties, labels, uniqueKey, uniqueKeyValue, properties);
+		return String.format("%s => %s -> %s => %s:%s %s", relationshipMajorLabel, relationshipProperties, labels, uniqueKey, uniqueKeyValue, properties);
 	}
 }

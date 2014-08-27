@@ -105,7 +105,8 @@ public class Neo4jKeggReactionTransform implements IEtlTransform<KeggReactionEnt
 		
 		simpleProperty.setUniqueKey(key);
 		simpleProperty.setUniqueKeyValue(value);
-		simpleProperty.addRelationshipLabel(relationship.toString());
+		simpleProperty.setRelationshipMajorLabel(relationship.toString());
+//		simpleProperty.addRelationshipLabel(relationship.toString());
 		
 		return simpleProperty;
 	}
@@ -117,8 +118,9 @@ public class Neo4jKeggReactionTransform implements IEtlTransform<KeggReactionEnt
 		relationshipProperties.put("coefficient", coefficient);
 		relationshipProperties.put("value", value);
 		dataReactionProperty.setRelationshipProperties(relationshipProperties);
-		dataReactionProperty.addRelationshipLabel(ReactionRelationshipType.Stoichiometry.toString());
-		dataReactionProperty.addRelationshipLabel(position);
+//		dataReactionProperty.addRelationshipLabel(ReactionRelationshipType.Stoichiometry.toString());
+		dataReactionProperty.setRelationshipMajorLabel(position);
+//		dataReactionProperty.addRelationshipLabel(position);
 		
 		dataReactionProperty.addLabel(CompoundNodeLabel.Compound.toString());
 		dataReactionProperty.addLabel(CompoundNodeLabel.KEGG.toString());

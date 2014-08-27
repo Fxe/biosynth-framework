@@ -79,14 +79,19 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 		}
 		
 		for (CentralDataReactionProperty property : rxn.getReactionStoichiometryProperties()) {
-			String cpdEntry = (String) property.getProperties().get("entry");
+			System.out.println(property);
+//			String cpdEntry = (String) property.getProperties().get("entry");
+			String cpdEntry = (String) property.getUniqueKeyValue();
 			String cpdMajor = property.getMajorLabel();
 			
 			Map<String, Object> propParams = new HashMap<> ();
 			
 			propParams.put("rxnEntry", rxn.getEntry());
-			propParams.put("cpdEntry", cpdMajor);
-			propParams.put("stoichProps", property.getRelationshipProperties());
+			propParams.put("cpdEntry", cpdEntry);
+			propParams.put("coefficient", property.getRelationshipProperties().get("coefficient"));
+			propParams.put("value", property.getRelationshipProperties().get("value"));
+			
+//			propParams.put("stoichProps", property.getRelationshipProperties());
 
 			this.mergeProxyCompoundNode(cpdEntry, cpdMajor);
 			
@@ -94,8 +99,10 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 			//{1} Compound Major Label
 			//{2} RelationShip Labels Major Label
 			String propQuery_ = "MATCH (rxn:%s {entry:{rxnEntry}}), (cpd:%s {entry:{cpdEntry}}) "
-					+ "MERGE (rxn)-[r:%s {stoichProps}]->(cpd)";
-			String propQuery = String.format(propQuery_, rxn.getMajorLabel(), cpdMajor, property.getConcatenatedLabel(':'));
+					+ "MERGE (rxn)-[r:%s {coefficient:{coefficient}, value:{value}}]->(cpd)";
+			String propQuery = String.format(propQuery_, rxn.getMajorLabel(), cpdMajor, property.getRelationshipMajorLabel());
+			System.out.println(propParams);
+			System.out.println(propQuery);
 			this.executionEngine.execute(propQuery, propParams);
 		}
 		
@@ -110,6 +117,7 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 				+ "cpd.created_at=timestamp(), cpd.updated_at=timestamp(), cpd.proxy=true";
 		String query = String.format(query_, labels);
 		LOGGER.debug(query);
+		System.out.println(params);
 		this.executionEngine.execute(query, params);
 	}
 

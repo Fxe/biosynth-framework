@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.eclipse.persistence.internal.jpa.parsing.UpdateNode;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -105,7 +104,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 			Node propertyNode = this.getOrCreateNode(propertyMajor, uniqueKey, uniqueValue);
 			this.updateNode(propertyNode, propertyEntity.getProperties());
 			propertyEntity.setId(propertyNode.getId());
-			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipLabels().iterator().next());
+			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipMajorLabel());
 			node.createRelationshipTo(propertyNode, relationshipType);
 		}
 		
