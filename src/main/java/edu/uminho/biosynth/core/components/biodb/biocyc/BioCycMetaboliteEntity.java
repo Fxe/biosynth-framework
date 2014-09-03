@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 
 @Entity
 @Table(name="BIOCYC_METABOLITE")
@@ -30,7 +30,7 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public void setCmlMolWeight(Double cmlMolWeight) { this.cmlMolWeight = cmlMolWeight;}
 
 	@Column(name="INCHI", length=16383) private String inChI;
-	public String getInChI() { return inChI;}
+	public String getInchi() { return inChI;}
 	public void setInChI(String inChI) { this.inChI = inChI;}
 
 	@Column(name="SMILES", length=16383) private String smiles;
@@ -85,15 +85,15 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
 
 	@OneToMany(mappedBy = "biocycMetaboliteEntity", cascade = CascadeType.ALL)
-	private List<BioCycMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<>();
-	public List<BioCycMetaboliteCrossReferenceEntity> getCrossReferences() { return crossReferences; }
-	public void setCrossReferences(List<BioCycMetaboliteCrossReferenceEntity> crossReferences) {
+	private List<BioCycMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<>();
+	public List<BioCycMetaboliteCrossreferenceEntity> getCrossreferences() { return crossReferences; }
+	public void setCrossReferences(List<BioCycMetaboliteCrossreferenceEntity> crossReferences) {
 		this.crossReferences = crossReferences;
 		if (crossReferences != null)
-		for (BioCycMetaboliteCrossReferenceEntity crossReference : crossReferences) 
+		for (BioCycMetaboliteCrossreferenceEntity crossReference : crossReferences) 
 			crossReference.setBiocycMetaboliteEntity(this);
 	}
-	public void addCrossReference(BioCycMetaboliteCrossReferenceEntity crossReference) {
+	public void addCrossReference(BioCycMetaboliteCrossreferenceEntity crossReference) {
 		crossReference.setBiocycMetaboliteEntity(this);
 		this.crossReferences.add(crossReference);
 	}

@@ -62,7 +62,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	@Column(name="enzyme_id", length=15)
 	protected List<String> enzymes = new ArrayList<> ();
 
-	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossReferences() {
+	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
 	public void setCrossReferences(List<KeggCompoundMetaboliteCrossreferenceEntity> crossReferences) {
@@ -101,7 +101,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 		sb.append("formula:").append(formula).append(sep);
 		sb.append("molw:").append(molWeight).append(sep);
 		sb.append("mass:").append(mass).append(sep);
-		sb.append("enzymes:").append(enzymes).append(sep);
+		sb.append("enzymes:").append(enzymes.size() > 10 ? String.format("%d Enzymes", enzymes.size()) : enzymes).append(sep);
 		sb.append("pathways:").append(pathways).append(sep);
 		sb.append("reactions:").append(reactions).append(sep);
 		sb.append("xrefs:").append(crossReferences);

@@ -11,22 +11,22 @@ import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 
 @Entity
-@Table(name="BIGG_METABOLITE_CROSSREF")
-public class BiggMetaboliteCrossReferenceEntity extends GenericCrossReference {
+@Table(name="bigg_metabolite_crossref")
+public class BiggMetaboliteCrossreferenceEntity extends GenericCrossReference {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="ID_METABOLITE")
+	@JoinColumn(name="metabolite_id")
 	private BiggMetaboliteEntity biggMetaboliteEntity;
 	public BiggMetaboliteEntity getBiggMetaboliteEntity() { return this.biggMetaboliteEntity; }
 	public void setBiggMetaboliteEntity(BiggMetaboliteEntity biggMetaboliteEntity) {
 		this.biggMetaboliteEntity = biggMetaboliteEntity;
 	}
 	
-	public BiggMetaboliteCrossReferenceEntity() { super(null, null, null); }
-	public BiggMetaboliteCrossReferenceEntity(Type type, String reference, String value) {
+	public BiggMetaboliteCrossreferenceEntity() { super(null, null, null); }
+	public BiggMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
 }

@@ -163,7 +163,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		}
 	}
 	
-	public List<SeedCompoundCrossReferenceEntity> getCrossReferences() {
+	public List<SeedCompoundCrossReferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
 	public void setCrossReferences(List<SeedCompoundCrossReferenceEntity> crossReferences) {

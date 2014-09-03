@@ -12,7 +12,7 @@ import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 
 @Entity
 @Table(name="kegg_drug_metabolite_crossreference")
-public class KeegDrugMetaboliteCrossreferenceEntity extends GenericCrossReference{
+public class KeggDrugMetaboliteCrossreferenceEntity extends GenericCrossReference{
 
 	private static final long serialVersionUID = 4269987711164363768L;
 	
@@ -25,8 +25,8 @@ public class KeegDrugMetaboliteCrossreferenceEntity extends GenericCrossReferenc
 		this.keggDrugMetaboliteEntity = keggDrugMetaboliteEntity;
 	}
 	
-	public KeegDrugMetaboliteCrossreferenceEntity() { super(null, null, null); }
-	public KeegDrugMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
+	public KeggDrugMetaboliteCrossreferenceEntity() { super(null, null, null); }
+	public KeggDrugMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
 }

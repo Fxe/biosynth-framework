@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 
 public class TestBiggMetaboliteEntity {
 
@@ -25,27 +25,27 @@ public class TestBiggMetaboliteEntity {
 		cpd.setEntry("3dhq");
 		cpd.setFormula("C7H9O6");
 		cpd.getCompartments().add("Cytosol");
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.DATABASE, "KEGG", "C00944"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iJR904", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iIT341", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iJN746", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iAF1260", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iND750", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iSB619", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iAF692", "3dhq"));
-		cpd.getCrossReferences().add( new BiggMetaboliteCrossReferenceEntity(
+		cpd.getCrossreferences().add( new BiggMetaboliteCrossreferenceEntity(
 				GenericCrossReference.Type.MODEL, "iNJ661", "3dhq"));
 		
 		assertEquals(36436L, (long)cpd.getId());
-		assertEquals(9, cpd.getCrossReferences().size());
+		assertEquals(9, cpd.getCrossreferences().size());
 	}
 
 }

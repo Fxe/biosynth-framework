@@ -13,7 +13,7 @@ import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 
 @Entity
 @Table(name="chebi_metabolite_crossreference")
-public class ChebiMetaboliteCrossReferenceEntity extends GenericCrossReference {
+public class ChebiMetaboliteCrossreferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 4485931882242085419L;
 	
@@ -37,5 +37,5 @@ public class ChebiMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	}
 
 
-	public ChebiMetaboliteCrossReferenceEntity() { super(null, null, null);}
+	public ChebiMetaboliteCrossreferenceEntity() { super(null, null, null);}
 }

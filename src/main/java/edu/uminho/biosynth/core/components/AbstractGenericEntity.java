@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -21,10 +23,10 @@ public abstract class AbstractGenericEntity implements Serializable {
 
 	@Id
     @Column(name="id", nullable=false)
-	@GeneratedValue
+//	@GeneratedValue
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
-//    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
-//	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
+    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
+	@GenericGenerator(name="IdOrGenerated", strategy="edu.uminho.biosynth.core.components.AbstractEntityIdGenerator")
 	@XmlAttribute(name="id")
 	protected Long id;
 	public Long getId() { return this.id; }
@@ -34,19 +36,19 @@ public abstract class AbstractGenericEntity implements Serializable {
 	@XmlAttribute(name="entry")
 	protected String entry;
 
-	@Column(name="E_NAME", length=2047)
+	@Column(name="e_name", length=2047)
 	protected String name = "";
 	
-	@Column(name="E_SOURCE", length=255)
+	@Column(name="e_source", length=255)
 	protected String source;
 	
-	@Column(name="DESCRIPTION", length=2047)
+	@Column(name="description", length=2047)
 	protected String description = "";
 	
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name="CREATED_AT") private DateTime created_at;
+    @Column(name="created_at") private DateTime created_at;
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name="UPDATED_AT") private DateTime updated_at;
+    @Column(name="updated_at") private DateTime updated_at;
 	
 	public AbstractGenericEntity() {
 		this.entry = null;

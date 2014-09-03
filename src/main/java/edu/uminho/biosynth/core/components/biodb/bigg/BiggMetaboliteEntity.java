@@ -14,23 +14,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 
 @Entity
-@Table(name="BIGG_METABOLITE")
+@Table(name="bigg_metabolite")
 public class BiggMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="CHARGE")
+	@Column(name="charge")
 	private Integer charge;
 	public Integer getCharge() { return charge; }
 	public void setCharge(Integer charge) { this.charge = charge; }
 	
-	@ElementCollection
-	@CollectionTable(name="BIGG_METABOLITE_COMPARTMENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="COMPARTMENT", length=127)
+	@JsonIgnore
+	@ElementCollection()
+	@CollectionTable(name="bigg_metabolite_compartment", joinColumns=@JoinColumn(name="metabolite_id"))
+	@Column(name="compartment", length=127)
 	private List<String> compartments = new ArrayList<> ();
 	public List<String> getCompartments() { return compartments; }
 	public void setCompartments(List<String> compartments) { this.compartments = compartments; }
@@ -38,16 +41,16 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 		this.compartments.clear();
 		this.compartments.addAll(Arrays.asList(compartments)); }
 
-	@OneToMany(mappedBy = "biggMetaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<BiggMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
-	public List<BiggMetaboliteCrossReferenceEntity> getCrossReferences() { return crossReferences; }
-	public void setCrossReferences(List<BiggMetaboliteCrossReferenceEntity> crossReferences) {
+	@OneToMany(mappedBy = "biggMetaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<BiggMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
+	public List<BiggMetaboliteCrossreferenceEntity> getCrossreferences() { return crossReferences; }
+	public void setCrossReferences(List<BiggMetaboliteCrossreferenceEntity> crossReferences) {
 		this.crossReferences = new ArrayList<>(crossReferences);
-		for (BiggMetaboliteCrossReferenceEntity crossReference : this.crossReferences) {
+		for (BiggMetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
 			crossReference.setBiggMetaboliteEntity(this);
 		}
 	}
-	public void addCrossReference(BiggMetaboliteCrossReferenceEntity crossReference) {
+	public void addCrossReference(BiggMetaboliteCrossreferenceEntity crossReference) {
 		this.crossReferences.add(crossReference);
 		crossReference.setBiggMetaboliteEntity(this);
 	}

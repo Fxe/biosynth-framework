@@ -19,16 +19,16 @@ public class GenericCrossReference implements Serializable {
 	}
 	
 	@Id
-    @Column(name="ID")
+    @Column(name="id")
     @GeneratedValue
     protected Integer id;
 	
-	@Column(name="REFTYPE", length=15, nullable=false)
+	@Column(name="ref_type", length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	protected Type type;
 	
-	@Column(name="REFSOURCE", length=255, nullable=false) protected String ref;
-	@Column(name="REFVALUE", length=255, nullable=false) protected String value;
+	@Column(name="tag", length=255, nullable=false) protected String ref;
+	@Column(name="value", length=255, nullable=false) protected String value;
 	
 	public GenericCrossReference() { }
 	

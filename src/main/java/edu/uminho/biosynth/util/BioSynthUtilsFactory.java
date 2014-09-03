@@ -2,9 +2,9 @@ package edu.uminho.biosynth.util;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 
@@ -57,7 +57,7 @@ public class BioSynthUtilsFactory {
 		
 		for (int i = 0; i < xrefs.length; i+=2) {
 			if (i + 1 < xrefs.length) {
-				BiggMetaboliteCrossReferenceEntity xref = new BiggMetaboliteCrossReferenceEntity();
+				BiggMetaboliteCrossreferenceEntity xref = new BiggMetaboliteCrossreferenceEntity();
 				xref.setType(GenericCrossReference.Type.DATABASE);
 				xref.setRef(xrefs[i]);
 				xref.setValue(xrefs[i+1]);
@@ -90,7 +90,7 @@ public class BioSynthUtilsFactory {
 		
 		for (int i = 0; i < xrefs.length; i+=4) {
 			if (i + 3 < xrefs.length) {
-				BioCycMetaboliteCrossReferenceEntity xref = new BioCycMetaboliteCrossReferenceEntity();
+				BioCycMetaboliteCrossreferenceEntity xref = new BioCycMetaboliteCrossreferenceEntity();
 				xref.setType(GenericCrossReference.Type.DATABASE);
 				xref.setRef(xrefs[i]);
 				xref.setValue(xrefs[i+1]);

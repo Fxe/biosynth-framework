@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 
 @Entity
 @Table(name="kegg_drug_metabolite")
@@ -101,18 +101,18 @@ public class KeggDrugMetaboliteEntity extends AbstractKeggMetabolite {
 	public void setDrugSource(String drugSource) { this.drugSource = drugSource;}
 
 	@OneToMany(mappedBy = "keggDrugMetaboliteEntity", cascade = CascadeType.ALL)
-	private List<KeegDrugMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
+	private List<KeggDrugMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
 	
-	public List<KeegDrugMetaboliteCrossreferenceEntity> getCrossReferences() {
+	public List<KeggDrugMetaboliteCrossreferenceEntity> getCrossReferences() {
 		return crossReferences;
 	}
-	public void setCrossReferences(List<KeegDrugMetaboliteCrossreferenceEntity> crossReferences) {
+	public void setCrossReferences(List<KeggDrugMetaboliteCrossreferenceEntity> crossReferences) {
 		this.crossReferences = new ArrayList<>(crossReferences);
-		for (KeegDrugMetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
+		for (KeggDrugMetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
 			crossReference.setKeggDrugMetaboliteEntity(this);
 		}
 	}
-	public void addCrossReference(KeegDrugMetaboliteCrossreferenceEntity crossReference) {
+	public void addCrossReference(KeggDrugMetaboliteCrossreferenceEntity crossReference) {
 		this.crossReferences.add(crossReference);
 		crossReference.setKeggDrugMetaboliteEntity(this);
 	}

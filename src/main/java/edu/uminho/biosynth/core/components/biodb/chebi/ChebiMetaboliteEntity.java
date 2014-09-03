@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 
 @Entity
@@ -59,7 +59,7 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	private List<ChebiMetaboliteNameEntity> names = new ArrayList<> ();
 	
 	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
-	private List<ChebiMetaboliteCrossReferenceEntity> crossreferences = new ArrayList<> ();
+	private List<ChebiMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
 	@Column(name="parent_id") public Integer parentId;
 	public Integer getParentId() { return parentId;}
@@ -73,11 +73,11 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	}
 	
 	
-	public List<ChebiMetaboliteCrossReferenceEntity> getCrossreferences() {
+	public List<ChebiMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossreferences;
 	}
 	public void setCrossreferences(
-			List<ChebiMetaboliteCrossReferenceEntity> crossreferences) {
+			List<ChebiMetaboliteCrossreferenceEntity> crossreferences) {
 		this.crossreferences = crossreferences;
 	}
 	

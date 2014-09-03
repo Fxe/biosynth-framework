@@ -48,7 +48,7 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 		this.smiles = smiles;
 	}
 
-	public String getInChI() {
+	public String getInchi() {
 		return inChI;
 	}
 	public void setInChI(String inChI) {
@@ -62,7 +62,7 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 		this.mass = mass;
 	}
 	
-	public List<MnxMetaboliteCrossReferenceEntity> getCrossReferences() {
+	public List<MnxMetaboliteCrossReferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
 	public void addCrossReference(MnxMetaboliteCrossReferenceEntity crossReference) {

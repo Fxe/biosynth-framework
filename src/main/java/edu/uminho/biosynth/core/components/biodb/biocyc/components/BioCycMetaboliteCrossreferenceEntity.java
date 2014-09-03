@@ -13,7 +13,7 @@ import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 
 @Entity
 @Table(name="BIOCYC_METABOLITE_CROSSREF")
-public class BioCycMetaboliteCrossReferenceEntity extends GenericCrossReference{
+public class BioCycMetaboliteCrossreferenceEntity extends GenericCrossReference{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -34,8 +34,8 @@ public class BioCycMetaboliteCrossReferenceEntity extends GenericCrossReference{
 	public String getUrl() { return url;}
 	public void setUrl(String url) { this.url = url;}
 	
-	public BioCycMetaboliteCrossReferenceEntity() { super(null, null, null); }
-	public BioCycMetaboliteCrossReferenceEntity(Type type, String reference, String value) {
+	public BioCycMetaboliteCrossreferenceEntity() { super(null, null, null); }
+	public BioCycMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
 
