@@ -80,7 +80,7 @@ public class TestDefaultBiggMetaboliteParser {
 		assertEquals("N10I", biggMetaboliteEntity.getName());
 		assertEquals(0, (int)biggMetaboliteEntity.getCharge());
 		assertEquals("N2K", biggMetaboliteEntity.getFormula());
-		assertEquals(11, biggMetaboliteEntity.getCrossReferences().size());
+		assertEquals(11, biggMetaboliteEntity.getCrossreferences().size());
 		assertEquals(10, biggMetaboliteEntity.getCompartments().size());
 	}
 	
@@ -100,7 +100,7 @@ public class TestDefaultBiggMetaboliteParser {
 		assertEquals("(aa':aa')-(-:-)", biggMetaboliteEntity.getName());
 		assertEquals(-3, (int)biggMetaboliteEntity.getCharge());
 		assertEquals("Ze8S8X", biggMetaboliteEntity.getFormula());
-		assertEquals(10, biggMetaboliteEntity.getCrossReferences().size());
+		assertEquals(10, biggMetaboliteEntity.getCrossreferences().size());
 		assertEquals("K", biggMetaboliteEntity.getCompartments().iterator().next());
 	}
 	

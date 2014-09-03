@@ -8,7 +8,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.BiosynthHbmConnectionManager;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.HbmBioCycMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.RestBiocycMetaboliteDaoImpl;
@@ -74,7 +74,7 @@ public class BiocycDaoFactory {
 		if (sessionFactory == null) {
 			initialize(
 					BioCycMetaboliteEntity.class,
-					BioCycMetaboliteCrossReferenceEntity.class);
+					BioCycMetaboliteCrossreferenceEntity.class);
 		}
 		
 		BiosynthHbmConnectionManager.registerSessionFactory(daoImpl, sessionFactory);

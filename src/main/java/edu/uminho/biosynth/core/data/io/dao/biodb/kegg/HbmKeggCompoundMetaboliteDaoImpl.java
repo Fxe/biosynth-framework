@@ -73,6 +73,7 @@ public class HbmKeggCompoundMetaboliteDaoImpl implements MetaboliteDao<KeggCompo
 		return res;
 	}
 
+	@Deprecated
 	@Override
 	public Serializable save(KeggCompoundMetaboliteEntity entity) {
 		// TODO Auto-generated method stub

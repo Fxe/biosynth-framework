@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import org.junit.Before;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.AbstractTestHbmMetaboliteDaoTemplate;
 import edu.uminho.biosynth.core.data.io.factory.BiggDaoFactory;
 import pt.uminho.sysbio.data.test.mother.HbmBiggMetaboliteMother;
@@ -29,6 +29,6 @@ extends AbstractTestHbmMetaboliteDaoTemplate<BiggMetaboliteEntity> {
 	public TestHbmBiggMetaboliteDaoImpl() {
 		super(new SessionFactoryRule(
 				BiggMetaboliteEntity.class, 
-				BiggMetaboliteCrossReferenceEntity.class));
+				BiggMetaboliteCrossreferenceEntity.class));
 	}
 }

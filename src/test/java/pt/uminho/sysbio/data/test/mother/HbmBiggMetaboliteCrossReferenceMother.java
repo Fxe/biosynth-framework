@@ -3,9 +3,9 @@ package pt.uminho.sysbio.data.test.mother;
 import org.hibernate.Session;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 
-public class HbmBiggMetaboliteCrossReferenceMother extends AbstractHbmObjectMother<BiggMetaboliteCrossReferenceEntity> {
+public class HbmBiggMetaboliteCrossReferenceMother extends AbstractHbmObjectMother<BiggMetaboliteCrossreferenceEntity> {
 
 	private GenericCrossReference.Type type = GenericCrossReference.Type.DATABASE;
 	private String referenceDatabase 	= "BarBase";
@@ -16,20 +16,20 @@ public class HbmBiggMetaboliteCrossReferenceMother extends AbstractHbmObjectMoth
 	}
 
 	@Override
-	protected BiggMetaboliteCrossReferenceEntity loadInstance(Session session) {
+	protected BiggMetaboliteCrossreferenceEntity loadInstance(Session session) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected BiggMetaboliteCrossReferenceEntity createInstance() {
-		BiggMetaboliteCrossReferenceEntity crossReference = 
-				new BiggMetaboliteCrossReferenceEntity();
+	protected BiggMetaboliteCrossreferenceEntity createInstance() {
+		BiggMetaboliteCrossreferenceEntity crossReference = 
+				new BiggMetaboliteCrossreferenceEntity();
 		return crossReference;
 	}
 
 	@Override
-	protected void configure(BiggMetaboliteCrossReferenceEntity crossReference) {
+	protected void configure(BiggMetaboliteCrossreferenceEntity crossReference) {
 		crossReference.setType(this.type);
 		crossReference.setRef(this.referenceDatabase);
 		crossReference.setValue(this.referenceValue);

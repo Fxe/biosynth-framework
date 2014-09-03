@@ -9,7 +9,7 @@ import java.util.List;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 
 public class DefaultBiggMetaboliteParser {
 	
@@ -45,12 +45,12 @@ public class DefaultBiggMetaboliteParser {
 			if (compartment.trim().length() > 0) cpd.getCompartments().add( compartment.trim());
 		}
 		if (values[5].trim().length() > 0) {
-			BiggMetaboliteCrossReferenceEntity xrefKegg = new BiggMetaboliteCrossReferenceEntity(
+			BiggMetaboliteCrossreferenceEntity xrefKegg = new BiggMetaboliteCrossreferenceEntity(
 					GenericCrossReference.Type.DATABASE, "KEGG", values[5]);
 			cpd.addCrossReference(xrefKegg);
 		}
 		if (values[6].trim().length() > 0) {
-			BiggMetaboliteCrossReferenceEntity xrefCas = new BiggMetaboliteCrossReferenceEntity(
+			BiggMetaboliteCrossreferenceEntity xrefCas = new BiggMetaboliteCrossreferenceEntity(
 					GenericCrossReference.Type.DATABASE, "CAS", values[6]);
 			cpd.addCrossReference(xrefCas);			
 		}
@@ -60,7 +60,7 @@ public class DefaultBiggMetaboliteParser {
 		for (String modelIntValue : values[8].split(",")) {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));
 			if (modelId != null) {
-				BiggMetaboliteCrossReferenceEntity xrefModel = new BiggMetaboliteCrossReferenceEntity(
+				BiggMetaboliteCrossreferenceEntity xrefModel = new BiggMetaboliteCrossreferenceEntity(
 						GenericCrossReference.Type.MODEL, modelId, modelId);
 				cpd.addCrossReference(xrefModel);
 			}

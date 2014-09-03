@@ -1344,7 +1344,7 @@ public class TestSBMLMapping {
 		List<MnxMetaboliteEntity> metabolites = dao.findAll(MnxMetaboliteEntity.class);
 		
 		for (MnxMetaboliteEntity mnxCpd : metabolites) {
-			for (MnxMetaboliteCrossReferenceEntity xref : mnxCpd.getCrossReferences()) {
+			for (MnxMetaboliteCrossReferenceEntity xref : mnxCpd.getCrossreferences()) {
 				if (xref.getRef().toLowerCase().equals("bigg")) {
 					if (biggToMnxMap.put(xref.getValue(), mnxCpd) != null) {
 						System.out.println("COLLISION !!! " + mnxCpd);

@@ -8,6 +8,15 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
+
 public class HelperHbmConfigInitializer {
 
 	private static final Logger LOGGER = Logger.getLogger(HelperHbmConfigInitializer.class);
@@ -26,12 +35,23 @@ public class HelperHbmConfigInitializer {
 	
 	public static SessionFactory initializeHibernateSession(File cfg) {
 		Configuration config = new Configuration().configure(cfg);
-		LOGGER.info(config.getProperty("hibernate.dialect"));
-//		Iterator<PersistentClass> iterator = config.getClassMappings();
-//		while (iterator.hasNext()) {
-//			LOGGER.trace(iterator.next());
-//		}
+		ServiceRegistry servReg = 
+				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
+		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
 		
+		return sessionFactory;
+	}
+	
+	public static SessionFactory initializeHibernateSessionAutoAnnotate(File cfg) {
+		Configuration config = new Configuration().configure(cfg);
+		config.addAnnotatedClass(BiggMetaboliteEntity.class)
+			  .addAnnotatedClass(BiggMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(KeggCompoundMetaboliteEntity.class)
+			  .addAnnotatedClass(KeggCompoundMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(KeggGlycanMetaboliteEntity.class)
+			  .addAnnotatedClass(KeggGlycanMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(KeggDrugMetaboliteEntity.class)
+			  .addAnnotatedClass(KeggDrugMetaboliteCrossreferenceEntity.class);
 		ServiceRegistry servReg = 
 				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);

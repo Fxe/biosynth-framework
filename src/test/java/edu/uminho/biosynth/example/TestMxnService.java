@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
+import edu.uminho.biosynth.core.components.Metabolite;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
@@ -73,7 +74,7 @@ public class TestMxnService {
 	public void tmp() {
 		
 		
-		List<GenericMetabolite> list = new ArrayList<> ();
+		List<Metabolite> list = new ArrayList<> ();
 		
 //		MetaboliteDao<?> dao = ;
 		MetaboliteDao<?> metaboliteDao = null;

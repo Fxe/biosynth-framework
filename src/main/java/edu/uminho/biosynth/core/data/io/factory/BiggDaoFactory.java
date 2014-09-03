@@ -10,8 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggReactionDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.HbmBiggMetaboliteDaoImpl;
@@ -52,13 +51,13 @@ public class BiggDaoFactory {
 		return daoImpl;
 	}
 	
-	public MetaboliteDao<BiggMetaboliteEntity> buildHbmBiggMetaboliteDao() {
+	public HbmBiggMetaboliteDaoImpl buildHbmBiggMetaboliteDao() {
 		HbmBiggMetaboliteDaoImpl daoImpl = new HbmBiggMetaboliteDaoImpl();
 		
 		if (sessionFactory == null) {
 			initialize(
 					BiggMetaboliteEntity.class, 
-					BiggMetaboliteCrossReferenceEntity.class);
+					BiggMetaboliteCrossreferenceEntity.class);
 		}
 		
 		daoImpl.setSessionFactory(sessionFactory);

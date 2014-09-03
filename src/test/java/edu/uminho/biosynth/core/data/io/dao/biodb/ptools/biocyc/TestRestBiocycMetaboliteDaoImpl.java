@@ -19,7 +19,7 @@ public class TestRestBiocycMetaboliteDaoImpl {
 
 		assertEquals("WATER", cpd.getEntry());
 		assertEquals("H2O1", cpd.getFormula());
-		assertEquals("1S/H2O/h1H2", cpd.getInChI());
+		assertEquals("1S/H2O/h1H2", cpd.getInchi());
 	}
 
 	@Test
@@ -33,6 +33,6 @@ public class TestRestBiocycMetaboliteDaoImpl {
 		
 		assertEquals("CPD-10773", cpd.getEntry());
 		assertEquals("C5H8O4", cpd.getFormula());
-		assertEquals("1S/C5H8O4/c1-5(8)4(7)3(6)2-9-5/h3,6,8H,2H2,1H3/t3-,5+/m0/s1", cpd.getInChI());
+		assertEquals("1S/C5H8O4/c1-5(8)4(7)3(6)2-9-5/h3,6,8H,2H2,1H3/t3-,5+/m0/s1", cpd.getInchi());
 	}
 }

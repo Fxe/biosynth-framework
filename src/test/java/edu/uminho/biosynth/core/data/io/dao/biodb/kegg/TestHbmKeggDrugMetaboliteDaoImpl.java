@@ -5,7 +5,7 @@ import org.junit.Before;
 import pt.uminho.sysbio.data.test.mother.HbmKeggDrugMetaboliteMother;
 import pt.uminho.sysbio.data.test.rule.SessionFactoryRule;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.AbstractTestHbmMetaboliteDaoTemplate;
 import edu.uminho.biosynth.core.data.io.factory.KeggDaoFactory;
 
@@ -30,6 +30,6 @@ extends AbstractTestHbmMetaboliteDaoTemplate<KeggDrugMetaboliteEntity>{
 	public TestHbmKeggDrugMetaboliteDaoImpl() {
 		super(new SessionFactoryRule(
 				KeggDrugMetaboliteEntity.class,
-				KeegDrugMetaboliteCrossreferenceEntity.class));
+				KeggDrugMetaboliteCrossreferenceEntity.class));
 	}
 }

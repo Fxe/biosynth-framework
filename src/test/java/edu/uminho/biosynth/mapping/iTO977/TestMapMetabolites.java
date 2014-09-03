@@ -80,7 +80,7 @@ public class TestMapMetabolites {
 					System.err.println("NOT FOUND: " + ref + ":" + value);
 				} else {
 					MnxMetaboliteCrossReferenceEntity xref = res.get(0);
-					for (MnxMetaboliteCrossReferenceEntity xr : xref.getMnxMetaboliteEntity().getCrossReferences()) {
+					for (MnxMetaboliteCrossReferenceEntity xr : xref.getMnxMetaboliteEntity().getCrossreferences()) {
 						if (xr.getRef().equals("metacyc")) {
 							sb.append(xr).append('\t');
 						}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 
 public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser {
 
@@ -127,8 +127,8 @@ public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser
 		return content;
 	}
 	
-	public List<KeegDrugMetaboliteCrossreferenceEntity> getCrossReferences() {
-		List<KeegDrugMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
+	public List<KeggDrugMetaboliteCrossreferenceEntity> getCrossReferences() {
+		List<KeggDrugMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
 		int tabIndex = this.getTabIndex("DBLINKS");
 		String content = this.tabContent_.get(tabIndex);
 		if (content == null) return crossReferences;
@@ -136,7 +136,7 @@ public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser
 		for (int i = 0; i < xrefs.length; i++) {
 			String[] xrefPair = xrefs[i].trim().split(": ");
 			for (String refValue : xrefPair[1].trim().split(" +")) {
-				KeegDrugMetaboliteCrossreferenceEntity xref = new KeegDrugMetaboliteCrossreferenceEntity(
+				KeggDrugMetaboliteCrossreferenceEntity xref = new KeggDrugMetaboliteCrossreferenceEntity(
 						GenericCrossReference.Type.DATABASE, xrefPair[0], refValue);
 				crossReferences.add(xref);
 			}

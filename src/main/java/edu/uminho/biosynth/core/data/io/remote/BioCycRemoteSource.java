@@ -20,7 +20,7 @@ import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycEnzymeXMLParser;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
@@ -238,7 +238,7 @@ public class BioCycRemoteSource implements IRemoteSource {
 		String smiles = parser.getSmiles();
 		String inchi = parser.getInchi();
 		Double gibbs = parser.getGibbs();
-		List<BioCycMetaboliteCrossReferenceEntity> crossReferences = parser.getCrossReferences();
+		List<BioCycMetaboliteCrossreferenceEntity> crossReferences = parser.getCrossReferences();
 		List<String> synonyms = parser.getSynonym();
 		List<String> reactions = parser.getReactions();
 		List<String> parents = parser.getParents();

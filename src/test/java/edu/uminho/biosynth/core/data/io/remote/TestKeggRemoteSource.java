@@ -47,7 +47,7 @@ public class TestKeggRemoteSource {
 		sb.append("COMMENT:\t").append(cpd.getComment()).append('\n');
 		sb.append("PATHWAYS:\t").append(cpd.getPathways()).append('\n');
 		sb.append("REACTIONS:\t").append(cpd.getReactions()).append('\n');
-		sb.append("CROSSREF:\t").append(cpd.getCrossReferences());
+		sb.append("CROSSREF:\t").append(cpd.getCrossreferences());
 		return sb.toString();
 	}
 

@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
 public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implements IGenericMetaboliteParser {
@@ -367,9 +367,9 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 		}
 	}
 	
-	public List<BioCycMetaboliteCrossReferenceEntity> getCrossReferences() {
+	public List<BioCycMetaboliteCrossreferenceEntity> getCrossReferences() {
 		try {
-			List<BioCycMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<> ();
+			List<BioCycMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
 			if (this.base.has("dblink")) {
 				JSONArray dblinkJsArray = null;
 				Object dblinkObj = this.base.get("dblink");
@@ -381,7 +381,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 				}
 				for (int i = 0; i < dblinkJsArray.length(); i++) {
 					JSONObject dblinkJsObj = dblinkJsArray.getJSONObject(i);
-					BioCycMetaboliteCrossReferenceEntity crossReference = new BioCycMetaboliteCrossReferenceEntity();
+					BioCycMetaboliteCrossreferenceEntity crossReference = new BioCycMetaboliteCrossreferenceEntity();
 					crossReference.setType(GenericCrossReference.Type.DATABASE);
 					if (dblinkJsObj.has("dblink-db"))
 						crossReference.setRef(dblinkJsObj.getString("dblink-db"));

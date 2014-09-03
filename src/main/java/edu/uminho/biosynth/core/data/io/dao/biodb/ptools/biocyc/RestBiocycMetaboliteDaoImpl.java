@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 import edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 
@@ -57,7 +57,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			String smiles = parser.getSmiles();
 			String inchi = parser.getInchi();
 			Double gibbs = parser.getGibbs();
-			List<BioCycMetaboliteCrossReferenceEntity> crossReferences = parser.getCrossReferences();
+			List<BioCycMetaboliteCrossreferenceEntity> crossReferences = parser.getCrossReferences();
 			List<String> synonyms = parser.getSynonym();
 			List<String> reactions = parser.getReactions();
 			List<String> parents = parser.getParents();
@@ -158,7 +158,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			String smiles = parser.getSmiles();
 			String inchi = parser.getInchi();
 			Double gibbs = parser.getGibbs();
-			List<BioCycMetaboliteCrossReferenceEntity> crossReferences = parser.getCrossReferences();
+			List<BioCycMetaboliteCrossreferenceEntity> crossReferences = parser.getCrossReferences();
 			List<String> synonyms = parser.getSynonym();
 			List<String> reactions = parser.getReactions();
 			List<String> parents = parser.getParents();

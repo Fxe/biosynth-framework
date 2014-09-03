@@ -88,6 +88,8 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 			return new ArrayList<String> (this.idToEntry.values());
 		}
 		
+		this.initialize();
+		
 		return new ArrayList<String> (this.idToEntry.values());
 	}
 	

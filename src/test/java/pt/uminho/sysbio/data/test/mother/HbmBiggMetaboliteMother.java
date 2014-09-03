@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.Session;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 
 public class HbmBiggMetaboliteMother extends AbstractHbmObjectMother<BiggMetaboliteEntity> {
 
@@ -19,7 +19,7 @@ public class HbmBiggMetaboliteMother extends AbstractHbmObjectMother<BiggMetabol
 	private String description = "abcdef 123456 !<>%&/\\() .;,-_";
 	private String metaboliteClass = "Foo";
 	private String source = "MotherPattern";
-	private List<BiggMetaboliteCrossReferenceEntity> crossReferenceEntities = new ArrayList<> ();
+	private List<BiggMetaboliteCrossreferenceEntity> crossReferenceEntities = new ArrayList<> ();
 	
 	public HbmBiggMetaboliteMother(Session session) {
 		super(session);

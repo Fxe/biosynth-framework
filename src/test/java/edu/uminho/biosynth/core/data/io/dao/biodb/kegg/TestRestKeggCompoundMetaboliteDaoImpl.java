@@ -51,7 +51,7 @@ public class TestRestKeggCompoundMetaboliteDaoImpl {
 		assertEquals(null, cpd.getComment());
 		assertEquals(null, cpd.getInchi());
 		assertEquals(6, cpd.getReactions().size());
-		assertEquals(8, cpd.getCrossReferences().size());
+		assertEquals(8, cpd.getCrossreferences().size());
 		assertNotEquals(true, cpd.getMol2d());
 	}
 	
@@ -69,7 +69,7 @@ public class TestRestKeggCompoundMetaboliteDaoImpl {
 		assertEquals(null, cpd.getComment());
 		assertEquals(null, cpd.getInchi());
 		assertEquals(3, cpd.getReactions().size());
-		assertEquals(8, cpd.getCrossReferences().size());
+		assertEquals(8, cpd.getCrossreferences().size());
 		assertNotEquals(true, cpd.getMol2d());
 	}
 //	

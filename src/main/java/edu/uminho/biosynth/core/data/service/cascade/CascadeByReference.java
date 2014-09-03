@@ -32,7 +32,7 @@ public class CascadeByReference implements ICascadeStrategy {
 		case "edu.uminho.biosynth.core.components.kegg.KeggMetaboliteEntity": {
 			LOGGER.log(Level.INFO, entity.getEntry() + " type of " + type.getName());
 			KeggCompoundMetaboliteEntity cpd = (KeggCompoundMetaboliteEntity) entity;
-			for (KeggCompoundMetaboliteCrossreferenceEntity crossReference : cpd.getCrossReferences()) {
+			for (KeggCompoundMetaboliteCrossreferenceEntity crossReference : cpd.getCrossreferences()) {
 				result.addAll( this.lookupReference(crossReference));
 			}
 		}
@@ -40,7 +40,7 @@ public class CascadeByReference implements ICascadeStrategy {
 		case "edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity": {
 			LOGGER.log(Level.INFO, entity.getEntry() + " type of " + type.getName());
 			MnxMetaboliteEntity cpd = (MnxMetaboliteEntity) entity;
-			for (MnxMetaboliteCrossReferenceEntity crossReference : cpd.getCrossReferences()) {
+			for (MnxMetaboliteCrossReferenceEntity crossReference : cpd.getCrossreferences()) {
 				result.addAll( this.lookupReference(crossReference));
 			}
 		}
