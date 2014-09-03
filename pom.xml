@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>pt.uminho.biosynthframework</groupId>
+  <groupId>pt.uminho.sysbio.biosynthframework</groupId>
   <artifactId>biosynth-chemanalysis</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -11,6 +11,7 @@
   <url>http://maven.apache.org</url>
 
   <properties>
+    <cdk.version>1.5.7</cdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
@@ -40,7 +41,7 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>pt.uminho.biosynthframework</groupId>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
       <artifactId>biosynth-data</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
@@ -62,60 +63,60 @@
       <version>1.2.0</version>
     </dependency>
     
-<dependency>
+    <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-core</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-silent</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-formula</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-smiles</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-inchi</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-io</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-render</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-renderbasic</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-renderextra</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-renderawt</artifactId>
-		<version>1.5.5</version>
+		<version>${cdk.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openscience.cdk</groupId>
       <artifactId>cdk-sdg</artifactId>
-      <version>1.5.5</version>
+      <version>${cdk.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openscience.jchempaint</groupId>
