@@ -47,6 +47,12 @@
     </dependency>
     
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.3.2</version>
+    </dependency>
+    
+    <dependency>
       <groupId>net.sf.jni-inchi</groupId>
       <artifactId>jni-inchi</artifactId>
       <version>0.7</version>
