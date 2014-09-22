@@ -2,12 +2,12 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
@@ -15,7 +15,7 @@ import edu.uminho.biosynth.core.data.io.parser.IGenericMetaboliteParser;
 
 public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implements IGenericMetaboliteParser {
 
-	private final static Logger LOGGER = Logger.getLogger(BioCycMetaboliteXMLParser.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(BioCycMetaboliteXMLParser.class);
 	
 	private final JSONObject base;
 	private final BioCycEntityType entityType;
@@ -37,7 +37,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			this.entityType = BioCycEntityType.RNA;
 		} else {
 			this.entityType = BioCycEntityType.ERROR;
-			LOGGER.log(Level.SEVERE, this.content.getJSONObject("ptools-xml").toString());
+			LOGGER.error(String.format("%s", this.content.getJSONObject("ptools-xml").toString()));
 		}
 		
 		this.base = jsMetabolite;
@@ -45,122 +45,97 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 	}
 	
 	public boolean isValid() {
-		return this.base != null;
+		if (this.base == null) return false;
+		return this.base != null || !this.base.has("Error");
 	}
 	
-	public List<String> getReactions() {
-		try {
-			List<String> rxnIdList = null;
-			JSONArray rxnJSArray = null;
-			
-			
-			rxnIdList = new ArrayList<String>();
-			
-			if (base.has("appears-in-right-side-of")) {
-				Object rightSide = base.getJSONObject("appears-in-right-side-of").get("Reaction");
-				if (rightSide instanceof JSONArray) {
-					rxnJSArray = (JSONArray) rightSide;
-				} else {
-					rxnJSArray = new JSONArray();
-					rxnJSArray.put(rightSide);
-				}
-				for (int i = 0; i < rxnJSArray.length(); i++) {
-					rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
-				}
-			}
-			
-			if (base.has("appears-in-left-side-of")) {
-				Object leftSide = base.getJSONObject("appears-in-left-side-of").get("Reaction");
-				if (leftSide instanceof JSONArray) {
-					rxnJSArray = (JSONArray) leftSide;
-				} else {
-					rxnJSArray = new JSONArray();
-					rxnJSArray.put(leftSide);
-				}
-				for (int i = 0; i < rxnJSArray.length(); i++) {
-					rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
-					//System.out.println(rxnJSArray.getJSONObject(i).getString("frameid"));
-				}
-			}
-			
-			return rxnIdList;
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
-			return null;
-		}
-	}
-	
-	public String getEntry() {
-		try {
-			return this.base.getString("frameid");
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
-			return null;
-		}
-	}
-	
-	public String getSource() {
-		try {
-			return this.base.getString("orgid");
-		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException " + e.getMessage());
-			return null;
-		}
-	}
-	
-	public String getName() {
-		try {
-			String commonName;
-			if (this.base.has("common-name")) {
-				commonName = this.base.getJSONObject("common-name").getString("content");
+	public List<String> getReactions() throws JSONException {
+		List<String> rxnIdList = null;
+		JSONArray rxnJSArray = null;
+		
+		
+		rxnIdList = new ArrayList<String>();
+		
+		if (base.has("appears-in-right-side-of")) {
+			Object rightSide = base.getJSONObject("appears-in-right-side-of").get("Reaction");
+			if (rightSide instanceof JSONArray) {
+				rxnJSArray = (JSONArray) rightSide;
 			} else {
-				commonName = this.getEntry();
+				rxnJSArray = new JSONArray();
+				rxnJSArray.put(rightSide);
 			}
-			
-			return commonName;
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
-			return null;
+			for (int i = 0; i < rxnJSArray.length(); i++) {
+				rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
+			}
 		}
+		
+		if (base.has("appears-in-left-side-of")) {
+			Object leftSide = base.getJSONObject("appears-in-left-side-of").get("Reaction");
+			if (leftSide instanceof JSONArray) {
+				rxnJSArray = (JSONArray) leftSide;
+			} else {
+				rxnJSArray = new JSONArray();
+				rxnJSArray.put(leftSide);
+			}
+			for (int i = 0; i < rxnJSArray.length(); i++) {
+				rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
+				//System.out.println(rxnJSArray.getJSONObject(i).getString("frameid"));
+			}
+		}
+		
+		return rxnIdList;
 	}
 	
-	public String getFormula() {
+	public String getEntry() throws JSONException {
+		String entry = this.base.getString("frameid"); 
+		return entry;
+	}
+	
+	public String getSource() throws JSONException {
+		return this.base.getString("orgid");
+
+	}
+	
+	public String getName() throws JSONException {
+		String commonName;
+		if (this.base.has("common-name")) {
+			commonName = this.base.getJSONObject("common-name").getString("content");
+		} else {
+			commonName = this.getEntry();
+		}
+		
+		return commonName;
+	}
+	
+	public String getFormula() throws JSONException {
 		String formula = null;
 		
-		try {
-			switch (entityType) {
-				case Compound:
-					if (this.base.has("cml")) {
-						formula = this.base.getJSONObject("cml")
-						.getJSONObject("molecule").getJSONObject("formula").getString("concise");
-						formula = formula.replaceAll(" ", "");
-					} else {
-						return null;
-					}
-					break;
-				default:
-					break;
-			}
-			return formula.isEmpty()?null:formula;
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage());
-			return null;
+		switch (entityType) {
+			case Compound:
+				if (this.base.has("cml")) {
+					formula = this.base.getJSONObject("cml")
+					.getJSONObject("molecule").getJSONObject("formula").getString("concise");
+					formula = formula.replaceAll(" ", "");
+				} else {
+					return null;
+				}
+				break;
+			default:
+				LOGGER.warn(String.format("Not parseable type - %s", entityType));
+				break;
 		}
+		return formula.isEmpty() ? null : formula;
 	}
 	
-	public String getInchi() {
+	public String getInchi() throws JSONException {
 		String inchi = null;
-		try {
-			if (this.base.has("inchi")) {
-				inchi = this.base.getJSONObject("inchi").getString("content");
-//				inchi = inchi.replace("InChI=", "");
-			}
-			
-			return inchi;
-		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException " + ex.getMessage());
-			return null;
+
+		if (this.base.has("inchi")) {
+			inchi = this.base.getJSONObject("inchi").getString("content");
+//			inchi = inchi.replace("InChI=", "");
 		}
+			
+		return inchi;
 	}
 	
 	public Integer getCharge() {
@@ -179,7 +154,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return charge;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage());
+			LOGGER.error("JSONException" + ex.getMessage());
 			return null;
 		}
 	}
@@ -219,7 +194,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return smiles;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage() + " => " + this.getEntry());
+			LOGGER.error("JSONException" + ex.getMessage() + " => " + this.getEntry());
 			return null;
 		}
 	}
@@ -244,7 +219,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			}
 			return comment;
 		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException " + e.getMessage() + " => " + this.getEntry());
+			LOGGER.error("JSONException " + e.getMessage() + " => " + this.getEntry());
 			return null;
 		}
 	}
@@ -255,12 +230,12 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			try {
 				ret = this.base.getJSONObject("species").getJSONObject("Organism").getString("frameid");
 			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, "EXCEPTION ! " + this.xmlDocument);
+				LOGGER.error("EXCEPTION ! " + this.xmlDocument);
 				throw e;
 			}
 			return ret;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error("JSONException");
 			return null;
 		}
 	}
@@ -279,7 +254,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			}
 			return keggLink;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException");
+			LOGGER.error("JSONException");
 			return null;
 		}
 	}
@@ -301,7 +276,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return molWeight;
 		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException" + e.getMessage());
+			LOGGER.error("JSONException" + e.getMessage());
 			return null;
 		}
 	}
@@ -324,7 +299,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return cmlMolWeight;
 		} catch (JSONException ex) {
-			LOGGER.log(Level.SEVERE, "JSONException" + ex.getMessage());
+			LOGGER.error("JSONException" + ex.getMessage());
 			return null;
 		}
 	}
@@ -338,7 +313,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return gibbs;
 		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException" + e.getMessage());
+			LOGGER.error("JSONException" + e.getMessage());
 			return null;
 		}
 	}
@@ -362,7 +337,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return synonyms;
 		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException" + e.getMessage());
+			LOGGER.error("JSONException" + e.getMessage());
 			return null;
 		}
 	}
@@ -399,7 +374,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			
 			return crossReferences;
 		} catch (JSONException e) {
-			LOGGER.log(Level.SEVERE, "JSONException" + e.getMessage() + " => " + this.getEntry());
+			LOGGER.error("JSONException" + e.getMessage() + " => " + this.getEntry());
 			return null;
 		}
 	}

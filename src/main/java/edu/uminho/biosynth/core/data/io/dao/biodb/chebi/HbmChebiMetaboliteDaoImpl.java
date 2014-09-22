@@ -25,6 +25,11 @@ public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteE
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
+	public HbmChebiMetaboliteDaoImpl() { }
+	public HbmChebiMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
 	@Override
 	public ChebiMetaboliteEntity getMetaboliteById(Serializable id) {
 		Object cpd = this.getSession().get(ChebiMetaboliteEntity.class, id);

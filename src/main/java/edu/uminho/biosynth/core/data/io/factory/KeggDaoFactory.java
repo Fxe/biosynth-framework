@@ -10,15 +10,18 @@ import org.hibernate.service.ServiceRegistry;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.BiosynthHbmConnectionManager;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggCompoundMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggDrugMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggGlycanMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggReactionDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.RestKeggCompoundMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.RestKeggDrugMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.RestKeggGlycanMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.RestKeggReactionDaoImpl;
 
 public class KeggDaoFactory {
 	
@@ -82,6 +85,16 @@ public class KeggDaoFactory {
 		return daoImpl;
 	}
 	
+	public RestKeggReactionDaoImpl buildRestKeggReactionDao() {
+		RestKeggReactionDaoImpl daoImpl = new RestKeggReactionDaoImpl();
+		
+		daoImpl.setLocalStorage(localStorage);
+		daoImpl.setUseLocalStorage(useLocalStorage);
+		daoImpl.setSaveLocalStorage(saveLocalStorage);
+		
+		return daoImpl;
+	}
+	
 	
 	public HbmKeggCompoundMetaboliteDaoImpl buildHbmKeggCompoundMetaboliteDao() {
 		HbmKeggCompoundMetaboliteDaoImpl daoImpl = new HbmKeggCompoundMetaboliteDaoImpl();
@@ -122,6 +135,17 @@ public class KeggDaoFactory {
 		}
 		
 		BiosynthHbmConnectionManager.registerSessionFactory(daoImpl, sessionFactory);
+		
+		daoImpl.setSessionFactory(sessionFactory);
+		return daoImpl;
+	}
+	
+	public HbmKeggReactionDaoImpl buildHbmKeggReactionDao() {
+		HbmKeggReactionDaoImpl daoImpl = new HbmKeggReactionDaoImpl();
+		
+		if (sessionFactory == null) {
+			initialize(KeggReactionEntity.class);
+		}
 		
 		daoImpl.setSessionFactory(sessionFactory);
 		return daoImpl;

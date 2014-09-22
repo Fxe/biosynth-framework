@@ -1,11 +1,13 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,17 +28,24 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 //	private final String urlRxnGeneAPI = "http://biocyc.org/apixml?fn=genes-of-reaction&id=META:";
 //	private final String urlRxnEnzymeAPI = "http://biocyc.org/apixml?fn=enzymes-of-reaction&id=%s:%s&detail=full";
 
+	public void createFolderIfNotExists(String path) {
+		File file = new File(path);
+		
+		if (!file.exists()) {
+			LOGGER.info(String.format("Make Dir %s", path));
+			file.mkdirs();
+		}
+	}
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
 		String restCpdQuery = String.format(RestBiocycMetaboliteDaoImpl.xmlGet, pgdb, id);
 		BioCycMetaboliteEntity cpd = null;
 		
-		
 		LOGGER.debug(String.format("Query: %s", restCpdQuery));
 		try {
-			String localPath = String.format("%scompound/%s/%s", this.getLocalStorage(), pgdb, id);
-			
+			String localPath = String.format("%s/%s/compound/", this.getLocalStorage(), pgdb, id);
+			createFolderIfNotExists(localPath);
 			String xmlDoc = null;
 			
 			LOGGER.debug(String.format("Local Path: %s", localPath));
@@ -136,13 +145,16 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 		
 		LOGGER.debug(String.format("Query: %s", restCpdQuery));
 		try {
-			String localPath = String.format("%scompound/%s/%s.xml", this.getLocalStorage(), pgdb, entry.replaceAll(":", "_"));
-			
+			String localPath = String.format("%s/%s/compound/", this.getLocalStorage(), pgdb);
+			createFolderIfNotExists(localPath);
+			localPath = localPath.concat(String.format("%s.xml", entry.replaceAll(":", "_")));
 			String xmlDoc = null;
 			
 			LOGGER.debug(String.format("Local Path: %s", localPath));
 			xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
 			BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
+			
+			if (!parser.isValid()) return null;
 			
 			cpd = new BioCycMetaboliteEntity();
 
@@ -165,7 +177,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			List<String> instances = parser.getInstanses();
 			List<String> subclasses = parser.getSubclasses();
 
-			cpd.setEntry(entry_);
+			cpd.setEntry(pgdb.concat(":").concat(entry_));
 			cpd.setSource(source);
 			cpd.setMetaboliteClass(metaboliteClass);
 			cpd.setFormula(formula);
@@ -185,8 +197,10 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			cpd.setSubclasses(subclasses);
 		} catch (IOException e) {
 			LOGGER.error(String.format("IO ERROR - %s", e.getMessage()));
+			cpd = null;
 		} catch (JSONException e) {
 			LOGGER.error(String.format("PARSE ERROR - %s", e.getMessage()));
+			cpd = null;
 		}
 		
 		return cpd;
@@ -198,8 +212,9 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 		try {
 			String params = String.format("[x:x<-%s^^%s]", pgdb, "compounds");
 			String restXmlQuery = String.format(xmlquery, URLEncoder.encode(params, "UTF-8"));
-			String localPath = this.getLocalStorage() + "query" + "/compound.xml";
-			
+			String localPath = String.format("%s/%s/query/", this.getLocalStorage(), pgdb);
+			createFolderIfNotExists(localPath);
+			localPath = localPath.concat("compound.xml");
 			String httpResponseString = getLocalOrWeb(restXmlQuery, localPath);
 			JSONObject jsDoc = XML.toJSONObject(httpResponseString);
 			JSONArray compoundJsArray = jsDoc.getJSONObject("ptools-xml").getJSONArray("Compound");

@@ -16,6 +16,11 @@ import edu.uminho.biosynth.core.data.io.dao.hibernate.AbstractHibernateDao;
 public class HbmBioCycMetaboliteDaoImpl 
 extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 
+	private String pgdb = "META";
+	
+	public String getPgdb() { return pgdb;}
+	public void setPgdb(String pgdb) { this.pgdb = pgdb;}
+
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
 		Object cpdObj = this.getSession().get(BioCycMetaboliteEntity.class, id);
@@ -31,7 +36,8 @@ extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
-		Query query = this.getSession().createQuery("SELECT cpd.id FROM BioCycMetaboliteEntity cpd");
+		Query query = this.getSession().createQuery("SELECT cpd.id FROM BioCycMetaboliteEntity cpd WHERE cpd.source = :source");
+		query.setParameter("source", pgdb);
 		@SuppressWarnings("unchecked")
 		List<Serializable> res = query.list();
 		return res;
@@ -63,7 +69,8 @@ extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 
 	@Override
 	public List<String> getAllMetaboliteEntries() {
-		Query query = this.getSession().createQuery("SELECT cpd.entry FROM BioCycMetaboliteEntity cpd");
+		Query query = this.getSession().createQuery("SELECT cpd.entry FROM BioCycMetaboliteEntity cpd WHERE cpd.source = :source");
+		query.setParameter("source", pgdb);
 		@SuppressWarnings("unchecked")
 		List<String> res = query.list();
 		return res;

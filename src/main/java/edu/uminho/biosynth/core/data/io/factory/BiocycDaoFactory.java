@@ -46,6 +46,11 @@ public class BiocycDaoFactory {
 		return this;
 	}
 	
+	public BiocycDaoFactory withSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+		return this;
+	}
+	
 	public RestBiocycMetaboliteDaoImpl buildRestBiocycMetaboliteDao() {
 		RestBiocycMetaboliteDaoImpl daoImpl = new RestBiocycMetaboliteDaoImpl();
 		
@@ -70,6 +75,8 @@ public class BiocycDaoFactory {
 	
 	public HbmBioCycMetaboliteDaoImpl buildHbmBioCycMetaboliteDao() {
 		HbmBioCycMetaboliteDaoImpl daoImpl = new HbmBioCycMetaboliteDaoImpl();
+		
+		daoImpl.setPgdb(pathwayGenomeDatabase);
 		
 		if (sessionFactory == null) {
 			initialize(

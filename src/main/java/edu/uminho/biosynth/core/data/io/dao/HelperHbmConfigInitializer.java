@@ -10,12 +10,20 @@ import org.hibernate.service.ServiceRegistry;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
 
 public class HelperHbmConfigInitializer {
 
@@ -46,12 +54,21 @@ public class HelperHbmConfigInitializer {
 		Configuration config = new Configuration().configure(cfg);
 		config.addAnnotatedClass(BiggMetaboliteEntity.class)
 			  .addAnnotatedClass(BiggMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(BioCycMetaboliteEntity.class)
+			  .addAnnotatedClass(BioCycMetaboliteCrossreferenceEntity.class)
 			  .addAnnotatedClass(KeggCompoundMetaboliteEntity.class)
 			  .addAnnotatedClass(KeggCompoundMetaboliteCrossreferenceEntity.class)
 			  .addAnnotatedClass(KeggGlycanMetaboliteEntity.class)
 			  .addAnnotatedClass(KeggGlycanMetaboliteCrossreferenceEntity.class)
 			  .addAnnotatedClass(KeggDrugMetaboliteEntity.class)
-			  .addAnnotatedClass(KeggDrugMetaboliteCrossreferenceEntity.class);
+			  .addAnnotatedClass(KeggDrugMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(ChebiMetaboliteEntity.class)
+			  .addAnnotatedClass(ChebiMetaboliteNameEntity.class)
+			  .addAnnotatedClass(ChebiMetaboliteCrossreferenceEntity.class)
+			  
+			  .addAnnotatedClass(KeggReactionEntity.class)
+			  .addAnnotatedClass(KeggReactionLeftEntity.class)
+			  .addAnnotatedClass(KeggReactionRightEntity.class);
 		ServiceRegistry servReg = 
 				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);
