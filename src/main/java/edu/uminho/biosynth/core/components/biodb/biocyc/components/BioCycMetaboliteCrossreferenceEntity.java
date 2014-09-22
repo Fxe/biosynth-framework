@@ -19,18 +19,18 @@ public class BioCycMetaboliteCrossreferenceEntity extends GenericCrossReference{
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="ID_METABOLITE")
+	@JoinColumn(name="metabolite_id")
 	private BioCycMetaboliteEntity biocycMetaboliteEntity;
 	public BioCycMetaboliteEntity getBiocycMetaboliteEntity() { return biocycMetaboliteEntity; }
 	public void setBiocycMetaboliteEntity(BioCycMetaboliteEntity biocycMetaboliteEntity) {
 		this.biocycMetaboliteEntity = biocycMetaboliteEntity;
 	}
 	
-	@Column(name="RELATIONSHIP") private String relationship;
+	@Column(name="relationship") private String relationship;
 	public String getRelationship() { return relationship;}
 	public void setRelationship(String relationship) { this.relationship = relationship;}
 	
-	@Column(name="URL") private String url;
+	@Column(name="url") private String url;
 	public String getUrl() { return url;}
 	public void setUrl(String url) { this.url = url;}
 	
