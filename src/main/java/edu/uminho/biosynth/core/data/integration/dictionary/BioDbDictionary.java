@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.integration.dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
@@ -32,55 +33,65 @@ public class BioDbDictionary {
 		 *    Only characters and '_'
 		 */
 		Map<String, String> dictionary = new HashMap<> ();
+		dictionary.put("NCI", "NCI");
+		
+		dictionary.put("Wikipedia", "Wikipedia");
+		
 		dictionary.put("LipidBank", "LipidBank");
-		dictionary.put("lipidmaps", "LipidMAPS");
-		dictionary.put("LIPIDMAPS", "LipidMAPS");
-		dictionary.put("LIPID MAPS instance accession", "LipidMAPS");
-		dictionary.put("CHEMSPIDER", "ChemSpider");
-		dictionary.put("Chemspider accession", "ChemSpider");
-		dictionary.put("DrugBank accession", CompoundNodeLabel.DrugBank.toString());
+		
+		dictionary.put("lipidmaps", MetaboliteMajorLabel.LipidMAPS.toString());
+		dictionary.put("LIPIDMAPS", MetaboliteMajorLabel.LipidMAPS.toString());
+		dictionary.put("LIPID MAPS instance accession", MetaboliteMajorLabel.LipidMAPS.toString());
+		
+		dictionary.put("CHEMSPIDER", MetaboliteMajorLabel.ChemSpider.toString());
+		dictionary.put("Chemspider accession", MetaboliteMajorLabel.ChemSpider.toString());
+		dictionary.put("DrugBank accession", MetaboliteMajorLabel.DrugBank.toString());
 		dictionary.put("biopath", "BioPath");
 		dictionary.put("upa", "UniPathway");
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
 		//BioCyc
-		dictionary.put("KNAPSACK", "KNApSAcK");
-		dictionary.put("KNApSAcK", "KNApSAcK");
+		dictionary.put("KNAPSACK", MetaboliteMajorLabel.KNApSAcK.toString());
+		dictionary.put("KNApSAcK", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("BIOCYC:ARA", "BioCyc:AraCyc");
-		dictionary.put("METACYC", "BioCyc:MetaCyc");
-		dictionary.put("metacyc", "BioCyc:MetaCyc");
-		dictionary.put("MetaCyc accession", "BioCyc:MetaCyc");
-		dictionary.put("BIGG", CompoundNodeLabel.BiGG.toString());
-		dictionary.put("bigg", CompoundNodeLabel.BiGG.toString());
-		dictionary.put("LIGAND-CPD", CompoundNodeLabel.KEGG.toString());
-		dictionary.put("KEGG", CompoundNodeLabel.KEGG.toString());
-		dictionary.put("kegg", CompoundNodeLabel.KEGG.toString());
-		dictionary.put("KEGG COMPOUND accession", CompoundNodeLabel.KEGG.toString());
-		dictionary.put("KEGG DRUG accession", CompoundNodeLabel.KEGG.toString());
-		dictionary.put("KEGG GLYCAN accession", CompoundNodeLabel.KEGG.toString());
+		dictionary.put("METACYC", MetaboliteMajorLabel.MetaCyc.toString());
+		dictionary.put("metacyc", MetaboliteMajorLabel.MetaCyc.toString());
+		dictionary.put("MetaCyc accession", MetaboliteMajorLabel.MetaCyc.toString());
+		
+		dictionary.put("BIGG", MetaboliteMajorLabel.BiGG.toString());
+		dictionary.put("bigg", MetaboliteMajorLabel.BiGG.toString());
+		dictionary.put("LIGAND-CPD", MetaboliteMajorLabel.LigandCompound.toString());
+//		dictionary.put("KEGG", MetaboliteMajorLabel.KEGG.toString());
+//		dictionary.put("kegg", MetaboliteMajorLabel.KEGG.toString());
+		dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
+		dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
+		dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());
 		//KEGG
 		dictionary.put("JCGGDB", "JCGGDB");
 		dictionary.put("GlycomeDB", "GlycomeDB");
 		dictionary.put("CCSD", "CCSD");
-		dictionary.put("PUBCHEM", "PubChem");
-		dictionary.put("Pubchem accession", "PubChem");
-		dictionary.put("PubChem", "PubChem");
+		
+		dictionary.put("PUBCHEM", MetaboliteMajorLabel.PubChemCompound.toString());
+		dictionary.put("Pubchem accession", MetaboliteMajorLabel.PubChemCompound.toString());
+		dictionary.put("PubChem", MetaboliteMajorLabel.PubChemCompound.toString());
+		
 		dictionary.put("PDB-CCD", "PDB");
-		dictionary.put("chebi", CompoundNodeLabel.ChEBI.toString());
-		dictionary.put("ChEBI", CompoundNodeLabel.ChEBI.toString());
-		dictionary.put("CHEBI", CompoundNodeLabel.ChEBI.toString());
-		dictionary.put("CAS", CompoundNodeLabel.CAS.toString());
-		dictionary.put("CAS Registry Number", CompoundNodeLabel.CAS.toString());
+		dictionary.put("chebi", MetaboliteMajorLabel.ChEBI.toString());
+		dictionary.put("ChEBI", MetaboliteMajorLabel.ChEBI.toString());
+		dictionary.put("CHEBI", MetaboliteMajorLabel.ChEBI.toString());
+		dictionary.put("CAS", MetaboliteMajorLabel.CAS.toString());
+		dictionary.put("CAS Registry Number", MetaboliteMajorLabel.CAS.toString());
 		dictionary.put("NIKKAJI", "NIKKAJI");
 		dictionary.put("3DMET", "MET3D");
-		dictionary.put("seed", CompoundNodeLabel.Seed.toString());
+		dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
 		
-		dictionary.put("hmdb", CompoundNodeLabel.HMDB.toString());
-		dictionary.put("HMDB accession", CompoundNodeLabel.HMDB.toString());
+		dictionary.put("hmdb", MetaboliteMajorLabel.HMDB.toString());
+		dictionary.put("HMDB accession", MetaboliteMajorLabel.HMDB.toString());
 		
-		dictionary.put("reactome", CompoundNodeLabel.Reactome.toString());
+		dictionary.put("reactome", MetaboliteMajorLabel.Reactome.toString());
 		
-		dictionary.put("brenda", CompoundNodeLabel.BRENDA.toString());
+		dictionary.put("BRENDA-COMPOUND", MetaboliteMajorLabel.BRENDA.toString());
+		dictionary.put("brenda", MetaboliteMajorLabel.BRENDA.toString());
 		return dictionary;
 	}
 	

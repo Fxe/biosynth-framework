@@ -1,9 +1,9 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 
-public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCrossReference<BioCycMetaboliteCrossReferenceEntity>{
+public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCrossReference<BioCycMetaboliteCrossreferenceEntity>{
 //	static {
 //		refTransformMap.put("LIGAND-CPD", "BIOCYC");
 //		refTransformMap.put("BIGG", "BIGG");
@@ -11,13 +11,13 @@ public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCr
 //		refTransformMap.put("", "");
 //	}
 	@Override
-	public Class<BioCycMetaboliteCrossReferenceEntity> getTransformerEntityClass() {
-		return BioCycMetaboliteCrossReferenceEntity.class;
+	public Class<BioCycMetaboliteCrossreferenceEntity> getTransformerEntityClass() {
+		return BioCycMetaboliteCrossreferenceEntity.class;
 	}
 
 	@Override
 	public GenericCrossReference transform(
-			BioCycMetaboliteCrossReferenceEntity crossReference) {
+			BioCycMetaboliteCrossreferenceEntity crossReference) {
 		
 		String originalRef = crossReference.getRef().toUpperCase();
 		String originalValue = crossReference.getValue().toUpperCase();

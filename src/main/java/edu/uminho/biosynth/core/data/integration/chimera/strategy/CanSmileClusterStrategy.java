@@ -11,9 +11,9 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.helpers.collection.IteratorUtil;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 
 public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
@@ -23,7 +23,7 @@ public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
 	@Override
 	public void setInitialNode(Long id) {
 		this.initialNode = db.getNodeById(id);
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.CanSMILES)) {
+		if (!this.initialNode.hasLabel(MetabolitePropertyLabel.CanSMILES)) {
 			throw new RuntimeException();
 		}
 	}
@@ -43,8 +43,8 @@ public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
 			Node isoNode = db.getNodeById(isoNodeId);
 			List<Relationship> links = IteratorUtil.asList(
 					isoNode.getRelationships(
-							CompoundRelationshipType.HasInChI, 
-							CompoundRelationshipType.HasSMILES));
+							MetaboliteRelationshipType.HasInChI, 
+							MetaboliteRelationshipType.HasSMILES));
 			
 			for (Relationship r: links) {
 				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {

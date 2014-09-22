@@ -13,9 +13,9 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 
 public class IsoFormulaClusterStrategy implements ClusteringStrategy {
@@ -36,7 +36,7 @@ public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 	@Override
 	public void setInitialNode(Long id) {
 		this.initialNode = db.getNodeById(id);
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.IsotopeFormula)) {
+		if (!this.initialNode.hasLabel(MetabolitePropertyLabel.IsotopeFormula)) {
 			throw new RuntimeException();
 		}
 	}
@@ -56,7 +56,7 @@ public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 		for (Long isoNodeId: isomorphicProperties) {
 			Node isoNode = db.getNodeById(isoNodeId);
 			
-			for (Relationship r: isoNode.getRelationships(CompoundRelationshipType.HasFormula)) {
+			for (Relationship r: isoNode.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
 				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {
 					nodes.add(r.getStartNode().getId());
 				} else if (r.getEndNode().hasLabel(CompoundNodeLabel.Compound)) {

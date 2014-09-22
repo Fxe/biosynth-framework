@@ -26,13 +26,13 @@ import org.neo4j.tooling.GlobalGraphOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
-import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
@@ -363,7 +363,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		for (Relationship r:node.getRelationships()) {
 			Node n = r.getEndNode();
 			
-			if (r.getType().equals(CompoundRelationshipType.HasCrossreferenceTo)) {
+			if (r.getType().equals(MetaboliteRelationshipType.HasCrossreferenceTo)) {
 				
 			} else {
 				Label label = n.getLabels().iterator().next();
@@ -438,11 +438,11 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			for (Relationship relationship : node.getRelationships()) {
 				Node nodeProp = relationship.getOtherNode(node);
 				if (nodeProp.hasLabel(label)) {
-					CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity();
+					CentralMetabolitePropertyEntity propertyEntity = 
+							new CentralMetabolitePropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
 					
 					propertyEntity.setId(nodeProp.getId());
 					propertyEntity.setUniqueKey(uniqueKey);
-					propertyEntity.setUniqueKeyValue(nodeProp.getProperty(uniqueKey));
 					propertyEntity.setMajorLabel(major);
 					
 					for (Label l : nodeProp.getLabels()) propertyEntity.getLabels().add(l.toString());
@@ -482,11 +482,14 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	@Override
 	public CentralMetabolitePropertyEntity getMetaboliteProperty(Long id) {
 		Node node = this.graphDatabaseService.getNodeById(id);
-		CentralMetabolitePropertyEntity entity = new CentralMetabolitePropertyEntity();
-		for (Label label : node.getLabels()) entity.addLabel(label.toString());
+		CentralMetabolitePropertyEntity entity = null;
+				
+		
 		for (String key : node.getPropertyKeys()) {
+			entity = new CentralMetabolitePropertyEntity(key, node.getProperty(key));
 			entity.getProperties().put(key, node.getProperty(key));
 		}
+		for (Label label : node.getLabels()) entity.addLabel(label.toString());
 		return entity;
 	}
 

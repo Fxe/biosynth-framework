@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
-import edu.uminho.biosynth.core.data.integration.neo4j.MetaboliteMajorLabel;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")
@@ -76,7 +76,7 @@ public class IntegrationStatisticsServiceImpl implements IntegrationStatisticsSe
 				property, 
 				uniqueKey, 
 				integratedCluster.listAllIntegratedMemberIds().toArray(new Long[0]))) {
-			objects.add(propertyEntity.getUniqueKeyValue());
+//			objects.add(propertyEntity.getUniqueKeyValue());
 		}
 		
 		return objects.size();

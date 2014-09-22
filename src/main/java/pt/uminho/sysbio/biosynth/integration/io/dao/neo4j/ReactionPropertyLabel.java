@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.neo4j;
+package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 public enum ReactionPropertyLabel {
 	Reaction,

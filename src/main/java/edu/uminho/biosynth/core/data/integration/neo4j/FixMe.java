@@ -21,10 +21,10 @@ public class FixMe implements EtlTransform<BiggMetaboliteEntity, CentralMetaboli
 		CentralMetaboliteEntity metaboliteEntity = new CentralMetaboliteEntity();
 		metaboliteEntity.setProperties(properties);
 		
-		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildFormula(cpd.getFormula()));
-		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildCharge(cpd.getCharge()));
-		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildName(cpd.getName()));
-		
+//		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildFormula(cpd.getFormula()));
+//		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildCharge(cpd.getCharge()));
+//		metaboliteEntity.getPropertyEntities().add(MetabolitePropertyBuilder.buildName(cpd.getName()));
+//		
 		return metaboliteEntity;
 	}
 

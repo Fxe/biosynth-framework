@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.neo4j.graphdb.Label;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+
 public class Neo4jUtils {
 	
 	private static final Set<String> majorCompoundLabels = new HashSet<> ();

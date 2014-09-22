@@ -52,7 +52,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 		params.put("entry", cpd.getEntry());
 		params.put("name", cpd.getName().toLowerCase());
 		params.put("formula", cpd.getFormula());
-		params.put("inchi", cpd.getInChI());
+		params.put("inchi", cpd.getInchi());
 		params.put("smiles", cpd.getSmiles());
 		params.put("originalSource", cpd.getOriginalSource());
 		params.put("charge", cpd.getCharge());
@@ -88,7 +88,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
 			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);	
 		}
-		for (MnxMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
+		for (MnxMetaboliteCrossReferenceEntity xref : cpd.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue();
 			params.put("dbEntry", dbEntry);

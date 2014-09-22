@@ -29,8 +29,8 @@ public class MnxMetaboliteStagingTransform extends AbstractMetaboliteStagingTran
 		}
 		
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
-		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInChI()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossreferences()));
+		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInchi()));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(cpd.getSmiles()));
 		List<String> names = new ArrayList<> ();
 		//add name if not null or contains at least one character

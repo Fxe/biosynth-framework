@@ -1,19 +1,45 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.graphdb.DynamicLabel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
 implements EtlTransform<M, CentralMetaboliteEntity> {
 	
-	protected final static String METABOLITE_LABEL = "Metabolite";
-	protected final static String METABOLITE_PROPERTY_LABEL = "MetaboliteProperty";
-	protected final static String METABOLITE_FORMULA_LABEL = "Formula";
-	protected final static String METABOLITE_NAME_LABEL = "Name";
-	protected static final String METABOLITE_SMILE_LABEL = "SMILES";
-	protected static final String METABOLITE_INCHI_LABEL = "InChI";
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
+	
+	protected static final String MODEL_LABEL = DynamicLabel.label("Model").toString();
+	protected static final String SUPER_METABOLITE_LABEL = GlobalLabel.SuperMetabolite.toString();
+	protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
+	protected static final String METABOLITE_PROPERTY_LABEL = GlobalLabel.MetaboliteProperty.toString();
+	
+	protected static final String PROPERTY_UNIQUE_KEY = "key";
+	
+	protected static final String METABOLITE_FORMULA_LABEL = MetabolitePropertyLabel.MolecularFormula.toString();
+	protected static final String METABOLITE_NAME_LABEL = MetabolitePropertyLabel.Name.toString();
+	protected static final String METABOLITE_SMILE_LABEL = MetabolitePropertyLabel.SMILES.toString();
+	protected static final String METABOLITE_INCHI_LABEL = MetabolitePropertyLabel.InChI.toString();
+	protected static final String METABOLITE_CHARGE_LABEL = MetabolitePropertyLabel.Charge.toString();
+	
+	protected static final String METABOLITE_FORMULA_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasMolecularFormula.toString();
+	protected static final String METABOLITE_NAME_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasName.toString();
+	protected static final String METABOLITE_SMILE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasSMILES.toString();
+	protected static final String METABOLITE_INCHI_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasInChI.toString();
+	protected static final String METABOLITE_CHARGE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCharge.toString();
+	
+	protected static final String METABOLITE_INSTANCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.InstanceOf.toString();
 	
 	private final String majorLabel;
 	
@@ -58,18 +84,50 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 		return propertyEntity;
 	}
 	
-	protected CentralMetabolitePropertyEntity buildPropertyEntity(Object value, String majorLabel) {
+	protected CentralMetabolitePropertyEntity buildPropertyEntity(
+			Object value, String majorLabel) {
 		return buildPropertyEntity("key", value, majorLabel);
+	}
+	
+	protected CentralMetaboliteRelationshipEntity buildRelationhipEntity(
+			String relationShipType) {
+		CentralMetaboliteRelationshipEntity relationshipEntity =
+				new CentralMetaboliteRelationshipEntity();
+		relationshipEntity.setMajorLabel(relationShipType);
+		
+		return relationshipEntity;
+	}
+	
+	protected Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> buildPropertyLinkPair(
+			String key, Object value, String majorLabel, String relationShipType) {
+		CentralMetabolitePropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
+		CentralMetaboliteRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
+		if (propertyEntity == null || relationshipEntity == null) {
+			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
+			return null;
+		}
+		Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyPair =
+				new ImmutablePair<>(propertyEntity, relationshipEntity);
+		
+		return propertyPair;
 	}
 	
 	protected void configureFormulaLink(CentralMetaboliteEntity centralMetaboliteEntity, M entity) {
 		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyEntity(entity.getFormula(), METABOLITE_FORMULA_LABEL));
+				this.buildPropertyLinkPair(
+						"key", 
+						entity.getFormula(), 
+						METABOLITE_FORMULA_LABEL, 
+						METABOLITE_FORMULA_RELATIONSHIP_TYPE));
 	}
 	
 	protected void configureNameLink(CentralMetaboliteEntity centralMetaboliteEntity, M entity) {
 		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyEntity(entity.getName(), METABOLITE_NAME_LABEL));
+				this.buildPropertyLinkPair(
+						"key", 
+						entity.getName(), 
+						METABOLITE_NAME_LABEL, 
+						METABOLITE_NAME_RELATIONSHIP_TYPE));
 	}
 	
 	protected abstract void configureAdditionalPropertyLinks(CentralMetaboliteEntity centralMetaboliteEntity, M entity);

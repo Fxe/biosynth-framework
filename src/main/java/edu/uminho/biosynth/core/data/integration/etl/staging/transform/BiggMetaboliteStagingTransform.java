@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class BiggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<BiggMetaboliteEntity, BiggMetaboliteCrossReferenceEntity> {
+public class BiggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<BiggMetaboliteEntity, BiggMetaboliteCrossreferenceEntity> {
 
 	@Override
 	public MetaboliteStga etlTransform(BiggMetaboliteEntity cpd) {
@@ -22,7 +22,7 @@ public class BiggMetaboliteStagingTransform extends AbstractMetaboliteStagingTra
 		}
 		
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossreferences()));
 		cpd_stga.setMetaboliteInchiDim( this.generateInChI(null));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(null));
 		List<String> names = new ArrayList<> ();

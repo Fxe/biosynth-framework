@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;

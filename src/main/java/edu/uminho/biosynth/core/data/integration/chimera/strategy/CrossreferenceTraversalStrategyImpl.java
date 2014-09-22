@@ -15,7 +15,7 @@ import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 
 public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 

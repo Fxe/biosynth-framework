@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;

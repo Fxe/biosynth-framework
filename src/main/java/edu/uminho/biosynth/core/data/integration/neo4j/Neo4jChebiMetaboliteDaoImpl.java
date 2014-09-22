@@ -12,7 +12,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
@@ -87,7 +87,7 @@ public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetabolit
 			executionEngine.execute("MERGE (n:Name {name:{name}}) ", params);
 			executionEngine.execute("MATCH (cpd:ChEBI {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
-		for (ChebiMetaboliteCrossReferenceEntity xref: cpd.getCrossreferences()) {
+		for (ChebiMetaboliteCrossreferenceEntity xref: cpd.getCrossreferences()) {
 
 			switch (xref.getType()) {
 				case DATABASE:

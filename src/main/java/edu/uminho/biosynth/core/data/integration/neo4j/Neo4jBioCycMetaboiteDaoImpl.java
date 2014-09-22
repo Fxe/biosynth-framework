@@ -15,7 +15,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
@@ -78,7 +78,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 		params.put("gibbs", cpd.getGibbs());
 		params.put("comment", cpd.getComment());
 		params.put("smiles", cpd.getSmiles());
-		params.put("inchi", cpd.getInChI());
+		params.put("inchi", cpd.getInchi());
 		params.put("molWeight", cpd.getMolWeight());
 		String biocycSubDb = translateDb(cpd.getSource());
 		
@@ -120,7 +120,7 @@ public class Neo4jBioCycMetaboiteDaoImpl extends AbstractNeo4jDao<BioCycMetaboli
 			executionEngine.execute("MATCH (cpd:" + biocycSubDb + " {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
-		for (BioCycMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
+		for (BioCycMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);

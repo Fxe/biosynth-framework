@@ -20,9 +20,9 @@ import org.junit.Test;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.GraphCluster;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
@@ -94,19 +94,19 @@ public class TestIntegrateMetabolite {
 		IMetaboliteService<KeggCompoundMetaboliteEntity> keggService = new KeggService(dao);
 		IMetaboliteService<MnxMetaboliteEntity> mxnService = new MnxService(dao);
 		
-		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> biocycLoader = 
-				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossReferenceEntity.class, 
+		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossreferenceEntity> biocycLoader = 
+				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossreferenceEntity.class, 
 						biocycXrefTrans);
 		biocycLoader.setService(biocycService);
 		biocycLoader.setReferenceTransformer(biocycXrefTrans);
 		
-		ReferenceLoader<BiggMetaboliteEntity, BiggMetaboliteCrossReferenceEntity> biggLoader = 
-				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossReferenceEntity.class, biggXrefTrans);
+		ReferenceLoader<BiggMetaboliteEntity, BiggMetaboliteCrossreferenceEntity> biggLoader = 
+				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossreferenceEntity.class, biggXrefTrans);
 		biggLoader.setService(biggService);
 		biggLoader.setReferenceTransformer(biggXrefTrans);
 		
-		ReferenceLoader<BiggMetaboliteEntity, BiggMetaboliteCrossReferenceEntity> biggLoader2 = 
-				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossReferenceEntity.class, biggXrefTrans);
+		ReferenceLoader<BiggMetaboliteEntity, BiggMetaboliteCrossreferenceEntity> biggLoader2 = 
+				new ReferenceLoader<>(BiggMetaboliteEntity.class, BiggMetaboliteCrossreferenceEntity.class, biggXrefTrans);
 		biggLoader2.setService(biggService2);
 		biggLoader2.setReferenceTransformer(biggXrefTrans);
 		

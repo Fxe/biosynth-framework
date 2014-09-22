@@ -6,9 +6,9 @@ import java.util.Set;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
 public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy {
 
@@ -36,16 +36,16 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 	
 	private String getIsotopeFormula(Node node) {
 		Set<Node> formulaNodes = new HashSet<> ();
-		for (Relationship relationship : node.getRelationships(CompoundRelationshipType.HasFormula)) {
+		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
 			formulaNodes.add(relationship.getOtherNode(node));
 		}
 		
 		if (formulaNodes.size() > 1) System.out.println("More than one formula");
 		
 		for (Node formulaNode : formulaNodes) {
-			if (formulaNode.hasLabel(CompoundPropertyLabel.Formula)) {
+			if (formulaNode.hasLabel(MetabolitePropertyLabel.MolecularFormula)) {
 				for (Relationship relationship : formulaNode
-						.getRelationships(CompoundRelationshipType.Isomorphic)) {
+						.getRelationships(MetaboliteRelationshipType.Isomorphic)) {
 					Node isotopeFormulaNode = relationship.getOtherNode(formulaNode);
 					String isotopeFormula = (String) isotopeFormulaNode.getProperty("formula");
 					if (!isotopeFormula.trim().isEmpty()) return isotopeFormula.trim();
@@ -57,14 +57,14 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 	
 	private Integer getCharge(Node node) {
 		Set<Node> chargeNodes = new HashSet<> ();
-		for (Relationship relationship : node.getRelationships(CompoundRelationshipType.HasCharge)) {
+		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.HasCharge)) {
 			chargeNodes.add(relationship.getOtherNode(node));
 		}
 		
 		if (chargeNodes.size() > 1) System.out.println("More than one charge");
 		
 		for (Node chargeNode : chargeNodes) {
-			if (chargeNode.hasLabel(CompoundPropertyLabel.Charge)) {
+			if (chargeNode.hasLabel(MetabolitePropertyLabel.Charge)) {
 				Integer charge = (Integer)chargeNode.getProperty("charge");
 				if (charge != null) return charge;
 			}
@@ -108,7 +108,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 		visited.add(this.initialNode.getId());
 		
 		for (Relationship relationship : this.initialNode
-				.getRelationships(CompoundRelationshipType.HasCrossreferenceTo)) {
+				.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
 			Node xref = relationship.getOtherNode(initialNode);
 			//Accept Xref if formula does not have isotope version
 			visited.add(xref.getId());
@@ -119,7 +119,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 					result.add(xref.getId());
 				} else {
 					for (Relationship xrefRelationship : xref
-							.getRelationships(CompoundRelationshipType.HasCrossreferenceTo)) {
+							.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
 						Node xref_ = xrefRelationship.getOtherNode(xref);
 						if (!visited.contains(xref_.getId())) {
 							if (isMatch(myIsotopeFormula, myCharge, xref_)) {

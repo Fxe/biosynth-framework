@@ -11,9 +11,9 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundPropertyLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
 public class InchiClusterStrategy implements ClusteringStrategy {
 	
@@ -31,21 +31,21 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 	@Override
 	public void setInitialNode(Long id) {
 		this.initialNode = db.getNodeById(id);
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
+		if (!this.initialNode.hasLabel(MetabolitePropertyLabel.InChI)) {
 			throw new RuntimeException("Invalid Node - not a inchi node");
 		}
 	}
 
 	@Override
 	public Set<Long> execute() {
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
+		if (!this.initialNode.hasLabel(MetabolitePropertyLabel.InChI)) {
 			throw new RuntimeException("Invalid Node - not a inchi node");
 		}
 
 		Set<Long> nodes = new HashSet<> ();
 		for (Path position: db.traversalDescription()
 				.depthFirst()
-				.relationships(CompoundRelationshipType.HasInChI)
+				.relationships(MetaboliteRelationshipType.HasInChI)
 				.evaluator(Evaluators.all()).traverse(initialNode)) {
 			
 			if (position.startNode().getId() != initialNode.getId() && 
@@ -63,7 +63,7 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 	
 	@Override
 	public String toString() {
-		if (!this.initialNode.hasLabel(CompoundPropertyLabel.InChI)) {
+		if (!this.initialNode.hasLabel(MetabolitePropertyLabel.InChI)) {
 			throw new RuntimeException("Invalid Node - not a inchi node");
 		}
 		return "InchiClusterStrategy " + initialNode.getProperty("inchi");

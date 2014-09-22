@@ -46,7 +46,7 @@ public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTra
 			if (name.trim().length() > 0) names.add(name);
 		}
 		cpd_stga.setMetaboliteNameGroupDim( this.generateNames(names));
-		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossreferences()));
 		
 		return cpd_stga;
 	}

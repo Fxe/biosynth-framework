@@ -15,7 +15,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeegDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
@@ -96,7 +96,7 @@ public class Neo4jKeggDrugMetaboliteDaoImpl extends AbstractNeo4jDao<KeggDrugMet
 		}
 
 		
-		for (KeegDrugMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
+		for (KeggDrugMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
 			
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary

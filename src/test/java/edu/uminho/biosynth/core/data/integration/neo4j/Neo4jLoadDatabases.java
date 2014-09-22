@@ -64,7 +64,7 @@ public class Neo4jLoadDatabases {
 				try ( Transaction tx = db.beginTx()) {
 					for (SeedMetaboliteEntity b : batch) {
 						System.out.println("SAVE:" + b.getEntry());
-						System.out.println(b.getCrossReferences());
+						System.out.println(b.getCrossreferences());
 						seedNeo4jDao.save(b);
 					}
 					tx.success();
@@ -110,7 +110,7 @@ public class Neo4jLoadDatabases {
 				try ( Transaction tx = db.beginTx()) {
 					for (BioCycMetaboliteEntity b : batch) {
 						System.out.println("SAVE:" + b.getEntry());
-						System.out.println(b.getCrossReferences());
+						System.out.println(b.getCrossreferences());
 						biocycNeo4jDao.save(b);
 					}
 					tx.success();

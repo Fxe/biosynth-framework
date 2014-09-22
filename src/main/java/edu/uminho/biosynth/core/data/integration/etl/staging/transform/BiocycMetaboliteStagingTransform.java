@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class BiocycMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> {
+public class BiocycMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<BioCycMetaboliteEntity, BioCycMetaboliteCrossreferenceEntity> {
 	
 	@Override
 	public MetaboliteStga etlTransform(BioCycMetaboliteEntity cpd) {
@@ -30,8 +30,8 @@ public class BiocycMetaboliteStagingTransform extends AbstractMetaboliteStagingT
 		}
 		
 		cpd_stga.setMetaboliteFormulaDim( this.generateFormula(cpd.getFormula()));
-		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossReferences()));
-		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInChI()));
+		cpd_stga.setMetaboliteXrefGroupDim( this.generateXrefGroup(cpd.getCrossreferences()));
+		cpd_stga.setMetaboliteInchiDim( this.generateInChI(cpd.getInchi()));
 		cpd_stga.setMetaboliteSmilesDim( this.generateSmiles(cpd.getSmiles()));
 		List<String> names = new ArrayList<> ();
 		//add name if not null or contains at least one character

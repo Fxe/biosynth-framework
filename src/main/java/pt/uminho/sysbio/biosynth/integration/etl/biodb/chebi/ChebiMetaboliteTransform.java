@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
+package pt.uminho.sysbio.biosynth.integration.etl.biodb.chebi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,23 +7,23 @@ import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 
-public class KeggDrugTransform 
-extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
+public class ChebiMetaboliteTransform
+extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 
-	private static final String KEGG_DRUG_METABOLITE_LABEL = MetaboliteMajorLabel.LigandDrug.toString();
+	private static final String CHEBI_METABOLITE_LABEL = MetaboliteMajorLabel.ChEBI.toString();
 	
-	public KeggDrugTransform() {
-		super(KEGG_DRUG_METABOLITE_LABEL);
+	public ChebiMetaboliteTransform() {
+		super(CHEBI_METABOLITE_LABEL);
 	}
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
 			CentralMetaboliteEntity centralMetaboliteEntity,
-			KeggDrugMetaboliteEntity entity) {
+			ChebiMetaboliteEntity entity) {
 		
 		centralMetaboliteEntity.addPropertyEntity(
 				this.buildPropertyLinkPair(
@@ -42,11 +42,11 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 	@Override
 	protected void configureCrossreferences(
 			CentralMetaboliteEntity centralMetaboliteEntity,
-			KeggDrugMetaboliteEntity entity) {
+			ChebiMetaboliteEntity entity) {
 		
 		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
 		
-		for (KeggDrugMetaboliteCrossreferenceEntity xref : entity.getCrossReferences()) {
+		for (ChebiMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
@@ -55,6 +55,8 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 			proxy.addLabel(METABOLITE_LABEL);
 			crossreferences.add(proxy);
 		}
+		
+		centralMetaboliteEntity.setCrossreferences(crossreferences);
 	}
-	
+
 }

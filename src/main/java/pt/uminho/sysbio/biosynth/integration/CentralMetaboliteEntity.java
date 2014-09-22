@@ -3,17 +3,18 @@ package pt.uminho.sysbio.biosynth.integration;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.codec.language.bm.Rule.RPattern;
+import org.apache.commons.lang3.tuple.Pair;
+
 import edu.uminho.biosynth.core.components.Metabolite;
 
 public class CentralMetaboliteEntity extends AbstractCentralEntity implements Metabolite {
 
 	private List<CentralMetaboliteProxyEntity> crossreferences = new  ArrayList<> ();
-	private List<CentralMetabolitePropertyEntity> propertyEntities = new ArrayList<> ();
+	private List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities = new ArrayList<> ();
 
 	
-	public void setEntry(String entry) {
-		properties.put("entry", entry);
-	};
+
 //	
 //	@Override
 //	public void setFormula(String formula) {
@@ -32,27 +33,30 @@ public class CentralMetaboliteEntity extends AbstractCentralEntity implements Me
 		this.crossreferences.add(crossreference);
 	}
 
-	public List<CentralMetabolitePropertyEntity> getPropertyEntities() {
+	public List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> getPropertyEntities() {
 		return propertyEntities;
 	}
 	public void setPropertyEntities(
-			List<CentralMetabolitePropertyEntity> propertyEntities) {
+			List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities) {
 		this.propertyEntities = propertyEntities;
 	}
-	public void addPropertyEntity(CentralMetabolitePropertyEntity propertyEntity) {
-		if (propertyEntity != null)
+	public void addPropertyEntity(Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyEntity) {
+		if (propertyEntity != null) {
+			if (propertyEntity.getLeft() == null || propertyEntity.getRight() == null) {
+				throw new RuntimeException();
+			}
 			this.propertyEntities.add(propertyEntity);
+		}
 	}
+	
+	@Override
+	public String getEntry() { return (String)this.properties.get("entry");}
+	public void setEntry(String entry) { properties.put("entry", entry);};
 
 	@Override
-	public String getName() {
-		return (String)this.properties.get("name");
-	}
-
+	public String getName() { return (String)this.properties.get("name");}
 	@Override
-	public String getFormula() {
-		return (String)this.properties.get("formula");
-	}
+	public String getFormula() { return (String)this.properties.get("formula");}
 	
 	
 	@Override
@@ -62,8 +66,11 @@ public class CentralMetaboliteEntity extends AbstractCentralEntity implements Me
 		if (propertyEntities.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (CentralMetabolitePropertyEntity p : propertyEntities) {
-				sb.append(p);
+			for (Pair<?, ?> p : propertyEntities) {
+				sb.append(p.getLeft().getClass().getSimpleName()).append("\n")
+				  .append(p.getLeft()).append(" => \n")
+				  .append(p.getRight().getClass().getSimpleName()).append("\n")
+				  .append(p.getRight());
 			}
 		}
 		sb.append("Crossreference Properties:\n");

@@ -101,7 +101,7 @@ public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCom
 		}
 
 		
-		for (KeggCompoundMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
+		for (KeggCompoundMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 			
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary

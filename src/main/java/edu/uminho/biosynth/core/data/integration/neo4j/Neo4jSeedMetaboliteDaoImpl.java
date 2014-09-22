@@ -97,7 +97,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 			executionEngine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
-		for (SeedCompoundCrossReferenceEntity xref : cpd.getCrossReferences()) {
+		for (SeedCompoundCrossReferenceEntity xref : cpd.getCrossreferences()) {
 //			System.out.println(xref);
 			switch (xref.getType()) {
 				case DATABASE:

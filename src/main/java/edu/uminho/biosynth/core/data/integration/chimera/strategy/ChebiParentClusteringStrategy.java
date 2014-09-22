@@ -6,8 +6,8 @@ import java.util.Set;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundRelationshipType;
 
 public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrategy {
 
@@ -20,7 +20,7 @@ public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrate
 		Set<Long> ids = new HashSet<> ();
 		
 		for (Relationship relationship : this.initialNode
-				.getRelationships(CompoundRelationshipType.HasCrossreferenceTo)) {
+				.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
 			
 			Node other = relationship.getOtherNode(initialNode);
 			

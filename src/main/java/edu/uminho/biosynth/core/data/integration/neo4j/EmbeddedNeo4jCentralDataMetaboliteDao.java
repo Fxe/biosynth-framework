@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 /**
@@ -100,16 +101,16 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 		
 		metabolite.setId(node.getId());
 		
-		for (CentralMetabolitePropertyEntity propertyEntity : metabolite.getPropertyEntities()) {
-			Label propertyMajor = DynamicLabel.label(propertyEntity.getMajorLabel());
-			String uniqueKey = propertyEntity.getUniqueKey();
-			String uniqueValue = (String) propertyEntity.getProperties().get(uniqueKey);
-			Node propertyNode = this.getOrCreateNode(propertyMajor, uniqueKey, uniqueValue);
-			this.updateNode(propertyNode, propertyEntity.getProperties());
-			propertyEntity.setId(propertyNode.getId());
-			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipMajorLabel());
-			node.createRelationshipTo(propertyNode, relationshipType);
-		}
+//		for (CentralMetabolitePropertyEntity propertyEntity : metabolite.getPropertyEntities()) {
+//			Label propertyMajor = DynamicLabel.label(propertyEntity.getMajorLabel());
+//			String uniqueKey = (String) propertyEntity.getUniqueKey();
+//			String uniqueValue = (String) propertyEntity.getProperties().get(uniqueKey);
+//			Node propertyNode = this.getOrCreateNode(propertyMajor, uniqueKey, uniqueValue);
+//			this.updateNode(propertyNode, propertyEntity.getProperties());
+//			propertyEntity.setId(propertyNode.getId());
+//			RelationshipType relationshipType = DynamicRelationshipType.withName(propertyEntity.getRelationshipMajorLabel());
+//			node.createRelationshipTo(propertyNode, relationshipType);
+//		}
 		
 		for (CentralMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
 			Label xrefMajor = DynamicLabel.label(xref.getMajorLabel());
@@ -117,7 +118,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());
 			if ( !xrefNode.hasProperty("proxy")) xrefNode.setProperty("proxy", true);
 			
-			RelationshipType relationshipType = CompoundRelationshipType.HasCrossreferenceTo;
+			RelationshipType relationshipType = MetaboliteRelationshipType.HasCrossreferenceTo;
 			Relationship relationship = node.createRelationshipTo(xrefNode, relationshipType);
 			this.updateRelationship(relationship, xref.getProperties());
 		}

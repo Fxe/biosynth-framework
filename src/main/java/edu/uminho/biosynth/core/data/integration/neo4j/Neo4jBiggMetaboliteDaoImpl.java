@@ -15,7 +15,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
@@ -203,7 +203,7 @@ public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteE
 				executionEngine.execute("MATCH (cpd:BiGG {id:{id}}), (c:Compartment {compartment:{compartment}}) MERGE (cpd)-[r:FoundIn]->(c)", params);
 			}
 			
-			for (BiggMetaboliteCrossReferenceEntity xref : cpd.getCrossReferences()) {
+			for (BiggMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 				switch (xref.getType()) {
 					case DATABASE:
 						String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());

@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
@@ -52,10 +52,10 @@ public class TestReferenceLoader {
 
 	@Test
 	public void test() {
-		IReferenceTransformer<BioCycMetaboliteCrossReferenceEntity> biocycXrefTrans = 
+		IReferenceTransformer<BioCycMetaboliteCrossreferenceEntity> biocycXrefTrans = 
 				new TransformBiocycMetaboliteCrossReference();
-		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossReferenceEntity> biocycLoader = 
-				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossReferenceEntity.class, 
+		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossreferenceEntity> biocycLoader = 
+				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossreferenceEntity.class, 
 						biocycXrefTrans);
 		IMetaboliteService<BioCycMetaboliteEntity> biocycService = new BiocycService(dao);
 		biocycLoader.setService(biocycService);
