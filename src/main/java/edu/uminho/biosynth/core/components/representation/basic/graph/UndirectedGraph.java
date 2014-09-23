@@ -149,8 +149,7 @@ public class UndirectedGraph<V, E> implements BinaryGraph<V, E> {
 
 	@Override
 	public boolean addEdge(V src, V dst, E e) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.addEdge(new DefaultBinaryEdge<E, V>(e, src, dst));
 	}
 
 	@Override
