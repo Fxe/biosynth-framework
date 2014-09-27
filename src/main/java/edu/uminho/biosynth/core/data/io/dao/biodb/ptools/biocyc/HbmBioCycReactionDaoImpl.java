@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +15,13 @@ import edu.uminho.biosynth.core.data.io.dao.hibernate.AbstractHibernateDao;
 public class HbmBioCycReactionDaoImpl 
 extends AbstractHibernateDao implements ReactionDao<BioCycReactionEntity> {
 
+	private String pgdb = "META";
+	
+	public String getPgdb() { return pgdb;}
+	public void setPgdb(String pgdb) { this.pgdb = pgdb;}
+	
 	@Override
-	public BioCycReactionEntity getReactionById(Serializable id) {
+	public BioCycReactionEntity getReactionById(Long id) {
 		Object rxnObj = this.getSession().get(BioCycReactionEntity.class, id);
 		return BioCycReactionEntity.class.cast(rxnObj);
 	}
@@ -41,16 +45,18 @@ extends AbstractHibernateDao implements ReactionDao<BioCycReactionEntity> {
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
-		Query query = this.getSession().createQuery("SELECT rxn.id FROM BioCycReactionEntity rxn");
+	public Set<Long> getAllReactionIds() {
+		Query query = this.getSession().createQuery("SELECT rxn.id FROM BioCycReactionEntity rxn WHERE rxn.source = :source");
+		query.setParameter("source", pgdb);
 		@SuppressWarnings("unchecked")
-		Set<Serializable> res = new HashSet<> (query.list());
+		Set<Long> res = new HashSet<> (query.list());
 		return res;
 	}
 
 	@Override
 	public Set<String> getAllReactionEntries() {
-		Query query = this.getSession().createQuery("SELECT rxn.entry FROM BioCycReactionEntity rxn");
+		Query query = this.getSession().createQuery("SELECT rxn.entry FROM BioCycReactionEntity rxn WHERE rxn.source = :source");
+		query.setParameter("source", pgdb);
 		@SuppressWarnings("unchecked")
 		Set<String> res = new HashSet<> (query.list());
 		return res;

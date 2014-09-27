@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
@@ -78,22 +79,19 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		return this.base.getString("reaction-direction");
 	}
 	
-	public int getOrientation() {
-		try {
-			if ( !this.base.has("reaction-direction")) return 0;
-			String orientation = this.base.getString("reaction-direction");
-			if ( orientation.equals("LEFT-TO-RIGHT")) return 1;
-			if ( orientation.equals("REVERSIBLE")) return 0;
-			if ( orientation.equals("PHYSIOL-LEFT-TO-RIGHT")) return 3;
-			if ( orientation.equals("RIGHT-TO-LEFT")) return -1;
-			if ( orientation.equals("PHYSIOL-RIGHT-TO-LEFT")) return -3;
-			if ( orientation.equals("IRREVERSIBLE-LEFT-TO-RIGHT")) return 2;
-			if ( orientation.equals("IRREVERSIBLE-RIGHT-TO-LEFT")) return -2;
-//			System.err.println(this.getEntry() + " => " + orientation);
-		} catch (JSONException ex) {
-			LOGGER.error(ex.getMessage());
-		}
-		return 9999;
+	public Orientation getOrientation() throws JSONException {
+		
+		if ( !this.base.has("reaction-direction")) return Orientation.Unknown;
+		String orientation = this.base.getString("reaction-direction");
+		if ( orientation.equals("LEFT-TO-RIGHT")) return Orientation.LeftToRight;
+		if ( orientation.equals("REVERSIBLE")) return Orientation.Reversible;
+		if ( orientation.equals("PHYSIOL-LEFT-TO-RIGHT")) return Orientation.LeftToRight;
+		if ( orientation.equals("RIGHT-TO-LEFT")) return Orientation.RightToLeft;
+		if ( orientation.equals("PHYSIOL-RIGHT-TO-LEFT")) return Orientation.RightToLeft;
+		if ( orientation.equals("IRREVERSIBLE-LEFT-TO-RIGHT")) return Orientation.LeftToRight;
+		if ( orientation.equals("IRREVERSIBLE-RIGHT-TO-LEFT")) return Orientation.RightToLeft;
+		
+		return null;
 	}
 	
 	public boolean isValid() {
@@ -106,9 +104,13 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		return true;
 	}
 	
+	public String getFrameId() {
+		return base.getString("frameid");
+	}
+	
 	@Override
 	public String getEntry() {
-		return base.getString("frameid");
+		return base.getString("ID");
 	}
 
 	@Override
@@ -193,12 +195,12 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			}
 			
 			
-			if ( this.getOrientation() > 10) {
+			if ( this.getOrientation().equals(Orientation.Unknown)) {
 				sb.append(" <?> ");
 			} else {
-				if (this.getOrientation() > 0) {
+				if (this.getOrientation().equals(Orientation.LeftToRight)) {
 					sb.append(" => ");
-				} else if ( this.getOrientation() < 0) {
+				} else if ( this.getOrientation().equals(Orientation.RightToLeft)) {
 					sb.append(" <= ");
 				} else {
 					sb.append(" <=> ");
@@ -428,8 +430,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			for (int i = 0; i < dblinkJsArray.length(); i++) {
 				JSONObject dblinkJsObj = dblinkJsArray.getJSONObject(i);
 				BioCycReactionCrossReferenceEntity crossReference = new BioCycReactionCrossReferenceEntity();
-				//XXX: must change type for genes
-				crossReference.setType(GenericCrossReference.Type.DATABASE);
+
 				if (dblinkJsObj.has("dblink-db"))
 					crossReference.setRef(dblinkJsObj.getString("dblink-db"));
 				if (dblinkJsObj.has("dblink-oid"))
@@ -438,6 +439,13 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 					crossReference.setRelationship(dblinkJsObj.getString("unification"));
 				if (dblinkJsObj.has("dblink-URL"))
 					crossReference.setUrl(dblinkJsObj.getString("dblink-URL"));
+				
+				if (crossReference.getRef().equals("UNIPROT")) {
+					crossReference.setType(GenericCrossReference.Type.GENE);
+				} else {
+					crossReference.setType(GenericCrossReference.Type.DATABASE);
+				}
+				
 				crossReferences.add(crossReference);
 			}
 		}

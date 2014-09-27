@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.io.dao;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import edu.uminho.biosynth.core.components.GenericReaction;
@@ -22,7 +21,7 @@ public interface ReactionDao<R extends GenericReaction> {
 	 * @param id the id of the reaction
 	 * @return the reaction with id <code>id</code> if found
 	 */
-	public R getReactionById(Serializable id);
+	public R getReactionById(Long id);
 	
 	/**
 	 * Looks up a reaction entity by it's entry.
@@ -47,7 +46,7 @@ public interface ReactionDao<R extends GenericReaction> {
 	 * 
 	 * @return a set that contains all reaction ids
 	 */
-	public Set<Serializable> getAllReactionIds();
+	public Set<Long> getAllReactionIds();
 	
 	/**
 	 * List all reaction entry

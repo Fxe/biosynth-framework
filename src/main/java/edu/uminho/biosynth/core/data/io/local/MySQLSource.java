@@ -20,6 +20,7 @@ import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
+import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.data.io.ILocalSource;
 import edu.uminho.biosynth.core.data.io.IPageableSource;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
@@ -114,7 +115,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			rxn.setName( res.getString( 1));
 //			rxn.setEquation( res.getString( 2));
 			rxn.setDescription( res.getString( 3));
-			rxn.setOrientation( res.getInt( 4));
+			rxn.setOrientation( Orientation.Reversible);
 		}
 		if (empty) return null;
 
@@ -989,6 +990,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 		while ( res.next()){
 			String id = res.getString( 1);
 			int orientation = res.getInt( 2);
+			System.out.println(orientation);
 			String source = res.getString( 3);
 			String name = res.getString( 4);
 //			String equation = res.getString( 5);
@@ -997,7 +999,7 @@ public class MySQLSource implements ILocalSource, IRemoteSource, IPageableSource
 			rxn.setEntry(id);
 			rxn.setDescription(description);
 //			rxn.setEquation(equation);
-			rxn.setOrientation(orientation);
+			rxn.setOrientation(Orientation.Reversible);
 			rxn.setName(name);
 			rxn.setSource(source);
 			

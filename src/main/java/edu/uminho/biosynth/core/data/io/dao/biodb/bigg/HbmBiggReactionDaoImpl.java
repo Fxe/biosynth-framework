@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +32,7 @@ public class HbmBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
 	@Override
-	public BiggReactionEntity getReactionById(Serializable id) {
+	public BiggReactionEntity getReactionById(Long id) {
 		Object cpd = this.getSession().get(BiggReactionEntity.class, id);
 		return BiggReactionEntity.class.cast(cpd);
 	}
@@ -61,10 +60,10 @@ public class HbmBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
+	public Set<Long> getAllReactionIds() {
 		Query query = this.getSession().createQuery("SELECT rxn.id FROM BiggReactionEntity rxn");
 		@SuppressWarnings("unchecked")
-		Set<Serializable> res = new HashSet<> (query.list());
+		Set<Long> res = new HashSet<> (query.list());
 		return res;
 	}
 

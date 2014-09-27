@@ -9,9 +9,18 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionRightEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
@@ -68,7 +77,16 @@ public class HelperHbmConfigInitializer {
 			  
 			  .addAnnotatedClass(KeggReactionEntity.class)
 			  .addAnnotatedClass(KeggReactionLeftEntity.class)
-			  .addAnnotatedClass(KeggReactionRightEntity.class);
+			  .addAnnotatedClass(KeggReactionRightEntity.class)
+			  .addAnnotatedClass(BioCycReactionEntity.class)
+			  .addAnnotatedClass(BioCycReactionCrossReferenceEntity.class)
+			  .addAnnotatedClass(BioCycReactionLeftEntity.class)
+			  .addAnnotatedClass(BioCycReactionRightEntity.class)
+			  .addAnnotatedClass(BioCycReactionEcNumberEntity.class)
+			  .addAnnotatedClass(BiggReactionEntity.class)
+			  .addAnnotatedClass(BiggReactionLeftEntity.class)
+			  .addAnnotatedClass(BiggReactionRightEntity.class)
+			  .addAnnotatedClass(BiggReactionCrossReferenceEntity.class);
 		ServiceRegistry servReg = 
 				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);

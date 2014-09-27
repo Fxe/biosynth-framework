@@ -13,6 +13,7 @@ import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericOrganism;
 import edu.uminho.biosynth.core.components.GenericReactionPair;
+import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.data.io.IRemoteSource;
@@ -159,7 +160,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		rxn.setComment(null);
 		rxn.setDefinition(null);
 		rxn.setRemark(parser.getRemark());
-		rxn.setOrientation(0);
+		rxn.setOrientation(Orientation.Reversible);
 		rxn.setName(parser.getName());
 		
 //		EquationParser eqp = new EquationParser( rxn.getEquation());

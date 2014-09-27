@@ -1,9 +1,9 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
@@ -62,7 +62,7 @@ public class TestHbmBioCycReactionDaoImpl {
 	
 	@Test
 	public void testGetAllReactionIdsEmpty() {
-		Set<Serializable> ids = reactionDao.getAllReactionIds();
+		Set<Long> ids = reactionDao.getAllReactionIds();
 		
 		assertEquals(0, ids.size());
 	}
@@ -121,7 +121,7 @@ public class TestHbmBioCycReactionDaoImpl {
 		crossReferenceEntity1.setValue("R123456");
 		crossReferenceEntity1.setBioCycReactionEntity(reaction);
 
-		reaction.getCrossReferences().add(crossReferenceEntity1);
+		reaction.getCrossreferences().add(crossReferenceEntity1);
 		
 		reactionDao.saveReaction(reaction);
 		

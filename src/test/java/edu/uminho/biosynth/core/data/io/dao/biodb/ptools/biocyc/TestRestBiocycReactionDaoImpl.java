@@ -47,7 +47,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(1, rxn.getLeft().size());
 		assertEquals(3, rxn.getRight().size());
 		assertEquals(4, rxn.getEnzymaticReactions().size());
-		assertEquals(23, rxn.getCrossReferences().size());
+		assertEquals(23, rxn.getCrossreferences().size());
 		assertEquals(-33.084015, rxn.getGibbs(), EPSILON);
 	}
 
@@ -63,7 +63,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(2, rxn.getLeft().size());
 		assertEquals(3, rxn.getRight().size());
 		assertEquals(1, rxn.getEnzymaticReactions().size());
-		assertEquals(1, rxn.getCrossReferences().size());
+		assertEquals(1, rxn.getCrossreferences().size());
 		assertEquals(8.77002, rxn.getGibbs(), EPSILON);
 	}
 	
@@ -80,7 +80,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(2, rxn.getLeft().size());
 		assertEquals(2, rxn.getRight().size());
 		assertEquals(1, rxn.getEnzymaticReactions().size());
-		assertEquals(2, rxn.getCrossReferences().size());
+		assertEquals(2, rxn.getCrossreferences().size());
 		assertEquals(13.640015, rxn.getGibbs(), EPSILON);
 	}
 	
@@ -99,7 +99,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(2, rxn.getParents().size());
 		assertEquals(1, rxn.getEcNumbers().size());
 		assertEquals(0, rxn.getEnzymaticReactions().size());
-		assertEquals(0, rxn.getCrossReferences().size());
+		assertEquals(0, rxn.getCrossreferences().size());
 		assertEquals(null, rxn.getGibbs());
 	}
 	
@@ -119,7 +119,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(2, rxn.getLeft().size());
 		assertEquals(3, rxn.getRight().size());
 		assertEquals(1, rxn.getEnzymaticReactions().size());
-		assertEquals(2, rxn.getCrossReferences().size());
+		assertEquals(2, rxn.getCrossreferences().size());
 		assertEquals(-6.080078, rxn.getGibbs(), EPSILON);
 	}
 	
@@ -140,7 +140,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(2, rxn.getLeft().size());
 		assertEquals(1, rxn.getRight().size());
 		assertEquals(0, rxn.getEnzymaticReactions().size());
-		assertEquals(0, rxn.getCrossReferences().size());
+		assertEquals(0, rxn.getCrossreferences().size());
 		assertEquals(null, rxn.getGibbs());
 	}
 //	@Test

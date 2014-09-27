@@ -86,9 +86,12 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 		return rxnIdList;
 	}
 	
+	public String getFrameId() {
+		return this.base.getString("frameid");
+	}
+	
 	public String getEntry() throws JSONException {
-		String entry = this.base.getString("frameid"); 
-		return entry;
+		return this.base.getString("ID");
 	}
 	
 	public String getSource() throws JSONException {

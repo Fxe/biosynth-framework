@@ -10,16 +10,23 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.BiggEquationParser;
+import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.BiggReactionParser;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggReactionDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.HbmBiggMetaboliteDaoImpl;
+import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.HbmBiggReactionDaoImpl;
 
 public class BiggDaoFactory {
 	
 	private Resource resource;
 	private SessionFactory sessionFactory;
 	private Configuration configuration;
+	private BiggEquationParser biggEquationParser;
+	private BiggReactionParser biggReactionParser;
 	
 	public BiggDaoFactory withFile(File file) {
 		this.resource = new FileSystemResource(file);
@@ -36,6 +43,16 @@ public class BiggDaoFactory {
 		return this;
 	}
 	
+	public BiggDaoFactory withBiggEquationParser(BiggEquationParser biggEquationParser) {
+		this.biggEquationParser = biggEquationParser;
+		return this;
+	}
+	
+	public BiggDaoFactory withBiggReactionParser(BiggReactionParser biggReactionParser) {
+		this.biggReactionParser = biggReactionParser;
+		return this;
+	}
+	
 	public CsvBiggMetaboliteDaoImpl buildCsvBiggMetaboliteDao() {
 		CsvBiggMetaboliteDaoImpl daoImpl = new CsvBiggMetaboliteDaoImpl();
 		if (!resource.exists()) {
@@ -48,6 +65,8 @@ public class BiggDaoFactory {
 	public CsvBiggReactionDaoImpl buildCsvBiggReactionDao() {
 		CsvBiggReactionDaoImpl daoImpl = new CsvBiggReactionDaoImpl();
 		daoImpl.setCsvFile(resource);
+		daoImpl.setBiggEquationParser(biggEquationParser);
+		daoImpl.setBiggReactionParser(biggReactionParser);
 		return daoImpl;
 	}
 	
@@ -58,6 +77,19 @@ public class BiggDaoFactory {
 			initialize(
 					BiggMetaboliteEntity.class, 
 					BiggMetaboliteCrossreferenceEntity.class);
+		}
+		
+		daoImpl.setSessionFactory(sessionFactory);
+		return daoImpl;
+	}
+	
+	public HbmBiggReactionDaoImpl buildHbmBiggReactionDao() {
+		HbmBiggReactionDaoImpl daoImpl = new HbmBiggReactionDaoImpl();
+		
+		if (sessionFactory == null) {
+			initialize(
+					BiggReactionEntity.class, 
+					BiggReactionCrossReferenceEntity.class);
 		}
 		
 		daoImpl.setSessionFactory(sessionFactory);

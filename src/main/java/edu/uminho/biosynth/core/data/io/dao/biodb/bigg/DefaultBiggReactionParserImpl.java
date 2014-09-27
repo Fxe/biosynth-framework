@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity;
 
-public class DefaultBiggReactionParser {
+public class DefaultBiggReactionParserImpl implements BiggReactionParser {
 	
 	public static String CSV_SEP = "\t";
 
-	public static List<BiggReactionEntity> parseReactions(InputStream inputStream) throws IOException {
+	private BiggEquationParser equationParser;
+	
+	public BiggEquationParser getEquationParser() { return equationParser;}
+	public void setEquationParser(BiggEquationParser equationParser) { this.equationParser = equationParser;}
+
+	public List<BiggReactionEntity> parseReactions(InputStream inputStream) throws IOException {
 		List<BiggReactionEntity> rxnReactions = new ArrayList<> ();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -24,7 +30,15 @@ public class DefaultBiggReactionParser {
 //		System.out.println(readLine);
 		while ( (readLine = br.readLine()) != null) {
 //			System.out.println(readLine);
+			
+			try {
+			
 			rxnReactions.add( parseReaction(readLine));
+			
+			} catch (Exception e) {
+				System.out.println(readLine);
+				throw e;
+			}
 			
 		}
 		
@@ -32,7 +46,7 @@ public class DefaultBiggReactionParser {
 		return rxnReactions;
 	}
 	
-	public static BiggReactionEntity parseReaction(String record) {
+	public BiggReactionEntity parseReaction(String record) {
 		/* Example Record
 		 * ENTRY  | NAME                                      | SYN | EQUATION                        | COMPARTMENT | ECN | REVERSIBLE   | TRANSLOCATION | ID      | MODEL REF
          * MTCMMT | Methylthiol: coenzyme M methyltransferase |     | [c] : com + dms --> ch4s + mcom | Cytosol     |     | Irreversible | N             | 1800860 | 9
@@ -46,11 +60,17 @@ public class DefaultBiggReactionParser {
 			if (synonym.trim().length() > 0) rxn.getSynonyms().add( synonym.trim());
 		}
 		rxn.setEquation(values[3]);
+		
+		this.equationParser.setEquation(rxn.getEquation());
+		this.equationParser.parse();
+		rxn.setLeft(this.equationParser.getLeft());
+		rxn.setRight(this.equationParser.getRight());
+		
 		for (String compartment : values[4].split(",")) {
 			if (compartment.trim().length() > 0) rxn.getCompartments().add( compartment.trim());
 		}
 		rxn.setEnzyme(values[5]);
-		rxn.setOrientation(values[6].equals("Reversible") ? 0 : 1);
+		rxn.setOrientation(values[6].equals("Reversible") ? Orientation.Reversible : Orientation.LeftToRight);
 		rxn.setTranslocation(values[7].equals("N") ? false:true);
 		rxn.setId(Long.parseLong(values[8]));
 		for (String modelIntValue : values[9].split(",")) {
@@ -66,7 +86,7 @@ public class DefaultBiggReactionParser {
 		return rxn;
 	}
 	
-	public static String convertToModelCrossReference(int i) {
+	public String convertToModelCrossReference(int i) {
 		/* INT - Model
 		 * 1 - E. coli iJR904
 		 * 2 - H. sapiens Recon 1

@@ -54,6 +54,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			
 			cpd = new BioCycMetaboliteEntity();
 
+			String frameId = parser.getFrameId();
 			String source = parser.getSource();
 			String entry = parser.getEntry();
 			String metaboliteClass = parser.getEntityClass();
@@ -73,6 +74,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			List<String> instances = parser.getInstanses();
 			List<String> subclasses = parser.getSubclasses();
 
+			cpd.setFrameId(frameId);
 			cpd.setEntry(entry);
 			cpd.setSource(source);
 			cpd.setMetaboliteClass(metaboliteClass);
@@ -109,22 +111,6 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 	@Override
 	public List<Serializable> getAllMetaboliteIds() {
 		throw new RuntimeException("Unsupported Operation");
-//		try {
-//			JSONObject jsDoc = XML.toJSONObject(xmlResponse);
-//			JSONArray compoundJsArray = jsDoc.getJSONObject("ptools-xml").getJSONArray("Compound");
-//			List<Serializable> cpdIdSet = new ArrayList<> ();
-//			for (int i = 0; i < compoundJsArray.length(); i++) {
-//				String entry = compoundJsArray.getJSONObject(i).getString("frameid");
-////				if ( this.entryPrefix.length() > 0) {
-////					entry = entryPrefix + ":" + entry;
-////				}
-//				cpdIdSet.add( entry);
-//			}
-//			return cpdIdSet;
-//		} catch (JSONException ex) {
-//			LOGGER.log(Level.SEVERE, "JSONException");
-//			
-//		}
 	}
 
 	@Override
@@ -177,7 +163,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			List<String> instances = parser.getInstanses();
 			List<String> subclasses = parser.getSubclasses();
 
-			cpd.setEntry(pgdb.concat(":").concat(entry_));
+			cpd.setEntry(entry_);
 			cpd.setSource(source);
 			cpd.setMetaboliteClass(metaboliteClass);
 			cpd.setFormula(formula);

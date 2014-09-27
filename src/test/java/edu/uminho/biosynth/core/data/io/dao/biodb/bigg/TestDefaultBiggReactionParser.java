@@ -46,42 +46,42 @@ public class TestDefaultBiggReactionParser {
 
 	@Test
 	public void testParseReactionsSuccess() throws IOException {
-		DefaultBiggReactionParser.parseReactions(IS_VALID);
+		new DefaultBiggReactionParserImpl().parseReactions(IS_VALID);
 	}
 	
 	@Test
 	public void testParseReactionsNull() throws IOException {
-		DefaultBiggReactionParser.parseReactions(null);
+		new DefaultBiggReactionParserImpl().parseReactions(null);
 	}
 
 	@Test
 	public void testParseReactionSuccess_h2o() {
-		DefaultBiggReactionParser.parseReaction("a");
+		new DefaultBiggReactionParserImpl().parseReaction("a");
 	}
 	
 	@Test
 	public void testParseReactionSuccess_glc() {
-		DefaultBiggReactionParser.parseReaction("a");
+		new DefaultBiggReactionParserImpl().parseReaction("a");
 	}
 	
 	@Test
 	public void testParseReactionSuccess_abc() {
-		DefaultBiggReactionParser.parseReaction("a");
+		new DefaultBiggReactionParserImpl().parseReaction("a");
 	}
 	
 	@Test
 	public void testParseReactionFail() {
-		DefaultBiggReactionParser.parseReaction("a\tb\tc\td\te");
+		new DefaultBiggReactionParserImpl().parseReaction("a\tb\tc\td\te");
 	}
 	
 	@Test
 	public void testParseReactionNull() {
-		DefaultBiggReactionParser.parseReaction(null);
+		new DefaultBiggReactionParserImpl().parseReaction(null);
 	}
 
 	@Test
 	public void testParseReactionEmpty() {
-		DefaultBiggReactionParser.parseReaction("");
+		new DefaultBiggReactionParserImpl().parseReaction("");
 	}
 
 }

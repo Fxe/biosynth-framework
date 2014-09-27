@@ -3,7 +3,6 @@ package edu.uminho.biosynth.core.data.io.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.Metabolite;
 
 /**

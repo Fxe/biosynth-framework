@@ -2,7 +2,6 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,14 +29,25 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	
 	private Resource csvFile;
 	
+	private BiggEquationParser biggEquationParser;
+	private BiggReactionParser biggReactionParser;
+	
 	public Resource getCsvFile() { return csvFile;}
 	public void setCsvFile(Resource csvFile) { this.csvFile = csvFile;}
 	
+	public BiggEquationParser getBiggEquationParser() { return biggEquationParser;}
+	public void setBiggEquationParser(BiggEquationParser biggEquationParser) { this.biggEquationParser = biggEquationParser;}
+	
+	public BiggReactionParser getBiggReactionParser() { return biggReactionParser;}
+	public void setBiggReactionParser(BiggReactionParser biggReactionParser) { this.biggReactionParser = biggReactionParser;}
+
+
+
 	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<String, BiggReactionEntity> cachedData = new HashMap<> ();
 
 	@Override
-	public BiggReactionEntity getReactionById(Serializable id) {
+	public BiggReactionEntity getReactionById(Long id) {
 		if (idToEntry.isEmpty()) {
 			this.initialize();
 		}
@@ -71,12 +81,12 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 	}
 	
 	@Override
-	public Set<Serializable> getAllReactionIds() {
+	public Set<Long> getAllReactionIds() {
 		if (idToEntry.isEmpty()) {
 			this.initialize();
 		}
 		
-		return new HashSet<Serializable> (this.idToEntry.keySet());
+		return new HashSet<Long> (this.idToEntry.keySet());
 	}
 	
 	@Override
@@ -84,6 +94,8 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 		if (!idToEntry.isEmpty()) {
 			return new HashSet<String> (this.idToEntry.values());
 		}
+
+		this.initialize();
 		
 		return new HashSet<String> (this.idToEntry.values());
 	}
@@ -92,10 +104,17 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 		this.cachedData.clear();
 		this.idToEntry.clear();
 		
+		if (this.biggEquationParser == null || this.biggReactionParser == null) {
+			LOGGER.error("Missing Parsers BiggEquationParser:%s, BiggReactionParser:%s");
+			return;
+		}
+		
+		this.biggReactionParser.setEquationParser(biggEquationParser);
+		
 		try {
 			List<BiggReactionEntity> res = new ArrayList<> ();
 			InputStream in = csvFile.getInputStream();
-			res = DefaultBiggReactionParser.parseReactions(in);
+			res = this.biggReactionParser.parseReactions(in);
 			
 			for (BiggReactionEntity rxn : res) {
 				this.cachedData.put(rxn.getEntry(), rxn);

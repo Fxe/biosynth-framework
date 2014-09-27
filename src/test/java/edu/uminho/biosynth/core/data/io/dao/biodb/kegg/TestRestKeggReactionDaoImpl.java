@@ -80,7 +80,7 @@ public class TestRestKeggReactionDaoImpl {
 	
 	@Test(expected=RuntimeException.class)
 	public void testGetById() {
-		reactionDao.getReactionById("OMG");
+		reactionDao.getReactionById(5L);
 	}
 	
 	@Test

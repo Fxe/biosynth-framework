@@ -1,7 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -30,10 +30,18 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 
 	private static Logger LOGGER = Logger.getLogger(RestBiocycReactionDaoImpl.class);
 	
+	public void createFolderIfNotExists(String path) {
+		File file = new File(path);
+		
+		if (!file.exists()) {
+			LOGGER.info(String.format("Make Dir %s", path));
+			file.mkdirs();
+		}
+	}
+	
 	@Override
-	public BioCycReactionEntity getReactionById(Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+	public BioCycReactionEntity getReactionById(Long id) {
+		throw new RuntimeException("Unsupported Operation");
 	}
 
 	@Override
@@ -41,11 +49,11 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 		String restRxnQuery = String.format(RestBiocycReactionDaoImpl.xmlGet, pgdb, entry);
 		BioCycReactionEntity rxn = null;
 		
-		
 		LOGGER.debug(String.format("Query: %s", restRxnQuery));
 		try {
-			String localPath = String.format("%sreaction/%s/%s.xml", this.getLocalStorage(), pgdb, entry);
-			
+			String localPath = String.format("%s/%s/reaction/", this.getLocalStorage(), pgdb);
+			createFolderIfNotExists(localPath);
+			localPath = localPath.concat(entry + ".xml");
 			String xmlDoc = null;
 			
 			LOGGER.debug(String.format("Local Path: %s", localPath));
@@ -58,6 +66,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn = new BioCycReactionEntity();
 			
 //			String source = parser.getSource();
+			String frameId = parser.getFrameId();
 			String entry_ = parser.getEntry();
 			List<BioCycReactionEcNumberEntity> ecNumberEntities = parser.getEcNumbers();
 			List<BioCycReactionLeftEntity> leftEntities = parser.getLeft();
@@ -71,6 +80,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			Double gibbs = parser.getGibbs();
 			String direction = parser.getReactionDirection();
 			
+			rxn.setFrameId(frameId);
 			rxn.setReactionDirection(direction);
 			rxn.setGibbs(gibbs);
 			rxn.setEcNumbers(ecNumberEntities);
@@ -82,7 +92,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn.setEntry(entry_);
 			rxn.setLeft(leftEntities);
 			rxn.setRight(rightEntities);
-			rxn.setCrossReferences(crossReferences);
+			rxn.setCrossreferences(crossReferences);
 			rxn.setSource(pgdb);
 
 			
@@ -100,9 +110,8 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Long> getAllReactionIds() {
+		throw new RuntimeException("Unsupported Operation");
 	}
 
 	@Override
@@ -112,8 +121,9 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 		try {
 			String params = String.format("[x:x<-%s^^%s]", pgdb, "reactions");
 			String restXmlQuery = String.format(xmlquery, URLEncoder.encode(params, "UTF-8"));
-			String localPath = this.getLocalStorage() + "query" + "/reaction.xml";
-			
+			String localPath = String.format("%s/%s/query/", this.getLocalStorage(), pgdb);
+			createFolderIfNotExists(localPath);
+			localPath = localPath.concat("reaction.xml");
 			String httpResponseString = getLocalOrWeb(restXmlQuery, localPath);
 			JSONObject jsDoc = XML.toJSONObject(httpResponseString);
 			JSONArray compoundJsArray = jsDoc.getJSONObject("ptools-xml").getJSONArray("Reaction");

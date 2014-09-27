@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class HbmKeggReactionDaoImpl implements ReactionDao<KeggReactionEntity> {
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
 	@Override
-	public KeggReactionEntity getReactionById(Serializable id) {
+	public KeggReactionEntity getReactionById(Long id) {
 		Object object = this.getSession().get(KeggReactionEntity.class, id);
 		return KeggReactionEntity.class.cast(object);
 	}
@@ -58,10 +57,10 @@ public class HbmKeggReactionDaoImpl implements ReactionDao<KeggReactionEntity> {
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
+	public Set<Long> getAllReactionIds() {
 		Query query = this.getSession().createQuery("SELECT rxn.id FROM KeggReactionEntity rxn");
 		@SuppressWarnings("unchecked")
-		Set<Serializable> res = new HashSet<> (query.list());
+		Set<Long> res = new HashSet<> (query.list());
 		return res;
 	}
 

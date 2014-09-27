@@ -1,7 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +17,7 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 	private static final String restRxnQuery = "http://rest.kegg.jp/get/rn:%s";
 	
 	@Override
-	public KeggReactionEntity getReactionById(Serializable id) {
+	public KeggReactionEntity getReactionById(Long id) {
 		throw new RuntimeException("Unsupported Operation.");
 	}
 
@@ -64,7 +63,7 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
+	public Set<Long> getAllReactionIds() {
 		throw new RuntimeException("Unsupported Operation.");
 	}
 
