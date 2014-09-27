@@ -15,7 +15,7 @@ public class StoichiometryPair implements Serializable{
 	@Id
     @Column(name="id")
     @GeneratedValue
-	private Long id;
+	protected Long id;
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
@@ -42,14 +42,6 @@ public class StoichiometryPair implements Serializable{
 	
 	@Override
 	public String toString() {
-		final char sep = ',';
-		final char ini = '<';
-		final char end = '>';
-		StringBuilder sb = new StringBuilder();
-		sb.append(ini);
-		sb.append(this.cpdEntry).append(sep);
-		sb.append(this.value).append(sep);
-		sb.append(end);
-		return sb.toString();
+		return String.format("<%s,%s>", this.cpdEntry, this.value);
 	}
 }

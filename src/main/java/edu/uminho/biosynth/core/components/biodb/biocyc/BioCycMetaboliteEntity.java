@@ -21,6 +21,10 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Column(name="frame_id") private String frameId;
+	public String getFrameId() { return frameId;}
+	public void setFrameId(String frameId) { this.frameId = frameId;}
+
 	@Column(name="MOLW") private Double molWeight;
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}

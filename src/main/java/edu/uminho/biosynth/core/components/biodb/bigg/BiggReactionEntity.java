@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionRightEntity;
 
 @Entity
 @Table(name="BIGG_REACTION")
@@ -35,7 +37,7 @@ public class BiggReactionEntity extends GenericReaction{
 	public void setTranslocation(boolean translocation) { this.translocation = translocation; }
 	
 	@ElementCollection
-	@CollectionTable(name="BIGG_REACTION_COMPARTMENT", joinColumns=@JoinColumn(name="ID_REACTION"))
+	@CollectionTable(name="BIGG_REACTION_COMPARTMENT", joinColumns=@JoinColumn(name="reaction_id"))
 	@Column(name="COMPARTMENT", length=31)
 	private List<String> compartments = new ArrayList<> ();
 	public List<String> getCompartments() { return compartments; }
@@ -45,7 +47,7 @@ public class BiggReactionEntity extends GenericReaction{
 		this.compartments.addAll(Arrays.asList(compartments)); }
 	
 	@ElementCollection
-	@CollectionTable(name="BIGG_REACTION_SYNONYM", joinColumns=@JoinColumn(name="ID_REACTION"))
+	@CollectionTable(name="BIGG_REACTION_SYNONYM", joinColumns=@JoinColumn(name="reaction_id"))
 	@Column(name="SYNONYM", length=2047)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms; }
@@ -53,6 +55,22 @@ public class BiggReactionEntity extends GenericReaction{
 	public void setSynonyms(String[] synonyms) { 
 		this.synonyms.clear();
 		this.synonyms.addAll(Arrays.asList(synonyms)); }
+
+	@OneToMany(mappedBy = "biggReactionEntity", cascade = CascadeType.ALL)
+	private List<BiggReactionLeftEntity> left = new ArrayList<> ();
+	public List<BiggReactionLeftEntity> getLeft() { return left;}
+	public void setLeft(List<BiggReactionLeftEntity> left) {
+		for (BiggReactionLeftEntity entity : left) entity.setBiggReactionEntity(this);
+		this.left = left;
+	}
+
+	@OneToMany(mappedBy = "biggReactionEntity", cascade = CascadeType.ALL)
+	private List<BiggReactionRightEntity> right = new ArrayList<> ();
+	public List<BiggReactionRightEntity> getRight() { return right;}
+	public void setRight(List<BiggReactionRightEntity> right) {
+		for (BiggReactionRightEntity entity : right) entity.setBiggReactionEntity(this);
+		this.right = right;
+	}
 
 	@OneToMany(mappedBy = "biggReactionEntity", cascade = CascadeType.ALL)
 	private List<BiggReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();

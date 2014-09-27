@@ -18,7 +18,7 @@ public class BiggReactionCrossReferenceEntity extends GenericCrossReference {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="ID_REACTION")
+	@JoinColumn(name="reaction_id")
 	private BiggReactionEntity biggReactionEntity;
 	public BiggReactionEntity getBiggReactionEntity() { return this.biggReactionEntity; }
 	public void setBiggReactionEntity(BiggReactionEntity biggReactionEntity) {

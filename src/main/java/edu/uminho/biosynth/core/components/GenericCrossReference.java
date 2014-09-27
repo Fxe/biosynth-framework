@@ -21,7 +21,7 @@ public class GenericCrossReference implements Serializable {
 	@Id
     @Column(name="id")
     @GeneratedValue
-    protected Integer id;
+    protected Long id;
 	
 	@Column(name="ref_type", length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
@@ -38,12 +38,8 @@ public class GenericCrossReference implements Serializable {
 		this.value = value;
 	}
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id;}
 
 	public Type getType() {
 		return type;

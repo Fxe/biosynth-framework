@@ -24,20 +24,15 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	private static final long serialVersionUID = 1L;
 	
+	@Column(name="frame_id", nullable=false)
+	private String frameId;
+	public String getFrameId() { return frameId;}
+	public void setFrameId(String frameId) { this.frameId = frameId;}
+
 	@Column(name="orphan", nullable=true)
 	private Boolean orphan;
 	public Boolean getOrphan() { return orphan;}
 	public void setOrphan(Boolean orphan) { this.orphan = orphan;}
-	
-//	@Column(name="ec_number", nullable=true, length=63)
-//	private String ecNumber;
-//	public String getEcNumber() { return ecNumber;}
-//	public void setEcNumber(String ecNumber) { this.ecNumber = ecNumber;}
-//	
-//	@Column(name="ec_number_official", nullable=true)
-//	private Boolean ecNumberOfficial;
-//	public Boolean getEcNumberOfficial() { return ecNumberOfficial;}
-//	public void setEcNumberOfficial(Boolean ecNumberOfficial) { this.ecNumberOfficial = ecNumberOfficial;}
 	
 	@Column(name="physio_relevant", nullable=true)
 	private Boolean physiologicallyRelevant;
@@ -79,7 +74,7 @@ public class BioCycReactionEntity extends GenericReaction {
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme;}
 	
-	@Column(name="ORIENTATION") private String direction;
+	@Column(name="orientation_str") private String direction;
 	public String getDirection() { return direction;}
 	public void setDirection(String direction) { this.direction = direction;}
 
@@ -119,10 +114,10 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
 	private List<BioCycReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
-	public List<BioCycReactionCrossReferenceEntity> getCrossReferences() {
+	public List<BioCycReactionCrossReferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
-	public void setCrossReferences(
+	public void setCrossreferences(
 			List<BioCycReactionCrossReferenceEntity> crossReferences) {
 		for (BioCycReactionCrossReferenceEntity entity : crossReferences) {
 			entity.setBioCycReactionEntity(this);
@@ -143,7 +138,7 @@ public class BioCycReactionEntity extends GenericReaction {
 		sb.append("parents:").append(this.getParents()).append(sep);
 		sb.append("pathways:").append(this.getPathways()).append(sep);
 		sb.append("enzymatic reactions:").append(this.getEnzymaticReactions()).append(sep);
-		sb.append("xref:").append(this.getCrossReferences());
+		sb.append("xref:").append(this.getCrossreferences());
 //		sb.append("molWeight:").append(this.molWeight).append(sep);
 //		sb.append("gibbs:").append(this.gibbs).append(sep);
 //		sb.append("Smiles:").append(this.smiles).append(sep);

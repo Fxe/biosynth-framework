@@ -10,15 +10,19 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import edu.uminho.biosynth.core.components.annotations.Formula;
+
 @MappedSuperclass
 public class GenericMetabolite extends AbstractGenericEntity implements Metabolite, Serializable {
 
 	private static final long serialVersionUID = 134867731L;
 
-	@Column(name="FORMULA", length=255) protected String formula;
+	@Formula
+	@Column(name="formula", length=255) protected String formula;
+	@Column(name="MCLASS", length=63) protected String metaboliteClass = "COMPOUND";
+	
 	@Transient private Map<Integer, GenericReaction> rxnMap = new HashMap<> ();
 	@Transient private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
-	@Column(name="MCLASS", length=63) protected String metaboliteClass = "COMPOUND";
 	
 	public GenericMetabolite() {
 		super(null);

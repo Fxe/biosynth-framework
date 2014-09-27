@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import edu.uminho.biosynth.core.components.annotations.InChI;
+import edu.uminho.biosynth.core.components.annotations.SMILES;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 
 @Entity
@@ -30,6 +32,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
 	
+	@InChI
 	@Column(name="inchi") private String inchi;
 	public String getInchi() { return inchi;}
 	public void setInchi(String inchi) { this.inchi = inchi;}
@@ -38,6 +41,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	public String getInchiKey() { return inchiKey;}
 	public void setInchiKey(String inchiKey) { this.inchiKey = inchiKey;}
 	
+	@SMILES
 	@Column(name="smiles") private String smiles;
 	public String getSmiles() { return smiles;}
 	public void setSmiles(String smiles) { this.smiles = smiles;}

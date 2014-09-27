@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.components;
 
 import java.util.Map;
 
+@Deprecated
 public class UnreversibleReaction {
 	private String entry;
 	private Map<String, StoichiometryPair> substrates;

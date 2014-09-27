@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.biodb;
+package edu.uminho.biosynth.core.components.biodb.factory;
 
 import java.util.ArrayList;
 import java.util.List;

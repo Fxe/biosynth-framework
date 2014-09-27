@@ -14,6 +14,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import edu.uminho.biosynth.core.components.GenericReaction;
+import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionCueEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionReagentEntity;
@@ -91,13 +92,13 @@ public class SeedReactionEntity extends GenericReaction {
 	public String getThermoReversibility() {
 		String thermoReversibility;
 		switch (this.orientation) {
-			case 0: 
+			case Reversible: 
 				thermoReversibility = "<=>";
 				break;
-			case 1:
+			case LeftToRight:
 				thermoReversibility = "=>";
 				break;
-			case -2:
+			case RightToLeft:
 				thermoReversibility = "<=";
 				break;
 			default:
@@ -109,16 +110,16 @@ public class SeedReactionEntity extends GenericReaction {
 	public void setThermoReversibility(String thermoReversibility) {
 		switch (thermoReversibility) {
 			case "<=>": 
-				this.orientation = 0;
+				this.orientation = Orientation.Reversible;
 				break;
 			case "=>":
-				this.orientation = 1;
+				this.orientation = Orientation.LeftToRight;
 				break;
 			case "<=":
-				this.orientation = -1;
+				this.orientation = Orientation.RightToLeft;
 				break;
 			default:
-				this.orientation = 0;
+				this.orientation = Orientation.Reversible;
 				break;
 		}
 	}

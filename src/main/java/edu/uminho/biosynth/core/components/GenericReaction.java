@@ -2,29 +2,36 @@ package edu.uminho.biosynth.core.components;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
 public class GenericReaction extends AbstractGenericEntity 
-implements ChemicalReaction<GenericMetabolite>, Serializable {
+implements Reaction, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static boolean ORIENTATION_NORMAL  = true;
-	public static boolean ORIENTATION_REVERSE = false;
-	public static boolean ORIENTATION_LEFT_TO_RIGHT  = true;
-	public static boolean ORIENTATION_RIGHT_TO_LEFT = false;
+	@Enumerated(EnumType.STRING)
+	@Column(name="orientation")
+	protected Orientation orientation = Orientation.LeftToRight;
+//	protected List<StoichiometryPair> left = new ArrayList<> ();
+//	protected Map<M, Double> right = new HashMap<> ();
+	
+//	public static boolean ORIENTATION_NORMAL  = true;
+//	public static boolean ORIENTATION_REVERSE = false;
+//	public static boolean ORIENTATION_LEFT_TO_RIGHT  = true;
+//	public static boolean ORIENTATION_RIGHT_TO_LEFT = false;
 	
 	public static String LEFT_TO_RIGHT = "LR";
 	public static String RIGHT_TO_LEFT = "RL";
 
-	@Column(name="REV") protected int orientation;
+//	@Column(name="REV") protected int orientation;
 	
 	@Transient private Set<String> similarRxn;
 	
@@ -34,7 +41,11 @@ implements ChemicalReaction<GenericMetabolite>, Serializable {
 	@Transient
 	private Map<String, Double> productStoichiometry = new HashMap<> ();
 	
-	
+
+//	@Override
+//	public List<StoichiometryPair> getLeft() { return this.left;}
+//	@Override
+//	public Map<M, Double> getRight() { return this.right;}
 	
 //	private Map<String, GenericMetabolite>		cpdMap;
 //	private Map<String, GenericEnzyme>			ecnMap;
@@ -52,18 +63,16 @@ implements ChemicalReaction<GenericMetabolite>, Serializable {
 	public void setProductStoichiometry(Map<String, Double> productStoichiometry) {
 		this.productStoichiometry = productStoichiometry;
 	}
-	public int getOrientation() {
-		return this.orientation;
-	}
-	public void setOrientation(int orientation) {
-		this.orientation = orientation;
-	}
+	
+	@Override
+	public Orientation getOrientation() { return this.orientation; }
+	public void setOrientation(Orientation orientation) { this.orientation = orientation;}
 	
 	public String getFullDetails() {
 		StringBuilder ret = new StringBuilder();
-		ret.append("Key: ").append( this.id).append('\n');
-		ret.append("ID: ").append(this.getEntry()).append('\n');
-		ret.append("Name: ").append(this.name).append('\n');
+		ret.append("id: ").append( this.id).append('\n');
+		ret.append("entry: ").append(this.getEntry()).append('\n');
+		ret.append("name: ").append(this.name).append('\n');
 //		ret.append("Equation: ").append(this.equation).append('\n');
 //		ret.append("Left: ").append(this.left).append('\n');
 //		ret.append("Right: ").append(this.right).append('\n');
@@ -73,29 +82,30 @@ implements ChemicalReaction<GenericMetabolite>, Serializable {
 		return ret.toString();
 	}
 	
-	@Override
-	public List<GenericMetabolite> getSubstrates() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public List<GenericMetabolite> getReactants() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public List<GenericMetabolite> getSubstrates() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	@Override
+//	public List<GenericMetabolite> getReactants() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
-	@Override
-	public String toString() {
-		final char sep = '\n';
-		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString()).append(sep);
-		sb.append("Orientation:")
-			.append('(')
-			.append(this.orientation)
-			.append(')')
-			.append(' ')
-			.append(this.orientation == 0 ? "L <-> R" : (this.orientation < 0 ? "L <-- R" : "L --> R" ));
-		return sb.toString();
-	}
+//	@Override
+//	public String toString() {
+//		final char sep = '\n';
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(super.toString()).append(sep);
+//		sb.append("Orientation:")
+//			.append('(')
+//			.append(this.orientation)
+//			.append(')')
+//			.append(' ')
+//			.append(this.orientation == 0 ? "L <-> R" : (this.orientation < 0 ? "L <-- R" : "L --> R" ));
+//		return sb.toString();
+//	}
+
 
 }
