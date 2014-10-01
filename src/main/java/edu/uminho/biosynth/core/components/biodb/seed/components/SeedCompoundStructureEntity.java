@@ -15,12 +15,12 @@ import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 public class SeedCompoundStructureEntity {
 	
 	@Id
-    @Column(name="ID")
+    @Column(name="id")
     @GeneratedValue
     private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_METABOLITE")
+	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
 	@Column(name="STRUCTURE") private String structure;

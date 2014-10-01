@@ -16,24 +16,24 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCueEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundPkEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
 
 @Entity
-@Table(name="SEED_METABOLITE")
+@Table(name="seed_metabolite")
 public class SeedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="DEFAULTCHARGE") private Integer defaultCharge;
-    @Column(name="DELTAG") private Double deltaG;
-    @Column(name="DELTAGERR") private Double deltaGErr;
-    @Column(name="UUID") private String uuid;
-    @Column(name="CKSUM") private String cksum;
-    @Column(name="LOCKED") private Short locked;
-    @Column(name="MASS") private Integer mass;
+    @Column(name="deltag") private Double deltaG;
+    @Column(name="deltagerr") private Double deltaGErr;
+    @Column(name="uuid") private String uuid;
+    @Column(name="cksum") private String cksum;
+    @Column(name="locked") private Short locked;
+    @Column(name="mass") private Integer mass;
     @Column(name="ABBREVIATION") private String abbreviation;
     @Column(name="UNCHARGEDFORMULA") private String unchargedFormula;
     @Column(name="OBSOLETE") private Boolean obsolete = false;
@@ -54,11 +54,11 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     private List<SeedCompoundCueEntity> compoundCues = new ArrayList<>();
     
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
-    private List<SeedCompoundCrossReferenceEntity> crossReferences = new ArrayList<>();
+    private List<SeedMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<>();
     
 	@ElementCollection
-	@CollectionTable(name="SEED_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="ID_METABOLITE"))
-	@Column(name="SYNONYM", length=255)
+	@CollectionTable(name="seed_metabolite_synonym", joinColumns=@JoinColumn(name="metabolite_id"))
+	@Column(name="synonym", length=255)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms;}
 	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
@@ -163,12 +163,12 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		}
 	}
 	
-	public List<SeedCompoundCrossReferenceEntity> getCrossreferences() {
+	public List<SeedMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
-	public void setCrossReferences(List<SeedCompoundCrossReferenceEntity> crossReferences) {
+	public void setCrossReferences(List<SeedMetaboliteCrossreferenceEntity> crossReferences) {
 		this.crossReferences = new ArrayList<> (crossReferences);
-		for (SeedCompoundCrossReferenceEntity crossReference : this.crossReferences) {
+		for (SeedMetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
 			crossReference.setSeedCompoundEntity(this);
 		}
 	}

@@ -10,21 +10,21 @@ import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
 
 @Entity
 @Table(name="SEED_COMPOUND_CROSSREF")
-public class SeedCompoundCrossReferenceEntity extends GenericCrossReference {
+public class SeedMetaboliteCrossreferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	@JoinColumn(name="ID_METABOLITE")
+	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
-	public SeedCompoundCrossReferenceEntity() {
+	public SeedMetaboliteCrossreferenceEntity() {
 		super(null, null, null);
 	}
-	public SeedCompoundCrossReferenceEntity(Type type, String reference, String value) {
+	public SeedMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
-	public SeedCompoundCrossReferenceEntity(GenericCrossReference crossReference) {
+	public SeedMetaboliteCrossreferenceEntity(GenericCrossReference crossReference) {
 		super(crossReference.getType(), crossReference.getRef(), crossReference.getValue());
 	}
 

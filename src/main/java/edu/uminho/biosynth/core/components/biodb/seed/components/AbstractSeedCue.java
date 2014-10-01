@@ -13,12 +13,12 @@ public abstract class AbstractSeedCue implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @Column(name="ID")
+    @Column(name="id")
     @GeneratedValue
     private Integer id;
 	
-	@Column(name="COUNT") private float count;
-	@Column(name="CUE_UUID") private String cue_uuid;
+	@Column(name="count") private float count;
+	@Column(name="cue_uuid") private String cue_uuid;
 	
 	public Integer getId() {
 		return id;
