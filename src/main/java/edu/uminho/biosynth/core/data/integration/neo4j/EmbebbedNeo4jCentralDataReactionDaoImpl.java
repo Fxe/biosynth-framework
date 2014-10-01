@@ -18,7 +18,7 @@ public class EmbebbedNeo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<Ce
 	}
 
 	@Override
-	public CentralDataReactionEntity getReactionById(Serializable id) {
+	public CentralDataReactionEntity getReactionById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -50,7 +50,7 @@ public class EmbebbedNeo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<Ce
 	}
 
 	@Override
-	public Set<Serializable> getAllReactionIds() {
+	public Set<Long> getAllReactionIds() {
 		// TODO Auto-generated method stub
 		return null;
 	}

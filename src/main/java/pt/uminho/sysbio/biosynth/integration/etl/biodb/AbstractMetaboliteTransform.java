@@ -2,7 +2,6 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.neo4j.graphdb.DynamicLabel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
 	
-	protected static final String MODEL_LABEL = DynamicLabel.label("Model").toString();
+	protected static final String MODEL_LABEL = GlobalLabel.Model.toString();
 	protected static final String SUPER_METABOLITE_LABEL = GlobalLabel.SuperMetabolite.toString();
 	protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
 	protected static final String METABOLITE_PROPERTY_LABEL = GlobalLabel.MetaboliteProperty.toString();
@@ -57,6 +56,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 		centralMetaboliteEntity.putProperty("description", entity.getDescription());
 		centralMetaboliteEntity.putProperty("metaboliteClass", entity.getMetaboliteClass());
 		centralMetaboliteEntity.putProperty("name", entity.getName());
+		centralMetaboliteEntity.putProperty("source", entity.getSource());
 		
 		this.configureFormulaLink(centralMetaboliteEntity, entity);
 		this.configureNameLink(centralMetaboliteEntity, entity);

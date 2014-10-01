@@ -9,6 +9,7 @@ public class AbstractCentralEntity {
 
 	protected Long id;
 	protected String majorLabel;
+	
 	protected Set<String> labels = new HashSet<> ();
 	protected Map<String, Object> properties = new HashMap<> ();
 	

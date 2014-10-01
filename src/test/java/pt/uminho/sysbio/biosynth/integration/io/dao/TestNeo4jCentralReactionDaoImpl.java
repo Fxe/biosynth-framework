@@ -1,9 +1,10 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,14 +19,13 @@ import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.factory.CentralReactionFactory;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jCentralReactionDaoImpl;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
 
 public class TestNeo4jCentralReactionDaoImpl {
 
 	private static String DB_PATH = "D:/dev/null/test.db";
 	private static GraphDatabaseService db;
 	private static org.neo4j.graphdb.Transaction tx;
-	private ReactionDao<CentralReactionEntity> reactionDao;
+	private ReactionHeterogeneousDao<CentralReactionEntity> reactionDao;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -60,7 +60,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	public void testSaveReactionSuccess() {
 		CentralReactionEntity entity = new CentralReactionFactory()
 			.withEntry("TES00001")
-			.withMajorLabel("LigandCompound")
+			.withMajorLabel("LigandReaction")
 			.withLabels(new String[]{"Compound", "Test", "Factory"})
 			.build();
 	
@@ -68,7 +68,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 
 		assertNull(entity.getId());
 		
-		entity = reactionDao.saveReaction(entity);
+		entity = reactionDao.saveReaction(entity.getMajorLabel(), entity);
 		
 		assertNotNull(entity.getId());
 		assertEquals("TES00001", entity.getEntry());
@@ -78,7 +78,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	public void testSaveReactionFail() {
 		CentralReactionEntity entity = new CentralReactionFactory()
 			.withEntry("TES00001")
-			.withMajorLabel("LigandCompound")
+			.withMajorLabel("LigandReaction")
 			.withLabels(new String[]{"Compound", "Test", "Factory"})
 			.build();
 	
@@ -86,14 +86,14 @@ public class TestNeo4jCentralReactionDaoImpl {
 
 		assertNull(entity.getId());
 		
-		entity = reactionDao.saveReaction(entity);
+		entity = reactionDao.saveReaction(entity.getMajorLabel(), entity);
 		
 		assertNull(entity);
 	}
 
 	@Test
 	public void testGetAllReactionEntries() {
-		Set<String> entries = reactionDao.getAllReactionEntries();
+		List<String> entries = reactionDao.getAllReactionEntries("LigandReaction");
 		
 		assertNotNull(entries);
 		assertEquals(1, entries.size());
@@ -101,7 +101,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	
 	@Test
 	public void testGetAllReactionIds() {
-		Set<Serializable> ids = reactionDao.getAllReactionIds();
+		List<Long> ids = reactionDao.getAllReactionIds("LigandReaction");
 		
 		assertNotNull(ids);
 		assertEquals(1, ids.size());
@@ -109,7 +109,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	
 	@Test
 	public void testGetAllReactionEntriesEmpty() {
-		Set<String> entries = reactionDao.getAllReactionEntries();
+		List<String> entries = reactionDao.getAllReactionEntries("LigandReaction");
 		
 		assertNotNull(entries);
 		assertEquals(0, entries.size());
@@ -117,7 +117,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	
 	@Test
 	public void testGetAllReactionIdsEmpty() {
-		Set<Serializable> ids = reactionDao.getAllReactionIds();
+		List<Long> ids = reactionDao.getAllReactionIds("LigandReaction");
 		
 		assertNotNull(ids);
 		assertEquals(0, ids.size());

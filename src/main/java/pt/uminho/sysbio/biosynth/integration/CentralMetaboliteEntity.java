@@ -3,7 +3,6 @@ package pt.uminho.sysbio.biosynth.integration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.language.bm.Rule.RPattern;
 import org.apache.commons.lang3.tuple.Pair;
 
 import edu.uminho.biosynth.core.components.Metabolite;
@@ -12,8 +11,6 @@ public class CentralMetaboliteEntity extends AbstractCentralEntity implements Me
 
 	private List<CentralMetaboliteProxyEntity> crossreferences = new  ArrayList<> ();
 	private List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities = new ArrayList<> ();
-
-	
 
 //	
 //	@Override
