@@ -1,16 +1,11 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.seed;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-
-
-
 import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
@@ -18,24 +13,29 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEntity>{
 
+	private static Logger LOGGER = LoggerFactory.getLogger(JsonSeedMetaboliteDaoImpl.class);
+	
 	public static int INITIAL_GEN_KEY = 0;
 	
-	private File jsonFile;
+	private Resource jsonFile;
 	
 	private JsonNode rootNode;
 	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
-	private Map<String, SeedMetaboliteEntity> metaboliteMap;
+	private Map<String, SeedMetaboliteEntity> metaboliteMap = new HashMap<> ();
 	
-	public File getJsonFile() { return jsonFile;}
-	public void setJsonFile(File jsonFile) { this.jsonFile = jsonFile;}
+	public Resource getJsonFile() { return jsonFile;}
+	public void setJsonFile(Resource jsonFile) { this.jsonFile = jsonFile;}
 	
 	private void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
 		Iterator<String> fields = node.getFieldNames();
@@ -78,7 +78,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 			try {
 				SeedMetaboliteEntity cpd = this.parseJsonSeedCompound(compounds.get(i));
 				
-				List<SeedCompoundCrossReferenceEntity> xrefs = new ArrayList<> ();
+				List<SeedMetaboliteCrossreferenceEntity> xrefs = new ArrayList<> ();
 				if (refMap.containsKey(cpd.getUuid())) {
 //					System.out.println(refMap.get(cpd.getUuid()));
 					for (GenericCrossReference xref : refMap.get(cpd.getUuid())) {
@@ -94,10 +94,10 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 								}
 								break;
 							case MODEL:
-								xrefs.add(new SeedCompoundCrossReferenceEntity(xref));
+								xrefs.add(new SeedMetaboliteCrossreferenceEntity(xref));
 								break;
 							case DATABASE:
-								xrefs.add(new SeedCompoundCrossReferenceEntity(xref));
+								xrefs.add(new SeedMetaboliteCrossreferenceEntity(xref));
 								break;
 							default:
 								System.err.println(xref.getType() + " unsupported");
@@ -129,9 +129,12 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 		ObjectMapper m = new ObjectMapper();
 		
 		try {
-			rootNode = m.readTree(jsonFile);
+			rootNode = m.readTree(jsonFile.getInputStream());
+			
+			LOGGER.debug("Loading 'aliasSets'");
+			
 			for (int i = 0; i < rootNode.get("aliasSets").size(); i++) {
-				System.out.println("Index - " + i);
+				LOGGER.debug("Index - " + i);
 				String attribute = rootNode.get("aliasSets").get(i).get("attribute").toString();
 				String name = rootNode.get("aliasSets").get(i).get("name").toString();
 				
@@ -178,10 +181,10 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 //						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
 //								GenericCrossReference.Type.OBSOLETE, refMap, "obsolete");
 					} else {
-						System.out.println("NO MATCH FOR " + name);
+						LOGGER.warn("NO MATCH FOR " + name);
 					}
 				} else {
-					System.out.println("SKIPED " + attribute + " " + name);
+					LOGGER.debug("SKIPED " + attribute + " " + name);
 				}
 			}
 //			buildXRefMap(rootNode.get("aliasSets").get(2) .get("aliases"), GenericCrossReference.Type.ECNUMBER, refMap, "ECNUMBER");
@@ -237,13 +240,12 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 	
 	@Override
 	public SeedMetaboliteEntity getMetaboliteByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.metaboliteMap.get(entry);
 	}
 	
 	@Override
 	public List<String> getAllMetaboliteEntries() {
-		if (this.metaboliteMap == null) {
+		if (this.metaboliteMap.isEmpty()) {
 			this.findAll();
 		}
 		return new ArrayList<String>(this.metaboliteMap.keySet());

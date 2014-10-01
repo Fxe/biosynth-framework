@@ -33,6 +33,11 @@ import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetabol
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCueEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundPkEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
 
 public class HelperHbmConfigInitializer {
 
@@ -74,6 +79,11 @@ public class HelperHbmConfigInitializer {
 			  .addAnnotatedClass(ChebiMetaboliteEntity.class)
 			  .addAnnotatedClass(ChebiMetaboliteNameEntity.class)
 			  .addAnnotatedClass(ChebiMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(SeedMetaboliteEntity.class)
+			  .addAnnotatedClass(SeedCompoundStructureEntity.class)
+			  .addAnnotatedClass(SeedCompoundPkEntity.class)
+			  .addAnnotatedClass(SeedCompoundCueEntity.class)
+			  .addAnnotatedClass(SeedMetaboliteCrossreferenceEntity.class)
 			  
 			  .addAnnotatedClass(KeggReactionEntity.class)
 			  .addAnnotatedClass(KeggReactionLeftEntity.class)

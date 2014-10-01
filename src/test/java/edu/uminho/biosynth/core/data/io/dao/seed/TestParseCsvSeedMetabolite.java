@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.seed;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +24,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.core.io.FileSystemResource;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
@@ -95,7 +96,7 @@ public class TestParseCsvSeedMetabolite {
 
 		File csv = new File("D:/home/data/seed/seed.json");
 		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
-		jsonSeedDao.setJsonFile(csv);
+		jsonSeedDao.setJsonFile(new FileSystemResource(csv));
 		jsonSeedDao.initialize();
 		
 		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
