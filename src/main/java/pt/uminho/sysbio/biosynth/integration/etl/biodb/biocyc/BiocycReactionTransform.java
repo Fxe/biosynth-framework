@@ -5,7 +5,7 @@ import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 
 public class BiocycReactionTransform
-extends AbstractReactionTransform<BioCycReactionEntity>{
+extends AbstractReactionTransform<BioCycReactionEntity> {
 	
 	public BiocycReactionTransform(String majorLabel) {
 		super(majorLabel);

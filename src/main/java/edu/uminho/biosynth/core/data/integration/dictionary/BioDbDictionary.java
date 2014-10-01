@@ -63,6 +63,7 @@ public class BioDbDictionary {
 		dictionary.put("LIGAND-CPD", MetaboliteMajorLabel.LigandCompound.toString());
 //		dictionary.put("KEGG", MetaboliteMajorLabel.KEGG.toString());
 //		dictionary.put("kegg", MetaboliteMajorLabel.KEGG.toString());
+		dictionary.put("KEGG", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
 		dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());

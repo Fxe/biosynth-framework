@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
@@ -97,7 +97,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 			executionEngine.execute("MATCH (cpd:Seed:Compound {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
-		for (SeedCompoundCrossReferenceEntity xref : cpd.getCrossreferences()) {
+		for (SeedMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 //			System.out.println(xref);
 			switch (xref.getType()) {
 				case DATABASE:

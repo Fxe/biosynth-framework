@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.springframework.core.io.FileSystemResource;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
@@ -43,7 +44,7 @@ public class Neo4jLoadDatabases {
 	public void testSeed() {
 		File json = new File("D:/home/data/seed/seed.json");
 		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
-		jsonSeedDao.setJsonFile(json);
+		jsonSeedDao.setJsonFile(new FileSystemResource(json));
 		jsonSeedDao.initialize();
 		
 		Neo4jSeedMetaboliteDaoImpl seedNeo4jDao = new Neo4jSeedMetaboliteDaoImpl(db);

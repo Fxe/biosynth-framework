@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
@@ -47,7 +47,7 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 		
 		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
 		
-		for (SeedCompoundCrossReferenceEntity xref : entity.getCrossreferences()) {
+		for (SeedMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
