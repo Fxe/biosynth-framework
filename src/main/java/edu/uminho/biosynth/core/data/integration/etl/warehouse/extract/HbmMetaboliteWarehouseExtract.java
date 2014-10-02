@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.data.integration.etl.IEtlExtract;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlExtract;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
-public class HbmMetaboliteWarehouseExtract implements IEtlExtract<MetaboliteStga>{
+public class HbmMetaboliteWarehouseExtract implements EtlExtract<MetaboliteStga>{
 
 	private IGenericDao dao;
 	

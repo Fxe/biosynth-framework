@@ -9,16 +9,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.GenericReaction;
-import edu.uminho.biosynth.core.components.StoichiometryPair;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import edu.uminho.biosynth.core.components.GenericCrossReference;
+import edu.uminho.biosynth.core.components.GenericReaction;
+import edu.uminho.biosynth.core.components.StoichiometryPair;
+import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 
 public abstract class AbstractReactionTransform<R extends GenericReaction>
 implements EtlTransform<R, CentralReactionEntity> {

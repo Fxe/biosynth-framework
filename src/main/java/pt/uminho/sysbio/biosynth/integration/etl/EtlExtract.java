@@ -1,9 +1,9 @@
-package edu.uminho.biosynth.core.data.integration.etl;
+package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
 import java.util.List;
 
-public interface IEtlExtract<SRC> {
+public interface EtlExtract<SRC> {
 	public SRC extract(Serializable id);
 	public List<SRC> extractAll();
 }

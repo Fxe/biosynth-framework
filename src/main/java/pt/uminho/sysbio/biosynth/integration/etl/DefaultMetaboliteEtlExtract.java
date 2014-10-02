@@ -1,0 +1,38 @@
+package pt.uminho.sysbio.biosynth.integration.etl;
+
+import java.io.Serializable;
+import java.util.List;
+
+import edu.uminho.biosynth.core.components.Metabolite;
+import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+
+public class DefaultMetaboliteEtlExtract<M extends Metabolite> implements EtlExtract<M> {
+
+	private final MetaboliteDao<M> metaboliteDao;
+	
+	public DefaultMetaboliteEtlExtract(MetaboliteDao<M> metaboliteDao) {
+		this.metaboliteDao = metaboliteDao;
+	}
+
+	@Override
+	public M extract(Serializable id) {
+		M metaboliteEntity = null;
+		
+		if (id instanceof String) {
+			metaboliteEntity = metaboliteDao.getMetaboliteByEntry((String)id);
+		} else if (id instanceof Long) {
+			metaboliteEntity = metaboliteDao.getMetaboliteById((Long)id);
+		} else {
+			
+		}
+
+		return metaboliteEntity;
+	}
+
+	@Override
+	public List<M> extractAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
