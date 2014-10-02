@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntity> {
@@ -24,7 +24,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 	
 	private Map<Serializable, Integer> entrySeekPosition = new HashMap<> ();
 	private Map<String, MnxMetaboliteEntity> cachedData = new HashMap<> ();
-	private Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap = new HashMap<> ();
+	private Map<Serializable, List<MnxMetaboliteCrossreferenceEntity>> xrefMap = new HashMap<> ();
 	
 	private boolean bulkAccess = false;
 	
@@ -76,7 +76,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		}
 	}
 
-	public void parseMetaboliteCrossReference(Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap, String record) {
+	public void parseMetaboliteCrossReference(Map<Serializable, List<MnxMetaboliteCrossreferenceEntity>> xrefMap, String record) {
 		/* Example Record
 		 * REFERENCE : ENTRY | MAPS TO  | 
 		 * bigg:14glucan     | MNXM2905 | inferred | 1,4-alpha-D-glucan
@@ -85,18 +85,18 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		String key = fields[1].trim();
 		String reference = fields[0].trim().split(":")[0].trim();
 		String entry = fields[0].trim().split(":")[1].trim();
-		MnxMetaboliteCrossReferenceEntity xref = new MnxMetaboliteCrossReferenceEntity(GenericCrossReference.Type.DATABASE, reference, entry);
+		MnxMetaboliteCrossreferenceEntity xref = new MnxMetaboliteCrossreferenceEntity(GenericCrossReference.Type.DATABASE, reference, entry);
 		if (fields.length > 3) xref.setDescription(fields[3].trim());
 		xref.setEvidence(fields[2].trim());
 		if ( !xrefMap.containsKey(key)) {
-			xrefMap.put(key, new ArrayList<MnxMetaboliteCrossReferenceEntity> ());
+			xrefMap.put(key, new ArrayList<MnxMetaboliteCrossreferenceEntity> ());
 		}
 		
 		xrefMap.get(key).add(xref);
 	}
 	
-	public Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> parseMetaboliteCrossReferences() throws FileNotFoundException, IOException {
-		Map<Serializable, List<MnxMetaboliteCrossReferenceEntity>> xrefMap = new TreeMap<> ();
+	public Map<Serializable, List<MnxMetaboliteCrossreferenceEntity>> parseMetaboliteCrossReferences() throws FileNotFoundException, IOException {
+		Map<Serializable, List<MnxMetaboliteCrossreferenceEntity>> xrefMap = new TreeMap<> ();
 		
 		BufferedReader br = new BufferedReader(new FileReader(crossreferenceCsvFile));
 		String readLine = null;
@@ -179,7 +179,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		
 		if (cachedData.containsKey(id)) {
 			MnxMetaboliteEntity cpd = cachedData.get(id);
-			for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(id)) {
+			for (MnxMetaboliteCrossreferenceEntity xref: this.xrefMap.get(id)) {
 				xref.setMnxMetaboliteEntity(cpd);
 				cpd.addCrossReference(xref);
 			}
@@ -195,7 +195,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 			if (this.entrySeekPosition.containsKey(id.toString())) {
 				String record = this.seekFileLine(metaboliteCsvFile, this.entrySeekPosition.get(id));
 				cpd = this.parseMetabolite(record);
-				for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(id)) {
+				for (MnxMetaboliteCrossreferenceEntity xref: this.xrefMap.get(id)) {
 					xref.setMnxMetaboliteEntity(cpd);
 					cpd.addCrossReference(xref);
 				}
@@ -260,7 +260,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		
 		if (cachedData.containsKey(entry)) {
 			MnxMetaboliteEntity cpd = cachedData.get(entry);
-			for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(entry)) {
+			for (MnxMetaboliteCrossreferenceEntity xref: this.xrefMap.get(entry)) {
 				xref.setMnxMetaboliteEntity(cpd);
 				cpd.addCrossReference(xref);
 			}
@@ -276,7 +276,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 			if (this.entrySeekPosition.containsKey(entry.toString())) {
 				String record = this.seekFileLine(metaboliteCsvFile, this.entrySeekPosition.get(entry));
 				cpd = this.parseMetabolite(record);
-				for (MnxMetaboliteCrossReferenceEntity xref: this.xrefMap.get(entry)) {
+				for (MnxMetaboliteCrossreferenceEntity xref: this.xrefMap.get(entry)) {
 					xref.setMnxMetaboliteEntity(cpd);
 					cpd.addCrossReference(xref);
 				}

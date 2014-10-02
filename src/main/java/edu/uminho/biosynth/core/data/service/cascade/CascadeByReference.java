@@ -11,7 +11,7 @@ import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.service.IMetaboliteService;
 import edu.uminho.biosynth.core.data.service.mapping.MapperService;
 
@@ -40,7 +40,7 @@ public class CascadeByReference implements ICascadeStrategy {
 		case "edu.uminho.biosynth.core.components.mnx.MnxMetaboliteEntity": {
 			LOGGER.log(Level.INFO, entity.getEntry() + " type of " + type.getName());
 			MnxMetaboliteEntity cpd = (MnxMetaboliteEntity) entity;
-			for (MnxMetaboliteCrossReferenceEntity crossReference : cpd.getCrossreferences()) {
+			for (MnxMetaboliteCrossreferenceEntity crossReference : cpd.getCrossreferences()) {
 				result.addAll( this.lookupReference(crossReference));
 			}
 		}

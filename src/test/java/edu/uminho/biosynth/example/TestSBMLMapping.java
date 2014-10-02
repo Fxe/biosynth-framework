@@ -21,7 +21,7 @@ import org.junit.Test;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
@@ -1344,7 +1344,7 @@ public class TestSBMLMapping {
 		List<MnxMetaboliteEntity> metabolites = dao.findAll(MnxMetaboliteEntity.class);
 		
 		for (MnxMetaboliteEntity mnxCpd : metabolites) {
-			for (MnxMetaboliteCrossReferenceEntity xref : mnxCpd.getCrossreferences()) {
+			for (MnxMetaboliteCrossreferenceEntity xref : mnxCpd.getCrossreferences()) {
 				if (xref.getRef().toLowerCase().equals("bigg")) {
 					if (biggToMnxMap.put(xref.getValue(), mnxCpd) != null) {
 						System.out.println("COLLISION !!! " + mnxCpd);

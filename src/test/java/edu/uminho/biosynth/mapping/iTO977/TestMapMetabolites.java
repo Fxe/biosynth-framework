@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
@@ -72,15 +72,15 @@ public class TestMapMetabolites {
 			if (miriam.length > 1) {
 				String value = miriam[miriam.length - 1];
 				String ref = miriam[miriam.length - 2];
-				List<MnxMetaboliteCrossReferenceEntity> res = dao.criteria(MnxMetaboliteCrossReferenceEntity.class, 
+				List<MnxMetaboliteCrossreferenceEntity> res = dao.criteria(MnxMetaboliteCrossreferenceEntity.class, 
 						Restrictions.and( Restrictions.eq("value", value), Restrictions.eq("ref", ref)));
 				if (res.size() > 1) {
 					System.err.println("ERROR > 1: " + ref + ":" + value);
 				} else if ( res.size() < 1 ) {
 					System.err.println("NOT FOUND: " + ref + ":" + value);
 				} else {
-					MnxMetaboliteCrossReferenceEntity xref = res.get(0);
-					for (MnxMetaboliteCrossReferenceEntity xr : xref.getMnxMetaboliteEntity().getCrossreferences()) {
+					MnxMetaboliteCrossreferenceEntity xref = res.get(0);
+					for (MnxMetaboliteCrossreferenceEntity xr : xref.getMnxMetaboliteEntity().getCrossreferences()) {
 						if (xr.getRef().equals("metacyc")) {
 							sb.append(xr).append('\t');
 						}

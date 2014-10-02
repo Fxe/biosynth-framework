@@ -7,7 +7,7 @@ import org.hibernate.criterion.Restrictions;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionProductEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionReactantEntity;
@@ -53,7 +53,7 @@ public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	}
 	
 	public MnxMetaboliteEntity getMnxMetaboliteFromCrossReference(String value) {
-		long cpdId = this.dao.criteria(MnxMetaboliteCrossReferenceEntity.class, Restrictions.eq("value", value)).get(0).getMnxMetaboliteEntity().getId();
+		long cpdId = this.dao.criteria(MnxMetaboliteCrossreferenceEntity.class, Restrictions.eq("value", value)).get(0).getMnxMetaboliteEntity().getId();
 		
 		return this.dao.find(MnxMetaboliteEntity.class, cpdId);
 	}
