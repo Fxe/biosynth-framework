@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 
 @Entity
 @Table(name="MNX_METABOLITE")
@@ -21,58 +21,36 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 	@Column(name="CHARGE") private Integer charge;
     @Column(name="O_SOURCE", length=255) private String originalSource;
     @Column(name="SMILES", length=16383) private String smiles;
-    @Column(name="INCHI", length=16383) private String inChI;
+    @Column(name="INCHI", length=16383) private String inchi;
     @Column(name="MASS") private Double mass;
     
     @OneToMany(mappedBy = "mnxMetaboliteEntity", cascade = CascadeType.ALL)
-    private List<MnxMetaboliteCrossReferenceEntity> crossReferences = new ArrayList<>();
+    private List<MnxMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<>();
 
-	public Integer getCharge() {
-		return charge;
-	}
-	public void setCharge(Integer charge) {
-		this.charge = charge;
-	}
+	public Integer getCharge() {return charge;}
+	public void setCharge(Integer charge) { this.charge = charge;}
 
-	public String getOriginalSource() {
-		return originalSource;
-	}
-	public void setOriginalSource(String originalSource) {
-		this.originalSource = originalSource;
-	}
+	public String getOriginalSource() { return originalSource;}
+	public void setOriginalSource(String originalSource) { this.originalSource = originalSource;}
 
-	public String getSmiles() {
-		return smiles;
-	}
-	public void setSmiles(String smiles) {
-		this.smiles = smiles;
-	}
+	public String getSmiles() { return smiles;}
+	public void setSmiles(String smiles) { this.smiles = smiles;}
 
-	public String getInchi() {
-		return inChI;
-	}
-	public void setInChI(String inChI) {
-		this.inChI = inChI;
-	}
+	public String getInchi() { return inchi;}
+	public void setInChI(String inchi) { this.inchi = inchi;}
 
-	public Double getMass() {
-		return mass;
-	}
-	public void setMass(Double mass) {
-		this.mass = mass;
-	}
+	public Double getMass() { return mass;}
+	public void setMass(Double mass) { this.mass = mass;}
 	
-	public List<MnxMetaboliteCrossReferenceEntity> getCrossreferences() {
-		return crossReferences;
-	}
-	public void addCrossReference(MnxMetaboliteCrossReferenceEntity crossReference) {
+	public List<MnxMetaboliteCrossreferenceEntity> getCrossreferences() { return crossreferences;}
+	public void addCrossReference(MnxMetaboliteCrossreferenceEntity crossReference) {
 		crossReference.setMnxMetaboliteEntity(this);
-		this.crossReferences.add(crossReference);
+		this.crossreferences.add(crossReference);
 	}
 	public void setCrossReferences(
-			List<MnxMetaboliteCrossReferenceEntity> crossReferences) {
-		this.crossReferences = new ArrayList<> (crossReferences);
-		for (MnxMetaboliteCrossReferenceEntity crossReference : crossReferences) {
+			List<MnxMetaboliteCrossreferenceEntity> crossReferences) {
+		this.crossreferences = new ArrayList<> (crossReferences);
+		for (MnxMetaboliteCrossreferenceEntity crossReference : crossReferences) {
 			crossReference.setMnxMetaboliteEntity(this);
 		}
 	}
@@ -85,9 +63,9 @@ public class MnxMetaboliteEntity extends GenericMetabolite{
 		sb.append("Charge:").append(charge).append(sep);
 		sb.append("Original Source:").append(originalSource).append(sep);
 		sb.append("Smiles:").append(smiles).append(sep);
-		sb.append("InChI:").append(inChI).append(sep);
+		sb.append("InChI:").append(inchi).append(sep);
 		sb.append("mass:").append(mass).append(sep);
-		sb.append("xrefs:").append(crossReferences);
+		sb.append("xrefs:").append(crossreferences);
 		return sb.toString();
 	}
 }

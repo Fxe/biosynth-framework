@@ -57,6 +57,9 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	
 	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiMetaboliteNameEntity> names = new ArrayList<> ();
+	public List<ChebiMetaboliteCrossreferenceEntity> getCrossreferences() { return crossreferences;}
+	public void setCrossreferences(
+			List<ChebiMetaboliteCrossreferenceEntity> crossreferences) { this.crossreferences = crossreferences;}
 	
 	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
@@ -73,13 +76,7 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	}
 	
 	
-	public List<ChebiMetaboliteCrossreferenceEntity> getCrossreferences() {
-		return crossreferences;
-	}
-	public void setCrossreferences(
-			List<ChebiMetaboliteCrossreferenceEntity> crossreferences) {
-		this.crossreferences = crossreferences;
-	}
+
 	
 	@Override
 	public String toString() {

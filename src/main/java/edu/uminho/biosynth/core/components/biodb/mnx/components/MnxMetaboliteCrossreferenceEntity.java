@@ -11,7 +11,7 @@ import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 
 @Entity
 @Table(name="MNX_METABOLITE_CROSSREF")
-public class MnxMetaboliteCrossReferenceEntity extends GenericCrossReference {
+public class MnxMetaboliteCrossreferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,10 +22,10 @@ public class MnxMetaboliteCrossReferenceEntity extends GenericCrossReference {
 	@Column(name="EVIDENCE", length=63) private String evidence;
 	@Column(name="DESCRIPTION", length=32767) private String description;
 	
-	public MnxMetaboliteCrossReferenceEntity() {
+	public MnxMetaboliteCrossreferenceEntity() {
 		super(null, null, null);
 	}
-	public MnxMetaboliteCrossReferenceEntity(Type type, String reference,
+	public MnxMetaboliteCrossreferenceEntity(Type type, String reference,
 			String value) {
 		super(type, reference, value);
 	}

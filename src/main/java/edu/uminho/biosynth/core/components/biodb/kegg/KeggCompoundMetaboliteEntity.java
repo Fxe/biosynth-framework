@@ -47,7 +47,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	public void setSmiles(String smiles) { this.smiles = smiles;}
 	
 	@OneToMany(mappedBy = "keggMetaboliteEntity", cascade = CascadeType.ALL)
-	private List<KeggCompoundMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
+	private List<KeggCompoundMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
 	@ElementCollection
 	@CollectionTable(name="kegg_compound_metabolite_reaction", joinColumns=@JoinColumn(name="metabolite_id"))
@@ -67,17 +67,17 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	protected List<String> enzymes = new ArrayList<> ();
 
 	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossreferences() {
-		return crossReferences;
+		return crossreferences;
 	}
-	public void setCrossReferences(List<KeggCompoundMetaboliteCrossreferenceEntity> crossReferences) {
-		this.crossReferences = new ArrayList<>(crossReferences);
-		for (KeggCompoundMetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
-			crossReference.setKeggMetaboliteEntity(this);
+	public void setCrossReferences(List<KeggCompoundMetaboliteCrossreferenceEntity> crossreferences) {
+		this.crossreferences = new ArrayList<>(crossreferences);
+		for (KeggCompoundMetaboliteCrossreferenceEntity crossreference : this.crossreferences) {
+			crossreference.setKeggMetaboliteEntity(this);
 		}
 	}
-	public void addCrossReference(KeggCompoundMetaboliteCrossreferenceEntity crossReference) {
-		this.crossReferences.add(crossReference);
-		crossReference.setKeggMetaboliteEntity(this);
+	public void addCrossReference(KeggCompoundMetaboliteCrossreferenceEntity crossreference) {
+		this.crossreferences.add(crossreference);
+		crossreference.setKeggMetaboliteEntity(this);
 	}
 
 	
@@ -108,7 +108,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 		sb.append("enzymes:").append(enzymes.size() > 10 ? String.format("%d Enzymes", enzymes.size()) : enzymes).append(sep);
 		sb.append("pathways:").append(pathways).append(sep);
 		sb.append("reactions:").append(reactions).append(sep);
-		sb.append("xrefs:").append(crossReferences);
+		sb.append("xrefs:").append(crossreferences);
 		return sb.toString();
 	}
 }
