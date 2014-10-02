@@ -43,45 +43,57 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 	}
 
 	@Override
-	public CentralMetaboliteEntity saveMetabolite(String tag, CentralMetaboliteEntity entity) {
+	public CentralMetaboliteEntity saveMetabolite(String tag, CentralMetaboliteEntity metabolite) {
 		boolean create = true;
 		
 		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
-				DynamicLabel.label(entity.getMajorLabel()), 
+				DynamicLabel.label(metabolite.getMajorLabel()), 
 				"entry", 
-				entity.getEntry())) {
+				metabolite.getEntry())) {
 			create = false;
-			LOGGER.debug("Update " + node);
+			LOGGER.debug(String.format("Found Previous node with entry:%s", metabolite.getEntry()));
+			LOGGER.debug(String.format("MODE:UPDATE %s", node));
+			//SCD Track changes
+			for (String key : metabolite.getProperties().keySet())
+				node.setProperty(key, metabolite.getProperties().get(key));
+			for (CentralMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
+				this.createOrLinkToProxy(node, proxy);
+			}
+			for (Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> pair 
+					: metabolite.getPropertyEntities()) {
+				this.createOrLinkToProperty(node, pair);
+			}
+			node.setProperty("proxy", false);
 			
-			entity.setId(node.getId());
+			metabolite.setId(node.getId());
 		}
 		
 		if (create) {
 			Node node = graphDatabaseService.createNode();
 			LOGGER.debug("Create " + node);
 			
-			node.addLabel(DynamicLabel.label(entity.getMajorLabel()));
-			for (String label : entity.getLabels())
+			node.addLabel(DynamicLabel.label(metabolite.getMajorLabel()));
+			for (String label : metabolite.getLabels())
 				node.addLabel(DynamicLabel.label(label));
 			
-			for (String key : entity.getProperties().keySet())
-				node.setProperty(key, entity.getProperties().get(key));
+			for (String key : metabolite.getProperties().keySet())
+				node.setProperty(key, metabolite.getProperties().get(key));
 			
-			for (CentralMetaboliteProxyEntity proxy : entity.getCrossreferences()) {
+			for (CentralMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
 			}
 			
 			for (Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> pair 
-					: entity.getPropertyEntities()) {
+					: metabolite.getPropertyEntities()) {
 				this.createOrLinkToProperty(node, pair);
 			}
 			
 			node.setProperty("proxy", false);
 			
-			entity.setId(node.getId());
+			metabolite.setId(node.getId());
 		}
 		
-		return entity;
+		return metabolite;
 	}
 	
 	private void createOrLinkToProperty(Node parent, Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyLinkPair) {

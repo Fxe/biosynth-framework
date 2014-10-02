@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteNameEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetaboliteEntity> implements MetaboliteDao<ChebiMetaboliteEntity>{

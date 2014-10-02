@@ -16,9 +16,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;

@@ -1,5 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -7,11 +11,14 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
@@ -40,10 +47,15 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 	
 	protected static final String METABOLITE_INSTANCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.InstanceOf.toString();
 	
+	protected static final String METABOLITE_MODEL_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCharge.toString();
+	
 	private final String majorLabel;
 	
-	public AbstractMetaboliteTransform(String majorLabel) {
+	protected final EtlDictionary<String, String> dictionary;
+	
+	public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String> dictionary) {
 		this.majorLabel = majorLabel;
+		this.dictionary = dictionary;
 	}
 	
 	@Override
@@ -130,7 +142,38 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 						METABOLITE_NAME_RELATIONSHIP_TYPE));
 	}
 	
-	protected abstract void configureAdditionalPropertyLinks(CentralMetaboliteEntity centralMetaboliteEntity, M entity);
+	protected abstract void configureAdditionalPropertyLinks(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite);
 	
-	protected abstract void configureCrossreferences(CentralMetaboliteEntity centralMetaboliteEntity, M entity);
+	protected void configureCrossreferences(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+		try {
+			Method method = metabolite.getClass().getMethod("getCrossreferences");
+			List<?> xrefs = List.class.cast(method.invoke(metabolite));
+			for (Object xrefObject : xrefs) {
+				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
+				
+				switch (xref.getType()) {
+					case DATABASE:
+						CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
+						proxyEntity.setEntry(xref.getValue());
+						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
+						
+						centralMetaboliteEntity.getCrossreferences().add(proxyEntity);
+						break;
+					case MODEL:
+						centralMetaboliteEntity.addPropertyEntity(
+								this.buildPropertyLinkPair(
+										"key", xref.getRef(), 
+										MODEL_LABEL, 
+										METABOLITE_MODEL_RELATIONSHIP_TYPE));
+						break;
+					default:
+						break;
+				}
+			}
+		} catch (NoSuchMethodException e) {
+			LOGGER.error(e.getMessage());
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			LOGGER.error(e.getMessage());
+		}
+	};
 }

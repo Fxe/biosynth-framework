@@ -13,9 +13,9 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEntity> implements MetaboliteDao<MnxMetaboliteEntity> {
@@ -88,7 +88,7 @@ public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEnt
 			executionEngine.execute("MERGE (c:Charge {charge:{charge}}) ", params);
 			executionEngine.execute("MATCH (cpd:MetaNetX:Compound {entry:{entry}}), (c:Charge {charge:{charge}}) MERGE (cpd)-[r:HasCharge]->(c)", params);	
 		}
-		for (MnxMetaboliteCrossReferenceEntity xref : cpd.getCrossreferences()) {
+		for (MnxMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue();
 			params.put("dbEntry", dbEntry);

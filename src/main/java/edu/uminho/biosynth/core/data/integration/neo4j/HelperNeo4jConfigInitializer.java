@@ -45,4 +45,10 @@ public class HelperNeo4jConfigInitializer {
 		
 		return graphDatabaseService;
 	}
+	
+	public static GraphDatabaseService s(String mg) {
+//		org.neo4j.
+//		GraphDatabaseService graphDatabaseService = new Remote
+		return null;
+	}
 }

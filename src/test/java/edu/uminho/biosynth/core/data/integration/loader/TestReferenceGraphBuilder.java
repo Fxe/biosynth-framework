@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
@@ -25,12 +26,11 @@ import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetabol
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.integration.loader.ReferenceLoader;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
@@ -172,8 +172,8 @@ public class TestReferenceGraphBuilder {
 		keggLoader.setReferenceTransformer(keggXrefTrans);
 		keggLoader.setService(keggService);
 		
-		ReferenceLoader<MnxMetaboliteEntity, MnxMetaboliteCrossReferenceEntity> mnxLoader =
-				new ReferenceLoader<>(MnxMetaboliteEntity.class, MnxMetaboliteCrossReferenceEntity.class, mnxXrefTrans);
+		ReferenceLoader<MnxMetaboliteEntity, MnxMetaboliteCrossreferenceEntity> mnxLoader =
+				new ReferenceLoader<>(MnxMetaboliteEntity.class, MnxMetaboliteCrossreferenceEntity.class, mnxXrefTrans);
 		mnxLoader.setReferenceTransformer(mnxXrefTrans);
 		mnxLoader.setService(mxnService);
 		

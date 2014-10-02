@@ -14,9 +14,9 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteEntity> implements MetaboliteDao<BiggMetaboliteEntity> {

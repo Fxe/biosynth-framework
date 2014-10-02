@@ -5,10 +5,11 @@ import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 
 public class BiocycMetaboliteTransform
 extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
@@ -16,7 +17,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 //	private final String BIOCYC_P_COMPOUND_METABOLITE_LABEL;
 	
 	public BiocycMetaboliteTransform(String majorLabel) {
-		super(majorLabel);
+		super(majorLabel, new BiobaseMetaboliteEtlDictionary<>(BioCycMetaboliteEntity.class));
 //		this.BIOCYC_P_COMPOUND_METABOLITE_LABEL = majorLabel;
 	}
 

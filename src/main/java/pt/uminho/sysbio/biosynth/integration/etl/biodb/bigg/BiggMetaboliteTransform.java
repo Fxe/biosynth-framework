@@ -6,10 +6,11 @@ import java.util.List;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 
 public class BiggMetaboliteTransform
 extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
@@ -17,7 +18,7 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 	private static final String BIGG_METABOLITE_LABEL = MetaboliteMajorLabel.BiGG.toString();
 	
 	public BiggMetaboliteTransform() {
-		super(BIGG_METABOLITE_LABEL);
+		super(BIGG_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(BiggMetaboliteEntity.class));
 	}
 
 	@Override

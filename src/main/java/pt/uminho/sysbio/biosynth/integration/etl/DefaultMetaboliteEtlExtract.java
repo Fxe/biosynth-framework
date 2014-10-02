@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.Metabolite;
@@ -33,6 +34,16 @@ public class DefaultMetaboliteEtlExtract<M extends Metabolite> implements EtlExt
 	public List<M> extractAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Serializable> getAllKeys() {
+		List<Serializable> keys = new ArrayList<> ();
+		for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
+			keys.add(entry);
+		}
+		
+		return keys;
 	}
 
 }

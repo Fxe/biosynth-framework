@@ -6,10 +6,11 @@ import java.util.List;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 
 public class KeggDrugTransform 
 extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
@@ -17,7 +18,7 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 	private static final String KEGG_DRUG_METABOLITE_LABEL = MetaboliteMajorLabel.LigandDrug.toString();
 	
 	public KeggDrugTransform() {
-		super(KEGG_DRUG_METABOLITE_LABEL);
+		super(KEGG_DRUG_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(KeggDrugMetaboliteEntity.class));
 	}
 
 	@Override

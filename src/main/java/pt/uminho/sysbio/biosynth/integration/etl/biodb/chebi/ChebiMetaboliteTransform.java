@@ -6,10 +6,11 @@ import java.util.List;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
 
 public class ChebiMetaboliteTransform
 extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
@@ -17,7 +18,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 	private static final String CHEBI_METABOLITE_LABEL = MetaboliteMajorLabel.ChEBI.toString();
 	
 	public ChebiMetaboliteTransform() {
-		super(CHEBI_METABOLITE_LABEL);
+		super(CHEBI_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(ChebiMetaboliteEntity.class));
 	}
 
 	@Override

@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface EtlExtract<SRC> {
 	public SRC extract(Serializable id);
+	public List<Serializable> getAllKeys();
 	public List<SRC> extractAll();
 }

@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.dictionary;
+package pt.uminho.sysbio.biosynth.integration.etl.dictionary;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,6 +8,7 @@ import pt.uminho.sysbio.biosynth.integration.etl.EtlExtract;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
+@Deprecated
 public class HbmMetaboliteWarehouseExtract implements EtlExtract<MetaboliteStga>{
 
 	private IGenericDao dao;
@@ -31,6 +32,11 @@ public class HbmMetaboliteWarehouseExtract implements EtlExtract<MetaboliteStga>
 	@Override
 	public List<MetaboliteStga> extractAll() {
 		return this.dao.findAll(MetaboliteStga.class);
+	}
+	@Override
+	public List<Serializable> getAllKeys() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

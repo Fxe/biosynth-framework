@@ -10,5 +10,6 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	HasInChI, 
 	HasCharge, 
 	HasSMILES, 
-	Isomorphic
+	Isomorphic,
+	FoundIn
 }

@@ -1,17 +1,17 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
 import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 
-public class TransformMnxMetaboliteCrossReference extends AbstractTransformCrossReference<MnxMetaboliteCrossReferenceEntity> {
+public class TransformMnxMetaboliteCrossReference extends AbstractTransformCrossReference<MnxMetaboliteCrossreferenceEntity> {
 	
 	@Override
-	public Class<MnxMetaboliteCrossReferenceEntity> getTransformerEntityClass() {
-		return MnxMetaboliteCrossReferenceEntity.class;
+	public Class<MnxMetaboliteCrossreferenceEntity> getTransformerEntityClass() {
+		return MnxMetaboliteCrossreferenceEntity.class;
 	}
 
 	@Override
-	public GenericCrossReference transform(MnxMetaboliteCrossReferenceEntity crossReference) {
+	public GenericCrossReference transform(MnxMetaboliteCrossreferenceEntity crossReference) {
 		String originalRef = crossReference.getRef().toUpperCase();
 		String originalValue = crossReference.getValue().toUpperCase();
 		

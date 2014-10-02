@@ -6,10 +6,11 @@ import java.util.List;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.integration.dictionary.BioDbDictionary;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 
 public class MnxMetaboliteTransform
 extends AbstractMetaboliteTransform<MnxMetaboliteEntity>{
@@ -17,7 +18,7 @@ extends AbstractMetaboliteTransform<MnxMetaboliteEntity>{
 	private static final String MNX_METABOLITE_LABEL = MetaboliteMajorLabel.MetaNetX.toString();
 	
 	public MnxMetaboliteTransform() {
-		super(MNX_METABOLITE_LABEL);
+		super(MNX_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(MnxMetaboliteEntity.class));
 	}
 
 	@Override
@@ -46,7 +47,7 @@ extends AbstractMetaboliteTransform<MnxMetaboliteEntity>{
 		
 		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
 		
-		for (MnxMetaboliteCrossReferenceEntity xref : entity.getCrossreferences()) {
+		for (MnxMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();

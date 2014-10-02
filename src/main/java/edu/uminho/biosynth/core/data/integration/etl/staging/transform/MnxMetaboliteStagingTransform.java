@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity;
+import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
-public class MnxMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<MnxMetaboliteEntity, MnxMetaboliteCrossReferenceEntity> {
+public class MnxMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<MnxMetaboliteEntity, MnxMetaboliteCrossreferenceEntity> {
 
 	@Override
 	public MetaboliteStga etlTransform(MnxMetaboliteEntity cpd) {
