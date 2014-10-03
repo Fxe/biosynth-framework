@@ -53,7 +53,7 @@ public class ApplyStructureInformationToKegg {
 				cpd.setInchi(OpenBabelWrapper.convert(mol2d, "mol", "inchi"));
 				cpd.setSmiles(OpenBabelWrapper.convertMol2dToSmiles(mol2d));
 				cpd.setInchiKey(OpenBabelWrapper.convert(mol2d, "mol", "inchikey"));
-				dao.save(cpd);
+				dao.saveMetabolite(cpd);
 				i++;
 			}
 			if (i % 10 == 0) {
