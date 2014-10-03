@@ -19,12 +19,14 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.uminho.biosynth.util.FormulaConverter;
+
 /**
  * 
  * @author Filipe
  *
  */
-public class CdkWrapper {
+public class CdkWrapper implements FormulaConverter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CdkWrapper.class);
 
@@ -39,7 +41,7 @@ public class CdkWrapper {
 	 * @return Returns the string representation of the molecule formula. Based on Hill System.
 	 * @see {@link org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator#getString(IMolecularFormula, boolean)}
 	 */
-	public static String convertToIsotopeMolecularFormula(String formula, boolean setOne) {
+	public static String toIsotopeMolecularFormula(String formula, boolean setOne) {
 		
 		try {
 		
@@ -131,5 +133,10 @@ public class CdkWrapper {
 //		
 //		AtomContainerRenderer atomContainerRenderer = new AtomContainerRenderer(generators, fontManager)
 //		atomContainerRenderer.paintMolecule(molecule, svgGenerator, bounds, resetCenter);
+	}
+
+	@Override
+	public String convertToIsotopeMolecularFormula(String formula, boolean setOne) {
+		return CdkWrapper.toIsotopeMolecularFormula(formula, setOne);
 	}
 }
