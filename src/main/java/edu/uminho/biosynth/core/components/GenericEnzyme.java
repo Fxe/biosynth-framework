@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class GenericEnzyme extends AbstractGenericEntity implements Serializable {
+public class GenericEnzyme extends AbstractBiosynthEntity implements Serializable {
 
 	public static int TOSTRING_DETAIL = 0;
 	

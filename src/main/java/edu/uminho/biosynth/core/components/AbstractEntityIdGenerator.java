@@ -19,10 +19,10 @@ public class AbstractEntityIdGenerator extends IdentityGenerator {
 		}
 		
 		Serializable id;
-		if ((((AbstractGenericEntity) obj).getId()) == null) {
+		if ((((AbstractBiosynthEntity) obj).getId()) == null) {
 			id = super.generate(s, obj);
 		} else {
-			id = ((AbstractGenericEntity)obj).getId();
+			id = ((AbstractBiosynthEntity)obj).getId();
 		}
 		return id;
 	}

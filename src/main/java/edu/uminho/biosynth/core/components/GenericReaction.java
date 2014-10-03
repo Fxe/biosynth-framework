@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 @MappedSuperclass
-public class GenericReaction extends AbstractGenericEntity 
+public class GenericReaction extends AbstractBiosynthEntity 
 implements Reaction, Serializable {
 	
 	private static final long serialVersionUID = 1L;

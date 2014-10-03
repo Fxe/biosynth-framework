@@ -17,7 +17,7 @@ import org.joda.time.DateTime;
 
 @MappedSuperclass
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class AbstractGenericEntity implements Serializable {
+public abstract class AbstractBiosynthEntity implements Serializable {
 
 	private static final long serialVersionUID = 353453463465587L;
 
@@ -50,54 +50,28 @@ public abstract class AbstractGenericEntity implements Serializable {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="updated_at") private DateTime updated_at;
 	
-	public AbstractGenericEntity() {
-		this.entry = null;
-	}
-	public AbstractGenericEntity(String entry) {
+	public AbstractBiosynthEntity() { }
+	public AbstractBiosynthEntity(String entry) {
 		this.entry = entry;
 	}
 	
-	public String getEntry() {
-		return entry;
-	}
-	public void setEntry(String entry) {
-		this.entry = entry;
-	}
+	public String getEntry() { return entry;}
+	public void setEntry(String entry) { this.entry = entry;}
 	
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	public String getDescription() { return description;}
+	public void setDescription(String description) { this.description = description;}
 	
-	public String getName() {
-		return this.name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	public String getName() { return this.name;}
+	public void setName(String name) { this.name = name;}
 	
-	public String getSource() {
-		return source;
-	}
-	public void setSource(String source) {
-		this.source = source;
-	}
+	public String getSource() { return source;}
+	public void setSource(String source) { this.source = source;}
 	
-	public DateTime getCreatedAt() {
-		return created_at;
-	}
-	public void setCreatedAt(String modDate) {
-		this.created_at = new DateTime(modDate);
-	}
+	public DateTime getCreatedAt() { return created_at;}
+	public void setCreatedAt(String modDate) { this.created_at = new DateTime(modDate);}
 	
-	public DateTime getUpdatedAt() {
-		return this.updated_at;
-	}
-	public void setUpdatedAt(String modDate) {
-		this.updated_at = new DateTime(modDate);
-	}
+	public DateTime getUpdatedAt() { return this.updated_at;}
+	public void setUpdatedAt(String modDate) { this.updated_at = new DateTime(modDate);}
 	
 	@Override
 	public String toString() {

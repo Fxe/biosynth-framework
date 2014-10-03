@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public class AbstractGenericReaction<M extends AbstractGenericMetabolite> extends AbstractGenericEntity implements IReactionEntity<M>, Serializable{
+public class AbstractGenericReaction<M extends AbstractGenericMetabolite> extends AbstractBiosynthEntity implements IReactionEntity<M>, Serializable{
 
 	private static final long serialVersionUID = 1L;
 	protected Map<M, Double> reactantStoichiometry;

@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.components;
 
 import java.io.Serializable;
 
-public class GenericOrganism extends AbstractGenericEntity implements Serializable {
+public class GenericOrganism extends AbstractBiosynthEntity implements Serializable {
 
 	private static final long serialVersionUID = 45454568017L;
 	

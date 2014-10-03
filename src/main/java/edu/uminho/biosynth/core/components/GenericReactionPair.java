@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GenericReactionPair extends AbstractGenericEntity implements Serializable{
+public class GenericReactionPair extends AbstractBiosynthEntity implements Serializable{
 
 	private static final long serialVersionUID = 454673L;
 	
