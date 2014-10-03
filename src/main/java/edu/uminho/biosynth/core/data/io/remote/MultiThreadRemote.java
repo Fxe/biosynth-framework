@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.uminho.biosynth.core.components.AbstractGenericEntity;
+import edu.uminho.biosynth.core.components.AbstractBiosynthEntity;
 import edu.uminho.biosynth.core.components.GenericEnzyme;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 import edu.uminho.biosynth.core.components.GenericReaction;
@@ -35,23 +35,23 @@ public class MultiThreadRemote {
 	private final ISource gatherEngine;
 	private final int numThreads;
 	private final List<Thread> threadArray;
-	private final Map<Integer, Map<String, AbstractGenericEntity>> threadResults;
+	private final Map<Integer, Map<String, AbstractBiosynthEntity>> threadResults;
 	
 	public MultiThreadRemote(IRemoteSource engine, int numThreads) {
 		this.gatherEngine = engine;
 		this.numThreads = numThreads;
 		this.threadArray = new ArrayList<Thread> ();
-		this.threadResults = new HashMap<Integer, Map<String,AbstractGenericEntity>> ();
+		this.threadResults = new HashMap<Integer, Map<String,AbstractBiosynthEntity>> ();
 	}
 	
 	public MultiThreadRemote(ISource engine, int numThreads) {
 		this.gatherEngine = engine;
 		this.numThreads = numThreads;
 		this.threadArray = new ArrayList<Thread> ();
-		this.threadResults = new HashMap<Integer, Map<String,AbstractGenericEntity>> ();
+		this.threadResults = new HashMap<Integer, Map<String,AbstractBiosynthEntity>> ();
 	}
 	
-	private class Worker<T extends AbstractGenericEntity> implements Runnable {
+	private class Worker<T extends AbstractBiosynthEntity> implements Runnable {
 
 		private final ISource engine;
 		
@@ -59,7 +59,7 @@ public class MultiThreadRemote {
 		private final List<String> work;
 		
 		private final Class<T> type;
-		private final List<AbstractGenericEntity> result;
+		private final List<AbstractBiosynthEntity> result;
 		private final MultiThreadRemote parent;
 		
 		public Worker(int tid, List<String> work, MultiThreadRemote parent, Class<T> type) {
@@ -72,8 +72,8 @@ public class MultiThreadRemote {
 			for (int i = 0; i < work.size(); i++) this.result.add(null); 
 		}
 		
-		public Map<String, AbstractGenericEntity> getResult() {
-			Map<String, AbstractGenericEntity> resultMap = new HashMap<String, AbstractGenericEntity> ();
+		public Map<String, AbstractBiosynthEntity> getResult() {
+			Map<String, AbstractBiosynthEntity> resultMap = new HashMap<String, AbstractBiosynthEntity> ();
 			for (int i = 0; i < work.size(); i++) {
 				resultMap.put( work.get(i), result.get(i));
 			}
@@ -159,7 +159,7 @@ public class MultiThreadRemote {
 		}
 	}
 	
-	public synchronized Map<Integer, Map<String, AbstractGenericEntity>> getThreadResults() {
+	public synchronized Map<Integer, Map<String, AbstractBiosynthEntity>> getThreadResults() {
 		return threadResults;
 	}
 
@@ -173,7 +173,7 @@ public class MultiThreadRemote {
 		
 		for (int i = 0; i < numThreads; i++) {
 			Worker<GenericMetabolite> w = new Worker<>(i, workPerThread.get(i), this, GenericMetabolite.class);
-			this.threadResults.put(i, new HashMap<String, AbstractGenericEntity>());
+			this.threadResults.put(i, new HashMap<String, AbstractBiosynthEntity>());
 			Thread thread = new Thread(w);
 			LOGGER.log(Level.INFO, thread + " => " + workPerThread.get(i).size());
 			this.threadArray.add(thread);
@@ -186,7 +186,7 @@ public class MultiThreadRemote {
 		
 		Map<String, GenericMetabolite> retMap = new HashMap<> ();
 		for (Integer tid : this.threadResults.keySet()) {
-			Map<String,AbstractGenericEntity> threadResult = this.threadResults.get(tid);
+			Map<String,AbstractBiosynthEntity> threadResult = this.threadResults.get(tid);
 			for (String key : threadResult.keySet()) {
 				if (retMap.put(key, (GenericMetabolite) threadResult.get(key)) != null) {
 					LOGGER.log(Level.SEVERE, "Collision detected");
@@ -213,7 +213,7 @@ public class MultiThreadRemote {
 		
 		Map<String, GenericReaction> retMap = new HashMap<> ();
 		for (Integer tid : this.threadResults.keySet()) {
-			Map<String,AbstractGenericEntity> threadResult = this.threadResults.get(tid);
+			Map<String,AbstractBiosynthEntity> threadResult = this.threadResults.get(tid);
 			for (String key : threadResult.keySet()) {
 				if ( retMap.put(key, (GenericReaction) threadResult.get(key)) != null) {
 					LOGGER.log(Level.SEVERE, "Collision detected");
@@ -240,7 +240,7 @@ public class MultiThreadRemote {
 		
 		Map<String, GenericEnzyme> retMap = new HashMap<> ();
 		for (Integer tid : this.threadResults.keySet()) {
-			Map<String,AbstractGenericEntity> threadResult = this.threadResults.get(tid);
+			Map<String,AbstractBiosynthEntity> threadResult = this.threadResults.get(tid);
 			for (String key : threadResult.keySet()) {
 				if ( retMap.put(key, (GenericEnzyme) threadResult.get(key)) != null) {
 					LOGGER.log(Level.SEVERE, "Collision detected");

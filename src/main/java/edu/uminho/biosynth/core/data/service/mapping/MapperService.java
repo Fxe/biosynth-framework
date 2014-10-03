@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.uminho.biosynth.core.components.AbstractGenericEntity;
+import edu.uminho.biosynth.core.components.AbstractBiosynthEntity;
 import edu.uminho.biosynth.core.data.service.BiggService;
 import edu.uminho.biosynth.core.data.service.BiocycService;
 import edu.uminho.biosynth.core.data.service.KeggService;
@@ -14,10 +14,10 @@ public class MapperService {
 	
 	private final static Logger LOGGER = Logger.getLogger(MapperService.class.getName());
 	
-	public static<T extends AbstractGenericEntity> List<String> filterEntityEntry(List<T> entityList) {
+	public static<T extends AbstractBiosynthEntity> List<String> filterEntityEntry(List<T> entityList) {
 		List<String> entryList = new ArrayList<> ();
 		for (int i = 0; i < entityList.size(); i++) {
-			AbstractGenericEntity entity = entityList.get(i);
+			AbstractBiosynthEntity entity = entityList.get(i);
 			entryList.add( entity == null ? "null" : entity.getEntry());
 		}
 		return entryList;

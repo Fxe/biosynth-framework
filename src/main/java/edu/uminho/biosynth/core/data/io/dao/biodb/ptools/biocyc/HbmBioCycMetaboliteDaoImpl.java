@@ -57,6 +57,7 @@ extends AbstractHibernateDao implements MetaboliteDao<BioCycMetaboliteEntity>{
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteByEntry(String entry) {
+		
 		BioCycMetaboliteEntity cpd = null;
 		Criteria criteria = this.getSession().createCriteria(BioCycMetaboliteEntity.class);
 		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
