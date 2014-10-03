@@ -1,10 +1,19 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
+import java.util.Map;
+
 import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.slf4j.Logger;
 
 public abstract class AbstractNeo4jDao<T> {
+	
+//	private static Logger LOGGER = 
 	
 	protected GraphDatabaseService graphDatabaseService;
 	protected ExecutionEngine executionEngine;
@@ -25,7 +34,23 @@ public abstract class AbstractNeo4jDao<T> {
 		this.executionEngine = new ExecutionEngine(graphdb);
 	}
 	
+	protected void create(
+			Node node, Label majorLabel, Object value, 
+			RelationshipType relationshipType, Map<String, Object> relationshipProperties) {
+		boolean create = true;
+		for (Node proxyNode : graphDatabaseService
+				.findNodesByLabelAndProperty(majorLabel, "entry", value)) {
+//			LOGGER.debug("Link To Node/Proxy " + proxyNode);
+			create = false;
+			
+			//TODO: SET TO UPDATE
+			Relationship relationship = node.createRelationshipTo(proxyNode, relationshipType);
+			for (String key : relationshipProperties.keySet()) {
+				relationship.setProperty(key, relationshipProperties.get(key));
+			}
+		}
+	}
+	
+	
 	protected abstract T nodeToObject(Node node);
-	
-	
 }

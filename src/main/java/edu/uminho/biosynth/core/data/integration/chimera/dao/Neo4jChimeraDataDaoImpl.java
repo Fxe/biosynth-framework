@@ -59,8 +59,10 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	}
 
 	public void setGraphDatabaseService(GraphDatabaseService graphDatabaseService) {
-		this.graphDatabaseService = graphDatabaseService;
-		this.executionEngine = new ExecutionEngine(graphDatabaseService);
+		if (graphDatabaseService != null) {
+			this.graphDatabaseService = graphDatabaseService;
+			this.executionEngine = new ExecutionEngine(graphDatabaseService);
+		}
 	}
 	
 	public Node getMetaboliteNodeByEntry(String entry, CompoundNodeLabel type) {

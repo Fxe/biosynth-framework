@@ -18,7 +18,6 @@ import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
-import edu.uminho.biosynth.core.data.integration.neo4j.ReactionRelationshipType;
 
 public class Neo4jCentralReactionDaoImpl 
 extends AbstractNeo4jDao<CentralReactionEntity> 
@@ -55,6 +54,25 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 			create = false;
 			LOGGER.debug(String.format("Found Previous node with entry:%s", reaction.getEntry()));
 			LOGGER.debug(String.format("MODE:UPDATE %s", node));
+			
+			for (String label : reaction.getLabels())
+				node.addLabel(DynamicLabel.label(label));
+			for (String key : reaction.getProperties().keySet())
+				node.setProperty(key, reaction.getProperties().get(key));
+			for (CentralMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
+				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
+				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
+			}
+			for (CentralMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
+				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
+			}
+			for (CentralReactionProxyEntity x : reaction.getCrossreferences()) {
+				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
+				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
+			}
+			
+			node.setProperty("proxy", false);
 			
 			reaction.setId(node.getId());
 		}
@@ -143,7 +161,8 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 			create = false;
 			
 			//TODO: SET TO UPDATE
-			parent.createRelationshipTo(proxyNode, relationshipType);
+			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
+			relationship.setProperty("stoichiometry", stoichiometry);
 		}
 		
 		if (create) {
@@ -156,7 +175,8 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
-			parent.createRelationshipTo(proxyNode, relationshipType);
+			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
+			relationship.setProperty("stoichiometry", stoichiometry);
 		}
 	}
 
@@ -205,69 +225,5 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//	@Override
-//	public CentralReactionEntity getReactionById(Serializable id) {
-//		Node node = null;
-//		return nodeToObject(node);
-//	}
-//
-//	@Override
-//	public CentralReactionEntity getReactionByEntry(String entry) {
-//		Node node = null;
-//		return nodeToObject(node);
-//	}
-//
-//	@Override
-//	public CentralReactionEntity saveReaction(CentralReactionEntity reaction) {
-//		boolean update = false;
-//		
-//		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
-//				DynamicLabel.label(reaction.getMajorLabel()), 
-//				"entry", 
-//				reaction.getEntry())) {
-//			update = true;
-//			LOGGER.debug("Update " + node);
-//			
-//			reaction.setId(node.getId());
-//		}
-//		
-//		if (!update) {
-//			Node node = graphDatabaseService.createNode();
-//			LOGGER.debug("Create " + node);
-//			
-//			node.addLabel(DynamicLabel.label(reaction.getMajorLabel()));
-//			for (String label : reaction.getLabels())
-//				node.addLabel(DynamicLabel.label(label));
-//			
-//			for (String key : reaction.getProperties().keySet())
-//				node.setProperty(key, reaction.getProperties().get(key));
-//			
-//			reaction.setId(node.getId());
-//		}
-//
-//		return reaction;
-//	}
-//
-//	@Override
-//	public Set<Serializable> getAllReactionIds() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public Set<String> getAllReactionEntries() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	protected CentralReactionEntity nodeToObject(Node node) {
-//		if (node == null) return null;
-//		
-//		
-//		
-//		return null;
-//	}
 
 }

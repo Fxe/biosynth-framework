@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
-public enum ReactionPropertyLabel {
+import org.neo4j.graphdb.Label;
+
+public enum ReactionPropertyLabel implements Label {
 	Reaction,
 	ECNumber, Name,
 	Pathway, Orthology, EnzymaticReaction

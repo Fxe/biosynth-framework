@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +29,7 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 
 	@Override
 	public CentralDataReactionEntity getReactionByEntry(String entry) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub	
 		return null;
 	}
 

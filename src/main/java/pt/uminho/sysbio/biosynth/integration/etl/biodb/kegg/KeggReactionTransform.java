@@ -4,14 +4,14 @@ import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
-import edu.uminho.biosynth.core.data.integration.neo4j.ReactionNodeLabel;
 
 public class KeggReactionTransform 
 extends AbstractReactionTransform<KeggReactionEntity>{
 
-	private static final String KEGG_REACTION_LABEL = ReactionNodeLabel.LigandReaction.toString();
+	private static final String KEGG_REACTION_LABEL = ReactionMajorLabel.LigandReaction.toString();
 	private static final String KEGG_COMPOUND_METABOLITE_LABEL = MetaboliteMajorLabel.LigandCompound.toString();
 	private static final String KEGG_GLYCAN_METABOLITE_LABEL = MetaboliteMajorLabel.LigandGlycan.toString();
 	

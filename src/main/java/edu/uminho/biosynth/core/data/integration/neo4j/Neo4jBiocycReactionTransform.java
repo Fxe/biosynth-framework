@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
 import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
@@ -22,7 +25,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 		String result = null;
 		switch (source) {
 			case "META":
-				result = ReactionNodeLabel.MetaCyc.toString();
+				result = ReactionMajorLabel.MetaCyc.toString();
 				break;
 			default:
 				break;
@@ -38,8 +41,8 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 		entity.setMajorLabel(sourceToFunnyLabel(rxn.getSource()));
 		
 		entity.addLabel(entity.getMajorLabel());
-		entity.addLabel(ReactionNodeLabel.Reaction.toString());
-		entity.addLabel(ReactionNodeLabel.BioCyc.toString());
+		entity.addLabel(GlobalLabel.Reaction.toString());
+		entity.addLabel(GlobalLabel.BioCyc.toString());
 		
 		entity.setEntry(rxn.getEntry());
 		Map<String, Object> properties = new HashMap<> ();
