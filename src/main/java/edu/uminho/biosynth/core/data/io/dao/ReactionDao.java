@@ -2,7 +2,7 @@ package edu.uminho.biosynth.core.data.io.dao;
 
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.GenericReaction;
+import edu.uminho.biosynth.core.components.Reaction;
 
 /**
  * 
@@ -10,7 +10,7 @@ import edu.uminho.biosynth.core.components.GenericReaction;
  *
  * @param <R> a GenericReaction entity.
  */
-public interface ReactionDao<R extends GenericReaction> {
+public interface ReactionDao<R extends Reaction> {
 
 	/**
 	 * Looks up a reaction entity by id. Note that the id is usually a 
