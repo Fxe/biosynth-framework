@@ -19,6 +19,7 @@ implements EtlPipeline<SRC, DST> {
 	
 //	private MetaboliteDao<SRC> daoSrc;
 	
+	private EtlDataCleansing<DST> dataCleasingSubsystem;
 	private EtlExtract<SRC> etlExtract;
 	private EtlTransform<SRC, DST> etlTransform;
 	private EtlLoad<DST> etlLoad;
@@ -42,6 +43,12 @@ implements EtlPipeline<SRC, DST> {
 	public void setSkipLoad(boolean skipLoad) { this.skipLoad = skipLoad;}
 
 	@Override
+	public void setEtlDataCleasingSubsystem(
+			EtlDataCleansing<DST> dataCleasingSubsystem) {
+		this.dataCleasingSubsystem = dataCleasingSubsystem;
+	}
+	
+	@Override
 	public void setExtractSubsystem(EtlExtract<SRC> etlExtract) { this.etlExtract = etlExtract;}
 
 	@Override
@@ -63,7 +70,10 @@ implements EtlPipeline<SRC, DST> {
 			
 			//DST = ETL TRANSFORM(SRC)
 			DST dst = etlTransform.etlTransform(src);
-
+			
+			//ETL CLEAN(DST)
+			dataCleasingSubsystem.etlCleanse(dst);
+			
 			//ETL LOAD(DST)
 			if (!skipLoad) etlLoad.etlLoad(dst);
 			

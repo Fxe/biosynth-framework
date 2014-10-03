@@ -4,6 +4,7 @@ import org.neo4j.graphdb.Label;
 
 public enum ReactionMajorLabel implements Label {
 	LigandReaction,
+	Rhea,
 	BiGG,
 	Seed,
 	MetaCyc

@@ -17,6 +17,7 @@ implements EtlPipeline<SRC, DST> {
 	private SessionFactory sessionFactory;
 	private GraphDatabaseService graphDatabaseService;
 	
+	private EtlDataCleansing<DST> dataCleasingSubsystem;
 	private EtlExtract<SRC> extractSubsystem;
 	private EtlTransform<SRC, DST> transformSubsystem;
 	private EtlLoad<DST> loadSubsystem;
@@ -37,6 +38,12 @@ implements EtlPipeline<SRC, DST> {
 	public void setSkipLoad(boolean skipLoad) { this.skipLoad = skipLoad;}
 	
 	@Override
+	public void setEtlDataCleasingSubsystem(
+			EtlDataCleansing<DST> dataCleasingSubsystem) {
+		this.dataCleasingSubsystem = dataCleasingSubsystem;
+	}
+	
+	@Override
 	public void setExtractSubsystem(EtlExtract<SRC> extractSubsystem) {
 		this.extractSubsystem = extractSubsystem;
 	}
@@ -53,6 +60,11 @@ implements EtlPipeline<SRC, DST> {
 
 	@Override
 	public void etl() {
+		
+		if (this.dataCleasingSubsystem == null) {
+			LOGGER.warn("No data cleasing system attached");
+		}
+		
 		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
 		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
 		
@@ -64,6 +76,9 @@ implements EtlPipeline<SRC, DST> {
 			//DST = ETL TRANSFORM(SRC)
 			DST dst = transformSubsystem.etlTransform(src);
 
+			if (this.dataCleasingSubsystem != null)
+				this.dataCleasingSubsystem.etlCleanse(dst);
+			
 			//ETL LOAD(DST)
 			if (!skipLoad) loadSubsystem.etlLoad(dst);
 			

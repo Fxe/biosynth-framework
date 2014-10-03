@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
@@ -93,6 +94,9 @@ public class BioDbDictionary {
 		
 		dictionary.put("BRENDA-COMPOUND", MetaboliteMajorLabel.BRENDA.toString());
 		dictionary.put("brenda", MetaboliteMajorLabel.BRENDA.toString());
+		
+		dictionary.put("RHEA", ReactionMajorLabel.Rhea.toString());
+		dictionary.put("LIGAND-RXN", ReactionMajorLabel.LigandReaction.toString());
 		return dictionary;
 	}
 	

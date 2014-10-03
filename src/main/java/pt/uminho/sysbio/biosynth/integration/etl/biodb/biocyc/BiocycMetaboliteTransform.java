@@ -1,15 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
-import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
+import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 
 public class BiocycMetaboliteTransform
 extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
@@ -65,25 +59,25 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 		super.configureNameLink(centralMetaboliteEntity, entity);
 	}
 
-	@Override
-	protected void configureCrossreferences(
-			CentralMetaboliteEntity centralMetaboliteEntity,
-			BioCycMetaboliteEntity entity) {
-
-		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-		
-		for (BioCycMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
-			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-			String dbEntry = xref.getValue(); //Also need to translate if necessary
-			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
-			proxy.setEntry(dbEntry);
-			proxy.setMajorLabel(dbLabel);
-			proxy.putProperty("reference", xref.getRef());
-			proxy.addLabel(METABOLITE_LABEL);
-			crossreferences.add(proxy);
-		}
-		
-		centralMetaboliteEntity.setCrossreferences(crossreferences);
-	}
+//	@Override
+//	protected void configureCrossreferences(
+//			CentralMetaboliteEntity centralMetaboliteEntity,
+//			BioCycMetaboliteEntity entity) {
+//
+//		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
+//		
+//		for (BioCycMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
+//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
+//			String dbEntry = xref.getValue(); //Also need to translate if necessary
+//			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
+//			proxy.setEntry(dbEntry);
+//			proxy.setMajorLabel(dbLabel);
+//			proxy.putProperty("reference", xref.getRef());
+//			proxy.addLabel(METABOLITE_LABEL);
+//			crossreferences.add(proxy);
+//		}
+//		
+//		centralMetaboliteEntity.setCrossreferences(crossreferences);
+//	}
 
 }

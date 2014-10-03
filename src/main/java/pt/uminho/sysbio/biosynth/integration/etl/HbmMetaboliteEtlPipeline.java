@@ -33,6 +33,13 @@ implements EtlPipeline<SRC, DST> {
 		this.extractSubsystem = extractSubsystem;
 	}; 
 	
+	@Override
+	public void setEtlDataCleasingSubsystem(
+			EtlDataCleansing<DST> dataCleasingSubsystem) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public EtlTransform<SRC, DST> getEtlTransform() { return etlTransform;}
 	@Override
 	public void setTransformSubsystem(EtlTransform<SRC, DST> etlTransform) { this.etlTransform = etlTransform;}
@@ -73,4 +80,5 @@ implements EtlPipeline<SRC, DST> {
 		
 		tx.commit();
 	}
+
 }
