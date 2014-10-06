@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
@@ -20,15 +21,15 @@ import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraDaoImpl {
 	
-	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
+	private static final String HBM_CFG = "D:/home/data/java_config/hbm_h2_biobase_meta.xml";
 	private static SessionFactory sessionFactory;
-	private static HbmChimeraMetadataDaoImpl dao;
+	private static HbmIntegrationMetadataDaoImpl dao;
 	private static org.hibernate.Transaction hbm_tx;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File(HBM_CFG));
-		dao = new HbmChimeraMetadataDaoImpl();
+		dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 	}
 

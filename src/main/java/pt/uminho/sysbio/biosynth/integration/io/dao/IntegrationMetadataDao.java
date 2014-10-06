@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +11,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluste
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
-public interface ChimeraMetadataDao {
+public interface IntegrationMetadataDao {
 	
 	//IntegrationSet
 	public List<Serializable> getAllIntegrationSetsId();

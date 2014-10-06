@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdgeType;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
@@ -15,7 +15,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluste
 public class IntegrationCurationServiceImpl implements IntegrationCurationService {
 
 	@Autowired
-	private ChimeraMetadataDao integrationMetadataDao;
+	private IntegrationMetadataDao integrationMetadataDao;
 	
 	@Override
 	public void setCurationInformation(long id1, long id2, CurationEdgeType type,

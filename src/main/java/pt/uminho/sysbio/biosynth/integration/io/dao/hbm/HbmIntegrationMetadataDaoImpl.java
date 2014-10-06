@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.dao;
+package pt.uminho.sysbio.biosynth.integration.io.dao.hbm;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
@@ -24,9 +26,9 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 @Repository
-public class HbmChimeraMetadataDaoImpl implements ChimeraMetadataDao {
+public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	
-	private static final Logger LOGGER = Logger.getLogger(HbmChimeraMetadataDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HbmIntegrationMetadataDaoImpl.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;

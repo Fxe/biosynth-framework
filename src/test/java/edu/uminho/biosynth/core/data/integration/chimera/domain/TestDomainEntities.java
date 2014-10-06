@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestDomainEntities {
@@ -42,7 +42,7 @@ public class TestDomainEntities {
 	
 	@Test
 	public void testCreateNodes() {
-		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
 		IntegratedMember node1 = new IntegratedMember();
@@ -59,7 +59,7 @@ public class TestDomainEntities {
 
 	@Test
 	public void test() {
-		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
 		IntegrationSet integrationSet = new IntegrationSet();

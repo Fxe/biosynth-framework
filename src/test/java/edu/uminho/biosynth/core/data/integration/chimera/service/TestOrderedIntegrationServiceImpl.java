@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.neo4j.graphdb.GraphDatabaseService;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
@@ -34,9 +34,9 @@ public class TestOrderedIntegrationServiceImpl {
 	private static GraphDatabaseService graphDatabaseService;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static ChimeraIntegrationServiceImpl integrationService;
+	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
-	private static HbmChimeraMetadataDaoImpl meta;
+	private static HbmIntegrationMetadataDaoImpl meta;
 	
 	private void printIntegrationState(IntegrationSet integrationSet, String message) {
 		System.out.println(String.format("################ %s ################", message.trim()));
@@ -58,10 +58,10 @@ public class TestOrderedIntegrationServiceImpl {
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(graphDatabaseService);
 		
-		meta = new HbmChimeraMetadataDaoImpl();
+		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new ChimeraIntegrationServiceImpl();
+		integrationService = new DefaultMetaboliteIntegrationServiceImpl();
 		integrationService.setData(data);
 		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));
@@ -96,7 +96,7 @@ public class TestOrderedIntegrationServiceImpl {
 	@Test
 	public void testSetA1_Create_Integration() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST_RUN", "TEST");
+				integrationService.createIntegrationSet("TEST_RUN", "TEST");
 		
 		printIntegrationState(integrationSet, "A1 Created");
 		assertNotEquals(null, integrationSet.getId());

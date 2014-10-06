@@ -13,9 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
@@ -30,7 +30,7 @@ public class TestIntegrationStatisticsServiceImpl {
 	private static final Long IID = 1L;
 	
 	private static IntegrationDataDao centralDataDao;
-	private static ChimeraMetadataDao centralMetadataDao;
+	private static IntegrationMetadataDao centralMetadataDao;
 	private static IntegrationStatisticsService integrationStatisticsService;
 	private static GraphDatabaseService graphDatabaseService;
 	private static SessionFactory sessionFactory;
@@ -42,7 +42,7 @@ public class TestIntegrationStatisticsServiceImpl {
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File(HBM_CFG));
 		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
-		HbmChimeraMetadataDaoImpl hbmChimeraMetadataDaoImpl = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl hbmChimeraMetadataDaoImpl = new HbmIntegrationMetadataDaoImpl();
 		hbmChimeraMetadataDaoImpl.setSessionFactory(sessionFactory);
 		centralMetadataDao = hbmChimeraMetadataDaoImpl;
 		Neo4jChimeraDataDaoImpl neo4jChimeraDataDaoImpl = new Neo4jChimeraDataDaoImpl();

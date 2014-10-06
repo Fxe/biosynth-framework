@@ -15,7 +15,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
@@ -52,7 +52,7 @@ public class TestHbmChimeraMetadataDao {
 
 	@Test
 	public void testA_CreateIntegrationSet() {
-		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
 		IntegrationSet integrationSet = new IntegrationSet();
@@ -66,7 +66,7 @@ public class TestHbmChimeraMetadataDao {
 	
 	@Test
 	public void testB_CreateIntegratedMembers() {
-		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
 		IntegratedMember m1 = new IntegratedMember(); m1.setId(1L);
@@ -81,7 +81,7 @@ public class TestHbmChimeraMetadataDao {
 	
 	@Test
 	public void testC_CreateIntegratedCluster() {
-		HbmChimeraMetadataDaoImpl dao = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
 		List<Serializable> integrationSetIds = dao.getAllIntegrationSetsId();

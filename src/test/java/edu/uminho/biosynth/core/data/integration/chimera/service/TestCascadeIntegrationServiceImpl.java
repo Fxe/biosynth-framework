@@ -20,7 +20,7 @@ import org.junit.runners.MethodSorters;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.StaticMapClusterStrategy;
@@ -39,9 +39,9 @@ public class TestCascadeIntegrationServiceImpl {
 	private static GraphDatabaseService graphDatabaseService;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static ChimeraIntegrationServiceImpl integrationService;
+	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
-	private static HbmChimeraMetadataDaoImpl meta;
+	private static HbmIntegrationMetadataDaoImpl meta;
 	
 	private static Set<Set<Long>> create = new HashSet<> ();
 	private static Set<Set<Long>> update = new HashSet<> ();
@@ -72,10 +72,10 @@ public class TestCascadeIntegrationServiceImpl {
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(graphDatabaseService);
 		
-		meta = new HbmChimeraMetadataDaoImpl();
+		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new ChimeraIntegrationServiceImpl();
+		integrationService = new DefaultMetaboliteIntegrationServiceImpl();
 		integrationService.setData(data);
 		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST_CASCADE"));
@@ -134,7 +134,7 @@ public class TestCascadeIntegrationServiceImpl {
 			meta_tx = sessionFactory.getCurrentSession().beginTransaction();
 		}
 		
-		integrationSet = integrationService.createNewIntegrationSet(INTEGRATION_ENTRY, "TEST");
+		integrationSet = integrationService.createIntegrationSet(INTEGRATION_ENTRY, "TEST");
 		
 		printIntegrationState(integrationSet, "A1 Created");
 		assertNotEquals(null, integrationSet.getId());

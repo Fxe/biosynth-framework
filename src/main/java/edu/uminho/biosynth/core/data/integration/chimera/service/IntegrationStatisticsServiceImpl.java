@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
@@ -27,13 +27,13 @@ public class IntegrationStatisticsServiceImpl implements IntegrationStatisticsSe
 	@Autowired
 	private IntegrationDataDao data;
 	@Autowired
-	private ChimeraMetadataDao meta;
+	private IntegrationMetadataDao meta;
 	
 	public IntegrationDataDao getData() { return data;}
 	public void setData(IntegrationDataDao data) { this.data = data;}
 
-	public ChimeraMetadataDao getMeta() { return meta;}
-	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
+	public IntegrationMetadataDao getMeta() { return meta;}
+	public void setMeta(IntegrationMetadataDao meta) { this.meta = meta;}
 	
 	@Override
 	public int countTotalMetaboliteMembers() {

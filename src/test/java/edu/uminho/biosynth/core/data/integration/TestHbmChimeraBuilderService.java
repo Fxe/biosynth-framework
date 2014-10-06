@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jIntegratedMetaboliteDao;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraDatabaseBuilderServiceImpl;
@@ -62,7 +62,7 @@ public class TestHbmChimeraBuilderService {
 	public void testBuilderService() {
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
-		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
 		ChimeraDatabaseBuilderServiceImpl builder = new ChimeraDatabaseBuilderServiceImpl();

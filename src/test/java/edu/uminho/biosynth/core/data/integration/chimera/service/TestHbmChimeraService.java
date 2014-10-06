@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
@@ -35,9 +35,9 @@ public class TestHbmChimeraService {
 	private static GraphDatabaseService graphDatabaseService;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static ChimeraIntegrationServiceImpl integrationService;
+	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
-	private static HbmChimeraMetadataDaoImpl meta;
+	private static HbmIntegrationMetadataDaoImpl meta;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -47,10 +47,10 @@ public class TestHbmChimeraService {
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(graphDatabaseService);
 		
-		meta = new HbmChimeraMetadataDaoImpl();
+		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new ChimeraIntegrationServiceImpl();
+		integrationService = new DefaultMetaboliteIntegrationServiceImpl();
 		integrationService.setData(data);
 		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));
@@ -77,7 +77,7 @@ public class TestHbmChimeraService {
 	@Test
 	public void testCreateIntegrationSet() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST", "TEST");
+				integrationService.createIntegrationSet("TEST", "TEST");
 		
 		assertNotEquals(null, integrationSet.getId());
 	}
@@ -85,7 +85,7 @@ public class TestHbmChimeraService {
 	@Test(expected=PropertyValueException.class)
 	public void testCreateIntegrationSetAllNull() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet(null, null);
+				integrationService.createIntegrationSet(null, null);
 		
 		assertNotEquals(null, integrationSet.getId());
 	}
@@ -93,7 +93,7 @@ public class TestHbmChimeraService {
 	@Test
 	public void testCreateIntegratedClusterWithTenMembers() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST", null);
+				integrationService.createIntegrationSet("TEST", null);
 		
 		Set<Long> allNodes = new HashSet<> (data.getAllMetaboliteIds());
 		
@@ -112,7 +112,7 @@ public class TestHbmChimeraService {
 	@Test
 	public void testCreateIntegratedClusterWithZeroMembers() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST", null);
+				integrationService.createIntegrationSet("TEST", null);
 	
 		Set<Long> members = new HashSet<> ();
 
@@ -125,7 +125,7 @@ public class TestHbmChimeraService {
 	@Test
 	public void testCreateIntegratedClusterWithStrategy() {
 		IntegrationSet integrationSet = 
-				integrationService.createNewIntegrationSet("TEST", null);
+				integrationService.createIntegrationSet("TEST", null);
 	
 		Set<Long> allNodes = new HashSet<> (data.getAllMetaboliteIds());
 		

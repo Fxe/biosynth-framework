@@ -19,11 +19,11 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
-import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraIntegrationServiceImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.service.DefaultMetaboliteIntegrationServiceImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.CrossreferenceTraversalStrategyImpl;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
@@ -36,16 +36,16 @@ public class TestHbmChimeraService {
 	private static GraphDatabaseService db;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static ChimeraIntegrationServiceImpl integrationService;
+	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
-	private static HbmChimeraMetadataDaoImpl meta;
+	private static HbmIntegrationMetadataDaoImpl meta;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hbm_mysql_chimera_meta.cfg.xml");
 		db = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
 		sessionFactory.openSession();
-		meta = new HbmChimeraMetadataDaoImpl();
+		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
@@ -62,7 +62,7 @@ public class TestHbmChimeraService {
 	public void setUp() throws Exception {
 		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
 		data_tx = db.beginTx();
-		integrationService = new  ChimeraIntegrationServiceImpl();
+		integrationService = new  DefaultMetaboliteIntegrationServiceImpl();
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("GEN"));
 		integrationService.setMeta(meta);
 		integrationService.setData(data);
@@ -77,16 +77,16 @@ public class TestHbmChimeraService {
 
 //	@Test
 	public void testCreateSingleCluster() {
-		ChimeraIntegrationServiceImpl integrator = new ChimeraIntegrationServiceImpl();
+		DefaultMetaboliteIntegrationServiceImpl integrator = new DefaultMetaboliteIntegrationServiceImpl();
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
-		HbmChimeraMetadataDaoImpl meta = new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl meta = new HbmIntegrationMetadataDaoImpl();
 		integrator.setClusterIdGenerator(new PrefixKeyGenerator("GEN_"));
 		
 		meta.setSessionFactory(sessionFactory);
 		integrator.setData(data);
 		integrator.setMeta(meta);
-		IntegrationSet integrationSet = integrator.createNewIntegrationSet(
+		IntegrationSet integrationSet = integrator.createIntegrationSet(
 				"TestService_SingleCluster_" + System.currentTimeMillis(), "Created by Service");
 		
 //		integrator.changeIntegrationSet(integrationSet.getId());
@@ -110,7 +110,7 @@ public class TestHbmChimeraService {
 	
 //	@Test
 	public void testCreateClusterByCascade() {
-		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
+		IntegrationSet integrationSet = integrationService.createIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
 //		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);
@@ -127,7 +127,7 @@ public class TestHbmChimeraService {
 
 //	@Test
 	public void testCreateClusterByClusteringStrategy() {
-		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
+		IntegrationSet integrationSet = integrationService.createIntegrationSet(
 				"TestService_CascadeCluster_" + System.currentTimeMillis(), "Created by Service");
 //		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);
@@ -148,7 +148,7 @@ public class TestHbmChimeraService {
 	
 //	@Test
 	public void testCreateClusterByClusteringStrategyCascade() {
-		IntegrationSet integrationSet = integrationService.createNewIntegrationSet(
+		IntegrationSet integrationSet = integrationService.createIntegrationSet(
 				"TestService_CascadeCluster_Cascade_" + System.currentTimeMillis(), "Created by Test Unit");
 //		integrationSet = integrationService.changeIntegrationSet(integrationSet.getId());
 		integrationService.resetIntegrationSet(integrationSet);

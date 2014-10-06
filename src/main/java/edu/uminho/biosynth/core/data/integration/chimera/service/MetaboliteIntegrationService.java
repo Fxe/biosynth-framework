@@ -9,11 +9,11 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
 
-public interface ChimeraIntegrationService {
+public interface MetaboliteIntegrationService {
 	
 	public IntegrationSet getIntegrationSetByEntry(String entry);
 	public IntegrationSet getIntegrationSetById(Long id);
-	public IntegrationSet createNewIntegrationSet(String name, String description);
+	public IntegrationSet createIntegrationSet(String name, String description);
 	public void resetIntegrationSet(IntegrationSet integrationSet);
 	public void deleteIntegrationSet(IntegrationSet integrationSet);
 	public List<IntegrationSet> getAllIntegrationSets();

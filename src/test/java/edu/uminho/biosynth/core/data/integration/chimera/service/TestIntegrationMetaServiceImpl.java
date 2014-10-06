@@ -13,9 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.HbmChimeraMetadataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
@@ -27,7 +27,7 @@ public class TestIntegrationMetaServiceImpl {
 	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
 	private static IntegrationMetaService integrationMetaService;
 	private static IntegrationDataDao data;
-	private static ChimeraMetadataDao meta;
+	private static IntegrationMetadataDao meta;
 	private static SessionFactory sessionFactory;
 	private static GraphDatabaseService graphDatabaseService;
 	
@@ -40,8 +40,8 @@ public class TestIntegrationMetaServiceImpl {
 				new File(HBM_CFG));
 		graphDatabaseService = HelperNeo4jConfigInitializer
 				.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
-		HbmChimeraMetadataDaoImpl chimeraMetadataDaoImpl = 
-				new HbmChimeraMetadataDaoImpl();
+		HbmIntegrationMetadataDaoImpl chimeraMetadataDaoImpl = 
+				new HbmIntegrationMetadataDaoImpl();
 		chimeraMetadataDaoImpl.setSessionFactory(sessionFactory);
 		
 		Neo4jChimeraDataDaoImpl chimeraDataDaoImpl =

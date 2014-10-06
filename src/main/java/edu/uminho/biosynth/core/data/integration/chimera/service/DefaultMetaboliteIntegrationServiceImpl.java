@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.ChimeraMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
@@ -31,22 +31,22 @@ import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")
-public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
+public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegrationService{
 
-	private static Logger LOGGER = Logger.getLogger(ChimeraIntegrationServiceImpl.class);
+	private static Logger LOGGER = Logger.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
 	
 	@Autowired
 	private IntegrationDataDao data;
 	@Autowired
-	private ChimeraMetadataDao meta;
+	private IntegrationMetadataDao meta;
 
 	private IKeyGenerator<String> clusterIdGenerator;
 	
 	public IntegrationDataDao getData() { return data;}
 	public void setData(IntegrationDataDao data) { this.data = data;}
 
-	public ChimeraMetadataDao getMeta() { return meta;}
-	public void setMeta(ChimeraMetadataDao meta) { this.meta = meta;}
+	public IntegrationMetadataDao getMeta() { return meta;}
+	public void setMeta(IntegrationMetadataDao meta) { this.meta = meta;}
 	
 	public IKeyGenerator<String> getClusterIdGenerator() { return clusterIdGenerator;}
 	public void setClusterIdGenerator(IKeyGenerator<String> clusterIdGenerator) { this.clusterIdGenerator = clusterIdGenerator;}
@@ -76,11 +76,11 @@ public class ChimeraIntegrationServiceImpl implements ChimeraIntegrationService{
 	}
 	
 	@Override
-	public IntegrationSet createNewIntegrationSet(String name, String description) {
+	public IntegrationSet createIntegrationSet(String name, String description) {
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName(name);
 		integrationSet.setDescription(description);
-		integrationSet.setLastClusterEntry(this.clusterIdGenerator.getCurrentKey());
+//		integrationSet.setLastClusterEntry(this.clusterIdGenerator.getCurrentKey());
 		meta.saveIntegrationSet(integrationSet);
 		
 		return integrationSet;
