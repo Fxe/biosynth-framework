@@ -23,34 +23,22 @@ public class SeedReactionReagentEntity extends StoichiometryPair {
 	@Column(name="CPD_UUID") private String compound_uuid;
 	@Column(name="CMP_UUID") private String destinationCompartment_uuid;
 	@Column(name="IS_TRANS") private short isTransport;
+	private short coefficient;
 	
-	public short getIsCofactor() {
-		return isCofactor;
-	}
-	public void setIsCofactor(short isCofactor) {
-		this.isCofactor = isCofactor;
-	}
+	public short getIsCofactor() { return isCofactor;}
+	public void setIsCofactor(short isCofactor) { this.isCofactor = isCofactor;}
 	
-	public String getCompound_uuid() {
-		return compound_uuid;
-	}
-	public void setCompound_uuid(String compound_uuid) {
-		this.compound_uuid = compound_uuid;
-	}
+	public String getCompound_uuid() { return compound_uuid;}
+	public void setCompound_uuid(String compound_uuid) { this.compound_uuid = compound_uuid;}
 	
-	public String getDestinationCompartment_uuid() {
-		return destinationCompartment_uuid;
-	}
-	public void setDestinationCompartment_uuid(String destinationCompartment_uuid) {
-		this.destinationCompartment_uuid = destinationCompartment_uuid;
-	}
+	public String getDestinationCompartment_uuid() { return destinationCompartment_uuid;}
+	public void setDestinationCompartment_uuid(String destinationCompartment_uuid) { this.destinationCompartment_uuid = destinationCompartment_uuid;}
 	
-	public short getIsTransport() {
-		return isTransport;
-	}
-	public void setIsTransport(short isTransport) {
-		this.isTransport = isTransport;
-	}
+	public short getIsTransport() { return isTransport;}
+	public void setIsTransport(short isTransport) { this.isTransport = isTransport;}
+	
+	public short getCoefficient() { return coefficient;}
+	public void setCoefficient(short coefficient) { this.coefficient = coefficient;}
 	
 	public SeedReactionEntity getSeedReactionEntity() {
 		return seedReactionEntity;
