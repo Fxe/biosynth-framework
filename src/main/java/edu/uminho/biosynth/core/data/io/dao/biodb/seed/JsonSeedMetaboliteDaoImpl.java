@@ -71,7 +71,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 
 	@Deprecated
 	public List<SeedMetaboliteEntity> findAll() {
-		this.metaboliteMap = new HashMap<> ();
+		this.metaboliteMap.clear();
 		List<SeedMetaboliteEntity> res = new ArrayList<> ();
 		JsonNode compounds = rootNode.get("compounds");
 		for (int i = 0; i < compounds.size(); i++ ) {
