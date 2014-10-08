@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 
 public class CentralReactionFactory {
 
@@ -57,8 +57,8 @@ public class CentralReactionFactory {
 		properties.put("Array", new String[]{"e1", "e2", "e3"});
 	}
 	
-	public CentralReactionEntity build() {
-		CentralReactionEntity entity = new CentralReactionEntity();
+	public GraphReactionEntity build() {
+		GraphReactionEntity entity = new GraphReactionEntity();
 		
 		entity.setEntry((String)properties.get("entry"));
 		entity.setMajorLabel(majorLabel);

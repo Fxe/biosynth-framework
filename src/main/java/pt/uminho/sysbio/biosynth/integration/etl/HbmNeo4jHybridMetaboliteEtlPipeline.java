@@ -58,6 +58,12 @@ implements EtlPipeline<SRC, DST> {
 	public void setLoadSubsystem(EtlLoad<DST> loadSubsystem) { this.etlLoad = loadSubsystem;}
 
 	@Override
+	public void etl(Serializable id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void etl() {
 		
 		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
@@ -72,7 +78,8 @@ implements EtlPipeline<SRC, DST> {
 			DST dst = etlTransform.etlTransform(src);
 			
 			//ETL CLEAN(DST)
-			dataCleasingSubsystem.etlCleanse(dst);
+			if (this.dataCleasingSubsystem != null)
+				dataCleasingSubsystem.etlCleanse(dst);
 			
 			//ETL LOAD(DST)
 			if (!skipLoad) etlLoad.etlLoad(dst);

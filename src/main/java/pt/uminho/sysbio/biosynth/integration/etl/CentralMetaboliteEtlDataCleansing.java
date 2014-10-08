@@ -33,9 +33,14 @@ implements EtlDataCleansing<CentralMetaboliteEntity> {
 	private Triple<String, String, EtlCleasingType> cleanseFormula(String formula) {
 		
 		String formula_ = formulaConverter.convertToIsotopeMolecularFormula(formula, false);
+		
+		
 		EtlCleasingType action = EtlCleasingType.UNCHANGED;
-		if (!formula_.equals(formula)) {
+		if (formula_ != null && !formula_.equals(formula)) {
 			action = EtlCleasingType.CORRECTED;
+		} else if (formula_ == null) {
+			formula_ = formula;
+			action = EtlCleasingType.CORRUPT;
 		}
 		
 		LOGGER.debug(String.format("%s %s -> %s", action, formula, formula_));
@@ -74,14 +79,14 @@ implements EtlDataCleansing<CentralMetaboliteEntity> {
 			switch (propertyEntity.getMajorLabel()) {
 				case "MolecularFormula":
 					triple = this.cleanseFormula((String)propertyEntity.getProperties().get("key"));
-					propertyEntity.setUniqueKey(triple.getLeft());
-					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight());
+					propertyEntity.setUniqueKey(nullToString(triple.getLeft()));
+					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
 					result.put("ChemicalFormula", triple);
 					break;
 				case "Name":
 					triple = this.cleanseName((String)propertyEntity.getProperties().get("key"));
-					propertyEntity.setUniqueKey(triple.getLeft());
-					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight());
+					propertyEntity.setUniqueKey(nullToString(triple.getLeft()));
+					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
 					result.put("Name", triple);
 					break;
 				default:
@@ -90,5 +95,10 @@ implements EtlDataCleansing<CentralMetaboliteEntity> {
 		}
 		
 		return result;
+	}
+	
+	private Object nullToString(Object object) {
+		if (object == null) return "null";
+		return object;
 	}
 }

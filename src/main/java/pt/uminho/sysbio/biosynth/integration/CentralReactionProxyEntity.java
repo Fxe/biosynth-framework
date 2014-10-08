@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-public class CentralReactionProxyEntity extends AbstractCentralEntity {
+public class CentralReactionProxyEntity extends AbstractGraphEntity {
 
 	/**
 	 * Get the domain tag of the proxy.

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AbstractCentralEntity {
+public class AbstractGraphEntity {
 
 	protected Long id;
 	protected String majorLabel;

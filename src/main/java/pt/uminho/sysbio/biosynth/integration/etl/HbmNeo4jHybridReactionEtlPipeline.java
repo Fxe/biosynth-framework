@@ -57,6 +57,35 @@ implements EtlPipeline<SRC, DST> {
 	public void setLoadSubsystem(EtlLoad<DST> loadSubsystem) {
 		this.loadSubsystem = loadSubsystem;
 	}
+	
+	@Override
+	public void etl(Serializable id) {
+		if (this.dataCleasingSubsystem == null) {
+			LOGGER.warn("No data cleasing system attached");
+		}
+		
+		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
+		
+
+		//SRC = ETL EXTRACT(Entry)
+		SRC src = extractSubsystem.extract(id);
+		
+		//DST = ETL TRANSFORM(SRC)
+		DST dst = transformSubsystem.etlTransform(src);
+
+		if (this.dataCleasingSubsystem != null)
+			this.dataCleasingSubsystem.etlCleanse(dst);
+		
+		//ETL LOAD(DST)
+		System.out.println(dst);
+		if (!skipLoad) loadSubsystem.etlLoad(dst);
+
+		
+		hbmTx.rollback();
+		neoTx.success();
+		neoTx.close();
+	}
 
 	@Override
 	public void etl() {
@@ -97,4 +126,7 @@ implements EtlPipeline<SRC, DST> {
 		hbmTx.rollback();
 		neoTx.success();
 	}
+
+	
+	
 }

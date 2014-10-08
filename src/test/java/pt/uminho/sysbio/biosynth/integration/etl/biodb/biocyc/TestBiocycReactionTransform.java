@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.factory.BiocycReactionCrossreferenceFactory;
@@ -37,7 +37,7 @@ public class TestBiocycReactionTransform {
 	public void testEmpty() {
 		BioCycReactionEntity entity = new BioCycReactionEntity();
 		BiocycReactionTransform biocycReactionTransform = new BiocycReactionTransform("FooCyc");
-		CentralReactionEntity centralReactionEntity = biocycReactionTransform.etlTransform(entity);
+		GraphReactionEntity centralReactionEntity = biocycReactionTransform.etlTransform(entity);
 		
 		assertEquals(0, centralReactionEntity.getLeft().size());
 		assertEquals(0, centralReactionEntity.getRight().size());
@@ -63,7 +63,7 @@ public class TestBiocycReactionTransform {
 			.build();
 		
 		BiocycReactionTransform biocycReactionTransform = new BiocycReactionTransform("FooCyc");
-		CentralReactionEntity centralReactionEntity = biocycReactionTransform.etlTransform(entity);
+		GraphReactionEntity centralReactionEntity = biocycReactionTransform.etlTransform(entity);
 
 		System.out.println(centralReactionEntity);
 		

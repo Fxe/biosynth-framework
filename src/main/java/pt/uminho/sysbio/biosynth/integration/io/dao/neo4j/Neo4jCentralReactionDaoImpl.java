@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.Label;
@@ -14,14 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
 
 public class Neo4jCentralReactionDaoImpl 
-extends AbstractNeo4jDao<CentralReactionEntity> 
-implements ReactionHeterogeneousDao<CentralReactionEntity> {
+extends AbstractNeo4jDao<GraphReactionEntity> 
+implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jCentralReactionDaoImpl.class);
 	private static final Label REACTION_LABEL = GlobalLabel.Reaction;
@@ -31,20 +32,20 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 			ReactionRelationshipType.HasCrossreferenceTo;
 	
 	@Override
-	public CentralReactionEntity getReactionById(String tag, Serializable id) {
+	public GraphReactionEntity getReactionById(String tag, Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralReactionEntity getReactionByEntry(String tag, String entry) {
+	public GraphReactionEntity getReactionByEntry(String tag, String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralReactionEntity saveReaction(String tag,
-			CentralReactionEntity reaction) {
+	public GraphReactionEntity saveReaction(String tag,
+			GraphReactionEntity reaction) {
 		boolean create = true;
 		
 		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
@@ -89,11 +90,13 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 				node.setProperty(key, reaction.getProperties().get(key));
 			for (CentralMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
-				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
+				Double stoichiometry = reaction.getLeft().get(l);
+				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, stoichiometry);
 			}
 			for (CentralMetaboliteProxyEntity r : reaction.getRight().keySet()) {
 				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
-				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
+				Double stoichiometry = reaction.getRight().get(r);
+				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, stoichiometry);
 			}
 			for (CentralReactionProxyEntity x : reaction.getCrossreferences()) {
 				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
@@ -145,6 +148,24 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 		}
 	}
 	
+	private Node createNode(Map<String, Object> nodeProperties) {
+		Node node = graphDatabaseService.createNode();
+		for (String key : nodeProperties.keySet()) {
+			node.setProperty(key, nodeProperties.get(key));
+		}
+		
+		return node;
+	}
+	
+	private Relationship createRelationship(Node src, Node dst, RelationshipType relationshipType, Map<String, Object> relationshipProperties) {
+		Relationship relationship = src.createRelationshipTo(dst, relationshipType);
+		for (String key : relationshipProperties.keySet()) {
+			relationship.setProperty(key, relationshipProperties.get(key));
+		}
+		
+		return relationship;
+	}
+	
 	private void createOrLinkToMetaboliteProxy(
 			Node parent, 
 			CentralMetaboliteProxyEntity proxy,
@@ -157,7 +178,7 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 						DynamicLabel.label(proxy.getMajorLabel()), 
 						"entry", 
 						proxy.getEntry())) {
-			LOGGER.debug("Link To Node/Proxy " + proxyNode);
+			LOGGER.debug("Link to previous Node/Proxy " + proxyNode);
 			create = false;
 			
 			//TODO: SET TO UPDATE
@@ -167,7 +188,7 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 		
 		if (create) {
 			Node proxyNode = graphDatabaseService.createNode();
-			LOGGER.debug(String.format("Create Property %s -> %s", proxy.getMajorLabel(), proxyNode));
+			LOGGER.debug(String.format("Link to new proxy %s -> %s", proxy.getMajorLabel(), proxyNode));
 			proxyNode.addLabel(DynamicLabel.label(proxy.getMajorLabel()));
 			
 			for (String label : proxy.getLabels())
@@ -221,7 +242,7 @@ implements ReactionHeterogeneousDao<CentralReactionEntity> {
 	}
 
 	@Override
-	protected CentralReactionEntity nodeToObject(Node node) {
+	protected GraphReactionEntity nodeToObject(Node node) {
 		// TODO Auto-generated method stub
 		return null;
 	}

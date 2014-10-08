@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
@@ -20,7 +20,7 @@ import edu.uminho.biosynth.core.components.GenericReaction;
 import edu.uminho.biosynth.core.components.StoichiometryPair;
 
 public abstract class AbstractReactionTransform<R extends GenericReaction>
-implements EtlTransform<R, CentralReactionEntity> {
+implements EtlTransform<R, GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactionTransform.class);
 	
@@ -35,8 +35,8 @@ implements EtlTransform<R, CentralReactionEntity> {
 	}
 	
 	@Override
-	public CentralReactionEntity etlTransform(R entity) {
-		CentralReactionEntity centralReactionEntity = new CentralReactionEntity();
+	public GraphReactionEntity etlTransform(R entity) {
+		GraphReactionEntity centralReactionEntity = new GraphReactionEntity();
 
 		this.configureProperties(centralReactionEntity, entity);
 		this.setupLeftMetabolites(centralReactionEntity, entity);
@@ -53,7 +53,7 @@ implements EtlTransform<R, CentralReactionEntity> {
 		return centralReactionEntity;
 	}
 	
-	protected void configureProperties(CentralReactionEntity centralReactionEntity, R reaction) {
+	protected void configureProperties(GraphReactionEntity centralReactionEntity, R reaction) {
 		centralReactionEntity.setMajorLabel(majorLabel);
 		centralReactionEntity.addLabel(REACTION_LABEL);
 		centralReactionEntity.putProperty("entry", reaction.getEntry());
@@ -74,7 +74,10 @@ implements EtlTransform<R, CentralReactionEntity> {
 			for (Object stoichiometryObject : right) {
 				StoichiometryPair stoichiometryPair = StoichiometryPair.class.cast(stoichiometryObject);
 				CentralMetaboliteProxyEntity entity = new CentralMetaboliteProxyEntity();
-				entity.setEntry(String.format("%s:%s", reaction.getSource(), stoichiometryPair.getCpdEntry()));
+				entity.setEntry(stoichiometryPair.getCpdEntry());
+				//NO CLUE WHY I DID THIS ! Biocyc ?
+//				entity.setEntry(String.format("%s:%s", reaction.getSource(), stoichiometryPair.getCpdEntry()));
+				//FIXME: BAD ASSUMPTION -> Metabolite and Reaction may have distinct labels ex.: LigandReaction -> LigandCompound
 				entity.setMajorLabel(this.majorLabel);
 				entity.addLabel(METABOLITE_LABEL);
 				
@@ -89,7 +92,7 @@ implements EtlTransform<R, CentralReactionEntity> {
 		return result;
 	}
 	
-	protected void setupLeftMetabolites(CentralReactionEntity centralReactionEntity, R reaction) {
+	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Left Components");
 		Map<CentralMetaboliteProxyEntity, Double> left =
 				this.getMetabolitesByReflexion(reaction, "getLeft");
@@ -97,7 +100,7 @@ implements EtlTransform<R, CentralReactionEntity> {
 		centralReactionEntity.setLeft(left);
 	}
 	
-	protected void setupRightMetabolites(CentralReactionEntity centralReactionEntity, R reaction) {
+	protected void setupRightMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Right Components");
 		Map<CentralMetaboliteProxyEntity, Double> right =
 				this.getMetabolitesByReflexion(reaction, "getRight");
@@ -105,10 +108,10 @@ implements EtlTransform<R, CentralReactionEntity> {
 		centralReactionEntity.setRight(right);
 	}
 	
-	protected abstract void configureAdditionalPropertyLinks(CentralReactionEntity centralReactionEntity, R reaction);
+	protected abstract void configureAdditionalPropertyLinks(GraphReactionEntity centralReactionEntity, R reaction);
 	
 	protected  void configureCrossreferences(
-			CentralReactionEntity centralReactionEntity, 
+			GraphReactionEntity centralReactionEntity, 
 			R reaction) {
 		
 		try {

@@ -8,7 +8,7 @@ import java.util.Map;
 import edu.uminho.biosynth.core.components.Orientation;
 import edu.uminho.biosynth.core.components.Reaction;
 
-public class CentralReactionEntity extends AbstractCentralEntity implements Reaction {
+public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
 	
 	private Map<CentralMetaboliteProxyEntity, Double> left = new HashMap<> ();
 	private Map<CentralMetaboliteProxyEntity, Double> right = new HashMap<> ();
@@ -20,6 +20,7 @@ public class CentralReactionEntity extends AbstractCentralEntity implements Reac
 	
 	@Override
 	public Orientation getOrientation() {
+		if (!this.properties.containsKey("orientation")) return null;
 		return Orientation.valueOf((String) this.properties.get("orientation"));
 	}
 	public void setOrientation(Orientation orientation) { properties.put("orientation", orientation);}
@@ -63,6 +64,7 @@ public class CentralReactionEntity extends AbstractCentralEntity implements Reac
 //				  .append(p.getRight());
 			}
 		}
+		sb.append("Right Metabolites:\n");
 		if (right.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {

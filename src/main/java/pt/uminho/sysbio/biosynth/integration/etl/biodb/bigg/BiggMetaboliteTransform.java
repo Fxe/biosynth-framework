@@ -27,6 +27,12 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 			BiggMetaboliteEntity entity) {
 
 	}
+	
+	@Override
+	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, BiggMetaboliteEntity metabolite) {
+		super.configureProperties(centralMetaboliteEntity, metabolite);
+		centralMetaboliteEntity.getProperties().put("id", metabolite.getId());
+	};
 
 	@Override
 	protected void configureCrossreferences(

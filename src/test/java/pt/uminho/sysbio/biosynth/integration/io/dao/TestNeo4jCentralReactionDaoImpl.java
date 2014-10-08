@@ -15,7 +15,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.factory.CentralReactionFactory;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jCentralReactionDaoImpl;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
@@ -25,7 +25,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	private static String DB_PATH = "D:/dev/null/test.db";
 	private static GraphDatabaseService db;
 	private static org.neo4j.graphdb.Transaction tx;
-	private ReactionHeterogeneousDao<CentralReactionEntity> reactionDao;
+	private ReactionHeterogeneousDao<GraphReactionEntity> reactionDao;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -58,7 +58,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 
 	@Test
 	public void testSaveReactionSuccess() {
-		CentralReactionEntity entity = new CentralReactionFactory()
+		GraphReactionEntity entity = new CentralReactionFactory()
 			.withEntry("TES00001")
 			.withMajorLabel("LigandReaction")
 			.withLabels(new String[]{"Compound", "Test", "Factory"})
@@ -76,7 +76,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	
 	@Test
 	public void testSaveReactionFail() {
-		CentralReactionEntity entity = new CentralReactionFactory()
+		GraphReactionEntity entity = new CentralReactionFactory()
 			.withEntry("TES00001")
 			.withMajorLabel("LigandReaction")
 			.withLabels(new String[]{"Compound", "Test", "Factory"})

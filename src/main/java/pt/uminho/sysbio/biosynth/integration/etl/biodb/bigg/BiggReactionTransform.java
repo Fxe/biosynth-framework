@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.bigg;
 
 import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 
@@ -16,7 +16,7 @@ extends AbstractReactionTransform<BiggReactionEntity> {
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralReactionEntity centralReactionEntity,
+			GraphReactionEntity centralReactionEntity,
 			BiggReactionEntity reaction) {
 		// TODO Auto-generated method stub
 		

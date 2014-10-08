@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.SystemUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 @Transactional(readOnly=true, value="chimerametadata")
 public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegrationService{
 
-	private static Logger LOGGER = Logger.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
 	
 	@Autowired
 	private IntegrationDataDao data;
@@ -1053,6 +1053,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 			if (!visitedIds.contains(i)) {
 				clusteringStrategy.setInitialNode(i);
 				Set<Long> clusterElements = clusteringStrategy.execute();
+				LOGGER.debug(String.format("%s generated %d members from %d", clusteringStrategy.getClass(), clusterElements.size(), i));
 				clusterElements.retainAll(domain);
 				if (!clusterElements.isEmpty()) {
 					visitedIds.addAll(clusterElements);

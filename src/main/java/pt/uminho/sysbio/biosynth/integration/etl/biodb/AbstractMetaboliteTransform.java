@@ -59,23 +59,27 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 	}
 	
 	@Override
-	public CentralMetaboliteEntity etlTransform(M entity) {
+	public CentralMetaboliteEntity etlTransform(M metabolite) {
 		CentralMetaboliteEntity centralMetaboliteEntity = new CentralMetaboliteEntity();
-		centralMetaboliteEntity.setMajorLabel(majorLabel);
-		centralMetaboliteEntity.addLabel(METABOLITE_LABEL);
-		centralMetaboliteEntity.putProperty("entry", entity.getEntry());
-		centralMetaboliteEntity.putProperty("formula", entity.getFormula());
-		centralMetaboliteEntity.putProperty("description", entity.getDescription());
-		centralMetaboliteEntity.putProperty("metaboliteClass", entity.getMetaboliteClass());
-		centralMetaboliteEntity.putProperty("name", entity.getName());
-		centralMetaboliteEntity.putProperty("source", entity.getSource());
-		
-		this.configureFormulaLink(centralMetaboliteEntity, entity);
-		this.configureNameLink(centralMetaboliteEntity, entity);
-		this.configureAdditionalPropertyLinks(centralMetaboliteEntity, entity);
-		this.configureCrossreferences(centralMetaboliteEntity, entity);
+
+		this.configureProperties(centralMetaboliteEntity, metabolite);
+		this.configureFormulaLink(centralMetaboliteEntity, metabolite);
+		this.configureNameLink(centralMetaboliteEntity, metabolite);
+		this.configureAdditionalPropertyLinks(centralMetaboliteEntity, metabolite);
+		this.configureCrossreferences(centralMetaboliteEntity, metabolite);
 		
 		return centralMetaboliteEntity;
+	}
+	
+	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+		centralMetaboliteEntity.setMajorLabel(majorLabel);
+		centralMetaboliteEntity.addLabel(METABOLITE_LABEL);
+		centralMetaboliteEntity.putProperty("entry", metabolite.getEntry());
+		centralMetaboliteEntity.putProperty("formula", metabolite.getFormula());
+		centralMetaboliteEntity.putProperty("description", metabolite.getDescription());
+		centralMetaboliteEntity.putProperty("metaboliteClass", metabolite.getMetaboliteClass());
+		centralMetaboliteEntity.putProperty("name", metabolite.getName());
+		centralMetaboliteEntity.putProperty("source", metabolite.getSource());
 	}
 	
 	protected CentralMetabolitePropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {

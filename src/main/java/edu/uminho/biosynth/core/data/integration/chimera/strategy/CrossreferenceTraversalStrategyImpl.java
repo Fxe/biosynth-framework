@@ -1,17 +1,12 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +26,7 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 	public void setDb(GraphDatabaseService db) { this.db = db;}
 	
 //	private RelationshipType relationshipType = CompoundRelationshipType.HasCrossreferenceTo;
-	private RelationshipType relationshipType = DynamicRelationshipType.withName("XrefType1");
+	private static final RelationshipType relationshipType = MetaboliteRelationshipType.HasCrossreferenceTo;
 	
 	@Override
 	public Set<Long> execute() {

@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
 
@@ -13,7 +13,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralReactionEntity centralReactionEntity,
+			GraphReactionEntity centralReactionEntity,
 			BioCycReactionEntity reaction) {
 		// TODO Auto-generated method stub
 		

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import edu.uminho.biosynth.core.components.Metabolite;
 
-public class CentralMetaboliteEntity extends AbstractCentralEntity implements Metabolite {
+public class CentralMetaboliteEntity extends AbstractGraphEntity implements Metabolite {
 
 	private List<CentralMetaboliteProxyEntity> crossreferences = new  ArrayList<> ();
 	private List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities = new ArrayList<> ();

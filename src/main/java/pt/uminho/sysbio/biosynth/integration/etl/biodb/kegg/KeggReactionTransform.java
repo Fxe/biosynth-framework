@@ -1,12 +1,13 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
 import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
+import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
 
 public class KeggReactionTransform 
 extends AbstractReactionTransform<KeggReactionEntity>{
@@ -18,7 +19,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 	public KeggReactionTransform() { super(KEGG_REACTION_LABEL);}
 
 	@Override
-	protected void setupLeftMetabolites(CentralReactionEntity centralReactionEntity, KeggReactionEntity entity) {
+	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, KeggReactionEntity entity) {
 		for(KeggReactionLeftEntity left : entity.getLeft()) {
 			CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
 			
@@ -39,10 +40,36 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 			centralReactionEntity.getLeft().put(proxyEntity, left.getValue());
 		}
 	}
+	
+	@Override
+	protected void setupRightMetabolites(
+			GraphReactionEntity centralReactionEntity,
+			KeggReactionEntity reaction) {
+		
+		for(KeggReactionRightEntity right : reaction.getRight()) {
+			CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
+			
+			String entry = right.getCpdEntry();
+			proxyEntity.setEntry(entry);
+			proxyEntity.addLabel("Metabolite");
+			switch (entry.charAt(0)) {
+				case 'C':
+					proxyEntity.setMajorLabel(KEGG_COMPOUND_METABOLITE_LABEL);
+					break;
+				case 'G':
+					proxyEntity.setMajorLabel(KEGG_GLYCAN_METABOLITE_LABEL);
+					break;
+				default:
+					break;
+			}
+			
+			centralReactionEntity.getRight().put(proxyEntity, right.getValue());
+		}
+	}
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralReactionEntity centralReactionEntity,
+			GraphReactionEntity centralReactionEntity,
 			KeggReactionEntity reaction) {
 //		centralMetaboliteEntity.putProperty("", value);
 		
@@ -50,7 +77,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 
 	@Override
 	protected void configureCrossreferences(
-			CentralReactionEntity centralReactionEntity,
+			GraphReactionEntity centralReactionEntity,
 			KeggReactionEntity reaction) {
 		// TODO Auto-generated method stub
 		

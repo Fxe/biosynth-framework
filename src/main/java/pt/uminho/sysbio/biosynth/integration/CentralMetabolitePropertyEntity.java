@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-public class CentralMetabolitePropertyEntity extends AbstractCentralEntity {
+public class CentralMetabolitePropertyEntity extends AbstractGraphEntity {
 
 	private static final String KEY_PROPERTY = "key";
 	

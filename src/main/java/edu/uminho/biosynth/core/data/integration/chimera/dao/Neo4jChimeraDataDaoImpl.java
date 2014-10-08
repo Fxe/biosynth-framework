@@ -26,6 +26,7 @@ import org.neo4j.tooling.GlobalGraphOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.components.GenericCrossReference;
@@ -307,7 +308,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	public List<Long> getAllMetaboliteIds() {
 		List<Long> idList = new ArrayList<> ();
 		for (Node n : GlobalGraphOperations.at(graphDatabaseService)
-				.getAllNodesWithLabel(CompoundNodeLabel.Compound)) {
+				.getAllNodesWithLabel(GlobalLabel.Metabolite)) {
 			
 			if (!((Boolean) n.getProperty("proxy"))) idList.add(n.getId());
 		}

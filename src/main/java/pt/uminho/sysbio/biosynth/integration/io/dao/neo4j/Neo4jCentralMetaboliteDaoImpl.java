@@ -9,6 +9,7 @@ import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
@@ -96,7 +97,8 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 		return metabolite;
 	}
 	
-	private void createOrLinkToProperty(Node parent, Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyLinkPair) {
+	private void createOrLinkToProperty(Node parent, 
+			Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyLinkPair) {
 		/*
 		 * Create or Update Link + Property
 		 * a) - If Property exists
@@ -120,10 +122,12 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 			create = false;
 			
 			//TODO: SET TO UPDATE
-			parent.createRelationshipTo(
-					propertyNode, 
+			Relationship relationship = parent.createRelationshipTo(propertyNode, 
 					DynamicRelationshipType.withName((
 							relationshipEntity.getMajorLabel())));
+			for (String key : relationshipEntity.getProperties().keySet()) {
+				relationship.setProperty(key, relationshipEntity.getProperties().get(key));
+			}
 		}
 		
 		//b) - If Property does not exists
@@ -147,10 +151,12 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 				LOGGER.trace(String.format("Add key:value [%s] -> %s", key, value, propertyNode));
 			}
 			//5 - Create Link To Property
-			parent.createRelationshipTo(
-					propertyNode, 
+			Relationship relationship = parent.createRelationshipTo(propertyNode, 
 					DynamicRelationshipType.withName((
 							relationshipEntity.getMajorLabel())));
+			for (String key : relationshipEntity.getProperties().keySet()) {
+				relationship.setProperty(key, relationshipEntity.getProperties().get(key));
+			}
 		}
 	}
 	
