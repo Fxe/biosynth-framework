@@ -351,8 +351,10 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 					String coefficient = coefficientJsonObject.get("content").toString();
 					properties.put("coefficient", coefficient);
 				} else if (type.equals("Compound") || type.equals("Protein") || type.equals("RNA")) {
-					String cpdEntry = stoichiometryJsonObject.getJSONObject(type).getString("frameid");
-					properties.put("cpdEntry", cpdEntry);
+					JSONObject jsonObject = stoichiometryJsonObject.getJSONObject(type);
+					String frameId = jsonObject.getString("frameid");
+					String orgId = jsonObject.getString("orgid");
+					properties.put("cpdEntry", String.format("%s:%s", orgId, frameId));
 				} else if (type.equals("content")) {
 					String cpdEntry = stoichiometryJsonObject.getString("content");
 					properties.put("cpdEntry", cpdEntry);
