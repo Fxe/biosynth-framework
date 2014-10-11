@@ -56,10 +56,10 @@ implements EtlTransform<R, GraphReactionEntity> {
 	protected void configureProperties(GraphReactionEntity centralReactionEntity, R reaction) {
 		centralReactionEntity.setMajorLabel(majorLabel);
 		centralReactionEntity.addLabel(REACTION_LABEL);
-		centralReactionEntity.putProperty("entry", reaction.getEntry());
-		centralReactionEntity.putProperty("description", reaction.getDescription());
-		centralReactionEntity.putProperty("name", reaction.getName());
-		centralReactionEntity.putProperty("source", reaction.getSource());
+		centralReactionEntity.addProperty("entry", reaction.getEntry());
+		centralReactionEntity.addProperty("description", reaction.getDescription());
+		centralReactionEntity.addProperty("name", reaction.getName());
+		centralReactionEntity.addProperty("source", reaction.getSource());
 	}
 	
 	private Map<CentralMetaboliteProxyEntity, Double> getMetabolitesByReflexion(
@@ -119,11 +119,21 @@ implements EtlTransform<R, GraphReactionEntity> {
 			List<?> xrefs = List.class.cast(method.invoke(reaction));
 			for (Object xrefObject : xrefs) {
 				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
-				CentralReactionProxyEntity proxyEntity = new CentralReactionProxyEntity();
-				proxyEntity.setEntry(xref.getValue());
-				proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
 				
-				centralReactionEntity.getCrossreferences().add(proxyEntity);
+				switch (xref.getType()) {
+					case DATABASE:
+						CentralReactionProxyEntity proxyEntity = new CentralReactionProxyEntity();
+						proxyEntity.setEntry(xref.getValue());
+						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
+						centralReactionEntity.getCrossreferences().add(proxyEntity);
+						break;
+					case GENE:
+						break;
+					default:
+						break;
+				}
+				
+
 			}
 		} catch (NoSuchMethodException e) {
 			LOGGER.error(e.getMessage());

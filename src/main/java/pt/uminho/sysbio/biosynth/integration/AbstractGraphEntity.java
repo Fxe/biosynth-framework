@@ -25,12 +25,9 @@ public class AbstractGraphEntity {
 	
 	public Map<String, Object> getProperties() { return properties;}
 	public void setProperties(Map<String, Object> properties) { this.properties = properties;}
-	public void putProperty(String key, String value) {
+	public void addProperty(String key, Object value) {
 		if (value != null) {
-			String trimmed = value.trim();
-			if (!trimmed.isEmpty()) {
-				properties.put(key, trimmed);
-			}
+			properties.put(key, value);
 		}
 	}
 	

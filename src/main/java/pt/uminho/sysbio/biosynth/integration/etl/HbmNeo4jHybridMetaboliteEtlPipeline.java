@@ -59,8 +59,24 @@ implements EtlPipeline<SRC, DST> {
 
 	@Override
 	public void etl(Serializable id) {
-		// TODO Auto-generated method stub
+		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
 		
+		//SRC = ETL EXTRACT(Entry)
+		SRC src = etlExtract.extract(id);
+		
+		//DST = ETL TRANSFORM(SRC)
+		DST dst = etlTransform.etlTransform(src);
+		
+		//ETL CLEAN(DST)
+		if (this.dataCleasingSubsystem != null)
+			dataCleasingSubsystem.etlCleanse(dst);
+		
+		//ETL LOAD(DST)
+		if (!skipLoad) etlLoad.etlLoad(dst);
+		
+		hbmTx.rollback();
+		neoTx.success();
 	}
 	
 	@Override

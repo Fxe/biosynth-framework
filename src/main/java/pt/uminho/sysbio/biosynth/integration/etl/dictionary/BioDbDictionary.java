@@ -97,6 +97,8 @@ public class BioDbDictionary {
 		
 		dictionary.put("RHEA", ReactionMajorLabel.Rhea.toString());
 		dictionary.put("LIGAND-RXN", ReactionMajorLabel.LigandReaction.toString());
+
+		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
 		return dictionary;
 	}
 	

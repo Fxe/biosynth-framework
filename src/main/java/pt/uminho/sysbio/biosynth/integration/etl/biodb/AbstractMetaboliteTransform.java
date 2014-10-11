@@ -74,12 +74,12 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		centralMetaboliteEntity.setMajorLabel(majorLabel);
 		centralMetaboliteEntity.addLabel(METABOLITE_LABEL);
-		centralMetaboliteEntity.putProperty("entry", metabolite.getEntry());
-		centralMetaboliteEntity.putProperty("formula", metabolite.getFormula());
-		centralMetaboliteEntity.putProperty("description", metabolite.getDescription());
-		centralMetaboliteEntity.putProperty("metaboliteClass", metabolite.getMetaboliteClass());
-		centralMetaboliteEntity.putProperty("name", metabolite.getName());
-		centralMetaboliteEntity.putProperty("source", metabolite.getSource());
+		centralMetaboliteEntity.addProperty("entry", metabolite.getEntry());
+		centralMetaboliteEntity.addProperty("formula", metabolite.getFormula());
+		centralMetaboliteEntity.addProperty("description", metabolite.getDescription());
+		centralMetaboliteEntity.addProperty("metaboliteClass", metabolite.getMetaboliteClass());
+		centralMetaboliteEntity.addProperty("name", metabolite.getName());
+		centralMetaboliteEntity.addProperty("source", metabolite.getSource());
 	}
 	
 	protected CentralMetabolitePropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {

@@ -14,6 +14,16 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 		super(majorLabel, new BiobaseMetaboliteEtlDictionary<>(BioCycMetaboliteEntity.class));
 //		this.BIOCYC_P_COMPOUND_METABOLITE_LABEL = majorLabel;
 	}
+	
+	@Override
+	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, BioCycMetaboliteEntity metabolite) {
+		centralMetaboliteEntity.addProperty("inchi", metabolite.getInchi());
+		centralMetaboliteEntity.addProperty("smiles", metabolite.getSmiles());
+		centralMetaboliteEntity.addProperty("gibbs", metabolite.getGibbs());
+		centralMetaboliteEntity.addProperty("frameId", metabolite.getFrameId());
+		centralMetaboliteEntity.addProperty("cmlMolWeight", metabolite.getCmlMolWeight());
+		super.configureProperties(centralMetaboliteEntity, metabolite);
+	};
 
 	@Override
 	protected void configureAdditionalPropertyLinks(

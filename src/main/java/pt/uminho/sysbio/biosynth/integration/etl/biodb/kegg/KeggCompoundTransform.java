@@ -69,7 +69,7 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
 			if (xref.getRef().equals("PubChem")) {
 				dbLabel = MetaboliteMajorLabel.PubChemSubstance.toString();
-				proxy.putProperty("reference", xref.getRef());
+				proxy.addProperty("reference", xref.getRef());
 			}
 			proxy.setEntry(dbEntry);
 			proxy.setMajorLabel(dbLabel);

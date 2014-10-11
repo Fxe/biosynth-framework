@@ -9,6 +9,7 @@ public enum MetaboliteMajorLabel implements Label {
 	Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS, DrugBank,
 	PubChemCompound, PubChemSubstance,
 	LipidMAPS, ChemSpider,
+	EawagBBDCompound,
 	NOTFOUND
 	;
 }

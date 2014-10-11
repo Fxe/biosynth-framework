@@ -55,6 +55,22 @@ implements EtlPipeline<SRC, DST> {
 	public void setSkipLoad(boolean skipLoad) { this.skipLoad = skipLoad;}
 
 	@Override
+	public void etl(Serializable id) {
+		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
+		
+		//SRC = ETL EXTRACT(Entry)
+		SRC src = extractSubsystem.extract(id);
+		
+		//DST = ETL TRANSFORM(SRC)
+		DST dst = etlTransform.etlTransform(src);
+
+		//ETL LOAD(DST)
+		if (!skipLoad) etlLoad.etlLoad(dst);
+		
+		tx.commit();
+	}
+	
+	@Override
 	public void etl() {
 		
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
@@ -80,5 +96,6 @@ implements EtlPipeline<SRC, DST> {
 		
 		tx.commit();
 	}
+
 
 }
