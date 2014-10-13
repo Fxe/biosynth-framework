@@ -2,13 +2,24 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.uminho.biosynthframework</groupId>
-  <artifactId>biosynth-data-chebi-dump</artifactId>
+  <groupId>pt.uminho.sysbio.biosynthframework</groupId>
+  <artifactId>biosynth-biodb-chebi</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>biosynth-data-chebi-dump</name>
   <url>http://maven.apache.org</url>
+
+  <distributionManagement>
+    <repository>
+      <id>watson</id>
+      <url>http://192.168.1.99:8081/nexus/content/repositories/biosystems-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>watson</id>
+      <url>http://192.168.1.99:8081/nexus/content/repositories/biosystems-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -18,14 +29,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
+      <groupId>pt.uminho.biosynthframework</groupId>
       <artifactId>biosynth-components</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
-      <artifactId>biosynth-data</artifactId>
+      <groupId>pt.uminho.biosynthframework</groupId>
+      <artifactId>biosynth-biodb</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -37,4 +48,19 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.2</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>local-nexus</serverId>
+          <nexusUrl>http://192.168.1.99:8081/nexus/</nexusUrl>          
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
