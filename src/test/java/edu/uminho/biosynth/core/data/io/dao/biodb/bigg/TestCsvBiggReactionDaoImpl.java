@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:test-context.xml")

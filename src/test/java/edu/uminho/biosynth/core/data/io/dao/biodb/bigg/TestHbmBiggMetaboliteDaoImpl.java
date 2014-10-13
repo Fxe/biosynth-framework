@@ -1,10 +1,11 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import org.junit.Before;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+
 import edu.uminho.biosynth.core.data.io.dao.biodb.AbstractTestHbmMetaboliteDaoTemplate;
-import edu.uminho.biosynth.core.data.io.factory.BiggDaoFactory;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.factory.BiggDaoFactory;
 import pt.uminho.sysbio.data.test.mother.HbmBiggMetaboliteMother;
 import pt.uminho.sysbio.data.test.rule.SessionFactoryRule;
 

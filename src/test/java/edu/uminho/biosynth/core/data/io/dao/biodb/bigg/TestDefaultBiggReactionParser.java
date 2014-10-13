@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggReactionParserImpl;
+
 public class TestDefaultBiggReactionParser {
 
 	private static InputStream IS_VALID;

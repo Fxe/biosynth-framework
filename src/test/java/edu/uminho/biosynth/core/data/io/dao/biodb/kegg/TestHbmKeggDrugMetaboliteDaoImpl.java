@@ -2,12 +2,12 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
 import org.junit.Before;
 
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.factory.KeggDaoFactory;
 import pt.uminho.sysbio.data.test.mother.HbmKeggDrugMetaboliteMother;
 import pt.uminho.sysbio.data.test.rule.SessionFactoryRule;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.io.dao.biodb.AbstractTestHbmMetaboliteDaoTemplate;
-import edu.uminho.biosynth.core.data.io.factory.KeggDaoFactory;
 
 public class TestHbmKeggDrugMetaboliteDaoImpl
 extends AbstractTestHbmMetaboliteDaoTemplate<KeggDrugMetaboliteEntity>{

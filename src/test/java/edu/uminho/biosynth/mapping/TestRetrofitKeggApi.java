@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.KeggApi;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.KeggApi;
 import retrofit.RestAdapter;
 
 public class TestRetrofitKeggApi {

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.data.io.source.ModelSeedSource;
+import pt.uminho.sysbio.biosynthframework.core.data.io.source.ModelSeedSource;
 
 public class TestModelSeedSource {
 

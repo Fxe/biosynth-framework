@@ -13,10 +13,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.data.service.MnxService;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 
 public class TestMnxDao {
 

@@ -3,12 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-  <artifactId>biosynth-data</artifactId>
+  <artifactId>biosynth-biodb</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>BioSynth-Data</name>
+  <name>Biosynth BioDB</name>
   <url>http://maven.apache.org</url>
+  <description>Metabolic Database Management Components</description>
+  
 
   <distributionManagement>
     <repository>
@@ -40,7 +42,7 @@
   <dependencies>
     <dependency>
       <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-      <artifactId>biosynth-components</artifactId>
+      <artifactId>biosynth-core</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 

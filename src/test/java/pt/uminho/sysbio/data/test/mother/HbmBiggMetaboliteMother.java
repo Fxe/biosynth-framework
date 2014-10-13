@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
 public class HbmBiggMetaboliteMother extends AbstractHbmObjectMother<BiggMetaboliteEntity> {
 

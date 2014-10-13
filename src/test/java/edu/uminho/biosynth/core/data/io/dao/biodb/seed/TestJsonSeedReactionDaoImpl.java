@@ -11,6 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.core.io.FileSystemResource;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed.JsonSeedReactionDaoImpl;
+
 public class TestJsonSeedReactionDaoImpl {
 
 	@BeforeClass

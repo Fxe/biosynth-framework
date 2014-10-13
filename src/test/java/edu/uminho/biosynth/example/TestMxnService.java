@@ -16,16 +16,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.Metabolite;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
-import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.HbmKeggCompoundMetaboliteDaoImpl;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.data.service.MnxService;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.HbmKeggCompoundMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class TestMxnService {
 	

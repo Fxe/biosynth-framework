@@ -2,8 +2,8 @@ package pt.uminho.sysbio.data.test.mother;
 
 import org.hibernate.Session;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 
 public class HbmBiggMetaboliteCrossReferenceMother extends AbstractHbmObjectMother<BiggMetaboliteCrossreferenceEntity> {
 

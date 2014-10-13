@@ -15,7 +15,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggMetaboliteParser;
 
 public class TestDefaultBiggMetaboliteParser {
 	

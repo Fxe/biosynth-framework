@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.DefaultBiggEquationParserImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggEquationParserImpl;
 
 public class TestDefaultBiggEquationParserImpl {
 

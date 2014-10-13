@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFileParser;
-import edu.uminho.biosynth.core.data.io.http.HttpRequest;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFileParser;
+import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
 
 public class TestKeggCompoundFlatFileParser {
 

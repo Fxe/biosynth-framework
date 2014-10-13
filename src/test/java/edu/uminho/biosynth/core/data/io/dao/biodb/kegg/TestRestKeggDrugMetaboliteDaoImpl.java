@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggDrugMetaboliteDaoImpl;
 
 public class TestRestKeggDrugMetaboliteDaoImpl {
 

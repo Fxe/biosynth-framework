@@ -5,8 +5,8 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public abstract class MetaboliteFactoryRule<M extends GenericMetabolite> implements MethodRule{
 

@@ -13,14 +13,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionLeftEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionRightEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.HbmBioCycReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class TestHbmBioCycReactionDaoImpl {
 

@@ -26,14 +26,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.core.io.FileSystemResource;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class TestParseCsvSeedMetabolite {
 

@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycReactionDaoImpl;
 
 public class TestRestBiocycReactionDaoImpl {
 

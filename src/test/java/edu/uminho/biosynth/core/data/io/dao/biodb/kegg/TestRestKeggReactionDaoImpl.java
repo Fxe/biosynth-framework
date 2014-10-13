@@ -7,8 +7,9 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class TestRestKeggReactionDaoImpl {
 

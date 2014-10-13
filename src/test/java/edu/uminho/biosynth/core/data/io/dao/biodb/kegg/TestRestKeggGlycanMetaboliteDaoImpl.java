@@ -10,9 +10,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGlycanMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
 
 public class TestRestKeggGlycanMetaboliteDaoImpl {
 

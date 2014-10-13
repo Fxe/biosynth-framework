@@ -18,17 +18,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.DefaultGenericReaction;
-import edu.uminho.biosynth.core.components.StoichiometryPair;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.core.data.service.MnxService;
-//import edu.uminho.biosynth.optflux.ContainerLoader;
-//import edu.uminho.biosynth.optflux.parser.DefaultSbmlTransformerImpl;
-//import edu.uminho.biosynth.optflux.parser.SbmlTransformer;
+import pt.uminho.sysbio.biosynthframework.DefaultGenericReaction;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 
 public class TestModelReactionMap {
 	

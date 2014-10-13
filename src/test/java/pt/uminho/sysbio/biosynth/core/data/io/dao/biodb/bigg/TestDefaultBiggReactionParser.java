@@ -7,11 +7,11 @@ import static org.junit.Assert.assertThat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.Orientation;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.BiggEquationParser;
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.DefaultBiggEquationParserImpl;
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.DefaultBiggReactionParserImpl;
+import pt.uminho.sysbio.biosynthframework.Orientation;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.BiggEquationParser;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggEquationParserImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggReactionParserImpl;
 
 public class TestDefaultBiggReactionParser {
 

@@ -11,10 +11,10 @@ import org.hibernate.SessionFactory;
 import org.junit.Rule;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.data.test.mother.AbstractHbmObjectMother;
 import pt.uminho.sysbio.data.test.rule.SessionFactoryRule;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
 public abstract class AbstractTestHbmMetaboliteDaoTemplate<M extends GenericMetabolite> {
 
