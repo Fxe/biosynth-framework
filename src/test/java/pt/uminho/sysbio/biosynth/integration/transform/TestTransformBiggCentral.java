@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import edu.uminho.biosynth.core.components.DefaultMetaboliteFactory;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
@@ -39,7 +39,7 @@ public class TestTransformBiggCentral {
 //			.withEntry("a")
 //			.withDescription("abc")
 		
-		EtlTransform<BiggMetaboliteEntity, CentralMetaboliteEntity> transform;
+		EtlTransform<BiggMetaboliteEntity, GraphMetaboliteEntity> transform;
 		
 		fail("Not yet implemented");
 	}

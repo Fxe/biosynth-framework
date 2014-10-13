@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.seed;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
@@ -18,7 +18,7 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			SeedMetaboliteEntity entity) {
 		
 //		throw new RuntimeException("Implement me please !");

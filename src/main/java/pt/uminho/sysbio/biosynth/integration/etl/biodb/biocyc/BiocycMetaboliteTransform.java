@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
@@ -16,7 +16,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 	}
 	
 	@Override
-	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, BioCycMetaboliteEntity metabolite) {
+	protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, BioCycMetaboliteEntity metabolite) {
 		centralMetaboliteEntity.addProperty("inchi", metabolite.getInchi());
 		centralMetaboliteEntity.addProperty("smiles", metabolite.getSmiles());
 		centralMetaboliteEntity.addProperty("gibbs", metabolite.getGibbs());
@@ -27,7 +27,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			BioCycMetaboliteEntity entity) {
 		
 		centralMetaboliteEntity.addPropertyEntity(
@@ -54,7 +54,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 	
 	@Override
 	protected void configureNameLink(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			BioCycMetaboliteEntity entity) {
 		
 		for (String name : entity.getSynonyms()) {

@@ -3,8 +3,8 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.chebi;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
@@ -23,7 +23,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			ChebiMetaboliteEntity entity) {
 		
 		centralMetaboliteEntity.addPropertyEntity(
@@ -42,15 +42,15 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 
 	@Override
 	protected void configureCrossreferences(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			ChebiMetaboliteEntity entity) {
 		
-		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
+		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
 		
 		for (ChebiMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
-			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
+			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
 			proxy.setEntry(dbEntry);
 			proxy.setMajorLabel(dbLabel);
 			proxy.addLabel(METABOLITE_LABEL);

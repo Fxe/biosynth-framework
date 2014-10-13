@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 
 public class MetabolitePropertyBuilder {
 	
@@ -10,41 +10,41 @@ public class MetabolitePropertyBuilder {
 	private static final String SMILES_LABEL = "SMILES";
 	private static final String CHARGE_LABEL = "Charge";
 	
-	public static CentralMetabolitePropertyEntity buildFormula(String formula) {
+	public static GraphPropertyEntity buildFormula(String formula) {
 		String uniqueKey = "formula";
-		CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity(uniqueKey, formula);
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(uniqueKey, formula);
 		propertyEntity.setMajorLabel(FORMULA_LABEL);
 		propertyEntity.setUniqueKey(uniqueKey);
 		return propertyEntity;
 	}
 	
-	public static CentralMetabolitePropertyEntity buildInchi(String inchi) {
+	public static GraphPropertyEntity buildInchi(String inchi) {
 		String uniqueKey = "inchi";
-		CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity(uniqueKey, inchi);
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(uniqueKey, inchi);
 		propertyEntity.setMajorLabel(INCHI_LABEL);
 		propertyEntity.setUniqueKey(uniqueKey);
 		return propertyEntity;
 	}
 	
-	public static CentralMetabolitePropertyEntity buildSmiles(String smiles) {
+	public static GraphPropertyEntity buildSmiles(String smiles) {
 		String uniqueKey = "smiles";
-		CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity(uniqueKey, smiles);
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(uniqueKey, smiles);
 		propertyEntity.setMajorLabel(SMILES_LABEL);
 		propertyEntity.setUniqueKey(uniqueKey);
 		return propertyEntity;
 	}
 	
-	public static CentralMetabolitePropertyEntity buildCharge(Integer charge) {
+	public static GraphPropertyEntity buildCharge(Integer charge) {
 		String uniqueKey = "charge";
-		CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity(uniqueKey, charge);
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(uniqueKey, charge);
 		propertyEntity.setMajorLabel(CHARGE_LABEL);
 		propertyEntity.setUniqueKey(uniqueKey);
 		return propertyEntity;
 	}
 	
-	public static CentralMetabolitePropertyEntity buildName(String name) {
+	public static GraphPropertyEntity buildName(String name) {
 		String uniqueKey = "name";
-		CentralMetabolitePropertyEntity propertyEntity = new CentralMetabolitePropertyEntity(uniqueKey, name);
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(uniqueKey, name);
 		propertyEntity.setMajorLabel(NAME_LABEL);
 		return propertyEntity;
 	}

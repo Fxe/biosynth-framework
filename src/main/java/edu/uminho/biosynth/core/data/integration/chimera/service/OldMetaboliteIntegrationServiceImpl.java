@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,12 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
+import pt.uminho.sysbio.biosynth.integration.service.BasicIntegrationService;
+import pt.uminho.sysbio.biosynth.integration.service.MetaboliteIntegrationService;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
 import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
-import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
+import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
@@ -31,83 +31,21 @@ import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")
-public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegrationService{
+public class OldMetaboliteIntegrationServiceImpl extends BasicIntegrationService
+implements MetaboliteIntegrationService{
 
-	private static Logger LOGGER = LoggerFactory.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(OldMetaboliteIntegrationServiceImpl.class);
 	
 	@Autowired
 	private IntegrationDataDao data;
-	@Autowired
-	private IntegrationMetadataDao meta;
 
 	private IKeyGenerator<String> clusterIdGenerator;
 	
 	public IntegrationDataDao getData() { return data;}
 	public void setData(IntegrationDataDao data) { this.data = data;}
-
-	public IntegrationMetadataDao getMeta() { return meta;}
-	public void setMeta(IntegrationMetadataDao meta) { this.meta = meta;}
 	
 	public IKeyGenerator<String> getClusterIdGenerator() { return clusterIdGenerator;}
 	public void setClusterIdGenerator(IKeyGenerator<String> clusterIdGenerator) { this.clusterIdGenerator = clusterIdGenerator;}
-	
-	@Override
-	public IntegrationSet getIntegrationSetByEntry(String entry) {
-		IntegrationSet integrationSet = this.meta.getIntegrationSet(entry);
-		
-		if (integrationSet == null) {
-			LOGGER.warn(String.format("Integration Set [%s] not found", entry));
-			return null;
-		}
-		
-		return integrationSet;
-	}
-	
-	@Override
-	public IntegrationSet getIntegrationSetById(Long id) {
-		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
-		
-		if (integrationSet == null) {
-			LOGGER.warn(String.format("Integration Set [%d] not found", id));
-			return null;
-		}
-		
-		return integrationSet;
-	}
-	
-	@Override
-	public IntegrationSet createIntegrationSet(String name, String description) {
-		IntegrationSet integrationSet = new IntegrationSet();
-		integrationSet.setName(name);
-		integrationSet.setDescription(description);
-//		integrationSet.setLastClusterEntry(this.clusterIdGenerator.getCurrentKey());
-		meta.saveIntegrationSet(integrationSet);
-		
-		return integrationSet;
-	}
-	
-	@Override
-	public void resetIntegrationSet(IntegrationSet integrationSet) {
-		if (integrationSet == null) {
-//			LOGGER.warn("No Integration Set selected - operation aborted");
-			return;
-		}
-		LOGGER.info(String.format("Reset atempt to Integration Set %s", integrationSet));
-		
-		List<Long> clusters = new ArrayList<> (integrationSet.getIntegratedClustersMap().keySet());
-		for (Long clusterId : clusters){
-			IntegratedCluster cluster = integrationSet.getIntegratedClustersMap().remove(clusterId);
-			LOGGER.info(String.format("Removing cluster %s", cluster));
-			this.meta.deleteCluster(cluster);
-		}
-		
-//		this.meta.saveIntegrationSet(currentIntegrationSet);
-	}
-
-	@Override
-	public void deleteIntegrationSet(IntegrationSet integrationSet) {
-		this.meta.deleteIntegrationSet(integrationSet);
-	}
 	
 	@Override
 	public IntegratedCluster createCluster(
@@ -119,7 +57,7 @@ public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegr
 
 		IntegratedCluster cluster = new IntegratedCluster();
 		cluster.setIntegrationSet(integrationSet);
-		cluster.setName(name);
+		cluster.setEntry(name);
 		cluster.setDescription(description);
 		
 		for (Long memberId: members) {
@@ -150,7 +88,7 @@ public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegr
 			String name, Set<Long> elements, String description) {
 		
 		
-		integratedCluster.setName(name);
+		integratedCluster.setEntry(name);
 		integratedCluster.setDescription(description);
 		
 		this.meta.updateCluster(integratedCluster);
@@ -316,7 +254,7 @@ public class DefaultMetaboliteIntegrationServiceImpl implements MetaboliteIntegr
 			this.meta.deleteCluster(c);
 		}
 		
-		IntegratedCluster union = this.generateCluster(null, integratedCluster.getName(), clusterMembers, integratedCluster.getDescription());
+		IntegratedCluster union = this.generateCluster(null, integratedCluster.getEntry(), clusterMembers, integratedCluster.getDescription());
 		this.meta.saveIntegratedCluster(union);
 		
 		return union;
@@ -428,7 +366,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 System.out.println("Loading Prev Clusters");
 start = System.currentTimeMillis();
 		for (IntegratedCluster integratedCluster : this.meta.getAllIntegratedClusters(integrationSet.getId())) {
-			String clusterEntry = integratedCluster.getName();
+			String clusterEntry = integratedCluster.getEntry();
 			Set<Long> clustersElements = new HashSet<> (integratedCluster.listAllIntegratedMemberIds());
 			resolvedClusters.put(clusterEntry, clustersElements);
 		}
@@ -542,15 +480,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		
 		return null;
 	}
-	
-	@Override
-	public List<IntegrationSet> getAllIntegrationSets() {
-		List<IntegrationSet> res = new ArrayList<> ();
-		for (Serializable id: this.meta.getAllIntegrationSetsId()) {
-			res.add(this.meta.getIntegrationSet(id));
-		}
-		return res;
-	}
+
 	
 	@Override
 	public Map<String, Integer> getDataStatistics() {
@@ -618,7 +548,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName(name);
+		integratedCluster.setEntry(name);
 		integratedCluster.setDescription(description);
 		
 		for (Long memberId: clusterElements) {
@@ -830,7 +760,7 @@ System.out.println("Ok ! [" + (end - start) + "]");
 							
 							
 							this.updateCluster(integratedCluster, 
-									integratedCluster.getName(), toMerge.get(cidList), integratedCluster.getDescription());
+									integratedCluster.getEntry(), toMerge.get(cidList), integratedCluster.getDescription());
 							integratedClusters.add(integratedCluster);
 							
 							System.out.println("AFTER" + integratedCluster.getMembers());
@@ -849,12 +779,12 @@ System.out.println("Ok ! [" + (end - start) + "]");
 						if (cidList.size() == 1) {
 							IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
 							this.updateCluster(integratedCluster, 
-									integratedCluster.getName(), toMerge.get(cidList), integratedCluster.getDescription());
+									integratedCluster.getEntry(), toMerge.get(cidList), integratedCluster.getDescription());
 							integratedClusters.add(integratedCluster);
 						} else {
 							IntegratedCluster integratedCluster = this.meta.getIntegratedClusterById(cidList.iterator().next());
 							this.mergeCluster(integrationSet, cidList, 
-									integratedCluster.getName(), toMerge.get(cidList), integratedCluster.getDescription());
+									integratedCluster.getEntry(), toMerge.get(cidList), integratedCluster.getDescription());
 							integratedClusters.add(integratedCluster);
 						}
 						//SOME MERGE FUNCTION (select a single CID join rest and delete prevs)

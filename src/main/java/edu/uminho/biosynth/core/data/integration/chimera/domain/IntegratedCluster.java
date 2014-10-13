@@ -29,12 +29,18 @@ public class IntegratedCluster {
 	@GeneratedValue
 	@Column(name="id", nullable=false)
 	private Long id;
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id;}
 	
-	@Column(name="name", length=255)
-	private String name;
+	@Column(name="entry", length=255)
+	private String entry;
+	public String getEntry() { return entry;}
+	public void setEntry(String entry) { this.entry = entry;}
 	
 	@Column(name="description", nullable=true, length=255)
-	private String description;
+	private String description = "";
+	public String getDescription() { return description;}
+	public void setDescription(String description) { this.description = description;}
 	
 	@ManyToOne
 	@JoinColumn(name="integration_id")
@@ -73,14 +79,7 @@ public class IntegratedCluster {
 	
 
 
-	public Long getId() { return id;}
-	public void setId(Long id) { this.id = id;}
 
-	public String getName() { return name;}
-	public void setName(String name) { this.name = name;}
-
-	public String getDescription() { return description;}
-	public void setDescription(String description) { this.description = description;}
 
 	public IntegratedClusterMember removeMember(Long eid) {
 		IntegratedClusterMember toRemove = null;
@@ -133,7 +132,7 @@ public class IntegratedCluster {
 	
 	@Override
 	public String toString() {
-		return String.format("IntegratedCluster[%d:%s]", id, name);
+		return String.format("IntegratedCluster[%d:%s]", id, entry);
 	}
 
 }

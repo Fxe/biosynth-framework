@@ -10,9 +10,9 @@ import edu.uminho.biosynth.core.components.Reaction;
 
 public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
 	
-	private Map<CentralMetaboliteProxyEntity, Double> left = new HashMap<> ();
-	private Map<CentralMetaboliteProxyEntity, Double> right = new HashMap<> ();
-	public List<CentralReactionProxyEntity> crossreferences = new ArrayList<> ();
+	private Map<GraphMetaboliteProxyEntity, Double> left = new HashMap<> ();
+	private Map<GraphMetaboliteProxyEntity, Double> right = new HashMap<> ();
+	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
 	
 	@Override
 	public String getEntry() { return (String)this.properties.get("entry");}
@@ -25,16 +25,16 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	}
 	public void setOrientation(Orientation orientation) { properties.put("orientation", orientation);}
 	
-	public Map<CentralMetaboliteProxyEntity, Double> getLeft() { return left;}
-	public void setLeft(Map<CentralMetaboliteProxyEntity, Double> left) { this.left = left;}
+	public Map<GraphMetaboliteProxyEntity, Double> getLeft() { return left;}
+	public void setLeft(Map<GraphMetaboliteProxyEntity, Double> left) { this.left = left;}
 	
-	public Map<CentralMetaboliteProxyEntity, Double> getRight() { return right;}
-	public void setRight(Map<CentralMetaboliteProxyEntity, Double> right) { this.right = right;}
+	public Map<GraphMetaboliteProxyEntity, Double> getRight() { return right;}
+	public void setRight(Map<GraphMetaboliteProxyEntity, Double> right) { this.right = right;}
 	
-	public List<CentralReactionProxyEntity> getCrossreferences() {
+	public List<GraphReactionProxyEntity> getCrossreferences() {
 		return crossreferences;
 	}
-	public void setCrossreferences(List<CentralReactionProxyEntity> crossreferences) {
+	public void setCrossreferences(List<GraphReactionProxyEntity> crossreferences) {
 		this.crossreferences = crossreferences;
 	}
 //	
@@ -56,7 +56,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		if (left.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (CentralMetaboliteProxyEntity l : left.keySet()) {
+			for (GraphMetaboliteProxyEntity l : left.keySet()) {
 				sb.append(String.format("[%f,\n%s]\n", left.get(l), l));
 //				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
 //				  .append(p.getLeft()).append(" => \n")
@@ -68,7 +68,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		if (right.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (CentralMetaboliteProxyEntity r : right.keySet()) {
+			for (GraphMetaboliteProxyEntity r : right.keySet()) {
 				sb.append(String.format("[%f,\n%s]\n", right.get(r), r));
 //				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
 //				  .append(p.getLeft()).append(" => \n")
@@ -81,7 +81,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		if (crossreferences.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (CentralReactionProxyEntity x : crossreferences) {
+			for (GraphReactionProxyEntity x : crossreferences) {
 				sb.append(x);
 			}
 		}

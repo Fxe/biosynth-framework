@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.uminho.biosynth.util.FormulaConverter;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 
 public class CentralMetaboliteEtlDataCleansing
-implements EtlDataCleansing<CentralMetaboliteEntity> {
+implements EtlDataCleansing<GraphMetaboliteEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CentralMetaboliteEtlDataCleansing.class);
 	
@@ -65,15 +65,15 @@ implements EtlDataCleansing<CentralMetaboliteEntity> {
 	}
 	
 	@Override
-	public Map<String, Triple<String, String, EtlCleasingType>> etlCleanse(CentralMetaboliteEntity metabolite) {
+	public Map<String, Triple<String, String, EtlCleasingType>> etlCleanse(GraphMetaboliteEntity metabolite) {
 		Map<String, Triple<String, String, EtlCleasingType>> result =
 				new HashMap<> ();
 		
-		for (Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> pair : 
+		for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair : 
 			metabolite.getPropertyEntities()) {
 			
-			CentralMetabolitePropertyEntity propertyEntity = pair.getLeft();
-			CentralMetaboliteRelationshipEntity relationshipEntity = pair.getRight();
+			GraphPropertyEntity propertyEntity = pair.getLeft();
+			GraphRelationshipEntity relationshipEntity = pair.getRight();
 			Triple<String, String, EtlCleasingType> triple;
 			
 			switch (propertyEntity.getMajorLabel()) {

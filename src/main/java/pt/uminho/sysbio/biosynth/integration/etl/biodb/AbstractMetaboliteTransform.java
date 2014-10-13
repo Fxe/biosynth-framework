@@ -9,10 +9,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
@@ -22,7 +22,7 @@ import edu.uminho.biosynth.core.components.GenericCrossReference;
 import edu.uminho.biosynth.core.components.GenericMetabolite;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
-implements EtlTransform<M, CentralMetaboliteEntity> {
+implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
 	
@@ -59,8 +59,8 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 	}
 	
 	@Override
-	public CentralMetaboliteEntity etlTransform(M metabolite) {
-		CentralMetaboliteEntity centralMetaboliteEntity = new CentralMetaboliteEntity();
+	public GraphMetaboliteEntity etlTransform(M metabolite) {
+		GraphMetaboliteEntity centralMetaboliteEntity = new GraphMetaboliteEntity();
 
 		this.configureProperties(centralMetaboliteEntity, metabolite);
 		this.configureFormulaLink(centralMetaboliteEntity, metabolite);
@@ -71,7 +71,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 		return centralMetaboliteEntity;
 	}
 	
-	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+	protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		centralMetaboliteEntity.setMajorLabel(majorLabel);
 		centralMetaboliteEntity.addLabel(METABOLITE_LABEL);
 		centralMetaboliteEntity.addProperty("entry", metabolite.getEntry());
@@ -82,7 +82,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 		centralMetaboliteEntity.addProperty("source", metabolite.getSource());
 	}
 	
-	protected CentralMetabolitePropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {
+	protected GraphPropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {
 		if (majorLabel == null) return null;
 		if (key == null) return null;
 		if (value == null) return null;
@@ -92,43 +92,43 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 		}
 		
 		
-		CentralMetabolitePropertyEntity propertyEntity =
-				new CentralMetabolitePropertyEntity(key, value);
+		GraphPropertyEntity propertyEntity =
+				new GraphPropertyEntity(key, value);
 		propertyEntity.setMajorLabel(majorLabel);
 		propertyEntity.addLabel(METABOLITE_PROPERTY_LABEL);
 		
 		return propertyEntity;
 	}
 	
-	protected CentralMetabolitePropertyEntity buildPropertyEntity(
+	protected GraphPropertyEntity buildPropertyEntity(
 			Object value, String majorLabel) {
 		return buildPropertyEntity("key", value, majorLabel);
 	}
 	
-	protected CentralMetaboliteRelationshipEntity buildRelationhipEntity(
+	protected GraphRelationshipEntity buildRelationhipEntity(
 			String relationShipType) {
-		CentralMetaboliteRelationshipEntity relationshipEntity =
-				new CentralMetaboliteRelationshipEntity();
+		GraphRelationshipEntity relationshipEntity =
+				new GraphRelationshipEntity();
 		relationshipEntity.setMajorLabel(relationShipType);
 		
 		return relationshipEntity;
 	}
 	
-	protected Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> buildPropertyLinkPair(
+	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
 			String key, Object value, String majorLabel, String relationShipType) {
-		CentralMetabolitePropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
-		CentralMetaboliteRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
+		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
+		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
 		if (propertyEntity == null || relationshipEntity == null) {
 			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
 			return null;
 		}
-		Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyPair =
+		Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyPair =
 				new ImmutablePair<>(propertyEntity, relationshipEntity);
 		
 		return propertyPair;
 	}
 	
-	protected void configureFormulaLink(CentralMetaboliteEntity centralMetaboliteEntity, M entity) {
+	protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
 		centralMetaboliteEntity.addPropertyEntity(
 				this.buildPropertyLinkPair(
 						"key", 
@@ -137,7 +137,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 						METABOLITE_FORMULA_RELATIONSHIP_TYPE));
 	}
 	
-	protected void configureNameLink(CentralMetaboliteEntity centralMetaboliteEntity, M entity) {
+	protected void configureNameLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
 		centralMetaboliteEntity.addPropertyEntity(
 				this.buildPropertyLinkPair(
 						"key", 
@@ -146,9 +146,9 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 						METABOLITE_NAME_RELATIONSHIP_TYPE));
 	}
 	
-	protected abstract void configureAdditionalPropertyLinks(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite);
+	protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
 	
-	protected void configureCrossreferences(CentralMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+	protected void configureCrossreferences(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		try {
 			Method method = metabolite.getClass().getMethod("getCrossreferences");
 			List<?> xrefs = List.class.cast(method.invoke(metabolite));
@@ -157,7 +157,7 @@ implements EtlTransform<M, CentralMetaboliteEntity> {
 				
 				switch (xref.getType()) {
 					case DATABASE:
-						CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
+						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 						proxyEntity.setEntry(xref.getValue());
 						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
 						

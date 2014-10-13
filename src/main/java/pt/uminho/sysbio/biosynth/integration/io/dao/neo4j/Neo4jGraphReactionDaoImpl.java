@@ -14,17 +14,17 @@ import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
 
-public class Neo4jCentralReactionDaoImpl 
+public class Neo4jGraphReactionDaoImpl 
 extends AbstractNeo4jDao<GraphReactionEntity> 
 implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jCentralReactionDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphReactionDaoImpl.class);
 	private static final Label REACTION_LABEL = GlobalLabel.Reaction;
 	private static final RelationshipType LEFT_RELATIONSHIP = ReactionRelationshipType.Left;
 	private static final RelationshipType RIGHT_RELATIONSHIP = ReactionRelationshipType.Right;
@@ -60,15 +60,15 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				node.addLabel(DynamicLabel.label(label));
 			for (String key : reaction.getProperties().keySet())
 				node.setProperty(key, reaction.getProperties().get(key));
-			for (CentralMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
+			for (GraphMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
 			}
-			for (CentralMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
 				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
 			}
-			for (CentralReactionProxyEntity x : reaction.getCrossreferences()) {
+			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
 				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
 				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
 			}
@@ -88,17 +88,17 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				node.addLabel(DynamicLabel.label(label));
 			for (String key : reaction.getProperties().keySet())
 				node.setProperty(key, reaction.getProperties().get(key));
-			for (CentralMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
+			for (GraphMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
 				Double stoichiometry = reaction.getLeft().get(l);
 				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, stoichiometry);
 			}
-			for (CentralMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
 				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
 				Double stoichiometry = reaction.getRight().get(r);
 				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, stoichiometry);
 			}
-			for (CentralReactionProxyEntity x : reaction.getCrossreferences()) {
+			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
 				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
 				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
 			}
@@ -112,7 +112,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	private void createOrLinkToReactionProxy(
 			Node parent, 
-			CentralReactionProxyEntity proxy,
+			GraphReactionProxyEntity proxy,
 			RelationshipType relationshipType
 			) {
 		
@@ -168,7 +168,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	private void createOrLinkToMetaboliteProxy(
 			Node parent, 
-			CentralMetaboliteProxyEntity proxy,
+			GraphMetaboliteProxyEntity proxy,
 			RelationshipType relationshipType,
 			Double stoichiometry) {
 		

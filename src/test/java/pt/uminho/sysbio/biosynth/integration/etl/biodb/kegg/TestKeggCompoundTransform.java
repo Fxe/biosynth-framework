@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.factory.KeggCompoundMetaboliteFactory;
 import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
 
@@ -19,7 +19,7 @@ public class TestKeggCompoundTransform {
 					.build();
 		
 		KeggCompoundTransform transform = new KeggCompoundTransform();
-		CentralMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
+		GraphMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
 		
 		assertEquals(0, entityDst.getPropertyEntities().size());
 		assertEquals(0, entityDst.getCrossreferences().size());
@@ -36,7 +36,7 @@ public class TestKeggCompoundTransform {
 					.build();
 		
 		KeggCompoundTransform transform = new KeggCompoundTransform();
-		CentralMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
+		GraphMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
 
 		assertNotEquals(0, entityDst.getPropertyEntities().size());
 		assertEquals(0, entityDst.getCrossreferences().size());
@@ -52,7 +52,7 @@ public class TestKeggCompoundTransform {
 					.build();
 		
 		KeggCompoundTransform transform = new KeggCompoundTransform();
-		CentralMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
+		GraphMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
 
 		assertEquals(0, entityDst.getPropertyEntities().size());
 		assertNotEquals(0, entityDst.getCrossreferences().size());
@@ -70,7 +70,7 @@ public class TestKeggCompoundTransform {
 					.build();
 		
 		KeggCompoundTransform transform = new KeggCompoundTransform();
-		CentralMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
+		GraphMetaboliteEntity entityDst = transform.etlTransform(entitySrc);
 
 		assertNotEquals(0, entityDst.getPropertyEntities().size());
 		assertNotEquals(0, entityDst.getCrossreferences().size());

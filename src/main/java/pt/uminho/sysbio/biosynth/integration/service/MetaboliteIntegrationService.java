@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.service;
+package pt.uminho.sysbio.biosynth.integration.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,35 +6,70 @@ import java.util.Set;
 
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import edu.uminho.biosynth.core.data.integration.chimera.service.ConflictDecision;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
 
-public interface MetaboliteIntegrationService {
-	
-	public IntegrationSet getIntegrationSetByEntry(String entry);
-	public IntegrationSet getIntegrationSetById(Long id);
-	public IntegrationSet createIntegrationSet(String name, String description);
-	public void resetIntegrationSet(IntegrationSet integrationSet);
-	public void deleteIntegrationSet(IntegrationSet integrationSet);
-	public List<IntegrationSet> getAllIntegrationSets();
+public interface MetaboliteIntegrationService extends IntegrationService {
 	
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults);
 	public int countIntegratedClustersByIntegrationId(Long iid);
 	
+	/**
+	 * 
+	 * Applies a clustering strategy to a set of initial 
+	 * targets against a set of domain elements.
+	 * 
+	 * @param iid id of the integration set
+	 * @param clusteringStrategy strategy to generate clusters
+	 * @param initial members to scaffold
+	 * @param domain valid members of the clusters
+	 * @param conflictDecision on conflict action
+	 * @return
+	 */
 	public List<IntegratedCluster> generateIntegratedClusters(Long iid, ClusteringStrategy clusteringStrategy, 
 			Set<Long> initial, Set<Long> domain, ConflictDecision conflictDecision);
 	
+	/**
+	 * Creates a single cluster
+	 * 
+	 * @param integrationSet integration set of the cluster
+	 * @param name the entry of the cluster
+	 * @param members the elements of the cluster
+	 * @param description
+	 * @param conflictDecision on conflict action
+	 * @return
+	 */
 	public IntegratedCluster createCluster(
 			IntegrationSet integrationSet, 
 			String name, Set<Long> members, 
 			String description, ConflictDecision conflictDecision);
 	
+	/**
+	 * same as generateIntegratedClusters except there is a limit !
+	 * @param integrationSet
+	 * @param clusteringStrategy
+	 * @param initial
+	 * @param domain
+	 * @param conflictDecision
+	 * @param limit
+	 * @return
+	 */
 	public List<IntegratedCluster> createCluster(
 			IntegrationSet integrationSet,
 			ClusteringStrategy clusteringStrategy,
 			Set<Long> initial, Set<Long> domain,
 			ConflictDecision conflictDecision, Long limit);
 	
+	/**
+	 * Splits a cluster
+	 * @param integrationSet
+	 * @param integratedCluster
+	 * @param splitStrategy
+	 * @param name
+	 * @param description
+	 * @return
+	 */
 	public List<IntegratedCluster> splitCluster(
 			IntegrationSet integrationSet,
 			IntegratedCluster integratedCluster,

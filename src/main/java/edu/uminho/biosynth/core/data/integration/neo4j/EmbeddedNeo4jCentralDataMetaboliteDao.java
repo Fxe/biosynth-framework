@@ -16,9 +16,9 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
 
@@ -28,7 +28,7 @@ import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
  * @author Filipe Liu
  *
  */
-public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<CentralMetaboliteEntity> {
+public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<GraphMetaboliteEntity> {
 
 	private static final Logger LOGGER = Logger.getLogger(EmbeddedNeo4jCentralDataMetaboliteDao.class);
 	
@@ -73,20 +73,20 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 	}
 	
 	@Override
-	public CentralMetaboliteEntity getMetaboliteById(Serializable id) {
+	public GraphMetaboliteEntity getMetaboliteById(Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity getMetaboliteByEntry(String entry) {
+	public GraphMetaboliteEntity getMetaboliteByEntry(String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity saveMetabolite(
-			CentralMetaboliteEntity metabolite) {
+	public GraphMetaboliteEntity saveMetabolite(
+			GraphMetaboliteEntity metabolite) {
 		
 		Label major = DynamicLabel.label(metabolite.getMajorLabel());
 		Node node = this.getOrCreateNode(major, "entry", metabolite.getEntry());
@@ -112,7 +112,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 //			node.createRelationshipTo(propertyNode, relationshipType);
 //		}
 		
-		for (CentralMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
+		for (GraphMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
 			Label xrefMajor = DynamicLabel.label(xref.getMajorLabel());
 			
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());
@@ -145,7 +145,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Cent
 	}
 
 	@Override
-	public Serializable save(CentralMetaboliteEntity entity) {
+	public Serializable save(GraphMetaboliteEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}

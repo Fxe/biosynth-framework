@@ -197,7 +197,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 		if (!cluster.getMembers().isEmpty()) {
 			cpd = new IntegratedMetaboliteEntity();
 			cpd.setId(cluster.getId());
-			cpd.setEntry(cluster.getName());
+			cpd.setEntry(cluster.getEntry());
 			cpd.setSource(cluster.getIntegrationSet().getName());
 			
 			LOGGER.debug((String.format("Generating Integrated Metabolite[%s] from %s", cpd.getEntry(), cluster)));

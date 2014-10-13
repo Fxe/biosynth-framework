@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
@@ -21,7 +21,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 	@Override
 	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, KeggReactionEntity entity) {
 		for(KeggReactionLeftEntity left : entity.getLeft()) {
-			CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
+			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 			
 			String entry = left.getCpdEntry();
 			proxyEntity.setEntry(entry);
@@ -47,7 +47,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 			KeggReactionEntity reaction) {
 		
 		for(KeggReactionRightEntity right : reaction.getRight()) {
-			CentralMetaboliteProxyEntity proxyEntity = new CentralMetaboliteProxyEntity();
+			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 			
 			String entry = right.getCpdEntry();
 			proxyEntity.setEntry(entry);

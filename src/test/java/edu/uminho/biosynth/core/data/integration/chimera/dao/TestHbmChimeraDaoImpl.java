@@ -102,7 +102,7 @@ public class TestHbmChimeraDaoImpl {
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName("C1");
+		integratedCluster.setEntry("C1");
 		
 		dao.saveIntegratedCluster(integratedCluster);
 		
@@ -118,7 +118,7 @@ public class TestHbmChimeraDaoImpl {
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName("C1");
+		integratedCluster.setEntry("C1");
 		
 		IntegratedMember integratedMember1 = new IntegratedMember();
 		integratedMember1.setId(1L);
@@ -141,7 +141,7 @@ public class TestHbmChimeraDaoImpl {
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName("C1");
+		integratedCluster.setEntry("C1");
 		
 		IntegratedMember integratedMember1 = new IntegratedMember();
 		integratedMember1.setId(1L);
@@ -175,7 +175,7 @@ public class TestHbmChimeraDaoImpl {
 		{
 			IntegratedCluster integratedCluster = new IntegratedCluster();
 			integratedCluster.setIntegrationSet(integrationSet);
-			integratedCluster.setName("C1");
+			integratedCluster.setEntry("C1");
 			
 			
 			
@@ -225,7 +225,7 @@ public class TestHbmChimeraDaoImpl {
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName("C1");
+		integratedCluster.setEntry("C1");
 		
 		dao.saveIntegratedCluster(integratedCluster);
 		
@@ -245,7 +245,7 @@ public class TestHbmChimeraDaoImpl {
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
-		integratedCluster.setName("C1");
+		integratedCluster.setEntry("C1");
 		
 		IntegratedMember integratedMember1 = new IntegratedMember();
 		integratedMember1.setId(1L);

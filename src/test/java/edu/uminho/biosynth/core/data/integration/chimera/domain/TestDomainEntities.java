@@ -69,11 +69,11 @@ public class TestDomainEntities {
 		
 		
 		IntegratedCluster cluster1 = new IntegratedCluster();
-		cluster1.setName("C_A");
+		cluster1.setEntry("C_A");
 		cluster1.setDescription("Should Contain A");
 		cluster1.setIntegrationSet(integrationSet);
 		IntegratedCluster cluster2 = new IntegratedCluster();
-		cluster2.setName("C_B");
+		cluster2.setEntry("C_B");
 		cluster2.setDescription("Should Contain B, C");
 		cluster2.setIntegrationSet(integrationSet);
 		

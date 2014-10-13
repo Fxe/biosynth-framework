@@ -15,36 +15,36 @@ import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
 
-public class Neo4jCentralMetaboliteDaoImpl 
-extends AbstractNeo4jDao<CentralMetaboliteEntity>
-implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
+public class Neo4jGraphMetaboliteDaoImpl 
+extends AbstractNeo4jDao<GraphMetaboliteEntity>
+implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jCentralMetaboliteDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	private static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
 	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
 			MetaboliteRelationshipType.HasCrossreferenceTo;
 	
 	@Override
-	public CentralMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
+	public GraphMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
+	public GraphMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CentralMetaboliteEntity saveMetabolite(String tag, CentralMetaboliteEntity metabolite) {
+	public GraphMetaboliteEntity saveMetabolite(String tag, GraphMetaboliteEntity metabolite) {
 		boolean create = true;
 		
 		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
@@ -57,10 +57,10 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 			//SCD Track changes
 			for (String key : metabolite.getProperties().keySet())
 				node.setProperty(key, metabolite.getProperties().get(key));
-			for (CentralMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
+			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
 			}
-			for (Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> pair 
+			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair 
 					: metabolite.getPropertyEntities()) {
 				this.createOrLinkToProperty(node, pair);
 			}
@@ -80,11 +80,11 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 			for (String key : metabolite.getProperties().keySet())
 				node.setProperty(key, metabolite.getProperties().get(key));
 			
-			for (CentralMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
+			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
 			}
 			
-			for (Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> pair 
+			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair 
 					: metabolite.getPropertyEntities()) {
 				this.createOrLinkToProperty(node, pair);
 			}
@@ -98,7 +98,7 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 	}
 	
 	private void createOrLinkToProperty(Node parent, 
-			Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyLinkPair) {
+			Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyLinkPair) {
 		/*
 		 * Create or Update Link + Property
 		 * a) - If Property exists
@@ -111,8 +111,8 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 		 *      5 - Create Link To Property
 		 */
 		boolean create = true;
-		CentralMetabolitePropertyEntity propertyEntity = propertyLinkPair.getLeft();
-		CentralMetaboliteRelationshipEntity relationshipEntity = propertyLinkPair.getRight();
+		GraphPropertyEntity propertyEntity = propertyLinkPair.getLeft();
+		GraphRelationshipEntity relationshipEntity = propertyLinkPair.getRight();
 		for (Node propertyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
 						DynamicLabel.label(propertyEntity.getMajorLabel()), 
@@ -160,7 +160,7 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 		}
 	}
 	
-	private void createOrLinkToProxy(Node parent, CentralMetaboliteProxyEntity proxy) {
+	private void createOrLinkToProxy(Node parent, GraphMetaboliteProxyEntity proxy) {
 		boolean create = true;
 		for (Node proxyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
@@ -189,7 +189,7 @@ implements MetaboliteHeterogeneousDao<CentralMetaboliteEntity>{
 	}
 
 	@Override
-	protected CentralMetaboliteEntity nodeToObject(Node node) {
+	protected GraphMetaboliteEntity nodeToObject(Node node) {
 		// TODO Auto-generated method stub
 		return null;
 	}

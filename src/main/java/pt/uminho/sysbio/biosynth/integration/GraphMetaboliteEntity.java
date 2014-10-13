@@ -7,10 +7,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import edu.uminho.biosynth.core.components.Metabolite;
 
-public class CentralMetaboliteEntity extends AbstractGraphEntity implements Metabolite {
+public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabolite {
 
-	private List<CentralMetaboliteProxyEntity> crossreferences = new  ArrayList<> ();
-	private List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities = new ArrayList<> ();
+	private List<GraphMetaboliteProxyEntity> crossreferences = new  ArrayList<> ();
+	private List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propertyEntities = new ArrayList<> ();
 
 //	
 //	@Override
@@ -19,25 +19,25 @@ public class CentralMetaboliteEntity extends AbstractGraphEntity implements Meta
 //		properties.put("formula", formula);
 //	};
 	
-	public List<CentralMetaboliteProxyEntity> getCrossreferences() {
+	public List<GraphMetaboliteProxyEntity> getCrossreferences() {
 		return crossreferences;
 	}
 	public void setCrossreferences(
-			List<CentralMetaboliteProxyEntity> crossreferences) {
+			List<GraphMetaboliteProxyEntity> crossreferences) {
 		this.crossreferences = crossreferences;
 	}
-	public void addCrossreference(CentralMetaboliteProxyEntity crossreference) {
+	public void addCrossreference(GraphMetaboliteProxyEntity crossreference) {
 		this.crossreferences.add(crossreference);
 	}
 
-	public List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> getPropertyEntities() {
+	public List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities() {
 		return propertyEntities;
 	}
 	public void setPropertyEntities(
-			List<Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity>> propertyEntities) {
+			List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propertyEntities) {
 		this.propertyEntities = propertyEntities;
 	}
-	public void addPropertyEntity(Pair<CentralMetabolitePropertyEntity, CentralMetaboliteRelationshipEntity> propertyEntity) {
+	public void addPropertyEntity(Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyEntity) {
 		if (propertyEntity != null) {
 			if (propertyEntity.getLeft() == null || propertyEntity.getRight() == null) {
 				throw new RuntimeException();
@@ -74,7 +74,7 @@ public class CentralMetaboliteEntity extends AbstractGraphEntity implements Meta
 		if (crossreferences.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (CentralMetaboliteProxyEntity x : crossreferences) {
+			for (GraphMetaboliteProxyEntity x : crossreferences) {
 				sb.append(x);
 			}
 		}

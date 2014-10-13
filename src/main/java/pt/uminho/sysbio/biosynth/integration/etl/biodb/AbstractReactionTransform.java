@@ -9,9 +9,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralReactionProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
@@ -62,18 +62,18 @@ implements EtlTransform<R, GraphReactionEntity> {
 		centralReactionEntity.addProperty("source", reaction.getSource());
 	}
 	
-	private Map<CentralMetaboliteProxyEntity, Double> getMetabolitesByReflexion(
+	private Map<GraphMetaboliteProxyEntity, Double> getMetabolitesByReflexion(
 			R reaction, 
 			String field) {
 		
-		Map<CentralMetaboliteProxyEntity, Double> result = new HashMap<> ();
+		Map<GraphMetaboliteProxyEntity, Double> result = new HashMap<> ();
 		
 		try {
 			Method method = reaction.getClass().getMethod(field);
 			List<?> right = List.class.cast(method.invoke(reaction));
 			for (Object stoichiometryObject : right) {
 				StoichiometryPair stoichiometryPair = StoichiometryPair.class.cast(stoichiometryObject);
-				CentralMetaboliteProxyEntity entity = new CentralMetaboliteProxyEntity();
+				GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 				entity.setEntry(stoichiometryPair.getCpdEntry());
 				//NO CLUE WHY I DID THIS ! Biocyc ?
 //				entity.setEntry(String.format("%s:%s", reaction.getSource(), stoichiometryPair.getCpdEntry()));
@@ -94,7 +94,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Left Components");
-		Map<CentralMetaboliteProxyEntity, Double> left =
+		Map<GraphMetaboliteProxyEntity, Double> left =
 				this.getMetabolitesByReflexion(reaction, "getLeft");
 		
 		centralReactionEntity.setLeft(left);
@@ -102,7 +102,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	protected void setupRightMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Right Components");
-		Map<CentralMetaboliteProxyEntity, Double> right =
+		Map<GraphMetaboliteProxyEntity, Double> right =
 				this.getMetabolitesByReflexion(reaction, "getRight");
 		
 		centralReactionEntity.setRight(right);
@@ -122,7 +122,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 				
 				switch (xref.getType()) {
 					case DATABASE:
-						CentralReactionProxyEntity proxyEntity = new CentralReactionProxyEntity();
+						GraphReactionProxyEntity proxyEntity = new GraphReactionProxyEntity();
 						proxyEntity.setEntry(xref.getValue());
 						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
 						centralReactionEntity.getCrossreferences().add(proxyEntity);

@@ -28,7 +28,7 @@ public class IntegrationSet {
 	private String name;
 	
 	@Column(name="description", nullable=true, length=255)
-	private String description;
+	private String description = "";
 	
 	@Column(name="last_cluster_entry", nullable=true, length=255)
 	private String lastClusterEntry;

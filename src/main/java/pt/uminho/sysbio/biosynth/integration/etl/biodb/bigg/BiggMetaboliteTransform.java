@@ -3,8 +3,8 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.bigg;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
@@ -23,30 +23,30 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			BiggMetaboliteEntity entity) {
 
 	}
 	
 	@Override
-	protected void configureProperties(CentralMetaboliteEntity centralMetaboliteEntity, BiggMetaboliteEntity metabolite) {
+	protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, BiggMetaboliteEntity metabolite) {
 		super.configureProperties(centralMetaboliteEntity, metabolite);
 		centralMetaboliteEntity.getProperties().put("id", metabolite.getId());
 	};
 
 	@Override
 	protected void configureCrossreferences(
-			CentralMetaboliteEntity centralMetaboliteEntity,
+			GraphMetaboliteEntity centralMetaboliteEntity,
 			BiggMetaboliteEntity entity) {
 		
-		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
+		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
 		
 		for (BiggMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
 			switch (xref.getType()) {
 				case DATABASE:
 					String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 					String dbEntry = xref.getValue(); //Also need to translate if necessary
-					CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
+					GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
 					proxy.setEntry(dbEntry);
 					proxy.setMajorLabel(dbLabel);
 					proxy.addLabel(METABOLITE_LABEL);

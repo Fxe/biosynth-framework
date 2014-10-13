@@ -7,7 +7,7 @@ import java.util.Set;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 
@@ -20,7 +20,7 @@ public interface IntegrationDataDao {
 	public List<String> getAllProperties();
 	public List<Long> listAllPropertyIds(String property);
 	
-	public List<CentralMetabolitePropertyEntity> collectAllPropertyFromIds(String major, String uniqueKey, Long...ids);
+	public List<GraphPropertyEntity> collectAllPropertyFromIds(String major, String uniqueKey, Long...ids);
 	
 	//TEMPORARY METHOD MISSING POJO FOR COMPOSE ENTRY
 	public Node getCompositeNode(String entry, Label...labels);
@@ -33,7 +33,7 @@ public interface IntegrationDataDao {
 	public Set<String> collectEntityLabels(Long id); 
 	
 	public CentralDataReactionProperty getReactionProperty(Long id);
-	public CentralMetabolitePropertyEntity getMetaboliteProperty(Long id);
+	public GraphPropertyEntity getMetaboliteProperty(Long id);
 	
 	
 }

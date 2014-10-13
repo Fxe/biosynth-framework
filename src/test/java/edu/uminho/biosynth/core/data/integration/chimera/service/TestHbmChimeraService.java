@@ -35,7 +35,7 @@ public class TestHbmChimeraService {
 	private static GraphDatabaseService graphDatabaseService;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
+	private static OldMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
 	private static HbmIntegrationMetadataDaoImpl meta;
 	
@@ -50,7 +50,7 @@ public class TestHbmChimeraService {
 		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new DefaultMetaboliteIntegrationServiceImpl();
+		integrationService = new OldMetaboliteIntegrationServiceImpl();
 		integrationService.setData(data);
 		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));

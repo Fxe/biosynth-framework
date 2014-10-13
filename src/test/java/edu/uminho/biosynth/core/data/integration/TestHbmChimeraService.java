@@ -23,7 +23,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDa
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
-import edu.uminho.biosynth.core.data.integration.chimera.service.DefaultMetaboliteIntegrationServiceImpl;
+import edu.uminho.biosynth.core.data.integration.chimera.service.OldMetaboliteIntegrationServiceImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.CrossreferenceTraversalStrategyImpl;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
@@ -36,7 +36,7 @@ public class TestHbmChimeraService {
 	private static GraphDatabaseService db;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
+	private static OldMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
 	private static HbmIntegrationMetadataDaoImpl meta;
 	
@@ -62,7 +62,7 @@ public class TestHbmChimeraService {
 	public void setUp() throws Exception {
 		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
 		data_tx = db.beginTx();
-		integrationService = new  DefaultMetaboliteIntegrationServiceImpl();
+		integrationService = new  OldMetaboliteIntegrationServiceImpl();
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("GEN"));
 		integrationService.setMeta(meta);
 		integrationService.setData(data);
@@ -77,7 +77,7 @@ public class TestHbmChimeraService {
 
 //	@Test
 	public void testCreateSingleCluster() {
-		DefaultMetaboliteIntegrationServiceImpl integrator = new DefaultMetaboliteIntegrationServiceImpl();
+		OldMetaboliteIntegrationServiceImpl integrator = new OldMetaboliteIntegrationServiceImpl();
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
 		HbmIntegrationMetadataDaoImpl meta = new HbmIntegrationMetadataDaoImpl();

@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.hbm;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,28 +45,29 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	}
 	
 	@Override
-	public List<Serializable> getAllIntegrationSetsId() {
+	public List<Long> getAllIntegrationSetsId() {
 		Query query = this.getSession().createQuery("SELECT i.id FROM IntegrationSet i");
 		@SuppressWarnings("unchecked")
-		List<Serializable> res = query.list();
+		List<Long> res = query.list();
 		return res;
 	}
 
 
 
-	@Override
-	public void mergeCluster(List<Long> ids, Serializable integrationId) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void mergeCluster(List<Long> ids, Long integrationId) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
-	public void saveIntegrationSet(IntegrationSet integrationSet) {
+	public IntegrationSet saveIntegrationSet(IntegrationSet integrationSet) {
 		this.getSession().save(integrationSet);
+		return integrationSet;
 	}
 
 	@Override
-	public IntegrationSet getIntegrationSet(Serializable id) {
+	public IntegrationSet getIntegrationSet(Long id) {
 		return IntegrationSet.class.cast(this.getSession().get(IntegrationSet.class, id));
 	}
 
@@ -122,10 +122,11 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	}
 
 	@Override
-	public void saveIntegratedMember(IntegratedMember member) {
+	public IntegratedMember saveIntegratedMember(IntegratedMember member) {
 		IntegratedMember m = this.getIntegratedMember(member.getId());
 		if (m == null) this.getSession().save(member);
-//		this.getSession().saveOrUpdate(member);
+		
+		return member;
 	}
 
 	@Override

@@ -34,6 +34,12 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE INDEX ON :Compound(proxy)",
 		
 		"CREATE CONSTRAINT ON (rxn:LigandReaction) ASSERT rxn.entry IS UNIQUE",
+		
+		"CREATE CONSTRAINT ON (iid:IntegrationSet) ASSERT iid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:MetaboliteMember) ASSERT cid.id IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:ReactionCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:ReactionMember) ASSERT cid.id IS UNIQUE",
 	};
 	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {

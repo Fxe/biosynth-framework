@@ -25,7 +25,7 @@ import org.neo4j.kernel.impl.core.NodeProxy;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetabolitePropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
@@ -430,9 +430,9 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	}
 
 	@Override
-	public List<CentralMetabolitePropertyEntity> collectAllPropertyFromIds(
+	public List<GraphPropertyEntity> collectAllPropertyFromIds(
 			String major, String uniqueKey, Long... ids) {
-		List<CentralMetabolitePropertyEntity> propertyEntities = new ArrayList<> ();
+		List<GraphPropertyEntity> propertyEntities = new ArrayList<> ();
 		
 		Label label = DynamicLabel.label(major);
 		
@@ -441,8 +441,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			for (Relationship relationship : node.getRelationships()) {
 				Node nodeProp = relationship.getOtherNode(node);
 				if (nodeProp.hasLabel(label)) {
-					CentralMetabolitePropertyEntity propertyEntity = 
-							new CentralMetabolitePropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
+					GraphPropertyEntity propertyEntity = 
+							new GraphPropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
 					
 					propertyEntity.setId(nodeProp.getId());
 					propertyEntity.setUniqueKey(uniqueKey);
@@ -483,13 +483,13 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	}
 
 	@Override
-	public CentralMetabolitePropertyEntity getMetaboliteProperty(Long id) {
+	public GraphPropertyEntity getMetaboliteProperty(Long id) {
 		Node node = this.graphDatabaseService.getNodeById(id);
-		CentralMetabolitePropertyEntity entity = null;
+		GraphPropertyEntity entity = null;
 				
 		
 		for (String key : node.getPropertyKeys()) {
-			entity = new CentralMetabolitePropertyEntity(key, node.getProperty(key));
+			entity = new GraphPropertyEntity(key, node.getProperty(key));
 			entity.getProperties().put(key, node.getProperty(key));
 		}
 		for (Label label : node.getLabels()) entity.addLabel(label.toString());

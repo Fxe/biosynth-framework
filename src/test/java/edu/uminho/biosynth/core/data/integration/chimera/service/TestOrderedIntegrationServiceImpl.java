@@ -34,7 +34,7 @@ public class TestOrderedIntegrationServiceImpl {
 	private static GraphDatabaseService graphDatabaseService;
 	private static org.hibernate.Transaction meta_tx;
 	private static org.neo4j.graphdb.Transaction data_tx;
-	private static DefaultMetaboliteIntegrationServiceImpl integrationService;
+	private static OldMetaboliteIntegrationServiceImpl integrationService;
 	private static Neo4jChimeraDataDaoImpl data;
 	private static HbmIntegrationMetadataDaoImpl meta;
 	
@@ -61,7 +61,7 @@ public class TestOrderedIntegrationServiceImpl {
 		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new DefaultMetaboliteIntegrationServiceImpl();
+		integrationService = new OldMetaboliteIntegrationServiceImpl();
 		integrationService.setData(data);
 		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));
@@ -139,7 +139,7 @@ public class TestOrderedIntegrationServiceImpl {
 		Iterator<Long> iterator = integrationSet.getIntegratedClustersMap().keySet().iterator();
 		Long cid1 = iterator.next();
 		Long cid2 = iterator.next();
-		String name = integrationSet.getIntegratedClustersMap().get(cid1).getName();
+		String name = integrationSet.getIntegratedClustersMap().get(cid1).getEntry();
 		String description = integrationSet.getIntegratedClustersMap().get(cid1).getDescription();
 		Set<Long> cidList = new HashSet<> ();
 		cidList.add(cid1); cidList.add(cid2);
@@ -151,7 +151,7 @@ public class TestOrderedIntegrationServiceImpl {
 		
 		printIntegrationState(integrationSet, "A3 2 merged clusters 10 clusters");
 		assertEquals(before - 1, integrationSet.size());
-		assertEquals(name, integratedCluster.getName());
+		assertEquals(name, integratedCluster.getEntry());
 		assertEquals(description, integratedCluster.getDescription());
 		assertEquals(elementList, new HashSet<> (integratedCluster.listAllIntegratedMemberIds()));
 	}

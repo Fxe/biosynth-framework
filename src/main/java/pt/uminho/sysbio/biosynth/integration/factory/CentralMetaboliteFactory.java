@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.uminho.sysbio.biosynth.integration.CentralMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 
 public class CentralMetaboliteFactory {
 	
@@ -46,8 +46,8 @@ public class CentralMetaboliteFactory {
 		return this;
 	}
 	
-	public CentralMetaboliteEntity build() {
-		CentralMetaboliteEntity entity = new CentralMetaboliteEntity();
+	public GraphMetaboliteEntity build() {
+		GraphMetaboliteEntity entity = new GraphMetaboliteEntity();
 		
 		entity.setEntry(entry);
 		entity.setMajorLabel(majorLabel);

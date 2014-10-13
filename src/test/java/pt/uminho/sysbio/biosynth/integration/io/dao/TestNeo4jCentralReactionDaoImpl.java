@@ -17,7 +17,7 @@ import org.neo4j.tooling.GlobalGraphOperations;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.factory.CentralReactionFactory;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jCentralReactionDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jGraphReactionDaoImpl;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
 
 public class TestNeo4jCentralReactionDaoImpl {
@@ -44,7 +44,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 
 	@Before
 	public void setUp() throws Exception {
-		Neo4jCentralReactionDaoImpl daoImpl = new Neo4jCentralReactionDaoImpl();
+		Neo4jGraphReactionDaoImpl daoImpl = new Neo4jGraphReactionDaoImpl();
 		daoImpl.setGraphDatabaseService(db);
 		reactionDao = daoImpl;
 		tx = db.beginTx();

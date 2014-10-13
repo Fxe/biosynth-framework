@@ -84,7 +84,7 @@ public class TestHbmChimeraMetadataDao {
 		HbmIntegrationMetadataDaoImpl dao = new HbmIntegrationMetadataDaoImpl();
 		dao.setSessionFactory(sessionFactory);
 		
-		List<Serializable> integrationSetIds = dao.getAllIntegrationSetsId();
+		List<Long> integrationSetIds = dao.getAllIntegrationSetsId();
 		if (integrationSetIds.isEmpty()) fail("No integration sets");
 		IntegrationSet integrationSet = dao.getIntegrationSet( integrationSetIds.iterator().next());
 		System.out.println(integrationSet);
@@ -95,7 +95,7 @@ public class TestHbmChimeraMetadataDao {
 		
 		IntegratedCluster cluster = new IntegratedCluster();
 		cluster.setIntegrationSet(integrationSet);
-		cluster.setName("C_A");
+		cluster.setEntry("C_A");
 		
 		IntegratedClusterMember member1 = new IntegratedClusterMember();
 		member1.setCluster(cluster); member1.setMember(m1);
