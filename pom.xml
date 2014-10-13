@@ -3,12 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-  <artifactId>biosynth-components</artifactId>
+  <artifactId>biosynth-core</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>BioSynth-Components</name>
+  <name>Biosynth Core</name>
   <url>http://maven.apache.org</url>
+  <description>The core functionality of biosynth framework</description>
 
   <distributionManagement>
     <repository>
