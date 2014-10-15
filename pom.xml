@@ -27,17 +27,17 @@
   <dependencies>
     <dependency>
       <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-      <artifactId>biosynth-components</artifactId>
+      <artifactId>biosynth-core</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-      <artifactId>biosynth-data</artifactId>
+      <artifactId>biosynth-biodb</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
-      <artifactId>biosynth-data-chebi-dump</artifactId>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
+      <artifactId>biosynth-biodb-chebi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
