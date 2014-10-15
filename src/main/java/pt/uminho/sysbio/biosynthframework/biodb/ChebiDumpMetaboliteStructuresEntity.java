@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.biodb.chebi.components;
+package pt.uminho.sysbio.biosynthframework.biodb;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,8 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
 
 @Entity
 @Table(name="structures")

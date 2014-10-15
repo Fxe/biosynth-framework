@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.biodb.chebi;
+package pt.uminho.sysbio.biosynthframework.biodb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteChemicalDataEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteCommentEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteNameEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity;
 
 @Entity
 @Table(name="compounds")

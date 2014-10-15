@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.biodb.chebi.components.ontology;
+package pt.uminho.sysbio.biosynthframework.biodb;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

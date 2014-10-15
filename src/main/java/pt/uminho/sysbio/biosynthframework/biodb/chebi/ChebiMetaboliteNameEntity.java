@@ -1,35 +1,25 @@
-package edu.uminho.biosynth.core.components.biodb.chebi.components;
+package pt.uminho.sysbio.biosynthframework.biodb.chebi;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
-
 @Entity
-@Table(name="names")
-public class ChebiDumpMetaboliteNameEntity {
-//	DROP TABLE IF EXISTS `names`;
-//	CREATE TABLE `names` (
-//	  `id` INT NOT NULL,
-//	  `compound_id` INT NOT NULL,
-//	  `name` TEXT NOT NULL,
-//	  `type` TEXT NOT NULL,
-//	  `source` TEXT NOT NULL,
-//	  `adapted` TEXT NOT NULL,
-//	  `language` TEXT NOT NULL,
-//	  PRIMARY KEY (`id`)
-//	) ENGINE=InnoDB;
+@Table(name="chebi_metabolite_name")
+public class ChebiMetaboliteNameEntity {
+	
 	@Id
+	@GeneratedValue
 	@Column(name="id", nullable=false)
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="compound_id")
-	private ChebiDumpMetaboliteEntity chebiDumpMetaboliteEntity;
+	@JoinColumn(name="metabolite_id")
+	private ChebiMetaboliteEntity chebiMetaboliteEntity;
 	
 	@Column(name="name", nullable=false)
 	private String name;
@@ -116,6 +106,18 @@ public class ChebiDumpMetaboliteNameEntity {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+
+
+	public ChebiMetaboliteEntity getChebiMetaboliteEntity() {
+		return chebiMetaboliteEntity;
+	}
+
+
+
+	public void setChebiMetaboliteEntity(ChebiMetaboliteEntity chebiMetaboliteEntity) {
+		this.chebiMetaboliteEntity = chebiMetaboliteEntity;
 	}
 
 

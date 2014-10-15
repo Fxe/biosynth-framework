@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.components.biodb.chebi.components;
+package pt.uminho.sysbio.biosynthframework.biodb;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +9,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
 
 @Entity
 @Table(name="comments")

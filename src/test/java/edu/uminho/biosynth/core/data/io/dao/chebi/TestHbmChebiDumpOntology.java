@@ -12,11 +12,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyRelationEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyVertexEntity;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyRelationEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyVertexEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class TestHbmChebiDumpOntology {
 	

@@ -13,12 +13,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.io.HbmChebiDumpDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@SuppressWarnings("deprecation")
 public class TestHbmChebiDumpDao {
 	
 	private static SessionFactory sessionFactory;
@@ -97,7 +99,7 @@ public class TestHbmChebiDumpDao {
 			System.out.println(id);
 			if (!cpdIds.contains(id)) {
 				
-				ChebiMetaboliteEntity chebi = chebiDumpDao.find(id);
+				ChebiMetaboliteEntity chebi = chebiDumpDao.getMetaboliteById(id);
 				System.out.println(chebi.getName());
 				genericDao.save(chebi);
 				if (i % 2 == 0) {

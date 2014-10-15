@@ -29,16 +29,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>pt.uminho.biosynthframework</groupId>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
       <artifactId>biosynth-components</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>pt.uminho.biosynthframework</groupId>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
       <artifactId>biosynth-biodb</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     
     <dependency>
