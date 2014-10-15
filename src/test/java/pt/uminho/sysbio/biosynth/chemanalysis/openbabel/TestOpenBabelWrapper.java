@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
-import edu.uminho.biosynth.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 public class TestOpenBabelWrapper {
 

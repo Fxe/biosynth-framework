@@ -36,20 +36,7 @@ import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-import edu.uminho.biosynth.util.FormulaConverter;
+import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
 
 /**
  * 
@@ -84,11 +71,11 @@ public class CdkWrapper implements FormulaConverter {
 			return ret;
 		
 		} catch (NullPointerException e) {
-			LOGGER.error(e.getMessage()); 
+			LOGGER.error("NullPointerException " + e.getMessage()); 
 		} catch (StringIndexOutOfBoundsException e) {
-			LOGGER.error(e.getMessage()); 
+			LOGGER.error("StringIndexOutOfBoundsException " + e.getMessage()); 
 		} catch (NumberFormatException e) {
-			LOGGER.error(e.getMessage()); 
+			LOGGER.error("NumberFormatException " + e.getMessage()); 
 		}
 
 		return null;
