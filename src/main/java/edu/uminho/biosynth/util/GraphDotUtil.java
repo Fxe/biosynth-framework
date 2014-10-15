@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.IBinaryEdge;
 
 public class GraphDotUtil {
 	

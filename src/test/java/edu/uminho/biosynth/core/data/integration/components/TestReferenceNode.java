@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class TestReferenceNode {
 

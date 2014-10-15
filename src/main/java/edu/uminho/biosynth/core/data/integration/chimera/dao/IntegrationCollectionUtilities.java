@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
-import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 
 public class IntegrationCollectionUtilities {
 

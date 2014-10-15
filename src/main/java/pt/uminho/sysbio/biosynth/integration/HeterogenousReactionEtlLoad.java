@@ -2,7 +2,7 @@ package pt.uminho.sysbio.biosynth.integration;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlLoad;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
-import edu.uminho.biosynth.core.components.Reaction;
+import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class HeterogenousReactionEtlLoad<R extends Reaction> implements EtlLoad<R> {
 

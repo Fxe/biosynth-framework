@@ -14,10 +14,10 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jIntegratedMetaboliteDao;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ChimeraDatabaseBuilderServiceImpl;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraBuilderService {
 	

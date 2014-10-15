@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.hibernate.criterion.Restrictions;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteNameBridge;
@@ -19,7 +20,6 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefBridge;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefBridgeId;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class HbmMetaboliteStagingManagerImpl implements IMetaboliteStagingManager {
 

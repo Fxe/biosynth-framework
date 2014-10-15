@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.neo4j.graphdb.Node;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public abstract class AbstractNeo4jMetaboliteDao<M extends GenericMetabolite> 
 extends AbstractNeo4jDao<M> implements MetaboliteDao<M> {

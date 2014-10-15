@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynthframework.util.math.components.OrderedPair;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteSmilesDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.util.math.components.OrderedPair;
 
 public class MetaboliteClusterEvaluator implements IClusterConsensus<MetaboliteStga>{
 

@@ -3,8 +3,8 @@ package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
 public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<KeggCompoundMetaboliteEntity, KeggCompoundMetaboliteCrossreferenceEntity>{

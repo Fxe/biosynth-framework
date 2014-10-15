@@ -7,7 +7,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.uminho.biosynth.core.components.Reaction;
+import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class HbmNeo4jHybridReactionEtlPipeline<SRC extends Reaction, DST extends Reaction>
 implements EtlPipeline<SRC, DST> {
@@ -70,6 +70,10 @@ implements EtlPipeline<SRC, DST> {
 
 		//SRC = ETL EXTRACT(Entry)
 		SRC src = extractSubsystem.extract(id);
+		if (src == null) {
+			LOGGER.warn(String.format("Unable to extract entity %s", id));
+			return;
+		}
 		
 		//DST = ETL TRANSFORM(SRC)
 		DST dst = transformSubsystem.etlTransform(src);

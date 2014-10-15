@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class EmbebbedNeo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDataReactionEntity> implements ReactionDao<CentralDataReactionEntity> {
 

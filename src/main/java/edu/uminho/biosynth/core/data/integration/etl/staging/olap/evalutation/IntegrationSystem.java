@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.etl.staging.olap.evalutation;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.MultiLayerGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.MultiLayerGraph;
 
 public class IntegrationSystem<V, E, L> extends MultiLayerGraph<V, E, L> {
 //	MultiLayerGraph<Serializable, String, Class<?>> graph = new MultiLayerGraph<>();

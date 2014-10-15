@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.Orientation;
-import edu.uminho.biosynth.core.components.Reaction;
+import pt.uminho.sysbio.biosynthframework.Orientation;
+import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
 	

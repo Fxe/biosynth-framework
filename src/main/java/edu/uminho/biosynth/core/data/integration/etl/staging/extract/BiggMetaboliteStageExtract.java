@@ -3,8 +3,8 @@ package edu.uminho.biosynth.core.data.integration.etl.staging.extract;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 
 @Deprecated
 public class BiggMetaboliteStageExtract implements IMetaboliteStageExtract<BiggMetaboliteEntity>{

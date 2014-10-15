@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlExtract;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 @Deprecated
 public class HbmMetaboliteWarehouseExtract implements EtlExtract<MetaboliteStga>{

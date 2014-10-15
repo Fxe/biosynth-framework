@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.references;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 
 public abstract class AbstractTransformCrossReference<T extends GenericCrossReference> implements IReferenceTransformer<T> {

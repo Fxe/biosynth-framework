@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.factory.KeggCompoundMetaboliteFactory;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.factory.KeggCompoundMetaboliteFactory;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class TestKeggCompoundTransform {
 

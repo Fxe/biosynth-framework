@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.components;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.uminho.biosynth.util.math.components.OrderedPair;
+import pt.uminho.sysbio.biosynthframework.util.math.components.OrderedPair;
 
 public class ReferenceNode {
 

@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
-import edu.uminho.biosynth.core.components.representation.basic.graph.UniqueEdgeGraphImpl;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UniqueEdgeGraphImpl;
+import pt.uminho.sysbio.biosynthframework.util.math.components.OrderedPair;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.loader.IReferenceLoader;
-import edu.uminho.biosynth.util.math.components.OrderedPair;
 
 public class ReferenceGraphBuilder {
 	

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.Metabolite;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class DefaultMetaboliteEtlExtract<M extends Metabolite> implements EtlExtract<M> {
 

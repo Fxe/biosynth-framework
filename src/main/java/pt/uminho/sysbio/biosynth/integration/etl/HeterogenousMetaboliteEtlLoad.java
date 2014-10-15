@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
-import edu.uminho.biosynth.core.components.Metabolite;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 public class HeterogenousMetaboliteEtlLoad<M extends Metabolite> implements EtlLoad<M> {
 	

@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 
 public class CompositeMetaboliteEntity extends GenericMetabolite {
 

@@ -8,10 +8,10 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionEcNumberEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionLeftEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycReactionRightEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionLeftEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionRightEntity;
 
 public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReactionEntity, CentralDataReactionEntity>{
 
