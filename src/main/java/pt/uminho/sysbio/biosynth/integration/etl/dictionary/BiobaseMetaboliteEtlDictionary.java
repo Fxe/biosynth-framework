@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.etl.dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.uminho.biosynth.core.components.Metabolite;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String> {
 

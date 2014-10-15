@@ -13,8 +13,9 @@ import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.*;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionLeftEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionRightEntity;
 
 public class TestBiggReactionTransform {
 

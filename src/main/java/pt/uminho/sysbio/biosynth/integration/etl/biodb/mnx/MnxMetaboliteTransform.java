@@ -9,8 +9,8 @@ import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransfo
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
 
 public class MnxMetaboliteTransform
 extends AbstractMetaboliteTransform<MnxMetaboliteEntity>{

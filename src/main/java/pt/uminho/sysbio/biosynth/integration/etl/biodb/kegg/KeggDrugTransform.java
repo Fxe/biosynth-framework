@@ -9,8 +9,8 @@ import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransfo
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggDrugMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggDrugMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
 public class KeggDrugTransform 
 extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {

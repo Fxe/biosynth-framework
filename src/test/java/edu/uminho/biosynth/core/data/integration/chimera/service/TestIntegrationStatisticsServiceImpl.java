@@ -16,12 +16,12 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestIntegrationStatisticsServiceImpl {
 	

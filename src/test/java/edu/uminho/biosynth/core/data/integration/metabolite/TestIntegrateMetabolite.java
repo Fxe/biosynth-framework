@@ -18,17 +18,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.service.BiggService;
+import pt.uminho.sysbio.biosynthframework.core.data.service.BiocycService;
+import pt.uminho.sysbio.biosynthframework.core.data.service.IMetaboliteService;
+import pt.uminho.sysbio.biosynthframework.core.data.service.KeggService;
+import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.GraphCluster;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggCompoundMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
 import edu.uminho.biosynth.core.data.integration.DefaultMetaboliteIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.IIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
@@ -41,12 +47,6 @@ import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetabol
 import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetaboliteCrossReference;
 import edu.uminho.biosynth.core.data.integration.references.TransformMnxMetaboliteCrossReference;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.service.BiggService;
-import edu.uminho.biosynth.core.data.service.BiocycService;
-import edu.uminho.biosynth.core.data.service.IMetaboliteService;
-import edu.uminho.biosynth.core.data.service.KeggService;
-import edu.uminho.biosynth.core.data.service.MnxService;
 
 public class TestIntegrateMetabolite {
 

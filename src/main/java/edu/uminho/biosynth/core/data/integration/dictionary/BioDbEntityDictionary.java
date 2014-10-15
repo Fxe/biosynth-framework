@@ -1,14 +1,13 @@
 package edu.uminho.biosynth.core.data.integration.dictionary;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.brenda.BrendaMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
 import edu.uminho.biosynth.core.components.biodb.pubchem.PubchemMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.reactome.ReactomeMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 
 public class BioDbEntityDictionary {
 
@@ -43,9 +42,9 @@ public class BioDbEntityDictionary {
 			case "BRENDA":
 				clazz = BrendaMetaboliteEntity.class;
 				break;
-			case "REACTOME":
-				clazz = ReactomeMetaboliteEntity.class;
-				break;
+//			case "REACTOME":
+//				clazz = ReactomeMetaboliteEntity.class;
+//				break;
 			default:
 				clazz = null;
 				break;

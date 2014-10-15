@@ -2,7 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
 
 public class BiocycReactionTransform
 extends AbstractReactionTransform<BioCycReactionEntity> {

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import edu.uminho.biosynth.util.math.components.OrderedPair;
+import pt.uminho.sysbio.biosynthframework.util.math.components.OrderedPair;
 
 public class TestOrderedPair {
 

@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import edu.uminho.biosynth.core.components.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
 
 public class CentralDataReactionEntity extends GenericReaction {
 	

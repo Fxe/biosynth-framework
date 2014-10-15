@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
-import edu.uminho.biosynth.core.components.DefaultMetaboliteFactory;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.factory.DefaultMetaboliteFactory;
 
 public class TestTransformBiggCentral {
 

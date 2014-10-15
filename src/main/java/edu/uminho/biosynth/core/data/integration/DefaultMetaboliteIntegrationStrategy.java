@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import edu.uminho.biosynth.core.data.integration.components.IntegratedMetabolite;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 

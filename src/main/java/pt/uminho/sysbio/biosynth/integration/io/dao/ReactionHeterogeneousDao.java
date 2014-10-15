@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.Reaction;
+import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public interface ReactionHeterogeneousDao<R extends Reaction> {
 

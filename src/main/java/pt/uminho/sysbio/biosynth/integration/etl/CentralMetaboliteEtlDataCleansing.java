@@ -9,10 +9,10 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.uminho.biosynth.util.FormulaConverter;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
+import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
 
 public class CentralMetaboliteEtlDataCleansing
 implements EtlDataCleansing<GraphMetaboliteEntity> {

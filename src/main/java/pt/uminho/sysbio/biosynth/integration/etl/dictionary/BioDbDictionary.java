@@ -5,7 +5,7 @@ import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class BioDbDictionary {

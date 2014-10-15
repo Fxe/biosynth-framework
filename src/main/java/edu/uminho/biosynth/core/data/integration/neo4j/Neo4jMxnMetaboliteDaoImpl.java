@@ -14,9 +14,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class Neo4jMxnMetaboliteDaoImpl extends AbstractNeo4jDao<MnxMetaboliteEntity> implements MetaboliteDao<MnxMetaboliteEntity> {
 

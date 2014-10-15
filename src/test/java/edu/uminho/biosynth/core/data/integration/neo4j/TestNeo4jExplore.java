@@ -9,7 +9,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
 public class TestNeo4jExplore {
 

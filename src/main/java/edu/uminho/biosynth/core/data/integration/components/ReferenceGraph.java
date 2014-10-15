@@ -3,7 +3,7 @@ package edu.uminho.biosynth.core.data.integration.components;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
 
 public class ReferenceGraph {
 	//map of vertexes

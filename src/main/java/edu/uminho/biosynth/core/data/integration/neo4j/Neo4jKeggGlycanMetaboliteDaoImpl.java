@@ -14,9 +14,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggGlycanMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggGlycanMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlycanMetaboliteEntity> implements MetaboliteDao<KeggGlycanMetaboliteEntity>{
 	

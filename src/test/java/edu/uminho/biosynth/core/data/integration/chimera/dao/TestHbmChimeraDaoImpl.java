@@ -14,10 +14,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
 
 public class TestHbmChimeraDaoImpl {
 	

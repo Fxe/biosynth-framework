@@ -5,9 +5,9 @@ import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionLeftEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.components.KeggReactionRightEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionLeftEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionRightEntity;
 
 public class KeggReactionTransform 
 extends AbstractReactionTransform<KeggReactionEntity>{

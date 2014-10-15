@@ -7,18 +7,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
-import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultGraphImpl;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultGraphImpl;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.IBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.data.service.IMetaboliteService;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLinkType;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbEntityDictionary;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
-import edu.uminho.biosynth.core.data.service.IMetaboliteService;
 
 public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCrossReference> implements IReferenceLoader{
 	

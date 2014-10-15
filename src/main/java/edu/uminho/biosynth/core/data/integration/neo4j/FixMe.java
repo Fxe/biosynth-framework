@@ -5,7 +5,7 @@ import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
 public class FixMe implements EtlTransform<BiggMetaboliteEntity, GraphMetaboliteEntity> {
 

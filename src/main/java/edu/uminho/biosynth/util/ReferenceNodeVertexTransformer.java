@@ -3,12 +3,12 @@ package edu.uminho.biosynth.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.chebi.ChebiMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 
 public class ReferenceNodeVertexTransformer implements IVertexTransformer<ReferenceNode>{

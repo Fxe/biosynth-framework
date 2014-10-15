@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
 
 public class TestAbstractReactionTransform {
 

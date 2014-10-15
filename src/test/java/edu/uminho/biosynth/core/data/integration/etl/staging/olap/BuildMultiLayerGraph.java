@@ -18,17 +18,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.uminho.biosynth.core.components.representation.basic.graph.MultiLayerGraph;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.MultiLayerGraph;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
+import pt.uminho.sysbio.biosynthframework.util.math.components.OrderedPair;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import edu.uminho.biosynth.util.math.components.OrderedPair;
 
 public class BuildMultiLayerGraph {
 

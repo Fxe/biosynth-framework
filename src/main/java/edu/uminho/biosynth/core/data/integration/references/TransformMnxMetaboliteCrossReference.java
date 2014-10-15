@@ -1,7 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
 
 public class TransformMnxMetaboliteCrossReference extends AbstractTransformCrossReference<MnxMetaboliteCrossreferenceEntity> {
 	

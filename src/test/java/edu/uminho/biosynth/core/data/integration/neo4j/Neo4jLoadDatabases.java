@@ -14,15 +14,15 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.springframework.core.io.FileSystemResource;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.kegg.KeggCompoundMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
-import edu.uminho.biosynth.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
-import edu.uminho.biosynth.core.data.io.factory.BiggDaoFactory;
-import edu.uminho.biosynth.core.data.io.remote.BioCycRemoteSource;
-import edu.uminho.biosynth.core.data.io.remote.KeggRemoteSource;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.factory.BiggDaoFactory;
+import pt.uminho.sysbio.biosynthframework.core.data.io.remote.BioCycRemoteSource;
+import pt.uminho.sysbio.biosynthframework.core.data.io.remote.KeggRemoteSource;
 
 public class Neo4jLoadDatabases {
 

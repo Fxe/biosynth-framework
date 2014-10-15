@@ -11,8 +11,9 @@ import net.sf.jniinchi.JniInchiWrapper;
 
 import org.hibernate.criterion.Restrictions;
 
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.integration.etl.staging.IMetaboliteStagingManager;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteFormulaDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteInchiDim;
@@ -22,7 +23,6 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStagingTransform<T> {
 	

@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.Metabolite;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 /**
  * Data Access Interface for Multiple Domain metabolites.

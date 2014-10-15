@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import edu.uminho.biosynth.core.components.Metabolite;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabolite {
 

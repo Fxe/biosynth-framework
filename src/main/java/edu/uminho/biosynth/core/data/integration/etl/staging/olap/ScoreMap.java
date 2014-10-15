@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.integration.etl.staging.olap.evalutation.IClusterConsensus;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
 
 public class ScoreMap<ID extends Serializable, T> {
 	//Map<ClusterId, Map<TargetClusterId, ScoreValue>>

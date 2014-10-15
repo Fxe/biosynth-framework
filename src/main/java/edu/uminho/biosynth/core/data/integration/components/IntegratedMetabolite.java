@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.Transient;
 
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 
 public class IntegratedMetabolite extends GenericMetabolite {
 

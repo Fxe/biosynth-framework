@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.service.BasicIntegrationService;
 import pt.uminho.sysbio.biosynth.integration.service.MetaboliteIntegrationService;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
-import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.UndirectedGraph;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationCollectionUtilities;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;

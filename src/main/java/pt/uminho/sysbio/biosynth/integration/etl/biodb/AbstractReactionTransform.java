@@ -15,9 +15,9 @@ import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.GenericReaction;
-import edu.uminho.biosynth.core.components.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
 
 public abstract class AbstractReactionTransform<R extends GenericReaction>
 implements EtlTransform<R, GraphReactionEntity> {
@@ -54,6 +54,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	}
 	
 	protected void configureProperties(GraphReactionEntity centralReactionEntity, R reaction) {
+		System.out.println(reaction);
 		centralReactionEntity.setMajorLabel(majorLabel);
 		centralReactionEntity.addLabel(REACTION_LABEL);
 		centralReactionEntity.addProperty("entry", reaction.getEntry());

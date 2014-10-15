@@ -9,11 +9,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
-import edu.uminho.biosynth.core.components.Orientation;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycReactionEntity;
-import edu.uminho.biosynth.core.components.biodb.factory.BiocycReactionCrossreferenceFactory;
-import edu.uminho.biosynth.core.components.biodb.factory.BiocycReactionFactory;
-import edu.uminho.biosynth.core.components.biodb.factory.BiocycReactionStoichiometryFactory;
+import pt.uminho.sysbio.biosynthframework.Orientation;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.factory.BiocycReactionCrossreferenceFactory;
+import pt.uminho.sysbio.biosynthframework.biodb.factory.BiocycReactionFactory;
+import pt.uminho.sysbio.biosynthframework.biodb.factory.BiocycReactionStoichiometryFactory;
 
 public class TestBiocycReactionTransform {
 

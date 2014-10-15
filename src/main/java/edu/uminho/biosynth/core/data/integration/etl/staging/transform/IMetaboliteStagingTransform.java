@@ -1,7 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
 public interface IMetaboliteStagingTransform<SRC extends GenericMetabolite> 

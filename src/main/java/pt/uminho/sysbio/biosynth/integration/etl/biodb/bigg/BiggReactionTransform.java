@@ -1,9 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.bigg;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
 
 public class BiggReactionTransform
 extends AbstractReactionTransform<BiggReactionEntity> {

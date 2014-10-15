@@ -7,7 +7,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.uminho.biosynth.core.components.Metabolite;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 public class HbmNeo4jHybridMetaboliteEtlPipeline<SRC extends Metabolite, DST extends Metabolite>
 implements EtlPipeline<SRC, DST> {

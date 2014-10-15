@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.Reaction;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.Reaction;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class DefaultReactionEtlExtract<R extends Reaction> implements EtlExtract<R> {
 

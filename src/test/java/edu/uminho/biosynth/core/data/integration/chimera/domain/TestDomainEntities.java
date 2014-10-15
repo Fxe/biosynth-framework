@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 
 public class TestDomainEntities {
 

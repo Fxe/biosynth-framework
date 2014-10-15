@@ -14,15 +14,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.HbmMetaboliteStagingManagerImpl;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteServiceDim;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.etl.staging.transform.BiggMetaboliteStagingTransform;
 import edu.uminho.biosynth.core.data.integration.references.TransformBiggMetaboliteCrossReference;
-import edu.uminho.biosynth.core.data.io.dao.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.io.dao.IGenericDao;
-import edu.uminho.biosynth.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
 public class TestStageBigg {
 

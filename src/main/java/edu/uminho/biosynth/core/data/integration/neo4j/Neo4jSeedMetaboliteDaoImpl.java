@@ -14,10 +14,10 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedMetaboliteCrossreferenceEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
-import edu.uminho.biosynth.core.data.io.dao.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteEntity> implements MetaboliteDao<SeedMetaboliteEntity> {
 

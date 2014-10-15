@@ -18,8 +18,8 @@ import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
-import edu.uminho.biosynth.core.components.GenericCrossReference;
-import edu.uminho.biosynth.core.components.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
 implements EtlTransform<M, GraphMetaboliteEntity> {

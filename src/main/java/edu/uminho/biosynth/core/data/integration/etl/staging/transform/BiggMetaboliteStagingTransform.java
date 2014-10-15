@@ -3,8 +3,8 @@ package edu.uminho.biosynth.core.data.integration.etl.staging.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
 public class BiggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<BiggMetaboliteEntity, BiggMetaboliteCrossreferenceEntity> {

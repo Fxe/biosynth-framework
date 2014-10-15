@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
-import edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 
 public class BiocycMetaboliteTransform
 extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{

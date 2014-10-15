@@ -4,8 +4,8 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 
 public class SeedMetaboliteTransform
 extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{

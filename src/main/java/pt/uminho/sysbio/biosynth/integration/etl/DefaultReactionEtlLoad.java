@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
-import edu.uminho.biosynth.core.components.Reaction;
-import edu.uminho.biosynth.core.data.io.dao.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.Reaction;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class DefaultReactionEtlLoad<R extends Reaction> implements EtlLoad<R> {
 
