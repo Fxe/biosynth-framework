@@ -1,7 +1,14 @@
 package pt.uminho.sysbio.biosynth.chemanalysis.cdk;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.text.DefaultCaret;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -10,14 +17,37 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.renderer.AbstractRenderer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.jchempaint.renderer.font.AWTFontManager;
+import org.openscience.jchempaint.renderer.font.IFontManager;
+import org.openscience.jchempaint.renderer.generators.AtomContainerBoundsGenerator;
+import org.openscience.jchempaint.renderer.generators.AtomContainerTitleGenerator;
+import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
+import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import edu.uminho.biosynth.util.FormulaConverter;
 
@@ -119,20 +149,52 @@ public class CdkWrapper implements FormulaConverter {
 		return inchiTuple;
 	}
 	
-	public static void generateSvg(IAtomContainer atomContainer) {
+	public static String generateSvg(IAtomContainer atomContainer) {
 		
 //		SVG
 //		IAtomContainer molecule;
 //		StructureDiagramGenerator a = new StructureDiagramGenerator(atomContainer);
 //		a.
+//		Intermediat
+		List<IGenerator> o = new ArrayList<> ();
+//		NumberFormat nf = NumberFormat.getNumberInstance(Locale.GERMAN);
+		BasicBondGenerator bond = new BasicBondGenerator(); o.add(bond);
+//		System.out.println(2.4d);
+//		bond.setOverrideColor(Color.BLACK);
+//		o.add(new org.openscience.jchempaint.renderer.generators.BasicAtomGenerator());
 		
-//		SVGGenerator svgGenerator = new SVGGenerator();
+//		o.add(new org.openscience.jchempaint.renderer.generators.AtomNumberGenerator());
+//		o.add(new AtomContainerBoundsGenerator());
+//		o.add(new AtomContainerTitleGenerator());
+		IFontManager fontManager = new AWTFontManager();
+		Renderer renderer = new Renderer(o, fontManager, false);
+		
+		org.openscience.cdk.renderer.ChemModelRenderer modelRenderer;
+//		renderer.p
+		org.openscience.cdk.renderer.RendererModel rendererModel;
+		
+		AbstractRenderer<?> abstractRenderer;
+//		I
+		org.openscience.jchempaint.renderer.IRenderer r;
+//		org.openscience.jchempaint.renderer.visitor.
+		IChemModel iChemModel;
+//		r.
+//		abstractRenderer.
+		SVGGenerator svgGenerator = new SVGGenerator();
+		renderer.paintMolecule(atomContainer, svgGenerator, new Rectangle(40, 40), true );
+//		svgGenerator
+//		rendererModel.
+//		svgGenerator.
+//		renderer.pa
+		
 //		StructureDiagramGenerator structureDiagramGenerator = new StructureDiagramGenerator();
 //		structureDiagramGenerator.setMolecule(molecule);
 //		structureDiagramGenerator.generateCoordinates();
 //		
 //		AtomContainerRenderer atomContainerRenderer = new AtomContainerRenderer(generators, fontManager)
 //		atomContainerRenderer.paintMolecule(molecule, svgGenerator, bounds, resetCenter);
+		
+		return svgGenerator.getResult().replace(',', '.');
 	}
 
 	@Override
