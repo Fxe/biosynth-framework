@@ -17,6 +17,13 @@ public class TestCdkWrapper {
 	}
 	
 	@Test
+	public void testRemoveOnes_BiGG_Invalid_Example() {
+		String ret = CdkWrapper.toIsotopeMolecularFormula("C20H29OFULLR2CO", false);
+
+		assertEquals(null, ret);
+	}
+	
+	@Test
 	public void testAddOnes() {
 		String ret = CdkWrapper.toIsotopeMolecularFormula("CHO", true);
 		

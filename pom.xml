@@ -36,13 +36,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>pt.uminho.biosynthframework</groupId>
-      <artifactId>biosynth-components</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>pt.uminho.sysbio.biosynthframework</groupId>
-      <artifactId>biosynth-data</artifactId>
+      <artifactId>biosynth-core</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
