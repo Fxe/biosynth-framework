@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
 
 @Entity
@@ -14,6 +16,7 @@ public class SeedReactionReagentEntity extends StoichiometryPair {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="ID_REACTION")
 	private SeedReactionEntity seedReactionEntity;

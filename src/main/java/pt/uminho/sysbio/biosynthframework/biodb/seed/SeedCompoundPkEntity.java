@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="SEED_COMPOUND_PK")
 public class SeedCompoundPkEntity {
@@ -20,6 +22,7 @@ public class SeedCompoundPkEntity {
     @GeneratedValue
     private Integer id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;

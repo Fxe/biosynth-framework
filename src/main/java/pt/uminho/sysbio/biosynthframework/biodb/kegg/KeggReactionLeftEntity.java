@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
 
 @Entity
@@ -18,6 +20,7 @@ public class KeggReactionLeftEntity extends StoichiometryPair{
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="reaction_id")
 	private KeggReactionEntity keggReactionEntity;

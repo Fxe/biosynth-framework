@@ -10,6 +10,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.service.BiggService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.BiocycService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.KeggService;
 
+@Deprecated
 public class MapperService {
 	
 	private final static Logger LOGGER = Logger.getLogger(MapperService.class.getName());

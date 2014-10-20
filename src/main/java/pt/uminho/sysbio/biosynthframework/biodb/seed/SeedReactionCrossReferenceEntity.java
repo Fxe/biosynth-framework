@@ -5,6 +5,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 
 @Entity
@@ -13,6 +15,7 @@ public class SeedReactionCrossReferenceEntity extends GenericCrossReference{
 
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="ID_REACTION")
 	private SeedReactionEntity seedReactionEntity;

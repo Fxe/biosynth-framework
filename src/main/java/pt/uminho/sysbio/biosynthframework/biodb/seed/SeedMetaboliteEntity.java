@@ -66,68 +66,33 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 		this.defaultCharge = defaultCharge;
 	}
 	
-	public Double getDeltaG() {
-		return deltaG;
-	}
-	public void setDeltaG(Double deltaG) {
-		this.deltaG = deltaG;
-	}
+	public Double getDeltaG() { return deltaG;}
+	public void setDeltaG(Double deltaG) { this.deltaG = deltaG;}
 
-	public Double getDeltaGErr() {
-		return deltaGErr;
-	}
-	public void setDeltaGErr(Double deltaGErr) {
-		this.deltaGErr = deltaGErr;
-	}
+	public Double getDeltaGErr() { return deltaGErr;}
+	public void setDeltaGErr(Double deltaGErr) { this.deltaGErr = deltaGErr;}
 
-	public String getUuid() {
-		return uuid;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+	public String getUuid() { return uuid;}
+	public void setUuid(String uuid) { this.uuid = uuid;}
 
-	public String getName() {
-		return name;
+	public String getName() { return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	public void setName(String name) { this.name = name;}
 
-	public String getCksum() {
-		return cksum;
-	}
-	public void setCksum(String cksum) {
-		this.cksum = cksum;
-	}
+	public String getCksum() { return cksum;}
+	public void setCksum(String cksum) { this.cksum = cksum;}
 
-	public Short getLocked() {
-		return locked;
-	}
-	public void setLocked(Short locked) {
-		this.locked = locked;
-	}
+	public Short getLocked() { return locked;}
+	public void setLocked(Short locked) { this.locked = locked;}
 
-	public Integer getMass() {
-		return mass;
-	}
-	public void setMass(Integer mass) {
-		this.mass = mass;
-	}
+	public Integer getMass() { return mass;}
+	public void setMass(Integer mass) { this.mass = mass;}
 
-	public String getAbbreviation() {
-		return abbreviation;
-	}
-	public void setAbbreviation(String abbreviation) {
-		this.abbreviation = abbreviation;
-	}
+	public String getAbbreviation() { return abbreviation;}
+	public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation;}
 
-	public String getUnchargedFormula() {
-		return unchargedFormula;
-	}
-	public void setUnchargedFormula(String unchargedFormula) {
-		this.unchargedFormula = unchargedFormula;
-	}
+	public String getUnchargedFormula() { return unchargedFormula;}
+	public void setUnchargedFormula(String unchargedFormula) { this.unchargedFormula = unchargedFormula;}
 
 	public List<SeedCompoundStructureEntity> getStructures() {
 		return structures;

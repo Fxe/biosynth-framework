@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="SEED_COMPOUND_STRUCTURE")
 public class SeedCompoundStructureEntity {
@@ -17,6 +19,7 @@ public class SeedCompoundStructureEntity {
     @GeneratedValue
     private Integer id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;

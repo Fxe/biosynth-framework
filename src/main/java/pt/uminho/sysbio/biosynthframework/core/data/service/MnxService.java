@@ -13,6 +13,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionProductEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionReactantEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 
+@Deprecated
 public class MnxService extends AbstractMetaboliteService<MnxMetaboliteEntity> {
 	
 	public MnxService(IGenericDao dao) {

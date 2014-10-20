@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 
+@Deprecated
 public abstract class AbstractMetaboliteService<T extends GenericMetabolite> 
 	implements IMetaboliteService<T> {
 	

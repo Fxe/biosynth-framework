@@ -15,6 +15,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.service.IMetaboliteService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.mapping.MapperService;
 
+@Deprecated
 public class CascadeByReference implements ICascadeStrategy {
 
 	private final static Logger LOGGER = Logger.getLogger(CascadeByReference.class.getName());

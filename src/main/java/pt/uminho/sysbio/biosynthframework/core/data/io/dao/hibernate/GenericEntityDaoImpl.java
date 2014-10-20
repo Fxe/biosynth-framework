@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projection;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 
+@Deprecated
 public class GenericEntityDaoImpl implements IGenericDao {
 
 	protected SessionFactory sessionFactory;
