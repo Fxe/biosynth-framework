@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 
 @Entity
@@ -34,6 +36,7 @@ public class IntegratedClusterMeta {
 	@Column(name="meta_type", length=255, nullable=false)
 	private String metaType;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="integrated_cluster_id")
 	private IntegratedCluster integratedCluster;

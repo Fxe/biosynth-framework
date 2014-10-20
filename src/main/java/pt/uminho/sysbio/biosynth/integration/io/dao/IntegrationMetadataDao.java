@@ -14,6 +14,7 @@ public interface IntegrationMetadataDao {
 	
 	//IntegrationSet
 	public List<Long> getAllIntegrationSetsId();
+	public List<String> getAllIntegrationSetsEntries();
 	public IntegrationSet saveIntegrationSet(IntegrationSet integrationSet);
 	public void deleteIntegrationSet(IntegrationSet integrationSet);
 	public IntegrationSet getIntegrationSet(Long id);

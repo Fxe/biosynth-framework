@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="integrated_cluster_member")
 public class IntegratedClusterMember {
@@ -21,12 +23,14 @@ public class IntegratedClusterMember {
 		
 		private static final long serialVersionUID = -63654766199161L;
 		
+		@JsonIgnore
 		@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 		@JoinColumn(name="integrated_cluster_id")
 		private IntegratedCluster cluster;
 		public IntegratedCluster getCluster() { return cluster;}
 		public void setCluster(IntegratedCluster cluster) { this.cluster = cluster;}
 		
+		@JsonIgnore
 		@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 		@JoinColumn(name="integrated_member_id")
 		private IntegratedMember member;

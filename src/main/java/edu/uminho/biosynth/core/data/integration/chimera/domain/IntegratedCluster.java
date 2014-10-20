@@ -21,6 +21,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="integrated_cluster")
 public class IntegratedCluster {
@@ -42,6 +44,7 @@ public class IntegratedCluster {
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="integration_id")
 	private IntegrationSet integrationSet;

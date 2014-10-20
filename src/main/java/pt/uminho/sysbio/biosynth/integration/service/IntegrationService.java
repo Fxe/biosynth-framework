@@ -5,6 +5,9 @@ import java.util.List;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 public interface IntegrationService {
+	
+	public List<String> getAllIntegrationSetsEntries();
+	public List<Long> getAllIntegrationSetsIds();
 	public IntegrationSet getIntegrationSetByEntry(String entry);
 	public IntegrationSet getIntegrationSetById(Long id);
 	public IntegrationSet createIntegrationSet(String name, String description);

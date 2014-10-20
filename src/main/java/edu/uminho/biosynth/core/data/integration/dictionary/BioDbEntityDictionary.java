@@ -1,7 +1,5 @@
 package edu.uminho.biosynth.core.data.integration.dictionary;
 
-import edu.uminho.biosynth.core.components.biodb.brenda.BrendaMetaboliteEntity;
-import edu.uminho.biosynth.core.components.biodb.pubchem.PubchemMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
@@ -36,12 +34,12 @@ public class BioDbEntityDictionary {
 			case "CAS":
 				clazz = java.lang.String.class;
 				break;
-			case "PUBCHEM":
-				clazz = PubchemMetaboliteEntity.class;
-				break;
-			case "BRENDA":
-				clazz = BrendaMetaboliteEntity.class;
-				break;
+//			case "PUBCHEM":
+//				clazz = PubchemMetaboliteEntity.class;
+//				break;
+//			case "BRENDA":
+//				clazz = BrendaMetaboliteEntity.class;
+//				break;
 //			case "REACTOME":
 //				clazz = ReactomeMetaboliteEntity.class;
 //				break;

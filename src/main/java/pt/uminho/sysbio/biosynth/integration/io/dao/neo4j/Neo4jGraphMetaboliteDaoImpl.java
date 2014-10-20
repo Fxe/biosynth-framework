@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -14,18 +15,23 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
-import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
-
 public class Neo4jGraphMetaboliteDaoImpl 
-extends AbstractNeo4jDao<GraphMetaboliteEntity>
+extends AbstractNeo4jDao
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
+	@Autowired
+	public Neo4jGraphMetaboliteDaoImpl(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	private static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
 	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
@@ -188,11 +194,11 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		}
 	}
 
-	@Override
-	protected GraphMetaboliteEntity nodeToObject(Node node) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	protected GraphMetaboliteEntity nodeToObject(Node node) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 

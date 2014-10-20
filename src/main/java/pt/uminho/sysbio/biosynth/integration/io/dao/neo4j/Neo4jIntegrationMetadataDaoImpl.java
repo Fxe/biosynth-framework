@@ -7,12 +7,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
@@ -24,6 +26,13 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
 	
+	
+	@Autowired
+	public Neo4jIntegrationMetadataDaoImpl(
+			GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
 	
 	@Override
@@ -35,6 +44,17 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			ids.add(node.getId());
 		}
 		return ids;
+	}
+	
+	@Override
+	public List<String> getAllIntegrationSetsEntries() {
+		List<String> result = new ArrayList<> ();
+		for (Node node : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(IntegrationLabel.IntegrationSet)) {
+			result.add((String) node.getProperty("entry"));
+		}
+		return result;
 	}
 
 	@Override
@@ -130,14 +150,25 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
 			Long... memberIds) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
+		if (iidNode == null || !iidNode.hasLabel(IntegrationLabel.IntegrationSet)) return null;
+		
+		LOGGER.debug(String.format("Loading metabolite clusters for %d", integrationSetId));
+		List<Long> result = new ArrayList<> ();
+		for (Relationship relationship : iidNode
+				.getRelationships(IntegrationRelationshipType.IntegratedMetaboliteCluster)) {
+			Node cidNode = relationship.getOtherNode(iidNode);
+			result.add(cidNode.getId());
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -346,6 +377,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		if (object == null) return "null";
 		return object;
 	}
+
+
 	
 //	private Node executionEngineMerge() {
 //		String cypher = String.format(

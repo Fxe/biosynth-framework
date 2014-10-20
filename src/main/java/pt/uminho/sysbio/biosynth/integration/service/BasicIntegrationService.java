@@ -79,5 +79,14 @@ public class BasicIntegrationService implements IntegrationService {
 		}
 		return res;
 	}
+	
+	@Override
+	public List<String> getAllIntegrationSetsEntries() {
+		return this.meta.getAllIntegrationSetsEntries();
+	}
+	@Override
+	public List<Long> getAllIntegrationSetsIds() {
+		return this.meta.getAllIntegrationSetsId();
+	}
 
 }

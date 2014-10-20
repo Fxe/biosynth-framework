@@ -52,7 +52,11 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		return res;
 	}
 
-
+	@Override
+	public List<String> getAllIntegrationSetsEntries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 //	@Override
 //	public void mergeCluster(List<Long> ids, Long integrationId) {
@@ -373,5 +377,7 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	public void saveCurationEdge(CurationEdge curationEdge) {
 		this.getSession().save(curationEdge);
 	}
+
+
 
 }

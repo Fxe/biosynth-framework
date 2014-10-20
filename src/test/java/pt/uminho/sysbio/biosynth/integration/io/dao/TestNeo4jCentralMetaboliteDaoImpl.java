@@ -36,8 +36,7 @@ public class TestNeo4jCentralMetaboliteDaoImpl {
 
 	@Before
 	public void setUp() throws Exception {
-		Neo4jGraphMetaboliteDaoImpl daoImpl = new Neo4jGraphMetaboliteDaoImpl();
-		daoImpl.setGraphDatabaseService(db);
+		Neo4jGraphMetaboliteDaoImpl daoImpl = new Neo4jGraphMetaboliteDaoImpl(db);
 		metaboliteDao = daoImpl;
 		tx = db.beginTx();
 	}

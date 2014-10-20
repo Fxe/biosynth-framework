@@ -47,8 +47,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl {
 
 	@Test
 	public void testCreateIntegrationSet() {
-		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl();
-		daoImpl.setGraphDatabaseService(graphDatabaseService);
+		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
 		
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName("IID_BIGG");
@@ -65,8 +64,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl {
 
 	@Test
 	public void test_create_IntegratedCluster_Without_Presaved_IntegrationSet() {
-		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl();
-		daoImpl.setGraphDatabaseService(graphDatabaseService);
+		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
 		
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName("IID_BIGG");
@@ -98,8 +96,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl {
 	
 	@Test
 	public void test_marshall_and_unmarshall_IntegratedCluster() {
-		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl();
-		daoImpl.setGraphDatabaseService(graphDatabaseService);
+		Neo4jIntegrationMetadataDaoImpl daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
 		
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName("IID_BIGG");

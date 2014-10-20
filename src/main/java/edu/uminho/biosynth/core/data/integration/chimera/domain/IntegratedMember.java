@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="integrated_member")
 public class IntegratedMember {
@@ -26,6 +28,7 @@ public class IntegratedMember {
 	public String getDescription() { return description;}
 	public void setDescription(String description) { this.description = description;}
 	
+	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="pk.member")
 	private List<IntegratedClusterMember> clusters = new ArrayList<> ();
 	public List<IntegratedClusterMember> getClusters() { return clusters;}
