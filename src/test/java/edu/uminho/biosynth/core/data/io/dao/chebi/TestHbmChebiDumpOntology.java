@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.chebi;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyVertexEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@SuppressWarnings("deprecation")
 public class TestHbmChebiDumpOntology {
 	
 	private static SessionFactory sessionFactory_chebi;
