@@ -6,8 +6,8 @@ import java.util.List;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 	
 @Deprecated
 public class Neo4jIntegratedMetaboliteDao implements MetaboliteDao<IntegratedMetaboliteEntity> {

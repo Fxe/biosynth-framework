@@ -8,21 +8,26 @@ import java.util.Set;
 
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
+import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
 	
@@ -98,10 +103,36 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	}
 
 	@Override
-	public IntegratedCluster getIntegratedClusterByEntry(String entry,
+	public IntegratedCluster getIntegratedClusterByEntry(final String entry,
 			Long integrationSetId) {
-		// TODO Auto-generated method stub
-		return null;
+		Node integrationSetNode = graphDatabaseService.getNodeById(integrationSetId);
+		if (integrationSetNode == null || 
+				!integrationSetNode.hasLabel(IntegrationLabel.IntegrationSet)) 
+			return null;
+		
+		Long nodeId = null;
+		for (Path path : graphDatabaseService
+				.traversalDescription()
+				.depthFirst()
+				.evaluator(Evaluators.toDepth(1))
+				.evaluator(new Evaluator() {
+
+					@Override
+					public Evaluation evaluate(Path path) {
+//						System.out.println(path.endNode().getProperty("entry", ""));
+						if(path.endNode().getProperty("entry", "").equals(entry)){
+							return Evaluation.INCLUDE_AND_CONTINUE;
+						} else {
+							return Evaluation.EXCLUDE_AND_CONTINUE;
+						}
+					}
+				})
+				.traverse(integrationSetNode)) {
+			
+			nodeId = path.endNode().getId();
+		}
+		
+		return getIntegratedClusterById(nodeId);
 	}
 
 	@Override
@@ -197,9 +228,10 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			members.add(graphDatabaseService.getNodeById(integratedMember.getId()));
 		}
 		// Generate Cluster
+		Label clusterLabel = IntegrationLabel.valueOf(cluster.getClusterType());
 		String cypher = String.format(
 				"MERGE (cid:%s {entry:{entry}, description:{description}}) RETURN cid AS CID", 
-				IntegrationLabel.MetaboliteCluster);
+				clusterLabel);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", cluster.getEntry());
 		params.put("description", nullToString(cluster.getDescription()));
@@ -281,9 +313,10 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
 	@Override
 	public IntegratedMember saveIntegratedMember(IntegratedMember member) {
+		Label memberLabel = IntegrationLabel.valueOf(member.getMemberType());
 		String cypher = String.format(
 				"MERGE (eid:%s {id:{id}, description:{description}}) RETURN eid AS EID", 
-				IntegrationLabel.MetaboliteMember);
+				memberLabel);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("id", member.getId());
 		params.put("description", nullToString(member.getDescription()));

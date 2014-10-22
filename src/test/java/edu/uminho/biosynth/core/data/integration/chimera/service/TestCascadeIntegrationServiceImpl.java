@@ -20,10 +20,10 @@ import org.junit.runners.MethodSorters;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.StaticMapClusterStrategy;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;

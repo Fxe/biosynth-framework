@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 public interface IntegrationMetadataDao {
 	

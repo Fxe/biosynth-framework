@@ -19,11 +19,11 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.Neo4jChimeraDataDaoImpl;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.OldMetaboliteIntegrationServiceImpl;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.CrossreferenceTraversalStrategyImpl;
 import edu.uminho.biosynth.core.data.integration.generator.PrefixKeyGenerator;

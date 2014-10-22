@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 
 public interface ChimeraDatabaseBuilderService {
 	public void changeIntegrationSet(Long id);

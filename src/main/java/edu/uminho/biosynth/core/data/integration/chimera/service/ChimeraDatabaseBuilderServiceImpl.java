@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteSourceProxy;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;

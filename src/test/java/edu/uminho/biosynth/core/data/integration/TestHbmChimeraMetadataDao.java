@@ -15,12 +15,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMember;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestHbmChimeraMetadataDao {

@@ -6,8 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 
 @Entity
 @Table(name="integrated_metabolite_crossreference")

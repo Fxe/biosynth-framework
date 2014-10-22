@@ -2,8 +2,8 @@ package edu.uminho.biosynth.core.data.integration.chimera.service;
 
 import java.util.Map;
 
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 
 public interface IntegrationStatisticsService {
 	

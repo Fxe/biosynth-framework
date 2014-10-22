@@ -10,6 +10,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 

@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ConflictDecision;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;

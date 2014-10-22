@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdgeType;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 
 @Service
 public class IntegrationCurationServiceImpl implements IntegrationCurationService {

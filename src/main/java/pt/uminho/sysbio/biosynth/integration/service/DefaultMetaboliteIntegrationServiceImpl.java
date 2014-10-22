@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ConflictDecision;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;

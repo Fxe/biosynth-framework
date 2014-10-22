@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 
 @Entity
 @Table(name="integrated_metabolite_source")

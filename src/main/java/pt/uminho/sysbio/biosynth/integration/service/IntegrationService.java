@@ -2,7 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.service;
 
 import java.util.List;
 
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 
 public interface IntegrationService {
 	

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import edu.uminho.biosynth.core.data.integration.chimera.dao.IntegrationDataDao;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegrationSet;
 
 @Service
 @Transactional(readOnly=true, value="chimerametadata")

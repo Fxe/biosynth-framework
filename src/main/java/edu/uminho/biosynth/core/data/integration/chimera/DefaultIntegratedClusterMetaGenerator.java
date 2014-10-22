@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedClusterMeta;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedMetaboliteEntity;
 
 public class DefaultIntegratedClusterMetaGenerator implements IntegratedClusterMetaGenerator{
 

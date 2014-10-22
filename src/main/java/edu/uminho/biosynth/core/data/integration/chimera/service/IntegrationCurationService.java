@@ -1,7 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdgeType;
-import edu.uminho.biosynth.core.data.integration.chimera.domain.IntegratedCluster;
 
 public interface IntegrationCurationService {
 	public void setCurationInformation(IntegratedCluster integratedCluster, String type, String description);

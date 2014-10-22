@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.domain;
+package pt.uminho.sysbio.biosynth.integration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
