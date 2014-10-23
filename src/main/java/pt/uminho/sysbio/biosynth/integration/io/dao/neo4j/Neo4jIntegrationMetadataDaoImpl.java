@@ -31,6 +31,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
 	
 	@Autowired
 	public Neo4jIntegrationMetadataDaoImpl(
@@ -38,7 +39,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		super(graphDatabaseService);
 	}
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
+	
 	
 	@Override
 	public List<Long> getAllIntegrationSetsId() {
@@ -390,7 +391,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		if (node == null || !node.hasLabel(IntegrationLabel.MetaboliteMember)) return null;
 		
 		IntegratedMember integratedMember = new IntegratedMember();
-		integratedMember.setId(node.getId());
+		integratedMember.setId((Long)node.getProperty("id"));
 		integratedMember.setDescription((String) node.getProperty("description"));
 		return integratedMember;
 	}
@@ -409,6 +410,48 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	private Object nullToString(Object object) {
 		if (object == null) return "null";
 		return object;
+	}
+
+	@Override
+	public String lookupClusterEntryByMemberId(Long iid, Long eid) {
+//		Node memberNode = graphDatabaseService.findNodesByLabelAndProperty(label, key, value)
+		
+		//START i=node(0) MATCH (i)-[r1:IntegratedMetaboliteCluster]->(c:MetaboliteCluster)-[r2:Integrates]->(m {id:245779}) RETURN id(m) as id
+		final String columnName = "id";
+		final String iidToCidRelationship = IntegrationRelationshipType.IntegratedMetaboliteCluster.toString();
+		final String cidToEidRelationship = IntegrationRelationshipType.Integrates.toString();
+		final String integratedClusterLabel = IntegrationLabel.MetaboliteCluster.toString();
+		String query = String.format("START i=node({iid}) MATCH "
+				+ "(i)-[r1:%s]->(c:%s)"
+				+ "-[r2:%s]->(m {id:{eid}}) RETURN c.entry as id", 
+				iidToCidRelationship, 
+				integratedClusterLabel, 
+				cidToEidRelationship, 
+				columnName);
+		
+		Map<String, Object> params = new HashMap<> ();
+		params.put("iid", iid);
+		params.put("eid", eid);
+		List<?> clusterEntryList = IteratorUtil.asList(executionEngine.execute(query, params).columnAs(columnName));
+		
+//		String query = String.format("MATCH (n {id:{id}}) RETURN id(n) AS %s", columnName);
+//		Map<String, Object> params = new HashMap<> ();
+//		params.put("id", eid);
+//		
+//		List<?> a = IteratorUtil.asList(executionEngine.execute(query, params).columnAs(columnName));
+		
+		if (clusterEntryList.isEmpty()) return null;
+		if (clusterEntryList.size() > 1) LOGGER.error("Duplicate");
+		
+		String entry = (String) clusterEntryList.iterator().next();
+		
+		return entry;
+	}
+
+	@Override
+	public Long lookupClusterIdByMemberId(Long iid, Long eid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

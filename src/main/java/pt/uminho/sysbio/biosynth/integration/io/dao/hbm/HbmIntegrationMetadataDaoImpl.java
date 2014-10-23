@@ -378,6 +378,18 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		this.getSession().save(curationEdge);
 	}
 
+	@Override
+	public String lookupClusterEntryByMemberId(Long iid, Long eid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long lookupClusterIdByMemberId(Long iid, Long eid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

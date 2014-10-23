@@ -13,6 +13,7 @@ import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.strategy.AbstractNeo4jClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 

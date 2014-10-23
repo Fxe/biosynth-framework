@@ -9,6 +9,7 @@ import org.neo4j.graphdb.Relationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.strategy.AbstractNeo4jClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy {

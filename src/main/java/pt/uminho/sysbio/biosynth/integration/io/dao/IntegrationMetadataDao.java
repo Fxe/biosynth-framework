@@ -61,4 +61,7 @@ public interface IntegrationMetadataDao {
 
 	public void saveCurationEdge(CurationEdge curationEdge);
 
+	
+	public String lookupClusterEntryByMemberId(Long iid, Long eid);
+	public Long lookupClusterIdByMemberId(Long iid, Long eid);
 }

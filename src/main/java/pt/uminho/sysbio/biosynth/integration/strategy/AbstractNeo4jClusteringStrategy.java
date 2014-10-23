@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.strategy;
+package pt.uminho.sysbio.biosynth.integration.strategy;
 
 import java.util.Set;
 
@@ -6,6 +6,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 
 public abstract class AbstractNeo4jClusteringStrategy implements ClusteringStrategy {
 

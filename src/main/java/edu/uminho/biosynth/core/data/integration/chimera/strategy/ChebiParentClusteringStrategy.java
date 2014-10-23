@@ -7,6 +7,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.strategy.AbstractNeo4jClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrategy {
