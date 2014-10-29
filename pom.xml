@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.uminho.biosynthframework</groupId>
+  <groupId>pt.uminho.sysbio.biosynthframework</groupId>
   <artifactId>biosynth-visualization</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -18,8 +18,18 @@
 
   <dependencies>
     <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
-      <artifactId>biosynth-components</artifactId>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
+      <artifactId>biosynth-core</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>pt.uminho.sysbio.biosynthframework</groupId>
+      <artifactId>biosynth-biodb</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>pt.uminho.sysbio.metropolis</groupId>
+      <artifactId>metropolis-graph</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     
