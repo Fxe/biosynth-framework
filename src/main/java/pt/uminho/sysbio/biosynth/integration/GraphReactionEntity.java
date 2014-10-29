@@ -95,6 +95,21 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 //			sb.append(String.format("\t%s: %s\n", key, this.properties.get(key)));
 //		return sb.toString();
 	}
+	@Override
+	public Map<String, Double> getLeftStoichiometry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Map<String, Double> getRightStoichiometry() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 
