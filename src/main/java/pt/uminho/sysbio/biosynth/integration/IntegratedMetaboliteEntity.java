@@ -77,6 +77,8 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	private Map<Long, List<String>> compartments = new HashMap<> ();
 	
 	
+	private Map<Long, String> sourceReferences = new HashMap<> ();
+	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="integratedMetaboliteEntity")
 	@MapKey(name="id")
 	private Map<Long, IntegratedMetaboliteSourceProxy> sources = new HashMap<> ();
