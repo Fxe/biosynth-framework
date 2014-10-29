@@ -1,8 +1,10 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.Node;
@@ -22,6 +24,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 	
 	private ReactionDao<GenericReaction> reactionDao;
 	private int mismatchThreshold = 1;
+	private String protonEntry = "BG_901";
 	
 	public ReactionClusterQualityScreener(ReactionDao<GenericReaction> reactionDao) {
 		this.reactionDao = reactionDao;
@@ -59,15 +62,17 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 			qualityLabels.add(ReactionQualityLabel.PROTON_MISMATCH);
 		}
 		
-		if (hasMetaboliteEqualSet(rxnList)) {
-			
-		} else if (hasMissingElements()) {
-			qualityLabels.add(ReactionQualityLabel.METABOLITE_MISMATCH);
-		} else {
-			qualityLabels.clear();
-			qualityLabels.add(ReactionQualityLabel.ERROR);
-			return qualityLabels;
-		}
+//		ReactionQualityLabel qualityLabel = 
+		
+//		if (hasMetaboliteEqualSet(rxnList)) {
+//			
+//		} else if (hasMissingElements()) {
+//			qualityLabels.add(ReactionQualityLabel.METABOLITE_MISMATCH);
+//		} else {
+//			qualityLabels.clear();
+//			qualityLabels.add(ReactionQualityLabel.ERROR);
+//			return qualityLabels;
+//		}
 		
 		if ( !alignReactions(rxnList)) {
 			qualityLabels.clear();
@@ -98,14 +103,51 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 		return false;
 	}
 
-	private boolean hasMetaboliteEqualSet(List<GenericReaction> rxnList) {
-		// TODO Auto-generated method stub
-		return false;
+	private ReactionQualityLabel hasMetaboliteEqualSet(List<GenericReaction> rxnList) {
+		LOGGER.debug("Test Metabolite Set Equality");
+		
+		Set<String> cpdTotalSet = new HashSet<> ();
+		Map<String, Set<String>> metaboliteSetMap = new HashMap<> ();
+		for (GenericReaction rxn : rxnList) {
+			Set<String> cpdSet = new HashSet<> ();
+			cpdSet.addAll(rxn.getProductStoichiometry().keySet());
+			cpdSet.addAll(rxn.getReactantStoichiometry().keySet());
+			cpdSet.remove(protonEntry);
+			cpdTotalSet.addAll(cpdTotalSet);
+			metaboliteSetMap.put(rxn.getEntry(), cpdSet);
+		}
+		
+		int missing = 0;
+		for (String key : metaboliteSetMap.keySet()) {
+			Set<String> cpdSet_ = new HashSet<> (cpdTotalSet);
+			cpdSet_.removeAll(metaboliteSetMap.get(key));
+			if (cpdSet_.size() > mismatchThreshold) {
+				//mismatch limit exceeded, throw error label
+				return ReactionQualityLabel.ERROR;
+			} else if (!cpdSet_.isEmpty()) {
+				missing++;
+			}
+		}
+		
+		if (missing != 0) {
+			//All OK !
+			return ReactionQualityLabel.METABOLITE_MISMATCH;
+		}
+		
+		return ReactionQualityLabel.OK;
 	}
 
 	//PROTON_MISMATCH
 	public boolean hasProtonMismatch(List<GenericReaction> rxnList) {
-		return true;
+		int res = 0;
+		
+		for (GenericReaction rxn : rxnList) {
+			boolean containsProton = rxn.getProductStoichiometry().containsKey(protonEntry) ||
+					rxn.getReactantStoichiometry().containsKey(protonEntry);
+			if (containsProton) res++;
+		}
+		
+		return res == 0 || res == rxnList.size();
 	}
 	
 	//ORIENTATION_MISMATCH
