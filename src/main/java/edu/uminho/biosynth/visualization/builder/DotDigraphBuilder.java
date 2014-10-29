@@ -7,17 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uminho.biosynth.core.components.GenericReaction;
-import edu.uminho.biosynth.core.components.representation.basic.graph.DefaultBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryEdge;
-import edu.uminho.biosynth.core.components.representation.basic.graph.IBinaryGraph;
-import edu.uminho.biosynth.core.components.representation.basic.graph.UniqueEdgeGraphImpl;
-import edu.uminho.biosynth.visualization.graphviz.DotEdge;
-import edu.uminho.biosynth.visualization.graphviz.DotNode;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.IBinaryEdge;
+import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UniqueEdgeGraphImpl;
+import pt.uminho.sysbio.biosynthframework.visualization.graphviz.DotEdge;
+import pt.uminho.sysbio.biosynthframework.visualization.graphviz.DotNode;
+import pt.uminho.sysbio.biosynthframework.visualization.graphviz.GraphVizShape;
 
 public class DotDigraphBuilder {
 	
-	private String compoundShape = "circle";
+	private GraphVizShape compoundShape = GraphVizShape.CIRCLE;
 	
 	private List<GenericReaction> reactionsList = new ArrayList<> ();
 	
@@ -29,8 +30,8 @@ public class DotDigraphBuilder {
 	
 	private Map<String, String> nodeText = new HashMap<> ();
 	
-	public String getCompoundShape() { return compoundShape;}
-	public DotDigraphBuilder setCompoundShape(String compoundShape) {
+	public GraphVizShape getCompoundShape() { return compoundShape;}
+	public DotDigraphBuilder setCompoundShape(GraphVizShape compoundShape) {
 		this.compoundShape = compoundShape;
 		return this;
 	}
@@ -70,7 +71,7 @@ public class DotDigraphBuilder {
 		this.compoundIgnoreList = compoundIgnoreList;
 	}
 	
-	public IBinaryGraph<DotNode, DotEdge> build() {
+	public BinaryGraph<DotNode, DotEdge> build() {
 		
 		Map<String, DotNode> compoundMap = new HashMap<> ();
 		List<DotNode> reactions = new ArrayList<> ();
@@ -81,7 +82,7 @@ public class DotDigraphBuilder {
 			Double fluxVal = reactionsFluxList.get(i);
 			DotNode reactionDotNode = new DotNode();
 			reactionDotNode.setLabel(genericReaction.getEntry());
-			reactionDotNode.setShape("reactangle");
+			reactionDotNode.setShape(GraphVizShape.BOX);
 			reactions.add(reactionDotNode);
 			
 			for (String cpdEntry : genericReaction.getProductStoichiometry().keySet()) {
@@ -143,7 +144,7 @@ public class DotDigraphBuilder {
 			}
 		}
 		
-		IBinaryGraph<DotNode, DotEdge> graph = new UniqueEdgeGraphImpl<> ();
+		BinaryGraph<DotNode, DotEdge> graph = new UniqueEdgeGraphImpl<> ();
 		for (IBinaryEdge<DotEdge, DotNode> edge : graphEdges) graph.addEdge(edge);
 		
 		return graph;

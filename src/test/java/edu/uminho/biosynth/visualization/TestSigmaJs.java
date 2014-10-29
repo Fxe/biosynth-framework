@@ -1,7 +1,5 @@
 package edu.uminho.biosynth.visualization;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -9,7 +7,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.mapping.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -66,6 +63,7 @@ public class TestSigmaJs {
 		s = s.replace("=", "\":");
 		System.out.println(s);
 		ObjectMapper mapper = new ObjectMapper();
+		@SuppressWarnings("unchecked")
 		HashMap<String,Double> graph = mapper.readValue(s, HashMap.class);
 		System.out.println(graph);
 		for (String reaction : graph.keySet()) {

@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.visualization.graphviz;
+package pt.uminho.sysbio.biosynthframework.visualization.graphviz;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import edu.uminho.biosynth.visualization.builder.DotDigraphBuilder;
 
 public class TestGraphVizGenerator {
 
@@ -31,6 +33,13 @@ public class TestGraphVizGenerator {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test
+	public void generateFromPathway() {
+		GraphVizGenerator graphVizGenerator = new GraphVizGenerator();
+		DotDigraphBuilder builder = new DotDigraphBuilder();
+//		builder.ad
+	}
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -47,13 +56,12 @@ public class TestGraphVizGenerator {
 		HashMap<String,Double> fluxMap = null;
 		
 		fluxMap = mapper.readValue(dist, HashMap.class);
-
 		
 		System.out.println(fluxMap);
 		
 		String svgStr = GraphVizGenerator.generateSvg("");
 		System.out.println(svgStr);
-		assertNotEquals(null, svgStr);
+		assertNotNull(svgStr);
 	}
 	
 	@Test
@@ -62,6 +70,7 @@ public class TestGraphVizGenerator {
 		dist = dist.replaceAll("META:", "");
 		dist = dist.replace("=", "\":");
 		dist = dist.replace("_NADP_NADPH", "");
+		dist = dist.replace("_NAD_NADH", "");
 		dist = dist.replace(", ", ", \"");
 		dist = dist.replace("{", "{\"");
 		System.out.println(dist);
