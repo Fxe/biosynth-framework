@@ -37,7 +37,7 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	protected String entry;
 
 	@Column(name="e_name", length=2047)
-	protected String name = "";
+	protected String name;
 	
 	@Column(name="e_source", length=255)
 	protected String source;

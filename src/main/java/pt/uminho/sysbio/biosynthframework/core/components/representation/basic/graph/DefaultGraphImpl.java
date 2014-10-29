@@ -136,6 +136,7 @@ public class DefaultGraphImpl<V, E> implements BinaryGraph<V, E> {
 	}
 	
 	public boolean addVertex(V vertex) {
+		if (vertex == null) throw new RuntimeException("omg !"); 
 		boolean added = this.vertexes.add(vertex);
 		if (added) {
 			this.vertexEdgesMap.put(vertex, new HashSet<IBinaryEdge<E, V>> ());
