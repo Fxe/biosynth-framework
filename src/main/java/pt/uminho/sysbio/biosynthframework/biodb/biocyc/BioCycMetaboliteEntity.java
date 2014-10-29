@@ -103,6 +103,7 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	
 	@Override
 	public String toString() {
+//		return "Ok";
 		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString()).append(sep);
