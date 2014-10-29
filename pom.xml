@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>edu.uminho.biosynthframework</groupId>
+      <groupId>pt.uminho.biosynthframework</groupId>
       <artifactId>biosynth-components</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
