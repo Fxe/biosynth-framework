@@ -14,7 +14,7 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	private static Logger LOGGER = Logger.getLogger(MetabolicHyperGraph.class);
 	
 	public static final String normTag = "";
-	public static final String reveTag = "R";
+	public static final String REVERSE_TAG = "_R";
 	
 	public MetabolicHyperGraph() {}
 	
@@ -29,7 +29,7 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	
 	public ReactionEdge createEdge(GenericReaction rxn, boolean leftToRight) {
 
-		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
+		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:REVERSE_TAG);
 		
 		ReactionEdge edge = null;
 		String[] in = new String[rxn.getReactantStoichiometry().size()];
