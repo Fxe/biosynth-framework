@@ -48,7 +48,7 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
 		
 //		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
-		
+		op.setEntry(rxn.getEntry());
 		op.setID(rxn.getEntry() + normTag);
 		System.out.println(op);
 		if ( duplicateForReverse ) {
@@ -58,6 +58,7 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 			op_.setID(rxn.getEntry() + reveTag);
 			op.setOpposite(op_);
 			op_.setOpposite(op);
+			op_.setEntry(rxn.getEntry());
 			System.out.println(op_);
 			if ( !this.addOperatingUnit(op_)) {
 				System.err.println("ERROR ADD REVERSE: " + rxn);
