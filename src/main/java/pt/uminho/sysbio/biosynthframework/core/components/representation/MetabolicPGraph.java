@@ -58,26 +58,24 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 		Set<String> alpha = new HashSet<> (rxn.getReactantStoichiometry().keySet());
 		Set<String> beta = new HashSet<> (rxn.getProductStoichiometry().keySet());
 		OperatingUnit<String> op = new OperatingUnit<String>(alpha, beta);
-		
-//		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:reveTag);
-		
+		op.setEntry(rxn.getEntry());
+		op.setID(rxn.getEntry() + normTag);
 		op.setID(id);
 		if ( duplicateForReverse  && rxn.getOrientation().equals(Orientation.Reversible)) {
 			LOGGER.debug(String.format("Generating duplicate operational unit %s", id_rev));
-			
+
 			Set<String> alpha_ = new HashSet<> (rxn.getProductStoichiometry().keySet());
 			Set<String> beta_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
 			OperatingUnit<String> op_ = new OperatingUnit<String>(alpha_, beta_);
 			op_.setID(id_rev);
 			op.setOpposite(op_);
 			op_.setOpposite(op);
+			op_.setEntry(rxn.getEntry());
 			if ( !this.addOperatingUnit(op_)) {
 				LOGGER.error("ERROR ADD REVERSE: " + rxn);
 			}
 		}
 		return this.addOperatingUnit(op);
-		
-//		return false;
 	}
 
 	@Override

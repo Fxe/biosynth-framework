@@ -81,6 +81,7 @@ implements Reaction, Serializable {
 //		ret.append("RPairs: ").append(this.rprMap.keySet()).append('\n');
 		return ret.toString();
 	}
+	
 	@Override
 	public Map<String, Double> getLeftStoichiometry() {
 		return this.getReactantStoichiometry();

@@ -10,6 +10,7 @@ public class OperatingUnit<T> implements Serializable {
 	private static final long serialVersionUID = 11L;
 	private Set<T> alpha_;
 	private Set<T> beta_;
+	private String entry;
 	private String id_ = null;
 	private OperatingUnit<T> opposite_ = null;
 	
@@ -28,6 +29,9 @@ public class OperatingUnit<T> implements Serializable {
 		this.beta_ = new HashSet<T> ();
 	}
 	
+	public String getEntry() { return entry;}
+	public void setEntry(String entry) { this.entry = entry;}
+
 	public Set<T> getAlpha() {
 		return this.alpha_;
 	}
