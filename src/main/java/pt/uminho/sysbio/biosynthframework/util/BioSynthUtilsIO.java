@@ -51,6 +51,22 @@ public class BioSynthUtilsIO {
 		return sb.toString();
 	}
 	
+	public static String readFromFile(File file) throws FileNotFoundException, IOException {
+		StringBuilder sb = new StringBuilder();
+
+		FileReader reader = new FileReader(file);
+		BufferedReader br = new BufferedReader(reader);
+		String line;
+		while ( (line = br.readLine()) != null ) {
+			sb.append(line).append('\n');
+		}
+		
+		br.close();
+		reader.close();
+
+		return sb.toString();
+	}
+	
 	public static void writeToFile(String data, String file) throws IOException {
 		StringReader stringReader = new StringReader(data);
 		BufferedReader bufferedReader = new BufferedReader(stringReader);
