@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 
 @Entity
@@ -52,41 +55,43 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public String getComment() { return comment;}
 	public void setComment(String comment) { this.comment = comment;}
 	
-	@ElementCollection
+	
+	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
 	@CollectionTable(name="BIOCYC_METABOLITE_SUBCLASS", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="SUBCLASS", length=63)
 	protected List<String> subclasses = new ArrayList<> ();
 	public List<String> getSubclasses() { return subclasses;}
 	public void setSubclasses(List<String> subclasses) { this.subclasses = subclasses;}
 
-	@ElementCollection
+	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
 	@CollectionTable(name="BIOCYC_METABOLITE_PARENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="PARENT", length=63)
 	protected List<String> parents = new ArrayList<> ();
 	public List<String> getParents() { return parents;}
 	public void setParents(List<String> parents) { this.parents = parents;}
 
-	@ElementCollection
+	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
 	@CollectionTable(name="BIOCYC_METABOLITE_INSTANCE", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="INSTANCE", length=63)
 	protected List<String> instances = new ArrayList<> ();
 	public List<String> getInstances() { return instances;}
 	public void setInstances(List<String> instances) { this.instances = instances;}
 
-	@ElementCollection
+	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
 	@CollectionTable(name="BIOCYC_METABOLITE_REACTION", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="REACTION", length=63)
 	protected List<String> reactions = new ArrayList<> ();
 	public List<String> getReactions() { return reactions;}
 	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
-	@ElementCollection
+	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
 	@CollectionTable(name="BIOCYC_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="ID_METABOLITE"))
 	@Column(name="SYNONYM", length=1023)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms;}
 	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
 
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(mappedBy = "biocycMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<BioCycMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<>();
 	public List<BioCycMetaboliteCrossreferenceEntity> getCrossreferences() { return crossReferences; }

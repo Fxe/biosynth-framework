@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import pt.uminho.sysbio.biosynthframework.annotations.InChI;
 import pt.uminho.sysbio.biosynthframework.annotations.SMILES;
 
@@ -45,25 +48,30 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	public String getSmiles() { return smiles;}
 	public void setSmiles(String smiles) { this.smiles = smiles;}
 	
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(mappedBy = "keggMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<KeggCompoundMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@ElementCollection
 	@CollectionTable(name="kegg_compound_metabolite_reaction", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="reaction_id", length=15)
-	protected List<String> reactions = new ArrayList<> ();
+	protected   List<String> reactions = new ArrayList<> ();
 	public List<String> getReactions() { return reactions;}
 	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@ElementCollection
 	@CollectionTable(name="kegg_compound_metabolite_pathway", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="pathway_id", length=15)
 	protected List<String> pathways = new ArrayList<> ();
 	
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@ElementCollection
 	@CollectionTable(name="kegg_compound_metabolite_enzyme", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="enzyme_id", length=15)
 	protected List<String> enzymes = new ArrayList<> ();
+
 
 	public List<KeggCompoundMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossreferences;

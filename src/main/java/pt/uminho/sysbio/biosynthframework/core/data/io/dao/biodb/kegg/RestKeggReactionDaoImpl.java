@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggReactionFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
@@ -38,6 +39,7 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 			KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
 			rxn.setEntry(parser.getEntry());
 			rxn.setName(parser.getName());
+			rxn.setOrientation(Orientation.Reversible);
 			rxn.setComment(parser.getComment());
 			rxn.setRemark(parser.getRemark());
 			rxn.setDefinition(parser.getDefinition());

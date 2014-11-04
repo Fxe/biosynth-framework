@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -12,9 +14,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 
@@ -96,6 +101,32 @@ public class KeggReactionEntity extends GenericReaction {
 		}
 		this.right = right;
 	}
+	
+	@JsonIgnore
+	@Transient
+	@Override
+	public Map<String,Double> getLeftStoichiometry() {
+		Map<String,Double> res = new HashMap<> ();
+		for (KeggReactionLeftEntity l : left) {
+			String entry = l.getCpdEntry();
+			Double value = l.getValue();
+			res.put(entry, value);
+		}
+		return res;
+	};
+	
+	@JsonIgnore
+	@Transient
+	@Override
+	public Map<String,Double> getRightStoichiometry() {
+		Map<String,Double> res = new HashMap<> ();
+		for (KeggReactionRightEntity r : right) {
+			String entry = r.getCpdEntry();
+			Double value = r.getValue();
+			res.put(entry, value);
+		}
+		return res;
+	};
 	
 //	@OneToMany(mappedBy = "keggReactionEntity")
 //	private List<KeggReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();

@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynthframework.DefaultGenericReaction;
+import pt.uminho.sysbio.biosynthframework.DefaultReaction;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
