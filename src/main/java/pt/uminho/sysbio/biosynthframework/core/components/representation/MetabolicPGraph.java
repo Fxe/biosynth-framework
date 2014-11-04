@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.core.components.representation;
 
 //import java.util.Set;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,17 @@ public class MetabolicPGraph extends ProcessGraph<String> implements IMetabolicR
 	
 	public static final String normTag = "";
 	public static final String reveTag = "_R";
+	
+	public MetabolicPGraph() { }
+	
+	public MetabolicPGraph(
+			Collection<GenericReaction> genericReactions,
+			boolean duplicateForReverse) { 
+		
+		for (GenericReaction genericReaction : genericReactions) {
+			this.addReaction(genericReaction, duplicateForReverse);
+		}
+	}
 	
 	@Override
 	public boolean isReactionPair() {

@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import javax.persistence.Transient;
 
 @MappedSuperclass
 public class GenericReaction extends AbstractBiosynthEntity 
-implements Reaction, Serializable {
+implements Reaction, Serializable, Cloneable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -68,6 +69,23 @@ implements Reaction, Serializable {
 	public Orientation getOrientation() { return this.orientation; }
 	public void setOrientation(Orientation orientation) { this.orientation = orientation;}
 	
+	public GenericReaction() { }
+	
+	public GenericReaction(GenericReaction rxn) {
+		this.id = rxn.id;
+		this.entry = rxn.entry;
+		this.name = rxn.name;
+		this.description = rxn.description;
+		this.source = rxn.source;
+		
+		this.orientation = rxn.orientation;
+		this.similarRxn = rxn.similarRxn == null ? null : new HashSet<> (rxn.similarRxn);
+		this.productStoichiometry = rxn.productStoichiometry == null ? 
+				null : new HashMap<> (rxn.productStoichiometry);
+		this.reactantStoichiometry = rxn.reactantStoichiometry == null ? 
+				null : new HashMap<> (rxn.reactantStoichiometry);
+	}
+	
 	public String getFullDetails() {
 		StringBuilder ret = new StringBuilder();
 		ret.append("id: ").append( this.id).append('\n');
@@ -115,6 +133,9 @@ implements Reaction, Serializable {
 //			.append(this.orientation == 0 ? "L <-> R" : (this.orientation < 0 ? "L <-- R" : "L --> R" ));
 //		return sb.toString();
 //	}
-
-
+	
+	@Override
+	public GenericReaction clone() {
+		return new GenericReaction(this);
+	}
 }

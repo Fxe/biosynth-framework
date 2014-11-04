@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.core.components.representation;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
@@ -11,7 +12,7 @@ import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.h
 
 public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements IMetabolicRepresentation {
 
-	private static Logger LOGGER = Logger.getLogger(MetabolicHyperGraph.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MetabolicHyperGraph.class);
 	
 	public static final String normTag = "";
 	public static final String REVERSE_TAG = "_R";
@@ -28,7 +29,6 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 	}
 	
 	public ReactionEdge createEdge(GenericReaction rxn, boolean leftToRight) {
-
 		String edgeName = rxn.getEntry() + ( leftToRight ? normTag:REVERSE_TAG);
 		
 		ReactionEdge edge = null;
