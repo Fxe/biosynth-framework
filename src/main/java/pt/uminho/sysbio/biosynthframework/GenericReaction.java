@@ -37,10 +37,10 @@ implements Reaction, Serializable, Cloneable {
 	@Transient private Set<String> similarRxn;
 	
 	@Transient
-	private Map<String, Double> reactantStoichiometry = new HashMap<> ();
+	protected Map<String, Double> reactantStoichiometry = new HashMap<> ();
 	
 	@Transient
-	private Map<String, Double> productStoichiometry = new HashMap<> ();
+	protected Map<String, Double> productStoichiometry = new HashMap<> ();
 	
 
 //	@Override

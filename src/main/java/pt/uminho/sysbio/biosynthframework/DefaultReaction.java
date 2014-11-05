@@ -15,4 +15,11 @@ public class DefaultReaction extends GenericReaction {
 	public DefaultReaction clone() {
 		return new DefaultReaction(this);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("[%d:%s]<%s, %s>", 
+				this.id, this.entry, 
+				this.reactantStoichiometry, this.productStoichiometry);
+	}
 }
