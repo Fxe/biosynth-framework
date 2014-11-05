@@ -27,11 +27,6 @@
       <artifactId>biosynth-biodb</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>pt.uminho.sysbio.metropolis</groupId>
-      <artifactId>metropolis-graph</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
     
     <dependency>
 	  <groupId>commons-io</groupId>
