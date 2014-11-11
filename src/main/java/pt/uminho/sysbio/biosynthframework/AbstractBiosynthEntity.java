@@ -15,6 +15,12 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.DateTimeDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+
 @MappedSuperclass
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractBiosynthEntity implements Serializable {
@@ -45,8 +51,11 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	@Column(name="description", length=2047)
 	protected String description = "";
 	
+	@JsonIgnore
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="created_at") private DateTime created_at;
+	
+	@JsonIgnore
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="updated_at") private DateTime updated_at;
 	
@@ -67,10 +76,20 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	public String getSource() { return source;}
 	public void setSource(String source) { this.source = source;}
 	
+	@JsonIgnore
+	@JsonSerialize(using = DateTimeSerializer.class)
 	public DateTime getCreatedAt() { return created_at;}
+	
+	@JsonIgnore
+//	@JsonDeserialize(using = DateTimeDeserializer.class)
 	public void setCreatedAt(String modDate) { this.created_at = new DateTime(modDate);}
 	
+	@JsonIgnore
+	@JsonSerialize(using = DateTimeSerializer.class)
 	public DateTime getUpdatedAt() { return this.updated_at;}
+	
+	@JsonIgnore
+//	@JsonDeserialize(using = DateTimeDeserializer.class)
 	public void setUpdatedAt(String modDate) { this.updated_at = new DateTime(modDate);}
 	
 	@Override

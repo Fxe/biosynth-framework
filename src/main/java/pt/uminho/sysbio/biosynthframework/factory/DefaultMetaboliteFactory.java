@@ -7,7 +7,7 @@ public class DefaultMetaboliteFactory extends AbstractGenericEntityFactory {
 	
 	private String formula = "N2C3H4S5P6K7Al8";
 	private String source = "Factory";
-	private String metaboliteClass = "Type1";
+	private String metaboliteClass = "FactoryMetabolite";
 	
 	public DefaultMetaboliteFactory() {
 		// TODO Auto-generated constructor stub

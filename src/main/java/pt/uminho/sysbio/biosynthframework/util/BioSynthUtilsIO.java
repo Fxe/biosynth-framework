@@ -67,6 +67,22 @@ public class BioSynthUtilsIO {
 		return sb.toString();
 	}
 	
+	public static void writeToFile(String data, File file) throws IOException {
+		StringReader stringReader = new StringReader(data);
+		BufferedReader bufferedReader = new BufferedReader(stringReader);
+		FileWriter fileWriter = new FileWriter(file);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        for(String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+            bufferedWriter.write(line);
+            bufferedWriter.newLine();
+        }
+        bufferedReader.close();
+        bufferedWriter.close();
+        fileWriter.close();
+        bufferedReader.close();
+        stringReader.close();
+	}
+	
 	public static void writeToFile(String data, String file) throws IOException {
 		StringReader stringReader = new StringReader(data);
 		BufferedReader bufferedReader = new BufferedReader(stringReader);

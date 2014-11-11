@@ -50,7 +50,7 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 					String[] right = fields[RIGHT_INDEX].split("\\s+");
 					String[] left_stoich = fields[LEFT_STOICH_INDEX].split("\\s+");
 					String[] right_stoich = fields[RIGHT_STOICH_INDEX].split("\\s+");
-					boolean rev = Integer.parseInt(fields[ORIENTATION_INDEX]) == 0;
+					boolean rev = Integer.parseInt(fields[ORIENTATION_INDEX]) != 0;
 					DefaultReaction genericReaction = new DefaultReaction();
 					genericReaction.setEntry(entry);
 					genericReaction.setName(entry);

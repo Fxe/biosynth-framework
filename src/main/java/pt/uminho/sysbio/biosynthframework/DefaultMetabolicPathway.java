@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework;
 
 import java.util.List;
+import java.util.Set;
 
 public class DefaultMetabolicPathway extends AbstractBiosynthEntity implements MetabolicPathway {
 
@@ -8,4 +9,10 @@ public class DefaultMetabolicPathway extends AbstractBiosynthEntity implements M
 
 	@SuppressWarnings("unused")
 	private List<?> reactions;
+
+	@Override
+	public Set<String> getReactions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

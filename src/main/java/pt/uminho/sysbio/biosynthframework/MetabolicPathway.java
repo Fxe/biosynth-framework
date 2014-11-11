@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework;
 
-public interface MetabolicPathway {
+import java.util.Set;
 
+public interface MetabolicPathway {
+	public Set<String> getReactions();
 }

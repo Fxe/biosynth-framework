@@ -18,8 +18,10 @@ public class DefaultReaction extends GenericReaction {
 	
 	@Override
 	public String toString() {
-		return String.format("[%d:%s]<%s, %s>", 
+		String op = this.orientation.equals(Orientation.Reversible) ? "<=>" : " =>";
+		
+		return String.format("[%d:%s]<%s %s %s>", 
 				this.id, this.entry, 
-				this.reactantStoichiometry, this.productStoichiometry);
+				this.reactantStoichiometry, op, this.productStoichiometry);
 	}
 }
