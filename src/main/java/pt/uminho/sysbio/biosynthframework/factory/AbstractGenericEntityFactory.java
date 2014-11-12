@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework;
+package pt.uminho.sysbio.biosynthframework.factory;
 
 public abstract class AbstractGenericEntityFactory {
 	
@@ -6,6 +6,6 @@ public abstract class AbstractGenericEntityFactory {
 	protected String entry = "metabolite1";
 	protected String name = "The Metabolite";
 	protected String description = "A factory metabolite";
-	
+	protected String source = "FACTORY";
 
 }

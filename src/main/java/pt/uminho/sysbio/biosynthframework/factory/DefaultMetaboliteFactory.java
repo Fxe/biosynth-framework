@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.factory;
 
-import pt.uminho.sysbio.biosynthframework.AbstractGenericEntityFactory;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 
 public class DefaultMetaboliteFactory extends AbstractGenericEntityFactory {

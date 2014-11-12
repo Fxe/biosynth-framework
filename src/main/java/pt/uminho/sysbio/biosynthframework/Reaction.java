@@ -11,7 +11,10 @@ public interface Reaction {
 	
 	public Orientation getOrientation();
 	public Map<String, Double> getLeftStoichiometry();
+	public void setLeftStoichiometry(Map<String, Double> left);
+	
 	public Map<String, Double> getRightStoichiometry();
+	public void setRightStoichiometry(Map<String, Double> right);
 	
 //	public List<StoichiometryPair> getLeft();
 //	public Map<M, Double> getRight();

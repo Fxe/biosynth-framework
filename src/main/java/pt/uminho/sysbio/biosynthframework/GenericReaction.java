@@ -105,10 +105,19 @@ implements Reaction, Serializable, Cloneable {
 		return this.getReactantStoichiometry();
 	}
 	@Override
+	public void setLeftStoichiometry(Map<String, Double> left) {
+		this.setReactantStoichiometry(left);
+	}
+	@Override
 	public Map<String, Double> getRightStoichiometry() {
 		return this.getProductStoichiometry();
 	}
-	
+	@Override
+	public void setRightStoichiometry(Map<String, Double> right) {
+		this.setProductStoichiometry(right);
+	}	
+
+
 //	@Override
 //	public List<GenericMetabolite> getSubstrates() {
 //		// TODO Auto-generated method stub
@@ -138,4 +147,5 @@ implements Reaction, Serializable, Cloneable {
 	public GenericReaction clone() {
 		return new GenericReaction(this);
 	}
+
 }
