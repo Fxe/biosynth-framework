@@ -101,15 +101,25 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		return null;
 	}
 	@Override
+	public void setLeftStoichiometry(Map<String, Double> left) {
+		// TODO Auto-generated method stub
+	}
+	@Override
 	public Map<String, Double> getRightStoichiometry() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
+	public void setRightStoichiometry(Map<String, Double> right) {
+		// TODO Auto-generated method stub	
+	}	
+	
+	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 
 

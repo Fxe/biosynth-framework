@@ -1,20 +1,20 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.neo4j.graphdb.Node;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
-import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationLabel;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
@@ -23,34 +23,29 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactionClusterQualityScreener.class);
 	
 	private ReactionDao<GenericReaction> reactionDao;
-	private int mismatchThreshold = 1;
+	private int mismatchThreshold = 2;
 	private String protonEntry = "BG_901";
 	
+	
+	
+	public String getProtonEntry() { return protonEntry;}
+	public void setProtonEntry(String protonEntry) { this.protonEntry = protonEntry;}
+
 	public ReactionClusterQualityScreener(ReactionDao<GenericReaction> reactionDao) {
 		this.reactionDao = reactionDao;
 	}
 	
-	public Set<ReactionQualityLabel> something(IntegratedCluster integratedCluster) {
-//		if (!integratedCluster.getClusterType()
-//				.equals(IntegrationLabel.ReactionCluster.toString())) {
-//			return null;
-//		}
-		
+	public Set<ReactionQualityLabel> something(List<GenericReaction> rxnList) {
 		Set<ReactionQualityLabel> qualityLabels = new HashSet<> ();
+		if (rxnList.isEmpty()) {
+			LOGGER.warn("String empty cluster.");	
+			return qualityLabels;
+		}
 		
-		List<GenericReaction> rxnList = new ArrayList<> ();
-		for (IntegratedClusterMember member : integratedCluster.getMembers()) {
-			Long reid = member.getMember().getId();
-//			Node reactionNode = 
-			
-			
-			GenericReaction rxn = reactionDao.getReactionById(reid);
-			
-			if (rxn != null) {
-				rxnList.add(rxn);
-			} else {
-				LOGGER.error("not found");
-			}
+		if ( !alignReactions(rxnList)) {
+			qualityLabels.clear();
+			qualityLabels.add(ReactionQualityLabel.ERROR);
+			return qualityLabels;
 		}
 		
 		/*
@@ -61,6 +56,15 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 		if (hasProtonMismatch(rxnList)) {
 			qualityLabels.add(ReactionQualityLabel.PROTON_MISMATCH);
 		}
+		
+		Pair<Integer, Integer> mismatch = this.getMaximumMismatchPair(rxnList);
+		int totalMismatch = mismatch.getLeft() + mismatch.getRight();
+		if (totalMismatch > mismatchThreshold) {
+			qualityLabels.add(ReactionQualityLabel.ERROR);
+			return qualityLabels;
+		}
+		
+		if (totalMismatch > 0) qualityLabels.add(ReactionQualityLabel.METABOLITE_MISMATCH);
 		
 //		ReactionQualityLabel qualityLabel = 
 		
@@ -74,11 +78,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 //			return qualityLabels;
 //		}
 		
-		if ( !alignReactions(rxnList)) {
-			qualityLabels.clear();
-			qualityLabels.add(ReactionQualityLabel.ERROR);
-			return qualityLabels;
-		}
+
 		
 		if (!hasEqualOrientation(rxnList)) {
 			qualityLabels.add(ReactionQualityLabel.ORIENTATION_MISMATCH);
@@ -93,9 +93,98 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 		return qualityLabels;
 	}
 	
+	public Set<ReactionQualityLabel> something(IntegratedCluster integratedCluster) {
+//		if (!integratedCluster.getClusterType()
+//				.equals(IntegrationLabel.ReactionCluster.toString())) {
+//			return null;
+//		}
+		List<GenericReaction> rxnList = new ArrayList<> ();
+		for (IntegratedClusterMember member : integratedCluster.getMembers()) {
+			Long reid = member.getMember().getId();
+//			Node reactionNode = 	
+			GenericReaction rxn = reactionDao.getReactionById(reid);
+			
+			if (rxn != null) {
+				rxnList.add(rxn);
+			} else {
+				LOGGER.error("not found");
+			}
+		}
+		
+		return this.something(rxnList);
+	}
+	
 	private boolean alignReactions(List<GenericReaction> rxnList) {
-		// TODO Auto-generated method stub
-		return false;
+		LOGGER.debug("Align reactions");
+		
+		if (rxnList.isEmpty()) return false;
+		
+		GenericReaction rxnPivot = rxnList.get(0);
+		Set<String> leftPivot = new HashSet<> (rxnPivot.getReactantStoichiometry().keySet());
+		Set<String> rightPivot = new HashSet<> (rxnPivot.getProductStoichiometry().keySet());
+		System.out.println(leftPivot + "\t" + rightPivot);
+		for (int i = 1; i < rxnList.size(); i++) {
+			GenericReaction rxn = rxnList.get(i);
+			Set<String> left_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
+//			Set<String> right_ = new HashSet<> (rxn.getProductStoichiometry().keySet());
+			
+			Double l_l = jaccard(left_, leftPivot);
+			Double l_r = jaccard(left_, rightPivot);
+			if (l_r > l_l) this.swapStoichiometry(rxn);
+			
+			System.out.println(rxn.getReactantStoichiometry().keySet() + "\t" + rxn.getProductStoichiometry().keySet());
+		}
+		return true;
+	}
+	
+	private Pair<Integer, Integer> getMaximumMismatchPair(List<GenericReaction> rxnList) {
+		if (rxnList.isEmpty()) return new ImmutablePair<Integer, Integer>(0, 0);
+		
+		int leftMax = 0;
+		int rightMax = 0;
+		
+		GenericReaction rxnPivot = rxnList.get(0);
+		Set<String> leftPivot = new HashSet<> (rxnPivot.getReactantStoichiometry().keySet());
+		Set<String> rightPivot = new HashSet<> (rxnPivot.getProductStoichiometry().keySet());
+		leftPivot.remove(protonEntry);
+		rightPivot.remove(protonEntry);
+		
+		for (int i = 1; i < rxnList.size(); i++) {
+			GenericReaction rxn = rxnList.get(i);
+			Set<String> left_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
+			Set<String> right_ = new HashSet<> (rxn.getProductStoichiometry().keySet());
+			left_.remove(protonEntry);
+			left_.removeAll(leftPivot);
+			right_.remove(protonEntry);
+			right_.removeAll(rightPivot);
+			int l = left_.size();
+			int r = right_.size();
+			
+			leftMax = l > leftMax ? l : leftMax;
+			rightMax = r > rightMax ? r : rightMax;
+		}
+//		System.out.println(leftMax + " - " + rightMax);
+		
+		return new ImmutablePair<Integer, Integer>(leftMax, rightMax);
+	}
+	
+	private<E> double jaccard(Collection<E> a, Collection<E> b) {
+		if (a.isEmpty() && b.isEmpty()) return 1.0;
+		
+		Set<E> A_union_B = new HashSet<> (a);
+		A_union_B.addAll(b);
+		Set<E> A_intersect_B = new HashSet<> (a);
+		A_intersect_B.retainAll(b);
+		
+		return A_intersect_B.size() / (double)A_union_B.size();
+	}
+	
+	private void swapStoichiometry(GenericReaction rxn) {
+		LOGGER.debug("Swap eq rxn: " + rxn.getEntry());
+		Map<String, Double> left = rxn.getLeftStoichiometry();
+		Map<String, Double> right = rxn.getRightStoichiometry();
+		rxn.setLeftStoichiometry(right);
+		rxn.setRightStoichiometry(left);
 	}
 
 	private boolean hasMissingElements() {
@@ -141,13 +230,15 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 	public boolean hasProtonMismatch(List<GenericReaction> rxnList) {
 		int res = 0;
 		
+		LOGGER.debug("Testing for proton mismatch.");
+		
 		for (GenericReaction rxn : rxnList) {
 			boolean containsProton = rxn.getProductStoichiometry().containsKey(protonEntry) ||
 					rxn.getReactantStoichiometry().containsKey(protonEntry);
 			if (containsProton) res++;
 		}
 		
-		return res == 0 || res == rxnList.size();
+		return !(res == 0 || res == rxnList.size());
 	}
 	
 	//ORIENTATION_MISMATCH
