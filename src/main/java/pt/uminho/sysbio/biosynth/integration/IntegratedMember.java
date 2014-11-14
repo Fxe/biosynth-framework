@@ -23,6 +23,12 @@ public class IntegratedMember {
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
+	@Id
+	@Column(name="reference_id", nullable=false)
+	private Long referenceId;
+	public Long getReferenceId() { return referenceId;}
+	public void setReferenceId(Long referenceId) { this.referenceId = referenceId;}
+
 	@Column(name="entry", nullable=true)
 	private String entry;
 	public String getEntry() { return entry;}

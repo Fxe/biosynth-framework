@@ -76,7 +76,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 		integrationSet.setName("IID_BIGG");
 		integrationSet.setDescription("BiGG <=> KEGG Compound Integration");
 		IntegratedCluster integratedCluster = new IntegratedCluster();
-		integratedCluster.setClusterType(IntegrationLabel.MetaboliteCluster.toString());
+		integratedCluster.setClusterType(IntegrationNodeLabel.MetaboliteCluster.toString());
 		integratedCluster.setIntegrationSet(integrationSet);
 		integratedCluster.setEntry("X00001");
 		integratedCluster.setDescription("some cluster");
@@ -84,7 +84,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 		IntegratedMember integratedMember = new IntegratedMember();
 		integratedMember.setId(12345L);
 		integratedMember.setDescription("cpd-0000A");
-		integratedMember.setMemberType(IntegrationLabel.MetaboliteMember.toString());
+		integratedMember.setMemberType(IntegrationNodeLabel.MetaboliteMember.toString());
 		
 		IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
 		integratedClusterMember.setCluster(integratedCluster);
