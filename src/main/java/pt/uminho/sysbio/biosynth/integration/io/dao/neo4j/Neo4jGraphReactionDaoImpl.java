@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.neo4j.graphdb.DynamicLabel;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -17,11 +18,11 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
-import edu.uminho.biosynth.core.data.integration.neo4j.AbstractNeo4jDao;
 
 public class Neo4jGraphReactionDaoImpl 
-extends AbstractNeo4jDao<GraphReactionEntity> 
+extends AbstractNeo4jDao
 implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphReactionDaoImpl.class);
@@ -30,6 +31,12 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	private static final RelationshipType RIGHT_RELATIONSHIP = ReactionRelationshipType.Right;
 	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
 			ReactionRelationshipType.HasCrossreferenceTo;
+	
+	
+	public Neo4jGraphReactionDaoImpl(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
+		// TODO Auto-generated constructor stub
+	}
 	
 	@Override
 	public GraphReactionEntity getReactionById(String tag, Serializable id) {
@@ -241,10 +248,10 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		return result;
 	}
 
-	@Override
-	protected GraphReactionEntity nodeToObject(Node node) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	protected GraphReactionEntity nodeToObject(Node node) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

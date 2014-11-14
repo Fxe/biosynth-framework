@@ -44,8 +44,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 
 	@Before
 	public void setUp() throws Exception {
-		Neo4jGraphReactionDaoImpl daoImpl = new Neo4jGraphReactionDaoImpl();
-		daoImpl.setGraphDatabaseService(db);
+		Neo4jGraphReactionDaoImpl daoImpl = new Neo4jGraphReactionDaoImpl(db);
 		reactionDao = daoImpl;
 		tx = db.beginTx();
 	}

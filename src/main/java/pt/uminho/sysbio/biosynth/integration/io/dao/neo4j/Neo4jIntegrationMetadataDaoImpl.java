@@ -38,8 +38,6 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			GraphDatabaseService graphDatabaseService) {
 		super(graphDatabaseService);
 	}
-
-	
 	
 	@Override
 	public List<Long> getAllIntegrationSetsId() {
@@ -192,10 +190,11 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
 		if (iidNode == null || !iidNode.hasLabel(IntegrationLabel.IntegrationSet)) return null;
 		
-		LOGGER.debug(String.format("Loading metabolite clusters for %d", integrationSetId));
+		LOGGER.debug(String.format("Loading metabolite clusters for integration set [%d]", integrationSetId));
 		List<Long> result = new ArrayList<> ();
 		for (Relationship relationship : iidNode
 				.getRelationships(IntegrationRelationshipType.IntegratedMetaboliteCluster)) {
+
 			Node cidNode = relationship.getOtherNode(iidNode);
 			result.add(cidNode.getId());
 		}
@@ -215,20 +214,26 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			LOGGER.error("No integration set assigned to cluster");
 			return null;
 		}
+		if (cluster.getClusterType() == null || cluster.getClusterType().isEmpty()) {
+			LOGGER.error("Invalid Cluster Type");
+			return null;
+		}
 		
 		if (cluster.getIntegrationSet().getId() == null) {
+			LOGGER.debug("Generating Integration Set");
 			this.saveIntegrationSet(cluster.getIntegrationSet());
 		}
 		
 		// Generate Members
 		List<Node> members = new ArrayList<> ();
 		for (IntegratedClusterMember clusterMember : cluster.getMembers()) {
-			
+			LOGGER.debug("Generating Member");
 			IntegratedMember integratedMember = clusterMember.getMember(); 
 			this.saveIntegratedMember(integratedMember);
 			members.add(graphDatabaseService.getNodeById(integratedMember.getId()));
 		}
 		// Generate Cluster
+		LOGGER.debug("Generating Cluster");
 		Label clusterLabel = IntegrationLabel.valueOf(cluster.getClusterType());
 		String cypher = String.format(
 				"MERGE (cid:%s {entry:{entry}, description:{description}}) RETURN cid AS CID", 
@@ -239,6 +244,16 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params)); 
 		Node clusterNode = getExecutionResultGetSingle("CID", this.executionEngine.execute(cypher, params));
+		
+		for (Relationship relationship : clusterNode.getRelationships()) {
+			System.out.println(relationship.getId());
+			System.out.println(relationship.getType());
+		}
+		
+		for (Relationship relationship : clusterNode.getRelationships(IntegrationRelationshipType.Integrates)) {
+			System.out.println("I was connected before !" + relationship.getOtherNode(clusterNode).getId());
+		}
+		
 		cluster.setId(clusterNode.getId());
 		// Create Links
 		for (Node otherNode : members) {
@@ -412,6 +427,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		return object;
 	}
 
+	
 	@Override
 	public String lookupClusterEntryByMemberId(Long iid, Long eid) {
 //		Node memberNode = graphDatabaseService.findNodesByLabelAndProperty(label, key, value)
@@ -441,7 +457,12 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 //		List<?> a = IteratorUtil.asList(executionEngine.execute(query, params).columnAs(columnName));
 		
 		if (clusterEntryList.isEmpty()) return null;
-		if (clusterEntryList.size() > 1) LOGGER.error("Duplicate");
+		if (clusterEntryList.size() > 1) {
+			LOGGER.error("Duplicate: " + query + " :: " +  params);
+			for (Object o : clusterEntryList) {
+				System.out.println("--> [" + o + "]");
+			}
+		}
 		
 		String entry = (String) clusterEntryList.iterator().next();
 		

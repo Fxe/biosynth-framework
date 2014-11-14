@@ -27,6 +27,8 @@ public class YetAnotherReactionDao implements ReactionDao<GenericReaction> {
 	private GraphDatabaseService graphDatabaseService;
 	private IntegrationSet integrationSet;
 	
+	private Map<Long, String> metaboliteIntegrationMap = new HashMap<> ();
+	
 	public YetAnotherReactionDao(
 			IntegrationSet integrationSet,
 			GraphDatabaseService graphDatabaseService,
@@ -80,30 +82,41 @@ public class YetAnotherReactionDao implements ReactionDao<GenericReaction> {
 		rxn.setId(reactionNode.getId());
 		rxn.setName((String) reactionNode.getProperty("name", null));
 
-		Map<String, Double> left = new HashMap<> ();
-		for (Long nodeId : collectNodes(reactionNode, ReactionRelationshipType.Left)) {
-			Node node = graphDatabaseService.getNodeById(nodeId);
-			String integratedEntry = metadataDao.lookupClusterEntryByMemberId(iid, nodeId);
-			integratedEntry = integratedEntry == null ? node.getProperty("entry").toString() : integratedEntry;
-			
-			LOGGER.debug(String.format("%s translated to %s", node.getProperty("entry"), integratedEntry));
-			left.put(integratedEntry, 1d);
-		}
+		Map<String, Double> left = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.Left, iid);
 		
-		Map<String, Double> right = new HashMap<> ();
-		for (Long nodeId : collectNodes(reactionNode, ReactionRelationshipType.Right)) {
-			Node node = graphDatabaseService.getNodeById(nodeId);
-			String integratedEntry = metadataDao.lookupClusterEntryByMemberId(iid, nodeId);
-			integratedEntry = integratedEntry == null ? node.getProperty("entry").toString() : integratedEntry;
-			
-			LOGGER.debug(String.format("%s translated to %s", node.getProperty("entry"), integratedEntry));
-			right.put(integratedEntry, 1d);
-		}
+		Map<String, Double> right = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.Right, iid);
+//		for (Long nodeId : collectNodes(reactionNode, ReactionRelationshipType.Right)) {
+//			Node node = graphDatabaseService.getNodeById(nodeId);
+//			String integratedEntry = metadataDao.lookupClusterEntryByMemberId(iid, nodeId);
+//			integratedEntry = integratedEntry == null ? node.getProperty("entry").toString() : integratedEntry;
+//			
+//			LOGGER.debug(String.format("%s translated to %s", node.getProperty("entry"), integratedEntry));
+//			right.put(integratedEntry, 1d);
+//		}
 		
 		rxn.setReactantStoichiometry(left);
 		rxn.setProductStoichiometry(right);
 		
 		return rxn;
+	}
+	
+	private Map<String, Double> loadStoichiometryMap(Node reactionNode, ReactionRelationshipType relationshipType, Long iid) {
+		Map<String, Double> stoichiometryMap = new HashMap<> ();
+		
+		for (Long nodeId : collectNodes(reactionNode, relationshipType)) {
+			Node node = graphDatabaseService.getNodeById(nodeId);
+			if (!this.metaboliteIntegrationMap.containsKey(nodeId)) {
+				this.metaboliteIntegrationMap.put(nodeId,  metadataDao.lookupClusterEntryByMemberId(iid, nodeId));
+			}
+			String integratedEntry = this.metaboliteIntegrationMap.get(nodeId);
+			
+			integratedEntry = integratedEntry == null ? node.getProperty("entry").toString() : integratedEntry;
+			
+			LOGGER.debug(String.format("%s translated to %s", node.getProperty("entry"), integratedEntry));
+			stoichiometryMap.put(integratedEntry, 1d);
+		}
+		
+		return stoichiometryMap;
 	}
 
 	@Override

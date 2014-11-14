@@ -22,6 +22,7 @@
     </snapshotRepository>
   </distributionManagement>
   
+  <!-- 
   <repositories>
     <repository>
       <id>jni-inchi</id>
@@ -29,7 +30,8 @@
       <url>http://jni-inchi.sourceforge.net/m2repo</url>
     </repository>
   </repositories>
-
+ -->
+ 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -72,13 +74,14 @@
        <version>2.1.5</version>
      </dependency>
 
+<!-- 
     <dependency>
       <groupId>net.sf.jni-inchi</groupId>
       <artifactId>jni-inchi</artifactId>
       <version>0.7</version>
       <scope>test</scope>
     </dependency>
-
+ -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>

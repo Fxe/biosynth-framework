@@ -1,10 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.staging;
 
 import static org.junit.Assert.*;
-import net.sf.jniinchi.JniInchiException;
-import net.sf.jniinchi.JniInchiOutput;
-import net.sf.jniinchi.JniInchiOutputKey;
-import net.sf.jniinchi.JniInchiWrapper;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -49,18 +45,18 @@ public class TestStagingSelection {
 
 	@Test
 	public void test() {
-		JniInchiOutputKey out;
-		try {
-			String inchi = "InChI=1S/5C7H12N2O4.3Al.4H2O/c5*1-4(10)9-5(7(12)13)2-3-6(8)11;;;;;;;/h5*5H,2-3H2,1H3,(H2,8,11)(H,9,10)(H,12,13);;;;4*1H2/q;;;;;3*+3;;;;/p-9/t5*5-;;;;;;;/m00000......./s1";
-			out = JniInchiWrapper.getInchiKey(inchi);
-			System.out.println(out.getReturnStatus().toString());
-			String key = out.getKey();
-			System.out.println(inchi);
-			System.out.println(key);
-		} catch (JniInchiException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		JniInchiOutputKey out;
+//		try {
+//			String inchi = "InChI=1S/5C7H12N2O4.3Al.4H2O/c5*1-4(10)9-5(7(12)13)2-3-6(8)11;;;;;;;/h5*5H,2-3H2,1H3,(H2,8,11)(H,9,10)(H,12,13);;;;4*1H2/q;;;;;3*+3;;;;/p-9/t5*5-;;;;;;;/m00000......./s1";
+//			out = JniInchiWrapper.getInchiKey(inchi);
+//			System.out.println(out.getReturnStatus().toString());
+//			String key = out.getKey();
+//			System.out.println(inchi);
+//			System.out.println(key);
+//		} catch (JniInchiException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 //		for (MetaboliteFormulaDim formula_dim : dao.criteria(MetaboliteFormulaDim.class, Restrictions.eq("formula", "H2O"))) {
 //			System.out.println(formula_dim.getId());

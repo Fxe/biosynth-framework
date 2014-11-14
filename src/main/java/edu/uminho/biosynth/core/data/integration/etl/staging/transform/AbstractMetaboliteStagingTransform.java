@@ -5,10 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.jniinchi.JniInchiException;
-import net.sf.jniinchi.JniInchiOutputKey;
-import net.sf.jniinchi.JniInchiWrapper;
-
 import org.hibernate.criterion.Restrictions;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
@@ -61,42 +57,43 @@ public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabo
 	}
 	
 	protected MetaboliteInchiDim generateInChI(String inchi) {
-		if (inchi == null || inchi.replaceAll("\\s+", "").trim().length() < 1) {
-			return manager.getNullInchiDim();
-		}
-		if (!inchi.startsWith("InChI=")) {
-			inchi = "InChI=".concat(inchi);
-		}
-		
 		MetaboliteInchiDim inchi_ = null;
-		for (MetaboliteInchiDim inchi_dim : dao.criteria(MetaboliteInchiDim.class, Restrictions.eq("inchi", inchi))) {
-			if (inchi_dim.getInchi().equals(inchi)) {
-				inchi_ = inchi_dim;
-			}
-		}
-		
-		if (inchi_ == null) {
-			inchi_ = new MetaboliteInchiDim();
-			inchi_.setInchi(inchi);
-			JniInchiOutputKey out;
-			String inchiKey = null;
-			try {
-				out = JniInchiWrapper.getInchiKey(inchi);
-				switch (out.getReturnStatus()) {
-					case OK:
-						inchiKey = out.getKey();
-						break;
-					default:
-						//RETURN INVALID INCHI
-						return manager.getInvalidInchiDim(out.getReturnStatus().toString(), out.getReturnStatus().toString());
-				}
-			} catch (JniInchiException e) {
-				//RETURN ERROR STATE INCHI
-				return manager.getInvalidInchiDim("EXCEPTION", e.getMessage());
-			}
-			inchi_.setInchiKey(inchiKey);
-			dao.save(inchi_);
-		}
+//		if (inchi == null || inchi.replaceAll("\\s+", "").trim().length() < 1) {
+//			return manager.getNullInchiDim();
+//		}
+//		if (!inchi.startsWith("InChI=")) {
+//			inchi = "InChI=".concat(inchi);
+//		}
+//		
+//		MetaboliteInchiDim inchi_ = null;
+//		for (MetaboliteInchiDim inchi_dim : dao.criteria(MetaboliteInchiDim.class, Restrictions.eq("inchi", inchi))) {
+//			if (inchi_dim.getInchi().equals(inchi)) {
+//				inchi_ = inchi_dim;
+//			}
+//		}
+//		
+//		if (inchi_ == null) {
+//			inchi_ = new MetaboliteInchiDim();
+//			inchi_.setInchi(inchi);
+//			JniInchiOutputKey out;
+//			String inchiKey = null;
+//			try {
+//				out = JniInchiWrapper.getInchiKey(inchi);
+//				switch (out.getReturnStatus()) {
+//					case OK:
+//						inchiKey = out.getKey();
+//						break;
+//					default:
+//						//RETURN INVALID INCHI
+//						return manager.getInvalidInchiDim(out.getReturnStatus().toString(), out.getReturnStatus().toString());
+//				}
+//			} catch (JniInchiException e) {
+//				//RETURN ERROR STATE INCHI
+//				return manager.getInvalidInchiDim("EXCEPTION", e.getMessage());
+//			}
+//			inchi_.setInchiKey(inchiKey);
+//			dao.save(inchi_);
+//		}
 		
 		return inchi_;
 	}
