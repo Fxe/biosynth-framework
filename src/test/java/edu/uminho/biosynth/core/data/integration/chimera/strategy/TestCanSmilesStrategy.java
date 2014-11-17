@@ -64,8 +64,8 @@ public class TestCanSmilesStrategy {
 	@Test
 	public void testGenerateClusterSuccess1() {
 		//1237463 BUTANAL CanSMILES CCCC=O
-		CanSmileClusterStrategy strategy = new CanSmileClusterStrategy();
-		strategy.setDb(graphDatabaseService);
+		CanSmileClusterStrategy strategy = 
+				new CanSmileClusterStrategy(graphDatabaseService);
 		strategy.setInitialNode(1236473L);
 		Set<Long> compoundNodeIds = strategy.execute();
 		List<String> entries = new ArrayList<> ();
@@ -83,8 +83,8 @@ public class TestCanSmilesStrategy {
 	@Test
 	public void testGenerateClusterSuccess2() {
 		//1251857 WATER CanSMILES O
-		CanSmileClusterStrategy strategy = new CanSmileClusterStrategy();
-		strategy.setDb(graphDatabaseService);
+		CanSmileClusterStrategy strategy = 
+				new CanSmileClusterStrategy(graphDatabaseService);
 		strategy.setInitialNode(1251857L);
 		Set<Long> compoundNodeIds = strategy.execute();
 		List<String> entries = new ArrayList<> ();

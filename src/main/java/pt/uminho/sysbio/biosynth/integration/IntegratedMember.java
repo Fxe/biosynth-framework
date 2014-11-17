@@ -17,18 +17,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="integrated_member")
 public class IntegratedMember {
 	
+	//Unique Id (MetaData)
 	@Id
 	@Column(name="id", nullable=false)
 	private Long id;
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
-	
+
+	//ReferenceId Id (DataSource)
 	@Id
 	@Column(name="reference_id", nullable=false)
 	private Long referenceId;
 	public Long getReferenceId() { return referenceId;}
 	public void setReferenceId(Long referenceId) { this.referenceId = referenceId;}
 
+	//Entry Id (DataSource)
 	@Column(name="entry", nullable=true)
 	private String entry;
 	public String getEntry() { return entry;}

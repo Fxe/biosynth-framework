@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -11,11 +12,13 @@ import pt.uminho.sysbio.biosynth.integration.strategy.AbstractNeo4jClusteringStr
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrategy {
-
-	public ChebiParentClusteringStrategy() {
+	
+	public ChebiParentClusteringStrategy(
+			GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
 		this.initialNodeLabel = CompoundNodeLabel.ChEBI;
 	}
-	
+
 	@Override
 	public Set<Long> execute() {
 		Set<Long> ids = new HashSet<> ();

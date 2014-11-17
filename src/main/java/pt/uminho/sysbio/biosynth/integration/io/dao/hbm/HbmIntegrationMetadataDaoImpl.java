@@ -181,6 +181,11 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		query.setParameter("iid", integrationSetId.getId());
 		return new HashSet<> (query.list());
 	}
+	@Override
+	public Set<Long> getAllIntegratedClusterIdsByType(Long integrationSetId,
+			String type) {
+		throw new RuntimeException("Someone implement this please !");
+	}
 
 	@Override
 	public IntegratedCluster getIntegratedClusterByEntry(String name, Long integrationSetId) {
@@ -389,6 +394,8 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 

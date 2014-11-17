@@ -22,11 +22,13 @@ public interface IntegrationMetadataDao {
 	
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, Long integrationSetId);
 	public IntegratedCluster getIntegratedClusterById(Long id);
+	
 	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId);
 	public List<IntegratedCluster> getIntegratedClustersByPage(Long integrationSetId, int firstResult, int maxResults);
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId);
 	public Set<Long> getAllIntegratedClusterIds(IntegrationSet integrationSetId);
+	public Set<Long> getAllIntegratedClusterIdsByType(Long integrationSetId, String type);
 	
 	public IntegratedCluster saveIntegratedCluster(IntegratedCluster cluster);
 	public void removeMembersFromIntegratedCluster(IntegratedCluster integratedCluster, Set<Long> toRemove);
@@ -64,4 +66,5 @@ public interface IntegrationMetadataDao {
 	
 	public String lookupClusterEntryByMemberId(Long iid, Long eid);
 	public Long lookupClusterIdByMemberId(Long iid, Long eid);
+	
 }

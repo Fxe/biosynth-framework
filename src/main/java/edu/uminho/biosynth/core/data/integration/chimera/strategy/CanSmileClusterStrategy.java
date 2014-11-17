@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -18,6 +19,10 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 
 public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
+
+	public CanSmileClusterStrategy(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
+	}
 
 	private static final Logger LOGGER = Logger.getLogger(CanSmileClusterStrategy.class);
 	

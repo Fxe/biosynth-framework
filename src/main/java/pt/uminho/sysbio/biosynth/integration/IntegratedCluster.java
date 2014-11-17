@@ -45,7 +45,7 @@ public class IntegratedCluster {
 	public void setDescription(String description) { this.description = description;}
 	
 	@Column(name="cluster_type", nullable=false, length=255)
-	private String clusterType = null;	
+	private String clusterType = null;
 	public String getClusterType() { return clusterType;}
 	public void setClusterType(String clusterType) { this.clusterType = clusterType;}
 

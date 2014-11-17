@@ -3,7 +3,7 @@
  */
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Set;
 
@@ -15,9 +15,6 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.tooling.GlobalGraphOperations;
-
-import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 /**
  * @author Filipe
@@ -78,8 +75,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateH2oCluster() {
 		Node initialNode = graphDatabaseService.getNodeById(5533L);
-		BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiggCompoundMatcherStrategy strategy = 
+				new BiggCompoundMatcherStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -89,8 +86,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateNadCluster() {
 		Node initialNode = graphDatabaseService.getNodeById(7402L);
-		BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiggCompoundMatcherStrategy strategy = 
+				new BiggCompoundMatcherStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -100,8 +97,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateNedCluster() {
 		Node initialNode = graphDatabaseService.getNodeById(29L);
-		BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiggCompoundMatcherStrategy strategy = 
+				new BiggCompoundMatcherStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -111,8 +108,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateOmgCluster() {
 		Node initialNode = graphDatabaseService.getNodeById(995L);
-		BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiggCompoundMatcherStrategy strategy = 
+				new BiggCompoundMatcherStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -122,8 +119,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateOh1Cluster() {
 		Node initialNode = graphDatabaseService.getNodeById(7645L);
-		BiggCompoundMatcherStrategy strategy = new BiggCompoundMatcherStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiggCompoundMatcherStrategy strategy = 
+				new BiggCompoundMatcherStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -133,8 +130,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateChEBI_16908_Main() {
 		Node initialNode = graphDatabaseService.getNodeById(167069L);
-		ChebiParentClusteringStrategy strategy = new ChebiParentClusteringStrategy();
-		strategy.setDb(graphDatabaseService);
+		ChebiParentClusteringStrategy strategy = 
+				new ChebiParentClusteringStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -146,8 +143,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateChEBI_7423_Parent_16908() {
 		Node initialNode = graphDatabaseService.getNodeById(167071L);
-		ChebiParentClusteringStrategy strategy = new ChebiParentClusteringStrategy();
-		strategy.setDb(graphDatabaseService);
+		ChebiParentClusteringStrategy strategy = 
+				new ChebiParentClusteringStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -158,8 +155,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateMetaCycWATER_Cluster() {
 		Node initialNode = graphDatabaseService.getNodeById(436046L);
-		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = new BiocycFirstDegreeCrossreferenceClusteringStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = 
+				new BiocycFirstDegreeCrossreferenceClusteringStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();
@@ -169,8 +166,8 @@ public class TestClusteringStrategy {
 	@Test
 	public void generateMetaCycPROTON_Cluster() {
 		Node initialNode = graphDatabaseService.getNodeById(167042L);
-		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = new BiocycFirstDegreeCrossreferenceClusteringStrategy();
-		strategy.setDb(graphDatabaseService);
+		BiocycFirstDegreeCrossreferenceClusteringStrategy strategy = 
+				new BiocycFirstDegreeCrossreferenceClusteringStrategy(graphDatabaseService);
 		strategy.setInitialNode(initialNode);
 		
 		Set<Long> result = strategy.execute();

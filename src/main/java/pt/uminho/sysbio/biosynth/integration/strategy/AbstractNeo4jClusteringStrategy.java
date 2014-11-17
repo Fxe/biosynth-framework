@@ -5,13 +5,11 @@ import java.util.Set;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 
 public abstract class AbstractNeo4jClusteringStrategy implements ClusteringStrategy {
 
-	@Autowired
 	protected GraphDatabaseService db;
 	
 	protected Label initialNodeLabel;
@@ -23,6 +21,10 @@ public abstract class AbstractNeo4jClusteringStrategy implements ClusteringStrat
 
 	public GraphDatabaseService getDb() { return db;}
 	public void setDb(GraphDatabaseService db) { this.db = db;}
+	
+	public AbstractNeo4jClusteringStrategy(GraphDatabaseService graphDatabaseService) {
+		this.db = graphDatabaseService;
+	}
 	
 	@Override
 	public void setInitialNode(Long id) {

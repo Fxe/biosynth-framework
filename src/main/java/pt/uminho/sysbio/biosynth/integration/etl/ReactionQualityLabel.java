@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
-public enum ReactionQualityLabel {
+import org.neo4j.graphdb.Label;
+
+public enum ReactionQualityLabel implements Label {
 	OK,
 	
 	EXACT_MATCH, // a A + b B op c C <=> c C' op a A + b B

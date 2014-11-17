@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -32,7 +33,8 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 //		return null;
 //	}
 	
-	public BiggCompoundMatcherStrategy() {
+	public BiggCompoundMatcherStrategy(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
 		this.initialNodeLabel = MetaboliteMajorLabel.BiGG;
 	}
 	

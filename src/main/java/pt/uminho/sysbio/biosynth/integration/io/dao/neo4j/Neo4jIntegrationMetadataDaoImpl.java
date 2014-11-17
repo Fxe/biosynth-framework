@@ -2,10 +2,12 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -137,22 +139,25 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public IntegratedCluster getIntegratedClusterById(Long id) {
 		Node cidNode = graphDatabaseService.getNodeById(id);
+		
+		LOGGER.debug(String.format("Loading cluster: %s -> %s", id, cidNode));
+		
 		IntegrationSet integrationSet = null;
 		for (Relationship relationship : cidNode
-				.getRelationships(IntegrationRelationshipType.IntegratedMetaboliteCluster)) {
+				.getRelationships()) {
 			Node iidNode = relationship.getOtherNode(cidNode);
 			if (integrationSet != null) {
-				LOGGER.debug("SOME ERROR FIXME !");
+				LOGGER.error("SOME ERROR FIXME !");
 			}
 			integrationSet = this.getIntegrationSet(iidNode.getId());
 		}
-		IntegratedCluster integratedCluster = nodeToIntegratedMetaboliteCluster(cidNode);
+		IntegratedCluster integratedCluster = nodeToIntegratedCluster(cidNode);
 		integratedCluster.setIntegrationSet(integrationSet);
 		List<IntegratedClusterMember> integratedClusterMembers = new ArrayList<> ();
 		for (Relationship relationship : cidNode
 				.getRelationships(IntegrationRelationshipType.Integrates)) {
 			Node eidNode = relationship.getOtherNode(cidNode);
-			IntegratedMember integratedMember = nodeToIntegratedMetaboliteMember(eidNode);
+			IntegratedMember integratedMember = nodeToIntegratedMember(eidNode);
 			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
 			integratedClusterMember.setMember(integratedMember);
 			integratedClusterMember.setCluster(integratedCluster);
@@ -190,10 +195,40 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
 		if (iidNode == null || !iidNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
 		
-		LOGGER.debug(String.format("Loading metabolite clusters for integration set [%d]", integrationSetId));
+		LOGGER.debug(String.format("Loading all clusters for integration set [%d]", integrationSetId));
 		List<Long> result = new ArrayList<> ();
 		for (Relationship relationship : iidNode
-				.getRelationships(IntegrationRelationshipType.IntegratedMetaboliteCluster)) {
+				.getRelationships()) {
+
+			Node cidNode = relationship.getOtherNode(iidNode);
+			result.add(cidNode.getId());
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public Set<Long> getAllIntegratedClusterIdsByType(Long integrationSetId, String type) {
+		IntegrationNodeLabel clusterType = IntegrationNodeLabel.valueOf(type);
+		IntegrationRelationshipType relationshipType;
+		switch (clusterType) {
+			case MetaboliteCluster:
+				relationshipType = IntegrationRelationshipType.IntegratedMetaboliteCluster;
+				break;
+			case ReactionCluster:
+				relationshipType = IntegrationRelationshipType.IntegratedReactionCluster;
+				break;
+			default:
+				throw new RuntimeException("Invalid cluster type: " + type);
+		}
+		
+		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
+		if (iidNode == null || !iidNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
+		
+		LOGGER.debug(String.format("Loading %s clusters for integration set [%d]", type, integrationSetId));
+		Set<Long> result = new HashSet<> ();
+		for (Relationship relationship : iidNode
+				.getRelationships(relationshipType)) {
 
 			Node cidNode = relationship.getOtherNode(iidNode);
 			result.add(cidNode.getId());
@@ -234,13 +269,19 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		}
 		// Generate Cluster
 		LOGGER.debug("Generating Cluster");
-		Label clusterLabel = IntegrationNodeLabel.valueOf(cluster.getClusterType());
+		IntegrationNodeLabel clusterLabel = IntegrationNodeLabel.valueOf(cluster.getClusterType());
+		
+		//Make Evaluation Labels (TEMP STRATEGY ! MAYBE NODE ?)
+		String qualityLabels = StringUtils.join(cluster.getMeta().keySet(), ':');
+		if (!qualityLabels.trim().isEmpty()) qualityLabels = ":".concat(qualityLabels);
+		
 		String cypher = String.format(
-				"MERGE (cid:%s {entry:{entry}, description:{description}}) RETURN cid AS CID", 
-				clusterLabel);
+				"MERGE (cid:%s%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
+				clusterLabel, qualityLabels);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", cluster.getEntry());
 		params.put("description", nullToString(cluster.getDescription()));
+		params.put("cluster_type", nullToString(cluster.getClusterType()));
 		
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params)); 
 		Node clusterNode = getExecutionResultGetSingle("CID", this.executionEngine.execute(cypher, params));
@@ -261,7 +302,16 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		}
 		// Link to Set
 		Node integrationSetNode = graphDatabaseService.getNodeById(cluster.getIntegrationSet().getId());
-		integrationSetNode.createRelationshipTo(clusterNode, IntegrationRelationshipType.IntegratedMetaboliteCluster);
+		switch (clusterLabel) {
+			case MetaboliteCluster:
+				integrationSetNode.createRelationshipTo(clusterNode, IntegrationRelationshipType.IntegratedMetaboliteCluster);
+				break;
+			case ReactionCluster:
+				integrationSetNode.createRelationshipTo(clusterNode, IntegrationRelationshipType.IntegratedReactionCluster);
+				break;
+			default:
+				throw new RuntimeException("Invalid type: " + clusterLabel.toString());
+		}
 		
 		return cluster;
 	}
@@ -397,22 +447,34 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		return integrationSet;
 	}
 	
-	private IntegratedCluster nodeToIntegratedMetaboliteCluster(Node node) {
-		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteCluster)) return null;
+	private IntegratedCluster nodeToIntegratedCluster(Node node) {
+		if (node == null) {
+			return null;
+		}
+//		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteCluster)) return null;
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
+		String clusterType = node.getLabels().iterator().next().toString();
 		integratedCluster.setId(node.getId());
+		integratedCluster.setClusterType(clusterType);
 		integratedCluster.setDescription((String) node.getProperty("description"));
 		integratedCluster.setEntry((String) node.getProperty("entry"));
 		return integratedCluster;
 	}
 	
-	private IntegratedMember nodeToIntegratedMetaboliteMember(Node node) {
-		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteMember)) return null;
+	public static IntegratedMember nodeToIntegratedMember(Node node) {
+		if (node == null) {
+			return null;
+		}
+//		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteMember)) return null;
 		
 		IntegratedMember integratedMember = new IntegratedMember();
-		integratedMember.setId((Long)node.getProperty("id"));
-		integratedMember.setDescription((String) node.getProperty("description"));
+		String memberType = node.getLabels().iterator().next().toString();
+		integratedMember.setId(node.getId());
+		integratedMember.setReferenceId((Long)node.getProperty("id", null));
+		integratedMember.setEntry((String) node.getProperty("entry", null));
+		integratedMember.setMemberType(memberType);
+		integratedMember.setDescription((String) node.getProperty("description", null));
 		return integratedMember;
 	}
 	
@@ -473,14 +535,62 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return entry;
 	}
+	
+	public Map<Long, Long> getUnificationMapping(Long iid, String fromType, String toType) {
+		Map<Long, Long> unificationMap = new HashMap<> ();
+		IntegrationNodeLabel fromLabel = 
+				IntegrationNodeLabel.valueOf(fromType);
+		IntegrationNodeLabel toLabel = 
+				IntegrationNodeLabel.valueOf(toType);
+		
+		IntegrationRelationshipType integrationRelationshipType = 
+				convertNodeTypeToRelationship(fromLabel);
+		
+		Node iidNode = graphDatabaseService.getNodeById(iid);
+		Set<Long> validClusters = Neo4jUtils.collectNodeRelationshipNodeIds(
+				iidNode, integrationRelationshipType);
+		
+		for (Node memberNode : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(toLabel)) {
+			
+			Set<Long> clusters = Neo4jUtils.collectNodeRelationshipNodeIds(
+					memberNode, IntegrationRelationshipType.Integrates);
+			clusters.retainAll(validClusters);
+			
+			if (clusters.size() > 1) {
+				LOGGER.warn("error more than one cluster !");
+			}
+			
+			for (Long cid : clusters) {
+				unificationMap.put((long)memberNode.getProperty("id", -1L), cid);
+			}
+		}
+		
+		return unificationMap;
+	}
 
 	@Override
 	public Long lookupClusterIdByMemberId(Long iid, Long eid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
+	
+	private IntegrationRelationshipType convertNodeTypeToRelationship(IntegrationNodeLabel integrationNodeLabel) {
+		IntegrationRelationshipType integrationRelationshipType;
+		
+		switch (integrationNodeLabel) {
+			case MetaboliteCluster:
+				integrationRelationshipType = IntegrationRelationshipType.IntegratedMetaboliteCluster;
+				break;
+			case ReactionCluster:
+				integrationRelationshipType = IntegrationRelationshipType.IntegratedReactionCluster;
+				break;
+			default: throw new RuntimeException("Invalid Type");	
+		}
+		
+		return integrationRelationshipType;
+	}
 	
 //	private Node executionEngineMerge() {
 //		String cypher = String.format(

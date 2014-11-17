@@ -3,6 +3,7 @@ package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -13,7 +14,8 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
 public class BiocycFirstDegreeCrossreferenceClusteringStrategy extends AbstractNeo4jClusteringStrategy {
 
-	public BiocycFirstDegreeCrossreferenceClusteringStrategy() {
+	public BiocycFirstDegreeCrossreferenceClusteringStrategy(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
 		initialNodeLabel = CompoundNodeLabel.MetaCyc;
 	}
 	

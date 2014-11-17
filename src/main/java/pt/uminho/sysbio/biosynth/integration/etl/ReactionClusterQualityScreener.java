@@ -13,8 +13,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
@@ -33,6 +35,36 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 
 	public ReactionClusterQualityScreener(ReactionDao<GenericReaction> reactionDao) {
 		this.reactionDao = reactionDao;
+	}
+	
+	public void evaluate(IntegratedCluster integratedCluster) {
+		Set<ReactionQualityLabel> labels = this.something(integratedCluster);
+		
+		Map<String, IntegratedClusterMeta> meta = new HashMap<> ();
+		
+		for (ReactionQualityLabel label : labels) {
+			IntegratedClusterMeta clusterMeta = new IntegratedClusterMeta();
+			IntegrationMessageLevel level;
+			switch (label) {
+				case ERROR: level = IntegrationMessageLevel.ERROR; break;
+				case EXACT_MATCH: level = IntegrationMessageLevel.INFO; break;
+				case OK: level = IntegrationMessageLevel.INFO; break;
+				case PROTON_MISMATCH: level = IntegrationMessageLevel.INFO; break;
+				case STOICHIOMETRY_MISMATCH: level = IntegrationMessageLevel.WARNING; break;
+				case METABOLITE_MISMATCH: level = IntegrationMessageLevel.WARNING; break;
+				default:
+					throw new RuntimeException("Unsupported Assertion Label: " + label);
+			}
+			
+			clusterMeta.setLevel(level);
+			clusterMeta.setIntegratedCluster(integratedCluster);
+			clusterMeta.setMessage("massage !");
+			clusterMeta.setMetaType(label.toString());
+			
+			meta.put(clusterMeta.getMetaType(), clusterMeta);
+		}
+		
+		integratedCluster.setMeta(meta);
 	}
 	
 	public Set<ReactionQualityLabel> something(List<GenericReaction> rxnList) {
@@ -98,16 +130,18 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 //				.equals(IntegrationLabel.ReactionCluster.toString())) {
 //			return null;
 //		}
+		System.out.println();
+		
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		for (IntegratedClusterMember member : integratedCluster.getMembers()) {
-			Long reid = member.getMember().getId();
+			Long reid = member.getMember().getReferenceId();
 //			Node reactionNode = 	
 			GenericReaction rxn = reactionDao.getReactionById(reid);
 			
 			if (rxn != null) {
 				rxnList.add(rxn);
 			} else {
-				LOGGER.error("not found");
+				LOGGER.error("Reaction not found: " + reid);
 			}
 		}
 		
