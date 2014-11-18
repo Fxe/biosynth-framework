@@ -97,21 +97,41 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	}
 	@Override
 	public Map<String, Double> getLeftStoichiometry() {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Double> leftMap = new HashMap<> ();
+		for (GraphMetaboliteProxyEntity entity : this.left.keySet()) {
+			leftMap.put(entity.getId().toString(), this.left.get(entity));
+		}
+		return leftMap;
 	}
 	@Override
 	public void setLeftStoichiometry(Map<String, Double> left) {
-		// TODO Auto-generated method stub
+		this.left.keySet().clear();
+		for (String entry : left.keySet()) {
+			Long id = Long.parseLong(entry);
+			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
+			entity.setId(id);
+//			entity.setEntry(entry);
+			this.left.put(entity, left.get(entry));
+		}
 	}
 	@Override
 	public Map<String, Double> getRightStoichiometry() {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Double> rightMap = new HashMap<> ();
+		for (GraphMetaboliteProxyEntity entity : this.right.keySet()) {
+			rightMap.put(entity.getId().toString(), this.right.get(entity));
+		}
+		return rightMap;
 	}
 	@Override
 	public void setRightStoichiometry(Map<String, Double> right) {
-		// TODO Auto-generated method stub	
+		this.right.keySet().clear();
+		for (String entry : right.keySet()) {
+			Long id = Long.parseLong(entry);
+			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
+			entity.setId(id);
+			
+			this.right.put(entity, left.get(entry));
+		}
 	}	
 	
 	@Override

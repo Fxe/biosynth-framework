@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +45,51 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private Map<GraphMetaboliteProxyEntity, Double> getReactionMetabolites(Node node, ReactionRelationshipType relationshipType) {
+		Map<GraphMetaboliteProxyEntity, Double> map = new HashMap<> ();
+		
+		for (Relationship relationship : node.getRelationships(relationshipType)) {
+			Node other = relationship.getOtherNode(node);
+			
+			Double stoichiometry = (double) relationship.getProperty("stoichiometry");
+			Long id = other.getId();
+			String entry = (String) other.getProperty("entry", null);
+			String majorLabel = (String) other.getProperty("major-label", null);
+			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
+			entity.setId(id);
+			entity.setEntry(entry);
+			entity.setMajorLabel(majorLabel);
+			
+			map.put(entity, stoichiometry);
+		}
+		
+		return map;
+	}
 
 	@Override
 	public GraphReactionEntity getReactionByEntry(String tag, String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(tag);
+		
+		List<Node> nodes = IteratorUtil.asList(graphDatabaseService
+				.findNodesByLabelAndProperty(majorLabel, "entry", entry));
+		
+		if (nodes.isEmpty()) return null;
+		if (nodes.size() > 1) LOGGER.warn("Multiple Records for: " + entry);
+		
+		Node node = nodes.get(0);
+		
+		LOGGER.debug("Found " + node);
+		
+		GraphReactionEntity reactionEntity = new GraphReactionEntity();
+		
+		reactionEntity.setId(node.getId());
+		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+		
+		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.Left));
+		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.Right));
+		
+		return reactionEntity;
 	}
 
 	@Override

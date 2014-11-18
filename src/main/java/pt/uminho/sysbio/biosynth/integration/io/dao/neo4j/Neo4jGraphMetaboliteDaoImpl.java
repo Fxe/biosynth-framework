@@ -12,6 +12,7 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +46,26 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
 	@Override
 	public GraphMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(tag);
+		
+		List<Node> nodes = IteratorUtil.asList(graphDatabaseService
+				.findNodesByLabelAndProperty(majorLabel, "entry", entry));
+		
+		if (nodes.isEmpty()) return null;
+		if (nodes.size() > 1) LOGGER.warn("Multiple Records for: " + entry);
+		
+		Node node = nodes.get(0);
+		
+		LOGGER.debug("Found " + node);
+		
+		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
+		
+		metaboliteEntity.setId(node.getId());
+		metaboliteEntity.setEntry( (String) node.getProperty("entry", null));
+		metaboliteEntity.setName( (String) node.getProperty("name", null));
+		metaboliteEntity.setFormula( (String) node.getProperty("formula", null));
+		
+		return metaboliteEntity;
 	}
 
 	@Override

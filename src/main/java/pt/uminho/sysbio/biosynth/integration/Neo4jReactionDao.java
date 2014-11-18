@@ -51,7 +51,7 @@ public class Neo4jReactionDao extends AbstractNeo4jDao implements ReactionDao<De
 
 	@Override
 	public DefaultReaction getReactionByEntry(String entry) {
-		Node node = graphDatabaseService.findNodesByLabelAndProperty(ReactionMajorLabel.LigandReaction, "entry", entry).iterator().next();
+		Node node = graphDatabaseService.findNodesByLabelAndProperty(ReactionMajorLabel.BiGG, "entry", entry).iterator().next();
 		
 		return this.getReactionById(node.getId());
 	}

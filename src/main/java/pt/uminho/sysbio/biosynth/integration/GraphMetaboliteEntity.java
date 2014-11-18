@@ -52,9 +52,11 @@ public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabo
 
 	@Override
 	public String getName() { return (String)this.properties.get("name");}
+	public void setName(String name) { this.properties.put("name", name);}
+	
 	@Override
 	public String getFormula() { return (String)this.properties.get("formula");}
-	
+	public void setFormula(String formula) { this.properties.put("formula", formula);}
 	
 	@Override
 	public String toString() {
