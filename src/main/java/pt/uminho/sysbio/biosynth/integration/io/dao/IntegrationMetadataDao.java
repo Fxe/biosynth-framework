@@ -22,6 +22,7 @@ public interface IntegrationMetadataDao {
 	
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, Long integrationSetId);
 	public IntegratedCluster getIntegratedClusterById(Long id);
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long integrationSetId, Long...memberIds);
 	
 	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId);
 	public List<IntegratedCluster> getIntegratedClustersByPage(Long integrationSetId, int firstResult, int maxResults);

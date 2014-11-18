@@ -167,6 +167,40 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return integratedCluster;
 	}
+	
+	@Override
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
+			Long integrationSetId, Long... eids) {
+		
+		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
+		Set<Long> cidInDomain = Neo4jUtils.collectNodeRelationshipNodeIds(iidNode);
+		Set<Long> cidSet = new HashSet<> ();
+		for (Long eid : eids) {
+			Set<Long> eidsFound = Neo4jUtils.collectNodeIdsFromNodes(
+					IteratorUtil.asCollection(this.graphDatabaseService
+							.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, "id", eid)));
+			if (!eidsFound.isEmpty()) {
+				if (eidsFound.size() > 1) LOGGER.warn("Multiple members found with reference id: " + eid);
+				long eid_ = eidsFound.iterator().next();
+				Node eidNode = this.graphDatabaseService.getNodeById(eid_);
+				Set<Long> cids = Neo4jUtils.collectNodeRelationshipNodeIds(eidNode, IntegrationRelationshipType.Integrates);
+				cids.retainAll(cidInDomain);
+				cidSet.addAll(cids);
+			} else {
+				LOGGER.warn("Skip " + eid + " not found");
+			}
+		}
+		
+		List<IntegratedCluster> integratedClusters = new ArrayList<> ();
+		for (Long cid : cidSet) {
+			IntegratedCluster integratedCluster = this.getIntegratedClusterById(cid);
+			if (integratedCluster != null) {
+				integratedClusters.add(integratedCluster);
+			}
+		}
+		
+		return integratedClusters;
+	}
 
 	@Override
 	public List<IntegratedCluster> getAllIntegratedClusters(
@@ -188,6 +222,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return null;
 	}
+	
+
 
 	@Override
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId) {
@@ -276,7 +312,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		if (!qualityLabels.trim().isEmpty()) qualityLabels = ":".concat(qualityLabels);
 		
 		String cypher = String.format(
-				"MERGE (cid:%s%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
+				"MERGE (cid:IntegratedCluster:%s%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
 				clusterLabel, qualityLabels);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", cluster.getEntry());
@@ -382,11 +418,12 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		try {	
 			Label memberLabel = IntegrationNodeLabel.valueOf(member.getMemberType());
 			String cypher = String.format(
-					"MERGE (eid:%s {id:{id}, description:{description}}) RETURN eid AS EID", 
+					"MERGE (eid:IntegratedMember:%s {id:{id}, description:{description}, member_type:{member_type}}) RETURN eid AS EID", 
 					memberLabel);
 			Map<String, Object> params = new HashMap<> ();
 			params.put("id", member.getReferenceId());
 			params.put("description", nullToString(member.getDescription()));
+			params.put("member_type", nullToString(member.getMemberType()));
 			
 			LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
 			Node node = getExecutionResultGetSingle("EID", this.executionEngine.execute(cypher, params));
@@ -591,6 +628,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return integrationRelationshipType;
 	}
+
+
 	
 //	private Node executionEngineMerge() {
 //		String cypher = String.format(

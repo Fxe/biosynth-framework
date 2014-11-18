@@ -33,6 +33,8 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 	public Set<Long> execute() {
 		Set<Long> superResult = super.execute();
 		
+		if (superResult.isEmpty()) return superResult;
+		
 		List<GenericReaction> reactions = new ArrayList<> ();
 		for (Long rxnId : superResult) {
 			
@@ -54,19 +56,26 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		
 		GenericReaction rxnPivot = reactions.get(0);
 		int l_pivot = rxnPivot.getLeftStoichiometry().size();
-		int r_pivot = rxnPivot.getLeftStoichiometry().size();
+		int r_pivot = rxnPivot.getRightStoichiometry().size();
 		
 		strictStoichMatchSet.add(rxnPivot.getId());
 		
-		LOGGER.debug(String.format("Pivot sizes %s / %s", rxnPivot.getLeftStoichiometry().keySet(), rxnPivot.getLeftStoichiometry().keySet()));
-		
+//		LOGGER.debug(String.format("Pivot sizes %s / %s", rxnPivot.getLeftStoichiometry().keySet(), rxnPivot.getLeftStoichiometry().keySet()));
+		LOGGER.debug(String.format("PIVOT::[%d]%s -> %s / %s", 
+				rxnPivot.getId(), rxnPivot.getEntry(), 
+				rxnPivot.getReactantStoichiometry().keySet(), rxnPivot.getProductStoichiometry().keySet()));
 		for (int i = 1; i < reactions.size(); i++) {
 			GenericReaction rxn = reactions.get(i);
 			if (rxn.getReactantStoichiometry().size() == l_pivot
 					&& rxn.getProductStoichiometry().size() == r_pivot) {
+				LOGGER.debug(String.format("OK   ::[%d]%s -> %s / %s", 
+						rxn.getId(), rxn.getEntry(), 
+						rxn.getReactantStoichiometry().keySet(), rxn.getProductStoichiometry().keySet()));
 				strictStoichMatchSet.add(rxn.getId());
 			} else {
-				LOGGER.debug(String.format("Size mismatch %s / %s", rxn.getReactantStoichiometry().keySet(), rxn.getProductStoichiometry().keySet()));
+				LOGGER.debug(String.format("FAIL ::[%d]%s -> %s / %s", 
+						rxn.getId(), rxn.getEntry(), 
+						rxn.getReactantStoichiometry().keySet(), rxn.getProductStoichiometry().keySet()));
 			}
 		}
 		
@@ -79,8 +88,11 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		for (String idStr : map.keySet()) {
 			Long id = Long.parseLong(idStr);
 			long uniId = this.metaboliteUnificationTable.reconciliateId(id);
-			Double stoichiometry = map.get(idStr);
-			reconciliationMap.put(Long.toString(uniId), stoichiometry);
+			//ignore id if it is a proton
+			if (uniId != protonId) {
+				Double stoichiometry = map.get(idStr);
+				reconciliationMap.put(Long.toString(uniId), stoichiometry);
+			}
 		}
 		
 		return reconciliationMap;
@@ -92,15 +104,14 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		if (rxnList.isEmpty()) return false;
 		
 		GenericReaction rxnPivot = rxnList.get(0);
+		
 		Set<String> leftPivot = new HashSet<> (rxnPivot.getReactantStoichiometry().keySet());
 		Set<String> rightPivot = new HashSet<> (rxnPivot.getProductStoichiometry().keySet());
-		
 		LOGGER.debug(rxnPivot.getEntry() + ":" + leftPivot + " / " + rightPivot);
 
 		for (int i = 1; i < rxnList.size(); i++) {
 			GenericReaction rxn = rxnList.get(i);
 			Set<String> left_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
-//			Set<String> right_ = new HashSet<> (rxn.getProductStoichiometry().keySet());
 			
 			Double l_l = jaccard(left_, leftPivot);
 			Double l_r = jaccard(left_, rightPivot);

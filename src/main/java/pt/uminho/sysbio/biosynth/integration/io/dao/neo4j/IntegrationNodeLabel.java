@@ -4,6 +4,7 @@ import org.neo4j.graphdb.Label;
 
 public enum IntegrationNodeLabel implements Label {
 	IntegrationSet,
+	IntegratedCluster, IntegratedMember,
 	MetaboliteCluster, ReactionCluster,
 	MetaboliteMember, ReactionMember
 }

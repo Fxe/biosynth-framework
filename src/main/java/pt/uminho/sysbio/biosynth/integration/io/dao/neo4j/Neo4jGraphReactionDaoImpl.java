@@ -42,8 +42,20 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	@Override
 	public GraphReactionEntity getReactionById(String tag, Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
+		
+		LOGGER.debug("Found " + node);
+		
+		GraphReactionEntity reactionEntity = new GraphReactionEntity();
+		
+		reactionEntity.setId(node.getId());
+		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+		
+		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.Left));
+		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.Right));
+		
+		return reactionEntity;
 	}
 	
 	private Map<GraphMetaboliteProxyEntity, Double> getReactionMetabolites(Node node, ReactionRelationshipType relationshipType) {

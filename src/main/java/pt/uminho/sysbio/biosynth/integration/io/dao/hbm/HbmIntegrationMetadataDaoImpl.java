@@ -395,6 +395,13 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		return null;
 	}
 
+	@Override
+	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
+			Long integrationSetId, Long... memberIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

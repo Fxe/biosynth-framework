@@ -26,7 +26,9 @@ public class UnificationTable {
 	}
 	
 	public Set<Long> getIdMappingsTo(long id) {
-		return this.unificationMapReverse.get(id);
+		Set<Long> mappings = this.unificationMapReverse.get(id);
+		if (mappings == null) mappings = new HashSet<> ();
+		return mappings;
 	}
 	
 	public long reconciliateId(long id) {
