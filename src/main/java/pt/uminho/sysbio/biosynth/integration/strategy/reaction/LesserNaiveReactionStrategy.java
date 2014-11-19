@@ -21,6 +21,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 	private final static Logger LOGGER = LoggerFactory.getLogger(LesserNaiveReactionStrategy.class);
 	
 	private Neo4jReactionDao reactionDao;
+	protected List<GenericReaction> reactions = new ArrayList<> ();
 
 	public LesserNaiveReactionStrategy(
 			GraphDatabaseService graphDatabaseService,
@@ -35,7 +36,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		
 		if (superResult.isEmpty()) return superResult;
 		
-		List<GenericReaction> reactions = new ArrayList<> ();
+		
 		for (Long rxnId : superResult) {
 			
 			DefaultReaction defaultReaction = reactionDao.getReactionById(rxnId);
@@ -98,7 +99,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		return reconciliationMap;
 	}
 	
-	private boolean alignReactions(List<GenericReaction> rxnList) {
+	protected boolean alignReactions(List<GenericReaction> rxnList) {
 		LOGGER.debug("Align reactions");
 		
 		if (rxnList.isEmpty()) return false;
@@ -122,7 +123,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		return true;
 	}
 	
-	private<E> double jaccard(Collection<E> a, Collection<E> b) {
+	protected<E> double jaccard(Collection<E> a, Collection<E> b) {
 		if (a.isEmpty() && b.isEmpty()) return 1.0;
 		
 		Set<E> A_union_B = new HashSet<> (a);
@@ -133,7 +134,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		return A_intersect_B.size() / (double)A_union_B.size();
 	}
 	
-	private void swapStoichiometry(GenericReaction rxn) {
+	protected void swapStoichiometry(GenericReaction rxn) {
 		LOGGER.debug("Swap eq rxn: " + rxn.getEntry());
 		Map<String, Double> left = rxn.getLeftStoichiometry();
 		Map<String, Double> right = rxn.getRightStoichiometry();
