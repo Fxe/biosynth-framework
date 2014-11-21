@@ -81,7 +81,7 @@ public class BioCycReactionEntity extends GenericReaction {
 		this.getReactantStoichiometry().clear();
 		for (BioCycReactionLeftEntity entity : left) {
 			entity.setBioCycReactionEntity(this);
-			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getValue());
+			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getStoichiometry());
 		}
 		this.left = left;
 	}
@@ -93,7 +93,7 @@ public class BioCycReactionEntity extends GenericReaction {
 		this.getProductStoichiometry().clear();
 		for (BioCycReactionRightEntity entity : right) {
 			entity.setBioCycReactionEntity(this);
-			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getValue());
+			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getStoichiometry());
 		}
 		this.right = right;
 	}

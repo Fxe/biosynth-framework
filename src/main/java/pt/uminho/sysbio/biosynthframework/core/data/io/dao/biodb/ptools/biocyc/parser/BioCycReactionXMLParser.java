@@ -392,10 +392,10 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				
 				BioCycReactionLeftEntity bioCycReactionLeftEntity = new BioCycReactionLeftEntity();
 				try {
-					bioCycReactionLeftEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+					bioCycReactionLeftEntity.setStoichiometry(Double.parseDouble(properties.get("coefficient")));
 					bioCycReactionLeftEntity.setCompartment(properties.get("compartment"));
 				} catch (NumberFormatException e) {
-					bioCycReactionLeftEntity.setValue(-1);
+					bioCycReactionLeftEntity.setStoichiometry(-1);
 				}
 				bioCycReactionLeftEntity.setCoefficient(properties.get("coefficient"));
 				bioCycReactionLeftEntity.setCpdEntry(properties.get("cpdEntry"));
@@ -416,10 +416,10 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 //				System.out.println(properties);
 				BioCycReactionRightEntity bioCycReactionRightEntity = new BioCycReactionRightEntity();
 				try {
-					bioCycReactionRightEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+					bioCycReactionRightEntity.setStoichiometry(Double.parseDouble(properties.get("coefficient")));
 					bioCycReactionRightEntity.setCompartment(properties.get("compartment"));
 				} catch (NumberFormatException e) {
-					bioCycReactionRightEntity.setValue(-1);
+					bioCycReactionRightEntity.setStoichiometry(-1);
 				}
 				bioCycReactionRightEntity.setCoefficient(properties.get("coefficient"));
 				bioCycReactionRightEntity.setCpdEntry(properties.get("cpdEntry"));

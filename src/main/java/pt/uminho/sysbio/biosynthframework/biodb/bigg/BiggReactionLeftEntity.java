@@ -35,6 +35,6 @@ public class BiggReactionLeftEntity extends StoichiometryPair {
 	
 	@Override
 	public String toString() {
-		return String.format("<%s,%s,%s>", this.cpdEntry, this.value, this.compartment);
+		return String.format("<%s,%s,%s>", this.cpdEntry, this.stoichiometry, this.compartment);
 	}
 }

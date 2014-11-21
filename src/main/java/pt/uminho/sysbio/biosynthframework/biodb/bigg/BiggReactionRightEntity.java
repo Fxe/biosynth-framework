@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,11 +17,13 @@ public class BiggReactionRightEntity extends StoichiometryPair {
 
 	private static final long serialVersionUID = 1L;
 	
+	@MetaProperty
 	@Column(name="compartment", nullable=false, length=7)
 	private String compartment;
 	public String getCompartment() { return compartment;}
 	public void setCompartment(String compartment) { this.compartment = compartment;}
 	
+	@MetaProperty
 	@Column(name="comment", nullable=true, length=255)
 	private String comment;
 	public String getComment() { return comment;}
@@ -35,6 +38,6 @@ public class BiggReactionRightEntity extends StoichiometryPair {
 	
 	@Override
 	public String toString() {
-		return String.format("<%s,%s,%s>%s", this.cpdEntry, this.value, this.compartment, this.comment == null ? "" : this.comment);
+		return String.format("<%s,%s,%s>%s", this.cpdEntry, this.stoichiometry, this.compartment, this.comment == null ? "" : this.comment);
 	}
 }

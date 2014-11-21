@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import pt.uminho.sysbio.biosynthframework.annotations.InChI;
+import pt.uminho.sysbio.biosynthframework.annotations.InChIProperty;
 import pt.uminho.sysbio.biosynthframework.annotations.SMILES;
 
 @Entity
@@ -34,7 +34,7 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
 	
-	@InChI
+	@InChIProperty
 	@Column(name="inchi") private String inchi;
 	public String getInchi() { return inchi;}
 	public void setInchi(String inchi) { this.inchi = inchi;}

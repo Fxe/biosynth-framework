@@ -26,7 +26,7 @@ public class BiocycReactionStoichiometryFactory {
 		biocycReactionLeftEntity.setCpdEntry(entry);
 //		biocycReactionLeftEntity.setCpdKey(cpdId);
 		biocycReactionLeftEntity.setId(id);
-		biocycReactionLeftEntity.setValue(stoichiometry);
+		biocycReactionLeftEntity.setStoichiometry(stoichiometry);
 		return biocycReactionLeftEntity;
 	}
 	
@@ -36,7 +36,7 @@ public class BiocycReactionStoichiometryFactory {
 		biocycReactionRightEntity.setCpdEntry(entry);
 //		biocycReactionRightEntity.setCpdKey(cpdId);
 		biocycReactionRightEntity.setId(id);
-		biocycReactionRightEntity.setValue(stoichiometry);
+		biocycReactionRightEntity.setStoichiometry(stoichiometry);
 		
 		return biocycReactionRightEntity;
 	}

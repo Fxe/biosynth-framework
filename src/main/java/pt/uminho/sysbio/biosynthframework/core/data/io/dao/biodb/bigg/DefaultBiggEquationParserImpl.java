@@ -77,14 +77,14 @@ public class DefaultBiggEquationParserImpl implements BiggEquationParser {
 		List<String[]> rigthTriples = this.getElements(right.split("\\+"));
 		for (String[] triple : leftTriples) {
 			BiggReactionLeftEntity l = new BiggReactionLeftEntity();
-			l.setValue(Double.parseDouble(triple[0]));
+			l.setStoichiometry(Double.parseDouble(triple[0]));
 			l.setCpdEntry(triple[1]);
 			l.setCompartment(compartment == null ? triple[2] : compartment);
 			this.left.add(l);
 		}
 		for (String[] triple : rigthTriples) {
 			BiggReactionRightEntity r = new BiggReactionRightEntity();
-			r.setValue(Double.parseDouble(triple[0]));
+			r.setStoichiometry(Double.parseDouble(triple[0]));
 			r.setCpdEntry(triple[1]);
 			r.setCompartment(compartment == null ? triple[2] : compartment);
 			this.right.add(r);

@@ -59,7 +59,7 @@ public class SeedReactionReagentEntity extends StoichiometryPair {
 		sb.append("isCofactor:").append(isCofactor).append(sep);
 		sb.append("compound_uuid:").append(compound_uuid).append(sep);
 		sb.append("destinationCompartment_uuid:").append(destinationCompartment_uuid).append(sep);
-		sb.append("coefficient:").append(value).append(sep);
+		sb.append("coefficient:").append(stoichiometry).append(sep);
 		sb.append("isTransport:").append(isTransport);
 		sb.append(end);
 		return sb.toString();

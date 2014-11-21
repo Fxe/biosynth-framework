@@ -84,7 +84,7 @@ public class KeggReactionEntity extends GenericReaction {
 		this.getReactantStoichiometry().clear();
 		for (KeggReactionLeftEntity entity : left) {
 			entity.setKeggReactionEntity(this);
-			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getValue());
+			this.getReactantStoichiometry().put(entity.getCpdEntry(), entity.getStoichiometry());
 		}
 		this.left = left;
 	}
@@ -97,7 +97,7 @@ public class KeggReactionEntity extends GenericReaction {
 		this.getProductStoichiometry().clear();
 		for (KeggReactionRightEntity entity : right) {
 			entity.setKeggReactionEntity(this);
-			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getValue());
+			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getStoichiometry());
 		}
 		this.right = right;
 	}
@@ -109,7 +109,7 @@ public class KeggReactionEntity extends GenericReaction {
 		Map<String,Double> res = new HashMap<> ();
 		for (KeggReactionLeftEntity l : left) {
 			String entry = l.getCpdEntry();
-			Double value = l.getValue();
+			Double value = l.getStoichiometry();
 			res.put(entry, value);
 		}
 		return res;
@@ -122,7 +122,7 @@ public class KeggReactionEntity extends GenericReaction {
 		Map<String,Double> res = new HashMap<> ();
 		for (KeggReactionRightEntity r : right) {
 			String entry = r.getCpdEntry();
-			Double value = r.getValue();
+			Double value = r.getStoichiometry();
 			res.put(entry, value);
 		}
 		return res;

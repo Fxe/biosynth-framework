@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
@@ -81,7 +82,19 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			Double gibbs = parser.getGibbs();
 			String direction = parser.getReactionDirection();
 			Boolean translocation = false;
-			
+			Orientation orientation = Orientation.Unknown;
+
+			if (direction != null) {
+				switch (direction) {
+					case "LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
+					case "IRREVERSIBLE-LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
+					case "PHYSIOL-LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
+					case "RIGHT-TO-LEFT": orientation = Orientation.RightToLeft; break;
+					case "PHYSIOL-RIGHT-TO-LEFT": orientation = Orientation.RightToLeft; break;
+					case "REVERSIBLE": orientation = Orientation.Reversible; break;
+					default: LOGGER.warn("Not characterized direction: " + direction); break;
+				}
+			}
 			
 			Set<String> compartments = new HashSet<> ();
 			for (BioCycReactionLeftEntity l : leftEntities) compartments.add(l.getCompartment());
@@ -94,6 +107,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn = new BioCycReactionEntity();
 			rxn.setEntry(entry_);
 			rxn.setTranslocation(translocation);
+			rxn.setOrientation(orientation);
 			rxn.setFrameId(frameId);
 			rxn.setReactionDirection(direction);
 			rxn.setGibbs(gibbs);

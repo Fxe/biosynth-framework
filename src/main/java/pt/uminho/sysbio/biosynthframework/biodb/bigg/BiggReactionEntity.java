@@ -14,17 +14,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+import pt.uminho.sysbio.biosynthframework.annotations.ReactionClass;
 
+@ReactionClass(reactionClass="BiGG")
 @Entity
-@Table(name="BIGG_REACTION")
+@Table(name="bigg_reaction")
 public class BiggReactionEntity extends GenericReaction{
 
 	private static final long serialVersionUID = 1L;
 
+	@MetaProperty
 	@Column(name="ENZYME", length=31) private String enzyme;
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme; }
 
+	@MetaProperty
 	@Column(name="equation", length=4095) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }

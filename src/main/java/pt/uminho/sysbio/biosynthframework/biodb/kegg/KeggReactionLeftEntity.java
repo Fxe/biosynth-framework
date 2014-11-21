@@ -29,6 +29,6 @@ public class KeggReactionLeftEntity extends StoichiometryPair{
 	
 	@Override
 	public String toString() {
-		return String.format("<%s, %s, %f>", this.cpdEntry, this.coefficient, this.value);
+		return String.format("<%s, %s, %f>", this.cpdEntry, this.coefficient, this.stoichiometry);
 	}
 }

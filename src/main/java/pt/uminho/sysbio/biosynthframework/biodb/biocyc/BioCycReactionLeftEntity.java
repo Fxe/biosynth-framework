@@ -33,6 +33,6 @@ public class BioCycReactionLeftEntity extends StoichiometryPair {
 	
 	@Override
 	public String toString() {
-		return String.format("<[%s]%s, %s, %f>", compartment, this.cpdEntry, this.coefficient, this.value);
+		return String.format("<[%s]%s, %s, %f>", compartment, this.cpdEntry, this.coefficient, this.stoichiometry);
 	}
 }

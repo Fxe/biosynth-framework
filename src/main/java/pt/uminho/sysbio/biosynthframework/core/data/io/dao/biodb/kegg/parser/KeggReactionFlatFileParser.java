@@ -172,7 +172,7 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 		for (String[] left : equationParser.getLeftTriplet()) {
 			KeggReactionLeftEntity leftEntity = new KeggReactionLeftEntity();
 			leftEntity.setCpdEntry(left[0]);;
-			leftEntity.setValue(Double.valueOf(left[1]));
+			leftEntity.setStoichiometry(Double.valueOf(left[1]));
 			leftEntity.setCoefficient(left[2]);
 			
 			leftEntities.add(leftEntity);
@@ -181,7 +181,7 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 		for (String[] right : equationParser.getRightTriplet()) {
 			KeggReactionRightEntity rightEntity = new KeggReactionRightEntity();
 			rightEntity.setCpdEntry(right[0]);
-			rightEntity.setValue(Double.valueOf(right[1]));
+			rightEntity.setStoichiometry(Double.valueOf(right[1]));
 			rightEntity.setCoefficient(right[2]);
 			
 			rightEntities.add(rightEntity);

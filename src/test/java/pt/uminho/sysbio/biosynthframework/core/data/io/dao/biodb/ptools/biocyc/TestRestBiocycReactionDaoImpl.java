@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
+package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 
 import static org.junit.Assert.*;
 
@@ -8,20 +8,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycReactionDaoImpl;
 
 public class TestRestBiocycReactionDaoImpl {
 
 	private final static double EPSILON = 0.0000001;
-	private static RestBiocycReactionDaoImpl reactionDao;
+	private static RestBiocycReactionDaoImpl restBiocycReactionDaoImpl;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		reactionDao = new RestBiocycReactionDaoImpl();
-		reactionDao.setLocalStorage("D:/home/data/biocyc/");
-		reactionDao.setSaveLocalStorage(true);
-		reactionDao.setUseLocalStorage(true);
+		restBiocycReactionDaoImpl = new RestBiocycReactionDaoImpl();
+		restBiocycReactionDaoImpl.setLocalStorage("D:/home/data/biocyc/");
+		restBiocycReactionDaoImpl.setSaveLocalStorage(true);
+		restBiocycReactionDaoImpl.setUseLocalStorage(true);
 	}
 
 	@AfterClass
@@ -37,11 +38,12 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 
 	@Test
-	public void testPORPHOBILSYNTH_RXN() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("PORPHOBILSYNTH-RXN");
+	public void test_META_PORPHOBILSYNTH_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("PORPHOBILSYNTH-RXN");
 		
-		assertEquals("PORPHOBILSYNTH-RXN", rxn.getEntry());
+		assertEquals("META:PORPHOBILSYNTH-RXN", rxn.getEntry());
 		assertEquals("LEFT-TO-RIGHT", rxn.getReactionDirection());
+		assertEquals(Orientation.LeftToRight, rxn.getOrientation());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(2, rxn.getParents().size());
 		assertEquals(2, rxn.getPathways().size());
@@ -53,11 +55,12 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 
 	@Test
-	public void testFLAVONE_APIOSYLTRANSFERASE_RXN() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("FLAVONE-APIOSYLTRANSFERASE-RXN");
+	public void test_META_FLAVONE_APIOSYLTRANSFERASE_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("FLAVONE-APIOSYLTRANSFERASE-RXN");
 		
-		assertEquals("FLAVONE-APIOSYLTRANSFERASE-RXN", rxn.getEntry());
+		assertEquals("META:FLAVONE-APIOSYLTRANSFERASE-RXN", rxn.getEntry());
 		assertEquals("LEFT-TO-RIGHT", rxn.getReactionDirection());
+		assertEquals(Orientation.LeftToRight, rxn.getOrientation());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(2, rxn.getParents().size());
 		assertEquals(1, rxn.getPathways().size());
@@ -69,11 +72,12 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 	
 	@Test
-	public void testDEOXYADENPHOSPHOR_RXN() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("DEOXYADENPHOSPHOR-RXN");
+	public void test_META_DEOXYADENPHOSPHOR_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("DEOXYADENPHOSPHOR-RXN");
 		
-		assertEquals("DEOXYADENPHOSPHOR-RXN", rxn.getEntry());
+		assertEquals("META:DEOXYADENPHOSPHOR-RXN", rxn.getEntry());
 		assertEquals("REVERSIBLE", rxn.getReactionDirection());
+		assertEquals(Orientation.Reversible, rxn.getOrientation());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(2, rxn.getParents().size());
 		assertEquals(1, rxn.getEcNumbers().size());
@@ -86,12 +90,12 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 	
 	@Test
-	public void test3_1_11_4_RXN() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("3.1.11.4-RXN");
+	public void test_META_3_1_11_4_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("3.1.11.4-RXN");
 		
 		System.out.println(rxn);
 		
-		assertEquals("3.1.11.4-RXN", rxn.getEntry());
+		assertEquals("META:3.1.11.4-RXN", rxn.getEntry());
 		assertEquals(null, rxn.getReactionDirection());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(0, rxn.getEnzymaticReactions().size());
@@ -105,13 +109,14 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 	
 	@Test
-	public void test1_2_1_66_RXN() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("1.2.1.66-RXN");
+	public void test_META_1_2_1_66_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("1.2.1.66-RXN");
 		
 		System.out.println(rxn);
 		
-		assertEquals("1.2.1.66-RXN", rxn.getEntry());
+		assertEquals("META:1.2.1.66-RXN", rxn.getEntry());
 		assertEquals("LEFT-TO-RIGHT", rxn.getReactionDirection());
+		assertEquals(Orientation.LeftToRight, rxn.getOrientation());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(false, rxn.getOrphan());
 		assertEquals(2, rxn.getParents().size());
@@ -126,13 +131,14 @@ public class TestRestBiocycReactionDaoImpl {
 	
 	
 	@Test
-	public void testRXN0_3283() {
-		BioCycReactionEntity rxn = reactionDao.getReactionByEntry("RXN0-3283");
+	public void test_META_RXN0_3283() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("RXN0-3283");
 		
 		System.out.println(rxn);
 		
-		assertEquals("RXN0-3283", rxn.getEntry());
+		assertEquals("META:RXN0-3283", rxn.getEntry());
 		assertEquals(null, rxn.getReactionDirection());
+		assertEquals(Orientation.Unknown, rxn.getOrientation());
 		assertEquals(true, rxn.getPhysiologicallyRelevant());
 		assertEquals(null, rxn.getOrphan());
 		assertEquals(2, rxn.getParents().size());
@@ -143,6 +149,27 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(0, rxn.getEnzymaticReactions().size());
 		assertEquals(0, rxn.getCrossreferences().size());
 		assertEquals(null, rxn.getGibbs());
+	}
+	
+	@Test
+	public void test_META_3_OXOACYL_ACP_REDUCT_RXN() {
+		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("3-OXOACYL-ACP-REDUCT-RXN");
+		
+		System.out.println(rxn);
+		
+		assertEquals("META:3-OXOACYL-ACP-REDUCT-RXN", rxn.getEntry());
+		assertEquals("RIGHT-TO-LEFT", rxn.getReactionDirection());
+		assertEquals(Orientation.RightToLeft, rxn.getOrientation());
+		assertEquals(true, rxn.getPhysiologicallyRelevant());
+		assertEquals(false, rxn.getOrphan());
+		assertEquals(1, rxn.getParents().size());
+		assertEquals(3, rxn.getEcNumbers().size());
+		assertEquals(1, rxn.getPathways().size());
+		assertEquals(2, rxn.getLeft().size());
+		assertEquals(3, rxn.getRight().size());
+		assertEquals(5, rxn.getEnzymaticReactions().size());
+		assertEquals(23, rxn.getCrossreferences().size());
+		assertEquals(2.330017, rxn.getGibbs(), EPSILON);
 	}
 //	@Test
 //	public void testGetAllReactions() {

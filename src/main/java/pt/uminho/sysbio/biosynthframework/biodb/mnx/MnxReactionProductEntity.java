@@ -28,7 +28,7 @@ public class MnxReactionProductEntity extends StoichiometryPair {
 		sb.append(ini);
 		sb.append(this.cpdKey).append(sep);
 		sb.append(this.cpdEntry).append(sep);
-		sb.append(this.value);
+		sb.append(this.stoichiometry);
 		sb.append(end);
 		return sb.toString();
 	}
