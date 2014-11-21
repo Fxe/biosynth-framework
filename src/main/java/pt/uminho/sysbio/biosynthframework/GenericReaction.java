@@ -21,6 +21,14 @@ implements Reaction, Serializable, Cloneable {
 	@Enumerated(EnumType.STRING)
 	@Column(name="orientation")
 	protected Orientation orientation = Orientation.LeftToRight;
+	
+	protected boolean translocation = false;
+	
+	@Column(name="translocation")
+	@Override
+	public boolean isTranslocation() { return translocation;}
+	public void setTranslocation(boolean translocation) { this.translocation = translocation;}
+	
 //	protected List<StoichiometryPair> left = new ArrayList<> ();
 //	protected Map<M, Double> right = new HashMap<> ();
 	
@@ -147,5 +155,6 @@ implements Reaction, Serializable, Cloneable {
 	public GenericReaction clone() {
 		return new GenericReaction(this);
 	}
+
 
 }
