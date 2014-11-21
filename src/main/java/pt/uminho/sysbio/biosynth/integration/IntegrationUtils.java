@@ -1,7 +1,13 @@
 package pt.uminho.sysbio.biosynth.integration;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
 
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
@@ -32,5 +38,24 @@ public class IntegrationUtils {
 			right_.put(unifi_id.toString(), stoich);
 		}
 		reaction.setRightStoichiometry(right_);
+	}
+	
+	public static Set<String> collectMemberEntriesInClusterByMajorLabel(
+			Label majorLabel, 
+			IntegratedCluster integratedCluster, 
+			GraphDatabaseService data) {
+		
+		Set<String> majorLabelSet = new HashSet<> ();
+		
+		for (IntegratedClusterMember clusterMember : integratedCluster.getMembers()) {
+			IntegratedMember member = clusterMember.getMember();
+			Node dataNode = data.getNodeById(member.getReferenceId());
+			
+			if (dataNode.hasLabel(majorLabel)) {
+				majorLabelSet.add((String)dataNode.getProperty("entry"));
+			}
+		}
+		
+		return majorLabelSet;
 	}
 }

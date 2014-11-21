@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.Node;
@@ -57,5 +59,12 @@ public class Neo4jUtils {
 		}
 		
 		return nodes;
+	}
+
+	public static Map<String, Object> getPropertiesMap(Node node) {
+		Map<String, Object> map = new HashMap<> ();
+		for (String key : node.getPropertyKeys()) { map.put(key, node.getProperty(key));}
+		
+		return map;
 	}
 }

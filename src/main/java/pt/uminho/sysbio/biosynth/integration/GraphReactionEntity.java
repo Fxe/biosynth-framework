@@ -19,6 +19,12 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public void setEntry(String entry) { properties.put("entry", entry);};
 	
 	@Override
+	public String getName() {
+		if (!this.properties.containsKey("name")) return null;
+		return this.properties.get("name").toString();
+	}
+	
+	@Override
 	public Orientation getOrientation() {
 		if (!this.properties.containsKey("orientation")) return null;
 		return Orientation.valueOf((String) this.properties.get("orientation"));
@@ -64,6 +70,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 //				  .append(p.getRight());
 			}
 		}
+		
 		sb.append("Right Metabolites:\n");
 		if (right.isEmpty()) {
 			sb.append("=========Empty=========\n");
@@ -134,10 +141,12 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		}
 	}	
 	
+
+	
 	@Override
-	public String getName() {
+	public boolean isTranslocation() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 

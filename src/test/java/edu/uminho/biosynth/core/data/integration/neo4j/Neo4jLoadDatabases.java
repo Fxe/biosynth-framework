@@ -43,9 +43,9 @@ public class Neo4jLoadDatabases {
 	@Test
 	public void testSeed() {
 		File json = new File("D:/home/data/seed/seed.json");
-		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
-		jsonSeedDao.setJsonFile(new FileSystemResource(json));
-		jsonSeedDao.initialize();
+		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl(new FileSystemResource(json));
+//		jsonSeedDao.setJsonFile(new FileSystemResource(json));
+//		jsonSeedDao.initialize();
 		
 		Neo4jSeedMetaboliteDaoImpl seedNeo4jDao = new Neo4jSeedMetaboliteDaoImpl(db);
 		List<String> skipEntries = new ArrayList<> ();

@@ -51,6 +51,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		
 		reactionEntity.setId(node.getId());
 		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+		reactionEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.Left));
 		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.Right));
