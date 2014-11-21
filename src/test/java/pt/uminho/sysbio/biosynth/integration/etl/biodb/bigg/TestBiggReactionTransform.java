@@ -44,7 +44,7 @@ public class TestBiggReactionTransform {
 		BiggReactionLeftEntity l1 = new BiggReactionLeftEntity();
 		l1.setCpdEntry("chlstol");
 		l1.setCompartment("r");
-		l1.setValue(1.0);
+		l1.setStoichiometry(1.0);
 		left.add(l1);
 		rxn.setLeft(left);
 		List<BiggReactionRightEntity> right = new ArrayList<> ();

@@ -10,8 +10,8 @@ import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
 	
-	private Map<GraphMetaboliteProxyEntity, Double> left = new HashMap<> ();
-	private Map<GraphMetaboliteProxyEntity, Double> right = new HashMap<> ();
+	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> left = new HashMap<> ();
+	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> right = new HashMap<> ();
 	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
 	
 	@Override
@@ -31,11 +31,11 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	}
 	public void setOrientation(Orientation orientation) { properties.put("orientation", orientation);}
 	
-	public Map<GraphMetaboliteProxyEntity, Double> getLeft() { return left;}
-	public void setLeft(Map<GraphMetaboliteProxyEntity, Double> left) { this.left = left;}
+	public Map<GraphMetaboliteProxyEntity, Map<String, Object>> getLeft() { return left;}
+	public void setLeft(Map<GraphMetaboliteProxyEntity, Map<String, Object>> left) { this.left = left;}
 	
-	public Map<GraphMetaboliteProxyEntity, Double> getRight() { return right;}
-	public void setRight(Map<GraphMetaboliteProxyEntity, Double> right) { this.right = right;}
+	public Map<GraphMetaboliteProxyEntity, Map<String, Object>> getRight() { return right;}
+	public void setRight(Map<GraphMetaboliteProxyEntity, Map<String, Object>> right) { this.right = right;}
 	
 	public List<GraphReactionProxyEntity> getCrossreferences() {
 		return crossreferences;
@@ -63,7 +63,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			sb.append("=========Empty=========\n");
 		} else {
 			for (GraphMetaboliteProxyEntity l : left.keySet()) {
-				sb.append(String.format("[%f,\n%s]\n", left.get(l), l));
+				sb.append(String.format("[%s,\n%s]\n", left.get(l), l));
 //				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
 //				  .append(p.getLeft()).append(" => \n")
 //				  .append(p.getRight().getClass().getSimpleName()).append("\n")
@@ -76,7 +76,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			sb.append("=========Empty=========\n");
 		} else {
 			for (GraphMetaboliteProxyEntity r : right.keySet()) {
-				sb.append(String.format("[%f,\n%s]\n", right.get(r), r));
+				sb.append(String.format("[%s,\n%s]\n", right.get(r), r));
 //				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
 //				  .append(p.getLeft()).append(" => \n")
 //				  .append(p.getRight().getClass().getSimpleName()).append("\n")
@@ -106,7 +106,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public Map<String, Double> getLeftStoichiometry() {
 		Map<String, Double> leftMap = new HashMap<> ();
 		for (GraphMetaboliteProxyEntity entity : this.left.keySet()) {
-			leftMap.put(entity.getId().toString(), this.left.get(entity));
+			leftMap.put(entity.getId().toString(), (double) this.left.get(entity).get("value"));
 		}
 		return leftMap;
 	}
@@ -117,15 +117,17 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			Long id = Long.parseLong(entry);
 			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 			entity.setId(id);
+			Map<String, Object> propertyMap = new HashMap<> ();
+			propertyMap.put("value", left.get(entry));
 //			entity.setEntry(entry);
-			this.left.put(entity, left.get(entry));
+			this.left.put(entity, propertyMap);
 		}
 	}
 	@Override
 	public Map<String, Double> getRightStoichiometry() {
 		Map<String, Double> rightMap = new HashMap<> ();
 		for (GraphMetaboliteProxyEntity entity : this.right.keySet()) {
-			rightMap.put(entity.getId().toString(), this.right.get(entity));
+			rightMap.put(entity.getId().toString(), (double) this.right.get(entity).get("value"));
 		}
 		return rightMap;
 	}
@@ -136,8 +138,10 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			Long id = Long.parseLong(entry);
 			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 			entity.setId(id);
+			Map<String, Object> propertyMap = new HashMap<> ();
+			propertyMap.put("value", right.get(entry));
 			
-			this.right.put(entity, left.get(entry));
+			this.right.put(entity, propertyMap);
 		}
 	}	
 	

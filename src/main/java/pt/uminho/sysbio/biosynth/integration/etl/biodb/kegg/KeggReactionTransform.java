@@ -1,5 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
@@ -37,7 +40,9 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 					break;
 			}
 			
-			centralReactionEntity.getLeft().put(proxyEntity, left.getValue());
+			Map<String, Object> propertyMap = new HashMap<> ();
+			propertyMap.put("stoichiometry", left.getStoichiometry());
+			centralReactionEntity.getLeft().put(proxyEntity, propertyMap);
 		}
 	}
 	
@@ -63,7 +68,9 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 					break;
 			}
 			
-			centralReactionEntity.getRight().put(proxyEntity, right.getValue());
+			Map<String, Object> propertyMap = new HashMap<> ();
+			propertyMap.put("stoichiometry", right.getStoichiometry());
+			centralReactionEntity.getRight().put(proxyEntity, propertyMap);
 		}
 	}
 

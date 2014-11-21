@@ -12,7 +12,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.Neo4jReactionDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jReactionDao;
 import pt.uminho.sysbio.biosynthframework.DefaultReaction;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 

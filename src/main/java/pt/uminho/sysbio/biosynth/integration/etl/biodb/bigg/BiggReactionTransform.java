@@ -19,7 +19,7 @@ extends AbstractReactionTransform<BiggReactionEntity> {
 			GraphReactionEntity centralReactionEntity,
 			BiggReactionEntity reaction) {
 		// TODO Auto-generated method stub
-		
+//		Annotation
 	}
 
 }

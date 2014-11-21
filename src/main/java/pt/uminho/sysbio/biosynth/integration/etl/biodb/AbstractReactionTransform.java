@@ -63,11 +63,11 @@ implements EtlTransform<R, GraphReactionEntity> {
 		centralReactionEntity.addProperty("source", reaction.getSource());
 	}
 	
-	private Map<GraphMetaboliteProxyEntity, Double> getMetabolitesByReflexion(
+	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> getMetabolitesByReflexion(
 			R reaction, 
 			String field) {
 		
-		Map<GraphMetaboliteProxyEntity, Double> result = new HashMap<> ();
+		Map<GraphMetaboliteProxyEntity, Map<String, Object>> result = new HashMap<> ();
 		
 		try {
 			Method method = reaction.getClass().getMethod(field);
@@ -81,8 +81,9 @@ implements EtlTransform<R, GraphReactionEntity> {
 				//FIXME: BAD ASSUMPTION -> Metabolite and Reaction may have distinct labels ex.: LigandReaction -> LigandCompound
 				entity.setMajorLabel(this.majorLabel);
 				entity.addLabel(METABOLITE_LABEL);
-				
-				result.put(entity, stoichiometryPair.getValue());
+				Map<String, Object> propertyMap = new HashMap<> ();
+				propertyMap.put("stoichiometry", stoichiometryPair.getStoichiometry());
+				result.put(entity, propertyMap);
 			}
 		} catch (NoSuchMethodException e) {
 			LOGGER.error(e.getMessage());
@@ -95,7 +96,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Left Components");
-		Map<GraphMetaboliteProxyEntity, Double> left =
+		Map<GraphMetaboliteProxyEntity, Map<String, Object>> left =
 				this.getMetabolitesByReflexion(reaction, "getLeft");
 		
 		centralReactionEntity.setLeft(left);
@@ -103,7 +104,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	protected void setupRightMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Right Components");
-		Map<GraphMetaboliteProxyEntity, Double> right =
+		Map<GraphMetaboliteProxyEntity, Map<String, Object>> right =
 				this.getMetabolitesByReflexion(reaction, "getRight");
 		
 		centralReactionEntity.setRight(right);

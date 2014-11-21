@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.helpers.collection.IteratorUtil;
 
 public class Neo4jUtils {
 	
@@ -62,9 +64,34 @@ public class Neo4jUtils {
 	}
 
 	public static Map<String, Object> getPropertiesMap(Node node) {
+		return getPropertiesFromPropertyContainer(node);
+	}
+	public static Map<String, Object> getPropertiesMap(Relationship relationship) {
+		return getPropertiesFromPropertyContainer(relationship);
+	}
+	private static Map<String, Object> getPropertiesFromPropertyContainer(PropertyContainer propertyContainer) {
+		if (propertyContainer == null) return null;
+		
 		Map<String, Object> map = new HashMap<> ();
-		for (String key : node.getPropertyKeys()) { map.put(key, node.getProperty(key));}
+		for (String key : propertyContainer.getPropertyKeys()) { 
+			map.put(key, propertyContainer.getProperty(key));
+		}
 		
 		return map;
+	}
+	
+	public static void printNode(Node node) {
+		String header = String.format("[%d]%s", node.getId(), IteratorUtil.asCollection(node.getLabels()));
+		System.out.println(header);
+		System.out.println(getPropertiesMap(node));
+		
+		for (Relationship relationship : node.getRelationships()) {
+			System.out.println("================" + relationship.getType());
+			Node other = relationship.getOtherNode(node);
+			System.out.println(getPropertiesMap(relationship));
+			String header_ = String.format("[%d]%s", other.getId(), IteratorUtil.asCollection(other.getLabels()));
+			System.out.println(header_);
+			System.out.println(getPropertiesMap(other));
+		}
 	}
 }

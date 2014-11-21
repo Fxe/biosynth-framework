@@ -59,13 +59,15 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		return reactionEntity;
 	}
 	
-	private Map<GraphMetaboliteProxyEntity, Double> getReactionMetabolites(Node node, ReactionRelationshipType relationshipType) {
-		Map<GraphMetaboliteProxyEntity, Double> map = new HashMap<> ();
+	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> getReactionMetabolites(Node node, ReactionRelationshipType relationshipType) {
+		Map<GraphMetaboliteProxyEntity, Map<String, Object>> map = new HashMap<> ();
 		
 		for (Relationship relationship : node.getRelationships(relationshipType)) {
 			Node other = relationship.getOtherNode(node);
 			
-			Double stoichiometry = (double) relationship.getProperty("stoichiometry");
+			Map<String, Object> propertyContainer = 
+					Neo4jUtils.getPropertiesMap(relationship);
+			
 			Long id = other.getId();
 			String entry = (String) other.getProperty("entry", null);
 			String majorLabel = (String) other.getProperty("major-label", null);
@@ -74,7 +76,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			entity.setEntry(entry);
 			entity.setMajorLabel(majorLabel);
 			
-			map.put(entity, stoichiometry);
+			map.put(entity, propertyContainer);
 		}
 		
 		return map;
@@ -152,13 +154,11 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				node.setProperty(key, reaction.getProperties().get(key));
 			for (GraphMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
-				Double stoichiometry = reaction.getLeft().get(l);
-				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, stoichiometry);
+				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
 			}
 			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
 				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
-				Double stoichiometry = reaction.getRight().get(r);
-				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, stoichiometry);
+				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
 			}
 			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
 				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
@@ -232,7 +232,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			Node parent, 
 			GraphMetaboliteProxyEntity proxy,
 			RelationshipType relationshipType,
-			Double stoichiometry) {
+			Map<String, Object> relationshipPropertyContainer) {
 		
 		boolean create = true;
 		for (Node proxyNode : graphDatabaseService
@@ -245,7 +245,9 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			//TODO: SET TO UPDATE
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
-			relationship.setProperty("stoichiometry", stoichiometry);
+			for (String key : relationshipPropertyContainer.keySet()) {
+				relationship.setProperty(key, relationshipPropertyContainer.get(key));
+			}
 		}
 		
 		if (create) {
@@ -259,7 +261,9 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
-			relationship.setProperty("stoichiometry", stoichiometry);
+			for (String key : relationshipPropertyContainer.keySet()) {
+				relationship.setProperty(key, relationshipPropertyContainer.get(key));
+			}
 		}
 	}
 

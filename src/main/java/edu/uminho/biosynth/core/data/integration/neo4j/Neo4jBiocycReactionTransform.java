@@ -92,7 +92,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 							leftEntity.getCpdEntry(), 
 							leftEntity.getCoefficient(), 
 							rxn.getSource(),
-							leftEntity.getValue(), 
+							leftEntity.getStoichiometry(), 
 							ReactionRelationshipType.Left.toString());
 			entity.getReactionStoichiometryProperties().add(dataReactionProperty);
 		}
@@ -103,7 +103,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 							rightEntity.getCpdEntry(), 
 							rightEntity.getCoefficient(), 
 							rxn.getSource(),
-							rightEntity.getValue(), 
+							rightEntity.getStoichiometry(), 
 							ReactionRelationshipType.Right.toString());
 			
 			entity.getReactionStoichiometryProperties().add(dataReactionProperty);

@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration;
+package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.DefaultReaction;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
