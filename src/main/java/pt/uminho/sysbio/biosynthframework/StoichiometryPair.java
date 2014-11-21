@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 @MappedSuperclass
 public class StoichiometryPair implements Serializable{
 	
@@ -19,12 +21,16 @@ public class StoichiometryPair implements Serializable{
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
-    @Column(name="value") protected double value;
-	public double getValue() { return value;}
-	public void setValue(double value) { this.value = value;}
+	@MetaProperty
+    @Column(name="value") protected double stoichiometry;
+	public double getStoichiometry() { return stoichiometry;}
+	public void setStoichiometry(double stoichiometry) { this.stoichiometry = stoichiometry;}
 	
-    @Column(name="metabolite_id") protected Integer cpdKey;
-    @Column(name="metabolite_entry", nullable=false) protected String cpdEntry;
+    @Column(name="metabolite_id") 
+    protected Integer cpdKey;
+    @MetaProperty
+    @Column(name="metabolite_entry", nullable=false) 
+    protected String cpdEntry;
 
 	public Integer getCpdKey() {
 		return cpdKey;
@@ -42,6 +48,6 @@ public class StoichiometryPair implements Serializable{
 	
 	@Override
 	public String toString() {
-		return String.format("<%s,%s>", this.cpdEntry, this.value);
+		return String.format("<%s,%s>", this.cpdEntry, this.stoichiometry);
 	}
 }

@@ -8,5 +8,6 @@ import java.lang.annotation.Target;
 
 @Target({FIELD})
 @Retention(RUNTIME)
-public @interface InChI {
+@MetaProperty
+public @interface InChIProperty {
 }

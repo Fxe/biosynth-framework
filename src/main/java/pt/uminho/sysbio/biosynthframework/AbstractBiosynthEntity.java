@@ -15,6 +15,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
@@ -36,16 +38,20 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	public Long getId() { return this.id; }
 	public void setId(Long id) { this.id = id; }
 	
+	@MetaProperty
 	@Column(name="entry", unique=true, length=255, nullable=false)
 	@XmlAttribute(name="entry")
 	protected String entry;
 
+	@MetaProperty
 	@Column(name="e_name", length=2047)
 	protected String name;
 	
+	@MetaProperty
 	@Column(name="e_source", length=255)
 	protected String source;
 	
+	@MetaProperty
 	@Column(name="description", length=2047)
 	protected String description = "";
 	

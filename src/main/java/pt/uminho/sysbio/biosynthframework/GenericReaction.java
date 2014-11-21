@@ -12,19 +12,24 @@ import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 @MappedSuperclass
 public class GenericReaction extends AbstractBiosynthEntity 
 implements Reaction, Serializable, Cloneable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	
 	@Enumerated(EnumType.STRING)
-	@Column(name="orientation")
+	@MetaProperty @Column(name="orientation")
 	protected Orientation orientation = Orientation.LeftToRight;
 	
+	@MetaProperty @Column(name="translocation")
 	protected boolean translocation = false;
 	
-	@Column(name="translocation")
+	
+	
 	@Override
 	public boolean isTranslocation() { return translocation;}
 	public void setTranslocation(boolean translocation) { this.translocation = translocation;}
