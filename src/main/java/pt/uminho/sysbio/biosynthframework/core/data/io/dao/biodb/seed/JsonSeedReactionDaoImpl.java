@@ -3,29 +3,32 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.codec.language.bm.Rule.RPattern;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(JsonSeedReactionDaoImpl.class);
+	
+	public static int INITIAL_GEN_KEY = 0;
 	
 	private Resource jsonFile;
 	private JsonNode rootNode;
@@ -36,6 +39,12 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 	public Resource getJsonFile() { return jsonFile;}
 	public void setJsonFile(Resource jsonFile) { this.jsonFile = jsonFile;}
 	
+	public JsonSeedReactionDaoImpl(Resource jsonFile) {
+		this.jsonFile = jsonFile;
+		this.initialize();
+		this.notsurewhattocall();
+	}
+	
 	@Override
 	public SeedReactionEntity getReactionById(Long id) {
 		throw new RuntimeException("Unsupported Operation");
@@ -43,8 +52,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 
 	@Override
 	public SeedReactionEntity getReactionByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.reactionMap.get(entry);
 	}
 
 	@Override
@@ -59,12 +67,62 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 
 	@Override
 	public Set<String> getAllReactionEntries() {
-		// TODO Auto-generated method stub
-		return null;
+		return new HashSet<String> (this.reactionMap.keySet());
+	}
+	
+	private void notsurewhattocall() {
+		this.reactionMap.clear();
+		
+		JsonNode reactions = rootNode.get("reactions");
+		for (int i = 0; i < reactions.size(); i++ ) {
+			
+			LOGGER.debug("Reading record: " + i);
+			
+			try {
+				SeedReactionEntity rxn = this.parseJsonSeedCompound(reactions.get(i));
+				
+				List<SeedReactionCrossReferenceEntity> xrefs = new ArrayList<> ();
+				if (refMap.containsKey(rxn.getUuid())) {
+//					System.out.println(refMap.get(cpd.getUuid()));
+					for (GenericCrossReference xref : refMap.get(rxn.getUuid())) {
+						switch (xref.getType()) {
+							case NAME:
+//								rxn.getSynonyms().add(xref.getValue());
+								break;
+							case SELF:
+								if (rxn.getEntry() != null) {
+									System.err.println("Duplicate SEED entry value for " + rxn.getUuid() + rxn.getEntry());
+								} else {
+									rxn.setEntry(xref.getValue());
+								}
+								break;
+							case MODEL:
+								xrefs.add(new SeedReactionCrossReferenceEntity(xref));
+								break;
+							case DATABASE:
+								xrefs.add(new SeedReactionCrossReferenceEntity(xref));
+								break;
+							default:
+								System.err.println(xref.getType() + " unsupported");
+								break;
+						}
+
+					}
+				}
+				if (rxn.getEntry() == null) {
+					System.err.println(rxn.getName() + rxn.getUuid() + " did not have entry value generating key ..");
+					rxn.setEntry("rxnGENVALUE" + INITIAL_GEN_KEY++);
+				}
+				rxn.setCrossReferences(xrefs);
+				this.reactionMap.put(rxn.getEntry(), rxn);
+			} catch (IOException e) {
+				System.err.println(i + " :: " + e.getMessage());
+			}
+		}
 	}
 	
 	private void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
-		Iterator<String> fields = node.getFieldNames();
+		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
 			JsonNode uuid_array = node.get(field);
@@ -85,7 +143,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 		ObjectMapper m = new ObjectMapper();
 		
 		try {
-			rootNode = m.readTree(jsonFile.getInputStream());
+			rootNode = m.readTree(this.jsonFile.getFile());
 			
 			LOGGER.debug("Loading 'aliasSets'");
 			
@@ -143,9 +201,6 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 					LOGGER.debug("SKIPED " + attribute + " " + name);
 				}
 			}
-
-		} catch (JsonProcessingException e) {
-			LOGGER.error(e.getMessage());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
 		}
@@ -153,7 +208,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 	
 	public void omg() {
 		
-		Iterator<String> a = rootNode.getFieldNames();
+		Iterator<String> a = rootNode.fieldNames();
 		while (a.hasNext()) {
 			String gg = a.next();
 			System.out.println(gg);
@@ -247,10 +302,11 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 		}
 	}
 	
-	public SeedReactionEntity parseJsonSeedCompound(JsonNode node) 
-			throws JsonMappingException, JsonParseException, IOException {
+	private SeedReactionEntity parseJsonSeedCompound(JsonNode node) 
+			throws IOException {
 		
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(node, SeedReactionEntity.class);
+//		node.
+		return mapper.readValue(node.toString(), SeedReactionEntity.class);
 	}
 }

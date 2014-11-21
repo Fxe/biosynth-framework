@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggDrugMetaboliteFlatFileParser;
@@ -14,7 +15,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 public class RestKeggDrugMetaboliteDaoImpl
 extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity>{
 
-	private static final Logger LOGGER = Logger.getLogger(RestKeggDrugMetaboliteDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggDrugMetaboliteDaoImpl.class);
 	private static final String restDrQuery = "http://rest.kegg.jp/get/dr:%s";
 	private static final String restDrMolQuery = "http://rest.kegg.jp/get/dr:%s/mol";
 
@@ -89,7 +90,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
 			
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
-			LOGGER.debug(e.getStackTrace());
+//			LOGGER.debug(e.getStackTrace());
 			return null;
 		}
 		return cpd;

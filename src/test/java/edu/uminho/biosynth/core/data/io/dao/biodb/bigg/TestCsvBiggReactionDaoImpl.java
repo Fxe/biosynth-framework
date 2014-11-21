@@ -2,7 +2,6 @@ package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
 import static org.junit.Assert.*;
 
-import org.apache.log4j.BasicConfigurator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,7 +25,7 @@ public class TestCsvBiggReactionDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		BasicConfigurator.configure();
+//		BasicConfigurator.configure();
 	}
 
 	@AfterClass

@@ -7,11 +7,12 @@ import java.io.InputStreamReader;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequest {
 	
-	private final static Logger LOGGER = Logger.getLogger(HttpRequest.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HttpRequest.class);
 	
 	public static String get(String url) {
 		StringBuilder ret = new StringBuilder();

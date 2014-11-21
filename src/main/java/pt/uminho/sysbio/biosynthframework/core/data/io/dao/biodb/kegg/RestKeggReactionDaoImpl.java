@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
@@ -14,7 +15,7 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 public class RestKeggReactionDaoImpl
 extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 
-	private static final Logger LOGGER = Logger.getLogger(RestKeggReactionDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggReactionDaoImpl.class);
 	private static final String restRxnQuery = "http://rest.kegg.jp/get/rn:%s";
 	
 	@Override
@@ -53,7 +54,7 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 			
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
-			LOGGER.debug(e.getStackTrace());
+//			LOGGER.debug(e.getStackTrace());
 			return null;
 		}
 		return rxn;

@@ -9,11 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
@@ -28,7 +29,7 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao 
 		implements ReactionDao<BioCycReactionEntity> {
 
-	private static Logger LOGGER = Logger.getLogger(RestBiocycReactionDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(RestBiocycReactionDaoImpl.class);
 	
 	public void createFolderIfNotExists(String path) {
 		File file = new File(path);
@@ -63,7 +64,7 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			if (!parser.isValid()) {
 				return null;
 			}
-			rxn = new BioCycReactionEntity();
+			
 			
 //			String source = parser.getSource();
 			String frameId = parser.getFrameId();
@@ -79,7 +80,20 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			Boolean physioRel = parser.isPhysiologicallyRelevant();
 			Double gibbs = parser.getGibbs();
 			String direction = parser.getReactionDirection();
+			Boolean translocation = false;
 			
+			
+			Set<String> compartments = new HashSet<> ();
+			for (BioCycReactionLeftEntity l : leftEntities) compartments.add(l.getCompartment());
+			for (BioCycReactionRightEntity r : rightEntities) compartments.add(r.getCompartment());
+			if (compartments.size() > 1) {
+				LOGGER.debug("Multiple compartments found: " + compartments);
+				translocation = true;
+			}
+			
+			rxn = new BioCycReactionEntity();
+			rxn.setEntry(entry_);
+			rxn.setTranslocation(translocation);
 			rxn.setFrameId(frameId);
 			rxn.setReactionDirection(direction);
 			rxn.setGibbs(gibbs);
@@ -89,12 +103,11 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn.setPathways(pathwayStrings);
 			rxn.setEnzymaticReactions(enzymaticReactionStrings);
 			rxn.setOrphan(orphan);
-			rxn.setEntry(entry_);
 			rxn.setLeft(leftEntities);
 			rxn.setRight(rightEntities);
 			rxn.setCrossreferences(crossReferences);
 			rxn.setSource(pgdb);
-
+			
 			
 		} catch (IOException e) {
 			LOGGER.error(String.format("IO ERROR - %s", e.getMessage()));

@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,7 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 @Repository
 public class HbmBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 
-	private static final Logger LOGGER = Logger.getLogger(HbmBiggReactionDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HbmBiggReactionDaoImpl.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;

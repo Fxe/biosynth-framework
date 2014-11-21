@@ -20,6 +20,10 @@ public class BioCycReactionRightEntity extends StoichiometryPair {
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
+    @Column(name="compartment") protected String compartment;
+	public String getCompartment() { return compartment;}
+	public void setCompartment(String compartment) { this.compartment = compartment;}
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="reaction_id")
@@ -29,6 +33,6 @@ public class BioCycReactionRightEntity extends StoichiometryPair {
 	
 	@Override
 	public String toString() {
-		return String.format("<%s, %s, %f>", this.cpdEntry, this.coefficient, this.value);
+		return String.format("<[%s]%s, %s, %f>", compartment, this.cpdEntry, this.coefficient, this.value);
 	}
 }

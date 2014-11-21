@@ -33,9 +33,7 @@ public class TestJsonSeedReactionDaoImpl {
 
 	@Test
 	public void test() {
-		JsonSeedReactionDaoImpl a = new JsonSeedReactionDaoImpl();
-		a.setJsonFile(new FileSystemResource(new File("D:/home/data/seed/seed.json")));
-		a.initialize();
+		JsonSeedReactionDaoImpl a = new JsonSeedReactionDaoImpl(new FileSystemResource("D:/home/data/seed/seed.json"));
 		a.omg();
 //		a.comp();
 		a.defaultNameSpace();

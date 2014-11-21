@@ -2,11 +2,12 @@ package pt.uminho.sysbio.biosynthframework.biodb.helper;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
@@ -38,7 +39,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 
 public class HelperHbmConfigInitializer {
 
-	private static final Logger LOGGER = Logger.getLogger(HelperHbmConfigInitializer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HelperHbmConfigInitializer.class);
 	
 	public static SessionFactory initializeHibernateSession(String cfg) {
 		Configuration config = new Configuration().configure(cfg);

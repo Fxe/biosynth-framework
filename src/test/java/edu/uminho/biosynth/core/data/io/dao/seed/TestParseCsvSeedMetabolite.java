@@ -11,11 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
@@ -25,6 +20,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.core.io.FileSystemResource;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
@@ -65,7 +66,7 @@ public class TestParseCsvSeedMetabolite {
 
 
 	public static void printJsonKeySet(JsonNode node) {
-		Iterator<String> fields = node.getFieldNames();
+		Iterator<String> fields = node.fieldNames();
 		System.out.println(node.size());
 
 		while (fields.hasNext()) {
@@ -74,7 +75,7 @@ public class TestParseCsvSeedMetabolite {
 	}
 	
 	private static void printJsonValues(JsonNode node) {
-		Iterator<String> fields = node.getFieldNames();
+		Iterator<String> fields = node.fieldNames();
 		System.out.println(node.size());
 
 		while (fields.hasNext()) {
@@ -88,16 +89,14 @@ public class TestParseCsvSeedMetabolite {
 	public static SeedReactionEntity parseJsonSeedReaction(JsonNode node) 
 			throws JsonMappingException, JsonParseException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(node, SeedReactionEntity.class);
+		return mapper.readValue(node.toString(), SeedReactionEntity.class);
 	}
 
 	@Test
 	public void testCompounds() {
 
 		File csv = new File("D:/home/data/seed/seed.json");
-		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl();
-		jsonSeedDao.setJsonFile(new FileSystemResource(csv));
-		jsonSeedDao.initialize();
+		JsonSeedMetaboliteDaoImpl jsonSeedDao = new JsonSeedMetaboliteDaoImpl(new FileSystemResource(csv));
 		
 		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
 		

@@ -25,9 +25,7 @@ public class SeedDaoFactory {
 	}
 	
 	public JsonSeedMetaboliteDaoImpl buildJsonSeedMetaboliteDao() {
-		JsonSeedMetaboliteDaoImpl daoImpl = new JsonSeedMetaboliteDaoImpl();
-		
-		daoImpl.setJsonFile(resource);
+		JsonSeedMetaboliteDaoImpl daoImpl = new JsonSeedMetaboliteDaoImpl(resource);
 		
 		return daoImpl;
 	}

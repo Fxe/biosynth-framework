@@ -8,11 +8,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
@@ -22,7 +23,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao 
 		implements MetaboliteDao<BioCycMetaboliteEntity> {
 
-	private static Logger LOGGER = Logger.getLogger(RestBiocycMetaboliteDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(RestBiocycMetaboliteDaoImpl.class);
 	
 
 //	private final String urlRxnGeneAPI = "http://biocyc.org/apixml?fn=genes-of-reaction&id=META:";

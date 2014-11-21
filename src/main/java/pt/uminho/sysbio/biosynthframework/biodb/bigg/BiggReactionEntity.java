@@ -25,13 +25,13 @@ public class BiggReactionEntity extends GenericReaction{
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme; }
 
-	@Column(name="EQUATION", length=4095) private String equation;
+	@Column(name="equation", length=4095) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }
 	
-	@Column(name="TRANSLOCATION") private boolean translocation;
-	public boolean isTranslocation() { return translocation; }
-	public void setTranslocation(boolean translocation) { this.translocation = translocation; }
+//	@Column(name="TRANSLOCATION") private boolean translocation;
+//	public boolean isTranslocation() { return translocation; }
+//	public void setTranslocation(boolean translocation) { this.translocation = translocation; }
 	
 	@ElementCollection
 	@CollectionTable(name="BIGG_REACTION_COMPARTMENT", joinColumns=@JoinColumn(name="reaction_id"))

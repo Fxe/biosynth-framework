@@ -8,14 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
@@ -34,11 +33,18 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
 	private Map<String, SeedMetaboliteEntity> metaboliteMap = new HashMap<> ();
 	
+	@Autowired
+	public JsonSeedMetaboliteDaoImpl(Resource jsonFile) {
+		this.jsonFile = jsonFile;
+		
+		initialize();
+	}
+	
 	public Resource getJsonFile() { return jsonFile;}
 	public void setJsonFile(Resource jsonFile) { this.jsonFile = jsonFile;}
 	
 	private void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
-		Iterator<String> fields = node.getFieldNames();
+		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
 			JsonNode uuid_array = node.get(field);
@@ -193,19 +199,16 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 //			buildXRefMap(rootNode.get("aliasSets").get(22).get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "KEGG");
 //			buildXRefMap(rootNode.get("aliasSets").get(52).get("aliases"), GenericCrossReference.Type.DATABASE, refMap, "KEGG");
 //			buildXRefMap(rootNode.get("aliasSets").get(4).get("aliases"), GenericCrossReference.Type.NAME, refMap, "NAME");
-
-		} catch (JsonProcessingException e) {
-			System.err.println(e.getMessage());
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
 	}
 	
 	public SeedMetaboliteEntity parseJsonSeedCompound(JsonNode node) 
-			throws JsonMappingException, JsonParseException, IOException {
+			throws IOException {
 		
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(node, SeedMetaboliteEntity.class);
+		return mapper.readValue(node.toString(), SeedMetaboliteEntity.class);
 	}
 	
 	@Override

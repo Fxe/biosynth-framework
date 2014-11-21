@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.Orientation;
@@ -24,7 +25,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.parser.IGenericReactionPa
 public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser 
 	implements IGenericReactionParser  {
 
-	private final static Logger LOGGER = Logger.getLogger(BioCycReactionXMLParser.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(BioCycReactionXMLParser.class);
 	public static boolean VERBOSE = false;
 
 	private final JSONObject base;
@@ -296,7 +297,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		if ( base.has("ec-number")) {
 			
 			JSONObject ecnJsonObject = this.getJsonObject(this.base, "ec-number");
-			System.out.println(ecnJsonObject);
+			
+			LOGGER.debug("ecnJsonObject: " + ecnJsonObject);
+			
 			JSONArray ecnJsonArray = this.getJsonArray(ecnJsonObject, "content");
 			for (int i = 0; i < ecnJsonArray.length(); i++) {
 				
@@ -321,7 +324,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		
 		if ( base.has("physiologically-relevant")) {
 			JSONObject physioJsonObject = this.base.getJSONObject("physiologically-relevant");
-			System.out.println(physioJsonObject);
+			
+			LOGGER.debug("physiologically-relevant: " + physioJsonObject);
+			
 			Boolean physio = physioJsonObject.getBoolean("content");
 			return physio;
 		}
@@ -333,7 +338,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		Map<String, String> properties = new HashMap<> ();
 		properties.put("cpdEntry", null);
 		properties.put("coefficient", "1");
-		properties.put("compartmentEntry", null);
+		properties.put("compartment", null);
 		
 		
 		if (stoichObj instanceof JSONObject) {
@@ -343,9 +348,15 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			while (iterator.hasNext()) {
 				Object entityType = iterator.next();
 				type = entityType.toString();
-//				System.out.println(type);
+				
+				LOGGER.debug(type);
+				
 				if (type.equals("compartment")) {
-					
+					JSONObject jsonObject = stoichiometryJsonObject.getJSONObject(type).getJSONObject("cco");
+					String frameId = jsonObject.getString("frameid");
+					String orgId = jsonObject.getString("orgid");
+					properties.put("compartment", String.format("%s:%s", orgId, frameId));
+//					System.out.println(jsonObject.getJSONObject("cco"));
 				} else if (type.equals("coefficient")) {
 					JSONObject coefficientJsonObject = this.getJsonObject(stoichiometryJsonObject, "coefficient");
 					String coefficient = coefficientJsonObject.get("content").toString();
@@ -382,6 +393,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				BioCycReactionLeftEntity bioCycReactionLeftEntity = new BioCycReactionLeftEntity();
 				try {
 					bioCycReactionLeftEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+					bioCycReactionLeftEntity.setCompartment(properties.get("compartment"));
 				} catch (NumberFormatException e) {
 					bioCycReactionLeftEntity.setValue(-1);
 				}
@@ -401,10 +413,11 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			JSONArray rightJsonArray = this.getJsonArray(this.base, "right");
 			for (int i = 0; i < rightJsonArray.length(); i++) {
 				Map<String, String> properties = this.getStoichiometry(rightJsonArray.get(i));
-
+//				System.out.println(properties);
 				BioCycReactionRightEntity bioCycReactionRightEntity = new BioCycReactionRightEntity();
 				try {
 					bioCycReactionRightEntity.setValue(Double.parseDouble(properties.get("coefficient")));
+					bioCycReactionRightEntity.setCompartment(properties.get("compartment"));
 				} catch (NumberFormatException e) {
 					bioCycReactionRightEntity.setValue(-1);
 				}

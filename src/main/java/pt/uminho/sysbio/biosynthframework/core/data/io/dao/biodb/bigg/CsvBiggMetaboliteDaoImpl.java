@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 @Repository
 public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity>{
 	
-	private static final Logger LOGGER = Logger.getLogger(CsvBiggMetaboliteDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CsvBiggMetaboliteDaoImpl.class);
 
 	private Resource csvFile;
 	
