@@ -106,7 +106,8 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public Map<String, Double> getLeftStoichiometry() {
 		Map<String, Double> leftMap = new HashMap<> ();
 		for (GraphMetaboliteProxyEntity entity : this.left.keySet()) {
-			leftMap.put(entity.getId().toString(), (double) this.left.get(entity).get("value"));
+			Map<String, Object> properties = this.left.get(entity);
+			leftMap.put(entity.getId().toString(), (double) properties.get("stoichiometry"));
 		}
 		return leftMap;
 	}
@@ -118,8 +119,8 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 			entity.setId(id);
 			Map<String, Object> propertyMap = new HashMap<> ();
-			propertyMap.put("value", left.get(entry));
-//			entity.setEntry(entry);
+			propertyMap.put("stoichiometry", left.get(entry));
+
 			this.left.put(entity, propertyMap);
 		}
 	}
@@ -127,7 +128,8 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public Map<String, Double> getRightStoichiometry() {
 		Map<String, Double> rightMap = new HashMap<> ();
 		for (GraphMetaboliteProxyEntity entity : this.right.keySet()) {
-			rightMap.put(entity.getId().toString(), (double) this.right.get(entity).get("value"));
+			Map<String, Object> properties = this.right.get(entity);
+			rightMap.put(entity.getId().toString(), (double) properties.get("stoichiometry"));
 		}
 		return rightMap;
 	}
@@ -139,7 +141,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 			entity.setId(id);
 			Map<String, Object> propertyMap = new HashMap<> ();
-			propertyMap.put("value", right.get(entry));
+			propertyMap.put("stoichiometry", right.get(entry));
 			
 			this.right.put(entity, propertyMap);
 		}

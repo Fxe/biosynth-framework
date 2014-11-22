@@ -2,16 +2,24 @@ package pt.uminho.sysbio.biosynth.integration;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class IntegrationUtils {
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(IntegrationUtils.class);
 	
 	/**
 	 * Applies a metabolite unification map to reconcialiate metabolite ids
@@ -57,5 +65,28 @@ public class IntegrationUtils {
 		}
 		
 		return majorLabelSet;
+	}
+	
+	public static Long getProtonClusterId(
+			MetaboliteMajorLabel biodbLabel,
+			String protonEntry,
+			MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteHeterogeneousDao,
+			IntegrationMetadataDao integrationMetadataDao,
+			Long iid) {
+		
+		Long protonClusterId = null;
+		
+		GraphMetaboliteEntity META_PROTON = metaboliteHeterogeneousDao.getMetaboliteByEntry(biodbLabel.toString(), protonEntry);
+		List<IntegratedCluster> integratedClusters = integrationMetadataDao.getIntegratedClusterByMemberIds(iid, new Long[] {META_PROTON.getId()});
+		
+		if (integratedClusters.isEmpty()) return protonClusterId;
+		if (integratedClusters.size() > 1) {
+			LOGGER.warn("Multiple Clusters found for member: " + protonEntry);
+		}
+		
+		for (IntegratedCluster integratedCluster : integratedClusters) {
+			protonClusterId = integratedCluster.getId();
+		}
+		return protonClusterId;
 	}
 }
