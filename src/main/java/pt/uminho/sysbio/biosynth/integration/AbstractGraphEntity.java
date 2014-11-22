@@ -30,6 +30,11 @@ public class AbstractGraphEntity {
 			properties.put(key, value);
 		}
 	}
+	public Object getProperty(String key, Object defaultValue) {
+		Object value = this.properties.get(key);
+		if (value == null) value = defaultValue;
+		return value;
+	}
 	
 	@Override
 	public String toString() {

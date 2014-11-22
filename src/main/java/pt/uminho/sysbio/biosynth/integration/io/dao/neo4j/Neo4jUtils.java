@@ -12,6 +12,11 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.helpers.collection.IteratorUtil;
 
+/**
+ * Utilities used to perform several Neo4j operations.
+ * 
+ * @author Filipe
+ */
 public class Neo4jUtils {
 	
 	public static Set<Long> collectNodes(Node node) {

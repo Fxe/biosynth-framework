@@ -12,6 +12,7 @@ import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluation;
@@ -138,7 +139,13 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
 	@Override
 	public IntegratedCluster getIntegratedClusterById(Long id) {
-		Node cidNode = graphDatabaseService.getNodeById(id);
+		Node cidNode;
+		try {
+			cidNode = graphDatabaseService.getNodeById(id);
+		} catch (NotFoundException e) {
+			LOGGER.error(String.format("Node[%d] not found.", id));
+			return null;
+		}
 		
 		LOGGER.debug(String.format("Loading cluster: %s -> %s", id, cidNode));
 		
