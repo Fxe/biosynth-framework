@@ -37,7 +37,6 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	public Neo4jGraphReactionDaoImpl(GraphDatabaseService graphDatabaseService) {
 		super(graphDatabaseService);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -50,7 +49,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		GraphReactionEntity reactionEntity = new GraphReactionEntity();
 		
 		reactionEntity.setId(node.getId());
-		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+//		reactionEntity.setEntry( (String) node.getProperty("entry", null));
 		reactionEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.Left));

@@ -28,20 +28,30 @@ public class Neo4jGraphMetaboliteDaoImpl
 extends AbstractNeo4jDao
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
-	@Autowired
-	public Neo4jGraphMetaboliteDaoImpl(GraphDatabaseService graphDatabaseService) {
-		super(graphDatabaseService);
-	}
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	private static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
 	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
 			MetaboliteRelationshipType.HasCrossreferenceTo;
 	
+	@Autowired
+	public Neo4jGraphMetaboliteDaoImpl(GraphDatabaseService graphDatabaseService) {
+		super(graphDatabaseService);
+	}
+	
 	@Override
 	public GraphMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
+		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
+		
+		LOGGER.debug("Found " + node);
+		
+		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
+		
+		metaboliteEntity.setId(node.getId());
+		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
+		
+		for (Label label : node.getLabels()) metaboliteEntity.addLabel(label.toString());
+		
+		return metaboliteEntity;
 	}
 
 	@Override
