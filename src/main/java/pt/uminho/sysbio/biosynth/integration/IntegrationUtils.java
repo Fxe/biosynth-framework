@@ -89,4 +89,38 @@ public class IntegrationUtils {
 		}
 		return protonClusterId;
 	}
+
+	public static<R extends Reaction> Set<String> collectReactionMetabolites(R reaction) {
+		Set<String> cpdSet = new HashSet<> ();
+		cpdSet.addAll(reaction.getLeftStoichiometry().keySet());
+		cpdSet.addAll(reaction.getRightStoichiometry().keySet());
+		
+		return cpdSet;
+	}
+	
+//	private Map<Long, Set<Long>> collectCompoundReactions(Set<Long> cpdIdSet, UnificationTable metaboliteUnificationTable, Long protonId) {
+//		Map<Long, Set<Long>> compoundToReactionMap = new HashMap<> ();
+//		
+//		for (Long cpdId : cpdIdSet) {
+//			Node cpdNode = db.getNodeById(cpdId);
+//			//ignore H on left -> this is cheating !
+//			long unif_cpdId = metaboliteUnificationTable.reconciliateId(cpdId);
+//			if (unif_cpdId != protonId) {
+//				Set<Long> meids = metaboliteUnificationTable.getIdMappingsTo(unif_cpdId);
+//				Set<Long> reids = collectNodes(meids, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
+//				
+//				//non-integrated compounds matches the pivot reaction
+//				if (reids.isEmpty()) reids.add(this.initialNode.getId());
+//				
+//				LOGGER.debug(String.format("MetaboliteNode %s Mapped to CID[%d] matched %d reactions",
+//						cpdNode, unif_cpdId, reids.size()));
+//				compoundToReactionMap.put(cpdId, reids);
+//			} else {
+//				LOGGER.debug(String.format("MetaboliteNode %s Mapped to CID[%d] skipped (ignore protons)",
+//						cpdNode, unif_cpdId));
+//			}
+//		}
+//		
+//		return compoundToReactionMap;
+//	}
 }

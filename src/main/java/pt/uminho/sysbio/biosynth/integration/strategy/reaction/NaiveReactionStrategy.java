@@ -20,6 +20,12 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(NaiveReactionStrategy.class);
 	
+	/**
+	 * if strict then add self reaction to the metabolite to reaction mapping
+	 * this implies that the intersection may be a singleton at the end
+	 */
+	protected boolean strictIntegration = true;
+	
 	protected Long protonId;
 	protected UnificationTable metaboliteUnificationTable;
 //	protected ClusterLookupTable<String, Long> metaboliteClusterLookup;
@@ -33,9 +39,12 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 		this.metaboliteUnificationTable = new UnificationTable(metaboliteUnificationMap);
 	}
 	
+	public boolean isStrictIntegration() { return strictIntegration;}
+	public void setStrictIntegration(boolean strictIntegration) { this.strictIntegration = strictIntegration;}
+
 	public Long getProtonId() { return protonId;}
 	public void setProtonId(Long protonId) { this.protonId = protonId;}
-
+	
 	public UnificationTable getMetaboliteUnificationTable() { return metaboliteUnificationTable;}
 	public void setMetaboliteUnificationTable(
 			UnificationTable metaboliteUnificationTable) {
@@ -58,11 +67,12 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 				Set<Long> reids = collectNodes(meids, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
 				
 				//non-integrated compounds matches the pivot reaction
-				if (reids.isEmpty()) reids.add(this.initialNode.getId());
+				if (strictIntegration && reids.isEmpty()) reids.add(this.initialNode.getId());
 				
 				LOGGER.debug(String.format("MetaboliteNode %s Mapped to CID[%d] matched %d reactions",
 						cpdNode, unif_cpdId, reids.size()));
-				compoundToReactionMap.put(cpdId, reids);
+				
+				if (!reids.isEmpty()) compoundToReactionMap.put(cpdId, reids);
 			} else {
 				LOGGER.debug(String.format("MetaboliteNode %s Mapped to CID[%d] skipped (ignore protons)",
 						cpdNode, unif_cpdId));
@@ -177,7 +187,7 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 			}
 		}
 		strongIntersection.removeAll(remove);
-		
+		strongIntersection.add(initialNode.getId());
 //		System.out.println(strongIntersection);
 		
 		return strongIntersection;

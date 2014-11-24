@@ -23,4 +23,10 @@ public class GraphMetaboliteProxyEntity extends AbstractGraphEntity {
 	public void setEntry(String entry) {
 		this.properties.put("entry", entry);
 	}
+	
+//	@Override
+//	public String toString() {
+//		String toString = String.format("%s", this.getEntry());
+//		return toString;
+//	}
 }
