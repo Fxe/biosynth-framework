@@ -17,6 +17,8 @@ public class CollectionUtils {
 		}
 	}
 	
+//	public static inters
+	
 	public static<C extends Set<T>, T> Set<T> toSet(T[] array, Class<C> clazz) {
 		try {
 			Set<T> set = clazz.newInstance();
