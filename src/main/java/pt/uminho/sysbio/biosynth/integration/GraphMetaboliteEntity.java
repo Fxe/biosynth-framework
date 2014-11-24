@@ -58,6 +58,11 @@ public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabo
 	public String getFormula() { return (String)this.properties.get("formula");}
 	public void setFormula(String formula) { this.properties.put("formula", formula);}
 	
+	public Boolean isProxy() {
+		if (!this.properties.containsKey("proxy")) return null;
+		return (boolean) this.properties.get("proxy");
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());

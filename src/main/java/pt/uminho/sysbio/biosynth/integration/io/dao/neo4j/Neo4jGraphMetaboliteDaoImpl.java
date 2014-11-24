@@ -42,6 +42,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	public GraphMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
 		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
 		
+		if (!node.hasLabel(GlobalLabel.Metabolite)) return null;
+		
 		LOGGER.debug("Found " + node);
 		
 		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
