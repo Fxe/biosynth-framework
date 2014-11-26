@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,10 +17,12 @@ public class BioCycReactionRightEntity extends StoichiometryPair {
 
 	private static final long serialVersionUID = 1L;
 
+	@MetaProperty
     @Column(name="coefficient_str") protected String coefficient;
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
+	@MetaProperty
     @Column(name="compartment") protected String compartment;
 	public String getCompartment() { return compartment;}
 	public void setCompartment(String compartment) { this.compartment = compartment;}

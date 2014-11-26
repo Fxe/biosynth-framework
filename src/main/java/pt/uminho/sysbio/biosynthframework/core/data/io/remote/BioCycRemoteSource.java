@@ -133,9 +133,9 @@ public class BioCycRemoteSource implements IRemoteSource {
 			rxn.setName( parser.getName());
 			rxn.setDescription( parser.getRemark());
 			rxn.setOrientation( parser.getOrientation());
-			rxn.setDirection( parser.getOrientationString());
+//			rxn.setDirection( parser.getOrientationString());
 //			rxn.setEquation( parser.getEquation());
-			rxn.setEnzyme( parser.getEnzymes().iterator().next());;
+//			rxn.setEnzyme( parser.getEnzymes().iterator().next());;
 //			EquationParser eqp = new EquationParser( "123456789012345");
 //			String[][] left = eqp.getLeftTriplet();
 //			String[][] right = eqp.getRightTriplet();

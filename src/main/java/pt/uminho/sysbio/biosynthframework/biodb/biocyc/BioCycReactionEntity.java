@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="biocyc_reaction")
@@ -20,26 +21,31 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	private static final long serialVersionUID = 1L;
 	
+	@MetaProperty
 	@Column(name="frame_id", nullable=false)
 	private String frameId;
 	public String getFrameId() { return frameId;}
 	public void setFrameId(String frameId) { this.frameId = frameId;}
 
+	@MetaProperty
 	@Column(name="orphan", nullable=true)
 	private Boolean orphan;
 	public Boolean getOrphan() { return orphan;}
 	public void setOrphan(Boolean orphan) { this.orphan = orphan;}
 	
+	@MetaProperty
 	@Column(name="physio_relevant", nullable=true)
 	private Boolean physiologicallyRelevant;
 	public Boolean getPhysiologicallyRelevant() { return physiologicallyRelevant;}
 	public void setPhysiologicallyRelevant(Boolean physiologicallyRelevant) { this.physiologicallyRelevant = physiologicallyRelevant;}
 
+	@MetaProperty
 	@Column(name="reaction_direction", nullable=true, length=127)
 	private String reactionDirection;
 	public String getReactionDirection() { return reactionDirection;}
 	public void setReactionDirection(String reactionDirection) { this.reactionDirection = reactionDirection;}
 	
+	@MetaProperty
 	@Column(name="gibbs", nullable=true)
 	private Double gibbs;
 	public Double getGibbs() { return gibbs;}
@@ -66,13 +72,13 @@ public class BioCycReactionEntity extends GenericReaction {
 	public List<String> getEnzymaticReactions() { return enzymaticReactions;}
 	public void setEnzymaticReactions(List<String> enzymaticReactions) { this.enzymaticReactions = enzymaticReactions;}
 
-	@Column(name="ENZYME", length=63) private String enzyme;
-	public String getEnzyme() { return enzyme; }
-	public void setEnzyme(String enzyme) { this.enzyme = enzyme;}
-	
-	@Column(name="orientation_str") private String direction;
-	public String getDirection() { return direction;}
-	public void setDirection(String direction) { this.direction = direction;}
+//	@Column(name="ENZYME", length=63) private String enzyme;
+//	public String getEnzyme() { return enzyme; }
+//	public void setEnzyme(String enzyme) { this.enzyme = enzyme;}
+//	
+//	@Column(name="orientation_str") private String direction;
+//	public String getDirection() { return direction;}
+//	public void setDirection(String direction) { this.direction = direction;}
 
 	@OneToMany(mappedBy = "bioCycReactionEntity", cascade = CascadeType.ALL)
 	private List<BioCycReactionLeftEntity> left = new ArrayList<> ();
