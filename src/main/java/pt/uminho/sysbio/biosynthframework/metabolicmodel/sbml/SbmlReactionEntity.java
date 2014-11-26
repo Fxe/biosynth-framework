@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.components.model.sbml;
+package pt.uminho.sysbio.biosynthframework.metabolicmodel.sbml;
 
 import java.util.HashSet;
 import java.util.Set;

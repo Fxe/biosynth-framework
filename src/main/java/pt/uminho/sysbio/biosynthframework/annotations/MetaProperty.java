@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Target(value = {ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RUNTIME)
 public @interface MetaProperty {
-	
+	boolean asString() default false;
 //	public String key();
 }

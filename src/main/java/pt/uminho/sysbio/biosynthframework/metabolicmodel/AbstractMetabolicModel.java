@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.components.model;
+package pt.uminho.sysbio.biosynthframework.metabolicmodel;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

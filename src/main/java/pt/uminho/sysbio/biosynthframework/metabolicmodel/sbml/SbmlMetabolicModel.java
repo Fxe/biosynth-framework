@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.components.model.sbml;
+package pt.uminho.sysbio.biosynthframework.metabolicmodel.sbml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.core.components.model.AbstractMetabolicModel;
+import pt.uminho.sysbio.biosynthframework.metabolicmodel.AbstractMetabolicModel;
 
 @Entity
 @Table(name="SBML_MODEL")

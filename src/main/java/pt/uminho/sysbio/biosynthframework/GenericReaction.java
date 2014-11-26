@@ -22,7 +22,7 @@ implements Reaction, Serializable, Cloneable {
 	
 	
 	@Enumerated(EnumType.STRING)
-	@MetaProperty @Column(name="orientation")
+	@MetaProperty(asString=true) @Column(name="orientation")
 	protected Orientation orientation = Orientation.LeftToRight;
 	
 	@MetaProperty @Column(name="translocation")
