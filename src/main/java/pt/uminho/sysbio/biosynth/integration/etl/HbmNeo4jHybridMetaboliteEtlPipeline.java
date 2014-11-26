@@ -62,6 +62,12 @@ implements EtlPipeline<SRC, DST> {
 		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
 		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
 		
+//		System.out.println("DFGSGSDGSD");
+//		for (Node omg : GlobalGraphOperations.at(graphDatabaseService).getAllNodes()) {
+//			
+//			System.out.println(omg);
+//		}
+		
 		//SRC = ETL EXTRACT(Entry)
 		SRC src = etlExtract.extract(id);
 		
@@ -77,6 +83,7 @@ implements EtlPipeline<SRC, DST> {
 		
 		hbmTx.rollback();
 		neoTx.success();
+		neoTx.close();
 	}
 	
 	@Override
@@ -114,6 +121,7 @@ implements EtlPipeline<SRC, DST> {
 		
 		hbmTx.rollback();
 		neoTx.success();
+		neoTx.close();
 	}
 
 }

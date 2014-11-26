@@ -15,8 +15,8 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 	protected void configureAdditionalPropertyLinks(
 			GraphReactionEntity centralReactionEntity,
 			BioCycReactionEntity reaction) {
-		// TODO Auto-generated method stub
 		
+//		centralReactionEntity.addP
 	}
 
 }

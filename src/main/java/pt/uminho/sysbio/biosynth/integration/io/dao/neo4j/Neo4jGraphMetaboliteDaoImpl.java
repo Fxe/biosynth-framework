@@ -83,7 +83,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	@Override
 	public GraphMetaboliteEntity saveMetabolite(String tag, GraphMetaboliteEntity metabolite) {
 		boolean create = true;
-		
+		System.out.println(metabolite.getMajorLabel());
+		System.out.println(metabolite.getEntry());
 		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
 				DynamicLabel.label(metabolite.getMajorLabel()), 
 				"entry", 
@@ -92,8 +93,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			LOGGER.debug(String.format("Found Previous node with entry:%s", metabolite.getEntry()));
 			LOGGER.debug(String.format("MODE:UPDATE %s", node));
 			//SCD Track changes
-			for (String key : metabolite.getProperties().keySet())
-				node.setProperty(key, metabolite.getProperties().get(key));
+			Neo4jUtils.applyProperties(node, metabolite.getProperties());
+			
 			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
 			}
@@ -101,6 +102,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 					: metabolite.getPropertyEntities()) {
 				this.createOrLinkToProperty(node, pair);
 			}
+			
+			node.setProperty("major-label", metabolite.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			metabolite.setId(node.getId());
@@ -114,8 +117,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			for (String label : metabolite.getLabels())
 				node.addLabel(DynamicLabel.label(label));
 			
-			for (String key : metabolite.getProperties().keySet())
-				node.setProperty(key, metabolite.getProperties().get(key));
+			Neo4jUtils.applyProperties(node, metabolite.getProperties());
 			
 			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
 				this.createOrLinkToProxy(node, proxy);
@@ -126,6 +128,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 				this.createOrLinkToProperty(node, pair);
 			}
 			
+			node.setProperty("major-label", metabolite.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			metabolite.setId(node.getId());
@@ -220,6 +223,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 				proxyNode.addLabel(DynamicLabel.label(label));
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
+			proxyNode.setProperty("major-label", proxy.getMajorLabel());
 			proxyNode.setProperty("proxy", true);
 			parent.createRelationshipTo(proxyNode, CROSSREFERENCE_RELATIONSHIP);
 		}

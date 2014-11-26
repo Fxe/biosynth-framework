@@ -99,4 +99,10 @@ public class Neo4jUtils {
 			System.out.println(getPropertiesMap(other));
 		}
 	}
+
+	public static void applyProperties(Node node, Map<String, Object> properties) {
+		for (String key : properties.keySet()) {
+			node.setProperty(key, properties.get(key));
+		}
+	}
 }

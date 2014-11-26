@@ -17,11 +17,11 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 	
 	@Override
 	protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, BioCycMetaboliteEntity metabolite) {
-		centralMetaboliteEntity.addProperty("inchi", metabolite.getInchi());
-		centralMetaboliteEntity.addProperty("smiles", metabolite.getSmiles());
-		centralMetaboliteEntity.addProperty("gibbs", metabolite.getGibbs());
-		centralMetaboliteEntity.addProperty("frameId", metabolite.getFrameId());
-		centralMetaboliteEntity.addProperty("cmlMolWeight", metabolite.getCmlMolWeight());
+//		centralMetaboliteEntity.addProperty("inchi", metabolite.getInchi());
+//		centralMetaboliteEntity.addProperty("smiles", metabolite.getSmiles());
+//		centralMetaboliteEntity.addProperty("gibbs", metabolite.getGibbs());
+//		centralMetaboliteEntity.addProperty("frameId", metabolite.getFrameId());
+//		centralMetaboliteEntity.addProperty("cmlMolWeight", metabolite.getCmlMolWeight());
 		super.configureProperties(centralMetaboliteEntity, metabolite);
 	};
 

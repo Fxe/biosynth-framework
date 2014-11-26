@@ -123,6 +123,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				node.addLabel(DynamicLabel.label(label));
 			for (String key : reaction.getProperties().keySet())
 				node.setProperty(key, reaction.getProperties().get(key));
+			
 			for (GraphMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
@@ -136,6 +137,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
 			}
 			
+			node.setProperty("major-label", reaction.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			reaction.setId(node.getId());
@@ -164,6 +166,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
 			}
 			
+			node.setProperty("major-label", reaction.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			reaction.setId(node.getId());
@@ -200,6 +203,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
+			proxyNode.setProperty("major-label", proxy.getMajorLabel());
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
 			
 			for (String key : proxy.getProperties().keySet()) {
@@ -259,6 +263,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
+			proxyNode.setProperty("major-label", proxy.getMajorLabel());
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
 			for (String key : relationshipPropertyContainer.keySet()) {
 				relationship.setProperty(key, relationshipPropertyContainer.get(key));

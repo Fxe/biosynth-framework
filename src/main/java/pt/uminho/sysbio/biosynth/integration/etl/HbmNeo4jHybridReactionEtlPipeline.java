@@ -129,6 +129,7 @@ implements EtlPipeline<SRC, DST> {
 		
 		hbmTx.rollback();
 		neoTx.success();
+		neoTx.close();
 	}
 
 	

@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -20,6 +21,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabe
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
 implements EtlTransform<M, GraphMetaboliteEntity> {
@@ -51,6 +53,8 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	private final String majorLabel;
 	
+	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
+			new AnnotationPropertyContainerBuilder();
 	protected final EtlDictionary<String, String> dictionary;
 	
 	public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String> dictionary) {
@@ -80,6 +84,18 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		centralMetaboliteEntity.addProperty("metaboliteClass", metabolite.getMetaboliteClass());
 		centralMetaboliteEntity.addProperty("name", metabolite.getName());
 		centralMetaboliteEntity.addProperty("source", metabolite.getSource());
+		
+		try {
+			Map<String, Object> propertyContainer = 
+					this.propertyContainerBuilder.extractProperties(
+							metabolite, metabolite.getClass());
+			
+			for (String key : propertyContainer.keySet()) {
+				centralMetaboliteEntity.addProperty(key, propertyContainer.get(key));
+			}
+		} catch (IllegalAccessException e) {
+			LOGGER.error(e.getMessage());
+		}
 	}
 	
 	protected GraphPropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {

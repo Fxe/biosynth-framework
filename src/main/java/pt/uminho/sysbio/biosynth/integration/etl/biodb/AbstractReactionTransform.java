@@ -18,11 +18,15 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
 
 public abstract class AbstractReactionTransform<R extends GenericReaction>
 implements EtlTransform<R, GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactionTransform.class);
+	
+	private AnnotationPropertyContainerBuilder propertyContainerBuilder = 
+			new AnnotationPropertyContainerBuilder();
 	
 	protected static final String REACTION_LABEL = GlobalLabel.Reaction.toString();
 	protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
@@ -61,6 +65,20 @@ implements EtlTransform<R, GraphReactionEntity> {
 		centralReactionEntity.addProperty("description", reaction.getDescription());
 		centralReactionEntity.addProperty("name", reaction.getName());
 		centralReactionEntity.addProperty("source", reaction.getSource());
+		centralReactionEntity.addProperty("translocation", reaction.isTranslocation());
+		
+		//Use java reflextion to extract properties of the node
+		try {
+			Map<String, Object> propertyContainer = 
+					this.propertyContainerBuilder.extractProperties(
+							reaction, reaction.getClass());
+			
+			for (String key : propertyContainer.keySet()) {
+				centralReactionEntity.addProperty(key, propertyContainer.get(key));
+			}
+		} catch (IllegalAccessException e) {
+			LOGGER.error(e.getMessage());
+		}
 	}
 	
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> getMetabolitesByReflexion(
@@ -73,6 +91,12 @@ implements EtlTransform<R, GraphReactionEntity> {
 			Method method = reaction.getClass().getMethod(field);
 			List<?> right = List.class.cast(method.invoke(reaction));
 			for (Object stoichiometryObject : right) {
+//				System.out.println(stoichiometryObject.getClass().getSimpleName());
+				Map<String, Object> propertyContainer = 
+						this.propertyContainerBuilder.extractProperties(
+								stoichiometryObject, 
+								stoichiometryObject.getClass());
+				
 				StoichiometryPair stoichiometryPair = StoichiometryPair.class.cast(stoichiometryObject);
 				GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 				entity.setEntry(stoichiometryPair.getCpdEntry());
@@ -81,9 +105,9 @@ implements EtlTransform<R, GraphReactionEntity> {
 				//FIXME: BAD ASSUMPTION -> Metabolite and Reaction may have distinct labels ex.: LigandReaction -> LigandCompound
 				entity.setMajorLabel(this.majorLabel);
 				entity.addLabel(METABOLITE_LABEL);
-				Map<String, Object> propertyMap = new HashMap<> ();
-				propertyMap.put("stoichiometry", stoichiometryPair.getStoichiometry());
-				result.put(entity, propertyMap);
+//				Map<String, Object> propertyContainer = new HashMap<> ();
+//				propertyContainer.put("stoichiometry", stoichiometryPair.getStoichiometry());
+				result.put(entity, propertyContainer);
 			}
 		} catch (NoSuchMethodException e) {
 			LOGGER.error(e.getMessage());
@@ -126,6 +150,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 					case DATABASE:
 						GraphReactionProxyEntity proxyEntity = new GraphReactionProxyEntity();
 						proxyEntity.setEntry(xref.getValue());
+						proxyEntity.addLabel(REACTION_LABEL);
 						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
 						centralReactionEntity.getCrossreferences().add(proxyEntity);
 						break;
