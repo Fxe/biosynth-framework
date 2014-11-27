@@ -17,6 +17,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import pt.uminho.sysbio.biosynthframework.annotations.InChIProperty;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 import pt.uminho.sysbio.biosynthframework.annotations.SMILES;
 
 @Entity
@@ -26,24 +27,29 @@ public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	
 	private static final long serialVersionUID = 1L;
 	
+	@MetaProperty
 	@Column(name="mass") private Double mass;
 	public Double getMass() { return mass;}
 	public void setMass(Double mass) { this.mass = mass;}
 	
+	@MetaProperty
 	@Column(name="molw") private Double molWeight;
 	public Double getMolWeight() { return molWeight;}
 	public void setMolWeight(Double molWeight) { this.molWeight = molWeight;}
 	
 	@InChIProperty
+	@MetaProperty
 	@Column(name="inchi") private String inchi;
 	public String getInchi() { return inchi;}
 	public void setInchi(String inchi) { this.inchi = inchi;}
 	
+	@MetaProperty
 	@Column(name="inchi_key") private String inchiKey;
 	public String getInchiKey() { return inchiKey;}
 	public void setInchiKey(String inchiKey) { this.inchiKey = inchiKey;}
 	
 	@SMILES
+	@MetaProperty
 	@Column(name="smiles") private String smiles;
 	public String getSmiles() { return smiles;}
 	public void setSmiles(String smiles) { this.smiles = smiles;}

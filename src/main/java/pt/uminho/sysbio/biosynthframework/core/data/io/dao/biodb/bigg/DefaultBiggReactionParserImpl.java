@@ -71,7 +71,7 @@ public class DefaultBiggReactionParserImpl implements BiggReactionParser {
 		rxn.setEnzyme(values[5]);
 		rxn.setOrientation(values[6].equals("Reversible") ? Orientation.Reversible : Orientation.LeftToRight);
 		rxn.setTranslocation(values[7].equals("N") ? false:true);
-		rxn.setId(Long.parseLong(values[8]));
+		rxn.setInternalId(Long.parseLong(values[8]));
 		for (String modelIntValue : values[9].split(",")) {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));
 			if (modelId != null) {

@@ -25,7 +25,13 @@ public class BiggReactionEntity extends GenericReaction{
 	private static final long serialVersionUID = 1L;
 
 	@MetaProperty
-	@Column(name="ENZYME", length=31) private String enzyme;
+	@Column(name="internal_id")
+	private Long internalId;
+	public Long getInternalId() { return internalId;}
+	public void setInternalId(Long internalId) { this.internalId = internalId;}
+	
+	@MetaProperty
+	@Column(name="enzyme", length=31) private String enzyme;
 	public String getEnzyme() { return enzyme; }
 	public void setEnzyme(String enzyme) { this.enzyme = enzyme; }
 
@@ -76,7 +82,7 @@ public class BiggReactionEntity extends GenericReaction{
 
 	@OneToMany(mappedBy = "biggReactionEntity", cascade = CascadeType.ALL)
 	private List<BiggReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
-	public List<BiggReactionCrossReferenceEntity> getCrossReferences() { return crossReferences; }
+	public List<BiggReactionCrossReferenceEntity> getCrossreferences() { return crossReferences; }
 	public void setCrossReferences(List<BiggReactionCrossReferenceEntity> crossReferences) {
 		this.crossReferences = new ArrayList<>(crossReferences);
 		for (BiggReactionCrossReferenceEntity crossReference : this.crossReferences) {

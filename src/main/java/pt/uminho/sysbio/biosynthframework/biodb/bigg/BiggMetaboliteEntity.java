@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,6 +25,13 @@ public class BiggMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 
+	@MetaProperty
+	@Column(name="internal_id")
+	private Long internalId;
+	public Long getInternalId() { return internalId;}
+	public void setInternalId(Long internalId) { this.internalId = internalId;}
+
+	@MetaProperty
 	@Column(name="charge")
 	private Integer charge;
 	public Integer getCharge() { return charge; }

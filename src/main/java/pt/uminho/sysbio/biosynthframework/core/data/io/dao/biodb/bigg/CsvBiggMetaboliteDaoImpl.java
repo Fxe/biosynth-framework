@@ -105,7 +105,7 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 			
 			for (BiggMetaboliteEntity cpd : res) {
 				this.cachedData.put(cpd.getEntry(), cpd);
-				this.idToEntry.put(cpd.getId(), cpd.getEntry());
+				this.idToEntry.put(cpd.getInternalId(), cpd.getEntry());
 			}
 		
 			in.close();

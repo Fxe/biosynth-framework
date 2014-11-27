@@ -9,13 +9,15 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="kegg_reaction_right")
 public class KeggReactionRightEntity extends StoichiometryPair{
 
 	private static final long serialVersionUID = 2200789460752514142L;
-
+	
+	@MetaProperty
     @Column(name="coefficient") protected String coefficient;
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}

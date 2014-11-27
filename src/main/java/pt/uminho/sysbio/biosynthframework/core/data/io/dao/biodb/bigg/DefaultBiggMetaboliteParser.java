@@ -16,18 +16,18 @@ public class DefaultBiggMetaboliteParser {
 	public static String CSV_SEP = "\t";
 	
 	public static List<BiggMetaboliteEntity> parseMetabolites(InputStream inputStream) throws IOException {
-		List<BiggMetaboliteEntity> mnxMetabolites = new ArrayList<> ();
+		List<BiggMetaboliteEntity> metaboliteEntities = new ArrayList<> ();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		
 		String readLine = br.readLine();
 //		System.out.println(readLine);
 		while ( (readLine = br.readLine()) != null) {
-			mnxMetabolites.add( parseMetabolite(readLine));
+			metaboliteEntities.add( parseMetabolite(readLine));
 		}
 		
 		br.close();
-		return mnxMetabolites;
+		return metaboliteEntities;
 	}
 	
 	public static BiggMetaboliteEntity parseMetabolite(String record) {
@@ -54,8 +54,8 @@ public class DefaultBiggMetaboliteParser {
 					GenericCrossReference.Type.DATABASE, "CAS", values[6]);
 			cpd.addCrossReference(xrefCas);			
 		}
-
-		cpd.setId(Long.parseLong( values[7]));
+		
+		cpd.setInternalId(Long.parseLong( values[7]));
 		cpd.setSource("BIGG");
 		for (String modelIntValue : values[8].split(",")) {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));

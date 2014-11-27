@@ -22,6 +22,7 @@ import org.hibernate.annotations.FetchMode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="kegg_reaction")
@@ -29,18 +30,22 @@ public class KeggReactionEntity extends GenericReaction {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@MetaProperty
 	@Column(name="definition", length=2047) private String definition;
 	public String getDefinition() { return definition; }
 	public void setDefinition(String definition) { this.definition = definition; }
 	
+	@MetaProperty
 	@Column(name="equation", length=2047) private String equation;
 	public String getEquation() { return equation; }
 	public void setEquation(String equation) { this.equation = equation; }
 
+	@MetaProperty
 	@Column(name="k_comment", length=2047) private String comment;
 	public String getComment() { return comment; }
 	public void setComment(String comment) { this.comment = comment; }
 	
+	@MetaProperty
 	@Column(name="remark", length=1047) private String remark;
 	public String getRemark() { return remark; }
 	public void setRemark(String remark) { this.remark = remark; }

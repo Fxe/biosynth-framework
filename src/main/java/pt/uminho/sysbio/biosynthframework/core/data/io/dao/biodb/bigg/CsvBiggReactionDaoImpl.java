@@ -119,7 +119,7 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 			
 			for (BiggReactionEntity rxn : res) {
 				this.cachedData.put(rxn.getEntry(), rxn);
-				this.idToEntry.put(rxn.getId(), rxn.getEntry());
+				this.idToEntry.put(rxn.getInternalId(), rxn.getEntry());
 			}
 		
 			in.close();

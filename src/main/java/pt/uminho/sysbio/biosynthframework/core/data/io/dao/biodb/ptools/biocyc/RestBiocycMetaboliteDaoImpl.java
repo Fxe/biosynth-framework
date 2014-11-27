@@ -40,67 +40,68 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
-		String restCpdQuery = String.format(RestBiocycMetaboliteDaoImpl.xmlGet, pgdb, id);
-		BioCycMetaboliteEntity cpd = null;
+		throw new RuntimeException("Unsupported Operation.");
+//		String restCpdQuery = String.format(RestBiocycMetaboliteDaoImpl.xmlGet, pgdb, id);
+//		BioCycMetaboliteEntity cpd = null;
+//		
+//		LOGGER.debug(String.format("Query: %s", restCpdQuery));
+//		try {
+//			String localPath = String.format("%s/%s/compound/", this.getLocalStorage(), pgdb, id);
+//			createFolderIfNotExists(localPath);
+//			String xmlDoc = null;
+//			
+//			LOGGER.debug(String.format("Local Path: %s", localPath));
+//			xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
+//			BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
+//			
+//			cpd = new BioCycMetaboliteEntity();
+//
+//			String frameId = parser.getFrameId();
+//			String source = parser.getSource();
+//			String entry = parser.getEntry();
+//			String metaboliteClass = parser.getEntityClass();
+//			String formula = parser.getFormula();
+//			String name = parser.getName();
+//			String comment = parser.getComment();
+//			Integer charge = parser.getCharge();
+//			Double molWeight = parser.getMolWeight();
+//			Double cmlMolWeight = parser.getCmlMolWeight();
+//			String smiles = parser.getSmiles();
+//			String inchi = parser.getInchi();
+//			Double gibbs = parser.getGibbs();
+//			List<BioCycMetaboliteCrossreferenceEntity> crossReferences = parser.getCrossReferences();
+//			List<String> synonyms = parser.getSynonym();
+//			List<String> reactions = parser.getReactions();
+//			List<String> parents = parser.getParents();
+//			List<String> instances = parser.getInstanses();
+//			List<String> subclasses = parser.getSubclasses();
+//
+//			cpd.setFrameId(frameId);
+//			cpd.setEntry(entry);
+//			cpd.setSource(source);
+//			cpd.setMetaboliteClass(metaboliteClass);
+//			cpd.setFormula(formula);
+//			cpd.setName(name);
+//			cpd.setComment(comment);
+//			cpd.setCharge(charge);
+//			cpd.setMolWeight(molWeight);
+//			cpd.setCmlMolWeight(cmlMolWeight);
+//			cpd.setSmiles(smiles);
+//			cpd.setInChI(inchi);
+//			cpd.setGibbs(gibbs);
+//			cpd.setSynonyms(synonyms);
+//			cpd.setCrossReferences(crossReferences);
+//			cpd.setReactions(reactions);
+//			cpd.setParents(parents);
+//			cpd.setInstances(instances);
+//			cpd.setSubclasses(subclasses);
+//		} catch (IOException e) {
+//			LOGGER.error(String.format("IO ERROR - %s", e.getMessage()));
+//		} catch (JSONException e) {
+//			LOGGER.error(String.format("PARSE ERROR - %s", e.getMessage()));
+//		}
 		
-		LOGGER.debug(String.format("Query: %s", restCpdQuery));
-		try {
-			String localPath = String.format("%s/%s/compound/", this.getLocalStorage(), pgdb, id);
-			createFolderIfNotExists(localPath);
-			String xmlDoc = null;
-			
-			LOGGER.debug(String.format("Local Path: %s", localPath));
-			xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
-			BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
-			
-			cpd = new BioCycMetaboliteEntity();
-
-			String frameId = parser.getFrameId();
-			String source = parser.getSource();
-			String entry = parser.getEntry();
-			String metaboliteClass = parser.getEntityClass();
-			String formula = parser.getFormula();
-			String name = parser.getName();
-			String comment = parser.getComment();
-			Integer charge = parser.getCharge();
-			Double molWeight = parser.getMolWeight();
-			Double cmlMolWeight = parser.getCmlMolWeight();
-			String smiles = parser.getSmiles();
-			String inchi = parser.getInchi();
-			Double gibbs = parser.getGibbs();
-			List<BioCycMetaboliteCrossreferenceEntity> crossReferences = parser.getCrossReferences();
-			List<String> synonyms = parser.getSynonym();
-			List<String> reactions = parser.getReactions();
-			List<String> parents = parser.getParents();
-			List<String> instances = parser.getInstanses();
-			List<String> subclasses = parser.getSubclasses();
-
-			cpd.setFrameId(frameId);
-			cpd.setEntry(entry);
-			cpd.setSource(source);
-			cpd.setMetaboliteClass(metaboliteClass);
-			cpd.setFormula(formula);
-			cpd.setName(name);
-			cpd.setComment(comment);
-			cpd.setCharge(charge);
-			cpd.setMolWeight(molWeight);
-			cpd.setCmlMolWeight(cmlMolWeight);
-			cpd.setSmiles(smiles);
-			cpd.setInChI(inchi);
-			cpd.setGibbs(gibbs);
-			cpd.setSynonyms(synonyms);
-			cpd.setCrossReferences(crossReferences);
-			cpd.setReactions(reactions);
-			cpd.setParents(parents);
-			cpd.setInstances(instances);
-			cpd.setSubclasses(subclasses);
-		} catch (IOException e) {
-			LOGGER.error(String.format("IO ERROR - %s", e.getMessage()));
-		} catch (JSONException e) {
-			LOGGER.error(String.format("PARSE ERROR - %s", e.getMessage()));
-		}
-		
-		return cpd;
+//		return cpd;
 	}
 
 	@Override
@@ -145,6 +146,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			
 			cpd = new BioCycMetaboliteEntity();
 
+			String frameId = parser.getFrameId();
 			String source = parser.getSource();
 			String entry_ = parser.getEntry();
 			String metaboliteClass = parser.getEntityClass();
@@ -164,6 +166,7 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			List<String> instances = parser.getInstanses();
 			List<String> subclasses = parser.getSubclasses();
 
+			cpd.setFrameId(frameId);
 			cpd.setEntry(entry_);
 			cpd.setSource(source);
 			cpd.setMetaboliteClass(metaboliteClass);
