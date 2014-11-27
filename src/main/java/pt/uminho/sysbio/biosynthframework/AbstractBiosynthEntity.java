@@ -4,14 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -29,11 +27,10 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 
 	@Id
     @Column(name="id", nullable=false)
-//	@GeneratedValue
+	@GeneratedValue
 //	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
-	@GenericGenerator(name="IdOrGenerated", strategy="pt.uminho.sysbio.biosynthframework.AbstractEntityIdGenerator")
-	@XmlAttribute(name="id")
+//    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
+//	@GenericGenerator(name="IdOrGenerated", strategy="pt.uminho.sysbio.biosynthframework.AbstractEntityIdGenerator")
 	protected Long id;
 	public Long getId() { return this.id; }
 	public void setId(Long id) { this.id = id; }

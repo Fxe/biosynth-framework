@@ -62,12 +62,12 @@ public class SbmlMetabolicModel extends AbstractMetabolicModel{
 
 	public List<SbmlMetaboliteSpecieEntity> getSbmlSpecies() { return sbmlSpecies; }
 	public void addSbmlSpecie(SbmlMetaboliteSpecieEntity sbmlSpecie) {
-		sbmlSpecie.setSbmlMetabolicModel(this);
+//		sbmlSpecie.setSbmlMetabolicModel(this);
 		this.sbmlSpecies.add(sbmlSpecie);
 	}
 	public void setSbmlSpecies(List<SbmlMetaboliteSpecieEntity> sbmlSpecies) {
 		for (SbmlMetaboliteSpecieEntity sbmlSpecie : sbmlSpecies) {
-			sbmlSpecie.setSbmlMetabolicModel(this);
+//			sbmlSpecie.setSbmlMetabolicModel(this);
 		}
 		this.sbmlSpecies = sbmlSpecies;
 	}
