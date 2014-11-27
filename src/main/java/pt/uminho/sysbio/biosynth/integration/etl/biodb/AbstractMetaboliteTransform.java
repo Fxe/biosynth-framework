@@ -165,12 +165,14 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
 	
 	protected void configureCrossreferences(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+		LOGGER.debug("Setup cross-references ...");
+		
 		try {
 			Method method = metabolite.getClass().getMethod("getCrossreferences");
 			List<?> xrefs = List.class.cast(method.invoke(metabolite));
 			for (Object xrefObject : xrefs) {
+				LOGGER.debug("Found cross-reference: " + xrefObject);
 				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
-				
 				switch (xref.getType()) {
 					case DATABASE:
 						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
