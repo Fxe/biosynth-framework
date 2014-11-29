@@ -49,6 +49,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 						this.reconciliateMetaboliteIds(defaultReaction.getRightStoichiometry()));
 				
 				if (rxnId == this.initialNode.getId()) {
+					reactions.add(defaultReaction);
 					rxnPivot = defaultReaction;
 				} else {
 					reactions.add(defaultReaction);

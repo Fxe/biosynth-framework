@@ -31,6 +31,7 @@ public class BetterNaiveReactionStrategy extends LesserNaiveReactionStrategy {
 		Set<Long> superResult = super.execute();
 		
 		if (superResult.isEmpty()) return superResult;
+		superResult.add(initialNode.getId());
 		
 		int size = reactions.size();
 		double[][] scoreMatrix = new double[size][size];
@@ -73,19 +74,23 @@ public class BetterNaiveReactionStrategy extends LesserNaiveReactionStrategy {
 			}
 		}
 		
-		int bestMatchSize = 0;
-		Long bestMatchKey = null;
-		for (Long id : matchingSets.keySet()) {
-			if (matchingSets.get(id).size() > bestMatchSize) {
-				bestMatchSize = matchingSets.get(id).size();
-				bestMatchKey = id;
-			}
-		}
-		
-		LOGGER.debug("Largest Match Set: " + matchingSets.get(bestMatchKey).toString());
 		reactions.clear();
+//		System.out.println(matchingSets);
+		return matchingSets.get(initialNode.getId());
 		
-		return matchingSets.get(bestMatchKey);
+//		int bestMatchSize = 0;
+//		Long bestMatchKey = null;
+//		for (Long id : matchingSets.keySet()) {
+//			if (matchingSets.get(id).size() > bestMatchSize) {
+//				bestMatchSize = matchingSets.get(id).size();
+//				bestMatchKey = id;
+//			}
+//		}
+//		
+//		LOGGER.debug("Largest Match Set: " + matchingSets.get(bestMatchKey).toString());
+//		
+//		
+//		return matchingSets.get(bestMatchKey);
 	}
 	
 	private double similarityScore(GenericReaction rxnA, GenericReaction rxnB) {

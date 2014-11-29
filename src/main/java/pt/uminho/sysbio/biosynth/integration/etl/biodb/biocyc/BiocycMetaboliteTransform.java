@@ -1,17 +1,27 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 
 public class BiocycMetaboliteTransform
 extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 
 //	private final String BIOCYC_P_COMPOUND_METABOLITE_LABEL;
+	private final static Logger LOGGER = LoggerFactory.getLogger(BiocycMetaboliteTransform.class);
 	
-	public BiocycMetaboliteTransform(String majorLabel) {
+	private Map<String, String> biggInternalIdToEntryMap;
+	
+	public BiocycMetaboliteTransform(String majorLabel, Map<String, String> biggInternalIdToEntryMap) {
 		super(majorLabel, new BiobaseMetaboliteEtlDictionary<>(BioCycMetaboliteEntity.class));
+		this.biggInternalIdToEntryMap = biggInternalIdToEntryMap;
 //		this.BIOCYC_P_COMPOUND_METABOLITE_LABEL = majorLabel;
 	}
 	
@@ -68,6 +78,21 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 		
 		super.configureNameLink(centralMetaboliteEntity, entity);
 	}
+	
+	@Override
+		protected void configureCrossreferences(
+				GraphMetaboliteEntity centralMetaboliteEntity,
+				BioCycMetaboliteEntity metabolite) {
+			for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+				if (xref.getRef().equals("BIGG")) {
+					if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+						xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
+					}
+					LOGGER.debug("Internal Id replaced: " + xref);
+				}
+			}
+			super.configureCrossreferences(centralMetaboliteEntity, metabolite);
+		}
 
 //	@Override
 //	protected void configureCrossreferences(

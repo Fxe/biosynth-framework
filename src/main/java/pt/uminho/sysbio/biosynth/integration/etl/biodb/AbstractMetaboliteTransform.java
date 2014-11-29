@@ -178,7 +178,8 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 						proxyEntity.setEntry(xref.getValue());
 						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
-						
+//						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
+//						proxyEntity.setProperties(properties);
 						centralMetaboliteEntity.getCrossreferences().add(proxyEntity);
 						break;
 					case MODEL:

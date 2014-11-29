@@ -78,6 +78,7 @@ implements EtlPipeline<SRC, DST> {
 		if (this.dataCleasingSubsystem != null)
 			dataCleasingSubsystem.etlCleanse(dst);
 		
+//		System.out.println(dst);
 		//ETL LOAD(DST)
 		if (!skipLoad) etlLoad.etlLoad(dst);
 		

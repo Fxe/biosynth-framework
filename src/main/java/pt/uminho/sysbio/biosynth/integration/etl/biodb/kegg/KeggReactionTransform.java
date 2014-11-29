@@ -3,6 +3,9 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
@@ -15,6 +18,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionRightEntity;
 public class KeggReactionTransform 
 extends AbstractReactionTransform<KeggReactionEntity>{
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(KeggReactionTransform.class);
 	private static final String KEGG_REACTION_LABEL = ReactionMajorLabel.LigandReaction.toString();
 	private static final String KEGG_COMPOUND_METABOLITE_LABEL = MetaboliteMajorLabel.LigandCompound.toString();
 	private static final String KEGG_GLYCAN_METABOLITE_LABEL = MetaboliteMajorLabel.LigandGlycan.toString();
@@ -40,8 +44,15 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 					break;
 			}
 			
-			Map<String, Object> propertyMap = new HashMap<> ();
-			propertyMap.put("stoichiometry", left.getStoichiometry());
+			Map<String, Object> propertyMap = null; 
+			try {
+				propertyMap = this.propertyContainerBuilder.extractProperties(left, left.getClass());
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
+				propertyMap = new HashMap<> ();
+				propertyMap.put("stoichiometry", left.getStoichiometry());
+			}
+			
 			centralReactionEntity.getLeft().put(proxyEntity, propertyMap);
 		}
 	}
@@ -68,8 +79,15 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 					break;
 			}
 			
-			Map<String, Object> propertyMap = new HashMap<> ();
-			propertyMap.put("stoichiometry", right.getStoichiometry());
+			Map<String, Object> propertyMap = null; 
+			try {
+				propertyMap = this.propertyContainerBuilder.extractProperties(right, right.getClass());
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
+				propertyMap = new HashMap<> ();
+				propertyMap.put("stoichiometry", right.getStoichiometry());
+			}
+			
 			centralReactionEntity.getRight().put(proxyEntity, propertyMap);
 		}
 	}
@@ -86,8 +104,8 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 	protected void configureCrossreferences(
 			GraphReactionEntity centralReactionEntity,
 			KeggReactionEntity reaction) {
-		// TODO Auto-generated method stub
 		
+		LOGGER.debug("Ligand Reaction does not support cross-references");
 	}
 	
 //	private void addIfNotNull(String propertie, Object value, Map<String, Object> properties) {

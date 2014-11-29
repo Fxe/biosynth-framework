@@ -25,7 +25,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactionTransform.class);
 	
-	private AnnotationPropertyContainerBuilder propertyContainerBuilder = 
+	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
 	
 	protected static final String REACTION_LABEL = GlobalLabel.Reaction.toString();
