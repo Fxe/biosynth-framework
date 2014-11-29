@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 @MappedSuperclass
 public class GenericCrossReference implements Serializable {
 
@@ -23,12 +25,18 @@ public class GenericCrossReference implements Serializable {
     @GeneratedValue
     protected Long id;
 	
+	@MetaProperty(asString=true)
 	@Column(name="ref_type", length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
 	protected Type type;
 	
-	@Column(name="tag", length=255, nullable=false) protected String ref;
-	@Column(name="value", length=255, nullable=false) protected String value;
+	@MetaProperty
+	@Column(name="tag", length=255, nullable=false) 
+	protected String ref;
+	
+	@MetaProperty
+	@Column(name="value", length=255, nullable=false)
+	protected String value;
 	
 	public GenericCrossReference() { }
 	
