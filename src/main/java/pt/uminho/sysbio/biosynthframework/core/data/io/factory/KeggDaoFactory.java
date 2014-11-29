@@ -112,13 +112,15 @@ public class KeggDaoFactory {
 	}
 	
 	public HbmKeggGlycanMetaboliteDaoImpl buildHbmKeggGlycanMetaboliteDao() {
-		HbmKeggGlycanMetaboliteDaoImpl daoImpl = new HbmKeggGlycanMetaboliteDaoImpl();
+		
 		
 		if (sessionFactory == null) {
 			initialize(
 					KeggGlycanMetaboliteEntity.class, 
 					KeggGlycanMetaboliteCrossreferenceEntity.class);
 		}
+		
+		HbmKeggGlycanMetaboliteDaoImpl daoImpl = new HbmKeggGlycanMetaboliteDaoImpl(sessionFactory);
 		
 		BiosynthHbmConnectionManager.registerSessionFactory(daoImpl, sessionFactory);
 		

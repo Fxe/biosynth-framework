@@ -40,8 +40,15 @@ public class KeggGlycanMetaboliteFlatFileParser extends AbstractKeggFlatFilePars
 		return sb.toString();
 	}
 	
-	public String getFormula() {
+	public String getComposition() {
 		int tabIndex = this.getTabIndex("COMPOSITION");
+		String content = this.tabContent_.get(tabIndex);
+		
+		return content;
+	}
+	
+	public String getFormula() {
+		int tabIndex = this.getTabIndex("FORMULA");
 		String content = this.tabContent_.get(tabIndex);
 		
 		return content;

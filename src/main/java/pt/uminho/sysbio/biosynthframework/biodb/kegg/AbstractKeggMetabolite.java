@@ -7,14 +7,20 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @MappedSuperclass
 public abstract class AbstractKeggMetabolite extends GenericMetabolite {
 
 	private static final long serialVersionUID = -6305406455329893352L;
 
-	@Column(name="K_COMMENT", length=2047) private String comment;
-	@Column(name="REMARK", length=1023) private String remark;
+	@MetaProperty
+	@Column(name="K_COMMENT", length=2047)
+	private String comment;
+	
+	@MetaProperty
+	@Column(name="REMARK", length=1023) 
+	private String remark;
 	
 	@Column(name="mol_file", columnDefinition="text") private String mol2d;
 	

@@ -15,11 +15,15 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class HbmKeggGlycanMetaboliteDaoImpl implements MetaboliteDao<KeggGlycanMetaboliteEntity> {
 
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	private Session getSession() {
 		return this.sessionFactory.getCurrentSession();
+	}
+	
+	@Autowired
+	public HbmKeggGlycanMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 	
 	public SessionFactory getSessionFactory() { return sessionFactory;}

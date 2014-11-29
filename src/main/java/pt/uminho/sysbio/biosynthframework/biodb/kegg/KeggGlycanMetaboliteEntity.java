@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 
 @Entity
 @Table(name="kegg_glycan_metabolite")
@@ -19,11 +21,19 @@ public class KeggGlycanMetaboliteEntity extends AbstractKeggMetabolite {
 	
 	private static final long serialVersionUID = 3012848505621097134L;
 
+	@MetaProperty
 	@Column(name="mass", length=255)
 	private String mass;
 	public String getMass() { return mass;}
 	public void setMass(String mass) { this.mass = mass;}
+	
+	@MetaProperty
+	@Column(name="composition", length=255)
+	private String composition;
+	public String getComposition() { return composition;}
+	public void setComposition(String composition) { this.composition = composition;}
 
+	@MetaProperty
 	@Column(name="glycan_class")
 	private String compoundClass;
 	public String getCompoundClass() { return compoundClass;}

@@ -66,6 +66,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 		
 		cpd.setEntry(parser.getEntry());
 		cpd.setName(parser.getName());
+		cpd.setComposition(parser.getComposition());
 		cpd.setFormula(parser.getFormula());
 		cpd.setMass(parser.getMass());
 		cpd.setCompoundClass(parser.getMetaboliteClass());
