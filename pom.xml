@@ -122,6 +122,11 @@
     	<artifactId>telnetd-x</artifactId>
     	<version>2.1.1</version>
     </dependency>
+    <dependency>
+    	<groupId>org.springframework.boot</groupId>
+    	<artifactId>spring-boot-starter-jetty</artifactId>
+    	<version>1.1.4.RELEASE</version>
+    </dependency>
   </dependencies>
   
   <build>

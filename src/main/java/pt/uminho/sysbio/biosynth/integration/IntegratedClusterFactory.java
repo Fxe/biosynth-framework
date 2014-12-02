@@ -3,8 +3,11 @@ package pt.uminho.sysbio.biosynth.integration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 
 public class IntegratedClusterFactory {
 
@@ -15,6 +18,7 @@ public class IntegratedClusterFactory {
 	private String clusterType;
 	private String memberType;
 	private Set<Long> eids = new HashSet<> ();
+	private Set<GraphMetaboliteEntity> cpdEntities = new HashSet<> ();
 	
 	public IntegratedClusterFactory withIntegrationSet(IntegrationSet integrationSet) {
 		this.integrationSet = integrationSet;
@@ -46,8 +50,13 @@ public class IntegratedClusterFactory {
 		return this;
 	}
 	
-	public IntegratedClusterFactory withMemberCollection(Collection<Long> eids) {
-		this.eids = new HashSet<> (eids);
+	public IntegratedClusterFactory withMemberIdCollection(Collection<Long> eids) {
+		this.eids.addAll(eids);
+		return this;
+	}
+	
+	public IntegratedClusterFactory withMemberEntityCollection(Collection<GraphMetaboliteEntity> eids) {
+		this.cpdEntities.addAll(eids);
 		return this;
 	}
 	
@@ -61,6 +70,17 @@ public class IntegratedClusterFactory {
 			integratedClusterMember.setCluster(integratedCluster);
 			IntegratedMember integratedMember = new IntegratedMember();
 			integratedMember.setReferenceId(eid);
+			integratedMember.setMemberType(memberType);
+			integratedClusterMember.setMember(integratedMember);
+			integratedClusterMembers.add(integratedClusterMember);
+		}
+		
+		for (Metabolite cpd : cpdEntities) {
+			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
+			integratedClusterMember.setCluster(integratedCluster);
+			IntegratedMember integratedMember = new IntegratedMember();
+			integratedMember.setReferenceId(cpd.getId());
+			integratedMember.setEntry(cpd.getEntry());
 			integratedMember.setMemberType(memberType);
 			integratedClusterMember.setMember(integratedMember);
 			integratedClusterMembers.add(integratedClusterMember);

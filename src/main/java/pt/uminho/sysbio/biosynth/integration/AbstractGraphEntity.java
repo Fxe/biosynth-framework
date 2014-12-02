@@ -38,14 +38,16 @@ public class AbstractGraphEntity {
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("id:%d\n", id));
-		sb.append(String.format("majorLabel:%s\n", majorLabel));
-		sb.append(String.format("labels:%s\n", labels));
-		sb.append("Self Properties:\n");
-		for (String key : properties.keySet()) {
-			sb.append(String.format("\t%s:%s\n", key, properties.get(key)));
-		}
-		return sb.toString();
+		String str = String.format("%s: %s", labels, this.properties);
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(String.format("id:%d\n", id));
+//		sb.append(String.format("majorLabel:%s\n", majorLabel));
+//		sb.append(String.format("labels:%s\n", labels));
+//		sb.append("Self Properties:\n");
+//		for (String key : properties.keySet()) {
+//			sb.append(String.format("\t%s:%s\n", key, properties.get(key)));
+//		}
+//		return sb.toString();
+		return str;
 	}
 }

@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
@@ -96,6 +98,30 @@ public class IntegrationUtils {
 		cpdSet.addAll(reaction.getRightStoichiometry().keySet());
 		
 		return cpdSet;
+	}
+
+	public static IntegratedCluster assembleMetaboliteClusterWithIds(
+			String entry, String description, Collection<Long> eids) {		
+		
+		return new IntegratedClusterFactory()
+			.withEntry(entry)
+			.withDescription(description)
+			.withClusterType(IntegrationNodeLabel.MetaboliteCluster.toString())
+			.withMemberType(IntegrationNodeLabel.MetaboliteMember.toString())
+			.withMemberIdCollection(eids)
+			.build();
+	}
+	
+	public static IntegratedCluster assembleMetaboliteClusterWithEntities(
+			String entry, String description, Collection<GraphMetaboliteEntity> eids) {		
+		
+		return new IntegratedClusterFactory()
+			.withEntry(entry)
+			.withDescription(description)
+			.withClusterType(IntegrationNodeLabel.MetaboliteCluster.toString())
+			.withMemberType(IntegrationNodeLabel.MetaboliteMember.toString())
+			.withMemberEntityCollection(eids)
+			.build();
 	}
 	
 //	private Map<Long, Set<Long>> collectCompoundReactions(Set<Long> cpdIdSet, UnificationTable metaboliteUnificationTable, Long protonId) {

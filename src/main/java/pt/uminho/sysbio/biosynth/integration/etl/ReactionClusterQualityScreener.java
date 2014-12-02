@@ -35,6 +35,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 		this.reactionDao = reactionDao;
 	}
 	
+	@Override
 	public void evaluate(IntegratedCluster integratedCluster) {
 		Set<ReactionQualityLabel> labels = this.something(integratedCluster);
 		
@@ -128,7 +129,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 //				.equals(IntegrationLabel.ReactionCluster.toString())) {
 //			return null;
 //		}
-		System.out.println();
+//		System.out.println();
 		
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		for (IntegratedClusterMember member : integratedCluster.getMembers()) {

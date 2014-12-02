@@ -1,16 +1,26 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.helpers.collection.IteratorUtil;
+
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 
 /**
  * Utilities used to perform several Neo4j operations.
@@ -83,6 +93,65 @@ public class Neo4jUtils {
 		}
 		
 		return map;
+	}
+	
+	public static List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities(Node node) {
+		System.out.println("--->");
+		List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propetyList = new ArrayList<> ();
+		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
+			Node other = relationship.getOtherNode(node);
+			
+			if (other.hasLabel(GlobalLabel.MetaboliteProperty) || other.hasLabel(GlobalLabel.ReactionProperty)) {
+			
+				System.out.println(relationship.getType());
+				
+				GraphPropertyEntity graphPropertyEntity = 
+						new GraphPropertyEntity(Neo4jUtils.getPropertiesMap(other));
+				for (Label label : other.getLabels()) {
+					graphPropertyEntity.addLabel(label.toString());
+				}
+				
+				GraphRelationshipEntity graphRelationshipEntity =
+						new GraphRelationshipEntity();
+				graphRelationshipEntity.setProperties(Neo4jUtils.getPropertiesMap(relationship));
+				
+				Pair<GraphPropertyEntity, GraphRelationshipEntity> pair = 
+						new ImmutablePair<>(graphPropertyEntity, graphRelationshipEntity);
+				
+				propetyList.add(pair);
+			
+			}
+		}
+		
+		return propetyList;
+//		System.out.println("<---");
+//		for (Relationship relationship : node.getRelationships(Direction.INCOMING)) {
+//			System.out.println(relationship.getType());
+//		}
+//		System.out.println("<-->");
+//		for (Relationship relationship : node.getRelationships(Direction.BOTH)) {
+//			System.out.println(relationship.getType());
+//		}
+	}
+	
+	public static List<GraphMetaboliteProxyEntity> getCrossreferences(Node node) {
+		
+		List<GraphMetaboliteProxyEntity> proxyEntities = new ArrayList<> ();
+		
+		for (Relationship relationship : node.getRelationships(
+				MetaboliteRelationshipType.HasCrossreferenceTo,
+				Direction.OUTGOING)) {
+			Node other = relationship.getOtherNode(node);
+			
+			System.out.println(relationship.getType());
+			
+			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
+			proxyEntity.setProperties(Neo4jUtils.getPropertiesMap(other));
+			
+			proxyEntities.add(proxyEntity);
+		}
+		
+		return proxyEntities;
 	}
 	
 	public static void printNode(Node node) {

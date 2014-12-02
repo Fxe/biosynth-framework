@@ -51,6 +51,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		
 		metaboliteEntity.setId(node.getId());
 		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
+		metaboliteEntity.setPropertyEntities(Neo4jUtils.getPropertyEntities(node));
+		metaboliteEntity.setCrossreferences(Neo4jUtils.getCrossreferences(node));
 		
 		for (Label label : node.getLabels()) metaboliteEntity.addLabel(label.toString());
 		
