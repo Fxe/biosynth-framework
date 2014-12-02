@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
-public class MetaboliteClusterQualityScreener {
+import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 
+public class MetaboliteClusterQualityScreener implements EtlQualityScreen<IntegratedCluster> {
+	
 }

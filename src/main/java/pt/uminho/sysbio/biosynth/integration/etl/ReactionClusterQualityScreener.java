@@ -28,8 +28,6 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 	private int mismatchThreshold = 2;
 	private String protonEntry = "BG_901";
 	
-	
-	
 	public String getProtonEntry() { return protonEntry;}
 	public void setProtonEntry(String protonEntry) { this.protonEntry = protonEntry;}
 

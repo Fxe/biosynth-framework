@@ -10,6 +10,7 @@ public enum MetaboliteMajorLabel implements Label {
 	PubChemCompound, PubChemSubstance,
 	LipidMAPS, ChemSpider,
 	EawagBBDCompound,
+	MET3D, NIKKAJI, PDB, NCI, LipidBank, JCGGDB, GlycomeDB, CCSD, Wikipedia,
 	NOTFOUND
 	;
 }

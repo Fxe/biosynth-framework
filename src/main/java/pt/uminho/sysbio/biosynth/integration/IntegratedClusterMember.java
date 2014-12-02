@@ -62,6 +62,7 @@ public class IntegratedClusterMember {
 	@EmbeddedId
 	private IntegratedClusterMemberPk pk = new IntegratedClusterMemberPk();
 
+	@JsonIgnore
 	public IntegratedCluster getCluster() { return this.pk.getCluster();}
 	public void setCluster(IntegratedCluster cluster) { this.pk.setCluster(cluster);}
 	
