@@ -59,7 +59,13 @@ public class KeggRemoteSource implements IRemoteSource {
 	@Override
 	public Set<String> getAllReactionIds() {
 		Set<String> rxnIds = new HashSet<String>(); 
-		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "rn")); // keggAPIList("rn");
+		String flat_string = null; 
+		try {
+			HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "rn"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // keggAPIList("rn");
 		String[] compound_array = flat_string.split("\n");
 		for ( int i = 0; i < compound_array.length; i++) {
 			String[] values = compound_array[i].split("\\t");
@@ -69,7 +75,14 @@ public class KeggRemoteSource implements IRemoteSource {
 	}
 	public Set<String> getAllCompoundIds(boolean includeGlycans) {
 		Set<String> cpdIDs = new HashSet<String>();
-		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd"));
+		String flat_string = null;
+		
+		try {
+			flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //		if (LOCALCACHE == null) {
 //			flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "cpd")); // keggAPIList("rn");
 //		} else {
@@ -86,7 +99,13 @@ public class KeggRemoteSource implements IRemoteSource {
 		}
 if (VERBOSE) System.out.println( "#CPD:" + cpdIDs.size());
 		if ( includeGlycans) {
-			flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "gl"));
+			flat_string = null; 
+			try {
+				HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "gl"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			compound_array = flat_string.split("\n");
 if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 			for ( int i = 0; i < compound_array.length; i++) {
@@ -106,7 +125,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	@Override
 	public Set<String> getAllEnzymeIds() {
 		Set<String> ecnIdSet = new HashSet<String>(); 
-		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "ec"));
+		String flat_string = null;
+		try {
+			HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "ec"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//String flat_string = keggAPIList("ec");
 		String[] compound_array = flat_string.split("\n");
 		for ( int i = 0; i < compound_array.length; i++) {
@@ -119,7 +144,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	@Override
 	public Set<String> getAllReactionPairIds() {
 		Set<String> rprIdSet = new HashSet<String>();
-		String flat_string = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "rp"));
+		String flat_string = null;
+		try {
+			HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s", "list", "rp"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//String flat_string = keggAPIList("rp");
 		String[] compound_array = flat_string.split("\n");
 		for ( int i = 0; i < compound_array.length; i++) {
@@ -131,7 +162,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	
 	public Set<String> getOrganimsReactionIdSet(String orgId) {
 		Set<String> rxnIdSet = new HashSet<String> ();
-		String retVal = HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s/%s", "link", "rn", orgId)); //keggAPILink("rn", orgId);
+		String retVal = null;
+		try {
+			HttpRequest.get(String.format("http://rest.kegg.jp/%s/%s/%s", "link", "rn", orgId));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //keggAPILink("rn", orgId);
 		Pattern reactionPattern = Pattern.compile("rn:(R[0-9]+)");
 		Matcher parser = reactionPattern.matcher( retVal);
 		while ( parser.find()) {
@@ -148,7 +185,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 
 	@Override
 	public KeggReactionEntity getReactionInformation(String rxnId) {
-		String flatFile = HttpRequest.get(String.format("http://rest.kegg.jp/get/%s:%s", "rn", rxnId));
+		String flatFile = null;
+		try {
+			flatFile = HttpRequest.get(String.format("http://rest.kegg.jp/get/%s:%s", "rn", rxnId));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (flatFile == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve Reaction - " + rxnId);
 			return null;
@@ -246,7 +289,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	}
 	@Override
 	public GenericEnzyme getEnzymeInformation(String ecnId) {
-		String flatfile = HttpRequest.get(String.format("http://rest.kegg.jp/get/%s:%s", "ec", ecnId));
+		String flatfile = null;
+		try {
+			flatfile = HttpRequest.get(String.format("http://rest.kegg.jp/get/%s:%s", "ec", ecnId));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (flatfile == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve Enzyme - " + ecnId);
@@ -265,7 +314,13 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 	}
 	@Override
 	public GenericReactionPair getPairInformation(String rprId) {		
-		String flatFile = HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", "rp", rprId));
+		String flatFile = null;
+		try {
+			flatFile = HttpRequest.get( String.format("http://rest.kegg.jp/get/%s:%s", "rp", rprId));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (flatFile == null) {
 			LOGGER.log(Level.SEVERE, "Error Retrieve Pair - " + rprId);

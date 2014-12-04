@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class AbstractBiocycDao {
 			}
 			//System.out.println(obj);
 			return pgdbs;
-		} catch (JSONException e) {
+		} catch (JSONException | IOException e) {
 //			LOGGER.error(String.format("JSONException - %s", e.getMessage()));
 			return null;
 		}

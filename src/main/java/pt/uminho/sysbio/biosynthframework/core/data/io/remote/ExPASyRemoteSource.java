@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.remote;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,7 +35,12 @@ public class ExPASyRemoteSource implements IRemoteSource{
 	public GenericEnzyme getEnzymeInformation(String ecId) {
 		if (VERBOSE) System.out.println("ExPASyRemoteSource::getEnzymeInformation - " + ecId);
 		
-		String flatfile = HttpRequest.get("http://enzyme.expasy.org/EC/" + ecId + ".txt");
+		String flatfile = null;
+		try {
+			flatfile = HttpRequest.get("http://enzyme.expasy.org/EC/" + ecId + ".txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if ( flatfile == null) return null;
 		ExPASyEnzymeFlatFileParser parser = new ExPASyEnzymeFlatFileParser(flatfile);
 		

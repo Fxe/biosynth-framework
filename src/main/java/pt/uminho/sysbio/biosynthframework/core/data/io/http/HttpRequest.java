@@ -14,13 +14,16 @@ public class HttpRequest {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(HttpRequest.class);
 	
-	public static String get(String url) {
+//	public boolean RETRY = false;
+//	public long RETRY_DELAY_MILLI = 300000;
+	
+	public static String get(String url) throws IOException {
 		StringBuilder ret = new StringBuilder();
 		
 		LOGGER.info(String.format("HttpRequest - %s", url));
 		
 		HttpClient client = HttpClientBuilder.create().build();
-		try {
+//		try {
 			HttpGet httpGet = new HttpGet(url);
 
 			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));
@@ -28,30 +31,30 @@ public class HttpRequest {
 			while ( (line = buffer.readLine()) != null) {
 				ret.append(line).append('\n');
 			}
-		} catch (IOException ioEx) {
-			LOGGER.error(String.format("IO ERROR - %s", ioEx.getMessage()));
-			return null;
-		}
+//		} catch (IOException ioEx) {
+//			LOGGER.error(String.format("IO ERROR - %s", ioEx.getMessage()));
+//			return null;
+//		}
 
 		return ret.toString();
 	}
 	
-	public static String get(String url, int retryAtempts) {
-		int n = 0;
-		boolean success = false;
-		String ret = null;
-		while (!success && n <= retryAtempts) {
-			success = true;
-			ret = get(url);
-			
-			n++;
-			if ( n <= retryAtempts && ret == null) {
-				success = false;
-				LOGGER.warn(String.format("Retry attempt %d - %s", n, url));
-			}
-			
-		}
-		
-		return ret;
-	}
+//	public static String get(String url, int retryAtempts) IOException {
+//		int n = 0;
+//		boolean success = false;
+//		String ret = null;
+//		while (!success && n <= retryAtempts) {
+//			success = true;
+//			ret = get(url);
+//			
+//			n++;
+//			if ( n <= retryAtempts && ret == null) {
+//				success = false;
+//				LOGGER.warn(String.format("Retry attempt %d - %s", n, url));
+//			}
+//			
+//		}
+//		
+//		return ret;
+//	}
 }

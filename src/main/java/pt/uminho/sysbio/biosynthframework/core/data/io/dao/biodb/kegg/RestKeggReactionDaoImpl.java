@@ -15,6 +15,8 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 public class RestKeggReactionDaoImpl
 extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 
+	public static boolean DELAY_ON_IO_ERROR = false;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggReactionDaoImpl.class);
 	private static final String restRxnQuery = "http://rest.kegg.jp/get/rn:%s";
 	
@@ -54,6 +56,14 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
 			
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
+			
+			if (DELAY_ON_IO_ERROR) {
+				try {
+					Thread.sleep(300000);
+				} catch (Exception es) {
+					System.out.println(es.getMessage());
+				}
+			}
 //			LOGGER.debug(e.getStackTrace());
 			return null;
 		}

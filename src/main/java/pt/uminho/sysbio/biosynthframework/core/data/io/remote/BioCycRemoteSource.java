@@ -57,7 +57,7 @@ public class BioCycRemoteSource implements IRemoteSource {
 		this.entryPrefix = prefix;
 	}
 	
-	public Set<String> getAllBioCycPGDB() {
+	public Set<String> getAllBioCycPGDB() throws IOException {
 		try {
 			//String xmlDoc = edu.uminho.biosynth.util.BioSynthUtilsIO.readFromFile("./input/xml/xmlqueryDBS.xml"); 
 			String xmlDoc = HttpRequest.get(xmlquery + "dbs");
@@ -91,13 +91,20 @@ public class BioCycRemoteSource implements IRemoteSource {
 
 	@Override
 	public BioCycReactionEntity getReactionInformation(String rxnId) {
+		
 		String pgdb = orgId;
-		String xmlDoc;
-		if (rxnId.contains(":")) {
-			pgdb = rxnId.replaceFirst(":[^:]+", "");
-			xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s", rxnId));
-		} else {
-			xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s:%s", orgId, rxnId));
+		String xmlDoc = null;
+		
+		try {
+		
+			if (rxnId.contains(":")) {
+				pgdb = rxnId.replaceFirst(":[^:]+", "");
+				xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s", rxnId));
+			} else {
+				xmlDoc = HttpRequest.get(xmlGet + String.format("id=%s:%s", orgId, rxnId));
+			}
+		} catch (IOException e) {
+			
 		}
 		
 		if ( xmlDoc == null) {
@@ -269,7 +276,13 @@ public class BioCycRemoteSource implements IRemoteSource {
 	@Override
 	public GenericEnzyme getEnzymeInformation(String ecnId) {
 		String url = String.format(urlRxnEnzymeAPI, orgId, ecnId);
-		String xmlDoc = HttpRequest.get(url);
+		String xmlDoc = null; 
+		
+		try {
+			xmlDoc = HttpRequest.get(url);
+		} catch (IOException e) {
+			
+		}
 		if ( xmlDoc == null) {
 			if (VERBOSE) LOGGER.log(Level.SEVERE, "Error Retrieve - " + ecnId);
 			return null;
@@ -348,7 +361,12 @@ public class BioCycRemoteSource implements IRemoteSource {
 	}
 	@Override
 	public Set<String> getAllReactionIds() {
-		String xmlResponse = HttpRequest.get(xmlquery + String.format("[x:x<-%s^^reactions]", orgId));
+		String xmlResponse = null;
+		try {
+			xmlResponse = HttpRequest.get(xmlquery + String.format("[x:x<-%s^^reactions]", orgId));
+		} catch (IOException e) {
+			
+		}
 		return getAllReactionIds(xmlResponse);
 	}
 	public Set<String> getAllMetabolitesIds(String xmlResponse) {

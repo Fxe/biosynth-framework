@@ -166,6 +166,11 @@
       </exclusions>
     </dependency>
      -->
+    <dependency>
+    	<groupId>org.apache.activemq</groupId>
+    	<artifactId>activemq-broker</artifactId>
+    	<version>5.9.1</version>
+    </dependency>
   </dependencies>
 
   <build>

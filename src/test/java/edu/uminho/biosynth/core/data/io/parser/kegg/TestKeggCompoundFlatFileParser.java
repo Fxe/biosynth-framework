@@ -2,6 +2,8 @@ package edu.uminho.biosynth.core.data.io.parser.kegg;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,8 +20,15 @@ public class TestKeggCompoundFlatFileParser {
 
 	@Test
 	public void testC00007() {
+		String abc = null; 
+		try {
+			abc = HttpRequest.get("http://rest.kegg.jp/get/C00007");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		KeggCompoundFlatFileParser parser = 
-				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00007"));
+				new KeggCompoundFlatFileParser(abc);
 		
 		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
@@ -39,8 +48,15 @@ public class TestKeggCompoundFlatFileParser {
 	
 	@Test
 	public void testC00755() {
+		String abc = null; 
+		try {
+			abc = HttpRequest.get("http://rest.kegg.jp/get/C00755");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		KeggCompoundFlatFileParser parser = 
-				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C00755"));
+				new KeggCompoundFlatFileParser(abc);
 
 		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
@@ -60,8 +76,15 @@ public class TestKeggCompoundFlatFileParser {
 	
 	@Test
 	public void testC01245() {
+		String abc = null; 
+		try {
+			abc = HttpRequest.get("http://rest.kegg.jp/get/C01245");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		KeggCompoundFlatFileParser parser = 
-				new KeggCompoundFlatFileParser(HttpRequest.get("http://rest.kegg.jp/get/C01245"));
+				new KeggCompoundFlatFileParser(abc);
 
 		KeggCompoundMetaboliteEntity cpd = new KeggCompoundMetaboliteEntity();
 		cpd.setEntry( parser.getEntry());
