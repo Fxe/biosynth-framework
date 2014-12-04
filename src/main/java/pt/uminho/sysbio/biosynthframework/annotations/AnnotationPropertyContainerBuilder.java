@@ -15,7 +15,26 @@ public class AnnotationPropertyContainerBuilder  {
 	@SuppressWarnings("unused")
 	private boolean ignoreNull = true;
 	
-	public Map<String, Object> extractProperties(Object object, Class<? extends Object> clazz) throws IllegalArgumentException, IllegalAccessException {
+	public void extractEntityMetaProperties(Object object, Class<? extends Object> clazz) 
+			throws IllegalArgumentException, IllegalAccessException {
+		LOGGER.debug(String.format("Reflect: %s", clazz));
+		while (!clazz.equals(Object.class)) {
+			
+			for (Field property : clazz.getDeclaredFields()) {
+				Annotation annotation = property.getAnnotation(EntityMetaProperty.class);
+				property.setAccessible(true);
+				if (annotation != null) {
+					
+				}
+			}
+			
+			clazz = clazz.getSuperclass();
+			LOGGER.debug(String.format("Reflect: %s", clazz));
+		}
+	}
+	
+	public Map<String, Object> extractProperties(Object object, Class<? extends Object> clazz) 
+			throws IllegalArgumentException, IllegalAccessException {
 		Map<String, Object> propertyContainer = new HashMap<> ();
 		
 		LOGGER.debug(String.format("Reflect: %s", clazz));

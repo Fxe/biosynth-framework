@@ -11,6 +11,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import pt.uminho.sysbio.biosynthframework.annotations.ChemicalFormula;
+import pt.uminho.sysbio.biosynthframework.annotations.EntityMetaProperty;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @MappedSuperclass
@@ -19,6 +20,7 @@ public class GenericMetabolite extends AbstractBiosynthEntity implements Metabol
 	private static final long serialVersionUID = 134867731L;
 
 	@ChemicalFormula
+	@EntityMetaProperty(entityType="")
 	@MetaProperty @Column(name="formula", length=255) 
 	protected String formula;
 	@MetaProperty @Column(name="MCLASS", length=63) 
