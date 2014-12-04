@@ -144,6 +144,21 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return propertyPair;
 	}
 	
+	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
+			String key, Object value, String majorLabel, String relationShipType, Map<String, Object> relationshipProperties) {
+		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
+		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
+		relationshipEntity.setProperties(relationshipProperties);
+		if (propertyEntity == null || relationshipEntity == null) {
+			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
+			return null;
+		}
+		Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyPair =
+				new ImmutablePair<>(propertyEntity, relationshipEntity);
+		
+		return propertyPair;
+	}
+	
 	protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
 		centralMetaboliteEntity.addPropertyEntity(
 				this.buildPropertyLinkPair(

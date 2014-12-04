@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb.chebi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
@@ -11,6 +12,7 @@ import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtl
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteNameEntity;
 
 public class ChebiMetaboliteTransform
 extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
@@ -38,6 +40,28 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 						entity.getSmiles(), 
 						METABOLITE_SMILE_LABEL, 
 						METABOLITE_SMILE_RELATIONSHIP_TYPE));
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY, 
+						entity.getCharge(), 
+						METABOLITE_CHARGE_LABEL, 
+						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
+		
+		for (ChebiMetaboliteNameEntity name : entity.getNames()) {
+			try {
+				Map<String, Object> properties = this.propertyContainerBuilder
+						.extractProperties(name, ChebiMetaboliteNameEntity.class);
+				centralMetaboliteEntity.addPropertyEntity(
+						this.buildPropertyLinkPair(
+								PROPERTY_UNIQUE_KEY, 
+								name.getName(), 
+								METABOLITE_NAME_LABEL, 
+								METABOLITE_NAME_RELATIONSHIP_TYPE,
+								properties));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	@Override
