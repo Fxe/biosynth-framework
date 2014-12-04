@@ -38,6 +38,12 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 						entity.getSmiles(), 
 						METABOLITE_SMILE_LABEL, 
 						METABOLITE_SMILE_RELATIONSHIP_TYPE));
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY, 
+						entity.getCharge(), 
+						METABOLITE_CHARGE_LABEL, 
+						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 	}
 
 	@Override

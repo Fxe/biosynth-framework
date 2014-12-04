@@ -36,6 +36,12 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 							METABOLITE_SMILE_LABEL, 
 							METABOLITE_SMILE_RELATIONSHIP_TYPE));
 		}
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY, 
+						entity.getDefaultCharge(), 
+						METABOLITE_CHARGE_LABEL, 
+						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 	}
 
 //	@Override

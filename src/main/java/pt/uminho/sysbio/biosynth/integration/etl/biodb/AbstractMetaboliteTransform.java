@@ -164,6 +164,10 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
 	
+	protected void foo(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
+		
+	}
+	
 	protected void configureCrossreferences(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		LOGGER.debug("Setup cross-references ...");
 		
@@ -178,6 +182,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 						proxyEntity.setEntry(xref.getValue());
 						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
+						proxyEntity.addLabel(METABOLITE_LABEL);
 //						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
 //						proxyEntity.setProperties(properties);
 						centralMetaboliteEntity.getCrossreferences().add(proxyEntity);
