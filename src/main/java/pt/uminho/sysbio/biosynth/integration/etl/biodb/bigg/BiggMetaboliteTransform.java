@@ -25,7 +25,13 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 	protected void configureAdditionalPropertyLinks(
 			GraphMetaboliteEntity centralMetaboliteEntity,
 			BiggMetaboliteEntity entity) {
-
+		
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY, 
+						entity.getCharge(), 
+						METABOLITE_CHARGE_LABEL, 
+						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 	}
 	
 	@Override
