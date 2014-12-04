@@ -16,6 +16,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.annotations.Charge;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
@@ -54,6 +55,7 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	public Double getGibbs() { return gibbs;}
 	public void setGibbs(Double gibbs) { this.gibbs = gibbs;}
 	
+	@Charge
 	@MetaProperty
 	@Column(name="CHARGE") private Integer charge;
 	public Integer getCharge() { return charge; }

@@ -16,6 +16,8 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
+import pt.uminho.sysbio.biosynthframework.annotations.Charge;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="seed_metabolite")
@@ -23,17 +25,48 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="DEFAULTCHARGE") private Integer defaultCharge;
-    @Column(name="deltag") private Double deltaG;
-    @Column(name="deltagerr") private Double deltaGErr;
-    @Column(name="uuid") private String uuid;
-    @Column(name="cksum") private String cksum;
-    @Column(name="locked") private Short locked;
-    @Column(name="mass") private Integer mass;
-    @Column(name="ABBREVIATION") private String abbreviation;
-    @Column(name="UNCHARGEDFORMULA") private String unchargedFormula;
-    @Column(name="OBSOLETE") private Boolean obsolete = false;
-    
+	@Charge
+	@MetaProperty
+	@Column(name="DEFAULTCHARGE") 
+	private Integer defaultCharge;
+	public int getDefaultCharge() { return defaultCharge;}
+	public void setDefaultCharge(int defaultCharge) { this.defaultCharge = defaultCharge;}
+	
+	@MetaProperty
+    @Column(name="deltag") 
+    private Double deltaG;
+	
+	@MetaProperty
+    @Column(name="deltagerr") 
+	private Double deltaGErr;
+	
+	@MetaProperty
+    @Column(name="uuid") 
+	private String uuid;
+	
+	@MetaProperty
+    @Column(name="cksum") 
+	private String cksum;
+	
+	@MetaProperty
+    @Column(name="locked") 
+    private Short locked;
+	
+	@MetaProperty
+    @Column(name="mass") 
+	private Integer mass;
+	
+	@MetaProperty
+    @Column(name="ABBREVIATION") 
+	private String abbreviation;
+	
+	@MetaProperty
+    @Column(name="UNCHARGEDFORMULA") 
+	private String unchargedFormula;
+	
+	@MetaProperty
+    @Column(name="OBSOLETE") 
+	private Boolean obsolete = false;
     public Boolean getObsolete() { return obsolete;}
 	public void setObsolete(Boolean obsolete) { this.obsolete = obsolete;}
 
@@ -59,12 +92,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 	public List<String> getSynonyms() { return synonyms;}
 	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
 	
-	public int getDefaultCharge() {
-		return defaultCharge;
-	}
-	public void setDefaultCharge(int defaultCharge) {
-		this.defaultCharge = defaultCharge;
-	}
+
 	
 	public Double getDeltaG() { return deltaG;}
 	public void setDeltaG(Double deltaG) { this.deltaG = deltaG;}
