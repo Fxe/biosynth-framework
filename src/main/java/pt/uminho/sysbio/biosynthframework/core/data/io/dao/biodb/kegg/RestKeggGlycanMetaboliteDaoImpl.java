@@ -8,6 +8,7 @@ import java.util.List;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 
 public class RestKeggGlycanMetaboliteDaoImpl 
@@ -53,8 +54,12 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 		String glMolFile = null;
 		try {
 			glFlatFile = getLocalOrWeb(restGlQuery, localPath + ".txt");
-			glMolFile = getLocalOrWeb(restGlMolQuery, localPath + ".mol");
+			if (glFlatFile == null) return null;
 			
+			glMolFile = getLocalOrWeb(restGlMolQuery, localPath + ".mol");
+			if (glMolFile == null) {
+				BioSynthUtilsIO.writeToFile("null", localPath + ".mol");
+			}
 //			System.out.println(drFlatFile);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -72,7 +77,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 		cpd.setCompoundClass(parser.getMetaboliteClass());
 		cpd.setRemark(parser.getRemark());
 		cpd.setComment(parser.getComment());
-		if (glMolFile != null && !glMolFile.isEmpty()) {
+		if (glMolFile != null && !glMolFile.isEmpty() && !glMolFile.startsWith("null")) {
 			cpd.setMol2d(glMolFile);
 		}
 		cpd.setCrossReferences(parser.getCrossReferences());

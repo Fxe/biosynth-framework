@@ -221,7 +221,7 @@ public class BioCycRemoteSource implements IRemoteSource {
 		
 		try {
 			parser = new BioCycMetaboliteXMLParser(xmlDoc);
-		} catch (JSONException jsEx) {
+		} catch (JSONException | IOException jsEx) {
 			LOGGER.log(Level.SEVERE, "Parse ERROR " + cpdId);
 			return null;
 		}

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 @Repository
 public class RestKeggCompoundMetaboliteDaoImpl 
@@ -36,7 +37,9 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 			if (cpdFlatFile == null) return null;
 			
 			cpdMolFile = getLocalOrWeb(restCpdMolQuery, localPath + ".mol");
-			
+			if (cpdMolFile == null) {
+				BioSynthUtilsIO.writeToFile("null", localPath + ".mol");
+			}
 //			System.out.println(drFlatFile);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -52,7 +55,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 		cpd.setMass(parser.getMass());
 		cpd.setRemark(parser.getRemark());
 		cpd.setComment(parser.getComment());
-		if (cpdMolFile != null && !cpdMolFile.isEmpty()) {
+		if (cpdMolFile != null && !cpdMolFile.isEmpty() && !cpdMolFile.startsWith("null")) {
 			cpd.setMol2d(cpdMolFile);
 		}
 		cpd.setCrossReferences(parser.getCrossReferences());

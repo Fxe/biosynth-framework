@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +14,15 @@ import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.IGenericMetaboliteParser;
 
-public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implements IGenericMetaboliteParser {
+public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser 
+implements IGenericMetaboliteParser {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(BioCycMetaboliteXMLParser.class);
 	
 	private final JSONObject base;
 	private final BioCycEntityType entityType;
 	
-	public BioCycMetaboliteXMLParser(String xmlDocument) throws JSONException {
+	public BioCycMetaboliteXMLParser(String xmlDocument) throws JSONException, IOException {
 		super(xmlDocument);
 		
 		this.parseContent();
@@ -37,7 +39,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 			this.entityType = BioCycEntityType.RNA;
 		} else {
 			this.entityType = BioCycEntityType.ERROR;
-			LOGGER.error(String.format("%s", this.content.getJSONObject("ptools-xml").toString()));
+			throw new IOException("Invalid metabolite xml document " + this.content.getJSONObject("ptools-xml").toString());
 		}
 		
 		this.base = jsMetabolite;
@@ -124,9 +126,11 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 				}
 				break;
 			default:
-				LOGGER.warn(String.format("Not parseable type - %s", entityType));
+				LOGGER.warn(String.format("getFormula Not parseable type - %s", entityType));
 				break;
 		}
+		if (formula == null) return null;
+		
 		return formula.isEmpty() ? null : formula;
 	}
 	
@@ -152,6 +156,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 					}
 					break;
 				default:
+					LOGGER.warn(String.format("getCharge Not parseable type - %s", entityType));
 					break;
 			}
 			
@@ -297,6 +302,7 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 					}
 					break;
 				default:
+					LOGGER.warn(String.format("getCmlMolWeight Not parseable type - %s", entityType));
 					break;
 			}
 			
@@ -392,7 +398,12 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 					JSONObject parentJsObj = (JSONObject) arrayIndexObj;
 					if (parentJsObj.has("Compound")) {
 						res.add(parentJsObj.getJSONObject("Compound").getString("frameid"));
+					} else if (parentJsObj.has("Protein")) {
+						res.add(parentJsObj.getJSONObject("Protein").getString("frameid"));
+					} else if (parentJsObj.has("RNA")) {
+						res.add(parentJsObj.getJSONObject("RNA").getString("frameid"));
 					} else {
+						System.out.println("PARENT ERROR !");
 						System.out.println(parentJsArray);
 						System.exit(0);
 					}
@@ -420,8 +431,13 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 				JSONObject instanceJsObj = instanceJsArray.getJSONObject(i);
 				if (instanceJsObj.has("Compound")) {
 					res.add(instanceJsObj.getJSONObject("Compound").getString("frameid"));
+				} else if (instanceJsObj.has("Protein")) {
+					res.add(instanceJsObj.getJSONObject("Protein").getString("frameid"));
+				} else if (instanceJsObj.has("RNA")) {
+					res.add(instanceJsObj.getJSONObject("RNA").getString("frameid"));
 				} else {
-					System.out.println(instanceJsArray);
+					System.out.println("PARENT ERROR !");
+					System.out.println(instanceJsObj);
 					System.exit(0);
 				}
 			}
@@ -444,8 +460,13 @@ public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser implement
 				JSONObject subclassJsObj = subclassJsArray.getJSONObject(i);
 				if (subclassJsObj.has("Compound")) {
 					res.add(subclassJsObj.getJSONObject("Compound").getString("frameid"));
+				} else if (subclassJsObj.has("Protein")) {
+					res.add(subclassJsObj.getJSONObject("Protein").getString("frameid"));
+				} else if (subclassJsObj.has("RNA")) {
+					res.add(subclassJsObj.getJSONObject("RNA").getString("frameid"));
 				} else {
-					System.out.println(subclassJsArray);
+					System.out.println("PARENT ERROR !");
+					System.out.println(subclassJsObj);
 					System.exit(0);
 				}
 			}

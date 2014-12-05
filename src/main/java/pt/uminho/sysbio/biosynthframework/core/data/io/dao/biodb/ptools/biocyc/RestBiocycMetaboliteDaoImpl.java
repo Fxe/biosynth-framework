@@ -19,6 +19,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossrefe
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao 
 		implements MetaboliteDao<BioCycMetaboliteEntity> {
@@ -127,6 +128,10 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 
 	@Override
 	public BioCycMetaboliteEntity getMetaboliteByEntry(String entry) {
+		if (entry.startsWith(pgdb)) {
+			entry = entry.replaceFirst(pgdb.concat(":"), "");
+		}
+		
 		String restCpdQuery = String.format(RestBiocycMetaboliteDaoImpl.xmlGet, pgdb, entry);
 		BioCycMetaboliteEntity cpd = null;
 		
@@ -143,6 +148,8 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
 			
 			if (!parser.isValid()) return null;
+//			if (saveLocalStorage && didFetch) {
+//			BioSynthUtilsIO.writeToFile(xmlDoc, localPath);
 			
 			cpd = new BioCycMetaboliteEntity();
 

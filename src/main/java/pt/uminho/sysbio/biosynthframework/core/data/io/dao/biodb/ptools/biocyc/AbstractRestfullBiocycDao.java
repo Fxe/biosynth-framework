@@ -3,14 +3,19 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 	
-	private String localStorage;
-	private boolean useLocalStorage = false;
-	private boolean saveLocalStorage = false;
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractRestfullBiocycDao.class); 
+	
+	protected String localStorage;
+	protected boolean useLocalStorage = false;
+	protected boolean saveLocalStorage = false;
 	
 	public String getLocalStorage() { return localStorage;}
 	public void setLocalStorage(String localStorage) {
@@ -22,7 +27,9 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 		String httpResponseString = null;
 //		String dataFileStr = localStorage  + entityType + "/" + entry + "." + extension;
 		File dataFile = new File(localPath);
-		System.out.println(dataFile);
+		
+		LOGGER.debug("File: " + dataFile);
+
 		boolean didFetch = false;
 		//check local file
 		if (useLocalStorage && dataFile.exists()) {
@@ -36,7 +43,7 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 		
 		
 		if (saveLocalStorage && didFetch) {
-//			System.out.println("SAVING !" + localPath);
+			LOGGER.debug("Write: " + localPath);
 			BioSynthUtilsIO.writeToFile(httpResponseString, localPath);			
 		}
 		
