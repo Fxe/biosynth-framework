@@ -11,6 +11,8 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicLabel;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
@@ -173,5 +175,25 @@ public class Neo4jUtils {
 		for (String key : properties.keySet()) {
 			node.setProperty(key, properties.get(key));
 		}
+	}
+
+	public static Node mergeNode(Label label, String key, Object value, GraphDatabaseService graphDatabaseService) {
+		Node node = null;
+		for (Node res : graphDatabaseService.findNodesByLabelAndProperty(label, key, value)) {
+			node = res;
+			System.out.println(res);
+		}
+		
+		if (node == null) {
+			node = graphDatabaseService.createNode();
+			node.setProperty(key, value);
+			node.addLabel(label);
+		}
+		
+		return node;
+	}
+	
+	public static Node mergeNode(String label, String key, Object value, GraphDatabaseService graphDatabaseService) {
+		return mergeNode(DynamicLabel.label(label), key, value, graphDatabaseService);
 	}
 }
