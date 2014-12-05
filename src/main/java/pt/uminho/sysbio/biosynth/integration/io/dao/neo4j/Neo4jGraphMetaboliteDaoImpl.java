@@ -29,8 +29,8 @@ extends AbstractNeo4jDao
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
-	private static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
-	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
+	protected static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
+	protected static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
 			MetaboliteRelationshipType.HasCrossreferenceTo;
 	
 	@Autowired
@@ -100,8 +100,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			//SCD Track changes
 			Neo4jUtils.applyProperties(node, metabolite.getProperties());
 			
-			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
-				this.createOrLinkToProxy(node, proxy);
+			for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyPair : metabolite.getCrossreferences()) {
+				this.createOrLinkToProxy(node, proxyPair);
 			}
 			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair 
 					: metabolite.getPropertyEntities()) {
@@ -124,8 +124,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			
 			Neo4jUtils.applyProperties(node, metabolite.getProperties());
 			
-			for (GraphMetaboliteProxyEntity proxy : metabolite.getCrossreferences()) {
-				this.createOrLinkToProxy(node, proxy);
+			for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyPair : metabolite.getCrossreferences()) {
+				this.createOrLinkToProxy(node, proxyPair);
 			}
 			
 			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair 
@@ -205,8 +205,11 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		}
 	}
 	
-	private void createOrLinkToProxy(Node parent, GraphMetaboliteProxyEntity proxy) {
+	private void createOrLinkToProxy(Node parent, Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyPair) {
 		boolean create = true;
+		GraphMetaboliteProxyEntity proxy = proxyPair.getLeft();
+		GraphRelationshipEntity relationshipEntity = proxyPair.getRight();
+		RelationshipType relationshipType = DynamicRelationshipType.withName(relationshipEntity.getMajorLabel());
 		for (Node proxyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
 						DynamicLabel.label(proxy.getMajorLabel()), 
@@ -216,7 +219,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			create = false;
 			
 			//TODO: SET TO UPDATE
-			parent.createRelationshipTo(proxyNode, CROSSREFERENCE_RELATIONSHIP);
+			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
+			Neo4jUtils.setPropertiesMap(relationshipEntity.getProperties(), relationship);
 		}
 		
 		if (create) {
@@ -230,7 +234,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("major-label", proxy.getMajorLabel());
 			proxyNode.setProperty("proxy", true);
-			parent.createRelationshipTo(proxyNode, CROSSREFERENCE_RELATIONSHIP);
+			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
+			Neo4jUtils.setPropertiesMap(relationshipEntity.getProperties(), relationship);
 		}
 	}
 

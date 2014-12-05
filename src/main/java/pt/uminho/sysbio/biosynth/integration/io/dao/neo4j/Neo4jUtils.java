@@ -96,6 +96,20 @@ public class Neo4jUtils {
 		
 		return map;
 	}
+	public static void setPropertiesMap(Map<String, Object> properties, Node node) {
+		setPropertiesFromPropertyContainer(properties, node);
+	}
+	public static void setPropertiesMap(Map<String, Object> properties, Relationship relationship) {
+		setPropertiesFromPropertyContainer(properties, relationship);
+	}
+	private static void setPropertiesFromPropertyContainer(
+			Map<String, Object> properties, PropertyContainer propertyContainer) {
+		if (propertyContainer == null) return;
+		
+		for (String key : properties.keySet()) { 
+			propertyContainer.setProperty(key, properties.get(key));
+		}
+	}
 	
 	public static List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities(Node node) {
 		System.out.println("--->");
@@ -136,9 +150,9 @@ public class Neo4jUtils {
 //		}
 	}
 	
-	public static List<GraphMetaboliteProxyEntity> getCrossreferences(Node node) {
+	public static List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> getCrossreferences(Node node) {
 		
-		List<GraphMetaboliteProxyEntity> proxyEntities = new ArrayList<> ();
+		List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> proxyEntities = new ArrayList<> ();
 		
 		for (Relationship relationship : node.getRelationships(
 				MetaboliteRelationshipType.HasCrossreferenceTo,
@@ -149,8 +163,13 @@ public class Neo4jUtils {
 			
 			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 			proxyEntity.setProperties(Neo4jUtils.getPropertiesMap(other));
+			GraphRelationshipEntity relationshipEntity = new GraphRelationshipEntity();
+			relationshipEntity.setMajorLabel(relationship.getType().toString());
+			relationshipEntity.setProperties(Neo4jUtils.getPropertiesMap(relationship));
 			
-			proxyEntities.add(proxyEntity);
+			Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> pair = 
+					new ImmutablePair<> (proxyEntity, relationshipEntity);
+			proxyEntities.add(pair);
 		}
 		
 		return proxyEntities;

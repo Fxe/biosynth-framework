@@ -133,7 +133,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
 		for (GraphMetaboliteEntity cpd : cpdList) {
-			for (GraphMetaboliteProxyEntity proxyEntity : cpd.getCrossreferences()) {
+			for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyEntity : cpd.getCrossreferences()) {
 				System.out.println(proxyEntity);
 			}
 		}

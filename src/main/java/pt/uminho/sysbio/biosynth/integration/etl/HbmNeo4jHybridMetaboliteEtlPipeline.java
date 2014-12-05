@@ -1,11 +1,13 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.hibernate.SessionFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 
@@ -26,6 +28,14 @@ implements EtlPipeline<SRC, DST> {
 	
 	private int batchSize = 100;
 	private boolean skipLoad = false;
+	
+	public HbmNeo4jHybridMetaboliteEtlPipeline() { }
+	
+	@Autowired
+	public HbmNeo4jHybridMetaboliteEtlPipeline(SessionFactory sessionFactory, GraphDatabaseService graphDatabaseService) {
+		this.sessionFactory = sessionFactory;
+		this.graphDatabaseService = graphDatabaseService;
+	}
 	
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
@@ -71,6 +81,11 @@ implements EtlPipeline<SRC, DST> {
 		//SRC = ETL EXTRACT(Entry)
 		SRC src = etlExtract.extract(id);
 		
+		if (src == null) {
+			LOGGER.warn(String.format("[%s] not found", id));
+			return;
+		}
+		
 		//DST = ETL TRANSFORM(SRC)
 		DST dst = etlTransform.etlTransform(src);
 		
@@ -78,7 +93,7 @@ implements EtlPipeline<SRC, DST> {
 		if (this.dataCleasingSubsystem != null)
 			dataCleasingSubsystem.etlCleanse(dst);
 		
-//		System.out.println(dst);
+		System.out.println(dst);
 		//ETL LOAD(DST)
 		if (!skipLoad) etlLoad.etlLoad(dst);
 		
@@ -97,6 +112,43 @@ implements EtlPipeline<SRC, DST> {
 		for (Serializable entry : etlExtract.getAllKeys()) {
 			//SRC = ETL EXTRACT(Entry)
 			SRC src = etlExtract.extract(entry);
+			
+			//DST = ETL TRANSFORM(SRC)
+			DST dst = etlTransform.etlTransform(src);
+			
+			//ETL CLEAN(DST)
+			if (this.dataCleasingSubsystem != null)
+				dataCleasingSubsystem.etlCleanse(dst);
+			
+			//ETL LOAD(DST)
+			if (!skipLoad) etlLoad.etlLoad(dst);
+			
+			i++;
+			if ((i % batchSize) == 0) {
+				LOGGER.debug(String.format("Commit ! %d", i));
+				neoTx.success();
+				neoTx.close();
+				neoTx = graphDatabaseService.beginTx();
+				
+				hbmTx.rollback();
+				hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+			}
+		}
+		
+		hbmTx.rollback();
+		neoTx.success();
+		neoTx.close();
+	}
+	
+	public void etl(Collection<Serializable> ids) {
+		
+		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
+		
+		int i = 0;
+		for (Serializable id : ids) {
+			//SRC = ETL EXTRACT(Entry)
+			SRC src = etlExtract.extract(id);
 			
 			//DST = ETL TRANSFORM(SRC)
 			DST dst = etlTransform.etlTransform(src);

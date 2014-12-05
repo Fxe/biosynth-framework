@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
@@ -112,7 +114,8 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Grap
 //			node.createRelationshipTo(propertyNode, relationshipType);
 //		}
 		
-		for (GraphMetaboliteProxyEntity xref : metabolite.getCrossreferences()) {
+		for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> xrefPair : metabolite.getCrossreferences()) {
+			GraphMetaboliteProxyEntity xref = xrefPair.getLeft();
 			Label xrefMajor = DynamicLabel.label(xref.getMajorLabel());
 			
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());
