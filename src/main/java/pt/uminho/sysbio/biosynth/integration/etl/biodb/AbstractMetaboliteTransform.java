@@ -51,6 +51,8 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	protected static final String METABOLITE_MODEL_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCharge.toString();
 	
+	protected static final String METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCrossreferenceTo.toString();
+	
 	private final String majorLabel;
 	
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
@@ -198,9 +200,11 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						proxyEntity.setEntry(xref.getValue());
 						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
 						proxyEntity.addLabel(METABOLITE_LABEL);
-//						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
-//						proxyEntity.setProperties(properties);
-						centralMetaboliteEntity.getCrossreferences().add(proxyEntity);
+						GraphRelationshipEntity graphRelationshipEntity = new GraphRelationshipEntity();
+						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
+						graphRelationshipEntity.setProperties(properties);
+						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
+						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
 						break;
 					case MODEL:
 						centralMetaboliteEntity.addPropertyEntity(
@@ -210,6 +214,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										METABOLITE_MODEL_RELATIONSHIP_TYPE));
 						break;
 					default:
+						LOGGER.warn(String.format("Ignored type <%s>[%s:%s]", xref.getType(), xref.getRef(), xref.getValue()));
 						break;
 				}
 			}

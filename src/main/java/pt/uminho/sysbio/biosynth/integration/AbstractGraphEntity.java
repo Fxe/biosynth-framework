@@ -38,7 +38,7 @@ public class AbstractGraphEntity {
 	
 	@Override
 	public String toString() {
-		String str = String.format("%s: %s", labels, this.properties);
+		String str = String.format("%s::%s: %s", majorLabel, labels, this.properties);
 //		StringBuilder sb = new StringBuilder();
 //		sb.append(String.format("id:%d\n", id));
 //		sb.append(String.format("majorLabel:%s\n", majorLabel));

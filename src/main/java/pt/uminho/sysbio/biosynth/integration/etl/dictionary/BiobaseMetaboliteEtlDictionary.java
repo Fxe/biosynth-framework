@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 
 public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String> {
@@ -21,7 +22,8 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 	public String translate(String lookup) {
 		String result = null;
 		
-		if (clazz.equals(KeggCompoundMetaboliteEntity.class) && 
+		if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
+				clazz.equals(ChebiMetaboliteEntity.class)) && 
 				lookup.equals("PubChem")) {
 			result = MetaboliteMajorLabel.PubChemSubstance.toString();
 		} else {

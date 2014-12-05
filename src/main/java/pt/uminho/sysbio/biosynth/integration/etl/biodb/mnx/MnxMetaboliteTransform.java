@@ -46,24 +46,24 @@ extends AbstractMetaboliteTransform<MnxMetaboliteEntity>{
 						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 	}
 
-	@Override
-	protected void configureCrossreferences(
-			GraphMetaboliteEntity centralMetaboliteEntity,
-			MnxMetaboliteEntity entity) {
-		
-		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-		
-		for (MnxMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
-			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-			String dbEntry = xref.getValue(); //Also need to translate if necessary
-			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-			proxy.setEntry(dbEntry);
-			proxy.setMajorLabel(dbLabel);
-			proxy.addLabel(METABOLITE_LABEL);
-			crossreferences.add(proxy);
-		}
-		
-		centralMetaboliteEntity.setCrossreferences(crossreferences);
-	}
+//	@Override
+//	protected void configureCrossreferences(
+//			GraphMetaboliteEntity centralMetaboliteEntity,
+//			MnxMetaboliteEntity entity) {
+//		
+//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
+//		
+//		for (MnxMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
+//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
+//			String dbEntry = xref.getValue(); //Also need to translate if necessary
+//			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
+//			proxy.setEntry(dbEntry);
+//			proxy.setMajorLabel(dbLabel);
+//			proxy.addLabel(METABOLITE_LABEL);
+//			crossreferences.add(proxy);
+//		}
+//		
+//		centralMetaboliteEntity.setCrossreferences(crossreferences);
+//	}
 
 }
