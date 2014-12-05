@@ -16,7 +16,6 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity> {
 
-	@Autowired
 	private SessionFactory sessionFactory;
 	
 	private Session getSession() {
@@ -26,7 +25,7 @@ public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteE
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
-	public HbmChebiMetaboliteDaoImpl() { }
+	@Autowired
 	public HbmChebiMetaboliteDaoImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -39,14 +38,11 @@ public class HbmChebiMetaboliteDaoImpl implements MetaboliteDao<ChebiMetaboliteE
 
 	@Override
 	public ChebiMetaboliteEntity getMetaboliteByEntry(String entry) {
-		ChebiMetaboliteEntity cpd = null;
 		Criteria criteria = this.getSession().createCriteria(ChebiMetaboliteEntity.class);
-		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
-		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
-		for (Object o: res) {
-			cpd = ChebiMetaboliteEntity.class.cast(o);
-		}
-		return cpd;
+		Object res = criteria.add(Restrictions.eq("entry", entry)).uniqueResult();
+		if (res == null) return null;
+		
+		return ChebiMetaboliteEntity.class.cast(res);
 	}
 
 	@Override

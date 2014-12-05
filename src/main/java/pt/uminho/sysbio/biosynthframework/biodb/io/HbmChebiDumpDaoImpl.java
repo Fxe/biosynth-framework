@@ -33,6 +33,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 
 	private static Logger LOGGER = LoggerFactory.getLogger(HbmChebiDumpDaoImpl.class);
 	
+	private boolean setParentAsCrossreference = false;
+	
 	private SessionFactory sessionFactory;
 	
 	private static final Set<String> validDbEntries = new HashSet<> (Arrays.asList(new String[]{
@@ -43,6 +45,14 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 	public SessionFactory getSessionFactory() { return sessionFactory; }
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 
+	
+	
+	public boolean isSetParentAsCrossreference() {
+		return setParentAsCrossreference;
+	}
+	public void setSetParentAsCrossreference(boolean setParentAsCrossreference) {
+		this.setParentAsCrossreference = setParentAsCrossreference;
+	}
 	@Override
 	public Serializable save(ChebiMetaboliteEntity cpd) {
 //		this.getSession().save(chebiToDump(cpd));
@@ -148,14 +158,17 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		}
 		
 		
-		// Generate the single internal cross reference to the parent
-		if (cpd.getParentId() != null) {
-			ChebiMetaboliteCrossreferenceEntity parentXref = new ChebiMetaboliteCrossreferenceEntity();
-			parentXref.setType(GenericCrossReference.Type.DATABASE);
-			parentXref.setRef("chebi");
-			parentXref.setValue(cpd.getParentId().toString());
-			parentXref.setChebiMetaboliteEntity(res);
-			res.getCrossreferences().add(parentXref);
+		if (isSetParentAsCrossreference()) {
+			//this should be optional !
+			// Generate the single internal cross reference to the parent
+			if (cpd.getParentId() != null) {
+				ChebiMetaboliteCrossreferenceEntity parentXref = new ChebiMetaboliteCrossreferenceEntity();
+				parentXref.setType(GenericCrossReference.Type.DATABASE);
+				parentXref.setRef("chebi");
+				parentXref.setValue(cpd.getParentId().toString());
+				parentXref.setChebiMetaboliteEntity(res);
+				res.getCrossreferences().add(parentXref);
+			}
 		}
 		
 		return res;
@@ -254,13 +267,22 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 
 	@Override
 	public ChebiMetaboliteEntity getMetaboliteByEntry(String entry) {
-		throw new RuntimeException("Not implememted yet");
+		if (!entry.startsWith("CHEBI:")) {
+			entry = "CHEBI:".concat(entry);
+		}
+		Criteria criteria = this.getSession().createCriteria(ChebiDumpMetaboliteEntity.class);
+		ChebiDumpMetaboliteEntity dumpMetaboliteEntity = ChebiDumpMetaboliteEntity.class.cast(
+				criteria.add(Restrictions.eq("chebiAccession", entry)).uniqueResult());
+		
+		ChebiMetaboliteEntity entity = this.dumpToChebi(dumpMetaboliteEntity);
+		
+		return entity;
 	}
 
 
 	@Override
 	public List<String> getAllMetaboliteEntries() {
-		Query query = this.getSession().createQuery("SELECT cpd.accessionNumber FROM ChebiDumpMetaboliteEntity cpd");
+		Query query = this.getSession().createQuery("SELECT cpd.chebiAccession FROM ChebiDumpMetaboliteEntity cpd");
 		@SuppressWarnings("unchecked")
 		List<String> accessions = query.list();
 		Set<String> entries = new HashSet<> ();

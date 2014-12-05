@@ -34,7 +34,7 @@ public class ChebiDumpMetaboliteEntity {
 	
 	@Column(name="source", nullable=false, length=32) private String source;
 	
-	@Column(name="parent_id") private Integer parentId;
+	@Column(name="parent_id") private Long parentId;
 	
 	@Column(name="chebi_accession", nullable=false, length=30) private String chebiAccession;
 	
@@ -75,8 +75,8 @@ public class ChebiDumpMetaboliteEntity {
 	public String getSource() { return source;}
 	public void setSource(String source) { this.source = source;}
 
-	public Integer getParentId() { return parentId;}
-	public void setParentId(Integer parentId) { this.parentId = parentId;}
+	public Long getParentId() { return parentId;}
+	public void setParentId(Long parentId) { this.parentId = parentId;}
 
 	public String getChebiAccession() { return chebiAccession;}
 	public void setChebiAccession(String chebiAccession) { this.chebiAccession = chebiAccession;}
