@@ -84,6 +84,8 @@ public class BioSynthUtilsIO {
 	}
 	
 	public static void writeToFile(String data, String file) throws IOException {
+		
+		
 		StringReader stringReader = new StringReader(data);
 		BufferedReader bufferedReader = new BufferedReader(stringReader);
 		FileWriter fileWriter = new FileWriter(file);
