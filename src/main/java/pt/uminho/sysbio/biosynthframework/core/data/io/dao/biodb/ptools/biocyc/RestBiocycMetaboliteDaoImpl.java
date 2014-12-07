@@ -173,6 +173,8 @@ public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao
 			List<String> instances = parser.getInstanses();
 			List<String> subclasses = parser.getSubclasses();
 
+			cpd.setDescription(localPath);
+			
 			cpd.setFrameId(frameId);
 			cpd.setEntry(entry_);
 			cpd.setSource(source);

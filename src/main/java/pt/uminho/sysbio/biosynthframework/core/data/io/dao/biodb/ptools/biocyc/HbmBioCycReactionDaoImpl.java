@@ -9,8 +9,11 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionLeftEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionRightEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.AbstractHibernateDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
+import scala.util.Left;
 
 public class HbmBioCycReactionDaoImpl 
 extends AbstractHibernateDao implements ReactionDao<BioCycReactionEntity> {
@@ -30,11 +33,17 @@ extends AbstractHibernateDao implements ReactionDao<BioCycReactionEntity> {
 	public BioCycReactionEntity getReactionByEntry(String entry) {
 		BioCycReactionEntity rxn = null;
 		Criteria criteria = this.getSession().createCriteria(BioCycReactionEntity.class);
-		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
-		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
-		for (Object o: res) {
-			rxn = BioCycReactionEntity.class.cast(o);
+		Object res = criteria.add(Restrictions.eq("entry", entry)).uniqueResult();
+		if (res == null) return null;
+		rxn = BioCycReactionEntity.class.cast(res);
+		
+		for (BioCycReactionLeftEntity l : rxn.getLeft()) {
+			rxn.getLeftStoichiometry().put(l.getCpdEntry(), l.getStoichiometry());
 		}
+		for (BioCycReactionRightEntity r : rxn.getRight()) {
+			rxn.getRightStoichiometry().put(r.getCpdEntry(), r.getStoichiometry());
+		}
+		
 		return rxn;
 	}
 

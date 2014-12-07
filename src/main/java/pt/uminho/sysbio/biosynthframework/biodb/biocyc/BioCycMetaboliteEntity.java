@@ -20,7 +20,7 @@ import pt.uminho.sysbio.biosynthframework.annotations.Charge;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
-@Table(name="BIOCYC_METABOLITE")
+@Table(name="biocyc_metabolite")
 public class BioCycMetaboliteEntity extends GenericMetabolite {
 	
 	private static final long serialVersionUID = 1L;
@@ -68,35 +68,35 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 	
 	
 	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
-	@CollectionTable(name="BIOCYC_METABOLITE_SUBCLASS", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@CollectionTable(name="BIOCYC_METABOLITE_SUBCLASS", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="SUBCLASS", length=63)
 	protected List<String> subclasses = new ArrayList<> ();
 	public List<String> getSubclasses() { return subclasses;}
 	public void setSubclasses(List<String> subclasses) { this.subclasses = subclasses;}
 
 	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
-	@CollectionTable(name="BIOCYC_METABOLITE_PARENT", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@CollectionTable(name="BIOCYC_METABOLITE_PARENT", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="PARENT", length=63)
 	protected List<String> parents = new ArrayList<> ();
 	public List<String> getParents() { return parents;}
 	public void setParents(List<String> parents) { this.parents = parents;}
 
 	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
-	@CollectionTable(name="BIOCYC_METABOLITE_INSTANCE", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@CollectionTable(name="BIOCYC_METABOLITE_INSTANCE", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="INSTANCE", length=63)
 	protected List<String> instances = new ArrayList<> ();
 	public List<String> getInstances() { return instances;}
 	public void setInstances(List<String> instances) { this.instances = instances;}
 
 	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
-	@CollectionTable(name="BIOCYC_METABOLITE_REACTION", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@CollectionTable(name="BIOCYC_METABOLITE_REACTION", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="REACTION", length=63)
 	protected List<String> reactions = new ArrayList<> ();
 	public List<String> getReactions() { return reactions;}
 	public void setReactions(List<String> reactions) { this.reactions = reactions;}
 	
 	@ElementCollection @LazyCollection(LazyCollectionOption.EXTRA)
-	@CollectionTable(name="BIOCYC_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="ID_METABOLITE"))
+	@CollectionTable(name="BIOCYC_METABOLITE_SYNONYM", joinColumns=@JoinColumn(name="metabolite_id"))
 	@Column(name="SYNONYM", length=1023)
 	private List<String> synonyms = new ArrayList<> ();
 	public List<String> getSynonyms() { return synonyms;}
