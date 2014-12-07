@@ -1,15 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.mnx;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
-import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
 
 public class MnxMetaboliteTransform
