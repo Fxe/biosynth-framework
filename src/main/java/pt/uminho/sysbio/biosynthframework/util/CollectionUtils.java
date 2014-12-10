@@ -1,9 +1,20 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 public class CollectionUtils {
+	
+	public static<K> void increaseCount(Map<K, Integer> map, K key, int amount) {
+		if (!map.containsKey(key)) {
+			map.put(key, 0);
+		}
+		
+		Integer total = map.get(key);
+		total += amount;
+		map.put(key, total);
+	}
 
 	public static<C extends Collection<T>, T> Collection<T> fromArray(T[] array, Class<C> clazz) {
 		try {
