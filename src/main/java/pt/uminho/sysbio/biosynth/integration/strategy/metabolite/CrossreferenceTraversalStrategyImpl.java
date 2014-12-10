@@ -1,4 +1,4 @@
-package edu.uminho.biosynth.core.data.integration.chimera.strategy;
+package pt.uminho.sysbio.biosynth.integration.strategy.metabolite;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +10,7 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 
 public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {

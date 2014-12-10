@@ -1,8 +1,10 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 public class MetaboliteClusterQualityScreener implements EtlQualityScreen<IntegratedCluster> {
 
@@ -75,14 +78,15 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking formulas ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		for (GraphMetaboliteEntity cpd: cpdList) {
-			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-				cpd.getPropertyEntities()) {
-				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.MolecularFormula.toString())) {
-					System.out.println(property.getLeft());
-				}
-			}
-		}
+		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.MolecularFormula.toString());
+//		for (GraphMetaboliteEntity cpd: cpdList) {
+//			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
+//				cpd.getPropertyEntities()) {
+//				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.MolecularFormula.toString())) {
+//					System.out.println(property.getLeft());
+//				}
+//			}
+//		}
 		
 		return qualityLabels;
 	}
@@ -91,14 +95,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking chemical charge ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		for (GraphMetaboliteEntity cpd: cpdList) {
-			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-				cpd.getPropertyEntities()) {
-				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.Charge.toString())) {
-					System.out.println(property.getLeft());
-				}
-			}
-		}
+		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.Charge.toString());
 		
 		return qualityLabels;
 	}
@@ -107,14 +104,16 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking structure ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		for (GraphMetaboliteEntity cpd: cpdList) {
-			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-				cpd.getPropertyEntities()) {
-				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.InChI.toString())) {
-					System.out.println(property.getLeft());
-				}
-			}
-		}
+		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.InChI.toString());
+		
+//		for (GraphMetaboliteEntity cpd: cpdList) {
+//			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
+//				cpd.getPropertyEntities()) {
+//				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.InChI.toString())) {
+//					System.out.println(property.getLeft());
+//				}
+//			}
+//		}
 		
 		for (GraphMetaboliteEntity cpd: cpdList) {
 			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
@@ -126,6 +125,26 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		}
 		
 		return qualityLabels;
+	}
+	
+	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String majorLabel) {
+		Map<Object, Integer> occurenceMap = new HashMap<> ();
+		
+		for (GraphMetaboliteEntity cpd: cpdList) {
+			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
+				cpd.getPropertyEntities()) {
+				if (property.getLeft().getLabels().contains(majorLabel)) {
+					LOGGER.debug("Found: " + property.getLeft());
+					
+					GraphPropertyEntity propertyEntity = property.getLeft(); 
+					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty("key", null), 1);
+				}
+			}
+		}
+		
+		LOGGER.debug("Total: " + occurenceMap);
+		
+		return occurenceMap;
 	}
 	
 	public Set<MetaboliteQualityLabel> verifyCrossreference(List<GraphMetaboliteEntity> cpdList) {
