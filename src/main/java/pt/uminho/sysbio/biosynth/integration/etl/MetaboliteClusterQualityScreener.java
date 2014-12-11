@@ -79,6 +79,8 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
 		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.MolecularFormula.toString());
+		
+		if (occurenceMap.size() > 1) qualityLabels.add(MetaboliteQualityLabel.FORMULA_MISMATCH);
 //		for (GraphMetaboliteEntity cpd: cpdList) {
 //			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
 //				cpd.getPropertyEntities()) {
@@ -96,6 +98,8 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
 		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.Charge.toString());
+		
+		if (occurenceMap.size() > 1) qualityLabels.add(MetaboliteQualityLabel.CHARGE_MISMATCH);
 		
 		return qualityLabels;
 	}
