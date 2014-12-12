@@ -119,6 +119,10 @@ public class CdkWrapper implements FormulaConverter {
 		return inchiTuple;
 	}
 	
+	public static void a(String inchi) {
+		
+	}
+	
 	public static void generateSvg(IAtomContainer atomContainer) {
 		
 //		SVG

@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.chemanalysis.inchi;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sf.jniinchi.INCHI_KEY;
 import net.sf.jniinchi.JniInchiException;
@@ -9,7 +10,7 @@ import net.sf.jniinchi.JniInchiWrapper;
 
 public class JniInchi {
 	
-	private static final Logger LOGGER = Logger.getLogger(JniInchi.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JniInchi.class);
 	
 	public static INCHI_KEY LAST_CALL_STATUS = null;
 	

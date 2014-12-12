@@ -19,6 +19,10 @@ public class OpsinWrapper {
 //		return ;nameToStructure.parseToCML(name)
 	}
 	
+//	public static String asf(String inchi) {
+//		Inchi
+//	}
+	
 	public static String iupacToInchi(String name) throws NameToStructureException {
 		NameToInchi nameToInchi = new NameToInchi();
 		return nameToInchi.parseToStdInchi(name);
