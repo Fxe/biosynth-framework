@@ -4,13 +4,14 @@ import org.neo4j.graphdb.Label;
 
 public enum MetaboliteMajorLabel implements Label {
 	LigandCompound, LigandDrug, LigandGlycan, 
-	MetaCyc, 
+	MetaCyc, EcoCyc, HumanCyc,
 	BiGG, MetaNetX, Seed, MaizeCyc, AraCyc, ChEBI, HMDB,
 	Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS, DrugBank,
 	PubChemCompound, PubChemSubstance,
 	LipidMAPS, ChemSpider,
 	EawagBBDCompound,
 	MET3D, NIKKAJI, PDB, NCI, LipidBank, JCGGDB, GlycomeDB, CCSD, Wikipedia,
+	LigandBox,
 	NOTFOUND
 	;
 }

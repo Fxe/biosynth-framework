@@ -40,6 +40,7 @@ public class BioDbDictionary {
 		
 		dictionary.put("LipidBank", "LipidBank");
 		
+		dictionary.put("LIPID_MAPS", MetaboliteMajorLabel.LipidMAPS.toString());
 		dictionary.put("lipidmaps", MetaboliteMajorLabel.LipidMAPS.toString());
 		dictionary.put("LIPIDMAPS", MetaboliteMajorLabel.LipidMAPS.toString());
 		dictionary.put("LIPID MAPS instance accession", MetaboliteMajorLabel.LipidMAPS.toString());
@@ -68,6 +69,7 @@ public class BioDbDictionary {
 		dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
 		dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());
+		dictionary.put("LigandBox", MetaboliteMajorLabel.LigandBox.toString());
 		//KEGG
 		dictionary.put("JCGGDB", "JCGGDB");
 		dictionary.put("GlycomeDB", "GlycomeDB");
@@ -83,10 +85,11 @@ public class BioDbDictionary {
 		dictionary.put("CHEBI", MetaboliteMajorLabel.ChEBI.toString());
 		dictionary.put("CAS", MetaboliteMajorLabel.CAS.toString());
 		dictionary.put("CAS Registry Number", MetaboliteMajorLabel.CAS.toString());
-		dictionary.put("NIKKAJI", "NIKKAJI");
-		dictionary.put("3DMET", "MET3D");
+		dictionary.put("NIKKAJI", MetaboliteMajorLabel.NIKKAJI.toString());
+		dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
 		dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
 		
+		dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("hmdb", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("HMDB accession", MetaboliteMajorLabel.HMDB.toString());
 		

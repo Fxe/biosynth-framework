@@ -7,6 +7,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
 public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String> {
 
@@ -23,8 +24,9 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 		String result = null;
 		
 		if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
-				clazz.equals(ChebiMetaboliteEntity.class)) && 
-				lookup.equals("PubChem")) {
+				 clazz.equals(KeggDrugMetaboliteEntity.class) || 
+					clazz.equals(ChebiMetaboliteEntity.class)) && 
+					lookup.equals("PubChem")) {
 			result = MetaboliteMajorLabel.PubChemSubstance.toString();
 		} else {
 			result = BioDbDictionary.translateDatabase(lookup);
@@ -43,6 +45,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 			if (entry.startsWith("G")) result = MetaboliteMajorLabel.LigandGlycan.toString();
 		} else {
 			if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
+				 clazz.equals(KeggDrugMetaboliteEntity.class) || 
 					clazz.equals(ChebiMetaboliteEntity.class)) && 
 					lookup.equals("PubChem")) {
 				result = MetaboliteMajorLabel.PubChemSubstance.toString();

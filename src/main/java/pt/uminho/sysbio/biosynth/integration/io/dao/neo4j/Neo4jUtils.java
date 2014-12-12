@@ -79,6 +79,10 @@ public class Neo4jUtils {
 		
 		return nodes;
 	}
+	
+	public static Set<Label> getLabels(Node node) {
+		return IteratorUtil.asSet(node.getLabels());
+	}
 
 	public static Map<String, Object> getPropertiesMap(Node node) {
 		return getPropertiesFromPropertyContainer(node);

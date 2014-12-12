@@ -21,17 +21,20 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
 
 public class MetaboliteClusterQualityScreener implements EtlQualityScreen<IntegratedCluster> {
 
+	private FormulaConverter formulaConverter;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetaboliteClusterQualityScreener.class);
 	
 	private MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteDao;
 	
 	@Autowired
 	public MetaboliteClusterQualityScreener(
-			MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteDao) {
-		
+			MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteDao, FormulaConverter formulaConverter) {
+		this.formulaConverter = formulaConverter;
 		this.metaboliteDao = metaboliteDao;
 	}
 	
@@ -80,15 +83,48 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		
 		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.MolecularFormula.toString());
 		
-		if (occurenceMap.size() > 1) qualityLabels.add(MetaboliteQualityLabel.FORMULA_MISMATCH);
-//		for (GraphMetaboliteEntity cpd: cpdList) {
-//			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-//				cpd.getPropertyEntities()) {
-//				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.MolecularFormula.toString())) {
-//					System.out.println(property.getLeft());
-//				}
-//			}
-//		}
+		if (occurenceMap.size() == 1) {
+			qualityLabels.add(MetaboliteQualityLabel.EXACT_FORMULA);
+			return qualityLabels;
+		}
+		
+		if (occurenceMap.isEmpty()) {
+			qualityLabels.add(MetaboliteQualityLabel.NO_FORMULA);
+			return qualityLabels;
+		}
+		
+		
+		List<Map<String, Integer>> atomMapList = new ArrayList<> ();
+		for (Object formula_ : occurenceMap.keySet()) {
+			String formula = (String) formula_;
+			Map<String, Integer> atomMap = formulaConverter.getAtomCountMap(formula);
+			LOGGER.trace(String.format("%s => %s", formula, atomMap));
+			atomMapList.add(atomMap);
+		}
+		
+		Map<String, Integer> atomMapPivot = atomMapList.get(0);
+		for (int i = 1; i < atomMapList.size(); i++) {
+			Map<String, Integer> atomMap = atomMapList.get(i);
+			for (String atom : atomMapPivot.keySet()) {
+				//pivot is never null
+				Integer atomCountPivot = atomMapPivot.get(atom);
+				//atom map may be null (if formula has distinct elements)
+				Integer atomCount = atomMap.get(atom);
+				if (atomCount == null) atomCount = 0;
+				LOGGER.trace(String.format("Check atom %s frequency ... %d --> %d", atom, atomCountPivot, atomCount));
+				if (atomCount != atomCountPivot) {
+					if (atom.equals("H")) {
+						LOGGER.trace("Hydrogen Mismatch");
+						qualityLabels.add(MetaboliteQualityLabel.FORMULA_MISMATCH_HYDROGEN);
+					} else {
+						LOGGER.trace("Element Mismatch");
+						qualityLabels.add(MetaboliteQualityLabel.FORMULA_MISMATCH);
+					}
+				}
+			}
+		}
+		
+		qualityLabels.add(MetaboliteQualityLabel.EXACT_FORMULA);
 		
 		return qualityLabels;
 	}
@@ -108,24 +144,15 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking structure ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.InChI.toString());
+		Map<Object, Integer> inchiOccurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.InChI.toString());
+		Map<Object, Integer> smilesOccurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.SMILES.toString());
 		
-//		for (GraphMetaboliteEntity cpd: cpdList) {
-//			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-//				cpd.getPropertyEntities()) {
-//				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.InChI.toString())) {
-//					System.out.println(property.getLeft());
-//				}
-//			}
-//		}
+		if (inchiOccurenceMap.size() > 1) {
+			qualityLabels.add(MetaboliteQualityLabel.INCHI_MISMATCH);
+		}
 		
-		for (GraphMetaboliteEntity cpd: cpdList) {
-			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-				cpd.getPropertyEntities()) {
-				if (property.getLeft().getLabels().contains(MetabolitePropertyLabel.SMILES.toString())) {
-					System.out.println(property.getLeft());
-				}
-			}
+		if (smilesOccurenceMap.size() > 1) {
+			qualityLabels.add(MetaboliteQualityLabel.SMILES_MISMATCH);
 		}
 		
 		return qualityLabels;
@@ -138,7 +165,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
 				cpd.getPropertyEntities()) {
 				if (property.getLeft().getLabels().contains(majorLabel)) {
-					LOGGER.debug("Found: " + property.getLeft());
+					LOGGER.trace("Found: " + property.getLeft());
 					
 					GraphPropertyEntity propertyEntity = property.getLeft(); 
 					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty("key", null), 1);

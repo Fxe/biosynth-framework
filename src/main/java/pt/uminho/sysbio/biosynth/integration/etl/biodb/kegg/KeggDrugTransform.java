@@ -40,22 +40,22 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 						METABOLITE_SMILE_RELATIONSHIP_TYPE));
 	}
 
-	@Override
-	protected void configureCrossreferences(
-			GraphMetaboliteEntity centralMetaboliteEntity,
-			KeggDrugMetaboliteEntity entity) {
-		
-		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-		
-		for (KeggDrugMetaboliteCrossreferenceEntity xref : entity.getCrossReferences()) {
-			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-			String dbEntry = xref.getValue(); //Also need to translate if necessary
-			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-			proxy.setEntry(dbEntry);
-			proxy.setMajorLabel(dbLabel);
-			proxy.addLabel(METABOLITE_LABEL);
-			crossreferences.add(proxy);
-		}
-	}
+//	@Override
+//	protected void configureCrossreferences(
+//			GraphMetaboliteEntity centralMetaboliteEntity,
+//			KeggDrugMetaboliteEntity entity) {
+//		
+//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
+//		
+//		for (KeggDrugMetaboliteCrossreferenceEntity xref : entity.getCrossReferences()) {
+//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
+//			String dbEntry = xref.getValue(); //Also need to translate if necessary
+//			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
+//			proxy.setEntry(dbEntry);
+//			proxy.setMajorLabel(dbLabel);
+//			proxy.addLabel(METABOLITE_LABEL);
+//			crossreferences.add(proxy);
+//		}
+//	}
 	
 }
