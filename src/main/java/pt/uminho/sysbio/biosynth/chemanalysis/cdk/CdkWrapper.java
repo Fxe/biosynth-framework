@@ -2,6 +2,8 @@ package pt.uminho.sysbio.biosynth.chemanalysis.cdk;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,6 +11,7 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -19,6 +22,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
 
 /**
@@ -30,6 +34,29 @@ public class CdkWrapper implements FormulaConverter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CdkWrapper.class);
 
+	@Override
+	public Map<String, Integer> getAtomCountMap(String formula) {
+		Map<String, Integer> atomMap = null; 
+		try {
+			atomMap = new HashMap<> ();
+			IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+			IMolecularFormula molecularFormula = MolecularFormulaManipulator
+					.getMajorIsotopeMolecularFormula(formula, builder);
+			IAtomContainer container = MolecularFormulaManipulator.getAtomContainer(molecularFormula);
+			for (IAtom atom : container.atoms()) {
+				CollectionUtils.increaseCount(atomMap, atom.getSymbol(), 1);
+			}
+		} catch (NullPointerException e) {
+			LOGGER.error("NullPointerException " + e.getMessage()); 
+		} catch (StringIndexOutOfBoundsException e) {
+			LOGGER.error("StringIndexOutOfBoundsException " + e.getMessage()); 
+		} catch (NumberFormatException e) {
+			LOGGER.error("NumberFormatException " + e.getMessage()); 
+		}
+		
+		return atomMap;
+	}
+	
 	/**
 	 * Wraps the CDK MolecularFormulaManipulator getString method. Uses the 
 	 * {@link org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator#getMajorIsotopeMolecularFormula(String, IChemObjectBuilder) 
@@ -138,5 +165,10 @@ public class CdkWrapper implements FormulaConverter {
 	@Override
 	public String convertToIsotopeMolecularFormula(String formula, boolean setOne) {
 		return CdkWrapper.toIsotopeMolecularFormula(formula, setOne);
+	}
+	
+	
+	public static void main(String[] args) {
+		System.out.println(new CdkWrapper().getAtomCountMap("CH5O9Mg5.NaCl.Ti(FeHe3)4"));
 	}
 }
