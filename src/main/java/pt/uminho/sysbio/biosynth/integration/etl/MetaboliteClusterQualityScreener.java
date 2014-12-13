@@ -7,17 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -39,10 +42,52 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 	}
 	
 	@Override
-	public void evaluate(IntegratedCluster entity) {
-		Set<MetaboliteQualityLabel> qualityLabels = this.yay(entity);
+	public void evaluate(IntegratedCluster integratedCluster) {
+		Set<MetaboliteQualityLabel> labels = this.yay(integratedCluster);
 		
-		System.out.println(qualityLabels);
+		LOGGER.trace(labels.toString());
+		
+		Map<String, IntegratedClusterMeta> meta = new HashMap<> ();
+		
+		for (MetaboliteQualityLabel label : labels) {
+			IntegratedClusterMeta clusterMeta = new IntegratedClusterMeta();
+			IntegrationMessageLevel level;
+			switch (label) {
+				case FORMULA_EMPTY: level = IntegrationMessageLevel.INFO; break;
+				case FORMULA_MISMATCH: level = IntegrationMessageLevel.ERROR; break;
+				case FORMULA_MISMATCH_HYDROGEN: level = IntegrationMessageLevel.WARNING; break;
+				case FORMULA_EXACT: level = IntegrationMessageLevel.INFO; break;
+				
+				case CHARGE_MISMATCH: level = IntegrationMessageLevel.WARNING; break;
+				
+				case CROSSREFERENCE_EXTERNAL: level = IntegrationMessageLevel.ERROR; break;
+				case MULTIPLE_DATABASES: level = IntegrationMessageLevel.ERROR; break;
+				
+				case INCHI_MISMATCH: level = IntegrationMessageLevel.ERROR; break;
+				case INCHI_MIXED_F: level = IntegrationMessageLevel.WARNING; break;
+				case INCHI_STANDARD: level = IntegrationMessageLevel.INFO; break;
+				case INCHI_NON_STANDARD: level = IntegrationMessageLevel.INFO; break;
+				case INCHI_P_BLOCK_MISMATCH: level = IntegrationMessageLevel.WARNING; break;
+				case INCHI_VERSION_MISMATCH: level = IntegrationMessageLevel.WARNING; break;
+				case INCHI_VERSION_1: level = IntegrationMessageLevel.INFO; break;
+				case INCHI_VERSION_2: level = IntegrationMessageLevel.INFO; break;
+				case INCHI_SECOND_HASH_BLOCK_MISMATCH: level = IntegrationMessageLevel.ERROR; break;
+				
+				case SMILES_MISMATCH: level = IntegrationMessageLevel.ERROR; break;
+				
+				default:
+					throw new RuntimeException("Unsupported Assertion Label: " + label);
+			}
+			
+			clusterMeta.setLevel(level);
+			clusterMeta.setIntegratedCluster(integratedCluster);
+			clusterMeta.setMessage("massage !");
+			clusterMeta.setMetaType(label.toString());
+			
+			meta.put(clusterMeta.getMetaType(), clusterMeta);
+		}
+		
+		integratedCluster.setMeta(meta);
 	}
 	
 	public Set<MetaboliteQualityLabel> yay(IntegratedCluster integratedCluster) {
@@ -84,12 +129,12 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.MolecularFormula.toString());
 		
 		if (occurenceMap.size() == 1) {
-			qualityLabels.add(MetaboliteQualityLabel.EXACT_FORMULA);
+			qualityLabels.add(MetaboliteQualityLabel.FORMULA_EXACT);
 			return qualityLabels;
 		}
 		
 		if (occurenceMap.isEmpty()) {
-			qualityLabels.add(MetaboliteQualityLabel.NO_FORMULA);
+			qualityLabels.add(MetaboliteQualityLabel.FORMULA_EMPTY);
 			return qualityLabels;
 		}
 		
@@ -124,7 +169,8 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 			}
 		}
 		
-		qualityLabels.add(MetaboliteQualityLabel.EXACT_FORMULA);
+		
+		if (qualityLabels.isEmpty()) qualityLabels.add(MetaboliteQualityLabel.FORMULA_EXACT);
 		
 		return qualityLabels;
 	}
@@ -242,13 +288,45 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 	
 	public Set<MetaboliteQualityLabel> verifyCrossreference(List<GraphMetaboliteEntity> cpdList) {
 		LOGGER.debug("Checking cross-reference ...");
+		
+		Set<Pair<String, String>> cpdEntries = new HashSet<> ();
+		for (GraphMetaboliteEntity cpdEntity : cpdList) {
+			Pair<String, String> entry = new ImmutablePair<> (cpdEntity.getMajorLabel(), cpdEntity.getEntry());
+			
+			if (entry.getLeft() == null || entry.getRight() == null) {
+				LOGGER.warn("null key field: " + entry);
+			}
+			
+			cpdEntries.add(entry);
+		}
+		
+		LOGGER.trace(cpdEntries.toString());
+		
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
+		boolean allInternal = true;
+		
 		for (GraphMetaboliteEntity cpd : cpdList) {
-			for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyEntity : cpd.getCrossreferences()) {
-				System.out.println(proxyEntity);
+			for (Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> proxyPair : cpd.getCrossreferences()) {
+				GraphMetaboliteProxyEntity proxyEntity = proxyPair.getLeft();
+				if(! (boolean) proxyEntity.getProperty("proxy", true)) {
+					Pair<String, String> entry = new ImmutablePair<> (proxyEntity.getMajorLabel(), proxyEntity.getEntry());
+					
+					if (entry.getLeft() == null || entry.getRight() == null) {
+						LOGGER.warn("null key field: " + entry);
+					}
+					
+					if (cpdEntries.contains(entry)) {
+						LOGGER.trace(String.format(" OK %s", entry));
+					} else {
+						LOGGER.trace(String.format("NOK %s", entry));
+						allInternal = false;
+					}
+				}
 			}
 		}
+		
+		if (!allInternal) qualityLabels.add(MetaboliteQualityLabel.CROSSREFERENCE_EXTERNAL);
 		
 		return qualityLabels;
 	}

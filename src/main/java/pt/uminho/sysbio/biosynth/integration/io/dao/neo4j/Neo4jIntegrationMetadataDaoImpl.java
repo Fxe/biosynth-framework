@@ -26,8 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
@@ -503,6 +505,18 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		integratedCluster.setClusterType(clusterType);
 		integratedCluster.setDescription((String) node.getProperty("description"));
 		integratedCluster.setEntry((String) node.getProperty("entry"));
+		
+		for (Label label : node.getLabels()) {
+			try {
+				MetaboliteQualityLabel qLabel = MetaboliteQualityLabel.valueOf(label.toString());
+				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
+				integratedClusterMeta.setMetaType(qLabel.toString());
+				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
+			} catch (Exception e) {
+				LOGGER.trace("awww " + label);
+			}
+		}
+		
 		return integratedCluster;
 	}
 	

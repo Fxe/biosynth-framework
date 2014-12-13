@@ -167,6 +167,7 @@ public class Neo4jUtils {
 			
 			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 			proxyEntity.setProperties(Neo4jUtils.getPropertiesMap(other));
+			proxyEntity.setMajorLabel((String) proxyEntity.getProperty("major-label", null));
 			GraphRelationshipEntity relationshipEntity = new GraphRelationshipEntity();
 			relationshipEntity.setMajorLabel(relationship.getType().toString());
 			relationshipEntity.setProperties(Neo4jUtils.getPropertiesMap(relationship));
