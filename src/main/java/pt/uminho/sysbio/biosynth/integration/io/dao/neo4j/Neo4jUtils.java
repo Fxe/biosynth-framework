@@ -116,14 +116,14 @@ public class Neo4jUtils {
 	}
 	
 	public static List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities(Node node) {
-		System.out.println("--->");
+//		System.out.println("--->");
 		List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propetyList = new ArrayList<> ();
 		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
 			Node other = relationship.getOtherNode(node);
 			
 			if (other.hasLabel(GlobalLabel.MetaboliteProperty) || other.hasLabel(GlobalLabel.ReactionProperty)) {
 			
-				System.out.println(relationship.getType());
+//				System.out.println(relationship.getType());
 				
 				GraphPropertyEntity graphPropertyEntity = 
 						new GraphPropertyEntity(Neo4jUtils.getPropertiesMap(other));
@@ -163,7 +163,7 @@ public class Neo4jUtils {
 				Direction.OUTGOING)) {
 			Node other = relationship.getOtherNode(node);
 			
-			System.out.println(relationship.getType());
+//			System.out.println(relationship.getType());
 			
 			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 			proxyEntity.setProperties(Neo4jUtils.getPropertiesMap(other));

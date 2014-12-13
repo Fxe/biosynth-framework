@@ -144,11 +144,67 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking structure ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		Map<Object, Integer> inchiOccurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.InChI.toString());
+		Map<Object, Integer> inchiOccurenceMap = this.collectPropertyKeys(cpdList, "inchiKey", MetabolitePropertyLabel.InChI.toString());
 		Map<Object, Integer> smilesOccurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.SMILES.toString());
 		
 		if (inchiOccurenceMap.size() > 1) {
-			qualityLabels.add(MetaboliteQualityLabel.INCHI_MISMATCH);
+			Set<String> fihbkSet = new HashSet<> ();
+			Set<String> sihbkSet = new HashSet<> ();
+			Set<String> fhbkSet = new HashSet<> ();
+			Set<String> vhbkSet = new HashSet<> ();
+			Set<String> phbkSet = new HashSet<> ();
+			
+			
+			for (Object inchi_ : inchiOccurenceMap.keySet()) {
+				String[] inchiBlock = ((String) inchi_).split("-");
+				// AAAAAAAAAAAAAA-BBBBBBBBFV-P
+				String fihbk = inchiBlock[0];
+				String sihbk = inchiBlock[1].substring(0, 8);
+				char fhbk = inchiBlock[1].charAt(8);
+				char vhbk = inchiBlock[1].charAt(9);
+				char phbk = inchiBlock[2].charAt(0);
+				
+				LOGGER.trace(String.format("%s -> %s -> %s _ %s _ %s", fihbk, sihbk, fhbk, vhbk, phbk));
+				
+				fihbkSet.add(fihbk);
+				sihbkSet.add(sihbk);
+				fhbkSet.add(Character.toString(fhbk));
+				vhbkSet.add(Character.toString(vhbk));
+				phbkSet.add(Character.toString(phbk));
+				
+				
+			}
+			if (fihbkSet.size() > 1) {
+				qualityLabels.add(MetaboliteQualityLabel.INCHI_MISMATCH);
+			} else {
+				if (sihbkSet.size() > 1) {
+					qualityLabels.add(MetaboliteQualityLabel.INCHI_SECOND_HASH_BLOCK_MISMATCH);					
+				}
+				if (fhbkSet.size() > 1) {
+					qualityLabels.add(MetaboliteQualityLabel.INCHI_MIXED_F);					
+				} else if (fhbkSet.size() == 1) {
+					String kind = fhbkSet.iterator().next();
+					switch (kind) {
+						case "S": qualityLabels.add(MetaboliteQualityLabel.INCHI_STANDARD); break;
+						case "N": qualityLabels.add(MetaboliteQualityLabel.INCHI_NON_STANDARD); break;
+						default: break;
+					}
+				}
+				if (vhbkSet.size() > 1) {
+					qualityLabels.add(MetaboliteQualityLabel.INCHI_VERSION_MISMATCH);					
+				} else if (vhbkSet.size() == 1) {
+					String version = vhbkSet.iterator().next();
+					switch (version) {
+						case "A": qualityLabels.add(MetaboliteQualityLabel.INCHI_VERSION_1); break;
+						case "B": qualityLabels.add(MetaboliteQualityLabel.INCHI_VERSION_2); break;
+						default: break;
+					}
+				}
+				if (phbkSet.size() > 1) {
+					qualityLabels.add(MetaboliteQualityLabel.INCHI_P_BLOCK_MISMATCH);					
+				}
+			}
+			
 		}
 		
 		if (smilesOccurenceMap.size() > 1) {
@@ -158,7 +214,13 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		return qualityLabels;
 	}
 	
+
+	
+	
 	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String majorLabel) {
+		return collectPropertyKeys(cpdList, "key", majorLabel);
+	}
+	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String key, String majorLabel) {
 		Map<Object, Integer> occurenceMap = new HashMap<> ();
 		
 		for (GraphMetaboliteEntity cpd: cpdList) {
@@ -168,7 +230,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 					LOGGER.trace("Found: " + property.getLeft());
 					
 					GraphPropertyEntity propertyEntity = property.getLeft(); 
-					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty("key", null), 1);
+					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty(key, null), 1);
 				}
 			}
 		}
