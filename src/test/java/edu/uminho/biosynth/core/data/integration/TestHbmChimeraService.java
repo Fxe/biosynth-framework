@@ -134,8 +134,7 @@ public class TestHbmChimeraService {
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
-			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl();
-			strategy.setDb(db);
+			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl(db);
 			System.out.println(db.getNodeById(0).getProperty("entry"));
 			strategy.setInitialNode(db.getNodeById(0));
 			integrationService.mergeCluster(strategy);
@@ -155,8 +154,7 @@ public class TestHbmChimeraService {
 		
 		try {
 			//START cpd=node(0) WITH cpd MATCH path=(cpd)-[:HasCrossreferenceTo*1..10]-(x:Compound) RETURN collect(distinct ID(x))
-			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl();
-			strategy.setDb(db);
+			CrossreferenceTraversalStrategyImpl strategy = new CrossreferenceTraversalStrategyImpl(db);
 			
 			//Get Nodes To Apply Map
 			List<Node> compoundNodes = IteratorUtil.asList(

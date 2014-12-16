@@ -39,7 +39,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	}
 	
 	@Override
-	public GraphMetaboliteEntity getMetaboliteById(String tag, Serializable id) {
+	public GraphMetaboliteEntity getMetaboliteById(String tagsss, Serializable id) {
 		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
 //		System.out.println(node);
 //		System.out.println(IteratorUtil.asCollection(node.getLabels()));

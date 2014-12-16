@@ -143,7 +143,7 @@ public class IntegrationCollectionUtilities {
 			Map<Set<Long>, Set<Long>> toMerge, 
 			Set<Long> unaffected) {
 		
-		System.out.println("prev clusters " + prevClusters.size());
+//		System.out.println("prev clusters " + prevClusters.size());
 		
 		Map<Long, Long> elementToClusterId = new HashMap<> ();
 		for (Long cid : prevClusters.keySet()) {

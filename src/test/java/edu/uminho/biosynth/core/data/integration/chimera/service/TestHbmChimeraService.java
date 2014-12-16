@@ -130,8 +130,7 @@ public class TestHbmChimeraService {
 		Set<Long> allNodes = new HashSet<> (data.getAllMetaboliteIds());
 		
 		
-		CrossreferenceTraversalStrategyImpl clusteringStrategy = new CrossreferenceTraversalStrategyImpl();
-		clusteringStrategy.setDb(graphDatabaseService);
+		CrossreferenceTraversalStrategyImpl clusteringStrategy = new CrossreferenceTraversalStrategyImpl(graphDatabaseService);
 		
 		
 		List<IntegratedCluster> integratedClusters = 

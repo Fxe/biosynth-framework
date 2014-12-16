@@ -1,8 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -13,11 +11,18 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import edu.uminho.biosynth.core.data.integration.neo4j.PropertyRelationshipType;
 
+/**
+ * No use. Formulas should be corrected prior.
+ * 
+ * @author Filipe
+ *
+ */
+@Deprecated
 public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 	
 	private static final Logger LOGGER = Logger.getLogger(IsoFormulaClusterStrategy.class);

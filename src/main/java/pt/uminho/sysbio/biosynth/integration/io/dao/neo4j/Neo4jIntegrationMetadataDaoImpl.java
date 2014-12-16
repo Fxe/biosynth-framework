@@ -77,6 +77,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
 		Node node = this.getExecutionResultGetSingle("IID", this.executionEngine.execute(cypher, params));
+		LOGGER.trace("IID: " + node.toString());
+		
 		integrationSet.setId(node.getId());
 		return integrationSet;
 	}
@@ -89,7 +91,14 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
 	@Override
 	public IntegrationSet getIntegrationSet(Long id) {
-		Node node = this.graphDatabaseService.getNodeById(id);
+		Node node = null;
+		
+		try {
+			node = this.graphDatabaseService.getNodeById(id);
+		} catch (NotFoundException e) {
+			LOGGER.debug(e.getMessage());
+		}
+		
 		return this.nodeToIntegrationSet(node);
 	}
 
@@ -214,22 +223,24 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public List<IntegratedCluster> getAllIntegratedClusters(
 			Long integrationSetId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+//		for (Long cid : this.getAllIntegratedClusterIdsByType(integrationSetId, Integrate)) {
+//			
+//		}
+		
+		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public List<IntegratedCluster> getIntegratedClustersByPage(
 			Long integrationSetId, int firstResult, int maxResults) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
 			Long... memberIds) {
-		
-		return null;
+		throw new RuntimeException("Not implemented");
 	}
 	
 
@@ -649,7 +660,6 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return integrationRelationshipType;
 	}
-
 
 	
 //	private Node executionEngineMerge() {

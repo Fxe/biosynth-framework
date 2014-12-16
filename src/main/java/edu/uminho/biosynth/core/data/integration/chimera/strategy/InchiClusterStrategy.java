@@ -1,8 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.chimera.strategy;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -11,10 +9,18 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 
+/**
+ * See 
+ * {@link pt.uminho.sysbio.biosynth.integration.strategy.metabolite.InchiIntegrationStategyImpl InchiIntegrationStategyImpl}
+ * 
+ * @author Filipe
+ *
+ */
+@Deprecated
 public class InchiClusterStrategy implements ClusteringStrategy {
 	
 	@Autowired
