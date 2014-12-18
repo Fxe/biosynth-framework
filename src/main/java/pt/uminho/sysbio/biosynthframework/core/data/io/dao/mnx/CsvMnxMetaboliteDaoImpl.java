@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
@@ -19,6 +22,8 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntity> {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(CsvMnxMetaboliteDaoImpl.class);
+	
 	private File metaboliteCsvFile;
 	private File crossreferenceCsvFile;
 	
@@ -27,8 +32,6 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 	private Map<Serializable, List<MnxMetaboliteCrossreferenceEntity>> xrefMap = new HashMap<> ();
 	
 	private boolean bulkAccess = false;
-	
-	
 	
 	public boolean isBulkAccess() {
 		return bulkAccess;
@@ -173,7 +176,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 					this.cachedData.put(cpd.getEntry(), cpd);
 				}
 			} catch (IOException e) {
-				//TODO: LOGGER
+				LOGGER.error(e.getMessage());
 			}
 		}
 		
@@ -255,6 +258,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 				}
 			} catch (IOException e) {
 				//TODO: LOGGER
+				
 			}
 		}
 		

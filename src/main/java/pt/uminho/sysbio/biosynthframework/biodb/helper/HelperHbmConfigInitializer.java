@@ -33,6 +33,10 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionLeftEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionRightEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionProductEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionReactantEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundCueEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundPkEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
@@ -84,6 +88,10 @@ public class HelperHbmConfigInitializer {
 			  
 			  .addAnnotatedClass(MnxMetaboliteEntity.class)
 			  .addAnnotatedClass(MnxMetaboliteCrossreferenceEntity.class)
+			  .addAnnotatedClass(MnxReactionEntity.class)
+			  .addAnnotatedClass(MnxReactionCrossReferenceEntity.class)
+			  .addAnnotatedClass(MnxReactionProductEntity.class)
+			  .addAnnotatedClass(MnxReactionReactantEntity.class)
 			  
 			  .addAnnotatedClass(KeggReactionEntity.class)
 			  .addAnnotatedClass(KeggReactionLeftEntity.class)

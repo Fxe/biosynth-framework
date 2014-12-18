@@ -14,7 +14,7 @@ public class MnxReactionReactantEntity extends StoichiometryPair {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_REACTION")
+	@JoinColumn(name="reaction_id")
 	private MnxReactionEntity mnxReactionEntity;
 
 	public MnxReactionEntity getMnxReactionEntity() {

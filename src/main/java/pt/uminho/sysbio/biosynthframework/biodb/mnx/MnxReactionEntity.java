@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 
 @Entity
-@Table(name="MNX_REACTION")
+@Table(name="mnx_reaction")
 public class MnxReactionEntity extends GenericReaction {
 
 	private static final long serialVersionUID = 1L;
@@ -33,11 +33,11 @@ public class MnxReactionEntity extends GenericReaction {
 	private List<MnxReactionProductEntity> right = new ArrayList<> ();
 	
     @OneToMany(mappedBy = "mnxReactionEntity", cascade = CascadeType.ALL)
-    private List<MnxReactionCrossReferenceEntity> crossReferences = new ArrayList<>();
+    private List<MnxReactionCrossReferenceEntity> crossreferences = new ArrayList<>();
     
 	@ElementCollection
-	@CollectionTable(name="MNX_REACTION_ENZYME", joinColumns=@JoinColumn(name="ID_REACTION"))
-	@Column(name="ENZYME")
+	@CollectionTable(name="MNX_REACTION_ENZYME", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="enzyme")
 	protected List<String> enzymes = new ArrayList<> ();
 	public List<String> getEnzymes() { return enzymes; }
 	public void addEnzyme(String enzyme) { this.enzymes.add(enzyme); }
@@ -100,18 +100,18 @@ public class MnxReactionEntity extends GenericReaction {
 		this.right = right;
 	}
 	
-	public List<MnxReactionCrossReferenceEntity> getCrossReferences() {
-		return crossReferences;
+	public List<MnxReactionCrossReferenceEntity> getCrossreferences() {
+		return crossreferences;
 	}
-	public void addCrossReference(MnxReactionCrossReferenceEntity crossReference) {
-		crossReference.setMnxReactionEntity(this);
-		this.crossReferences.add(crossReference);
+	public void addCrossReference(MnxReactionCrossReferenceEntity crossreference) {
+		crossreference.setMnxReactionEntity(this);
+		this.crossreferences.add(crossreference);
 	}
 	public void setCrossReferences(
-			List<MnxReactionCrossReferenceEntity> crossReferences) {
-		this.crossReferences = new ArrayList<> (crossReferences);
-		for (MnxReactionCrossReferenceEntity crossReference : crossReferences) {
-			crossReference.setMnxReactionEntity(this);
+			List<MnxReactionCrossReferenceEntity> crossreferences) {
+		this.crossreferences = new ArrayList<> (crossreferences);
+		for (MnxReactionCrossReferenceEntity crossreference : crossreferences) {
+			crossreference.setMnxReactionEntity(this);
 		}
 	}
 	
@@ -132,7 +132,7 @@ public class MnxReactionEntity extends GenericReaction {
 		sb.append("O_SOURCE:").append(this.originalSource).append(sep);
 		sb.append("REV:").append(this.orientation).append(sep);
 		sb.append("ENZYMES:").append(this.getEnzymes()).append(sep);
-		sb.append("XREF:").append(this.crossReferences).append(sep);
+		sb.append("XREF:").append(this.crossreferences).append(sep);
 		return sb.toString();
 	}
 }

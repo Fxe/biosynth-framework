@@ -1303,7 +1303,7 @@ public class TestSBMLMapping {
 			for (MnxReactionCrossReferenceEntity xref : res) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(xref.getValue()).append("\t");
-				for (MnxReactionCrossReferenceEntity rxnXref : xref.getMnxReactionEntity().getCrossReferences()) {
+				for (MnxReactionCrossReferenceEntity rxnXref : xref.getMnxReactionEntity().getCrossreferences()) {
 					if (rxnXref.getRef().equals("bigg")) {
 						sb.append(rxnXref.getValue()).append("\t");
 					}

@@ -60,7 +60,7 @@ public class TestMxnService {
 		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
 		List<MnxReactionCrossReferenceEntity> res = service.getReactionCrossreferences("kegg", "R00066");
 		for (MnxReactionCrossReferenceEntity xrefKegg : res) {
-			for (MnxReactionCrossReferenceEntity rxnXref : xrefKegg.getMnxReactionEntity().getCrossReferences()) {
+			for (MnxReactionCrossReferenceEntity rxnXref : xrefKegg.getMnxReactionEntity().getCrossreferences()) {
 				if (rxnXref.getRef().equals("metacyc")) {
 					System.out.println(rxnXref);
 				}
