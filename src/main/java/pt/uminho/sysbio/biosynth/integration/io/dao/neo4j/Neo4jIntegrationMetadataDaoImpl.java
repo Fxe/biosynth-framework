@@ -660,6 +660,32 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		return integrationRelationshipType;
 	}
+	
+	public void updateMetaEntities(IntegratedCluster integratedCluster) {
+		Node node;
+		if (integratedCluster.getId() == null || 
+				(node = graphDatabaseService.getNodeById(integratedCluster.getId())) == null) {
+			
+			LOGGER.error("Invalid cluster: " + integratedCluster.getId());
+			return;
+		}
+		
+		
+		for (IntegratedClusterMeta metaEntity : integratedCluster.getMeta().values()) {
+			String type = metaEntity.getMetaType();
+			String message = metaEntity.getMessage();
+			
+			String cypherQuery = String.format("MERGE (m:%s {type:{type}}) RETURN m AS metaEntity", 
+					IntegrationNodeLabel.MetaboliteClusterMetaProperty.toString());
+			Map<String, Object> params = new HashMap<> ();
+			params.put("type", type);
+			
+			Node metaNode = this.getExecutionResultGetSingle("metaEntity", this.executionEngine.execute(cypherQuery, params));
+			
+			Relationship relationship = node.createRelationshipTo(metaNode, null);
+			relationship.setProperty("message", message);
+		}
+	}
 
 	
 //	private Node executionEngineMerge() {

@@ -155,6 +155,11 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		return false;
 	}
 
+	public Boolean isProxy() {
+		if (!this.properties.containsKey("proxy")) return null;
+		return (boolean) this.properties.get("proxy");
+	}
+
 
 
 

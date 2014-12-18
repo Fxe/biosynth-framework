@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
@@ -43,6 +44,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 			if (entry.startsWith("C")) result = MetaboliteMajorLabel.LigandCompound.toString();
 			if (entry.startsWith("D")) result = MetaboliteMajorLabel.LigandDrug.toString();
 			if (entry.startsWith("G")) result = MetaboliteMajorLabel.LigandGlycan.toString();
+			if (entry.startsWith("R")) result = ReactionMajorLabel.LigandReaction.toString();
 		} else {
 			if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
 				 clazz.equals(KeggDrugMetaboliteEntity.class) || 

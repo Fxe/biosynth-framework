@@ -48,8 +48,8 @@ public class BioDbDictionary {
 		dictionary.put("CHEMSPIDER", MetaboliteMajorLabel.ChemSpider.toString());
 		dictionary.put("Chemspider accession", MetaboliteMajorLabel.ChemSpider.toString());
 		dictionary.put("DrugBank accession", MetaboliteMajorLabel.DrugBank.toString());
-		dictionary.put("biopath", "BioPath");
-		dictionary.put("upa", "UniPathway");
+		
+		
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
 		//BioCyc
@@ -99,8 +99,13 @@ public class BioDbDictionary {
 		dictionary.put("brenda", MetaboliteMajorLabel.BRENDA.toString());
 		
 		dictionary.put("RHEA", ReactionMajorLabel.Rhea.toString());
+		dictionary.put("rhea", ReactionMajorLabel.Rhea.toString());
 		dictionary.put("LIGAND-RXN", ReactionMajorLabel.LigandReaction.toString());
 
+		dictionary.put("biopath", ReactionMajorLabel.BioPath.toString());
+		
+		dictionary.put("upa", ReactionMajorLabel.UniPathway.toString());
+		dictionary.put("reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
 		return dictionary;
 	}
