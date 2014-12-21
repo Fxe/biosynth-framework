@@ -112,6 +112,18 @@ public class IntegrationUtils {
 			.build();
 	}
 	
+	public static IntegratedCluster assembleReactionClusterWithIds(
+			String entry, String description, Collection<Long> eids) {		
+		
+		return new IntegratedClusterFactory()
+			.withEntry(entry)
+			.withDescription(description)
+			.withClusterType(IntegrationNodeLabel.ReactionCluster.toString())
+			.withMemberType(IntegrationNodeLabel.ReactionMember.toString())
+			.withMemberIdCollection(eids)
+			.build();
+	}
+	
 	public static IntegratedCluster assembleMetaboliteClusterWithEntities(
 			String entry, String description, Collection<GraphMetaboliteEntity> eids) {		
 		
