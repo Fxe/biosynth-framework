@@ -133,7 +133,111 @@ public class IntegrationCollectionUtilities {
 		
 		return res;
 	}
-	
+//	
+//	public static void resolveMerging(
+//			//Input
+//			Map<Long, Set<Long>> setA,
+//			Map<Long, Set<Long>> setB,
+//			//Output Collections
+//			List<Set<Long>> newClusters, 
+//			Map<Set<Long>, Set<Long>> toMerge, 
+//			Set<Long> unaffected) {
+//		
+//		Map<Long, Long> elementToClusterId = new HashMap<> ();
+//		for (Long cid : setB.keySet()) {
+//			for (Long eid : setB.get(cid)) {
+//				if (cid == null || eid == null) {
+//					throw new RuntimeException("Error null id found " + cid + setB.get(cid));
+//				}
+//				elementToClusterId.put(eid, cid);
+//			}
+//		}
+//		for (Long cid : setA.keySet()) {
+//			for (Long eid : setA.get(cid)) {
+//				if (cid == null || eid == null) {
+//					throw new RuntimeException("Error null id found " + cid + setA.get(cid));
+//				}
+//				elementToClusterId.put(eid, cid);
+//			}
+//		}
+//		
+//		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
+//		Integer counter = 0;
+//		Set<Long> eids = new HashSet<> ();
+//		
+//		for (Set<Long> cluster : uniqueMembershipClusters) {
+//			Long prev = null;
+//			for (Long eid : cluster) {
+//				eids.add(eid);
+//				if (prev != null) {
+//					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//					graph.addEdge(edge);
+//				} else if (cluster.size() < 2) {
+//					graph.addVertex(eid);
+//				}
+//				prev = eid;
+//			}
+//		}
+//		
+//		
+//		Set<Set<Long>> oldClusters = new HashSet<> ();
+//		Set<Long> oldElements = new HashSet<> ();
+//		for (Set<Long> cluster : setB.values()) {
+//			oldClusters.add(cluster);
+//			oldElements.addAll(cluster);
+//			Long prev = null;
+//			for (Long eid : cluster) {
+//				eids.add(eid);
+//				if (prev != null) {
+//					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//					graph.addEdge(edge);
+//				} else if (cluster.size() < 2) {
+//					graph.addVertex(eid);
+//				}
+//				prev = eid;
+//			}
+//		}
+//		
+//		Set<Long> eidsProcessed = new HashSet<> ();
+//		for (Long eid : eids) {
+//			if (!eidsProcessed.contains(eid)) {
+//				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+//				
+//				if (!cluster.isEmpty()) {
+//					eidsProcessed.addAll(cluster);
+//					
+//					Set<Long> aux_ = new HashSet<> (cluster);
+//					aux_.retainAll(oldElements);
+//					
+//					//Unaffected if ALL COLOR BLACK
+//					//New if ALL COLOR RED
+//					//Merge if Mixed Color
+//					
+//					//Test if the cluster have previous elements
+//					if (aux_.isEmpty()) {
+//						//if all elements are new then the entire cluster is new
+//						newClusters.add(cluster);
+//					} else if (oldClusters.contains(cluster)){
+//						//if previous clusters have an identical cluster
+//						unaffected.add(elementToClusterId.get(cluster.iterator().next()));
+//					} else {
+//						//Else there are elements from previous clusters
+//						//if can be either an update
+//						//or update and delete (if more than one CID is present)
+//						Set<Long> cidList = new HashSet<> ();
+//						for (Long eid_ : cluster) {
+//							Long cid_;
+//							if ((cid_ = elementToClusterId.get(eid_)) != null) {
+//								cidList.add(cid_);
+//							}
+//						}
+//						toMerge.put(cidList, cluster);
+//					}
+//				}
+//			}
+//		}
+//	}
+//	
 	public static void resolveMerging(
 			//Input
 			List<Set<Long>> uniqueMembershipClusters,

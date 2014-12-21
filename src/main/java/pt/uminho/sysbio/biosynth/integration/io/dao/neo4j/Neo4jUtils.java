@@ -18,6 +18,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
@@ -219,5 +220,19 @@ public class Neo4jUtils {
 	
 	public static Node mergeNode(String label, String key, Object value, GraphDatabaseService graphDatabaseService) {
 		return mergeNode(DynamicLabel.label(label), key, value, graphDatabaseService);
+	}
+
+	public static Node getUniqueResult(
+			ResourceIterable<Node> findNodesByLabelAndProperty) {
+		Node node = null;
+		
+		for (Node node_ : findNodesByLabelAndProperty) {
+			if (node != null) {
+				throw new RuntimeException("Resource not unique");
+			}
+			node = node_;
+		}
+		
+		return node;
 	}
 }

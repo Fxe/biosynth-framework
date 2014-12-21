@@ -61,10 +61,15 @@ public class Neo4jIntegrationEngine {
 	public List<Set<Long>> generateUniqueMembershipClusters(ClusteringStrategy clusteringStrategy, Long[] eids) {
 		Map<Long, Set<Long>> initialClusters = new HashMap<> ();
 		
+		
 		for (Long eid : eids) {
 			clusteringStrategy.setInitialNode(eid);
 			Set<Long> res = clusteringStrategy.execute();
-			initialClusters.put(eid, res);
+			if (res == null || res.isEmpty()) throw new RuntimeException("null or empty set - " + eid);
+			
+			if (res.size() > 1) {
+				initialClusters.put(eid, res);
+			}
 		}
 		
 		Set<Long> survived = new HashSet<>();
