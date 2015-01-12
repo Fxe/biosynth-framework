@@ -186,6 +186,28 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		return qualityLabels;
 	}
 	
+	public static String[] disassembleInchiKey(String inchiKey) {
+		String[] result = new String[5];
+		
+		String[] inchiBlock = inchiKey.split("-");
+		// AAAAAAAAAAAAAA-BBBBBBBBFV-P
+		String fihbk = inchiBlock[0];
+		String sihbk = inchiBlock[1].substring(0, 8);
+		char fhbk = inchiBlock[1].charAt(8);
+		char vhbk = inchiBlock[1].charAt(9);
+		char phbk = inchiBlock[2].charAt(0);
+		
+		LOGGER.trace(String.format("%s -> %s -> %s _ %s _ %s", fihbk, sihbk, fhbk, vhbk, phbk));
+		
+		result[0] = fihbk;
+		result[1] = sihbk;
+		result[2] = Character.toString(fhbk);
+		result[3] = Character.toString(vhbk);
+		result[4] = Character.toString(phbk);
+		
+		return result;
+	}
+	
 	public Set<MetaboliteQualityLabel> verifyStructure(List<GraphMetaboliteEntity> cpdList) {
 		LOGGER.debug("Checking structure ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
@@ -202,21 +224,13 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 			
 			
 			for (Object inchi_ : inchiOccurenceMap.keySet()) {
-				String[] inchiBlock = ((String) inchi_).split("-");
-				// AAAAAAAAAAAAAA-BBBBBBBBFV-P
-				String fihbk = inchiBlock[0];
-				String sihbk = inchiBlock[1].substring(0, 8);
-				char fhbk = inchiBlock[1].charAt(8);
-				char vhbk = inchiBlock[1].charAt(9);
-				char phbk = inchiBlock[2].charAt(0);
+				String[] inchiBlock = disassembleInchiKey((String) inchi_);
 				
-				LOGGER.trace(String.format("%s -> %s -> %s _ %s _ %s", fihbk, sihbk, fhbk, vhbk, phbk));
-				
-				fihbkSet.add(fihbk);
-				sihbkSet.add(sihbk);
-				fhbkSet.add(Character.toString(fhbk));
-				vhbkSet.add(Character.toString(vhbk));
-				phbkSet.add(Character.toString(phbk));
+				fihbkSet.add(inchiBlock[0]);
+				sihbkSet.add(inchiBlock[1]);
+				fhbkSet.add(inchiBlock[2]);
+				vhbkSet.add(inchiBlock[3]);
+				phbkSet.add(inchiBlock[4]);
 				
 				
 			}

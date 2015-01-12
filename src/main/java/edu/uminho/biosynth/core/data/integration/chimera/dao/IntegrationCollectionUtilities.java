@@ -238,6 +238,97 @@ public class IntegrationCollectionUtilities {
 //		}
 //	}
 //	
+	
+	public static<T> void resolveMerging(
+			Map<T, Set<Long>> prevClusters,
+			Set<T> keep,
+			Set<Set<T>> merge) {
+		
+		Map<Long, Set<T>> elementToClusterId = new HashMap<> ();
+		Set<Long> eids = new HashSet<> ();
+		UndirectedGraph<Long, T> graph = new UndirectedGraph<>();
+		
+		for (T entry : prevClusters.keySet()) {
+			Set<Long> members = prevClusters.get(entry);
+			eids.addAll(members);
+//			oldClusters.add(cluster);
+//			oldElements.addAll(members);
+			Long prev = null;
+			for (Long eid : members) {
+				eids.add(eid);
+				if (!elementToClusterId.containsKey(eid)) {
+					elementToClusterId.put(eid, new HashSet<T> ());
+				}
+				elementToClusterId.get(eid).add(entry);
+				
+				if (prev != null) {
+					DefaultBinaryEdge<T, Long> edge = new DefaultBinaryEdge<T, Long>(entry, prev, eid);
+					graph.addEdge(edge);
+				} else if (members.size() < 2) {
+					graph.addVertex(eid);
+				}
+				prev = eid;
+			}
+		}
+		
+		//track vertices processed
+		Set<Long> eidsProcessed = new HashSet<> ();
+		
+		//begin traversal
+		for (Long eid : eids) {
+			if (!eidsProcessed.contains(eid)) {
+				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+				
+				if (!cluster.isEmpty()) {
+					eidsProcessed.addAll(cluster);
+					
+					Set<T> cids = new HashSet<> ();
+					for (Long eid_ : cluster) {
+						cids.addAll(elementToClusterId.get(eid_));
+					}
+					
+					if (cids.isEmpty()) {
+						throw new RuntimeException("wut cid is empty ?");
+					}
+					
+					if (cids.size() > 1) {
+						merge.add(cids);
+					} else {
+						keep.add(cids.iterator().next());
+					}
+					
+//					Set<Long> aux_ = new HashSet<> (cluster);
+//					aux_.retainAll(oldElements);
+//					
+//					//Unaffected if ALL COLOR BLACK
+//					//New if ALL COLOR RED
+//					//Merge if Mixed Color
+//					
+//					//Test if the cluster have previous elements
+//					if (aux_.isEmpty()) {
+//						//if all elements are new then the entire cluster is new
+//						newClusters.add(cluster);
+//					} else if (oldClusters.contains(cluster)){
+//						//if previous clusters have an identical cluster
+//						unaffected.add(elementToClusterId.get(cluster.iterator().next()));
+//					} else {
+//						//Else there are elements from previous clusters
+//						//if can be either an update
+//						//or update and delete (if more than one CID is present)
+//						Set<Long> cidList = new HashSet<> ();
+//						for (Long eid_ : cluster) {
+//							Long cid_;
+//							if ((cid_ = elementToClusterId.get(eid_)) != null) {
+//								cidList.add(cid_);
+//							}
+//						}
+//						toMerge.put(cidList, cluster);
+//					}
+				}
+			}
+		}
+	}
+	
 	public static void resolveMerging(
 			//Input
 			List<Set<Long>> uniqueMembershipClusters,

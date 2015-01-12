@@ -135,6 +135,17 @@ public class IntegrationUtils {
 			.withMemberEntityCollection(eids)
 			.build();
 	}
+
+	public static Set<Long> collectClusterMemberIds(
+			IntegratedCluster integratedCluster) {
+		Set<Long> eids = new HashSet<> ();
+		
+		for (IntegratedClusterMember integratedClusterMember : integratedCluster.getMembers()) {
+			Long eid = integratedClusterMember.getMember().getReferenceId();
+			eids.add(eid);
+		}
+		return eids;
+	}
 	
 //	private Map<Long, Set<Long>> collectCompoundReactions(Set<Long> cpdIdSet, UnificationTable metaboliteUnificationTable, Long protonId) {
 //		Map<Long, Set<Long>> compoundToReactionMap = new HashMap<> ();

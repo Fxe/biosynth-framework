@@ -73,7 +73,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		
 		Node node = nodes.get(0);
 		
-		LOGGER.debug("Found " + node);
+		LOGGER.debug(String.format("Found %s for %s:%s", node, tag, entry));
 		
 		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
 		

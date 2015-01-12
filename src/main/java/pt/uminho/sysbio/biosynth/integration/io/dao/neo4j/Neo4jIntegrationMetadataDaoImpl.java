@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -30,6 +31,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
+import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
@@ -298,6 +300,29 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public IntegratedCluster saveIntegratedClusterMetadata(IntegratedCluster cluster) {
+		if (cluster.getIntegrationSet() == null) {
+			LOGGER.error("No integration set assigned to cluster");
+			return null;
+		}
+		if (cluster.getClusterType() == null || cluster.getClusterType().isEmpty()) {
+			LOGGER.error("Invalid Cluster Type");
+			return null;
+		}
+		if (cluster.getId() == null) {
+			LOGGER.error("No id save it first !");
+			return null;
+		}
+		
+		for (String meta : cluster.getMeta().keySet()) {
+			Label label = DynamicLabel.label(meta);
+			Node cidNode = graphDatabaseService.getNodeById(cluster.getId());
+			cidNode.addLabel(label);
+		}
+		
+		return cluster;
+	}
 
 	@Override
 	public IntegratedCluster saveIntegratedCluster(IntegratedCluster cluster) {
@@ -524,7 +549,16 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 				integratedClusterMeta.setMetaType(qLabel.toString());
 				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
 			} catch (Exception e) {
-				LOGGER.trace("awww " + label);
+				LOGGER.trace("not metabolite label .. " + label);
+			}
+			
+			try {
+				ReactionQualityLabel qLabel = ReactionQualityLabel.valueOf(label.toString());
+				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
+				integratedClusterMeta.setMetaType(qLabel.toString());
+				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
+			} catch (Exception e) {
+				LOGGER.trace("not reaction label .. " + label);
 			}
 		}
 		
