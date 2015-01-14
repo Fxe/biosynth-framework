@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +49,16 @@ public class IntegrationUtils {
 			right_.put(unifi_id.toString(), stoich);
 		}
 		reaction.setRightStoichiometry(right_);
+	}
+	
+	public static List<IntegratedMember> collectMembersFromCluster(IntegratedCluster integratedCluster) {
+		List<IntegratedMember> integratedMembers = new ArrayList<> ();
+		
+		for (IntegratedClusterMember icm : integratedCluster.getMembers()) {
+			integratedMembers.add(icm.getMember());
+		}
+		
+		return integratedMembers;
 	}
 	
 	public static Set<String> collectMemberEntriesInClusterByMajorLabel(

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
@@ -24,7 +25,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStra
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly=true, value="neo4jMetaTransactionManager")
 public class DefaultMetaboliteIntegrationServiceImpl<M extends Metabolite> 
 extends BasicIntegrationService
 implements MetaboliteIntegrationService {
@@ -48,6 +49,7 @@ implements MetaboliteIntegrationService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 	@Override
 	public List<IntegratedCluster> generateIntegratedClusters(Long iid,
 			ClusteringStrategy clusteringStrategy, Set<Long> initial,
@@ -223,4 +225,25 @@ implements MetaboliteIntegrationService {
 		
 		return uniqueMembershipClusters;
 	}
+	
+	@Override
+	public List<IntegratedCluster> getAllMetaboliteIntegratedClusterEntries(Long iid) {
+		Set<Long> ids = meta.getAllIntegratedClusterIdsByType(iid, IntegrationNodeLabel.MetaboliteCluster.toString());
+		
+		LOGGER.debug(String.format("Found %d clusters", ids.size()));
+		
+		List<IntegratedCluster> integratedClusters = new ArrayList<> ();
+		
+		for (Long id : ids) {
+			IntegratedCluster integratedCluster = meta.getIntegratedClusterById(id);
+			if (integratedCluster != null) {
+				integratedClusters.add(integratedCluster);
+			} else {
+				LOGGER.error(String.format("Unable to retrieve cluster %d", id));
+			}
+		}
+		return integratedClusters;
+	}
+	
+
 }

@@ -6,11 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 
+@Transactional(readOnly=true, value="neo4jMetaTransactionManager")
 public class BasicIntegrationService implements IntegrationService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicIntegrationService.class);
@@ -32,6 +34,7 @@ public class BasicIntegrationService implements IntegrationService {
 		
 		return integrationSet;
 	}
+	
 	@Override
 	public IntegrationSet getIntegrationSetById(Long id) {
 		IntegrationSet integrationSet = this.meta.getIntegrationSet(id);
@@ -87,6 +90,18 @@ public class BasicIntegrationService implements IntegrationService {
 	@Override
 	public List<Long> getAllIntegrationSetsIds() {
 		return this.meta.getAllIntegrationSetsId();
+	}
+
+	@Override
+	public IntegratedCluster getIntegratedClusterById(long id) {
+		IntegratedCluster integratedCluster = meta.getIntegratedClusterById(id);
+		return integratedCluster;
+	}
+	
+	@Override
+	public IntegratedCluster getIntegratedClusterByEntry(String entry, long iid) {
+		IntegratedCluster integratedCluster = meta.getIntegratedClusterByEntry(entry, iid);
+		return integratedCluster;
 	}
 
 }

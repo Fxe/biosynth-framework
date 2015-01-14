@@ -56,14 +56,13 @@ public class IntegratedCluster {
 	public IntegrationSet getIntegrationSet() { return integrationSet;}
 	public void setIntegrationSet(IntegrationSet integrationSet) { this.integrationSet = integrationSet;}
 	
-	
+	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
 	@Fetch(FetchMode.SELECT)
 	private List<IntegratedClusterMember> members = new ArrayList<> ();
 	public List<IntegratedClusterMember> getMembers() { return members;}
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
 	
-	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="integratedCluster")
 	@MapKey(name="metaType")
 	private Map<String, IntegratedClusterMeta> meta = new HashMap<> ();

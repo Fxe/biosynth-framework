@@ -952,6 +952,12 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		
 		return null;
 	}
+	@Override
+	public List<IntegratedCluster> getAllMetaboliteIntegratedClusterEntries(
+			Long iid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

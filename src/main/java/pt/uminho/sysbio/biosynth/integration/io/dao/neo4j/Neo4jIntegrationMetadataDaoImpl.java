@@ -107,13 +107,25 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public IntegrationSet getIntegrationSet(String entry) {
 		String cypher = String.format(
-				"MATCH (iid:%s {entry:{entry}) RETURN iid", 
+				"MATCH (iid:%s {entry:{entry}}) RETURN iid AS IID", 
 				IntegrationNodeLabel.IntegrationSet);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", entry);
 		ExecutionResult executionResult = this.executionEngine.execute(cypher, params);
-		System.out.println(executionResult.dumpToString());
-		throw new RuntimeException("Not implemented !");
+		Node integrationSetNode = getExecutionResultGetSingle("IID", executionResult);
+		
+		if (integrationSetNode == null 
+				|| !integrationSetNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
+		
+		System.out.println(Neo4jUtils.getPropertiesMap(integrationSetNode));
+		IntegrationSet integrationSet = new IntegrationSet();
+		integrationSet.setId(integrationSetNode.getId());
+		integrationSet.setName((String) integrationSetNode.getProperty("entry", ""));
+		integrationSet.setDescription((String) integrationSetNode.getProperty("description", ""));
+		
+		return integrationSet;
+//		System.out.println(executionResult.dumpToString());
+//		throw new RuntimeException("Not implemented !");
 //		return null;
 	}
 
@@ -160,6 +172,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			return null;
 		}
 		
+//		System.out.println(cidNode + " " + Neo4jUtils.getPropertiesMap(cidNode));
 		LOGGER.debug(String.format("Loading cluster: %s -> %s", id, cidNode));
 		
 		IntegrationSet integrationSet = null;
@@ -281,6 +294,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		}
 		
 		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
+		
 		if (iidNode == null || !iidNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
 		
 		LOGGER.debug(String.format("Loading %s clusters for integration set [%d]", type, integrationSetId));
@@ -539,7 +553,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		String clusterType = node.getLabels().iterator().next().toString();
 		integratedCluster.setId(node.getId());
 		integratedCluster.setClusterType(clusterType);
-		integratedCluster.setDescription((String) node.getProperty("description"));
+		integratedCluster.setDescription((String) node.getProperty("description", ""));
 		integratedCluster.setEntry((String) node.getProperty("entry"));
 		
 		for (Label label : node.getLabels()) {

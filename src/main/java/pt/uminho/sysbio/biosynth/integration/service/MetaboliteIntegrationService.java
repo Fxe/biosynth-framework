@@ -117,4 +117,6 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 	@Deprecated
 	public IntegrationSet getCurrentIntegrationSet();
 	public Map<String, Integer> getDataStatistics();
+
+	public List<IntegratedCluster> getAllMetaboliteIntegratedClusterEntries(Long iid);
 }

@@ -31,7 +31,16 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	@OneToMany(mappedBy = "integratedMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<IntegratedMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
-//	@ElementCollection
+	private Map<String, Map<Object, List<Long>>> properties = new HashMap<> ();
+	
+	public Map<String, Map<Object, List<Long>>> getProperties() { return properties;}
+	public void setProperties(Map<String, Map<Object, List<Long>>> properties) {
+		this.properties = properties;
+	}
+
+
+
+	//	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="name", length=2000, nullable=false)
 	private Map<Long, List<String>> names = new HashMap<> ();

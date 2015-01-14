@@ -41,7 +41,6 @@ public class MetaboliteQAReporter implements IntegrationSetReporter {
 	@Override
 	public void generateReport(IntegrationSet integrationSet) {
 		long iid = integrationSet.getId();
-		
 
 		
 		Map<Integer, Integer> sizeDistributionCount = new HashMap<> ();

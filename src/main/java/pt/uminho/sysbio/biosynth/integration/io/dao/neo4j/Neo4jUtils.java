@@ -20,6 +20,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
@@ -31,6 +33,8 @@ import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
  * @author Filipe
  */
 public class Neo4jUtils {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jUtils.class);
 	
 	public static Set<Long> collectNodes(Node node) {
 		return null;
@@ -116,6 +120,18 @@ public class Neo4jUtils {
 		}
 	}
 	
+	public static String resolvePropertyMajorLabel(Set<String> labels) {
+		Set<String> labels_ = new HashSet<> (labels);
+		labels_.remove(GlobalLabel.MetaboliteProperty.toString());
+		labels_.remove(GlobalLabel.ReactionProperty.toString());
+		
+		if (labels_.size() > 1) LOGGER.warn("Multiple labels " + labels_);
+		
+		if (labels_.isEmpty()) return null;
+		
+		return labels_.iterator().next();
+	}
+	
 	public static List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities(Node node) {
 //		System.out.println("--->");
 		List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propetyList = new ArrayList<> ();
@@ -131,6 +147,8 @@ public class Neo4jUtils {
 				for (Label label : other.getLabels()) {
 					graphPropertyEntity.addLabel(label.toString());
 				}
+				
+				graphPropertyEntity.setMajorLabel(resolvePropertyMajorLabel(graphPropertyEntity.getLabels()));
 				
 				GraphRelationshipEntity graphRelationshipEntity =
 						new GraphRelationshipEntity();

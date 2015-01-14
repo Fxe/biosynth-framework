@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @Table(name="integration")
 public class IntegrationSet {
@@ -36,7 +38,7 @@ public class IntegrationSet {
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY , mappedBy="integrationSet")
 //	@LazyCollection(LazyCollectionOption.EXTRA)
 	@MapKey(name="id")
-	@BatchSize(size=100)
+	@BatchSize(size=100) @JsonInclude
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();
 
 	public Long getId() { return id;}
