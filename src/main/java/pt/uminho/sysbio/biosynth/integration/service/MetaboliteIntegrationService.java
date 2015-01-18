@@ -15,6 +15,8 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults);
 	public int countIntegratedClustersByIntegrationId(Long iid);
 	
+	public void lalal(String type, long iid, int page, int limit);
+	
 	/**
 	 * 
 	 * Applies a clustering strategy to a set of initial 

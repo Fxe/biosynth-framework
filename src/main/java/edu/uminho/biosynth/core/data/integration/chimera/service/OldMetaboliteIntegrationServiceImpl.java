@@ -958,6 +958,11 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public void lalal(String type, long iid, int page, int limit) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

@@ -245,5 +245,10 @@ implements MetaboliteIntegrationService {
 		return integratedClusters;
 	}
 	
+	@Override
+	public void lalal(String type, long iid, int page, int limit) {
+//		meta.get
+	}
+	
 
 }

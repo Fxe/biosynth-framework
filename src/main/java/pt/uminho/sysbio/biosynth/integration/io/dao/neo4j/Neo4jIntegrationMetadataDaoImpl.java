@@ -172,6 +172,11 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			return null;
 		}
 		
+		if (!cidNode.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
+			LOGGER.warn(String.format("Invalid Node %s", Neo4jUtils.getLabels(cidNode)));
+			return null;
+		}
+		
 //		System.out.println(cidNode + " " + Neo4jUtils.getPropertiesMap(cidNode));
 		LOGGER.debug(String.format("Loading cluster: %s -> %s", id, cidNode));
 		
