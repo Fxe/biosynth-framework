@@ -23,7 +23,7 @@ public class IntegratedMetaboliteFactory<M extends Metabolite> {
 		id = integratedCluster.getId();
 		entry = integratedCluster.getEntry();
 		description = integratedCluster.getDescription();
-		source = integratedCluster.getIntegrationSet().getName(); //source
+		source = integratedCluster.getIntegrationSet().getEntry(); //source
 		
 		integratedCluster.getClusterType();
 		

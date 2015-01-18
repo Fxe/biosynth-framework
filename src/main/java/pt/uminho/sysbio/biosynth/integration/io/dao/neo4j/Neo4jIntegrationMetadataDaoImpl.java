@@ -74,7 +74,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 				"MERGE (iid:%s {entry:{entry}, description:{description}}) RETURN iid AS IID", 
 				IntegrationNodeLabel.IntegrationSet);
 		Map<String, Object> params = new HashMap<> ();
-		params.put("entry", integrationSet.getName());
+		params.put("entry", integrationSet.getEntry());
 		params.put("description", nullToString(integrationSet.getDescription()));
 
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
@@ -190,6 +190,9 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		for (Relationship relationship : cidNode
 				.getRelationships(IntegrationRelationshipType.Integrates)) {
 			Node eidNode = relationship.getOtherNode(cidNode);
+			
+			LOGGER.debug(String.format("%s Integrates %s", cidNode, eidNode));
+			
 			IntegratedMember integratedMember = nodeToIntegratedMember(eidNode);
 			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
 			integratedClusterMember.setMember(integratedMember);

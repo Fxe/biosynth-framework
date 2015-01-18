@@ -15,10 +15,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="integration")
+@Table(name="integration_set")
 public class IntegrationSet {
 	
 	@Id
@@ -26,8 +26,8 @@ public class IntegrationSet {
 	@Column(name="id", nullable=false)
 	private Long id;
 	
-	@Column(name="name", nullable=false, length=255)
-	private String name;
+	@Column(name="entry", nullable=false, length=255, unique=true)
+	private String entry;
 	
 	@Column(name="description", nullable=true, length=255)
 	private String description = "";
@@ -38,14 +38,14 @@ public class IntegrationSet {
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY , mappedBy="integrationSet")
 //	@LazyCollection(LazyCollectionOption.EXTRA)
 	@MapKey(name="id")
-	@BatchSize(size=100) @JsonInclude
+	@BatchSize(size=100) @JsonIgnore
 	private Map<Long, IntegratedCluster> integratedClustersMap = new HashMap<> ();
 
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
-	public String getName() { return name;}
-	public void setName(String name) { this.name = name;}
+	public String getEntry() { return entry;}
+	public void setName(String entry) { this.entry = entry;}
 	
 	public String getLastClusterEntry() { return lastClusterEntry;}
 	public void setLastClusterEntry(String lastClusterEntry) { this.lastClusterEntry = lastClusterEntry;}
@@ -66,6 +66,6 @@ public class IntegrationSet {
 	
 	@Override
 	public String toString() {
-		return String.format("IntegratedSet[%d] %s [%s]", id, name, description);
+		return String.format("IntegratedSet[%d] %s [%s]", id, entry, description);
 	}
 }

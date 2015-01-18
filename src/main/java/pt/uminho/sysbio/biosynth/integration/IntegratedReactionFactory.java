@@ -17,7 +17,7 @@ public class IntegratedReactionFactory<R extends Reaction> {
 		integratedCluster.getDescription();
 		integratedCluster.getClusterType();
 		integratedCluster.getId();
-		integratedCluster.getIntegrationSet().getName(); //source
+		integratedCluster.getIntegrationSet().getEntry(); //source
 		
 		for (IntegratedClusterMember integratedClusterMember : integratedCluster.getMembers()) {
 			IntegratedMember integratedMember = integratedClusterMember.getMember();

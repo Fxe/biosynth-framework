@@ -6,7 +6,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 public class HelperNeo4jConfigInitializer {
 
-	private static final String[] contraints = {
+	private static final String[] NEO_DATA_CONSTRAINTS = {
 		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.id IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:BioPath) ASSERT cpd.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:HMDB) ASSERT cpd.entry IS UNIQUE",
@@ -47,10 +47,42 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (cid:ReactionMember) ASSERT cid.id IS UNIQUE",
 	};
 	
+	private static final String[] NEO_META_CONSTRAINTS = {
+		"CREATE CONSTRAINT ON (iid:IntegrationSet) ASSERT iid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:MetaboliteMember) ASSERT cid.id IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:ReactionCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid:ReactionMember) ASSERT cid.id IS UNIQUE",
+	};
+	
+	private static final String[] NEO_CURA_CONSTRAINTS = {
+		"CREATE CONSTRAINT ON (iid:CurationSet) ASSERT iid.entry IS UNIQUE",
+	};
+	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {
 		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
 		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
-		for (String query: contraints) {
+		for (String query: NEO_DATA_CONSTRAINTS) {
+			engine.execute(query);
+		}
+		
+		return graphDatabaseService;
+	}
+	
+	public static GraphDatabaseService initializeNeo4jMetaDatabaseConstraints(String databasePath) {
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+		for (String query: NEO_META_CONSTRAINTS) {
+			engine.execute(query);
+		}
+		
+		return graphDatabaseService;
+	}
+	
+	public static GraphDatabaseService initializeNeo4jCuraDatabaseConstraints(String databasePath) {
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+		for (String query: NEO_CURA_CONSTRAINTS) {
 			engine.execute(query);
 		}
 		

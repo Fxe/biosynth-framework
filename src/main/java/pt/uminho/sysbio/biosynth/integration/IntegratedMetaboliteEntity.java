@@ -18,6 +18,8 @@ import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteSourceProxy;
@@ -28,6 +30,7 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 
 	private static final long serialVersionUID = -6116044461015672826L;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "integratedMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<IntegratedMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
 	
@@ -43,53 +46,63 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 	//	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="name", length=2000, nullable=false)
+	@JsonIgnore
 	private Map<Long, List<String>> names = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_isotope_formula", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="iso_formula", length=255, nullable=false)
+	@JsonIgnore
 	private Map<Long, String> isoFormulas = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_formula", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="formula", length=255, nullable=false)
+	@JsonIgnore
 	private Map<Long, String> formulas = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_charge", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="charge", nullable=false)
+	@JsonIgnore
 	private Map<Long, Integer> charges = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_can_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="can_smiles", nullable=false)
+	@JsonIgnore
 	private Map<Long, String> canSmiles = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_smiles", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="smiles", nullable=false)
+	@JsonIgnore
 	private Map<Long, String> smiles = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_inchi", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="inchi", nullable=false)
+	@JsonIgnore
 	private Map<Long, String> inchis = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_models", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="model", nullable=false)
+	@JsonIgnore
 	private Map<Long, List<String>> models = new HashMap<> ();
 	
 //	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_compartments", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="compartment", nullable=false)
+	@JsonIgnore
 	private Map<Long, List<String>> compartments = new HashMap<> ();
 	
-	
+	@JsonIgnore
 	private Map<Long, String> sourceReferences = new HashMap<> ();
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="integratedMetaboliteEntity")
 	@MapKey(name="id")
+	@JsonIgnore
 	private Map<Long, IntegratedMetaboliteSourceProxy> sources = new HashMap<> ();
 	public Map<Long, IntegratedMetaboliteSourceProxy> getSources() { return sources;}
 	public void setSources(Map<Long, IntegratedMetaboliteSourceProxy> sources) {
