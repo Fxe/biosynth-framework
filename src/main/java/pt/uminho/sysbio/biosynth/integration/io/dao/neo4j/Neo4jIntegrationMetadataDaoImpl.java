@@ -661,6 +661,14 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		return entry;
 	}
 	
+	/**
+	 * 
+	 * @param iid
+	 * @param fromType
+	 * @param toType
+	 * @return
+	 */
+	@Override
 	public Map<Long, Long> getUnificationMapping(Long iid, String fromType, String toType) {
 		Map<Long, Long> unificationMap = new HashMap<> ();
 		IntegrationNodeLabel fromLabel = 
@@ -741,6 +749,33 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			Relationship relationship = node.createRelationshipTo(metaNode, null);
 			relationship.setProperty("message", message);
 		}
+	}
+
+	@Override
+	public List<IntegratedCluster> getIntegratedClusterByQuery(String query) {
+		ExecutionResult executionResult = this.executionEngine.execute(query);
+		
+//		LOGGER.info(executionResult.dumpToString());
+		
+		if (executionResult.columns().size() != 1) {
+			LOGGER.warn(String.format("Expected one output column [%s]", executionResult.columns()));
+			return null;
+		}
+		String column = executionResult.columns().get(0);
+		
+		List<IntegratedCluster> result = new ArrayList<> ();
+		
+		for (Object o : IteratorUtil.asCollection(executionResult.columnAs(column))) {
+			Node clusterNode = (Node) o;
+			if (clusterNode.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
+				System.out.println(clusterNode + " " + Neo4jUtils.getLabels(clusterNode) + " :: " + Neo4jUtils.getPropertiesMap(clusterNode));
+				IntegratedCluster integratedCluster = this.getIntegratedClusterById(clusterNode.getId());
+				result.add(integratedCluster);
+			} else {
+				LOGGER.warn(String.format("Invalid output node %s", Neo4jUtils.getLabels(clusterNode)));
+			}
+		}
+		return result;
 	}
 
 	

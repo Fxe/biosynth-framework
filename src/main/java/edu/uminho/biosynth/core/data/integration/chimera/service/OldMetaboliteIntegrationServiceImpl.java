@@ -963,6 +963,17 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public List<IntegratedCluster> getAllReactionIntegratedClusterEntries(
+			Long iid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Map<Long, Long> getMetaboliteUnificationMap(long iid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

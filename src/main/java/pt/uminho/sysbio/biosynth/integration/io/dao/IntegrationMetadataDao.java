@@ -27,6 +27,7 @@ public interface IntegrationMetadataDao {
 	public List<IntegratedCluster> getAllIntegratedClusters(Long integrationSetId);
 	public List<IntegratedCluster> getIntegratedClustersByPage(Long integrationSetId, int firstResult, int maxResults);
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long...memberIds);
+	public List<IntegratedCluster> getIntegratedClusterByQuery(String query);
 	public List<Long> getAllIntegratedClusterIds(Long integrationSetId);
 	public Set<Long> getAllIntegratedClusterIds(IntegrationSet integrationSetId);
 	public Set<Long> getAllIntegratedClusterIdsByType(Long integrationSetId, String type);
@@ -67,5 +68,6 @@ public interface IntegrationMetadataDao {
 	
 	public String lookupClusterEntryByMemberId(Long iid, Long eid);
 	public Long lookupClusterIdByMemberId(Long iid, Long eid);
+	public Map<Long, Long> getUnificationMapping(Long iid, String fromType, String toType);
 	
 }

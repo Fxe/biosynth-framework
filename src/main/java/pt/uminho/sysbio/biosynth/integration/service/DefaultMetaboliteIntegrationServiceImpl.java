@@ -269,5 +269,13 @@ implements MetaboliteIntegrationService {
 //		meta.get
 	}
 	
+	@Override
+	public Map<Long, Long> getMetaboliteUnificationMap(long iid) {
+		return this.meta.getUnificationMapping(
+				iid, 
+				IntegrationNodeLabel.MetaboliteCluster.toString(), 
+				IntegrationNodeLabel.MetaboliteMember.toString());
+	}
+	
 
 }

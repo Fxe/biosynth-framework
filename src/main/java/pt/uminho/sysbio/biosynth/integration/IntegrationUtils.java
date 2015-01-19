@@ -18,6 +18,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class IntegrationUtils {
@@ -156,6 +157,49 @@ public class IntegrationUtils {
 			eids.add(eid);
 		}
 		return eids;
+	}
+	
+	public static<E> double jaccard(Collection<E> a, Collection<E> b) {
+		if (a.isEmpty() && b.isEmpty()) return 1.0;
+		
+		Set<E> A_union_B = new HashSet<> (a);
+		A_union_B.addAll(b);
+		Set<E> A_intersect_B = new HashSet<> (a);
+		A_intersect_B.retainAll(b);
+		
+		return A_intersect_B.size() / (double)A_union_B.size();
+	}
+	
+	public static<R extends Reaction> boolean alignReactions(List<R> rxnList) {
+		LOGGER.debug("Align reactions");
+		
+		if (rxnList.isEmpty()) return false;
+		
+		Reaction rxnPivot = rxnList.get(0);
+		
+		Set<String> leftPivot = new HashSet<> (rxnPivot.getLeftStoichiometry().keySet());
+		Set<String> rightPivot = new HashSet<> (rxnPivot.getRightStoichiometry().keySet());
+		LOGGER.debug(rxnPivot.getEntry() + ":" + leftPivot + " / " + rightPivot);
+
+		for (int i = 1; i < rxnList.size(); i++) {
+			Reaction rxn = rxnList.get(i);
+			Set<String> left_ = new HashSet<> (rxn.getLeftStoichiometry().keySet());
+			
+			Double l_l = IntegrationUtils.jaccard(left_, leftPivot);
+			Double l_r = IntegrationUtils.jaccard(left_, rightPivot);
+			if (l_r > l_l) swapStoichiometry(rxn);
+			
+			LOGGER.debug(rxn.getEntry() + ":" + rxn.getLeftStoichiometry().keySet() + " / " + rxn.getRightStoichiometry().keySet());
+		}
+		return true;
+	}
+	
+	public static<R extends Reaction> void swapStoichiometry(R rxn) {
+		LOGGER.debug("Swap eq rxn: " + rxn.getEntry());
+		Map<String, Double> left = rxn.getLeftStoichiometry();
+		Map<String, Double> right = rxn.getRightStoichiometry();
+		rxn.setLeftStoichiometry(right);
+		rxn.setRightStoichiometry(left);
 	}
 	
 //	private Map<Long, Set<Long>> collectCompoundReactions(Set<Long> cpdIdSet, UnificationTable metaboliteUnificationTable, Long protonId) {

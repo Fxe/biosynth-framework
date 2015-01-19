@@ -9,6 +9,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 
 public class BetterNaiveReactionStrategy extends LesserNaiveReactionStrategy {
@@ -94,8 +95,8 @@ public class BetterNaiveReactionStrategy extends LesserNaiveReactionStrategy {
 	}
 	
 	private double similarityScore(GenericReaction rxnA, GenericReaction rxnB) {
-		double l = this.jaccard(rxnA.getLeftStoichiometry().keySet(), rxnB.getLeftStoichiometry().keySet());
-		double r = this.jaccard(rxnA.getRightStoichiometry().keySet(), rxnB.getRightStoichiometry().keySet());
+		double l = IntegrationUtils.jaccard(rxnA.getLeftStoichiometry().keySet(), rxnB.getLeftStoichiometry().keySet());
+		double r = IntegrationUtils.jaccard(rxnA.getRightStoichiometry().keySet(), rxnB.getRightStoichiometry().keySet());
 		
 //		if (l + r >= 2.0) System.out.println(rxnA.getEntry() + " EQ " + rxnB.getEntry());
 		

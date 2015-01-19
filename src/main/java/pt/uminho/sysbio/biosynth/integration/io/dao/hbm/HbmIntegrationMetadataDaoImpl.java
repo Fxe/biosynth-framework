@@ -402,6 +402,19 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		return null;
 	}
 
+	@Override
+	public List<IntegratedCluster> getIntegratedClusterByQuery(String query) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Long, Long> getUnificationMapping(Long iid, String fromType,
+			String toType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

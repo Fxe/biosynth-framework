@@ -122,4 +122,5 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 
 	public List<IntegratedCluster> getAllMetaboliteIntegratedClusterEntries(Long iid);
 	public List<IntegratedCluster> getAllReactionIntegratedClusterEntries(Long iid);
+	public Map<Long, Long> getMetaboliteUnificationMap(long iid);
 }

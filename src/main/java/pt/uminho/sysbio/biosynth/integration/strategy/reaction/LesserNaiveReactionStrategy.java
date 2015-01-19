@@ -12,6 +12,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jReactionDao;
 import pt.uminho.sysbio.biosynthframework.DefaultReaction;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
@@ -59,7 +60,7 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 			}
 		}
 		//separate stoichiometry
-		this.alignReactions(reactions);
+		IntegrationUtils.alignReactions(reactions);
 		
 		Set<Long> strictStoichMatchSet = new HashSet<> ();
 		
@@ -107,46 +108,37 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		return reconciliationMap;
 	}
 	
-	protected boolean alignReactions(List<GenericReaction> rxnList) {
-		LOGGER.debug("Align reactions");
-		
-		if (rxnList.isEmpty()) return false;
-		
-		GenericReaction rxnPivot = rxnList.get(0);
-		
-		Set<String> leftPivot = new HashSet<> (rxnPivot.getReactantStoichiometry().keySet());
-		Set<String> rightPivot = new HashSet<> (rxnPivot.getProductStoichiometry().keySet());
-		LOGGER.debug(rxnPivot.getEntry() + ":" + leftPivot + " / " + rightPivot);
+//	protected boolean alignReactions(List<GenericReaction> rxnList) {
+//		LOGGER.debug("Align reactions");
+//		
+//		if (rxnList.isEmpty()) return false;
+//		
+//		GenericReaction rxnPivot = rxnList.get(0);
+//		
+//		Set<String> leftPivot = new HashSet<> (rxnPivot.getReactantStoichiometry().keySet());
+//		Set<String> rightPivot = new HashSet<> (rxnPivot.getProductStoichiometry().keySet());
+//		LOGGER.debug(rxnPivot.getEntry() + ":" + leftPivot + " / " + rightPivot);
+//
+//		for (int i = 1; i < rxnList.size(); i++) {
+//			GenericReaction rxn = rxnList.get(i);
+//			Set<String> left_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
+//			
+//			Double l_l = IntegrationUtils.jaccard(left_, leftPivot);
+//			Double l_r = IntegrationUtils.jaccard(left_, rightPivot);
+//			if (l_r > l_l) this.swapStoichiometry(rxn);
+//			
+//			LOGGER.debug(rxn.getEntry() + ":" + rxn.getReactantStoichiometry().keySet() + " / " + rxn.getProductStoichiometry().keySet());
+//		}
+//		return true;
+//	}
+	
 
-		for (int i = 1; i < rxnList.size(); i++) {
-			GenericReaction rxn = rxnList.get(i);
-			Set<String> left_ = new HashSet<> (rxn.getReactantStoichiometry().keySet());
-			
-			Double l_l = jaccard(left_, leftPivot);
-			Double l_r = jaccard(left_, rightPivot);
-			if (l_r > l_l) this.swapStoichiometry(rxn);
-			
-			LOGGER.debug(rxn.getEntry() + ":" + rxn.getReactantStoichiometry().keySet() + " / " + rxn.getProductStoichiometry().keySet());
-		}
-		return true;
-	}
 	
-	protected<E> double jaccard(Collection<E> a, Collection<E> b) {
-		if (a.isEmpty() && b.isEmpty()) return 1.0;
-		
-		Set<E> A_union_B = new HashSet<> (a);
-		A_union_B.addAll(b);
-		Set<E> A_intersect_B = new HashSet<> (a);
-		A_intersect_B.retainAll(b);
-		
-		return A_intersect_B.size() / (double)A_union_B.size();
-	}
-	
-	protected void swapStoichiometry(GenericReaction rxn) {
-		LOGGER.debug("Swap eq rxn: " + rxn.getEntry());
-		Map<String, Double> left = rxn.getLeftStoichiometry();
-		Map<String, Double> right = rxn.getRightStoichiometry();
-		rxn.setLeftStoichiometry(right);
-		rxn.setRightStoichiometry(left);
-	}
+//	protected void swapStoichiometry(GenericReaction rxn) {
+//		LOGGER.debug("Swap eq rxn: " + rxn.getEntry());
+//		Map<String, Double> left = rxn.getLeftStoichiometry();
+//		Map<String, Double> right = rxn.getRightStoichiometry();
+//		rxn.setLeftStoichiometry(right);
+//		rxn.setRightStoichiometry(left);
+//	}
 }
