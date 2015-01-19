@@ -246,6 +246,25 @@ implements MetaboliteIntegrationService {
 	}
 	
 	@Override
+	public List<IntegratedCluster> getAllReactionIntegratedClusterEntries(Long iid) {
+		Set<Long> ids = meta.getAllIntegratedClusterIdsByType(iid, IntegrationNodeLabel.ReactionCluster.toString());
+		
+		LOGGER.debug(String.format("Found %d clusters", ids.size()));
+		
+		List<IntegratedCluster> integratedClusters = new ArrayList<> ();
+		
+		for (Long id : ids) {
+			IntegratedCluster integratedCluster = meta.getIntegratedClusterById(id);
+			if (integratedCluster != null) {
+				integratedClusters.add(integratedCluster);
+			} else {
+				LOGGER.error(String.format("Unable to retrieve cluster %d", id));
+			}
+		}
+		return integratedClusters;
+	}
+	
+	@Override
 	public void lalal(String type, long iid, int page, int limit) {
 //		meta.get
 	}

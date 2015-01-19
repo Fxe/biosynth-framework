@@ -11,6 +11,4 @@ public interface IntegrationCurationDao {
 	public Long saveCurationCluster(CurationCluster curationCluster);
 	public CurationCluster getCurationCluster(long id);
 	public CurationCluster getCurationCluster(String entry);
-	
-	
 }

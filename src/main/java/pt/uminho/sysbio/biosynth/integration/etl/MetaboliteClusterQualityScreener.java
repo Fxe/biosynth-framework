@@ -24,11 +24,11 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
-import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
+import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
 
 public class MetaboliteClusterQualityScreener implements EtlQualityScreen<IntegratedCluster> {
 
-	private FormulaConverter formulaConverter;
+	private FormulaReader formulaConverter;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetaboliteClusterQualityScreener.class);
 	
@@ -36,7 +36,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 	
 	@Autowired
 	public MetaboliteClusterQualityScreener(
-			MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteDao, FormulaConverter formulaConverter) {
+			MetaboliteHeterogeneousDao<GraphMetaboliteEntity> metaboliteDao, FormulaReader formulaConverter) {
 		this.formulaConverter = formulaConverter;
 		this.metaboliteDao = metaboliteDao;
 	}

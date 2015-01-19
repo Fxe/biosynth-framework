@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
-import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
+import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
 
 public class CentralMetaboliteEtlDataCleansing
 implements EtlDataCleansing<GraphMetaboliteEntity> {
@@ -21,9 +21,9 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
 	
 	private static final String DCS_STATUS_KEY = "DCS-status";
 	
-	private final FormulaConverter formulaConverter;
+	private final FormulaReader formulaConverter;
 	
-	public CentralMetaboliteEtlDataCleansing(FormulaConverter formulaConverter) {
+	public CentralMetaboliteEtlDataCleansing(FormulaReader formulaConverter) {
 		this.formulaConverter = formulaConverter;
 	}
 	
