@@ -55,6 +55,10 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.Left));
 		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.Right));
 		
+		String majorLabel = (String) reactionEntity.getProperty("major-label", null);
+		if (majorLabel == null) LOGGER.warn("Major label not found for %s:%s", node, Neo4jUtils.getLabels(node));
+		reactionEntity.setMajorLabel(majorLabel);
+		
 		return reactionEntity;
 	}
 	
