@@ -98,21 +98,22 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 
 	@Override
 	public Long saveCurationCluster(CurationOperation curationCluster) {
-		if (curationCluster.getType() == null) {
-			LOGGER.warn("warn 1");
+		if (curationCluster.getClusterType() == null
+				|| curationCluster.getOperationType() == null) {
+			LOGGER.warn("Missing type definition");
 			return null;
 		}
 		
-		if (curationCluster.getType().equals(CurationLabel.CurationMetabolite.toString())) {
+		if (curationCluster.getClusterType().equals(CurationLabel.CurationMetabolite.toString())) {
 			return saveMetaboliteCurationCluster(curationCluster);
 		}
 		
-		if (curationCluster.getType().equals(CurationLabel.CurationReaction.toString())) {
-			LOGGER.warn("warn 3");
+		if (curationCluster.getClusterType().equals(CurationLabel.CurationReaction.toString())) {
+			LOGGER.warn("Not implemented for: " + curationCluster.getClusterType());
 			return null;
 		}
 		
-		LOGGER.warn("warn 2");
+		LOGGER.warn("Not implemented for: " + curationCluster.getClusterType());
 		return null;
 	}
 	

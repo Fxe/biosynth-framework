@@ -33,10 +33,17 @@ public class CurationOperation {
 	public String getEntry() { return entry;}
 	public void setEntry(String entry) { this.entry = entry; }
 	
-	private String type;
-	public String getType() { return type;}
-	public void setType(String type) { this.type = type;}
-	public void setType(Object type) { this.type = type.toString();}
+	@Column
+	private String operationType;
+	public String getOperationType() { return operationType;}
+	public void setOperationType(String operationType) { this.operationType = operationType;}
+	public void setOperationType(Object operationType) { this.operationType = operationType.toString();}
+
+	@Column
+	private String clusterType;
+	public String getClusterType() { return clusterType;}
+	public void setClusterType(String clusterType) { this.clusterType = clusterType;}
+	public void setClusterType(Object clusterType) { this.clusterType = clusterType.toString();}
 
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
