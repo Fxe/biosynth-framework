@@ -21,7 +21,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name="aaa")
-public class CurationCluster {
+public class CurationOperation {
 
 	@Id
 	private long id;
@@ -36,6 +36,7 @@ public class CurationCluster {
 	private String type;
 	public String getType() { return type;}
 	public void setType(String type) { this.type = type;}
+	public void setType(Object type) { this.type = type.toString();}
 
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
@@ -50,7 +51,16 @@ public class CurationCluster {
 	public void setCurationSet(CurationSet curationSet) {
 		this.curationSet = curationSet;
 	}
-	
+
+	private String clusterRelationship;
+	public String getClusterRelationship() { return clusterRelationship;}
+	public void setClusterRelationship(String clusterRelationship) {
+		this.clusterRelationship = clusterRelationship;
+	}
+	public void setClusterRelationship(Object clusterRelationship) {
+		this.clusterRelationship = clusterRelationship.toString();
+	}
+
 	private List<IntegratedCluster> integratedClusters = new ArrayList<> ();
 	public List<IntegratedCluster> getIntegratedClusters() { return integratedClusters;}
 	public void setIntegratedClusters(List<IntegratedCluster> integratedClusters) { 

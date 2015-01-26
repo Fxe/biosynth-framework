@@ -101,7 +101,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			LOGGER.debug(e.getMessage());
 		}
 		
-		return this.nodeToIntegrationSet(node);
+		return Neo4jMapper.nodeToIntegrationSet(node);
 	}
 
 	@Override
@@ -173,23 +173,27 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		}
 		
 		if (!cidNode.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
-			LOGGER.warn(String.format("Invalid Node %s", Neo4jUtils.getLabels(cidNode)));
+			LOGGER.warn(String.format("Invalid Node expected %s found %s", IntegrationNodeLabel.IntegratedCluster, Neo4jUtils.getLabels(cidNode)));
 			return null;
 		}
 		
 //		System.out.println(cidNode + " " + Neo4jUtils.getPropertiesMap(cidNode));
 		LOGGER.debug(String.format("Loading cluster: %s -> %s", id, cidNode));
 		
+		LOGGER.debug("Loading Cluster Integration Set ... ");
 		IntegrationSet integrationSet = null;
 		for (Relationship relationship : cidNode
 				.getRelationships()) {
 			Node iidNode = relationship.getOtherNode(cidNode);
-			if (integrationSet != null) {
-				LOGGER.error("SOME ERROR FIXME !");
+			LOGGER.trace("Found link to %s", iidNode, Neo4jUtils.getLabels(iidNode));
+			if (iidNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) {
+				if (integrationSet != null) {
+					LOGGER.error("SOME ERROR FIXME !");
+				}
+				integrationSet = this.getIntegrationSet(iidNode.getId());
 			}
-			integrationSet = this.getIntegrationSet(iidNode.getId());
 		}
-		IntegratedCluster integratedCluster = nodeToIntegratedCluster(cidNode);
+		IntegratedCluster integratedCluster = Neo4jMapper.nodeToIntegratedCluster(cidNode);
 		integratedCluster.setIntegrationSet(integrationSet);
 		List<IntegratedClusterMember> integratedClusterMembers = new ArrayList<> ();
 		for (Relationship relationship : cidNode
@@ -198,7 +202,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			
 			LOGGER.debug(String.format("%s Integrates %s", cidNode, eidNode));
 			
-			IntegratedMember integratedMember = nodeToIntegratedMember(eidNode);
+			IntegratedMember integratedMember = Neo4jMapper.nodeToIntegratedMember(eidNode);
 			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
 			integratedClusterMember.setMember(integratedMember);
 			integratedClusterMember.setCluster(integratedCluster);
@@ -212,6 +216,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
 			Long integrationSetId, Long... eids) {
+		
+		
 		
 		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
 		Set<Long> cidInDomain = Neo4jUtils.collectNodeRelationshipNodeIds(iidNode);
@@ -539,68 +545,6 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	public void saveCurationEdge(CurationEdge curationEdge) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	private IntegrationSet nodeToIntegrationSet(Node node) {
-		if (node == null || !node.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
-		
-		IntegrationSet integrationSet = new IntegrationSet();
-		integrationSet.setId(node.getId());
-		integrationSet.setDescription((String) node.getProperty("description"));
-		integrationSet.setName((String) node.getProperty("entry"));
-		return integrationSet;
-	}
-	
-	private IntegratedCluster nodeToIntegratedCluster(Node node) {
-		if (node == null) {
-			return null;
-		}
-//		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteCluster)) return null;
-		
-		IntegratedCluster integratedCluster = new IntegratedCluster();
-		String clusterType = node.getLabels().iterator().next().toString();
-		integratedCluster.setId(node.getId());
-		integratedCluster.setClusterType(clusterType);
-		integratedCluster.setDescription((String) node.getProperty("description", ""));
-		integratedCluster.setEntry((String) node.getProperty("entry"));
-		
-		for (Label label : node.getLabels()) {
-			try {
-				MetaboliteQualityLabel qLabel = MetaboliteQualityLabel.valueOf(label.toString());
-				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
-				integratedClusterMeta.setMetaType(qLabel.toString());
-				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
-			} catch (Exception e) {
-				LOGGER.trace("not metabolite label .. " + label);
-			}
-			
-			try {
-				ReactionQualityLabel qLabel = ReactionQualityLabel.valueOf(label.toString());
-				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
-				integratedClusterMeta.setMetaType(qLabel.toString());
-				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
-			} catch (Exception e) {
-				LOGGER.trace("not reaction label .. " + label);
-			}
-		}
-		
-		return integratedCluster;
-	}
-	
-	public static IntegratedMember nodeToIntegratedMember(Node node) {
-		if (node == null) {
-			return null;
-		}
-//		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteMember)) return null;
-		
-		IntegratedMember integratedMember = new IntegratedMember();
-		String memberType = node.getLabels().iterator().next().toString();
-		integratedMember.setId(node.getId());
-		integratedMember.setReferenceId((Long)node.getProperty("id", null));
-		integratedMember.setEntry((String) node.getProperty("entry", null));
-		integratedMember.setMemberType(memberType);
-		integratedMember.setDescription((String) node.getProperty("description", null));
-		return integratedMember;
 	}
 	
 	private Node getExecutionResultGetSingle(String column, ExecutionResult executionResult) {

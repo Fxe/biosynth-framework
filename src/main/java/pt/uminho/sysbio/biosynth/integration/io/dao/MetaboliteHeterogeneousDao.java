@@ -27,6 +27,13 @@ public interface MetaboliteHeterogeneousDao<M extends Metabolite> {
 	 */
 	public M getMetaboliteById(String tag, Serializable id);
 
+	/**
+	 * Looks up a metabolite entity by entry in the <code>tag</code> domain. 
+	 * 
+	 * @param tag the domain of the metabolite
+	 * @param entry the entry of the metabolite
+	 * @return the metabolite with entry <code>entry</code> if found
+	 */
 	public M getMetaboliteByEntry(String tag, String entry);
 
 	public M saveMetabolite(String tag, M metabolite);

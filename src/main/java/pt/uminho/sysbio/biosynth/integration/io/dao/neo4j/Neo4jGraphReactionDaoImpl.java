@@ -41,8 +41,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	@Override
 	public GraphReactionEntity getReactionById(String tag, Serializable id) {
-		
 		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
+		if (!node.hasLabel(GlobalLabel.Reaction)) return null;
 		
 		LOGGER.debug("Found " + node);
 		

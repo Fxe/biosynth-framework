@@ -74,6 +74,17 @@ public class Neo4jUtils {
 		return nodes;
 	}
 	
+	public static Set<Node> collectNodeRelationshipNodes(Node node, RelationshipType...relationshipTypes) {
+		Set<Node> nodes = new HashSet<> ();
+		
+		for (Relationship relationship : node.getRelationships(relationshipTypes)) {
+			Node other = relationship.getOtherNode(node);
+			nodes.add(other);
+		}
+		
+		return nodes;
+	}
+	
 	public static Set<Long> collectNodeRelationshipNodeIds(Node node) {
 		Set<Long> nodes = new HashSet<> ();
 		
@@ -87,6 +98,13 @@ public class Neo4jUtils {
 	
 	public static Set<Label> getLabels(Node node) {
 		return IteratorUtil.asSet(node.getLabels());
+	}
+	public static Set<String> getLabelsAsString(Node node) {
+		Set<String> labels = new HashSet<> ();
+		for (Label label : node.getLabels()) {
+			labels.add(label.toString());
+		}
+		return labels;
 	}
 
 	public static Map<String, Object> getPropertiesMap(Node node) {
