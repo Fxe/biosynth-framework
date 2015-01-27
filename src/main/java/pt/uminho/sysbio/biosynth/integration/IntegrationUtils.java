@@ -167,7 +167,7 @@ public class IntegrationUtils {
 			.build();
 	}
 
-	public static Set<Long> collectClusterMemberIds(
+	public static Set<Long> collectClusterMemberRerefenceEids(
 			IntegratedCluster integratedCluster) {
 		Set<Long> eids = new HashSet<> ();
 		

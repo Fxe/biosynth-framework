@@ -1,22 +1,18 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
-import java.util.Set;
-
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
-import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
-import pt.uminho.sysbio.biosynth.integration.curation.CurationOperation;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
-import pt.uminho.sysbio.biosynth.integration.curation.CurationRelationship;
+import pt.uminho.sysbio.biosynth.integration.curation.CurationOperation;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
+import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
 
@@ -24,42 +20,38 @@ public class Neo4jMapper {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jMapper.class);
 	
-	public static CurationOperation nodeToCurationCluster(Node node) {
-		if (node == null) return null;
-		LOGGER.debug(String.format("Mapping %s:%s to CurationCluster", node, Neo4jUtils.getLabels(node)));
+	public static CurationOperation nodeToCurationOperation(Node oidNode) {
+		if (oidNode == null) return null;
+		LOGGER.debug(String.format("Mapping %s:%s to CurationOperation", oidNode, Neo4jUtils.getLabels(oidNode)));
 		
-		if (!node.hasLabel(CurationLabel.CurationMetabolite)) {
-			LOGGER.warn(String.format("Invalid node. Expected %s got %s", 
-					CurationLabel.CurationMetabolite, Neo4jUtils.getLabels(node)));;
-		}
-		
-		CurationOperation curationCluster = new CurationOperation();
-		Set<Node> a = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.Curation);
-		if (a.isEmpty()) {
-			LOGGER.warn(String.format("Unable to load curation set for ") + node);
+		if (!oidNode.hasLabel(CurationLabel.CurationOperation)) {
+			LOGGER.error(String.format("Invalid node. Expected %s got %s", 
+					CurationLabel.CurationOperation, Neo4jUtils.getLabels(oidNode)));;
 			return null;
 		}
 		
-		CurationSet curationSet = null;
-		for (Node curationSetNode : a) {
-			if (curationSet != null) LOGGER.warn(":(:(:(:(:");
-			curationSet = nodeToCurationSet(curationSetNode);
+		CurationOperation curationOperation = new CurationOperation();
+		curationOperation.setId(oidNode.getId());
+		curationOperation.setEntry((String) oidNode.getProperty("entry"));
+		curationOperation.setCreatedAt((long) oidNode.getProperty("created_at"));
+		curationOperation.setClusterType((String) oidNode.getProperty("cluster_type"));
+		curationOperation.setOperationType((String) oidNode.getProperty("operation_type"));
+		
+		return curationOperation;
+	}
+	
+	public static CurationOperation nodeToCurationMetabolite(Node oidNode) {
+		if (oidNode == null) {
+			LOGGER.debug("Invalid curation set node: null");
+			return null;
+		}
+		LOGGER.debug(String.format("Mapping %s:%s to CurationMetabolite", oidNode, Neo4jUtils.getLabels(oidNode)));
+		if (!oidNode.hasLabel(CurationLabel.CurationMetabolite)) {
+			LOGGER.debug(String.format("Invalid curation metabolite node: ", Neo4jUtils.getLabels(oidNode)));
+			return null;
 		}
 		
-		curationCluster.setCurationSet(curationSet);
-		
-		Set<Node> cidIdSet = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.CurationOperation);
-		for (Node cidNode : cidIdSet) {
-			IntegratedCluster integratedCluster = Neo4jMapper.nodeToIntegratedCluster(cidNode);
-			for (Node eidNode : Neo4jUtils.collectNodeRelationshipNodes(cidNode, IntegrationRelationshipType.Integrates)) {
-				IntegratedMember integratedMember = Neo4jMapper.nodeToIntegratedMember(eidNode);
-				IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
-				integratedClusterMember.setCluster(integratedCluster);
-				integratedClusterMember.setMember(integratedMember);
-				integratedCluster.getMembers().add(integratedClusterMember);
-			}
-			curationCluster.getIntegratedClusters().add(integratedCluster);
-		}
+		CurationOperation curationCluster = nodeToCurationOperation(oidNode);
 		
 		return curationCluster;
 	}
@@ -147,7 +139,7 @@ public class Neo4jMapper {
 		if (node == null) return null;
 		LOGGER.debug(String.format("Mapping %s:%s to IntegratedMember", node, Neo4jUtils.getLabels(node)));
 //		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteMember)) return null;
-		
+		LOGGER.trace(String.format("Properties: ", Neo4jUtils.getPropertiesMap(node)));
 		IntegratedMember integratedMember = new IntegratedMember();
 		String memberType = node.getLabels().iterator().next().toString();
 		integratedMember.setId(node.getId());
@@ -158,21 +150,23 @@ public class Neo4jMapper {
 		return integratedMember;
 	}
 
-	public static CurationOperation nodeToCurationMetabolite(Node oidNode) {
-		if (oidNode == null) {
-			LOGGER.trace("Invalid curation set node: null");
+
+
+	public static CurationUser nodeToCurationUser(Node usrNode) {
+		if (usrNode == null) {
+			LOGGER.debug("Invalid curation user node: null");
 			return null;
 		}
-		LOGGER.debug(String.format("Mapping %s:%s to CurationMetabolite", oidNode, Neo4jUtils.getLabels(oidNode)));
-		if (!oidNode.hasLabel(CurationLabel.CurationMetabolite)) {
-			LOGGER.debug(String.format("Invalid curation set node: ", Neo4jUtils.getLabels(oidNode)));
+		LOGGER.debug(String.format("Mapping %s:%s to CurationUser", usrNode, Neo4jUtils.getLabels(usrNode)));
+		if (!usrNode.hasLabel(CurationLabel.CurationUser)) {
+			LOGGER.debug(String.format("Invalid curation user node: ", Neo4jUtils.getLabels(usrNode)));
 			return null;
 		}
 		
-		CurationOperation curationCluster = new CurationOperation();
-		curationCluster.setId(oidNode.getId());
-		curationCluster.setEntry((String)oidNode.getProperty("entry"));
+		CurationUser curationUser = new CurationUser();
+		curationUser.setId(usrNode.getId());
+		curationUser.setUsername((String) usrNode.getProperty("username"));
 		
-		return curationCluster;
+		return curationUser;
 	}
 }

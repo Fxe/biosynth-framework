@@ -1,8 +1,10 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -15,20 +17,21 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
+import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationOperation;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationRelationship;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
+import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
+import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationCurationDao;
 
-public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
+public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements IntegrationCurationDao {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationCurationDaoImpl.class);
 	
-	private GraphDatabaseService graphDatabaseService;
-	
 	public Neo4jIntegrationCurationDaoImpl(GraphDatabaseService graphDatabaseService) {
-		this.graphDatabaseService = graphDatabaseService;
+		super(graphDatabaseService);
 	}
 	
 	@Override
@@ -50,6 +53,42 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 		return generateMemberNode(referenceId, IntegrationNodeLabel.ReactionMember);
 	}
 	
+	public Node generateCurationSetNode(CurationSet curationSet) {
+		Map<String, Object> params = new HashMap<> ();
+		params.put("entry", curationSet.getEntry());
+		String cypherQuery = String.format("MERGE (xid:%s {entry:{entry}}) RETURN xid AS XID", CurationLabel.CurationSet);
+		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("XID", executionEngine.execute(cypherQuery, params));
+		
+		return node;
+	}
+	
+	public Node generateUserNode(CurationUser curationUser) {
+		Map<String, Object> params = new HashMap<> ();
+		params.put("username", curationUser.getUsername());
+		String cypherQuery = String.format("MERGE (usr:%s {username:{username}}) RETURN usr AS USER", CurationLabel.CurationUser);
+		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("USER", executionEngine.execute(cypherQuery, params));
+		
+		return node;
+	}
+	
+	private Node generateIntegratedCluster(IntegratedCluster integratedCluster) {
+		Map<String, Object> params = new HashMap<> ();
+		params.put("entry", integratedCluster.getEntry());
+		params.put("reference_cid", integratedCluster.getId());
+		params.put("description", integratedCluster.getDescription());
+		params.put("cluster_type", integratedCluster.getClusterType());
+		
+		String cypherQuery = String.format(
+				"MERGE (cid:%s {entry:{entry}, reference_cid:{reference_cid}, cluster_type:{cluster_type}, description:{description}}) RETURN cid AS CID", 
+				IntegrationNodeLabel.IntegratedCluster);
+		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("CID", executionEngine.execute(cypherQuery, params));
+		
+		return node;
+	}
+	
 	public Node generateMemberNode(long referenceId, IntegrationNodeLabel label) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(
@@ -66,6 +105,15 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 		return node;
 	}
 	
+
+	
+	private long saveIntegratedCluster(IntegratedCluster integratedCluster) {
+		Node node = generateIntegratedCluster(integratedCluster);
+		return node.getId();
+	}
+	
+
+
 	@Override
 	public Long saveCurationSet(CurationSet curationSet) {
 		
@@ -74,11 +122,7 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 			return null;
 		}
 		
-		Node node = graphDatabaseService.createNode();
-		node.setProperty("entry", curationSet.getEntry());
-		node.addLabel(CurationLabel.CurationSet);
-		
-		curationSet.setId(node.getId());
+		Node node = generateCurationSetNode(curationSet);
 		return node.getId();
 	}
 
@@ -149,16 +193,16 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 		
 	}
 	
-	public Long saveMetaboliteCurationCluster(CurationOperation curationCluster) {
-		CurationSet curationSet = curationCluster.getCurationSet();
+	public Long saveMetaboliteCurationCluster(CurationOperation curationOperation) {
+		CurationSet curationSet = curationOperation.getCurationSet();
 		
 		if (curationSet == null) {
 			LOGGER.warn("Invalid Curation Cluster: No curation set assigned.");
 			return null;
 		}
 		
-		if (curationCluster.getClusterRelationship() == null) {
-			if (curationCluster.getIntegratedClusters().size() < 2) {
+		if (curationOperation.getClusterRelationship() == null) {
+			if (curationOperation.getIntegratedClusters().size() < 2) {
 				LOGGER.warn("No relationship specified: ignored");
 			} else {
 				LOGGER.warn("No relationship specified: multiple clusters found");
@@ -166,87 +210,125 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 			}
 		}
 		
-		Long curaSetId = curationSet.getId();
-		if (curaSetId == null) {
-			curaSetId = this.saveCurationSet(curationSet);
-		}
+		//0: SAVE OID
+		Node oidNode = graphDatabaseService.createNode();
+		oidNode.addLabel(CurationLabel.CurationOperation);
+		oidNode.addLabel(CurationLabel.CurationMetabolite);
+		oidNode.setProperty("entry", curationOperation.getEntry());
+		oidNode.setProperty("created_at", System.currentTimeMillis());
+		oidNode.setProperty("operation_type", curationOperation.getOperationType());
+		oidNode.setProperty("cluster_type", curationOperation.getClusterType());
+		long oid = oidNode.getId();
+		curationOperation.setId(oid);
+		LOGGER.debug(String.format("Curation Operation oid %s", oidNode));
+		
+		//1: SAVE XID
+		long xid = this.saveCurationSet(curationSet);
+		Node xidNode = graphDatabaseService.getNodeById(xid);
+		LOGGER.debug(String.format("Curation Set xid %s", xidNode));
+		xidNode.createRelationshipTo(oidNode, CurationRelationship.HAS_CURATION_OPERATION);
+		LOGGER.debug(String.format("Linked %s -> %s", xidNode, oidNode));
+		
+		//2: SAVE USR
+		LOGGER.debug("Resolving User data");
+		long usr = this.saveCurationUser(curationOperation.getCurationUser());
+		Node usrNode = graphDatabaseService.getNodeById(usr);
+		LOGGER.debug(String.format("Curation User usr %s", usrNode));
+		usrNode.createRelationshipTo(oidNode, CurationRelationship.PERFORMED_CURATION_OPERATION);
+		LOGGER.debug(String.format("Linked %s -> %s", usrNode, oidNode));
+
 		Set<Node> eids = new HashSet<> ();
 		Set<Node> eidNodeSet = new HashSet<> ();
-		//scaffold members to curation
+		Map<Long, Long> referenceEidToNodeIdMap = new HashMap<> ();
+		//3: scaffold members to curation
 		for (IntegratedClusterMember integratedClusterMember 
-				: curationCluster.getMembers()) {
+				: curationOperation.getMembers()) {
 			
 			IntegratedMember integratedMember = integratedClusterMember.getMember();
 			Node eidNode = this.getOrCreateMetaboliteMemberNode(integratedMember.getReferenceId());
 			eidNodeSet.add(eidNode);
 			eids.add(eidNode);
-			LOGGER.debug(String.format("Link to member node %s:%s", eidNode, Neo4jUtils.getLabels(eidNode)));
+			LOGGER.debug(String.format("Scaffold Member Node %s:%s", eidNode, Neo4jUtils.getLabels(eidNode)));
+			referenceEidToNodeIdMap.put(integratedMember.getReferenceId(), eidNode.getId());
 		}
 		List<Node> cidArray = new ArrayList<> ();
 		
-		//check if [EID]->CC exists
-		Set<Node> nodes = this.findMatchingClusterByNodes(eids);
-		if (nodes.isEmpty()) {
-			LOGGER.debug("Create replicate proxy cluster");
-			Node cidNode = graphDatabaseService.createNode();
-			cidNode.addLabel(IntegrationNodeLabel.IntegratedCluster);
-			cidNode.addLabel(IntegrationNodeLabel.MetaboliteCluster);
-			cidNode.setProperty("entry", "aaaaaaaaaaa");
+		//check if [EID]->CC exists NOT NEEDED REPLICATE ALL CIDS FOR ROLLBACK OP
+//		Set<Node> nodes = this.findMatchingClusterByNodes(eids);
+		for (IntegratedCluster integratedCluster : 
+			curationOperation.getIntegratedClusters()) {
+			long cid = this.saveIntegratedCluster(integratedCluster);
+			Node cidNode = graphDatabaseService.getNodeById(cid); 
 			cidArray.add(cidNode);
-			for (Node eidNode : eidNodeSet) {
+			LOGGER.debug(String.format("Integrated Cluster cid %s", cidNode));
+			for (long referenceEid : IntegrationUtils.collectClusterMemberRerefenceEids(integratedCluster)) {
+				Node eidNode = graphDatabaseService.getNodeById(referenceEidToNodeIdMap.get(referenceEid));
 				cidNode.createRelationshipTo(eidNode, IntegrationRelationshipType.Integrates);
+				LOGGER.debug(String.format("Linked %s -> %s", cidNode, eidNode));
 			}
-		} else {
-			LOGGER.debug("Found existing match set: " + nodes);
 		}
+		
+//		if (nodes.isEmpty()) {
+//			LOGGER.debug("Create replicate proxy cluster");
+//			Node cidNode = graphDatabaseService.createNode();
+//			cidNode.addLabel(IntegrationNodeLabel.IntegratedCluster);
+//			cidNode.addLabel(IntegrationNodeLabel.MetaboliteCluster);
+//			cidNode.setProperty("entry", "aaaaaaaaaaa");
+//			cidNode.setProperty("reference_cid", value);
+//			cidArray.add(cidNode);
+//			for (Node eidNode : eidNodeSet) {
+//				cidNode.createRelationshipTo(eidNode, IntegrationRelationshipType.Integrates);
+//			}
+//		} else {
+//			LOGGER.debug("Found existing match set: " + nodes);
+//		}
 		
 		
 		//if cid array size > 1 must estabilish relationship between cids
+		
 		if (cidArray.size() > 1) {
+			LOGGER.debug("Resolving CID to CID relationship ... ");
 			CurationRelationship relationship = 
-					CurationRelationship.valueOf(curationCluster.getClusterRelationship());
+					CurationRelationship.valueOf(curationOperation.getClusterRelationship());
 			Node prev = cidArray.get(0);
 			for (int i = 1; i < cidArray.size(); i++) {
 				Node next = cidArray.get(i);
-				prev.createRelationshipTo(next, relationship);
+				Relationship cidToCid = prev.createRelationshipTo(next, relationship);
+				LOGGER.debug(String.format("Linked %s - [%s] -> %s", prev, cidToCid, next));
 				prev = next;
 			}
 		} else {
-			
+			LOGGER.debug("Resolving CID to CID relationship ... [SKIP]");
 		}
-		
-		Node curationNode = graphDatabaseService.createNode();
-		curationNode.addLabel(CurationLabel.CurationMetabolite);
-		curationNode.setProperty("entry", curationCluster.getEntry());
+
 		for (Node cidNode : cidArray) {
-			LOGGER.debug(String.format("Link %s -> %s", curationNode, cidNode));
-			Relationship relationship = curationNode.createRelationshipTo(
-					cidNode, CurationRelationship.CurationOperation);
-			relationship.setProperty("operation", "accept");
+			Relationship relationship = oidNode.createRelationshipTo(
+					cidNode, CurationRelationship.OPERATES_ON);
+			relationship.setProperty("operation", curationOperation.getOperationType());
+			LOGGER.debug(String.format("Link %s -> %s", oidNode, cidNode));
 		}
 		
-		
-		Node curationSetNode = graphDatabaseService.getNodeById(curaSetId);
-		curationSetNode.createRelationshipTo(curationNode, CurationRelationship.Curation);
-		
-		//if exists add user
-		//if not create CC and link and add user
-		//copy cluster
-		//link cluster
-		
-		curationCluster.setId(curationNode.getId());
-		
-		return curationNode.getId();
+		return oidNode.getId();
 	}
 
-	public CurationOperation assembleNode(Node oidNode) {
+
+
+	public CurationOperation assembleCurationOperationNode(Node oidNode) {
 		CurationOperation curationOperation = Neo4jMapper.nodeToCurationMetabolite(oidNode);
 		for (Node cidNode : Neo4jUtils
 				.collectNodeRelationshipNodes(
-						oidNode, CurationRelationship.CurationOperation)) {
+						oidNode, CurationRelationship.OPERATES_ON)) {
 			IntegratedCluster integratedCluster = Neo4jMapper.nodeToIntegratedCluster(cidNode);
 			curationOperation.getIntegratedClusters().add(integratedCluster);
 		}
+		
+		Node xidNode = Neo4jUtils.collectUniqueNodeRelationshipNodes(oidNode, CurationRelationship.HAS_CURATION_OPERATION);
+		CurationSet curationSet = Neo4jMapper.nodeToCurationSet(xidNode);
+		Node usrNode = Neo4jUtils.collectUniqueNodeRelationshipNodes(oidNode, CurationRelationship.PERFORMED_CURATION_OPERATION);
+		CurationUser curationUser = Neo4jMapper.nodeToCurationUser(usrNode);
+		
+		curationOperation.setCurationSet(curationSet);
+		curationOperation.setCurationUser(curationUser);
 		
 		return curationOperation;
 	}
@@ -254,7 +336,7 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 	@Override
 	public CurationOperation getCurationCluster(long oid) {
 		Node oidNode = graphDatabaseService.getNodeById(oid);
-		return assembleNode(oidNode);
+		return assembleCurationOperationNode(oidNode);
 	}
 
 	@Override
@@ -263,12 +345,12 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 				.findNodesByLabelAndProperty(
 						CurationLabel.CurationOperation, "entry", entry));
 		
-		return assembleNode(oidNode);
+		return assembleCurationOperationNode(oidNode);
 	}
 
 	@Override
 	public Set<CurationOperation> getCurationClustersByMembers(Set<Long> eidSet) {
-		Set<CurationOperation> curationClusters = new HashSet<> ();
+		Set<CurationOperation> curationOperations = new HashSet<> ();
 		
 		Set<Node> nodes = new HashSet<> ();
 		for (Long eid : eidSet) {
@@ -283,7 +365,7 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 					eidNode.getRelationships(IntegrationRelationshipType.Integrates)) {
 					Node cidNode = relationship.getOtherNode(eidNode);
 					LOGGER.debug(cidNode + " " + Neo4jUtils.getLabels(cidNode));
-					Set<Node> curationNodes = Neo4jUtils.collectNodeRelationshipNodes(cidNode, CurationRelationship.CurationOperation);
+					Set<Node> curationNodes = Neo4jUtils.collectNodeRelationshipNodes(cidNode, CurationRelationship.OPERATES_ON);
 					LOGGER.debug(curationNodes.toString());
 					
 					nodes.addAll(curationNodes);
@@ -291,12 +373,12 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 			}
 		}
 		
-		for (Node xidNode : nodes) {
-			CurationOperation curationCluster = Neo4jMapper.nodeToCurationCluster(xidNode);
-			curationClusters.add(curationCluster);
+		for (Node oidNode : nodes) {
+			CurationOperation curationOperation = this.assembleCurationOperationNode(oidNode);
+			curationOperations.add(curationOperation);
 		}
 		
-		return curationClusters;
+		return curationOperations;
 	}
 
 	@Override
@@ -304,13 +386,35 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 		Set<Long> ids = new HashSet<> ();
 		Node xidNode = graphDatabaseService.getNodeById(xid);
 		for (Relationship relationship : 
-			xidNode.getRelationships(CurationRelationship.Curation)) {
+			xidNode.getRelationships(CurationRelationship.HAS_CURATION_OPERATION)) {
 			
 			Node oidNode = relationship.getOtherNode(xidNode);
 			LOGGER.debug(String.format("Found %s:%s", oidNode, Neo4jUtils.getLabels(oidNode)));
 			ids.add(oidNode.getId());
 		}
 		return ids;
+	}
+
+	@Override
+	public CurationUser getCurationUserById(long id) {
+		Node node = graphDatabaseService.getNodeById(id);
+		CurationUser curationUser = Neo4jMapper.nodeToCurationUser(node);
+		return curationUser;
+	}
+
+	@Override
+	public CurationUser getCurationUserByUsername(String username) {
+		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
+				.findNodesByLabelAndProperty(CurationLabel.CurationUser, "username", username));
+		CurationUser curationUser = Neo4jMapper.nodeToCurationUser(node);
+		return curationUser;
+	}
+
+	@Override
+	public Long saveCurationUser(CurationUser curationUser) {
+		Node node = this.generateUserNode(curationUser);
+		curationUser.setId(node.getId());
+		return node.getId();
 	}
 
 

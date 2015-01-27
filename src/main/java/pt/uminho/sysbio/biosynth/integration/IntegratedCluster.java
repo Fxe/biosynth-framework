@@ -48,6 +48,7 @@ public class IntegratedCluster {
 	private String clusterType = null;
 	public String getClusterType() { return clusterType;}
 	public void setClusterType(String clusterType) { this.clusterType = clusterType;}
+	public void setClusterType(Object clusterType) { this.clusterType = clusterType.toString();}
 
 	@JsonIgnore
 	@ManyToOne

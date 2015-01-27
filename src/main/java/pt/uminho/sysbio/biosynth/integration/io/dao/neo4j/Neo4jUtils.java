@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -270,5 +271,25 @@ public class Neo4jUtils {
 		}
 		
 		return node;
+	}
+	
+	public static Node getExecutionResultGetSingle(String column, ExecutionResult executionResult) {
+		if (executionResult == null) return null;
+		
+		Node node = null;
+		for (Object object : IteratorUtil.asList(executionResult.columnAs(column))) {
+			if (node != null) LOGGER.warn("Integrity failure. Not unique result.");
+			node = (Node) object;
+		}
+		return node;
+	}
+
+	public static Node collectUniqueNodeRelationshipNodes(Node node, RelationshipType...relationshipTypes) {
+		Set<Node> nodes = collectNodeRelationshipNodes(node, relationshipTypes);
+		if (nodes.isEmpty()) return null;
+		
+		if (nodes.size() > 1) LOGGER.warn(String.format("Relationships not unique for %s", node));
+		
+		return nodes.iterator().next();
 	}
 }

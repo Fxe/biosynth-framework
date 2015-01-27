@@ -43,7 +43,7 @@ public class Neo4jIntegrationEngine {
 		for (Long cid : cidSet) {
 			IntegratedCluster integratedCluster = metadataDao.getIntegratedClusterById(cid);
 			Long id = integratedCluster.getId();
-			Set<Long> eids = IntegrationUtils.collectClusterMemberIds(integratedCluster);
+			Set<Long> eids = IntegrationUtils.collectClusterMemberRerefenceEids(integratedCluster);
 			
 			clusterMemberMap.put(id, eids);
 		}

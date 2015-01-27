@@ -78,7 +78,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		params.put("description", nullToString(integrationSet.getDescription()));
 
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
-		Node node = this.getExecutionResultGetSingle("IID", this.executionEngine.execute(cypher, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("IID", this.executionEngine.execute(cypher, params));
 		LOGGER.trace("IID: " + node.toString());
 		
 		integrationSet.setId(node.getId());
@@ -112,7 +112,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", entry);
 		ExecutionResult executionResult = this.executionEngine.execute(cypher, params);
-		Node integrationSetNode = getExecutionResultGetSingle("IID", executionResult);
+		Node integrationSetNode = Neo4jUtils.getExecutionResultGetSingle("IID", executionResult);
 		
 		if (integrationSetNode == null 
 				|| !integrationSetNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
@@ -393,7 +393,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		params.put("cluster_type", nullToString(cluster.getClusterType()));
 		
 		LOGGER.debug(String.format("Execute:%s with %s", cypher, params)); 
-		Node clusterNode = getExecutionResultGetSingle("CID", this.executionEngine.execute(cypher, params));
+		Node clusterNode = Neo4jUtils.getExecutionResultGetSingle("CID", this.executionEngine.execute(cypher, params));
 		
 		for (Relationship relationship : clusterNode.getRelationships()) {
 			System.out.println(relationship.getId());
@@ -475,9 +475,9 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	}
 
 	@Override
-	public IntegratedMember getIntegratedMember(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public IntegratedMember getIntegratedMember(Long eid) {
+		Node eidNode = graphDatabaseService.getNodeById(eid);
+		return Neo4jMapper.nodeToIntegratedMember(eidNode);
 	}
 
 	@Override
@@ -499,7 +499,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			params.put("member_type", nullToString(member.getMemberType()));
 			
 			LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
-			Node node = getExecutionResultGetSingle("EID", this.executionEngine.execute(cypher, params));
+			Node node = Neo4jUtils.getExecutionResultGetSingle("EID", this.executionEngine.execute(cypher, params));
 			member.setId(node.getId());
 		
 		} catch (Exception e) {
@@ -547,16 +547,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 	}
 	
-	private Node getExecutionResultGetSingle(String column, ExecutionResult executionResult) {
-		if (executionResult == null) return null;
-		
-		Node node = null;
-		for (Object object : IteratorUtil.asList(executionResult.columnAs(column))) {
-			if (node != null) LOGGER.warn("Integrity failure. Not unique result.");
-			node = (Node) object;
-		}
-		return node;
-	}
+
 	
 	private Object nullToString(Object object) {
 		if (object == null) return "null";
@@ -688,7 +679,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			Map<String, Object> params = new HashMap<> ();
 			params.put("type", type);
 			
-			Node metaNode = this.getExecutionResultGetSingle("metaEntity", this.executionEngine.execute(cypherQuery, params));
+			Node metaNode = Neo4jUtils.getExecutionResultGetSingle("metaEntity", this.executionEngine.execute(cypherQuery, params));
 			
 			Relationship relationship = node.createRelationshipTo(metaNode, null);
 			relationship.setProperty("message", message);

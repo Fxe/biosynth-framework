@@ -7,5 +7,6 @@ public enum CurationLabel implements Label{
 	CurationMetabolite,
 	CurationReaction,
 	CurationProperty,
-	CurationOperation
+	CurationOperation,
+	CurationUser,
 }

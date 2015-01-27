@@ -58,6 +58,14 @@ public class CurationOperation {
 	public void setCurationSet(CurationSet curationSet) {
 		this.curationSet = curationSet;
 	}
+	
+	private long createdAt;
+	public long getCreatedAt() { return createdAt;}
+	public void setCreatedAt(long createdAt) { this.createdAt = createdAt;}
+
+	private CurationUser curationUser;
+	public CurationUser getCurationUser() { return curationUser; }
+	public void setCurationUser(CurationUser curationUser) { this.curationUser = curationUser;}
 
 	private String clusterRelationship;
 	public String getClusterRelationship() { return clusterRelationship;}

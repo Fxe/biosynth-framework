@@ -4,6 +4,9 @@ import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
+import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
+
 public class HelperNeo4jConfigInitializer {
 
 	private static final String[] NEO_DATA_CONSTRAINTS = {
@@ -40,23 +43,22 @@ public class HelperNeo4jConfigInitializer {
 		
 		"CREATE CONSTRAINT ON (rxn:LigandReaction) ASSERT rxn.entry IS UNIQUE",
 		
-		"CREATE CONSTRAINT ON (iid:IntegrationSet) ASSERT iid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:MetaboliteMember) ASSERT cid.id IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:ReactionCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:ReactionMember) ASSERT cid.id IS UNIQUE",
 	};
 	
 	private static final String[] NEO_META_CONSTRAINTS = {
-		"CREATE CONSTRAINT ON (iid:IntegrationSet) ASSERT iid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:MetaboliteMember) ASSERT cid.id IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:ReactionCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid:ReactionMember) ASSERT cid.id IS UNIQUE",
+		"CREATE CONSTRAINT ON (iid : IntegrationSet) ASSERT iid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid : MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid : MetaboliteMember) ASSERT cid.id IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid : ReactionCluster) ASSERT cid.entry IS UNIQUE",
+		"CREATE CONSTRAINT ON (cid : ReactionMember) ASSERT cid.id IS UNIQUE",
 	};
 	
 	private static final String[] NEO_CURA_CONSTRAINTS = {
-		"CREATE CONSTRAINT ON (iid:CurationSet) ASSERT iid.entry IS UNIQUE",
+		String.format("CREATE CONSTRAINT ON (xid : %s) ASSERT xid.entry IS UNIQUE", CurationLabel.CurationSet),
+		String.format("CREATE CONSTRAINT ON (oid : %s) ASSERT oid.entry IS UNIQUE", CurationLabel.CurationOperation),
+		String.format("CREATE CONSTRAINT ON (usr : %s) ASSERT usr.username IS UNIQUE", CurationLabel.CurationUser),
+		String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
+		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.referenceId IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
 	};
 	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {
