@@ -97,7 +97,7 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 	}
 
 	@Override
-	public Long saveCurationCluster(CurationOperation curationCluster) {
+	public Long saveCurationOperation(CurationOperation curationCluster) {
 		if (curationCluster.getClusterType() == null
 				|| curationCluster.getOperationType() == null) {
 			LOGGER.warn("Missing type definition");
@@ -252,13 +252,13 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 	}
 	
 	@Override
-	public CurationOperation getCurationCluster(long oid) {
+	public CurationOperation getCurationOperationById(long oid) {
 		Node oidNode = graphDatabaseService.getNodeById(oid);
 		return assembleNode(oidNode);
 	}
 
 	@Override
-	public CurationOperation getCurationCluster(String entry) {
+	public CurationOperation getCurationOperationByEntry(String entry) {
 		Node oidNode = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(
 						CurationLabel.CurationOperation, "entry", entry));
@@ -267,7 +267,7 @@ public class Neo4jIntegrationCurationDaoImpl implements IntegrationCurationDao {
 	}
 
 	@Override
-	public Set<CurationOperation> getCurationClustersByMembers(Set<Long> eidSet) {
+	public Set<CurationOperation> getCurationOperationByMembers(Set<Long> eidSet) {
 		Set<CurationOperation> curationClusters = new HashSet<> ();
 		
 		Set<Node> nodes = new HashSet<> ();

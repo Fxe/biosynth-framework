@@ -11,9 +11,9 @@ public interface IntegrationCurationDao {
 	public CurationSet getCurationSet(String entry);
 	public Set<Long> getAllCurationSetIds();
 	
-	public Long saveCurationCluster(CurationOperation curationCluster);
-	public CurationOperation getCurationCluster(long oid);
-	public CurationOperation getCurationCluster(String entry);
-	public Set<CurationOperation> getCurationClustersByMembers(Set<Long> eidSet);
+	public Long saveCurationOperation(CurationOperation curationOperation);
+	public CurationOperation getCurationOperationById(long oid);
+	public CurationOperation getCurationOperationByEntry(String entry);
+	public Set<CurationOperation> getCurationOperationByMembers(Set<Long> eidSet);
 	public Set<Long> getAllCurationOperationIds(long xid);
 }
