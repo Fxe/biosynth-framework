@@ -23,14 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
-import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
+import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
 
 /**
  * 
  * @author Filipe
  *
  */
-public class CdkWrapper implements FormulaConverter {
+public class CdkWrapper implements FormulaReader {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CdkWrapper.class);
 
@@ -173,6 +173,6 @@ public class CdkWrapper implements FormulaConverter {
 	
 	
 	public static void main(String[] args) {
-		System.out.println(new CdkWrapper().getAtomCountMap("CH5O9Mg5.NaCl.Ti(FeHe3)4"));
+		System.out.println(new CdkWrapper().getAtomCountMap("HeHeHeHeCH5O9Mg5.NaCl.Ti(FeHe3)4"));
 	}
 }

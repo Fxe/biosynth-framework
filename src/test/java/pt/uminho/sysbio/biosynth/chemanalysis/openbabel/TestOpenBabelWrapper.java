@@ -54,6 +54,13 @@ public class TestOpenBabelWrapper {
 	}
 	
 	@Test
+	public void testConvertSmilesToSvg() {
+		String out = OpenBabelWrapper.convert("dfd", "smi", "svg");
+		System.out.println(out);
+//		assertEquals("InChI=1S/C4H4Cl2O2/c5-3(7)1-2-4(6)8/h1-2H2", OpenBabelWrapper.convertSmilesToInchi("C(Cl)(=O)CCC(=O)Cl"));
+	}
+	
+	@Test
 	public void testConvertMol2dToInchi() throws IOException {
 		String molFile = BioSynthUtilsIO.readFromFile("D:/home/data/kegg/cpd/C00001.mol");
 		assertEquals("InChI=1S/H2O/h1H2", OpenBabelWrapper.convert(molFile, "mol", "inchi"));

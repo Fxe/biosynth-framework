@@ -2,14 +2,21 @@ package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
 
 import org.openbabel.OBConversion;
 import org.openbabel.OBMol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenBabelWrapper {
+	
+	public static final Logger LOGGER = LoggerFactory.getLogger(OpenBabelWrapper.class);
 	
 //	public static boolean INITIALIZED = false;
 	
 	public static void initializeLibrary() {
+		LOGGER.info("Loading library");
+//		System.setProperty("java.library.path", System.getProperty("java.library.path").concat(";D:\\home\\workspace\\java\\biosynth-chemanalysis\\lib"));
 //		System.out.println(System.getProperty("java.library.path"));
 		System.loadLibrary("openbabel_java");
+//		System.load("D:\\home\\workspace\\java\\biosynth-chemanalysis\\lib\\openbabel_java.dll");
 //		INITIALIZED = true;
 	}
 	
