@@ -42,6 +42,56 @@ public class ChebiDumpMetaboliteCommentEntity {
 	@Column(name="datatype_id", nullable=false)
 	private Integer dataTypeId;
 	
+	
+	
+	public Integer getId() {
+		return id;
+	}
+
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+
+	public String getText() {
+		return text;
+	}
+
+
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+
+
+	public String getDataType() {
+		return dataType;
+	}
+
+
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
+
+
+
+	public Integer getDataTypeId() {
+		return dataTypeId;
+	}
+
+
+
+	public void setDataTypeId(Integer dataTypeId) {
+		this.dataTypeId = dataTypeId;
+	}
+
+
+
 	@Override
 	public String toString() {
 		final char sep = ',';

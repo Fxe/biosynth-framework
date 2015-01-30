@@ -15,7 +15,7 @@ public class ChebiMetaboliteNameEntity {
 	@Id
 	@GeneratedValue
 	@Column(name="id", nullable=false)
-	private Integer id;
+	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="metabolite_id")
@@ -38,72 +38,29 @@ public class ChebiMetaboliteNameEntity {
 	
 	
 	
-	public Integer getId() {
-		return id;
-	}
+	public Long getId() { return id;}
+	public void setId(Long id) { this.id = id; }
 
+	public String getName() { return name;}
+	public void setName(String name) { this.name = name; }
 
+	public String getType() { return type;}
+	public void setType(String type) { this.type = type;}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-
-
-	public String getName() {
-		return name;
-	}
-
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-
-	public String getType() {
-		return type;
-	}
-
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-
-
-	public String getSource() {
-		return source;
-	}
-
-
-
-	public void setSource(String source) {
-		this.source = source;
-	}
+	public String getSource() { return source;}
+	public void setSource(String source) { this.source = source;}
 
 
 
 	public String getAdapted() {
 		return adapted;
 	}
-
-
-
 	public void setAdapted(String adapted) {
 		this.adapted = adapted;
 	}
 
 
-
-	public String getLanguage() {
-		return language;
-	}
-
-
-
+	public String getLanguage() { return language;}
 	public void setLanguage(String language) {
 		this.language = language;
 	}
@@ -113,9 +70,6 @@ public class ChebiMetaboliteNameEntity {
 	public ChebiMetaboliteEntity getChebiMetaboliteEntity() {
 		return chebiMetaboliteEntity;
 	}
-
-
-
 	public void setChebiMetaboliteEntity(ChebiMetaboliteEntity chebiMetaboliteEntity) {
 		this.chebiMetaboliteEntity = chebiMetaboliteEntity;
 	}

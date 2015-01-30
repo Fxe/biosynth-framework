@@ -18,11 +18,13 @@ import org.springframework.stereotype.Repository;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteChemicalDataEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteCommentEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteDatabaseAccession;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteNameEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteStructuresEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteComment;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteNameEntity;
@@ -40,7 +42,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 	private static final Set<String> validDbEntries = new HashSet<> (Arrays.asList(new String[]{
 			"kegg compound accession", "cas registry number", "lipid maps instance accession", 
 			"kegg drug accession", "kegg glycan accession", "metacyc accession", "hmdb accession",
-			"pubchem accession", "chemspider accession", "drugbank accession"}));
+			"pubchem accession", "chemspider accession", "drugbank accession", "ymdb accession", "wikipedia accession",
+			"knapsack accession"}));
 	
 	public SessionFactory getSessionFactory() { return sessionFactory; }
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
@@ -81,6 +84,14 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			resName.setAdapted(name.getAdapted());
 			resName.setChebiMetaboliteEntity(res);
 			res.getNames().add(resName);
+		}
+		
+		for (ChebiDumpMetaboliteCommentEntity comment : cpd.getComments()) {
+			ChebiMetaboliteComment comment_ = new ChebiMetaboliteComment();
+			comment_.setComment(comment.getText());
+			comment_.setDataType(comment.getDataType());
+			comment_.setChebiMetaboliteEntity(res);
+			res.getComments().add(comment_);
 		}
 		
 		for (ChebiDumpMetaboliteChemicalDataEntity chemData: cpd.getChemicalData()) {
@@ -188,9 +199,12 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			case "citexplore citation":
 				type = GenericCrossReference.Type.CITATION;
 				break;
-//			case "patent":
-//				type = GenericCrossReference.Type.PATENT;
-//				break;
+			case "patent":
+				type = GenericCrossReference.Type.PATENT;
+				break;
+			case "patent accession":
+				type = GenericCrossReference.Type.PATENT;
+				break;
 			case "pubchem":
 				type = GenericCrossReference.Type.DATABASE;
 				break;
@@ -204,6 +218,7 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 				type = GenericCrossReference.Type.ECNUMBER;
 				break;
 			default:
+				LOGGER.warn("Unknown type: " + db);
 				type = GenericCrossReference.Type.UNKNOWN;
 				break;
 		}

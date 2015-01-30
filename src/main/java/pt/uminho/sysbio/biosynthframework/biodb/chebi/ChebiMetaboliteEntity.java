@@ -68,21 +68,34 @@ public class ChebiMetaboliteEntity extends GenericMetabolite {
 	
 	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<ChebiMetaboliteNameEntity> names = new ArrayList<> ();
-	public List<ChebiMetaboliteCrossreferenceEntity> getCrossreferences() { return crossreferences;}
-	public void setCrossreferences(
-			List<ChebiMetaboliteCrossreferenceEntity> crossreferences) { this.crossreferences = crossreferences;}
-	
-	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
-	private List<ChebiMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
-	
-
-	
 	public List<ChebiMetaboliteNameEntity> getNames() {
 		return names;
 	}
 	public void setNames(List<ChebiMetaboliteNameEntity> names) {
 		this.names = names;
 	}
+	
+	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
+	private List<ChebiMetaboliteComment> comments = new ArrayList<> ();
+	public List<ChebiMetaboliteComment> getComments() { return comments;}
+	public void setComments(List<ChebiMetaboliteComment> comments) {
+		for (ChebiMetaboliteComment comment : comments) {
+			comment.setChebiMetaboliteEntity(this);
+		}
+		this.comments = comments;
+	}
+
+	@OneToMany(mappedBy = "chebiMetaboliteEntity", cascade = CascadeType.ALL)
+	private List<ChebiMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
+	public List<ChebiMetaboliteCrossreferenceEntity> getCrossreferences() { return crossreferences;}
+	public void setCrossreferences(
+			List<ChebiMetaboliteCrossreferenceEntity> crossreferences) { this.crossreferences = crossreferences;}
+	
+
+	
+
+	
+
 	
 	
 
