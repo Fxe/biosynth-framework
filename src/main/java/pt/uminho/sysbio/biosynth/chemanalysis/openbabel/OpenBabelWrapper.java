@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 
 public class OpenBabelWrapper {
 	
-	public static final Logger LOGGER = LoggerFactory.getLogger(OpenBabelWrapper.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenBabelWrapper.class);
+
 //	public static boolean INITIALIZED = false;
 	
 	public static void initializeLibrary() {
