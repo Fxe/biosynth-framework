@@ -83,7 +83,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
 			cpd.setMetabolism(parser.getMetabolism());
 			cpd.setRemark(parser.getRemark());
 			cpd.setComment(parser.getComment());
-			if (drMolFile != null && !drMolFile.isEmpty()) {
+			if (drMolFile != null && !drMolFile.isEmpty() && !drMolFile.startsWith("null")) {
 				cpd.setMol2d(drMolFile);
 			}
 			cpd.setCrossReferences(parser.getCrossReferences());
