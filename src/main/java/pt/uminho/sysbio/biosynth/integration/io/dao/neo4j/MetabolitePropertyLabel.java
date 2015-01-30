@@ -4,5 +4,6 @@ import org.neo4j.graphdb.Label;
 
 public enum MetabolitePropertyLabel implements Label {
 	MolecularFormula, Name, SMILES, Charge, CanSMILES, IsotopeFormula,
+	MDLMolFile, MDLSdFile, ChemicalMarkupLanguage,
 	InChI, FIKHB, SIKHB
 }

@@ -121,7 +121,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Grap
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());
 			if ( !xrefNode.hasProperty("proxy")) xrefNode.setProperty("proxy", true);
 			
-			RelationshipType relationshipType = MetaboliteRelationshipType.HasCrossreferenceTo;
+			RelationshipType relationshipType = MetaboliteRelationshipType.has_crossreference_to;
 			Relationship relationship = node.createRelationshipTo(xrefNode, relationshipType);
 			this.updateRelationship(relationship, xref.getProperties());
 		}

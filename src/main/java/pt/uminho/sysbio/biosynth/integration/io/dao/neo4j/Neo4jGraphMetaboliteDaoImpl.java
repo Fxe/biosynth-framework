@@ -31,7 +31,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	protected static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
 	protected static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
-			MetaboliteRelationshipType.HasCrossreferenceTo;
+			MetaboliteRelationshipType.has_crossreference_to;
 	
 	@Autowired
 	public Neo4jGraphMetaboliteDaoImpl(GraphDatabaseService graphDatabaseService) {

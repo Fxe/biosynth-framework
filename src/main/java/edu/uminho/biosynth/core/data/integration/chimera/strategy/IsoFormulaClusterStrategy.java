@@ -61,7 +61,7 @@ public class IsoFormulaClusterStrategy implements ClusteringStrategy {
 		for (Long isoNodeId: isomorphicProperties) {
 			Node isoNode = db.getNodeById(isoNodeId);
 			
-			for (Relationship r: isoNode.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
+			for (Relationship r: isoNode.getRelationships(MetaboliteRelationshipType.has_molecular_formula)) {
 				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {
 					nodes.add(r.getStartNode().getId());
 				} else if (r.getEndNode().hasLabel(CompoundNodeLabel.Compound)) {

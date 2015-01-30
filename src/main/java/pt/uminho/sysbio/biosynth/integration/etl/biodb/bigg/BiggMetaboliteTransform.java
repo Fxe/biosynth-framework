@@ -26,6 +26,7 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 						entity.getCharge(), 
 						METABOLITE_CHARGE_LABEL, 
 						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
+		
 	}
 	
 	@Override
@@ -33,40 +34,5 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 		super.configureProperties(centralMetaboliteEntity, metabolite);
 		centralMetaboliteEntity.getProperties().put("id", metabolite.getId());
 	};
-
-//	@Override
-//	protected void configureCrossreferences(
-//			GraphMetaboliteEntity centralMetaboliteEntity,
-//			BiggMetaboliteEntity entity) {
-//		
-//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-//		
-//		for (BiggMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
-//			switch (xref.getType()) {
-//				case DATABASE:
-//					String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-//					String dbEntry = xref.getValue(); //Also need to translate if necessary
-//					GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-//					proxy.setEntry(dbEntry);
-//					proxy.setMajorLabel(dbLabel);
-//					proxy.addLabel(METABOLITE_LABEL);
-//					crossreferences.add(proxy);
-//					break;
-//				case MODEL:
-//					centralMetaboliteEntity.addPropertyEntity(
-//							this.buildPropertyLinkPair(
-//									"key", 
-//									xref.getValue(), 
-//									MODEL_LABEL, 
-//									"FoundIn"));
-//					break;
-//				default:
-//					break;
-//			}
-//
-//		}
-//		
-//		centralMetaboliteEntity.setCrossreferences(crossreferences);
-//	}
 
 }

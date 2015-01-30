@@ -35,7 +35,7 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 	public void setDb(GraphDatabaseService db) { this.db = db;}
 	
 //	private RelationshipType relationshipType = CompoundRelationshipType.HasCrossreferenceTo;
-	private static final RelationshipType relationshipType = MetaboliteRelationshipType.HasCrossreferenceTo;
+	private static final RelationshipType relationshipType = MetaboliteRelationshipType.has_crossreference_to;
 	
 	@Override
 	public Set<Long> execute() {

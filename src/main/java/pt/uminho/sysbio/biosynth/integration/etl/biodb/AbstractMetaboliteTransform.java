@@ -38,20 +38,23 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	protected static final String METABOLITE_FORMULA_LABEL = MetabolitePropertyLabel.MolecularFormula.toString();
 	protected static final String METABOLITE_NAME_LABEL = MetabolitePropertyLabel.Name.toString();
 	protected static final String METABOLITE_SMILE_LABEL = MetabolitePropertyLabel.SMILES.toString();
+	protected static final String METABOLITE_MOL_FILE_LABEL = MetabolitePropertyLabel.MDLMolFile.toString();
 	protected static final String METABOLITE_INCHI_LABEL = MetabolitePropertyLabel.InChI.toString();
 	protected static final String METABOLITE_CHARGE_LABEL = MetabolitePropertyLabel.Charge.toString();
 	
-	protected static final String METABOLITE_FORMULA_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasMolecularFormula.toString();
-	protected static final String METABOLITE_NAME_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasName.toString();
-	protected static final String METABOLITE_SMILE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasSMILES.toString();
-	protected static final String METABOLITE_INCHI_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasInChI.toString();
-	protected static final String METABOLITE_CHARGE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCharge.toString();
+	protected static final String METABOLITE_FORMULA_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_molecular_formula.toString();
+	protected static final String METABOLITE_NAME_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_name.toString();
+	protected static final String METABOLITE_SMILE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_smiles.toString();
+	protected static final String METABOLITE_MOL_FILE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_mdl_mol_file.toString();
+	protected static final String METABOLITE_INCHI_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_inchi.toString();
+	protected static final String METABOLITE_CHARGE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_charge.toString();
 	
-	protected static final String METABOLITE_INSTANCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.InstanceOf.toString();
+	protected static final String METABOLITE_INSTANCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.instance_of.toString();
 	
-	protected static final String METABOLITE_MODEL_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCharge.toString();
+	protected static final String METABOLITE_COMPARMENT_RELATIONSHIP_TYPE = MetaboliteRelationshipType.found_in.toString();
+	protected static final String METABOLITE_MODEL_RELATIONSHIP_TYPE = MetaboliteRelationshipType.included_in.toString();
 	
-	protected static final String METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.HasCrossreferenceTo.toString();
+	protected static final String METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_crossreference_to.toString();
 	
 	private final String majorLabel;
 	
