@@ -2,9 +2,12 @@ package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
 
 import org.openbabel.OBConversion;
 import org.openbabel.OBMol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenBabelWrapper {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenBabelWrapper.class);
 //	public static boolean INITIALIZED = false;
 	
 	public static void initializeLibrary() {

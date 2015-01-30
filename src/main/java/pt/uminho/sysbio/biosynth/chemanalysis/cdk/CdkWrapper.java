@@ -23,14 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
-import pt.uminho.sysbio.biosynthframework.util.FormulaConverter;
+import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
 
 /**
  * 
  * @author Filipe
  *
  */
-public class CdkWrapper implements FormulaConverter {
+public class CdkWrapper implements FormulaReader {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CdkWrapper.class);
 
