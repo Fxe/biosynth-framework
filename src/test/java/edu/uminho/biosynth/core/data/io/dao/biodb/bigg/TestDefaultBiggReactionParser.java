@@ -1,10 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.bigg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -84,6 +81,7 @@ public class TestDefaultBiggReactionParser {
 	@Test
 	public void testParseReactionEmpty() {
 		new DefaultBiggReactionParserImpl().parseReaction("");
+		assertEquals("", "");
 	}
 
 }

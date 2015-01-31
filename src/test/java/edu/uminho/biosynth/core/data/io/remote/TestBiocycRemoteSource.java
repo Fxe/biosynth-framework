@@ -9,6 +9,7 @@ import org.junit.Test;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.remote.BioCycRemoteSource;
 
+@SuppressWarnings("deprecation")
 public class TestBiocycRemoteSource {
 
 	private static BioCycRemoteSource remote;

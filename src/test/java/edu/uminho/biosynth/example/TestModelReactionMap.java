@@ -26,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 
+@SuppressWarnings({ "unused", "deprecation" })
 public class TestModelReactionMap {
 	
 	private static SessionFactory sessionFactory;

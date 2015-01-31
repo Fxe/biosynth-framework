@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class EquationParser {
 	public static boolean VERBOSE = false;
 	

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.source.ModelSeedSource;
 
+@SuppressWarnings({ "unused", "deprecation" })
 public class TestModelSeedSource {
 
 	@Test

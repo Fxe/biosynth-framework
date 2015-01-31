@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.seed;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,6 +36,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@SuppressWarnings("deprecation")
 public class TestParseCsvSeedMetabolite {
 
 	private static SessionFactory sessionFactory;

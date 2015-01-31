@@ -1,8 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.seed;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -39,6 +37,7 @@ public class TestJsonSeedReactionDaoImpl {
 		a.defaultNameSpace();
 		a.publics();
 		a.uuid();
+		assertEquals("", "");
 	}
 
 }

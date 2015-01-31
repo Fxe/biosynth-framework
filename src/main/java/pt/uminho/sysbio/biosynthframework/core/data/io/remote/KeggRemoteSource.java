@@ -56,6 +56,7 @@ public class KeggRemoteSource implements IRemoteSource {
 		return entryFlatFile;
 	}
 	
+	@SuppressWarnings("null")
 	@Override
 	public Set<String> getAllReactionIds() {
 		Set<String> rxnIds = new HashSet<String>(); 
@@ -73,6 +74,7 @@ public class KeggRemoteSource implements IRemoteSource {
 		}
 		return rxnIds;
 	}
+	@SuppressWarnings("null")
 	public Set<String> getAllCompoundIds(boolean includeGlycans) {
 		Set<String> cpdIDs = new HashSet<String>();
 		String flat_string = null;
@@ -122,6 +124,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		return getAllCompoundIds( true);
 	}
 	
+	@SuppressWarnings("null")
 	@Override
 	public Set<String> getAllEnzymeIds() {
 		Set<String> ecnIdSet = new HashSet<String>(); 
@@ -141,6 +144,7 @@ if (VERBOSE) System.out.println( "#GLY:" + compound_array.length);
 		
 		return ecnIdSet;
 	}
+	@SuppressWarnings("null")
 	@Override
 	public Set<String> getAllReactionPairIds() {
 		Set<String> rprIdSet = new HashSet<String>();

@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 
+@SuppressWarnings("deprecation")
 public class TestKeggDao {
 
 	private static SessionFactory sessionFactory;

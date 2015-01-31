@@ -147,21 +147,21 @@ public class CsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
 		return mnxReactions;
 	}
 	
-	private String seekFileLine(File file, int pos) throws IOException{
-		if (pos < 0) return null;
-		
-		String res = null;
-		
-		int line = 0;
-		BufferedReader br = new BufferedReader(new FileReader(reactionCsvFile));
-		String readLine = null;
-		while ( (readLine = br.readLine()) != null && line < pos) {
-			line++;
-		}
-		res = readLine;
-		br.close();
-		return res;
-	}
+//	private String seekFileLine(File file, int pos) throws IOException{
+//		if (pos < 0) return null;
+//		
+//		String res = null;
+//		
+//		int line = 0;
+//		BufferedReader br = new BufferedReader(new FileReader(reactionCsvFile));
+//		String readLine = null;
+//		while ( (readLine = br.readLine()) != null && line < pos) {
+//			line++;
+//		}
+//		res = readLine;
+//		br.close();
+//		return res;
+//	}
 	
 	@Override
 	public MnxReactionEntity getReactionById(Long id) {

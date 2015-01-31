@@ -19,6 +19,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.remote.BioCycRemoteSource;
 
+@SuppressWarnings("deprecation")
 public class TestBiocycDao {
 	
 	private static SessionFactory sessionFactory;

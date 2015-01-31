@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.kegg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.Serializable;
 
@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGlycanMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
@@ -48,6 +47,7 @@ public class TestRestKeggGlycanMetaboliteDaoImpl {
 			KeggGlycanMetaboliteEntity cpd = dao.getMetaboliteById(cpdId);
 			System.out.println(cpd);
 		}
+		assertEquals("", "");
 	}
 
 //	@Test

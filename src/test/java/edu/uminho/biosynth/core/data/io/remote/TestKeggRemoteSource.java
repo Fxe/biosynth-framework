@@ -12,6 +12,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntit
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.remote.KeggRemoteSource;
 
+@SuppressWarnings("deprecation")
 public class TestKeggRemoteSource {
 
 	private static KeggRemoteSource remote;

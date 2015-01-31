@@ -19,7 +19,6 @@ import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossrefe
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 public class RestBiocycMetaboliteDaoImpl extends AbstractRestfullBiocycDao 
 		implements MetaboliteDao<BioCycMetaboliteEntity> {

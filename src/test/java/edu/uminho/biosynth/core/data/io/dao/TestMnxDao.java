@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 
+@SuppressWarnings("deprecation")
 public class TestMnxDao {
 
 	private static SessionFactory sessionFactory;

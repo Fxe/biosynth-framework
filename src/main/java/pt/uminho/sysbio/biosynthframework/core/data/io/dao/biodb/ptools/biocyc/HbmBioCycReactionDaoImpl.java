@@ -1,7 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Criteria;
@@ -13,7 +12,6 @@ import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionLeftEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionRightEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.AbstractHibernateDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
-import scala.util.Left;
 
 public class HbmBioCycReactionDaoImpl 
 extends AbstractHibernateDao implements ReactionDao<BioCycReactionEntity> {

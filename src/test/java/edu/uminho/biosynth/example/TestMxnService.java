@@ -27,6 +27,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEnti
 import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
+@SuppressWarnings({ "unused", "deprecation", "null" })
 public class TestMxnService {
 	
 	private static SessionFactory sessionFactory;

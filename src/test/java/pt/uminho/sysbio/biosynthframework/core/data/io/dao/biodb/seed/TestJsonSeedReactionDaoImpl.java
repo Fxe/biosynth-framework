@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
+@SuppressWarnings("unused")
 public class TestJsonSeedReactionDaoImpl {
 
 	private static JsonSeedReactionDaoImpl jsonSeedReactionDaoImpl;

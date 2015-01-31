@@ -28,6 +28,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
+@SuppressWarnings({ "unused", "deprecation" })
 public class TestSBMLMapping {
 
 	private static String[] cpdMap = { "14glucan", "1-4-alpha-D-Glucan",
