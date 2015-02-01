@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
@@ -22,7 +23,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class Neo4jKeggCompoundMetaboliteDaoImpl extends AbstractNeo4jDao<KeggCompoundMetaboliteEntity> implements MetaboliteDao<KeggCompoundMetaboliteEntity>{
 	
-	private static final Logger LOGGER = Logger.getLogger(Neo4jKeggCompoundMetaboliteDaoImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jKeggCompoundMetaboliteDaoImpl.class);
 	
 	private static Label compoundLabel = CompoundNodeLabel.KEGG;
 	

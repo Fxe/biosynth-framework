@@ -108,13 +108,13 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	}
 
 	@Override
-	public IntegratedMember getIntegratedMember(Long id) {
+	public IntegratedMember getIntegratedMemberById(Long id) {
 		return IntegratedMember.class.cast(this.getSession().get(IntegratedMember.class, id));
 	}
 	
 	@Override
-	public IntegratedMember getOrCreateIntegratedMember(Long id) {
-		IntegratedMember integratedMember = this.getIntegratedMember(id);
+	public IntegratedMember getOrCreateIntegratedMemberByReferenceEid(Long id) {
+		IntegratedMember integratedMember = this.getIntegratedMemberById(id);
 		if (integratedMember == null) {
 			integratedMember = new IntegratedMember();
 			integratedMember.setId(id);
@@ -127,7 +127,7 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 
 	@Override
 	public IntegratedMember saveIntegratedMember(IntegratedMember member) {
-		IntegratedMember m = this.getIntegratedMember(member.getId());
+		IntegratedMember m = this.getIntegratedMemberById(member.getId());
 		if (m == null) this.getSession().save(member);
 		
 		return member;
@@ -411,6 +411,12 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 	@Override
 	public Map<Long, Long> getUnificationMapping(Long iid, String fromType,
 			String toType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IntegratedMember getIntegratedMemberByReferenceEid(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

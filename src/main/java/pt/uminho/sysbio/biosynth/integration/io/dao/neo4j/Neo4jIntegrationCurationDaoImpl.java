@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotFoundException;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
+import pt.uminho.sysbio.biosynth.integration.curation.CurationDecisionMap;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationOperation;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationRelationship;
@@ -203,9 +206,9 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		
 		if (curationOperation.getClusterRelationship() == null) {
 			if (curationOperation.getIntegratedClusters().size() < 2) {
-				LOGGER.warn("No relationship specified: ignored");
+				LOGGER.debug("No relationship specified: ignored");
 			} else {
-				LOGGER.warn("No relationship specified: multiple clusters found");
+				LOGGER.warn("No relationship specified: invalid because of multiple clusters found");
 				return null;
 			}
 		}
@@ -218,6 +221,8 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		oidNode.setProperty("created_at", System.currentTimeMillis());
 		oidNode.setProperty("operation_type", curationOperation.getOperationType());
 		oidNode.setProperty("cluster_type", curationOperation.getClusterType());
+		if (curationOperation.getClusterRelationship() != null)
+			oidNode.setProperty("cluster_relationship", curationOperation.getClusterRelationship());
 		long oid = oidNode.getId();
 		curationOperation.setId(oid);
 		LOGGER.debug(String.format("Curation Operation oid %s", oidNode));
@@ -237,20 +242,28 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		usrNode.createRelationshipTo(oidNode, CurationRelationship.PERFORMED_CURATION_OPERATION);
 		LOGGER.debug(String.format("Linked %s -> %s", usrNode, oidNode));
 
+		//3: scaffold members to curation
 		Set<Node> eids = new HashSet<> ();
 		Set<Node> eidNodeSet = new HashSet<> ();
 		Map<Long, Long> referenceEidToNodeIdMap = new HashMap<> ();
-		//3: scaffold members to curation
 		for (IntegratedClusterMember integratedClusterMember 
 				: curationOperation.getMembers()) {
 			
 			IntegratedMember integratedMember = integratedClusterMember.getMember();
 			Node eidNode = this.getOrCreateMetaboliteMemberNode(integratedMember.getReferenceId());
+			integratedMember.setId(eidNode.getId());
 			eidNodeSet.add(eidNode);
 			eids.add(eidNode);
 			LOGGER.debug(String.format("Scaffold Member Node %s:%s", eidNode, Neo4jUtils.getLabels(eidNode)));
 			referenceEidToNodeIdMap.put(integratedMember.getReferenceId(), eidNode.getId());
 		}
+		
+		//4: exclude links
+		for (IntegratedMember eid : curationOperation.getExclude()) {
+			Node eidNode = graphDatabaseService.getNodeById(eid.getId());
+			oidNode.createRelationshipTo(eidNode, CurationRelationship.NOT_EQUAL);
+		}
+		
 		List<Node> cidArray = new ArrayList<> ();
 		
 		//check if [EID]->CC exists NOT NEEDED REPLICATE ALL CIDS FOR ROLLBACK OP
@@ -416,9 +429,95 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		curationUser.setId(node.getId());
 		return node.getId();
 	}
-
-
 	
 
+	@Override
+	public CurationDecisionMap resolveMembership(Set<Long> referenceEids) {
+		CurationDecisionMap decisionMap = new CurationDecisionMap();
+		
+		Set<Long> eids = new HashSet<> ();
+		for (long referenceEid : referenceEids) {
+			Node eidNode = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(
+					IntegrationNodeLabel.IntegratedMember, "id", referenceEid));
+			if (eidNode != null) {
+				eids.add(eidNode.getId());
+			} else {
+				LOGGER.debug("Reference Eid not found: " + referenceEid);
+			}
+		}
+		
+		long setCounter = 0L;
+		Set<Long> found = new HashSet<> ();
+		Set<Node> opNodeSet = new HashSet<> ();
+		for (long eid : eids) {
+			try {
+				Node eidNode = graphDatabaseService.getNodeById(eid);
+				long refEid = (long) eidNode.getProperty("id");
+				if (!found.contains(refEid)) {
+					Set<Long> eidSet = new HashSet<> ();
+					for (Path path : graphDatabaseService.traversalDescription()
+							.relationships(IntegrationRelationshipType.Integrates)
+							.breadthFirst()
+							.traverse(eidNode)) {
+						Node node = path.endNode();
+						if (node.hasLabel(IntegrationNodeLabel.IntegratedMember)) eidSet.add((long) node.getProperty("id"));
+						if (node.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
+							Set<Node> nodes = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.OPERATES_ON);
+							opNodeSet.addAll(nodes);
+						}
+					}
+					decisionMap.addMergedSet(setCounter, eidSet);
+					LOGGER.debug(String.format("Set %d - %s", setCounter, eidSet));
+					found.addAll(eidSet);
+					setCounter++;
+				}
+			} catch (NotFoundException e) {
+				LOGGER.warn(e.getMessage());
+			}
+		}
+		
+		LOGGER.debug("Looking for rejection sets ...");
+		for (Node node : opNodeSet) {
+			
+			LOGGER.trace(node + " " + Neo4jUtils.getLabels(node) + " " + Neo4jUtils.getPropertiesMap(node));
+			List<Node> cidNodes = new ArrayList<> (
+					Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.OPERATES_ON));
+			String opType = (String) node.getProperty("operation_type");
+			switch (opType) {
+				case "ACCEPT": LOGGER.debug(String.format("%s:%s TYPE: %s SKIP", node, Neo4jUtils.getLabels(node), opType)); break;
+				case "SPLIT": 
+					LOGGER.debug(String.format("%s:%s TYPE: %s", node, Neo4jUtils.getLabels(node), opType));
+					Node prev = cidNodes.get(0);
+					for (int i = 1; i < cidNodes.size(); i++) {
+						Node next = cidNodes.get(i);
+						Node prevEid = Neo4jUtils.collectNodeRelationshipNodes(prev, IntegrationRelationshipType.Integrates).iterator().next();
+						Node nextEid = Neo4jUtils.collectNodeRelationshipNodes(next, IntegrationRelationshipType.Integrates).iterator().next();
+						long refEid1 = (long) prevEid.getProperty("id");
+						long refEid2 = (long) nextEid.getProperty("id");
+						LOGGER.debug(String.format("%d - REJECT -> %d", refEid1, refEid2));
+						decisionMap.addMemberRejectionPair(refEid1, refEid2);
+					}
+					break;
+				case "EXCLUDE":
+					LOGGER.debug(String.format("%s:%s TYPE: %s", node, Neo4jUtils.getLabels(node), opType));
+					Set<Node> nodes = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.NOT_EQUAL);
+					for (Node node_ : nodes) {
+						long refEid1 = (long) node_.getProperty("id");
+						LOGGER.trace("Found rejection edge " + refEid1);
+						for (Node cidNode : cidNodes) {
+							Node eidNode = Neo4jUtils.collectNodeRelationshipNodes(cidNode, IntegrationRelationshipType.Integrates).iterator().next();
+							long refEid2 = (long) eidNode.getProperty("id");
+							LOGGER.debug(String.format("%d - REJECT -> %d", refEid1, refEid2));
+							decisionMap.addMemberRejectionPair(refEid1, refEid2);
+						}
+					}
+					break;
+				default: LOGGER.warn(String.format("%s:%s TYPE: %s NOT SUPPORTED SKIP", node, Neo4jUtils.getLabels(node), opType)); break;
+			}
+
+		}
+		
+		return decisionMap;
+	}
 
 }

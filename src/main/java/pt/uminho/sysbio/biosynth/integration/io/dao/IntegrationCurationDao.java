@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynth.integration.curation.CurationDecisionMap;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationOperation;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
@@ -22,4 +23,10 @@ public interface IntegrationCurationDao {
 	public Set<CurationOperation> getCurationOperationByMembers(Set<Long> eidSet);
 
 	public Set<Long> getAllCurationOperationIds(long xid);
+	
+	/**
+	 * 
+	 * @param eids IntegratedMembers reference eids
+	 */
+	public CurationDecisionMap resolveMembership(Set<Long> referenceEids);
 }

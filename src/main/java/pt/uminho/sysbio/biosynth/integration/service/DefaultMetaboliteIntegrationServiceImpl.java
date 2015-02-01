@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
@@ -275,6 +276,16 @@ implements MetaboliteIntegrationService {
 				iid, 
 				IntegrationNodeLabel.MetaboliteCluster.toString(), 
 				IntegrationNodeLabel.MetaboliteMember.toString());
+	}
+	
+	@Override
+	public IntegratedMember getIntegratedMemberByReferenceEid(long referenceEid) {
+		return this.meta.getIntegratedMemberByReferenceEid(referenceEid);
+	}
+	
+	@Override
+	public IntegratedMember getIntegratedMemberById(long id) {
+		return this.meta.getIntegratedMemberById(id);
 	}
 	
 

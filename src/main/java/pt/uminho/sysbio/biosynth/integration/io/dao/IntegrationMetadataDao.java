@@ -51,8 +51,10 @@ public interface IntegrationMetadataDao {
 	 */
 	public Map<Long, String> getIntegratedClusterWithElement(Long iid, Long eid);
 	
-	public IntegratedMember getIntegratedMember(Long id);
-	public IntegratedMember getOrCreateIntegratedMember(Long id);
+	
+	public IntegratedMember getIntegratedMemberById(Long id);
+	public IntegratedMember getIntegratedMemberByReferenceEid(Long id);
+	public IntegratedMember getOrCreateIntegratedMemberByReferenceEid(Long id);
 	public IntegratedMember saveIntegratedMember(IntegratedMember member);
 	public List<Long> getAllIntegratedMembersId();
 	public List<Long> getAllIntegratedMembersId(IntegrationSet integrationSet, boolean distinct);

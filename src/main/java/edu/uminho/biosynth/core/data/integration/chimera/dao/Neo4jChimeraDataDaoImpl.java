@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.DynamicLabel;
@@ -23,6 +22,8 @@ import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
 import org.neo4j.tooling.GlobalGraphOperations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
@@ -38,7 +39,7 @@ import scala.collection.convert.Wrappers.SeqWrapper;
 
 public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
-	private static Logger LOGGER = Logger.getLogger(Neo4jChimeraDataDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jChimeraDataDaoImpl.class);
 	
 	@Autowired
 	private GraphDatabaseService graphDatabaseService;

@@ -39,7 +39,7 @@ public class TestIntegrationMetaServiceImpl {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(
 				new File(HBM_CFG));
 		graphDatabaseService = HelperNeo4jConfigInitializer
-				.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
+				.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
 		HbmIntegrationMetadataDaoImpl chimeraMetadataDaoImpl = 
 				new HbmIntegrationMetadataDaoImpl();
 		chimeraMetadataDaoImpl.setSessionFactory(sessionFactory);

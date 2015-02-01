@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 
@@ -102,6 +103,11 @@ public class BasicIntegrationService implements IntegrationService {
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, long iid) {
 		IntegratedCluster integratedCluster = meta.getIntegratedClusterByEntry(entry, iid);
 		return integratedCluster;
+	}
+	@Override
+	public IntegratedMember getIntegratedMemberById(long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

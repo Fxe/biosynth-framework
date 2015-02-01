@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ConflictDecision;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
@@ -123,4 +124,6 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 	public List<IntegratedCluster> getAllMetaboliteIntegratedClusterEntries(Long iid);
 	public List<IntegratedCluster> getAllReactionIntegratedClusterEntries(Long iid);
 	public Map<Long, Long> getMetaboliteUnificationMap(long iid);
+	
+	public IntegratedMember getIntegratedMemberByReferenceEid(long referenceEid);
 }

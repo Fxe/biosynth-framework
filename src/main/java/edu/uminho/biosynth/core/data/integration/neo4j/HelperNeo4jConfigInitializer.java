@@ -3,54 +3,33 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 
 public class HelperNeo4jConfigInitializer {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(HelperNeo4jConfigInitializer.class);
+	
 	private static final String[] NEO_DATA_CONSTRAINTS = {
 		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.id IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:BioPath) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:HMDB) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.referenceId IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:LigandCompound) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:LigandDrug) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:LigandGlycan) ASSERT cpd.entry IS UNIQUE",
-//		"CREATE CONSTRAINT ON (cpd:KEGG) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:MetaCyc) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:AraCyc) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:MaizeCyc) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:ChEBI) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:CAS) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:Seed) ASSERT cpd.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cpd:MetaNetX) ASSERT cpd.entry IS UNIQUE",
-		
-		"CREATE CONSTRAINT ON (n:Name) ASSERT n.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (f:Formula) ASSERT f.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (i:InChI) ASSERT i.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (s:CanSMILES) ASSERT s.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (if:IsotopeFormula) ASSERT if.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (s:SMILES) ASSERT s.key IS UNIQUE",
-		"CREATE CONSTRAINT ON (c:Charge) ASSERT c.key IS UNIQUE",
-		
-		"CREATE CONSTRAINT ON (c:FIKHB) ASSERT c.key IS UNIQUE",
+		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.internalId IS UNIQUE",
 		
 		"CREATE CONSTRAINT ON (c:Compartment) ASSERT c.entry IS UNIQUE",
 		"CREATE CONSTRAINT ON (m:Model) ASSERT m.entry IS UNIQUE",
 		"CREATE INDEX ON :Metabolite(proxy)",
-		
-		"CREATE CONSTRAINT ON (rxn:LigandReaction) ASSERT rxn.entry IS UNIQUE",
-		
+		"CREATE INDEX ON :Reaction(proxy)",
 	};
 	
 	private static final String[] NEO_META_CONSTRAINTS = {
-		"CREATE CONSTRAINT ON (iid : IntegrationSet) ASSERT iid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid : MetaboliteCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid : MetaboliteMember) ASSERT cid.id IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid : ReactionCluster) ASSERT cid.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (cid : ReactionMember) ASSERT cid.id IS UNIQUE",
+		String.format("CREATE CONSTRAINT ON (iid : %s) ASSERT iid.entry IS UNIQUE", IntegrationNodeLabel.IntegrationSet),
+		String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
+		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
 	};
 	
 	private static final String[] NEO_CURA_CONSTRAINTS = {
@@ -58,12 +37,31 @@ public class HelperNeo4jConfigInitializer {
 		String.format("CREATE CONSTRAINT ON (oid : %s) ASSERT oid.entry IS UNIQUE", CurationLabel.CurationOperation),
 		String.format("CREATE CONSTRAINT ON (usr : %s) ASSERT usr.username IS UNIQUE", CurationLabel.CurationUser),
 		String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
-		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.referenceId IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
+		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
 	};
 	
-	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {
+	public static GraphDatabaseService initializeNeo4jDataDatabaseConstraints(String databasePath) {
 		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
 		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+		
+		for (MetaboliteMajorLabel label : MetaboliteMajorLabel.values()) {
+			String cypherQuery = String.format("CREATE CONSTRAINT ON (cpd:%s) ASSERT cpd.entry IS UNIQUE", label);
+			LOGGER.trace("Execute Constraint: " + cypherQuery);
+			engine.execute(cypherQuery);
+		}
+		
+		for (MetabolitePropertyLabel label : MetabolitePropertyLabel.values()) {
+			String cypherQuery = String.format("CREATE CONSTRAINT ON (p:%s) ASSERT p.key IS UNIQUE", label);
+			LOGGER.trace("Execute Constraint: " + cypherQuery);
+			engine.execute(cypherQuery);
+		}
+		
+		for (ReactionMajorLabel label : ReactionMajorLabel.values()) {
+			String cypherQuery = String.format("CREATE CONSTRAINT ON (rxn:%s) ASSERT rxn.entry IS UNIQUE", label);
+			LOGGER.trace("Execute Constraint: " + cypherQuery);
+			engine.execute(cypherQuery);
+		}
+		
 		for (String query: NEO_DATA_CONSTRAINTS) {
 			engine.execute(query);
 		}

@@ -30,7 +30,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(NEO_META_DB);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(NEO_META_DB);
 //		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabase(NEO_META_DB);
 	}
 

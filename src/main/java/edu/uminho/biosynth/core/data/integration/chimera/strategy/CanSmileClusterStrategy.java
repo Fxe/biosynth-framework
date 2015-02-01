@@ -4,13 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
@@ -24,7 +25,7 @@ public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
 		super(graphDatabaseService);
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(CanSmileClusterStrategy.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CanSmileClusterStrategy.class);
 	
 	@Override
 	public void setInitialNode(Long id) {

@@ -4,8 +4,8 @@ import org.neo4j.graphdb.RelationshipType;
 
 public enum CurationRelationship implements RelationshipType {
 	OPERATES_ON,
-	ACCEPT,
 	CurationReject,
 	CurationEqualSet,
-	NOT_EQUAL, HAS_CURATION_OPERATION, PERFORMED_CURATION_OPERATION, SPLIT, EXCLUDE, UNION
+	HAS_CURATION_OPERATION, PERFORMED_CURATION_OPERATION, 
+	NOT_EQUAL, EQUAL,
 }

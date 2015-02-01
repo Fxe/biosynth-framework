@@ -23,7 +23,7 @@ public class TestNeo4jGraphReactionDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(NEO_DATA_DB_PATH);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(NEO_DATA_DB_PATH);
 		neo4jGraphReactionDaoImpl = new Neo4jGraphReactionDaoImpl(graphDatabaseService);
 	}
 

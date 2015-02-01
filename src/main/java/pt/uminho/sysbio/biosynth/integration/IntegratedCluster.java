@@ -109,6 +109,24 @@ public class IntegratedCluster {
 		return toRemove;
 	}
 	
+	public IntegratedClusterMember removeMember(IntegratedMember eid) {
+		if (eid == null || eid.getId() == null) return null;
+		
+		IntegratedClusterMember toRemove = null;
+		for (IntegratedClusterMember clusterMember : this.members) {
+			if (clusterMember.getMember().getId().equals(eid.getId())) {
+				toRemove = clusterMember;
+				break;
+			}
+		}
+		
+		if (toRemove != null) {
+			this.members.remove(toRemove);
+		}
+		
+		return toRemove;
+	}
+	
 	public void addMember(IntegratedMember integratedMember) {
 		if (!this.containsMember(integratedMember)) {
 			IntegratedClusterMember integratedClusterMember = new IntegratedClusterMember();
@@ -123,10 +141,10 @@ public class IntegratedCluster {
 		if (integratedMember == null) return false;
 		if (integratedMember.getId() == null) return false;
 		
-		Long id = integratedMember.getId();
+		long eid = integratedMember.getId();
 		
 		for (IntegratedClusterMember clusterMember : this.members) {
-			if (clusterMember.getMember().getId() == id) return true;
+			if (clusterMember.getMember().getId().equals(eid)) return true;
 		}
 		
 		return false;

@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 @Transactional(value="integrationTransactionManager")
 public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilderService{
 
-	private static Logger LOGGER = Logger.getLogger(ChimeraDatabaseBuilderServiceImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ChimeraDatabaseBuilderServiceImpl.class);
 	
 	@Autowired
 	private IntegrationDataDao data;
@@ -168,7 +169,7 @@ public class ChimeraDatabaseBuilderServiceImpl implements ChimeraDatabaseBuilder
 
 	@Override
 	public IntegratedMetaboliteEntity buildCompoundByClusterMemberId(Long id) {
-		IntegratedMember member = this.meta.getIntegratedMember(id);
+		IntegratedMember member = this.meta.getIntegratedMemberById(id);
 		if (member == null) {
 			LOGGER.warn(String.format("Member not found [%d]", id));
 			return null;

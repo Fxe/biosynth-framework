@@ -17,6 +17,7 @@ import org.hibernate.annotations.FetchMode;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -53,6 +54,10 @@ public class CurationOperation {
 	public List<IntegratedClusterMember> getMembers() { return members;}
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
 	
+	private List<IntegratedMember> exclude = new ArrayList<> ();
+	public List<IntegratedMember> getExclude() { return exclude;}
+	public void setExclude(List<IntegratedMember> exclude) { this.exclude = exclude;}
+
 	private CurationSet curationSet;
 	public CurationSet getCurationSet() { return curationSet;}
 	public void setCurationSet(CurationSet curationSet) {

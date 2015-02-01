@@ -7,21 +7,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.neo4j.cypher.CypherExecutionException;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
+@SuppressWarnings("deprecation")
 public class Neo4jBiggMetaboliteDaoImpl extends AbstractNeo4jDao<BiggMetaboliteEntity> implements MetaboliteDao<BiggMetaboliteEntity> {
 
-	private static Logger LOGGER = Logger.getLogger(Neo4jBiggMetaboliteDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jBiggMetaboliteDaoImpl.class);
 	
 	public Neo4jBiggMetaboliteDaoImpl(GraphDatabaseService graphdb) {
 		super(graphdb);

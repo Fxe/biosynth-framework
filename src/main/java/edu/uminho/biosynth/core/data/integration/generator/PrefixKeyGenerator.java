@@ -1,10 +1,12 @@
 package edu.uminho.biosynth.core.data.integration.generator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class PrefixKeyGenerator implements IKeyGenerator<String> {
 
-	private static final Logger LOGGER = Logger.getLogger(PrefixKeyGenerator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrefixKeyGenerator.class);
 	
 	private final String prefix;
 	private int counter = 0;

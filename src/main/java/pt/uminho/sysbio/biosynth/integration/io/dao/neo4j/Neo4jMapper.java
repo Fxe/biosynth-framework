@@ -169,4 +169,15 @@ public class Neo4jMapper {
 		
 		return curationUser;
 	}
+
+	public static void updateNodeWithIntegratedCluster(Node cidNode,
+			IntegratedCluster cid) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public static void updateNodeWithIntegratedMember(Node cidNode,
+			IntegratedMember eid) {
+		throw new RuntimeException("Not implemented !!! ups :)");
+	}
 }

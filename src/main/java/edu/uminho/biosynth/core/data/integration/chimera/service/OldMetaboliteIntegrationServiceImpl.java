@@ -106,7 +106,7 @@ implements MetaboliteIntegrationService{
 		
 		for (Long eid : toAdd) {
 			
-			IntegratedMember integratedMember = this.meta.getOrCreateIntegratedMember(eid);
+			IntegratedMember integratedMember = this.meta.getOrCreateIntegratedMemberByReferenceEid(eid);
 			integratedCluster.addMember(integratedMember);
 			LOGGER.trace(String.format("ADDED Member %d TO Cluster %d", eid, integratedCluster.getId()));
 		}
@@ -971,6 +971,11 @@ System.out.println("Ok ! [" + (end - start) + "]");
 	}
 	@Override
 	public Map<Long, Long> getMetaboliteUnificationMap(long iid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public IntegratedMember getIntegratedMemberByReferenceEid(long referenceEid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

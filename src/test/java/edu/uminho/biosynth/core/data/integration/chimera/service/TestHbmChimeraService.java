@@ -42,7 +42,7 @@ public class TestHbmChimeraService {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File(HBM_CFG));
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
 		
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(graphDatabaseService);

@@ -30,8 +30,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
-import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
-import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
+import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
@@ -439,51 +438,82 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 //	}
 
 	@Override
-	public void updateCluster(IntegratedCluster cluster) {
-		// TODO Auto-generated method stub
+	public void updateCluster(IntegratedCluster cid) {
+		//UPDATE PROPERTIES
+		Node cidNode = graphDatabaseService.getNodeById(cid.getId());
+		Neo4jMapper.updateNodeWithIntegratedCluster(cidNode, cid);
+		//UPDATE LINKS
+
+		Set<Long> refEids = new HashSet<> ();
+		Set<Long> toLink = new HashSet<> ();
 		
+		for (IntegratedMember eid : IntegrationUtils.collectMembersFromCluster(cid)) {
+			refEids.add(eid.getReferenceId());
+			toLink.add(eid.getReferenceId());
+		}
+		
+		Set<Relationship> toDelete = new HashSet<> ();
+		
+		for (Relationship relationship : cidNode.getRelationships(IntegrationRelationshipType.Integrates)) {
+			Node eidNode = relationship.getOtherNode(cidNode);
+			long refEid = (long) eidNode.getProperty("id");
+			if (!refEids.contains(refEid)) {
+				LOGGER.debug("DELETE link to: " + refEid);
+				toDelete.add(relationship);
+			} else {
+				toLink.remove(refEid);
+			}
+		}
+		
+		for (Relationship relationship : toDelete) {
+			relationship.delete();
+		}
+		
+		for (IntegratedMember eid : IntegrationUtils.collectMembersFromCluster(cid)) {
+			long refEid = eid.getReferenceId();
+			if (toLink.contains(refEid)) {
+				this.saveIntegratedMember(eid);
+				Node eidNode = graphDatabaseService.getNodeById(eid.getId());
+				LOGGER.debug("CREATE link to: " + refEid);
+				cidNode.createRelationshipTo(eidNode, IntegrationRelationshipType.Integrates);
+			}
+		}
 	}
 
 	@Override
 	public void deleteCluster(IntegratedCluster cluster) {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
 	public String getLastClusterEntry(Long integrationSetId) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
 	public void deleteClusterMember(IntegratedClusterMember member) {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
 	public List<Long> getAllIntegratedClusterMembersId() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
 	public Map<Long, String> getIntegratedClusterWithElement(Long iid, Long eid) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
-	public IntegratedMember getIntegratedMember(Long eid) {
+	public IntegratedMember getIntegratedMemberById(Long eid) {
 		Node eidNode = graphDatabaseService.getNodeById(eid);
 		return Neo4jMapper.nodeToIntegratedMember(eidNode);
 	}
 
 	@Override
-	public IntegratedMember getOrCreateIntegratedMember(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public IntegratedMember getOrCreateIntegratedMemberByReferenceEid(Long id) {
+		throw new RuntimeException("Not implemented !!! ups :)");
 	}
 
 	@Override
@@ -711,6 +741,13 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public IntegratedMember getIntegratedMemberByReferenceEid(Long referenceEid) {
+		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
+				.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, "id", referenceEid));
+		return Neo4jMapper.nodeToIntegratedMember(node);
 	}
 
 	
