@@ -50,8 +50,8 @@ public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
 			Node isoNode = db.getNodeById(isoNodeId);
 			List<Relationship> links = IteratorUtil.asList(
 					isoNode.getRelationships(
-							MetaboliteRelationshipType.HasInChI, 
-							MetaboliteRelationshipType.HasSMILES));
+							MetaboliteRelationshipType.has_inchi, 
+							MetaboliteRelationshipType.has_smiles));
 			
 			for (Relationship r: links) {
 				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {

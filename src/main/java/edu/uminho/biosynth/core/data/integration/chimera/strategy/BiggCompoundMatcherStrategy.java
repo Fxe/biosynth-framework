@@ -40,7 +40,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 	
 	private String getIsotopeFormula(Node node) {
 		Set<Node> formulaNodes = new HashSet<> ();
-		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
+		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.has_molecular_formula)) {
 			formulaNodes.add(relationship.getOtherNode(node));
 		}
 		
@@ -61,7 +61,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 	
 	private Integer getCharge(Node node) {
 		Set<Node> chargeNodes = new HashSet<> ();
-		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.HasCharge)) {
+		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.has_charge)) {
 			chargeNodes.add(relationship.getOtherNode(node));
 		}
 		
@@ -112,7 +112,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 		visited.add(this.initialNode.getId());
 		
 		for (Relationship relationship : this.initialNode
-				.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
+				.getRelationships(MetaboliteRelationshipType.has_crossreference_to)) {
 			Node xref = relationship.getOtherNode(initialNode);
 			//Accept Xref if formula does not have isotope version
 			visited.add(xref.getId());
@@ -123,7 +123,7 @@ public class BiggCompoundMatcherStrategy extends AbstractNeo4jClusteringStrategy
 					result.add(xref.getId());
 				} else {
 					for (Relationship xrefRelationship : xref
-							.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
+							.getRelationships(MetaboliteRelationshipType.has_crossreference_to)) {
 						Node xref_ = xrefRelationship.getOtherNode(xref);
 						if (!visited.contains(xref_.getId())) {
 							if (isMatch(myIsotopeFormula, myCharge, xref_)) {

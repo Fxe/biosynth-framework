@@ -44,7 +44,7 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 		}
 		
 		for (Relationship relationship : node
-				.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
+				.getRelationships(MetaboliteRelationshipType.has_molecular_formula)) {
 			
 			String status = (String) relationship.getProperty("DCS-status", null);
 			if (status == null) {

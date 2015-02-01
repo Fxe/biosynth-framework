@@ -33,7 +33,7 @@ public class InchiIntegrationStategyImpl extends AbstractNeo4jClusteringStrategy
 		Set<Long> cluster = new HashSet<> ();
 		cluster.add(initialNode.getId());
 		
-		Set<Long> inchiNodeIdSet = Neo4jUtils.collectNodeRelationshipNodeIds(initialNode, MetaboliteRelationshipType.HasInChI);
+		Set<Long> inchiNodeIdSet = Neo4jUtils.collectNodeRelationshipNodeIds(initialNode, MetaboliteRelationshipType.has_inchi);
 		
 		LOGGER.debug("Found " + inchiNodeIdSet);
 		
@@ -46,7 +46,7 @@ public class InchiIntegrationStategyImpl extends AbstractNeo4jClusteringStrategy
 			
 			for (Path position: db.traversalDescription()
 					.depthFirst()
-					.relationships(MetaboliteRelationshipType.HasInChI)
+					.relationships(MetaboliteRelationshipType.has_inchi)
 					.evaluator(Evaluators.all()).traverse(inichiNode)) {
 				
 				if ( position.startNode().hasLabel(GlobalLabel.Metabolite)) {

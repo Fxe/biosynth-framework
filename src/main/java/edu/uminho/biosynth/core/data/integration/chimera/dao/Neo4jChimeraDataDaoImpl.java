@@ -367,7 +367,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		for (Relationship r:node.getRelationships()) {
 			Node n = r.getEndNode();
 			
-			if (r.getType().equals(MetaboliteRelationshipType.HasCrossreferenceTo)) {
+			if (r.getType().equals(MetaboliteRelationshipType.has_crossreference_to)) {
 				
 			} else {
 				Label label = n.getLabels().iterator().next();

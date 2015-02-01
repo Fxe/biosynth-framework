@@ -32,6 +32,12 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 						entity.getSmiles(), 
 						METABOLITE_SMILE_LABEL, 
 						METABOLITE_SMILE_RELATIONSHIP_TYPE));
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY, 
+						entity.getMol2d(), 
+						METABOLITE_MOL_FILE_LABEL, 
+						METABOLITE_MOL_FILE_RELATIONSHIP_TYPE));
 	}
 	
 	@Override
@@ -48,31 +54,5 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 							METABOLITE_NAME_RELATIONSHIP_TYPE));
 		}
 	}
-
-//	@Override
-//	protected void configureCrossreferences(
-//			GraphMetaboliteEntity centralMetaboliteEntity,
-//			KeggCompoundMetaboliteEntity entity) {
-//		
-//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-//		
-//		for (KeggCompoundMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
-//			dictionary.translate(xref.getRef());
-//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-//	
-//			String dbEntry = xref.getValue(); //Also need to translate if necessary
-//			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-//			if (xref.getRef().equals("PubChem")) {
-//				dbLabel = MetaboliteMajorLabel.PubChemSubstance.toString();
-//				proxy.addProperty("reference", xref.getRef());
-//			}
-//			proxy.setEntry(dbEntry);
-//			proxy.setMajorLabel(dbLabel);
-//			proxy.addLabel(METABOLITE_LABEL);
-//			crossreferences.add(proxy);
-//		}
-//		
-//		centralMetaboliteEntity.setCrossreferences(crossreferences);
-//	}
 
 }

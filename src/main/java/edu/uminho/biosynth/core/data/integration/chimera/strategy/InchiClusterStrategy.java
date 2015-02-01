@@ -51,7 +51,7 @@ public class InchiClusterStrategy implements ClusteringStrategy {
 		Set<Long> nodes = new HashSet<> ();
 		for (Path position: db.traversalDescription()
 				.depthFirst()
-				.relationships(MetaboliteRelationshipType.HasInChI)
+				.relationships(MetaboliteRelationshipType.has_inchi)
 				.evaluator(Evaluators.all()).traverse(initialNode)) {
 			
 			if (position.startNode().getId() != initialNode.getId() && 

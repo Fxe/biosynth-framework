@@ -197,7 +197,7 @@ public class Neo4jUtils {
 		List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> proxyEntities = new ArrayList<> ();
 		
 		for (Relationship relationship : node.getRelationships(
-				MetaboliteRelationshipType.HasCrossreferenceTo,
+				MetaboliteRelationshipType.has_crossreference_to,
 				Direction.OUTGOING)) {
 			Node other = relationship.getOtherNode(node);
 			
