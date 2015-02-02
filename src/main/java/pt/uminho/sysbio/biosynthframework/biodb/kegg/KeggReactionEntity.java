@@ -147,6 +147,19 @@ public class KeggReactionEntity extends GenericReaction {
 //		}
 //	}
 	
+	public List<String> getNames() {
+		List<String> names = new ArrayList<> ();
+		if (this.name != null) {
+			for (String str : this.name.split("[\\s+]*;[\\s+]*")) {
+				String s = str.trim(); 
+				if (!s.isEmpty()) {
+					names.add(s);
+				}
+			}
+		}
+		return names;
+	}
+	
 	@Override
 	public String toString() {
 		final char sep = '\n';
