@@ -1,15 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
-import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
 public class KeggDrugTransform 
@@ -38,24 +32,27 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 						entity.getSmiles(), 
 						METABOLITE_SMILE_LABEL, 
 						METABOLITE_SMILE_RELATIONSHIP_TYPE));
+		centralMetaboliteEntity.addPropertyEntity(
+				this.buildPropertyLinkPair(
+						PROPERTY_UNIQUE_KEY,
+						entity.getMol2d(), 
+						METABOLITE_MOL_FILE_LABEL, 
+						METABOLITE_MOL_FILE_RELATIONSHIP_TYPE));
 	}
 
-//	@Override
-//	protected void configureCrossreferences(
-//			GraphMetaboliteEntity centralMetaboliteEntity,
-//			KeggDrugMetaboliteEntity entity) {
-//		
-//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-//		
-//		for (KeggDrugMetaboliteCrossreferenceEntity xref : entity.getCrossReferences()) {
-//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-//			String dbEntry = xref.getValue(); //Also need to translate if necessary
-//			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-//			proxy.setEntry(dbEntry);
-//			proxy.setMajorLabel(dbLabel);
-//			proxy.addLabel(METABOLITE_LABEL);
-//			crossreferences.add(proxy);
-//		}
-//	}
+	@Override
+	protected void configureNameLink(
+			GraphMetaboliteEntity centralMetaboliteEntity,
+			KeggDrugMetaboliteEntity entity) {
+		
+		for (String name : entity.getNames()) {
+			centralMetaboliteEntity.addPropertyEntity(
+					this.buildPropertyLinkPair(
+							"key", 
+							name.trim(), 
+							METABOLITE_NAME_LABEL, 
+							METABOLITE_NAME_RELATIONSHIP_TYPE));
+		}
+	}
 	
 }

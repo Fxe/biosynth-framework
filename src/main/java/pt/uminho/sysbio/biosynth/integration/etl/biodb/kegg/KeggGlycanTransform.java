@@ -22,23 +22,20 @@ extends AbstractMetaboliteTransform<KeggGlycanMetaboliteEntity> {
 
 	}
 
-//	@Override
-//	protected void configureCrossreferences(
-//			GraphMetaboliteEntity centralMetaboliteEntity,
-//			KeggGlycanMetaboliteEntity entity) {
-//		
-//		List<GraphMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-//		
-//		for (KeggGlycanMetaboliteCrossreferenceEntity xref : entity.getCrossReferences()) {
-//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-//			String dbEntry = xref.getValue(); //Also need to translate if necessary
-//			GraphMetaboliteProxyEntity proxy = new GraphMetaboliteProxyEntity();
-//			proxy.setEntry(dbEntry);
-//			proxy.setMajorLabel(dbLabel);
-//			proxy.addLabel(METABOLITE_LABEL);
-//			crossreferences.add(proxy);
-//		}
-//	}
+	@Override
+	protected void configureNameLink(
+			GraphMetaboliteEntity centralMetaboliteEntity,
+			KeggGlycanMetaboliteEntity entity) {
+		
+		for (String name : entity.getNames()) {
+			centralMetaboliteEntity.addPropertyEntity(
+					this.buildPropertyLinkPair(
+							"key", 
+							name.trim(), 
+							METABOLITE_NAME_LABEL, 
+							METABOLITE_NAME_RELATIONSHIP_TYPE));
+		}
+	}
 	
 
 }
