@@ -200,29 +200,22 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 		public static final String RIGHT = "RIGHT";
 		
 		private boolean variable = false;
-		private Map<String, Double> leftBasic;
-		private Map<String, String> leftVariable;
-		private Map<String, Double> rightBasic;
-		private Map<String, String> rightVariable;
+		private Map<String, Double> leftBasic = new HashMap<> ();
+		private Map<String, String> leftVariable = new HashMap<> ();
+		private Map<String, Double> rightBasic = new HashMap<> ();
+		private Map<String, String> rightVariable = new HashMap<> ();
 		
 		private String equation;
 		
 		public EquationParser(String eq) {
 			this.equation = eq.replaceAll("\\s+", " ");
-			this.leftVariable = new HashMap<String, String> ();
-			this.rightVariable = new HashMap<String, String> ();
-			this.leftBasic = new HashMap<String, Double> ();
-			this.rightBasic = new HashMap<String, Double> ();
-			
 			this.parseEquation(equation);
 			variable = !(leftVariable.isEmpty() && rightVariable.isEmpty());
 		}
 		
 		
 		
-		public String getEquation() {
-			return equation;
-		}
+		public String getEquation() { return equation;}
 
 		public Set<String> getLeft() {
 			Set<String> ret = new HashSet<String> ();

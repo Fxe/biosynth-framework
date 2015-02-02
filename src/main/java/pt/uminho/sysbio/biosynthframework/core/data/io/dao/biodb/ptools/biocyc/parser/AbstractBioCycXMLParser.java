@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
-public class AbstractBioCycXMLParser {
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.PathwayToolsParser;
+
+public class AbstractBioCycXMLParser implements PathwayToolsParser {
 
 	protected final String xmlDocument;
 	protected JSONObject content;
