@@ -17,7 +17,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 
 	private static final String CHEBI_METABOLITE_LABEL = MetaboliteMajorLabel.ChEBI.toString();
 	
-	private static final String CHEBI_METABOLITE_RELATIONSHIP_PARENT_LABEL = MetaboliteRelationshipType.ChEBI_Parent.toString();
+	private static final String CHEBI_METABOLITE_RELATIONSHIP_PARENT_LABEL = MetaboliteRelationshipType.chebi_parent.toString();
 	
 	public ChebiMetaboliteTransform() {
 		super(CHEBI_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(ChebiMetaboliteEntity.class));

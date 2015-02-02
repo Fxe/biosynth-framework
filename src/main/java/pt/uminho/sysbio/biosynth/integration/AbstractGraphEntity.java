@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +14,9 @@ public class AbstractGraphEntity {
 	
 	protected Set<String> labels = new HashSet<> ();
 	protected Map<String, Object> properties = new HashMap<> ();
+	
+	public String uniqueKey;
+	public List<Map<AbstractGraphEdgeEntity, AbstractGraphEntity>> links = new ArrayList<> ();
 	
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}

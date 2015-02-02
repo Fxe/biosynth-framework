@@ -24,7 +24,7 @@ public class ChebiParentClusteringStrategy extends AbstractNeo4jClusteringStrate
 		this.initialNodeLabel = CompoundNodeLabel.ChEBI;
 	}
 	
-	private static final RelationshipType relationshipType = MetaboliteRelationshipType.ChEBI_Parent;
+	private static final RelationshipType relationshipType = MetaboliteRelationshipType.chebi_parent;
 
 	@Override
 	public Set<Long> execute() {

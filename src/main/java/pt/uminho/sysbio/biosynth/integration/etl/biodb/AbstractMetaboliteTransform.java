@@ -2,6 +2,9 @@ package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
@@ -28,7 +31,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
 	
-	protected static final String MODEL_LABEL = GlobalLabel.Model.toString();
+	protected static final String MODEL_LABEL = GlobalLabel.MetabolicModel.toString();
 	protected static final String SUPER_METABOLITE_LABEL = GlobalLabel.SuperMetabolite.toString();
 	protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
 	protected static final String METABOLITE_PROPERTY_LABEL = GlobalLabel.MetaboliteProperty.toString();
@@ -103,7 +106,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		}
 	}
 	
-	protected GraphPropertyEntity buildPropertyEntity(String key, Object value, String majorLabel) {
+	protected GraphPropertyEntity buildPropertyEntity(String key, Object value, String majorLabel, String...labels) {
 		if (majorLabel == null) return null;
 		if (key == null) return null;
 		if (value == null) return null;
@@ -112,12 +115,43 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 			if (value_.trim().isEmpty()) return null;
 		}
 		
+		Map<String, Object> properties = new HashMap<> ();
+		properties.put(key, value);
+		List<String> labels_ = new ArrayList<> (Arrays.asList(labels));
+		labels_.add(METABOLITE_PROPERTY_LABEL);
+		return buildPropertyEntity(properties, key, majorLabel, labels_);
+	}
+	
+	/**
+	 * Everything with 2 at the end does not automatic add the METABOLITE_PROPERTY_LABEL
+	 * @param key
+	 * @param value
+	 * @param majorLabel
+	 * @param labels
+	 * @return
+	 */
+	protected GraphPropertyEntity buildPropertyEntity2(String key, Object value, String majorLabel, String...labels) {
+		if (majorLabel == null) return null;
+		if (key == null) return null;
+		if (value == null) return null;
+		if (value instanceof String) {
+			String value_ = (String)value;
+			if (value_.trim().isEmpty()) return null;
+		}
 		
-		GraphPropertyEntity propertyEntity =
-				new GraphPropertyEntity(key, value);
+		Map<String, Object> properties = new HashMap<> ();
+		properties.put(key, value);
+		List<String> labels_ = Arrays.asList(labels);
+		return buildPropertyEntity(properties, key, majorLabel, labels_);
+	}
+	
+	protected GraphPropertyEntity buildPropertyEntity(Map<String, Object> properties, String unique, String majorLabel, List<String> labels) {
+		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(properties);
+		propertyEntity.uniqueProperty = unique;
 		propertyEntity.setMajorLabel(majorLabel);
-		propertyEntity.addLabel(METABOLITE_PROPERTY_LABEL);
-		
+		for (String label : labels) {
+			propertyEntity.addLabel(label);
+		}
 		return propertyEntity;
 	}
 	
@@ -136,8 +170,8 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	}
 	
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
-			String key, Object value, String majorLabel, String relationShipType) {
-		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
+			String key, Object value, String majorLabel, String relationShipType, String...labels) {
+		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel, labels);
 		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
 		if (propertyEntity == null || relationshipEntity == null) {
 			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
@@ -148,6 +182,42 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		
 		return propertyPair;
 	}
+	
+	/**
+	 * Everything with 2 at the end does not automatic add the METABOLITE_PROPERTY_LABEL
+	 * @param key
+	 * @param value
+	 * @param majorLabel
+	 * @param labels
+	 * @return
+	 */
+	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair2(
+			String key, Object value, String majorLabel, String relationShipType, String...labels) {
+		GraphPropertyEntity propertyEntity = this.buildPropertyEntity2(key, value, majorLabel, labels);
+		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
+		if (propertyEntity == null || relationshipEntity == null) {
+			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
+			return null;
+		}
+		Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyPair =
+				new ImmutablePair<>(propertyEntity, relationshipEntity);
+		
+		return propertyPair;
+	}
+	
+//	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
+//			String key, Object value, String[] a, String relationShipType) {
+//		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
+//		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
+//		if (propertyEntity == null || relationshipEntity == null) {
+//			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
+//			return null;
+//		}
+//		Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyPair =
+//				new ImmutablePair<>(propertyEntity, relationshipEntity);
+//		
+//		return propertyPair;
+//	}
 	
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
 			String key, Object value, String majorLabel, String relationShipType, Map<String, Object> relationshipProperties) {

@@ -146,6 +146,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
 	private void createOrLinkToProperty(Node parent, 
 			Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyLinkPair) {
+		
+		LOGGER.debug(String.format("Resolving %s => %s", propertyLinkPair.getRight(), propertyLinkPair.getLeft()));
 		/*
 		 * Create or Update Link + Property
 		 * a) - If Property exists
@@ -163,7 +165,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		for (Node propertyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
 						DynamicLabel.label(propertyEntity.getMajorLabel()), 
-						"key", 
+						propertyEntity.uniqueProperty, 
 						propertyEntity.getUniqueKey())) {
 			LOGGER.debug("Link To Node/Proxy " + propertyNode);
 			create = false;

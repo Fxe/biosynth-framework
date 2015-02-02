@@ -4,7 +4,9 @@ import java.util.Map;
 
 public class GraphPropertyEntity extends AbstractGraphEntity {
 
-	private static final String KEY_PROPERTY = "key";
+//	private static final String KEY_PROPERTY = "key";
+	
+	public String uniqueProperty = "key";
 	
 	public GraphPropertyEntity(String key, Object value) {
 		this.properties.put(key, value);
@@ -15,10 +17,10 @@ public class GraphPropertyEntity extends AbstractGraphEntity {
 	}
 	
 	public Object getUniqueKey() {
-		return this.properties.get(KEY_PROPERTY);
+		return this.properties.get(uniqueProperty);
 	}
 	public void setUniqueKey(Object value) {
-		this.properties.put(KEY_PROPERTY, value);
+		this.properties.put(uniqueProperty, value);
 	}
 	
 	public String getRelationshipMajorLabel() {

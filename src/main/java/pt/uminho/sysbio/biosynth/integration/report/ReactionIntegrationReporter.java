@@ -69,7 +69,7 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 		
 		boolean generic = true;
 		
-		Set<Long> cpdIds = Neo4jUtils.collectNodeRelationshipNodeIds(node, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
+		Set<Long> cpdIds = Neo4jUtils.collectNodeRelationshipNodeIds(node, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
 		for (Long cpdId : cpdIds) {
 			Node cpdNode = graphDataService.getNodeById(cpdId);
 			generic &= !isGeneric(cpdNode);

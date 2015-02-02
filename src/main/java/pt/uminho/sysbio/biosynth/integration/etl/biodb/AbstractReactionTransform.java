@@ -9,12 +9,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
@@ -28,9 +32,12 @@ implements EtlTransform<R, GraphReactionEntity> {
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
 	
+	protected static final String REACTION_PROPERTY_LABEL = GlobalLabel.ReactionProperty.toString();
 	protected static final String REACTION_LABEL = GlobalLabel.Reaction.toString();
+	protected static final String REACTION_NAME_LABEL = ReactionPropertyLabel.Name.toString();
 	protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
 	protected static final String PROPERTY_UNIQUE_KEY = "key";
+	protected static final String REACTION_NAME_RELATIONSHIP_TYPE = ReactionRelationshipType.has_name.toString();
 	
 	private final String majorLabel;
 	
@@ -46,17 +53,45 @@ implements EtlTransform<R, GraphReactionEntity> {
 		this.setupLeftMetabolites(centralReactionEntity, entity);
 		this.setupRightMetabolites(centralReactionEntity, entity);
 		this.configureCrossreferences(centralReactionEntity, entity);
-		
-//		entity.get
-//		Map<M, Double> m = entity.getLeft();
-		//setup reactants
-		//setup products
-		//setup enzymes
-		//setup pathways
+		this.configureNameLink(centralReactionEntity, entity);
+		this.configureAdditionalPropertyLinks(centralReactionEntity, entity);
 		
 		return centralReactionEntity;
 	}
 	
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
+			R entity) {
+		
+		Map<AbstractGraphEdgeEntity, AbstractGraphEntity> link = new HashMap<> ();
+		AbstractGraphEdgeEntity edge = buildSomeEdge(null, REACTION_NAME_RELATIONSHIP_TYPE);
+		Map<String, Object> properties = new HashMap<> ();
+		properties.put(PROPERTY_UNIQUE_KEY, entity.getName());
+		AbstractGraphEntity node = buildSomeNode(properties, null, REACTION_NAME_LABEL, REACTION_PROPERTY_LABEL);
+		
+		link.put(edge, node);
+		centralReactionEntity.links.add(link);
+	}
+	
+	
+	public AbstractGraphEntity buildSomeNode(Map<String, Object> properties, String majorLabel, String...labels) {
+		AbstractGraphEntity node = new AbstractGraphEntity();
+		node.setMajorLabel(majorLabel);
+		for (String label : labels) {
+			node.addLabel(label);
+		}
+		node.setProperties(properties);
+		return node;
+	}
+	
+	public AbstractGraphEdgeEntity buildSomeEdge(Map<String, Object> properties, String...labels) {
+		AbstractGraphEdgeEntity edge = new AbstractGraphEdgeEntity();
+		for (String label : labels) {
+			edge.labels.add(label);
+		}
+		if (properties != null) edge.properties = properties;
+		return edge;
+	}
+
 	protected void configureProperties(GraphReactionEntity centralReactionEntity, R reaction) {
 		System.out.println(reaction);
 		centralReactionEntity.setMajorLabel(majorLabel);

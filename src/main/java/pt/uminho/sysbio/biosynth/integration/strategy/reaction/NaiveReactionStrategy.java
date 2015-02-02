@@ -64,7 +64,7 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 			long unif_cpdId = metaboliteUnificationTable.reconciliateId(cpdId);
 			if (unif_cpdId != protonId) {
 				Set<Long> meids = metaboliteUnificationTable.getIdMappingsTo(unif_cpdId);
-				Set<Long> reids = collectNodes(meids, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
+				Set<Long> reids = collectNodes(meids, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
 				
 				//non-integrated compounds matches the pivot reaction
 				if (strictIntegration && reids.isEmpty()) reids.add(this.initialNode.getId());
@@ -91,8 +91,8 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 			LOGGER.debug(String.format("Found reaction %d:%s", initialNode.getId(), rxn.getProperty("entry")));
 		}
 		
-		Set<Long> left = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.Left);
-		Set<Long> right = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.Right);
+		Set<Long> left = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.left_component);
+		Set<Long> right = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.right_component);
 		
 		Map<Long, Set<Long>> compoundToReactionMap = new HashMap<> ();
 		LOGGER.debug("Gathering Left  Metabolite Reactions ...");
@@ -180,7 +180,7 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 		for (Long reid : strongIntersection) {
 			Node rxnNode = db.getNodeById(reid);
 			Set<Long> compounds = Neo4jUtils.collectNodeRelationshipNodeIds(
-					rxnNode, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
+					rxnNode, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
 			int diff = Math.abs(compounds.size() - compoundToReactionMap.size());
 			if (diff > 2) {
 				remove.add(reid);
