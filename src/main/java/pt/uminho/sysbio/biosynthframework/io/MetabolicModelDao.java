@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface MetabolicModelDao {
 	
+	public Object getMetabolicModel();
+	
 	public Set<Long> getAllCompartmentIds();
 	public Set<Long> getAllMetaboliteSpecieIds();
 	public Set<Long> getAllReactionSpecieIds();

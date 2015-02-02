@@ -61,65 +61,6 @@ public class AnnotationPropertyContainerBuilder  {
 			clazz = clazz.getSuperclass();
 			LOGGER.debug(String.format("Reflect: %s", clazz));
 		}
-//		System.out.println(clazz);
-//		System.out.println(object.getClass());
-//		
-//		for (Field property : clazz.getDeclaredFields()) {
-//			Annotation annotation = property.getAnnotation(MetaProperty.class);
-//			property.setAccessible(true);
-//			String key = property.getName();
-//			if (annotation != null) {
-//				Object value = property.get(object);
-//				LOGGER.debug(String.format("Property - %s:%s", key, value));
-//				if (value != null) {
-//					propertyContainer.put(key, value);
-//				}
-//			}
-//		}
-//		
-//		Class<?> superClass = clazz.getClass().getSuperclass();
-//		System.out.println(superClass);
-//		for (Field property : superClass.getDeclaredFields()) {
-//			Annotation annotation = property.getAnnotation(MetaProperty.class);
-//			property.setAccessible(true);
-//			String key = property.getName();
-//			if (annotation != null) {
-//				Object value = property.get(object);
-//				LOGGER.debug(String.format("Property - %s:%s", key, value));
-//				if (value != null) {
-//					propertyContainer.put(key, value);
-//				}
-//			}
-//		}
-//		
-//		Class<?> evenMoreSuperClass = superClass.getSuperclass();
-//		System.out.println(evenMoreSuperClass);
-//		for (Field property : evenMoreSuperClass.getDeclaredFields()) {
-//			Annotation annotation = property.getAnnotation(MetaProperty.class);
-//			property.setAccessible(true);
-//			String key = property.getName();
-//			if (annotation != null) {
-//				Object value = property.get(object);
-//				LOGGER.debug(String.format("Property - %s:%s", key, value));
-//				if (value != null) {
-//					propertyContainer.put(key, value);
-//				}
-//			}
-//		}
-//		
-//		Class<?> MoreMoreSuperClass = evenMoreSuperClass.getClass().getSuperclass();
-//		for (Field property : MoreMoreSuperClass.getDeclaredFields()) {
-//			Annotation annotation = property.getAnnotation(MetaProperty.class);
-//			property.setAccessible(true);
-//			String key = property.getName();
-//			if (annotation != null) {
-//				Object value = property.get(object);
-//				LOGGER.debug(String.format("Property - %s:%s", key, value));
-//				if (value != null) {
-//					propertyContainer.put(key, value);
-//				}
-//			}
-//		}
 		
 		return propertyContainer;
 	}

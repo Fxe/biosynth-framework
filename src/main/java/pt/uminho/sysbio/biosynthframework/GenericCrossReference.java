@@ -17,7 +17,7 @@ public class GenericCrossReference implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
-		DATABASE, MODEL, ECNUMBER, NAME, OBSOLETE, SELF, PATENT, GENE, UNKNOWN, REACTION, CITATION
+		DATABASE, MODEL, ECNUMBER, NAME, OBSOLETE, SELF, PATENT, GENE, UNKNOWN, REACTION, CITATION, OTHER, PROTEIN
 	}
 	
 	@Id
