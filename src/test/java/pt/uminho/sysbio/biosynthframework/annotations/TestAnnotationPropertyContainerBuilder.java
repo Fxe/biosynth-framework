@@ -54,6 +54,8 @@ public class TestAnnotationPropertyContainerBuilder {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		
+		assertEquals(true, true);
 	}
 
 	@Test

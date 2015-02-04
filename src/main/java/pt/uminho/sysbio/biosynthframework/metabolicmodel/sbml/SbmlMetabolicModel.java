@@ -67,6 +67,7 @@ public class SbmlMetabolicModel extends AbstractMetabolicModel{
 	}
 	public void setSbmlSpecies(List<SbmlMetaboliteSpecieEntity> sbmlSpecies) {
 		for (SbmlMetaboliteSpecieEntity sbmlSpecie : sbmlSpecies) {
+			System.out.println(sbmlSpecie);
 //			sbmlSpecie.setSbmlMetabolicModel(this);
 		}
 		this.sbmlSpecies = sbmlSpecies;
