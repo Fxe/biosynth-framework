@@ -58,6 +58,19 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());
+		sb.append("\nStrong Properties:\n");
+		if (links.isEmpty()) {
+			sb.append("=========Empty=========\n");
+		} else {
+			for (Map<?, ?> p : links) {
+				Object l = p.keySet().iterator().next();
+				Object r = p.get(l);
+				sb.append("#").append(l.getClass().getSimpleName()).append("#")
+				  .append(l).append(" => ")
+				  .append("#").append(r.getClass().getSimpleName()).append("#")
+				  .append(r).append("\n");
+			}
+		}
 		sb.append("Left Metabolites:\n");
 		if (left.isEmpty()) {
 			sb.append("=========Empty=========\n");

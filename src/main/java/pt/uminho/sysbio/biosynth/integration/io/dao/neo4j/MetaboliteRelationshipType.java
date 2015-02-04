@@ -13,5 +13,8 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	Isomorphic,
 	included_in,
 	found_in,
-	ChEBI_Parent, has_mdl_mol_file,
+	chebi_parent, 
+	has_mdl_mol_file,
+	in_pathway,
+	related_to,
 }

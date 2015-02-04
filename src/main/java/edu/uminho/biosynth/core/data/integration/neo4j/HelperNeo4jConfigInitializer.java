@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
@@ -20,10 +21,12 @@ public class HelperNeo4jConfigInitializer {
 		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.id IS UNIQUE",
 		"CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.internalId IS UNIQUE",
 		
-		"CREATE CONSTRAINT ON (c:Compartment) ASSERT c.entry IS UNIQUE",
-		"CREATE CONSTRAINT ON (m:Model) ASSERT m.entry IS UNIQUE",
-		"CREATE INDEX ON :Metabolite(proxy)",
-		"CREATE INDEX ON :Reaction(proxy)",
+		String.format("CREATE CONSTRAINT ON (mmd : %s) ASSERT mmd.entry IS UNIQUE", GlobalLabel.MetabolicModel),
+		String.format("CREATE CONSTRAINT ON (cmp : %s) ASSERT cmp.entry IS UNIQUE", GlobalLabel.SubcellularCompartment),
+		String.format("CREATE CONSTRAINT ON (pwy : %s) ASSERT pwy.entry IS UNIQUE", GlobalLabel.MetabolicPathway),
+		String.format("CREATE CONSTRAINT ON (ecn : %s) ASSERT ecn.entry IS UNIQUE", GlobalLabel.EnzymeCommission),
+		String.format("CREATE INDEX ON :%s(proxy)", GlobalLabel.Metabolite),
+		String.format("CREATE INDEX ON :%s(proxy)", GlobalLabel.Reaction),
 	};
 	
 	private static final String[] NEO_META_CONSTRAINTS = {

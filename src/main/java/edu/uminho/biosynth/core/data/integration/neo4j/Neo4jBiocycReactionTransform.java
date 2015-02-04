@@ -65,7 +65,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 		for (BioCycReactionEcNumberEntity ecnumber : rxn.getEcNumbers()) {
 			CentralDataReactionProperty ecnProp = 
 					this.buildSimpleProperty("ecn", ecnumber.getEcNumber(), 
-							ReactionRelationshipType.HasECNumber, 
+							ReactionRelationshipType.has_ec_number, 
 							ReactionPropertyLabel.ECNumber);
 			entity.getReactionProperties().add(ecnProp);
 		}
@@ -73,7 +73,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 		for (String pathway : rxn.getPathways()) {
 			CentralDataReactionProperty pathwayProp = 
 					this.buildSimpleProperty("entry", pathway, 
-							ReactionRelationshipType.InPathway, 
+							ReactionRelationshipType.in_pathway, 
 							ReactionPropertyLabel.Pathway);
 			entity.getReactionProperties().add(pathwayProp);
 		}
@@ -93,7 +93,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 							leftEntity.getCoefficient(), 
 							rxn.getSource(),
 							leftEntity.getStoichiometry(), 
-							ReactionRelationshipType.Left.toString());
+							ReactionRelationshipType.left_component.toString());
 			entity.getReactionStoichiometryProperties().add(dataReactionProperty);
 		}
 		
@@ -104,7 +104,7 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 							rightEntity.getCoefficient(), 
 							rxn.getSource(),
 							rightEntity.getStoichiometry(), 
-							ReactionRelationshipType.Right.toString());
+							ReactionRelationshipType.right_component.toString());
 			
 			entity.getReactionStoichiometryProperties().add(dataReactionProperty);
 		}
