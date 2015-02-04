@@ -71,7 +71,7 @@ public class BiggDaoFactory {
 	}
 	
 	public HbmBiggMetaboliteDaoImpl buildHbmBiggMetaboliteDao() {
-		HbmBiggMetaboliteDaoImpl daoImpl = new HbmBiggMetaboliteDaoImpl();
+		
 		
 		if (sessionFactory == null) {
 			initialize(
@@ -79,7 +79,7 @@ public class BiggDaoFactory {
 					BiggMetaboliteCrossreferenceEntity.class);
 		}
 		
-		daoImpl.setSessionFactory(sessionFactory);
+		HbmBiggMetaboliteDaoImpl daoImpl = new HbmBiggMetaboliteDaoImpl(sessionFactory);
 		return daoImpl;
 	}
 	

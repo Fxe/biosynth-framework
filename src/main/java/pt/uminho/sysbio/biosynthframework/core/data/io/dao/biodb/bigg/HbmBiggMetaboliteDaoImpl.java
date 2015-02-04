@@ -24,6 +24,13 @@ public class HbmBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 		return this.sessionFactory.getCurrentSession();
 	}
 	
+	@Deprecated
+	public HbmBiggMetaboliteDaoImpl() {};
+	
+	public HbmBiggMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
 	public SessionFactory getSessionFactory() { return sessionFactory;}
 	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	public HbmBiggMetaboliteDaoImpl withSessionFactory(SessionFactory sessionFactory) {
