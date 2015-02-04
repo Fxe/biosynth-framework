@@ -106,9 +106,21 @@ public class Neo4jMapper {
 //		if (node == null || !node.hasLabel(IntegrationNodeLabel.MetaboliteCluster)) return null;
 		
 		IntegratedCluster integratedCluster = new IntegratedCluster();
-		String clusterType = node.getLabels().iterator().next().toString();
+		if (node.hasLabel(IntegrationNodeLabel.MetaboliteCluster) &&
+				node.hasLabel(IntegrationNodeLabel.ReactionCluster)) {
+			LOGGER.warn("Invalid type definition: MetaboliteCluster and ReactionCluster are exclusive");
+			integratedCluster.setClusterType("ERROR");
+		} else if (node.hasLabel(IntegrationNodeLabel.MetaboliteCluster)) {
+			integratedCluster.setClusterType(IntegrationNodeLabel.MetaboliteCluster);
+		} else if (node.hasLabel(IntegrationNodeLabel.ReactionCluster)) {
+			integratedCluster.setClusterType(IntegrationNodeLabel.ReactionCluster);
+		} else {
+			LOGGER.warn(String.format("Invalid type definition %s expected MetaboliteCluster or ReactionCluster", Neo4jUtils.getLabels(node)));
+			integratedCluster.setClusterType("ERROR");
+		}
+//		String clusterType = node.getLabels().iterator().next().toString();
 		integratedCluster.setId(node.getId());
-		integratedCluster.setClusterType(clusterType);
+		
 		integratedCluster.setDescription((String) node.getProperty("description", ""));
 		integratedCluster.setEntry((String) node.getProperty("entry"));
 		
