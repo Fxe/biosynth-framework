@@ -16,12 +16,14 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
@@ -205,20 +207,6 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return propertyPair;
 	}
 	
-//	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
-//			String key, Object value, String[] a, String relationShipType) {
-//		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
-//		GraphRelationshipEntity relationshipEntity = this.buildRelationhipEntity(relationShipType);
-//		if (propertyEntity == null || relationshipEntity == null) {
-//			LOGGER.debug(String.format("Ignored Property/Link %s -> %s::%s:%s", relationShipType, majorLabel, key, value));
-//			return null;
-//		}
-//		Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyPair =
-//				new ImmutablePair<>(propertyEntity, relationshipEntity);
-//		
-//		return propertyPair;
-//	}
-	
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
 			String key, Object value, String majorLabel, String relationShipType, Map<String, Object> relationshipProperties) {
 		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
@@ -280,11 +268,30 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
 						break;
 					case MODEL:
-						centralMetaboliteEntity.addPropertyEntity(
-								this.buildPropertyLinkPair(
-										"key", xref.getRef(), 
-										MODEL_LABEL, 
-										METABOLITE_MODEL_RELATIONSHIP_TYPE));
+						Pair<GraphPropertyEntity, GraphRelationshipEntity> p = this.buildPropertyLinkPair(
+								"entry", xref.getRef(), 
+								MODEL_LABEL, 
+								METABOLITE_MODEL_RELATIONSHIP_TYPE);
+						p.getRight().getProperties().put("specie", xref.getValue());
+						centralMetaboliteEntity.addPropertyEntity(p);
+						break;
+					case GENE:
+						GlobalLabel major_label = GlobalLabel.valueOf(xref.getRef());
+						Pair<GraphPropertyEntity, GraphRelationshipEntity> g = this.buildPropertyLinkPair(
+								"entry", xref.getValue(), 
+								major_label.toString(), 
+								MetaboliteRelationshipType.related_to.toString(),
+								GlobalLabel.Gene.toString());
+						centralMetaboliteEntity.addPropertyEntity(g);
+						break;
+					case REACTION:
+						ReactionMajorLabel reactionMajorLabel = ReactionMajorLabel.valueOf(xref.getRef());
+						Pair<GraphPropertyEntity, GraphRelationshipEntity> r = this.buildPropertyLinkPair(
+								"entry", xref.getValue(), 
+								reactionMajorLabel.toString(), 
+								MetaboliteRelationshipType.found_in.toString(),
+								GlobalLabel.Reaction.toString());
+						centralMetaboliteEntity.addPropertyEntity(r);
 						break;
 					default:
 						LOGGER.warn(String.format("Ignored type <%s>[%s:%s]", xref.getType(), xref.getRef(), xref.getValue()));

@@ -3,7 +3,8 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import org.neo4j.graphdb.Label;
 
 public enum GlobalLabel implements Label {
-	KEGG,
+	Literature,
+	KEGG, BioCyc,
 	Orthology,
 	KeggPathway, KeggOrthology,
 	EnzymeCommission,
@@ -11,6 +12,9 @@ public enum GlobalLabel implements Label {
 	SuperMetabolite, Metabolite, MetaboliteProperty,
 	Reaction, ReactionProperty,
 	MetabolicPathway, 
-	BioCyc,
+	
 	SubcellularCompartment,
+	
+	//Things that I have no clue where to put !
+	UniProt, Gene, 
 }
