@@ -70,6 +70,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     public Boolean getObsolete() { return obsolete;}
 	public void setObsolete(Boolean obsolete) { this.obsolete = obsolete;}
 
+	@MetaProperty(asString=true)
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name="MODDATE") private DateTime modDate;
 	
