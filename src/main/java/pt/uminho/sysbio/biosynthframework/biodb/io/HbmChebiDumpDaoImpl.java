@@ -84,6 +84,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			resName.setAdapted(name.getAdapted());
 			resName.setChebiMetaboliteEntity(res);
 			res.getNames().add(resName);
+			
+			LOGGER.debug("Added ChebiMetaboliteNameEntity: " + resName);
 		}
 		
 		for (ChebiDumpMetaboliteCommentEntity comment : cpd.getComments()) {
@@ -92,17 +94,21 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			comment_.setDataType(comment.getDataType());
 			comment_.setChebiMetaboliteEntity(res);
 			res.getComments().add(comment_);
+			LOGGER.debug("Added ChebiMetaboliteComment: " + comment_);
 		}
 		
 		for (ChebiDumpMetaboliteChemicalDataEntity chemData: cpd.getChemicalData()) {
 			switch (chemData.getType().toLowerCase()) {
 				case "charge":
+					LOGGER.debug("Charge: " + chemData.getChemicalData());
 					res.setCharge(Integer.parseInt(chemData.getChemicalData()));
 					break;
 				case "formula":
+					LOGGER.debug("Formula: " + chemData.getChemicalData());
 					res.setFormula(chemData.getChemicalData());
 					break;
 				case "mass":
+					LOGGER.debug("Mass: " + chemData.getChemicalData());
 					res.setMass(Double.parseDouble(chemData.getChemicalData()));
 					break;
 				default:
@@ -113,15 +119,19 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		for (ChebiDumpMetaboliteStructuresEntity structure: cpd.getStructures()) {
 			switch (structure.getType().toLowerCase()) {
 				case "inchi":
+					LOGGER.debug("InChI: " + structure.getStructure());
 					res.setInchi(structure.getStructure());
 					break;
 				case "inchikey":
+					LOGGER.debug("InChI Key: " + structure.getStructure());
 					res.setInchiKey(structure.getStructure());
 					break;
 				case "smiles":
+					LOGGER.debug("SMILES: " + structure.getStructure());
 					res.setSmiles(structure.getStructure());
 					break;
 				case "mol":
+					LOGGER.debug("Found Mol: " + structure.getDimension());
 					if (structure.getDimension().equals("3D")) {
 						res.setMol3d(structure.getStructure());
 					} else if (structure.getDimension().equals("2D")) {
@@ -143,8 +153,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 				xref.setType(type);
 				xref.setRef(reference.getReferenceDbName());
 				xref.setValue(reference.getReferenceId());
-				xref.setLocationInReference(reference.getLocationInRef().trim().isEmpty()?null:reference.getLocationInRef());
-				xref.setReferenceName(reference.getReferenceName().trim().isEmpty()?null:reference.getReferenceName());
+				if (reference.getLocationInRef() != null) xref.setLocationInReference(reference.getLocationInRef().trim().isEmpty()?null:reference.getLocationInRef());
+				if (reference.getReferenceName() != null) xref.setReferenceName(reference.getReferenceName().trim().isEmpty()?null:reference.getReferenceName());
 				
 				xref.setChebiMetaboliteEntity(res);
 				
@@ -211,11 +221,20 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			case "uniprot":
 				type = GenericCrossReference.Type.GENE;
 				break;
+			case "reactome":
+				type = GenericCrossReference.Type.REACTION;
+			 	break;
+			case "sabio-rk":
+				type = GenericCrossReference.Type.REACTION;
+			 	break;
 			case "rhea":
 				type = GenericCrossReference.Type.REACTION;
 				break;
 			case "brenda":
 				type = GenericCrossReference.Type.ECNUMBER;
+				break;
+			case "enzymeportal":
+				type = GenericCrossReference.Type.PROTEIN;
 				break;
 			default:
 				LOGGER.warn("Unknown type: " + db);
