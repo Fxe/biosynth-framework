@@ -8,8 +8,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="SEED_COMPOUND_CUE")
-public class SeedCompoundCueEntity extends AbstractSeedCue {
+@Table(name="seed_metabolite_cue")
+public class SeedMetaboliteCueEntity extends AbstractSeedCue {
 
 	private static final long serialVersionUID = 1L;
 	

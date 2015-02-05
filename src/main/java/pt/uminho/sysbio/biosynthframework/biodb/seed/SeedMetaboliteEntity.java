@@ -27,7 +27,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 	
 	@Charge
 	@MetaProperty
-	@Column(name="DEFAULTCHARGE") 
+	@Column(name="default_charge") 
 	private Integer defaultCharge;
 	public int getDefaultCharge() { return defaultCharge;}
 	public void setDefaultCharge(int defaultCharge) { this.defaultCharge = defaultCharge;}
@@ -65,7 +65,7 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 	private String unchargedFormula;
 	
 	@MetaProperty
-    @Column(name="OBSOLETE") 
+    @Column(name="obsolete") 
 	private Boolean obsolete = false;
     public Boolean getObsolete() { return obsolete;}
 	public void setObsolete(Boolean obsolete) { this.obsolete = obsolete;}
@@ -74,13 +74,13 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
     @Column(name="MODDATE") private DateTime modDate;
 	
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
-    private List<SeedCompoundStructureEntity> structures = new ArrayList<>();
+    private List<SeedMetaboliteStructureEntity> structures = new ArrayList<>();
     
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
-    private List<SeedCompoundPkEntity> pks = new ArrayList<>();
+    private List<SeedMetabolitePkEntity> pks = new ArrayList<>();
     
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
-    private List<SeedCompoundCueEntity> compoundCues = new ArrayList<>();
+    private List<SeedMetaboliteCueEntity> compoundCues = new ArrayList<>();
     
     @OneToMany(mappedBy = "seedCompoundEntity", cascade = CascadeType.ALL)
     private List<SeedMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<>();
@@ -122,32 +122,32 @@ public class SeedMetaboliteEntity extends GenericMetabolite {
 	public String getUnchargedFormula() { return unchargedFormula;}
 	public void setUnchargedFormula(String unchargedFormula) { this.unchargedFormula = unchargedFormula;}
 
-	public List<SeedCompoundStructureEntity> getStructures() {
+	public List<SeedMetaboliteStructureEntity> getStructures() {
 		return structures;
 	}
-	public void setStructures(List<SeedCompoundStructureEntity> structures) {
+	public void setStructures(List<SeedMetaboliteStructureEntity> structures) {
 		this.structures = new ArrayList<> (structures);
-		for (SeedCompoundStructureEntity struct : this.structures) {
+		for (SeedMetaboliteStructureEntity struct : this.structures) {
 			struct.setSeedCompoundEntity(this);
 		}
 	}
 	
-	public List<SeedCompoundPkEntity> getPks() {
+	public List<SeedMetabolitePkEntity> getPks() {
 		return pks;
 	}
-	public void setPks(List<SeedCompoundPkEntity> pks) {
+	public void setPks(List<SeedMetabolitePkEntity> pks) {
 		this.pks = new ArrayList<> (pks);
-		for (SeedCompoundPkEntity pk : this.pks) {
+		for (SeedMetabolitePkEntity pk : this.pks) {
 			pk.setSeedCompoundEntity(this);
 		}
 	}
 	
-	public List<SeedCompoundCueEntity> getCompoundCues() {
+	public List<SeedMetaboliteCueEntity> getCompoundCues() {
 		return compoundCues;
 	}
-	public void setCompoundCues(List<SeedCompoundCueEntity> compoundCues) {
+	public void setCompoundCues(List<SeedMetaboliteCueEntity> compoundCues) {
 		this.compoundCues = new ArrayList<> (compoundCues);
-		for (SeedCompoundCueEntity compoundCue : this.compoundCues) {
+		for (SeedMetaboliteCueEntity compoundCue : this.compoundCues) {
 			compoundCue.setSeedCompoundEntity(this);
 		}
 	}

@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 
 @Entity
-@Table(name="SEED_REACTION_CROSSREF")
+@Table(name="seed_reaction_crossreference")
 public class SeedReactionCrossReferenceEntity extends GenericCrossReference{
 
 	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="ID_REACTION")
+	@JoinColumn(name="reaction_id")
 	private SeedReactionEntity seedReactionEntity;
 	
 	public SeedReactionCrossReferenceEntity() {

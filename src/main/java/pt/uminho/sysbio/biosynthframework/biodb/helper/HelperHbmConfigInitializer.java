@@ -37,11 +37,15 @@ import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEnt
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionProductEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionReactantEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundCueEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundPkEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCueEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetabolitePkEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteStructureEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCueEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionReagentEntity;
 
 public class HelperHbmConfigInitializer {
 
@@ -81,9 +85,9 @@ public class HelperHbmConfigInitializer {
 			  .addAnnotatedClass(KeggDrugMetaboliteEntity.class)
 			  .addAnnotatedClass(KeggDrugMetaboliteCrossreferenceEntity.class)
 			  .addAnnotatedClass(SeedMetaboliteEntity.class)
-			  .addAnnotatedClass(SeedCompoundStructureEntity.class)
-			  .addAnnotatedClass(SeedCompoundPkEntity.class)
-			  .addAnnotatedClass(SeedCompoundCueEntity.class)
+			  .addAnnotatedClass(SeedMetaboliteStructureEntity.class)
+			  .addAnnotatedClass(SeedMetabolitePkEntity.class)
+			  .addAnnotatedClass(SeedMetaboliteCueEntity.class)
 			  .addAnnotatedClass(SeedMetaboliteCrossreferenceEntity.class)
 			  
 			  .addAnnotatedClass(MnxMetaboliteEntity.class)
@@ -104,7 +108,11 @@ public class HelperHbmConfigInitializer {
 			  .addAnnotatedClass(BiggReactionEntity.class)
 			  .addAnnotatedClass(BiggReactionLeftEntity.class)
 			  .addAnnotatedClass(BiggReactionRightEntity.class)
-			  .addAnnotatedClass(BiggReactionCrossReferenceEntity.class);
+			  .addAnnotatedClass(BiggReactionCrossReferenceEntity.class)
+			  .addAnnotatedClass(SeedReactionEntity.class)
+			  .addAnnotatedClass(SeedReactionCrossReferenceEntity.class)
+			  .addAnnotatedClass(SeedReactionCueEntity.class)
+			  .addAnnotatedClass(SeedReactionReagentEntity.class);
 		ServiceRegistry servReg = 
 				new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		SessionFactory sessionFactory = config.buildSessionFactory(servReg);

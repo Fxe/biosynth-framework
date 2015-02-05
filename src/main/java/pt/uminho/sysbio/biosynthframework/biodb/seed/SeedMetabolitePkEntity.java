@@ -8,11 +8,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="SEED_COMPOUND_STRUCTURE")
-public class SeedCompoundStructureEntity {
+@Table(name="seed_metabolite_pk")
+public class SeedMetabolitePkEntity {
 	
 	@Id
     @Column(name="id")
@@ -24,9 +27,12 @@ public class SeedCompoundStructureEntity {
 	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
-	@Column(name="STRUCTURE") private String structure;
-	@Column(name="CKSUM") private String cksum;
-	@Column(name="S_TYPE") private String type;
+	@Column(name="pk") private Double pk;
+	@Column(name="atom") private short atom;
+	@Column(name="pk_type") private String type;
+
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name="MODDATE") private DateTime modDate;
 	
 	public Integer getId() {
 		return id;
@@ -42,18 +48,18 @@ public class SeedCompoundStructureEntity {
 		this.seedCompoundEntity = seedCompoundEntity;
 	}
 	
-	public String getStructure() {
-		return structure;
+	public double getPk() {
+		return pk;
 	}
-	public void setStructure(String structure) {
-		this.structure = structure;
+	public void setPk(double pk) {
+		this.pk = pk;
 	}
 	
-	public String getCksum() {
-		return cksum;
+	public short getAtom() {
+		return atom;
 	}
-	public void setCksum(String cksum) {
-		this.cksum = cksum;
+	public void setAtom(short atom) {
+		this.atom = atom;
 	}
 	
 	public String getType() {
@@ -63,6 +69,13 @@ public class SeedCompoundStructureEntity {
 		this.type = type;
 	}
 	
+	public DateTime getModDate() {
+		return modDate;
+	}
+	public void setModDate(String modDate) {
+		this.modDate = new DateTime(modDate);
+	}
+	
 	@Override
 	public String toString() {
 		final char sep = ',';
@@ -70,8 +83,9 @@ public class SeedCompoundStructureEntity {
 		final char end = '>';
 		StringBuilder sb = new StringBuilder();
 		sb.append(ini);
-		sb.append("structure:").append(structure).append(sep);
-		sb.append("cksum:").append(cksum).append(sep);
+		sb.append("pk:").append(pk).append(sep);
+		sb.append("atom:").append(atom).append(sep);
+		sb.append("modDate:").append(modDate).append(sep);
 		sb.append("type:").append(type);
 		sb.append(end);
 		return sb.toString();

@@ -8,14 +8,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="SEED_REACTION_CUE")
+@Table(name="seed_reaction_cue")
 public class SeedReactionCueEntity extends AbstractSeedCue{
 	
 	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="ID_REACTION")
+	@JoinColumn(name="reaction_id")
 	private SeedReactionEntity seedReactionEntity;
 
 	public SeedReactionEntity getSeedReactionEntity() {

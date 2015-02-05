@@ -8,14 +8,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="SEED_COMPOUND_PK")
-public class SeedCompoundPkEntity {
+@Table(name="seed_metabolite_structure")
+public class SeedMetaboliteStructureEntity {
 	
 	@Id
     @Column(name="id")
@@ -27,12 +24,9 @@ public class SeedCompoundPkEntity {
 	@JoinColumn(name="metabolite_id")
 	private SeedMetaboliteEntity seedCompoundEntity;
 	
-	@Column(name="PK") private Double pk;
-	@Column(name="ATOM") private short atom;
-	@Column(name="PK_TYPE") private String type;
-
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name="MODDATE") private DateTime modDate;
+	@Column(name="STRUCTURE") private String structure;
+	@Column(name="CKSUM") private String cksum;
+	@Column(name="S_TYPE") private String type;
 	
 	public Integer getId() {
 		return id;
@@ -48,18 +42,18 @@ public class SeedCompoundPkEntity {
 		this.seedCompoundEntity = seedCompoundEntity;
 	}
 	
-	public double getPk() {
-		return pk;
+	public String getStructure() {
+		return structure;
 	}
-	public void setPk(double pk) {
-		this.pk = pk;
+	public void setStructure(String structure) {
+		this.structure = structure;
 	}
 	
-	public short getAtom() {
-		return atom;
+	public String getCksum() {
+		return cksum;
 	}
-	public void setAtom(short atom) {
-		this.atom = atom;
+	public void setCksum(String cksum) {
+		this.cksum = cksum;
 	}
 	
 	public String getType() {
@@ -69,13 +63,6 @@ public class SeedCompoundPkEntity {
 		this.type = type;
 	}
 	
-	public DateTime getModDate() {
-		return modDate;
-	}
-	public void setModDate(String modDate) {
-		this.modDate = new DateTime(modDate);
-	}
-	
 	@Override
 	public String toString() {
 		final char sep = ',';
@@ -83,9 +70,8 @@ public class SeedCompoundPkEntity {
 		final char end = '>';
 		StringBuilder sb = new StringBuilder();
 		sb.append(ini);
-		sb.append("pk:").append(pk).append(sep);
-		sb.append("atom:").append(atom).append(sep);
-		sb.append("modDate:").append(modDate).append(sep);
+		sb.append("structure:").append(structure).append(sep);
+		sb.append("cksum:").append(cksum).append(sep);
 		sb.append("type:").append(type);
 		sb.append(end);
 		return sb.toString();

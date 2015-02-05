@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,18 +20,18 @@ import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.Orientation;
 
 @Entity
-@Table(name="SEED_REACTION")
+@Table(name="seed_reaction")
 public class SeedReactionEntity extends GenericReaction {
     
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="LOCKED") private short locked;
-    @Column(name="DELTAG") private double deltaG;
-    @Column(name="DELTAGERR") private double deltaGErr;
-    @Column(name="UUID") private String uuid;
-    @Column(name="STATUS") private String status;
-    @Column(name="CKSUM") private String cksum;
-    @Column(name="DEFPROTONS") private int defaultProtons;
+	@Column(name="locked") private short locked;
+    @Column(name="deltag") private double deltaG;
+    @Column(name="deltagerr") private double deltaGErr;
+    @Column(name="uuid") private String uuid;
+    @Column(name="status") private String status;
+    @Column(name="cksum") private String cksum;
+    @Column(name="default_protons") private int defaultProtons;
     @Column(name="DIRECTION") private String direction;
     @Column(name="ABBREVIATION") private String abbreviation;
     
@@ -44,6 +47,20 @@ public class SeedReactionEntity extends GenericReaction {
     @OneToMany(mappedBy = "seedReactionEntity", cascade = CascadeType.ALL)
     private List<SeedReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
     
+	@ElementCollection
+	@CollectionTable(name="seed_reaction_synonym", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="synonym", length=255)
+	private List<String> synonyms = new ArrayList<> ();
+	public List<String> getSynonyms() { return synonyms;}
+	public void setSynonyms(List<String> synonyms) { this.synonyms = synonyms;}
+	
+	@ElementCollection
+	@CollectionTable(name="seed_reaction_enzyme_class", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="enzyme_class", length=255)
+	private List<String> enzymeClass = new ArrayList<> ();
+	public List<String> getEnzymeClass() { return enzymeClass;}
+	public void setEnzymeClass(List<String> enzymeClass) { this.enzymeClass = enzymeClass;}
+	
 	public short getLocked() {
 		return locked;
 	}

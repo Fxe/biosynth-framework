@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 
 @Entity
-@Table(name="SEED_COMPOUND_CROSSREF")
+@Table(name="seed_metabolite_crossreference")
 public class SeedMetaboliteCrossreferenceEntity extends GenericCrossReference {
 
 	private static final long serialVersionUID = 1L;
