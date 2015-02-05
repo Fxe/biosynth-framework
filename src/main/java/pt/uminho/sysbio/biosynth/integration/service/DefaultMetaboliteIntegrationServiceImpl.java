@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
@@ -33,11 +34,18 @@ implements MetaboliteIntegrationService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
 	
-	@Autowired
 	private MetaboliteHeterogeneousDao<M> data;
 	
 	public MetaboliteHeterogeneousDao<M> getData() { return data;}
 	public void setData(MetaboliteHeterogeneousDao<M> data) { this.data = data;}
+	
+	@Autowired
+	public DefaultMetaboliteIntegrationServiceImpl(
+			MetaboliteHeterogeneousDao<M> data, 
+			IntegrationMetadataDao meta) {
+		super(meta);
+		this.data = data;
+	}
 	
 	@Override
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult,

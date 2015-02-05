@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteStructureEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
@@ -136,7 +136,7 @@ public class Neo4jSeedMetaboliteDaoImpl extends AbstractNeo4jDao<SeedMetaboliteE
 		if (node.hasProperty("molWeight")) cpd.setDeltaG((Double) node.getProperty("deltaG"));
 		if (node.hasProperty("inchi")) cpd.setDeltaGErr((Double) node.getProperty("deltaGErr"));
 		if (node.hasProperty("smiles")) {
-			SeedCompoundStructureEntity smiles = new SeedCompoundStructureEntity();
+			SeedMetaboliteStructureEntity smiles = new SeedMetaboliteStructureEntity();
 			cpd.getStructures().add(smiles);
 			smiles.setStructure((String) node.getProperty("smiles"));
 		}

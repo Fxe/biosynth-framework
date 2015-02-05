@@ -62,9 +62,8 @@ public class TestHbmChimeraService {
 	public void setUp() throws Exception {
 		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
 		data_tx = db.beginTx();
-		integrationService = new  OldMetaboliteIntegrationServiceImpl();
+		integrationService = new  OldMetaboliteIntegrationServiceImpl(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("GEN"));
-		integrationService.setMeta(meta);
 		integrationService.setData(data);
 	}
 
@@ -77,7 +76,7 @@ public class TestHbmChimeraService {
 
 //	@Test
 	public void testCreateSingleCluster() {
-		OldMetaboliteIntegrationServiceImpl integrator = new OldMetaboliteIntegrationServiceImpl();
+		OldMetaboliteIntegrationServiceImpl integrator = new OldMetaboliteIntegrationServiceImpl(meta);
 		Neo4jChimeraDataDaoImpl data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(db);
 		HbmIntegrationMetadataDaoImpl meta = new HbmIntegrationMetadataDaoImpl();

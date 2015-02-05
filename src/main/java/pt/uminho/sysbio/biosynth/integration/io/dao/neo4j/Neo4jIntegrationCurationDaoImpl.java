@@ -101,7 +101,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 			node = graphDatabaseService.createNode();
 			node.addLabel(IntegrationNodeLabel.IntegratedMember);
 			node.addLabel(label);
-			//XXX: reference id - may be changed to reference-id in future
+			//XXX: reference id - may be changed to reference_id in future
 			node.setProperty("id", referenceId);
 		}
 		

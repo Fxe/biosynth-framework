@@ -18,11 +18,16 @@ public class BasicIntegrationService implements IntegrationService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasicIntegrationService.class);
 	
-	@Autowired
+	
 	protected IntegrationMetadataDao meta;
 	
 	public IntegrationMetadataDao getMeta() { return meta;}
 	public void setMeta(IntegrationMetadataDao meta) { this.meta = meta;}
+	
+	@Autowired
+	public BasicIntegrationService(IntegrationMetadataDao meta) {
+		this.meta = meta;
+	}
 
 	@Override
 	public IntegrationSet getIntegrationSetByEntry(String entry) {

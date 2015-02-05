@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +33,8 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(NEO_META_DB);
-//		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabase(NEO_META_DB);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jMetaDatabaseConstraints(NEO_META_DB);
+		daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
 	}
 
 	@AfterClass
@@ -41,7 +44,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 
 	@Before
 	public void setUp() throws Exception {
-		daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
+		
 		neoTx = graphDatabaseService.beginTx();
 	}
 
@@ -53,19 +56,57 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 
 	@Test
 	public void test_create_integration_set_success() {
-		
-		
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setName("IID_BIGG");
 		integrationSet.setDescription("BiGG <=> KEGG Compound Integration");
-		
 		daoImpl.saveIntegrationSet(integrationSet);
-		
 		List<Long> ids = daoImpl.getAllIntegrationSetsId();
-		
-		System.out.println(ids);
-		
+		LOGGER.debug(ids.toString());
 		assertNotEquals(0, ids.size());
+	}
+	
+	@Test
+	public void test_get_integration_set_by_entry_success() {
+		String entry = "TEST_SET_2";
+		String description = "test_get_integration_set_success";
+		IntegrationSet integrationSet = new IntegrationSet();
+		integrationSet.setName(entry);
+		integrationSet.setDescription(description);
+		daoImpl.saveIntegrationSet(integrationSet);
+		List<Long> ids = daoImpl.getAllIntegrationSetsId();
+		LOGGER.debug(ids.toString());
+		IntegrationSet integrationSet_ = daoImpl.getIntegrationSet(entry);
+		assertEquals(entry, integrationSet_.getEntry());
+		assertEquals(description, integrationSet_.getDescription());
+	}
+	
+	@Test
+	public void test_get_integration_set_by_id_success() {
+		String entry = "TEST_SET_3";
+		String description = "test_get_integration_set_by_id_success";
+		IntegrationSet integrationSet = new IntegrationSet();
+		integrationSet.setName(entry);
+		integrationSet.setDescription(description);
+		daoImpl.saveIntegrationSet(integrationSet);
+		List<Long> ids = daoImpl.getAllIntegrationSetsId();
+		LOGGER.debug(ids.toString());
+		IntegrationSet integrationSet_ = daoImpl.getIntegrationSet(integrationSet.getId());
+		assertEquals(entry, integrationSet_.getEntry());
+		assertEquals(description, integrationSet_.getDescription());
+	}
+	
+	@Test
+	public void test_verify_neo4j_integration_set_data_success() {
+		String entry = "TEST_SET_4";
+		String description = "test_verify_neo4j_integration_set_data_success";
+		IntegrationSet integrationSet = new IntegrationSet();
+		integrationSet.setName(entry);
+		integrationSet.setDescription(description);
+		daoImpl.saveIntegrationSet(integrationSet);
+		Node node = graphDatabaseService.getNodeById(integrationSet.getId());
+		assertEquals(entry, node.getProperty("entry"));
+		assertEquals(description, node.getProperty("description"));
+		assertEquals(true, node.hasLabel(IntegrationNodeLabel.IntegrationSet));
 	}
 
 	@Test
@@ -82,7 +123,7 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 		integratedCluster.setDescription("some cluster");
 		
 		IntegratedMember integratedMember = new IntegratedMember();
-		integratedMember.setId(12345L);
+		integratedMember.setReferenceId(12345L);
 		integratedMember.setDescription("cpd-0000A");
 		integratedMember.setMemberType(IntegrationNodeLabel.MetaboliteMember.toString());
 		
@@ -117,10 +158,11 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 		IntegratedCluster integratedCluster = new IntegratedCluster();
 		integratedCluster.setIntegrationSet(integrationSet);
 		integratedCluster.setEntry("X00001");
+		integratedCluster.setClusterType(IntegrationNodeLabel.MetaboliteCluster);
 		integratedCluster.setDescription("some cluster");
 		
 		IntegratedMember integratedMember = new IntegratedMember();
-		integratedMember.setId(12345L);
+		integratedMember.setReferenceId(12345L);
 		integratedMember.setDescription("cpd-0000A");
 		
 		List<IntegratedClusterMember> integratedClusterMembers = new ArrayList<> ();

@@ -17,6 +17,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.service.BasicIntegrationService;
 import pt.uminho.sysbio.biosynth.integration.service.MetaboliteIntegrationService;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
@@ -34,6 +35,10 @@ import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 public class OldMetaboliteIntegrationServiceImpl extends BasicIntegrationService
 implements MetaboliteIntegrationService{
 
+	public OldMetaboliteIntegrationServiceImpl(IntegrationMetadataDao meta) {
+		super(meta);
+		// TODO Auto-generated constructor stub
+	}
 	private static Logger LOGGER = LoggerFactory.getLogger(OldMetaboliteIntegrationServiceImpl.class);
 	
 	@Autowired

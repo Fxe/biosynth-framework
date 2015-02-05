@@ -47,12 +47,13 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
 		if (!node.hasLabel(GlobalLabel.Reaction)) return null;
 		
-		LOGGER.debug("Found " + node);
+		LOGGER.debug(String.format("Found %s:%s", node, Neo4jUtils.getLabels(node)));
 		
 		GraphReactionEntity reactionEntity = new GraphReactionEntity();
 		
 		reactionEntity.setId(node.getId());
 //		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+		LOGGER.trace(String.format("Set Properties: %s", Neo4jUtils.getPropertiesMap(node)));
 		reactionEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.left_component));
@@ -68,8 +69,10 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> getReactionMetabolites(Node node, ReactionRelationshipType relationshipType) {
 		Map<GraphMetaboliteProxyEntity, Map<String, Object>> map = new HashMap<> ();
 		
+		LOGGER.debug(String.format("Lookup relationship %s", relationshipType));
 		for (Relationship relationship : node.getRelationships(relationshipType)) {
 			Node other = relationship.getOtherNode(node);
+			LOGGER.trace(String.format("Found %s:%s", other, Neo4jUtils.getLabels(other)));
 			
 			Map<String, Object> propertyContainer = 
 					Neo4jUtils.getPropertiesMap(relationship);

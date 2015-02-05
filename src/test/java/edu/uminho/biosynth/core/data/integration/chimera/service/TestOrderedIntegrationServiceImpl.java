@@ -61,9 +61,8 @@ public class TestOrderedIntegrationServiceImpl {
 		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new OldMetaboliteIntegrationServiceImpl();
+		integrationService = new OldMetaboliteIntegrationServiceImpl(meta);
 		integrationService.setData(data);
-		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));
 	}
 

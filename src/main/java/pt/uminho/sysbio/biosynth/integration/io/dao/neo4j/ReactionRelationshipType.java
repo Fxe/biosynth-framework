@@ -7,6 +7,6 @@ public enum ReactionRelationshipType implements RelationshipType {
 	has_crossreference_to, 
 	instance_of, 
 	has_ec_number, stoichiometry, left_component, right_component, in_pathway,
-	has_orthology, InEnzymaticReaction
-	
+	has_orthology, InEnzymaticReaction,
+//	Left, Right,
 }

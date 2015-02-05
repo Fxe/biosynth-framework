@@ -4,7 +4,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteStructureEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 
 public class SeedMetaboliteTransform
@@ -28,7 +28,7 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 //						entity.getInchi(), 
 //						METABOLITE_INCHI_LABEL, 
 //						METABOLITE_INCHI_RELATIONSHIP_TYPE));
-		for (SeedCompoundStructureEntity structure : entity.getStructures()) {
+		for (SeedMetaboliteStructureEntity structure : entity.getStructures()) {
 			centralMetaboliteEntity.addPropertyEntity(
 					this.buildPropertyLinkPair(
 							PROPERTY_UNIQUE_KEY, 
