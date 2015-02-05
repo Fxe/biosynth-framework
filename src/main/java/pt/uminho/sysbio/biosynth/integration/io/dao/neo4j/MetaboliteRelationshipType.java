@@ -17,5 +17,5 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	has_mdl_mol_file,		//Metabolite -[has_mdl_mol_file]-> ..
 	in_pathway,				//Metabolite -[in_pathway]-> MetabolicPathway
 	related_to,				//Metabolite -[related_to?]-> [Reaction|ec number|Gene|protein ?] e c number 1) this is a generic connection
-	has_patent,
+	has_literature,
 }
