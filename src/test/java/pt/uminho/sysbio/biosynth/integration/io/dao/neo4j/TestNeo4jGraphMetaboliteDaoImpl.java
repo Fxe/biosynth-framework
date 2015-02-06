@@ -45,7 +45,7 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
 	}
 
 	@Test
-	public void test_metabolite_entity_with_no_connected_link() {
+	public void test_save_metabolite_entity_with_no_connected_link() {
 		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
 			.withEntry("CX9999")
 			.withLabel(MetaboliteMajorLabel.LigandCompound)
@@ -60,7 +60,29 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
 	}
 	
 	@Test
-	public void test_metabolite_entity_with_crossreference() {
+	public void test_get_metabolite_entity_with_no_connected_link() {
+		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
+			.withEntry("CX9999")
+			.withLabel(MetaboliteMajorLabel.LigandCompound)
+			.withLabel(GlobalLabel.KEGG)
+			.withProperty("formula", "CHO")
+			.withProperty("name", "name1; name2;")
+			.buildGraphMetaboliteEntity(MetaboliteMajorLabel.LigandCompound);
+		
+		neo4jGraphMetaboliteDaoImpl.saveMetabolite("", metabolite);
+		
+		
+		GraphMetaboliteEntity metabolite_ = neo4jGraphMetaboliteDaoImpl
+				.getMetaboliteByEntry(metabolite.getMajorLabel(), metabolite.getEntry());
+		
+		assertEquals(metabolite.getEntry(), metabolite_.getEntry());
+		assertEquals(metabolite.getFormula(), metabolite_.getFormula());
+		assertEquals(metabolite.getName(), metabolite_.getName());
+		assertEquals(metabolite.getId(), metabolite_.getId());
+	}
+	
+	@Test
+	public void test_save_metabolite_entity_with_crossreference() {
 		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
 			.withEntry("DX9998")
 			.withLabel(MetaboliteMajorLabel.LigandDrug)
@@ -79,9 +101,39 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
 		
 		assertNotNull(metabolite.getId());
 	}
+	
+	
+	@Test
+	public void test_get_metabolite_entity_with_crossreference() {
+		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
+			.withEntry("DX9998")
+			.withLabel(MetaboliteMajorLabel.LigandDrug)
+			.withLabel(GlobalLabel.KEGG)
+			.withProperty("formula", "COSP")
+			.withProperty("name", "name1; name2; name3 (uuu);")
+			.withProperty("pro", "abc")
+			.withLinkTo(new SomeNodeFactory()
+				.withEntry("1-1-1")
+				.buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.CAS), 
+						new SomeNodeFactory()
+				.buildMetaboliteEdge(MetaboliteRelationshipType.has_crossreference_to))
+			.buildGraphMetaboliteEntity(MetaboliteMajorLabel.LigandDrug);
+		
+		neo4jGraphMetaboliteDaoImpl.saveMetabolite("", metabolite);
+		
+		GraphMetaboliteEntity metabolite_ = neo4jGraphMetaboliteDaoImpl
+				.getMetaboliteByEntry(metabolite.getMajorLabel(), metabolite.getEntry());
+		
+		assertEquals(metabolite.getEntry(), metabolite_.getEntry());
+		assertEquals(metabolite.getFormula(), metabolite_.getFormula());
+		assertEquals(metabolite.getName(), metabolite_.getName());
+		assertEquals(metabolite.getId(), metabolite_.getId());
+		assertEquals(1 , metabolite_.getConnectedEntities().size());
+		 
+	}
 
 	@Test
-	public void test_metabolite_entity_with_properties() {
+	public void test_save_metabolite_entity_with_properties() {
 		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
 			.withEntry("DX9997")
 			.withLabel(MetaboliteMajorLabel.LigandDrug)
@@ -110,5 +162,44 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
 		neo4jGraphMetaboliteDaoImpl.saveMetabolite("", metabolite);
 		
 		assertNotNull(metabolite.getId());
+	}
+	
+	@Test
+	public void test_get_metabolite_entity_with_properties() {
+		GraphMetaboliteEntity metabolite = new SomeNodeFactory()
+			.withEntry("DX9997")
+			.withLabel(MetaboliteMajorLabel.LigandDrug)
+			.withLabel(GlobalLabel.KEGG)
+			.withProperty("formula", "COSP")
+			.withProperty("name", "name1; name2; name3 (uuu);")
+			.withProperty("pro", "abc")
+			.withLinkTo(new SomeNodeFactory()
+				.buildGraphMetabolitePropertyEntity(MetabolitePropertyLabel.Charge, 0), 
+						new SomeNodeFactory()
+				.buildMetaboliteEdge(MetaboliteRelationshipType.has_charge))
+			.withLinkTo(new SomeNodeFactory()
+				.buildGraphMetabolitePropertyEntity(MetabolitePropertyLabel.Name, "name1"), 
+						new SomeNodeFactory()
+				.buildMetaboliteEdge(MetaboliteRelationshipType.has_name))
+			.withLinkTo(new SomeNodeFactory()
+				.buildGraphMetabolitePropertyEntity(MetabolitePropertyLabel.Name, "name2"), 
+						new SomeNodeFactory()
+				.buildMetaboliteEdge(MetaboliteRelationshipType.has_name))
+			.withLinkTo(new SomeNodeFactory()
+				.buildGraphMetabolitePropertyEntity(MetabolitePropertyLabel.MolecularFormula, "COSP"), 
+						new SomeNodeFactory()
+				.buildMetaboliteEdge(MetaboliteRelationshipType.has_molecular_formula))
+			.buildGraphMetaboliteEntity(MetaboliteMajorLabel.LigandDrug);
+		
+		neo4jGraphMetaboliteDaoImpl.saveMetabolite("", metabolite);
+		
+		GraphMetaboliteEntity metabolite_ = neo4jGraphMetaboliteDaoImpl
+				.getMetaboliteByEntry(metabolite.getMajorLabel(), metabolite.getEntry());
+		
+		assertEquals(metabolite.getEntry(), metabolite_.getEntry());
+		assertEquals(metabolite.getFormula(), metabolite_.getFormula());
+		assertEquals(metabolite.getName(), metabolite_.getName());
+		assertEquals(metabolite.getId(), metabolite_.getId());
+		assertEquals(4 , metabolite_.getConnectedEntities().size());
 	}
 }

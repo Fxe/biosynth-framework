@@ -24,6 +24,7 @@ public class SomeNodeFactory {
 
 	private String entry;
 	private String majorLabel;
+	private String uniqueConstraintProperty = null;
 	private Set<String> labels = new HashSet<> ();
 	private List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities = new ArrayList<> ();
 	private Map<String, Object> properties = new HashMap<> ();
@@ -44,6 +45,7 @@ public class SomeNodeFactory {
 		return this;
 	}
 	public SomeNodeFactory withEntry(String entry) {
+		this.uniqueConstraintProperty = "entry";
 		this.entry = entry;
 		return this;
 	}
@@ -86,7 +88,9 @@ public class SomeNodeFactory {
 	}
 	
 	private void setupGraphBaseEntity(AbstractGraphNodeEntity entity) {
+		
 		entity.setProperties(properties);
+		if (this.uniqueConstraintProperty != null) entity.setUniqueKey(uniqueConstraintProperty);
 		if (this.entry != null) entity.setEntry(this.entry);
 		entity.setMajorLabel(this.majorLabel);
 		entity.getLabels().add(this.majorLabel);
@@ -139,7 +143,8 @@ public class SomeNodeFactory {
 	
 	public GraphMetaboliteEntity buildGraphMetabolitePropertyEntity(MetabolitePropertyLabel label, Object property) {
 		this.majorLabel = label.toString();
-		this.properties.put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, property);
+		this.uniqueConstraintProperty = Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT;
+		this.properties.put(uniqueConstraintProperty, property);
 		this.labels.add(GlobalLabel.MetaboliteProperty.toString());
 		GraphMetaboliteEntity entity = new GraphMetaboliteEntity();
 		setupGraphBaseEntity(entity);
@@ -147,7 +152,8 @@ public class SomeNodeFactory {
 	}
 	public GraphReactionEntity buildGraphReactionPropertyEntity(ReactionPropertyLabel label, Object property) {
 		this.majorLabel = label.toString();
-		this.properties.put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, property);
+		this.uniqueConstraintProperty = Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT;
+		this.properties.put(uniqueConstraintProperty, property);
 		this.labels.add(GlobalLabel.ReactionProperty.toString());
 		GraphReactionEntity entity = new GraphReactionEntity();
 		setupGraphBaseEntity(entity);

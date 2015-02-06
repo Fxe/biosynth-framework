@@ -74,6 +74,10 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
 			AbstractGraphNodeEntity propertyEntity = p.getRight();
 			AbstractGraphEdgeEntity relationshipEntity = p.getLeft();
 			Triple<String, String, EtlCleasingType> triple;
+//			
+			if (propertyEntity.getMajorLabel() == null) {
+				System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
+			}
 			switch (propertyEntity.getMajorLabel()) {
 				case "MolecularFormula":
 					triple = this.cleanseFormula((String)propertyEntity.getProperties().get("key"));

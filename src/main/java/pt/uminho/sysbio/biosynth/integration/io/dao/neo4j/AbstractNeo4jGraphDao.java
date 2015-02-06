@@ -1,7 +1,5 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -24,18 +22,18 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 		this.graphDatabaseService = graphDatabaseService;
 	}
 	
-	protected<T extends AbstractGraphNodeEntity> AbstractGraphNodeEntity getGraphNodeEntity(long id, Class<T> clazz) {
-		AbstractGraphNodeEntity nodeEntity = null;
-		Node node = null;
-		try {
-			nodeEntity = clazz.newInstance();
-			Neo4jMapper.nodeToAbstractGraphNodeEntity(nodeEntity, node);
-		} catch (InstantiationException | IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return nodeEntity;
-	}
+//	protected<T extends AbstractGraphNodeEntity> AbstractGraphNodeEntity getGraphNodeEntity(long id, Class<T> clazz) {
+//		AbstractGraphNodeEntity nodeEntity = null;
+//		Node node = null;
+//		try {
+//			nodeEntity = clazz.newInstance();
+//			Neo4jMapper.nodeToAbstractGraphNodeEntity(nodeEntity, node);
+//		} catch (InstantiationException | IllegalAccessException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		return nodeEntity;
+//	}
 	
 	protected void saveGraphEntity(AbstractGraphNodeEntity entity) {
 		Node node = null;
@@ -43,6 +41,12 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 		if (entity.getId() != null) {
 			LOGGER.trace("Entity id[%s] non zero looking for existing node");
 			node = graphDatabaseService.getNodeById(entity.getId());
+		} else if (entity.getUniqueKey() != null && 
+				entity.getProperty(entity.getUniqueKey(), null) != null && 
+				entity.getMajorLabel() != null){
+			LOGGER.trace("Entity entry[%s] non zero looking for existing node");
+			Object uniqueContraintValue = entity.getProperty(entity.getUniqueKey(), null);
+			node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(DynamicLabel.label(entity.getMajorLabel()), entity.getUniqueKey(), uniqueContraintValue));
 		}
 		
 		
@@ -61,7 +65,12 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 		
 		
 		LOGGER.debug("Setup node properties ...");
-		Neo4jUtils.setPropertiesMap(entity.getProperties(), node);
+		try {
+			Neo4jUtils.setPropertiesMap(entity.getProperties(), node);
+		} catch (RuntimeException e) {
+			LOGGER.error(entity.getEntry() + " "  + entity.getLabels() + " " + "Property error " + entity.getProperties() + " - " + e.getMessage());
+			throw e;
+		}
 		if (entity.getMajorLabel() != null) {
 			LOGGER.trace("Setup major label property: " + entity.getMajorLabel());
 			node.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, entity.getMajorLabel());
@@ -76,6 +85,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 			
 			Node otherNode = graphDatabaseService.getNodeById(nodeEntity.getId());
 			String relationshipType = edgeEntity.getLabels().iterator().next();
+//			if (node.getR)
 			Relationship relationship = node.createRelationshipTo(otherNode, DynamicRelationshipType.withName(relationshipType));
 			LOGGER.trace(String.format("Connected %s:%s -[:%s]-> %s:%s", 
 					node, Neo4jUtils.getLabels(node), relationshipType, 

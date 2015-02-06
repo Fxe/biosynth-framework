@@ -22,6 +22,7 @@ import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
@@ -63,7 +64,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	protected static final String METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE = MetaboliteRelationshipType.has_crossreference_to.toString();
 	
-	private final String majorLabel;
+	protected final String majorLabel;
 	
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
@@ -76,8 +77,11 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	@Override
 	public GraphMetaboliteEntity etlTransform(M metabolite) {
-		GraphMetaboliteEntity centralMetaboliteEntity = new GraphMetaboliteEntity();
-
+		
+		GraphMetaboliteEntity centralMetaboliteEntity = new SomeNodeFactory()
+			.withEntry(metabolite.getEntry())
+			.buildGraphMetaboliteEntity(MetaboliteMajorLabel.valueOf(majorLabel));
+		
 		this.configureProperties(centralMetaboliteEntity, metabolite);
 		this.configureFormulaLink(centralMetaboliteEntity, metabolite);
 		this.configureNameLink(centralMetaboliteEntity, metabolite);
@@ -233,7 +237,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return propertyPair;
 	}
 	
-	private Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
+	protected Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
 			AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
 		Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p =
 				new ImmutablePair<>(edge, node);
@@ -253,13 +257,17 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		this.configureNameLink(centralMetaboliteEntity, entity.getName());
 	}
 	protected void configureNameLink(GraphMetaboliteEntity centralMetaboliteEntity, String name) {
-		centralMetaboliteEntity.getConnectedEntities().add(
-				this.buildPair(
-				new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
-						MetabolitePropertyLabel.MolecularFormula, name), 
-				new SomeNodeFactory().buildMetaboliteEdge(
-						MetaboliteRelationshipType.has_name)));
+		this.configureGenericPropertyLink(centralMetaboliteEntity, name, MetabolitePropertyLabel.Name, MetaboliteRelationshipType.has_name);
 	}
+	protected void configureGenericPropertyLink(GraphMetaboliteEntity centralMetaboliteEntity, Object value, MetabolitePropertyLabel label, MetaboliteRelationshipType relationship) {
+		if (value != null) {
+			centralMetaboliteEntity.getConnectedEntities().add(
+					this.buildPair(
+					new SomeNodeFactory().buildGraphMetabolitePropertyEntity(label, value), 
+					new SomeNodeFactory().buildMetaboliteEdge(relationship)));
+		}
+	}
+
 	
 	protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
 	
@@ -299,8 +307,8 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						centralMetaboliteEntity.getConnectedEntities().add(
 								this.buildPair(
 								new SomeNodeFactory()
-										.withEntry(xref.getValue())
-										.withLabel(GlobalLabel.MetabolicModel)
+										.withEntry(xref.getRef())
+										.withMajorLabel(GlobalLabel.MetabolicModel)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()
 										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
@@ -312,12 +320,48 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 //						p.getRight().getProperties().put("specie", xref.getValue());
 //						centralMetaboliteEntity.addPropertyEntity(p);
 						break;
+					case PATENT:
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withMajorLabel(LiteratureMajorLabel.valueOf(xref.getRef()))
+										.withLabel(GlobalLabel.Literature)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.has_literature)));
+						break;					
+					case PROTEIN:
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withMajorLabel(GlobalLabel.valueOf(xref.getRef()))
+										.withLabel(GlobalLabel.Gene)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.related_to)));
+						break;
+					case ECNUMBER:
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withMajorLabel(GlobalLabel.BrendaEnzyme)
+										.withLabel(GlobalLabel.EnzymeCommission)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.related_to)));
+						break;
 					case GENE:
 						centralMetaboliteEntity.getConnectedEntities().add(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.withLabel(GlobalLabel.valueOf(xref.getRef()))
+										.withMajorLabel(GlobalLabel.valueOf(xref.getRef()))
 										.withLabel(GlobalLabel.Gene)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()

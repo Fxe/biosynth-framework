@@ -31,6 +31,10 @@ public class BioDbDictionary {
 //		return "NOTFOUND";
 //	}
 	
+	/**
+	 * WHY NOT LOWER CASE ! ?
+	 * @return
+	 */
 	public static Map<String, String> getDbDictionary() {
 		/**
 		 * Some Rules:
@@ -42,6 +46,7 @@ public class BioDbDictionary {
 		
 		
 		dictionary.put("Wikipedia", MetaboliteMajorLabel.Wikipedia.toString());
+		dictionary.put("Wikipedia accession", MetaboliteMajorLabel.Wikipedia.toString());
 		
 		dictionary.put("LipidBank", MetaboliteMajorLabel.LipidBank.toString());
 		
@@ -108,6 +113,7 @@ public class BioDbDictionary {
 		dictionary.put("biopath", ReactionMajorLabel.BioPath.toString());
 		
 		dictionary.put("upa", ReactionMajorLabel.UniPathway.toString());
+		dictionary.put("Reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
 		return dictionary;

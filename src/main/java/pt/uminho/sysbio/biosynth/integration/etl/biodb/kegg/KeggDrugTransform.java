@@ -1,9 +1,12 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
 public class KeggDrugTransform 
@@ -20,24 +23,9 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 			GraphMetaboliteEntity centralMetaboliteEntity,
 			KeggDrugMetaboliteEntity entity) {
 		
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getInchi(), 
-						METABOLITE_INCHI_LABEL, 
-						METABOLITE_INCHI_RELATIONSHIP_TYPE));
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getSmiles(), 
-						METABOLITE_SMILE_LABEL, 
-						METABOLITE_SMILE_RELATIONSHIP_TYPE));
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY,
-						entity.getMol2d(), 
-						METABOLITE_MOL_FILE_LABEL, 
-						METABOLITE_MOL_FILE_RELATIONSHIP_TYPE));
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getInchi(), MetabolitePropertyLabel.InChI, MetaboliteRelationshipType.has_inchi);
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getSmiles(), MetabolitePropertyLabel.SMILES, MetaboliteRelationshipType.has_smiles);
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getMol2d(), MetabolitePropertyLabel.MDLMolFile, MetaboliteRelationshipType.has_mdl_mol_file);
 	}
 
 	@Override
@@ -46,12 +34,7 @@ extends AbstractMetaboliteTransform<KeggDrugMetaboliteEntity> {
 			KeggDrugMetaboliteEntity entity) {
 		
 		for (String name : entity.getNames()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							"key", 
-							name.trim(), 
-							METABOLITE_NAME_LABEL, 
-							METABOLITE_NAME_RELATIONSHIP_TYPE));
+			configureNameLink(centralMetaboliteEntity, name);
 		}
 	}
 	

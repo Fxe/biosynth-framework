@@ -59,7 +59,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.left_component));
 		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.right_component));
 		
-		String majorLabel = (String) reactionEntity.getProperty("major-label", null);
+		String majorLabel = (String) reactionEntity.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, null);
 		if (majorLabel == null) LOGGER.warn("Major label not found for %s:%s", node, Neo4jUtils.getLabels(node));
 		reactionEntity.setMajorLabel(majorLabel);
 		
@@ -79,7 +79,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			Long id = other.getId();
 			String entry = (String) other.getProperty("entry", null);
-			String majorLabel = (String) other.getProperty("major-label", null);
+			String majorLabel = (String) other.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, null);
 			GraphMetaboliteProxyEntity entity = new GraphMetaboliteProxyEntity();
 			entity.setId(id);
 			entity.setEntry(entry);
@@ -154,7 +154,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 //				this.createOrLinkToNode(node, relationship, entity);
 //			}
 			
-			node.setProperty("major-label", reaction.getMajorLabel());
+			node.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, reaction.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			reaction.setId(node.getId());
@@ -183,7 +183,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 //				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
 //			}
 			
-			node.setProperty("major-label", reaction.getMajorLabel());
+			node.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, reaction.getMajorLabel());
 			node.setProperty("proxy", false);
 			
 			reaction.setId(node.getId());
@@ -244,7 +244,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
-			proxyNode.setProperty("major-label", proxy.getMajorLabel());
+			proxyNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, proxy.getMajorLabel());
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
 			
 			for (String key : proxy.getProperties().keySet()) {
@@ -304,7 +304,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 			
 			proxyNode.setProperty("entry", proxy.getEntry());
 			proxyNode.setProperty("proxy", true);
-			proxyNode.setProperty("major-label", proxy.getMajorLabel());
+			proxyNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, proxy.getMajorLabel());
 			Relationship relationship = parent.createRelationshipTo(proxyNode, relationshipType);
 			for (String key : relationshipPropertyContainer.keySet()) {
 				relationship.setProperty(key, relationshipPropertyContainer.get(key));

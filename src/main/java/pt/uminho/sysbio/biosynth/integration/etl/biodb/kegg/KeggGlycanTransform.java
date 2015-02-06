@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
@@ -23,23 +24,27 @@ extends AbstractMetaboliteTransform<KeggGlycanMetaboliteEntity> {
 			KeggGlycanMetaboliteEntity entity) {
 		
 		for (String pwy : entity.getPathways()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair2(
-							"entry", 
-							pwy, 
-							GlobalLabel.KeggPathway.toString(), 
-							MetaboliteRelationshipType.in_pathway.toString(),
-							GlobalLabel.MetabolicPathway.toString(), GlobalLabel.KEGG.toString()));
+			centralMetaboliteEntity.getConnectedEntities().add(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(pwy)
+							.withLabel(GlobalLabel.KEGG)
+							.withLabel(GlobalLabel.MetabolicPathway)
+							.withMajorLabel(GlobalLabel.KeggPathway)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildMetaboliteEdge(
+							MetaboliteRelationshipType.in_pathway)));
 		}
 		
 		for (String ecn : entity.getEnzymes()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair2(
-							"entry", 
-							ecn, 
-							GlobalLabel.EnzymeCommission.toString(), 
-							MetaboliteRelationshipType.related_to.toString()
-							));
+			centralMetaboliteEntity.getConnectedEntities().add(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(ecn)
+							.withMajorLabel(GlobalLabel.EnzymeCommission)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildMetaboliteEdge(
+							MetaboliteRelationshipType.related_to)));
 		}
 		
 	}
@@ -50,12 +55,7 @@ extends AbstractMetaboliteTransform<KeggGlycanMetaboliteEntity> {
 			KeggGlycanMetaboliteEntity entity) {
 		
 		for (String name : entity.getNames()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							"key", 
-							name.trim(), 
-							METABOLITE_NAME_LABEL, 
-							METABOLITE_NAME_RELATIONSHIP_TYPE));
+			configureNameLink(centralMetaboliteEntity, name);
 		}
 	}
 	

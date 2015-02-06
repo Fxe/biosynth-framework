@@ -268,7 +268,7 @@ public class Neo4jUtils {
 		
 		for (Node node_ : findNodesByLabelAndProperty) {
 			if (node != null) {
-				throw new RuntimeException("Resource not unique");
+				LOGGER.warn("Resource not unique");
 			}
 			node = node_;
 		}

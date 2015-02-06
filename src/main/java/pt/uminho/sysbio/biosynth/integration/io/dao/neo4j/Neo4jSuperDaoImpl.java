@@ -46,21 +46,6 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 		
 		Neo4jNode neo4jNode = toNeo4jNode(node);
 		
-
-		
-//		for (Relationship relationship : node.getRelationships(Direction.BOTH)) {
-//			Node otherNode = relationship.getOtherNode(node);
-//
-//			Neo4jRelationship neo4jRelationship = toNeo4jRelationship(relationship);
-//			neo4jRelationship.setDireaction(Direction.BOTH);
-//			Neo4jNode neo4jOtherNode = toNeo4jNode(otherNode);
-//			long rId = relationship.getId();
-//			long nId = otherNode.getId();
-//			neo4jNode.getNodes().put(nId, neo4jOtherNode);
-//			neo4jNode.getEdges().put(rId, neo4jRelationship);
-//			neo4jNode.getLinks().put(rId, nId);
-//		}
-		
 		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
 			Node otherNode = relationship.getOtherNode(node);
 
@@ -86,6 +71,52 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 			neo4jNode.getEdges().put(rId, neo4jRelationship);
 			neo4jNode.getLinks().put(rId, nId);
 		}
+		
+		return neo4jNode;
+	}
+	
+	@Override
+	public Neo4jNode getAnyNodeLimit(long id, int limit) {
+		int limit_counter;
+		Node node = graphDatabaseService.getNodeById(id);
+		
+		Neo4jNode neo4jNode = toNeo4jNode(node);
+		
+		int totalRelationships = 0;
+		
+		limit_counter = 0;
+		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
+			Node otherNode = relationship.getOtherNode(node);
+			if (limit_counter < limit) {
+				Neo4jRelationship neo4jRelationship = toNeo4jRelationship(relationship);
+				neo4jRelationship.setDireaction(Direction.OUTGOING);
+				Neo4jNode neo4jOtherNode = toNeo4jNode(otherNode);
+				long rId = relationship.getId();
+				long nId = otherNode.getId();
+				neo4jNode.getNodes().put(nId, neo4jOtherNode);
+				neo4jNode.getEdges().put(rId, neo4jRelationship);
+				neo4jNode.getLinks().put(rId, nId);
+				limit_counter++;
+			}
+			totalRelationships++;
+		}
+		limit_counter = 0;
+		for (Relationship relationship : node.getRelationships(Direction.INCOMING)) {
+			Node otherNode = relationship.getOtherNode(node);
+			if (limit_counter < limit) {
+				Neo4jRelationship neo4jRelationship = toNeo4jRelationship(relationship);
+				neo4jRelationship.setDireaction(Direction.INCOMING);
+				Neo4jNode neo4jOtherNode = toNeo4jNode(otherNode);
+				long rId = relationship.getId();
+				long nId = otherNode.getId();
+				neo4jNode.getNodes().put(nId, neo4jOtherNode);
+				neo4jNode.getEdges().put(rId, neo4jRelationship);
+				neo4jNode.getLinks().put(rId, nId);
+				limit_counter++;
+			}
+			totalRelationships++;
+		}
+		neo4jNode.totalRelationships = totalRelationships;
 		
 		return neo4jNode;
 	}

@@ -6,8 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 
@@ -40,32 +44,53 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 			GraphMetaboliteEntity centralMetaboliteEntity,
 			BioCycMetaboliteEntity entity) {
 		
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getInchi(), 
-						METABOLITE_INCHI_LABEL, 
-						METABOLITE_INCHI_RELATIONSHIP_TYPE));
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getSmiles(), 
-						METABOLITE_SMILE_LABEL, 
-						METABOLITE_SMILE_RELATIONSHIP_TYPE));
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getCharge(), 
-						METABOLITE_CHARGE_LABEL, 
-						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getCharge(), MetabolitePropertyLabel.Charge, MetaboliteRelationshipType.has_charge);
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getInchi(), MetabolitePropertyLabel.InChI, MetaboliteRelationshipType.has_inchi);
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getSmiles(), MetabolitePropertyLabel.SMILES, MetaboliteRelationshipType.has_smiles);
+
+//		centralMetaboliteEntity.addPropertyEntity(
+//				this.buildPropertyLinkPair(
+//						PROPERTY_UNIQUE_KEY, 
+//						entity.getInchi(), 
+//						METABOLITE_INCHI_LABEL, 
+//						METABOLITE_INCHI_RELATIONSHIP_TYPE));
+//		centralMetaboliteEntity.addPropertyEntity(
+//				this.buildPropertyLinkPair(
+//						PROPERTY_UNIQUE_KEY, 
+//						entity.getSmiles(), 
+//						METABOLITE_SMILE_LABEL, 
+//						METABOLITE_SMILE_RELATIONSHIP_TYPE));
+//		centralMetaboliteEntity.addPropertyEntity(
+//				this.buildPropertyLinkPair(
+//						PROPERTY_UNIQUE_KEY, 
+//						entity.getCharge(), 
+//						METABOLITE_CHARGE_LABEL, 
+//						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 		
 		for (String parent : entity.getParents()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							PROPERTY_UNIQUE_KEY, 
-							parent, 
-							SUPER_METABOLITE_LABEL, 
-							METABOLITE_INSTANCE_RELATIONSHIP_TYPE));
+			centralMetaboliteEntity.getConnectedEntities().add(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(parent)
+							.buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+					new SomeNodeFactory().buildMetaboliteEdge(
+							MetaboliteRelationshipType.instance_of)));
+
+//			centralMetaboliteEntity.addPropertyEntity(
+//					this.buildPropertyLinkPair(
+//							PROPERTY_UNIQUE_KEY, 
+//							parent, 
+//							SUPER_METABOLITE_LABEL, 
+//							METABOLITE_INSTANCE_RELATIONSHIP_TYPE));
+		}
+		for (String instance : entity.getInstances()) {
+			centralMetaboliteEntity.getConnectedEntities().add(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(instance)
+							.buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+					new SomeNodeFactory().buildMetaboliteEdge(
+							MetaboliteRelationshipType.parent_of)));
 		}
 	}
 	
@@ -75,12 +100,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 			BioCycMetaboliteEntity entity) {
 		
 		for (String name : entity.getSynonyms()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							PROPERTY_UNIQUE_KEY, 
-							name, 
-							METABOLITE_NAME_LABEL, 
-							METABOLITE_NAME_RELATIONSHIP_TYPE));
+			configureNameLink(centralMetaboliteEntity, name);
 		}
 		
 		super.configureNameLink(centralMetaboliteEntity, entity);

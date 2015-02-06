@@ -7,6 +7,7 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	has_name,				//Metabolite -[has_name]-> Name
 	has_crossreference_to,	//Metabolite -[has_crossreference_to]-> Metabolite
 	instance_of,			//Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
+	parent_of,
 	has_inchi,				//Metabolite -[has_inchi]-> InChI
 	has_charge,				//Metabolite -[has_charge]-> Charge
 	has_smiles,				//Metabolite -[has_smiles]-> SMILES

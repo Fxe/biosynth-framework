@@ -4,6 +4,7 @@ import org.neo4j.graphdb.Label;
 
 public enum GlobalLabel implements Label {
 	Literature,
+	BiGG,
 	KEGG, BioCyc,
 	Orthology,
 	KeggPathway, KeggOrthology,
@@ -16,5 +17,5 @@ public enum GlobalLabel implements Label {
 	SubcellularCompartment,
 	
 	//Things that I have no clue where to put !
-	UniProt, Gene, 
+	UniProt, Gene, EnzymePortal, BrendaEnzyme
 }

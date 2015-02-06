@@ -11,4 +11,5 @@ public interface Neo4jSuperDao {
 	public Neo4jNode getAnyNode(long id);
 	public Neo4jNode getMetaboliteNode(long id);
 	public Neo4jNode getReactionNode(long id);
+	public Neo4jNode getAnyNodeLimit(long id, int limit);
 }
