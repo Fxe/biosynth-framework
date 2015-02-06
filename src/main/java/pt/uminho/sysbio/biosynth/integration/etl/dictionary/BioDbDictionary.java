@@ -65,6 +65,7 @@ public class BioDbDictionary {
 		//BioCyc
 		dictionary.put("KNAPSACK", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("KNApSAcK", MetaboliteMajorLabel.KNApSAcK.toString());
+		dictionary.put("KNApSAcK accession", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("BIOCYC:ARA", "BioCyc:AraCyc");
 		dictionary.put("METACYC", MetaboliteMajorLabel.MetaCyc.toString());
 		dictionary.put("metacyc", MetaboliteMajorLabel.MetaCyc.toString());
@@ -97,8 +98,12 @@ public class BioDbDictionary {
 		dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
 		dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
 		
+		
+		
 		dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("hmdb", MetaboliteMajorLabel.HMDB.toString());
+		dictionary.put("YMDB accession", MetaboliteMajorLabel.YMDB.toString());
+		
 		dictionary.put("HMDB accession", MetaboliteMajorLabel.HMDB.toString());
 		
 		dictionary.put("reactome", MetaboliteMajorLabel.Reactome.toString());

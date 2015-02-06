@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseLiteratureEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
@@ -30,6 +31,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
+import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
 implements EtlTransform<M, GraphMetaboliteEntity> {
@@ -69,10 +71,12 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
 	protected final EtlDictionary<String, String> dictionary;
+	protected final EtlDictionary<String, String> literatureDictionary;
 	
 	public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String> dictionary) {
 		this.majorLabel = majorLabel;
 		this.dictionary = dictionary;
+		this.literatureDictionary = new BiobaseLiteratureEtlDictionary<ChebiMetaboliteEntity>(ChebiMetaboliteEntity.class);
 	}
 	
 	@Override
@@ -245,12 +249,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	}
 	
 	protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
-		centralMetaboliteEntity.getConnectedEntities().add(
-				this.buildPair(
-				new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
-						MetabolitePropertyLabel.MolecularFormula, entity.getFormula()), 
-				new SomeNodeFactory().buildMetaboliteEdge(
-						MetaboliteRelationshipType.has_molecular_formula)));
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getFormula(), MetabolitePropertyLabel.MolecularFormula, MetaboliteRelationshipType.has_molecular_formula);
 	}
 	
 	protected void configureNameLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
@@ -320,18 +319,31 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 //						p.getRight().getProperties().put("specie", xref.getValue());
 //						centralMetaboliteEntity.addPropertyEntity(p);
 						break;
+						
 					case PATENT:
 						centralMetaboliteEntity.getConnectedEntities().add(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.withMajorLabel(LiteratureMajorLabel.valueOf(xref.getRef()))
+										.withMajorLabel(literatureDictionary.translate(xref.getRef()))
 										.withLabel(GlobalLabel.Literature)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()
 										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
 										.buildMetaboliteEdge(MetaboliteRelationshipType.has_literature)));
-						break;					
+						break;
+					case CITATION:
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withMajorLabel(literatureDictionary.translate(xref.getRef()))
+										.withLabel(GlobalLabel.Literature)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.has_literature)));
+						break;
 					case PROTEIN:
 						centralMetaboliteEntity.getConnectedEntities().add(
 								this.buildPair(
