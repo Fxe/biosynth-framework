@@ -7,20 +7,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AbstractGraphEntity {
+import org.apache.commons.lang3.tuple.Pair;
 
-	protected Long id;
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+
+public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
+
+	private static final long serialVersionUID = 1L;
+
 	protected String majorLabel;
 	
 	protected Set<String> labels = new HashSet<> ();
 	protected Map<String, Object> properties = new HashMap<> ();
 	
 	public String uniqueKey;
-	public List<Map<AbstractGraphEdgeEntity, AbstractGraphEntity>> links = new ArrayList<> ();
+	public String getUniqueKey() {
+		return uniqueKey;
+	}
+	public void setUniqueKey(String uniqueKey) {
+		this.uniqueKey = uniqueKey;
+	}
+
+	public List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities = new ArrayList<> ();
 	
-	public Long getId() { return id;}
-	public void setId(Long id) { this.id = id;}
 	
+	public List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> getConnectedEntities() {
+		return connectedEntities;
+	}
+	public void setConnectedEntities(
+			List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities) {
+		this.connectedEntities = connectedEntities;
+	}
 	public String getMajorLabel() { return majorLabel;}
 	public void setMajorLabel(String majorLabel) { this.majorLabel = majorLabel;}
 	
@@ -42,17 +59,17 @@ public class AbstractGraphEntity {
 	}
 	
 	@Override
+	public String getEntry() { return (String)this.properties.get("entry");}
+	@Override
+	public void setEntry(String entry) { properties.put("entry", entry);};
+	
+	@Override
+	public String getName() { return (String)this.properties.get("name");}
+	public void setName(String name) { this.properties.put("name", name);}
+	
+	@Override
 	public String toString() {
 		String str = String.format("%s::%s: %s", majorLabel, labels, this.properties);
-//		StringBuilder sb = new StringBuilder();
-//		sb.append(String.format("id:%d\n", id));
-//		sb.append(String.format("majorLabel:%s\n", majorLabel));
-//		sb.append(String.format("labels:%s\n", labels));
-//		sb.append("Self Properties:\n");
-//		for (String key : properties.keySet()) {
-//			sb.append(String.format("\t%s:%s\n", key, properties.get(key)));
-//		}
-//		return sb.toString();
 		return str;
 	}
 }

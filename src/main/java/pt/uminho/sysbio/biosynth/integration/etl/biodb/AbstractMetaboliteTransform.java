@@ -13,14 +13,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
@@ -88,6 +90,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		centralMetaboliteEntity.setMajorLabel(majorLabel);
 		centralMetaboliteEntity.addLabel(METABOLITE_LABEL);
+		//not needed annotations will replace these
 		centralMetaboliteEntity.addProperty("entry", metabolite.getEntry());
 		centralMetaboliteEntity.addProperty("formula", metabolite.getFormula());
 		centralMetaboliteEntity.addProperty("description", metabolite.getDescription());
@@ -108,6 +111,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		}
 	}
 	
+	@Deprecated
 	protected GraphPropertyEntity buildPropertyEntity(String key, Object value, String majorLabel, String...labels) {
 		if (majorLabel == null) return null;
 		if (key == null) return null;
@@ -132,6 +136,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	 * @param labels
 	 * @return
 	 */
+	@Deprecated
 	protected GraphPropertyEntity buildPropertyEntity2(String key, Object value, String majorLabel, String...labels) {
 		if (majorLabel == null) return null;
 		if (key == null) return null;
@@ -147,16 +152,19 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return buildPropertyEntity(properties, key, majorLabel, labels_);
 	}
 	
+	@Deprecated
 	protected GraphPropertyEntity buildPropertyEntity(Map<String, Object> properties, String unique, String majorLabel, List<String> labels) {
-		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(properties);
-		propertyEntity.uniqueProperty = unique;
-		propertyEntity.setMajorLabel(majorLabel);
-		for (String label : labels) {
-			propertyEntity.addLabel(label);
-		}
-		return propertyEntity;
+//		GraphPropertyEntity propertyEntity = new GraphPropertyEntity(properties);
+//		propertyEntity.uniqueProperty = unique;
+//		propertyEntity.setMajorLabel(majorLabel);
+//		for (String label : labels) {
+//			propertyEntity.addLabel(label);
+//		}
+//		return propertyEntity;
+		return null;
 	}
 	
+	@Deprecated
 	protected GraphPropertyEntity buildPropertyEntity(
 			Object value, String majorLabel) {
 		return buildPropertyEntity("key", value, majorLabel);
@@ -171,6 +179,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return relationshipEntity;
 	}
 	
+	@Deprecated
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
 			String key, Object value, String majorLabel, String relationShipType, String...labels) {
 		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel, labels);
@@ -193,6 +202,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	 * @param labels
 	 * @return
 	 */
+	@Deprecated
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair2(
 			String key, Object value, String majorLabel, String relationShipType, String...labels) {
 		GraphPropertyEntity propertyEntity = this.buildPropertyEntity2(key, value, majorLabel, labels);
@@ -207,6 +217,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return propertyPair;
 	}
 	
+	@Deprecated
 	protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
 			String key, Object value, String majorLabel, String relationShipType, Map<String, Object> relationshipProperties) {
 		GraphPropertyEntity propertyEntity = this.buildPropertyEntity(key, value, majorLabel);
@@ -222,29 +233,35 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 		return propertyPair;
 	}
 	
+	private Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
+			AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
+		Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p =
+				new ImmutablePair<>(edge, node);
+		return p;
+	}
+	
 	protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						"key", 
-						entity.getFormula(), 
-						METABOLITE_FORMULA_LABEL, 
-						METABOLITE_FORMULA_RELATIONSHIP_TYPE));
+		centralMetaboliteEntity.getConnectedEntities().add(
+				this.buildPair(
+				new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
+						MetabolitePropertyLabel.MolecularFormula, entity.getFormula()), 
+				new SomeNodeFactory().buildMetaboliteEdge(
+						MetaboliteRelationshipType.has_molecular_formula)));
 	}
 	
 	protected void configureNameLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						"key", 
-						entity.getName(), 
-						METABOLITE_NAME_LABEL, 
-						METABOLITE_NAME_RELATIONSHIP_TYPE));
+		this.configureNameLink(centralMetaboliteEntity, entity.getName());
+	}
+	protected void configureNameLink(GraphMetaboliteEntity centralMetaboliteEntity, String name) {
+		centralMetaboliteEntity.getConnectedEntities().add(
+				this.buildPair(
+				new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
+						MetabolitePropertyLabel.MolecularFormula, name), 
+				new SomeNodeFactory().buildMetaboliteEdge(
+						MetaboliteRelationshipType.has_name)));
 	}
 	
 	protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
-	
-	protected void foo(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
-		
-	}
 	
 	protected void configureCrossreferences(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
 		LOGGER.debug("Setup cross-references ...");
@@ -257,41 +274,79 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
 				switch (xref.getType()) {
 					case DATABASE:
-						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
-						proxyEntity.setEntry(xref.getValue());
-						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
-						proxyEntity.addLabel(METABOLITE_LABEL);
-						GraphRelationshipEntity graphRelationshipEntity = new GraphRelationshipEntity();
-						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
-						graphRelationshipEntity.setProperties(properties);
-						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
-						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
+//						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
+//						proxyEntity.setEntry(xref.getValue());
+//						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
+//						proxyEntity.addLabel(METABOLITE_LABEL);
+//						GraphRelationshipEntity graphRelationshipEntity = new GraphRelationshipEntity();
+//						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
+//						graphRelationshipEntity.setProperties(properties);
+//						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
+//						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
+						MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef()));
+						Map<String, Object> relationshipProperteis = 
+								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.buildGraphMetaboliteProxyEntity(majorLabel), 
+								new SomeNodeFactory()
+										.withProperties(relationshipProperteis)
+										.buildMetaboliteEdge(MetaboliteRelationshipType.has_crossreference_to)));
 						break;
 					case MODEL:
-						Pair<GraphPropertyEntity, GraphRelationshipEntity> p = this.buildPropertyLinkPair(
-								"entry", xref.getRef(), 
-								MODEL_LABEL, 
-								METABOLITE_MODEL_RELATIONSHIP_TYPE);
-						p.getRight().getProperties().put("specie", xref.getValue());
-						centralMetaboliteEntity.addPropertyEntity(p);
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withLabel(GlobalLabel.MetabolicModel)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.included_in)));
+//						Pair<GraphPropertyEntity, GraphRelationshipEntity> p = this.buildPropertyLinkPair(
+//								"entry", xref.getRef(), 
+//								MODEL_LABEL, 
+//								METABOLITE_MODEL_RELATIONSHIP_TYPE);
+//						p.getRight().getProperties().put("specie", xref.getValue());
+//						centralMetaboliteEntity.addPropertyEntity(p);
 						break;
 					case GENE:
-						GlobalLabel major_label = GlobalLabel.valueOf(xref.getRef());
-						Pair<GraphPropertyEntity, GraphRelationshipEntity> g = this.buildPropertyLinkPair(
-								"entry", xref.getValue(), 
-								major_label.toString(), 
-								MetaboliteRelationshipType.related_to.toString(),
-								GlobalLabel.Gene.toString());
-						centralMetaboliteEntity.addPropertyEntity(g);
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withLabel(GlobalLabel.valueOf(xref.getRef()))
+										.withLabel(GlobalLabel.Gene)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.related_to)));
+//						GlobalLabel major_label = GlobalLabel.valueOf(xref.getRef());
+//						Pair<GraphPropertyEntity, GraphRelationshipEntity> g = this.buildPropertyLinkPair(
+//								"entry", xref.getValue(), 
+//								major_label.toString(), 
+//								MetaboliteRelationshipType.related_to.toString(),
+//								GlobalLabel.Gene.toString());
+//						centralMetaboliteEntity.addPropertyEntity(g);
 						break;
 					case REACTION:
-						ReactionMajorLabel reactionMajorLabel = ReactionMajorLabel.valueOf(xref.getRef());
-						Pair<GraphPropertyEntity, GraphRelationshipEntity> r = this.buildPropertyLinkPair(
-								"entry", xref.getValue(), 
-								reactionMajorLabel.toString(), 
-								MetaboliteRelationshipType.found_in.toString(),
-								GlobalLabel.Reaction.toString());
-						centralMetaboliteEntity.addPropertyEntity(r);
+						centralMetaboliteEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.buildGraphReactionProxyEntity(ReactionMajorLabel.valueOf(this.dictionary.translate(xref.getRef()))), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildMetaboliteEdge(MetaboliteRelationshipType.found_in)));
+						
+//						Pair<GraphPropertyEntity, GraphRelationshipEntity> r = this.buildPropertyLinkPair(
+//								"entry", xref.getValue(), 
+//								reactionMajorLabel.toString(), 
+//								MetaboliteRelationshipType.found_in.toString(),
+//								GlobalLabel.Reaction.toString());
+//						centralMetaboliteEntity.addPropertyEntity(r);
 						break;
 					default:
 						LOGGER.warn(String.format("Ignored type <%s>[%s:%s]", xref.getType(), xref.getRef(), xref.getValue()));

@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-public class GraphMetaboliteProxyEntity extends AbstractGraphEntity {
+public class GraphMetaboliteProxyEntity extends AbstractGraphNodeEntity {
 	
 	/**
 	 * Get the domain tag of the proxy.

@@ -6,17 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
-import pt.uminho.sysbio.biosynth.integration.AbstractGraphEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
@@ -59,22 +62,38 @@ implements EtlTransform<R, GraphReactionEntity> {
 		return centralReactionEntity;
 	}
 	
-	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
-			R entity) {
-		
-		Map<AbstractGraphEdgeEntity, AbstractGraphEntity> link = new HashMap<> ();
-		AbstractGraphEdgeEntity edge = buildSomeEdge(null, REACTION_NAME_RELATIONSHIP_TYPE);
-		Map<String, Object> properties = new HashMap<> ();
-		properties.put(PROPERTY_UNIQUE_KEY, entity.getName());
-		AbstractGraphEntity node = buildSomeNode(properties, null, REACTION_NAME_LABEL, REACTION_PROPERTY_LABEL);
-		
-		link.put(edge, node);
-		centralReactionEntity.links.add(link);
+	protected Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
+			AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
+		Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p =
+				new ImmutablePair<>(edge, node);
+		return p;
 	}
 	
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
+			R entity) {
+		this.configureNameLink(centralReactionEntity, entity.getName());
+		
+//		Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
+//		AbstractGraphEdgeEntity edge = buildSomeEdge(null, REACTION_NAME_RELATIONSHIP_TYPE);
+//		Map<String, Object> properties = new HashMap<> ();
+//		properties.put(PROPERTY_UNIQUE_KEY, entity.getName());
+//		AbstractGraphNodeEntity node = buildSomeNode(properties, null, REACTION_NAME_LABEL, REACTION_PROPERTY_LABEL);
+//		
+//		link.put(edge, node);
+//		centralReactionEntity.links.add(link);
+	}
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
+			String name) {
+		centralReactionEntity.getConnectedEntities().add(
+				this.buildPair(
+				new SomeNodeFactory().buildGraphReactionPropertyEntity(
+						ReactionPropertyLabel.Name, name), 
+				new SomeNodeFactory().buildReactionEdge(
+						ReactionRelationshipType.has_name)));
+	}
 	
-	public AbstractGraphEntity buildSomeNode(Map<String, Object> properties, String majorLabel, String...labels) {
-		AbstractGraphEntity node = new AbstractGraphEntity();
+	public AbstractGraphNodeEntity buildSomeNode(Map<String, Object> properties, String majorLabel, String...labels) {
+		AbstractGraphNodeEntity node = new AbstractGraphNodeEntity();
 		node.setMajorLabel(majorLabel);
 		for (String label : labels) {
 			node.addLabel(label);
@@ -183,15 +202,27 @@ implements EtlTransform<R, GraphReactionEntity> {
 				
 				switch (xref.getType()) {
 					case DATABASE:
-						GraphReactionProxyEntity proxyEntity = new GraphReactionProxyEntity();
-						proxyEntity.setEntry(xref.getValue());
-						proxyEntity.addLabel(REACTION_LABEL);
-						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
-						centralReactionEntity.getCrossreferences().add(proxyEntity);
+						ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(BioDbDictionary.translateDatabase(xref.getRef()));
+						Map<String, Object> relationshipProperteis = 
+								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
+						centralReactionEntity.getConnectedEntities().add(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.buildGraphReactionProxyEntity(majorLabel), 
+								new SomeNodeFactory()
+										.withProperties(relationshipProperteis)
+										.buildReactionEdge(ReactionRelationshipType.has_crossreference_to)));
+//						GraphReactionProxyEntity proxyEntity = new GraphReactionProxyEntity();
+//						proxyEntity.setEntry(xref.getValue());
+//						proxyEntity.addLabel(REACTION_LABEL);
+//						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
+//						centralReactionEntity.getCrossreferences().add(proxyEntity);
 						break;
-					case GENE:
-						break;
+//					case GENE:
+//						break;
 					default:
+						LOGGER.warn(String.format("Ignored type <%s>[%s:%s]", xref.getType(), xref.getRef(), xref.getValue()));
 						break;
 				}
 				

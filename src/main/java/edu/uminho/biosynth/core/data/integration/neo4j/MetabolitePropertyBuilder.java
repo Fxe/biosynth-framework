@@ -2,6 +2,7 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 
+@Deprecated
 public class MetabolitePropertyBuilder {
 	
 	private static final String NAME_LABEL = "CompoundName";

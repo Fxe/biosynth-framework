@@ -1,18 +1,20 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
-public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
+public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reaction {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> left = new HashMap<> ();
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> right = new HashMap<> ();
-	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
+//	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
 	
 	@Override
 	public String getEntry() { return (String)this.properties.get("entry");}
@@ -37,12 +39,12 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public Map<GraphMetaboliteProxyEntity, Map<String, Object>> getRight() { return right;}
 	public void setRight(Map<GraphMetaboliteProxyEntity, Map<String, Object>> right) { this.right = right;}
 	
-	public List<GraphReactionProxyEntity> getCrossreferences() {
-		return crossreferences;
-	}
-	public void setCrossreferences(List<GraphReactionProxyEntity> crossreferences) {
-		this.crossreferences = crossreferences;
-	}
+//	public List<GraphReactionProxyEntity> getCrossreferences() {
+//		return crossreferences;
+//	}
+//	public void setCrossreferences(List<GraphReactionProxyEntity> crossreferences) {
+//		this.crossreferences = crossreferences;
+//	}
 //	
 //	@Override
 //	public void setReactantStoichiometry(Map<String,Double> reactantStoichiometry) {
@@ -59,12 +61,12 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());
 		sb.append("\nStrong Properties:\n");
-		if (links.isEmpty()) {
+		if (connectedEntities.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (Map<?, ?> p : links) {
-				Object l = p.keySet().iterator().next();
-				Object r = p.get(l);
+			for (Pair<?, ?> p : connectedEntities) {
+				Object l = p.getLeft();
+				Object r = p.getRight();
 				sb.append("#").append(l.getClass().getSimpleName()).append("#")
 				  .append(l).append(" => ")
 				  .append("#").append(r.getClass().getSimpleName()).append("#")
@@ -97,14 +99,14 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 			}
 		}
 		
-		sb.append("Crossreference Properties:\n");
-		if (crossreferences.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (GraphReactionProxyEntity x : crossreferences) {
-				sb.append(x);
-			}
-		}
+//		sb.append("Crossreference Properties:\n");
+//		if (crossreferences.isEmpty()) {
+//			sb.append("=========Empty=========\n");
+//		} else {
+//			for (GraphReactionProxyEntity x : crossreferences) {
+//				sb.append(x);
+//			}
+//		}
 		
 		return sb.toString();
 //		StringBuilder sb = new StringBuilder(super.toString()).append("\n");

@@ -135,7 +135,9 @@ public class Neo4jUtils {
 		if (propertyContainer == null) return;
 		
 		for (String key : properties.keySet()) { 
-			propertyContainer.setProperty(key, properties.get(key));
+			Object value = properties.get(key);
+			LOGGER.trace(String.format("Assign property - %s:%s", key, value));
+			propertyContainer.setProperty(key, value);
 		}
 	}
 	
@@ -151,6 +153,7 @@ public class Neo4jUtils {
 		return labels_.iterator().next();
 	}
 	
+	@Deprecated
 	public static List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities(Node node) {
 //		System.out.println("--->");
 		List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propetyList = new ArrayList<> ();
@@ -161,8 +164,8 @@ public class Neo4jUtils {
 			
 //				System.out.println(relationship.getType());
 				
-				GraphPropertyEntity graphPropertyEntity = 
-						new GraphPropertyEntity(Neo4jUtils.getPropertiesMap(other));
+				GraphPropertyEntity graphPropertyEntity = new GraphPropertyEntity(); 
+//						new GraphPropertyEntity(Neo4jUtils.getPropertiesMap(other));
 				for (Label label : other.getLabels()) {
 					graphPropertyEntity.addLabel(label.toString());
 				}

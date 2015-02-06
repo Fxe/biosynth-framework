@@ -73,6 +73,6 @@ public class TestBiocycReactionTransform {
 //		assertEquals("123.456", centralReactionEntity.getProperties().get("gibbs"));
 		assertEquals(1, centralReactionEntity.getLeft().size());
 		assertEquals(1, centralReactionEntity.getRight().size());
-		assertEquals(1, centralReactionEntity.getCrossreferences().size());
+		assertEquals(2, centralReactionEntity.getConnectedEntities().size());
 	}
 }

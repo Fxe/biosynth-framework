@@ -25,7 +25,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 public class Neo4jGraphMetaboliteDaoImpl 
-extends AbstractNeo4jDao
+extends AbstractNeo4jGraphDao<GraphMetaboliteEntity>
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
@@ -85,6 +85,13 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
 	@Override
 	public GraphMetaboliteEntity saveMetabolite(String tag, GraphMetaboliteEntity metabolite) {
+		super.saveGraphEntity(metabolite);
+		Node node = graphDatabaseService.getNodeById(metabolite.getId());
+		node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+		return metabolite;
+	};
+	
+	public GraphMetaboliteEntity saveMetabolite_(String tag, GraphMetaboliteEntity metabolite) {
 		boolean create = true;
 		System.out.println(metabolite.getMajorLabel());
 		System.out.println(metabolite.getEntry());
@@ -140,6 +147,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		return metabolite;
 	}
 	
+	@Deprecated
 	private void createOrLinkToProperty(Node parent, 
 			Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyLinkPair) {
 		
@@ -161,7 +169,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		for (Node propertyNode : graphDatabaseService
 				.findNodesByLabelAndProperty(
 						DynamicLabel.label(propertyEntity.getMajorLabel()), 
-						propertyEntity.uniqueProperty, 
+						null,
+//						propertyEntity.uniqueProperty, 
 						propertyEntity.getUniqueKey())) {
 			LOGGER.debug("Link To Node/Proxy " + propertyNode);
 			create = false;

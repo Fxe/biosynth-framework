@@ -10,4 +10,5 @@ public enum ReactionMajorLabel implements Label {
 	Seed, Reactome, 
 	MetaCyc, 
 	BioPath, UniPathway, 
+	NOTFOUND,
 }

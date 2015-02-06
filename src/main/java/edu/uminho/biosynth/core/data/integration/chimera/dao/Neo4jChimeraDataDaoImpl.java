@@ -37,6 +37,7 @@ import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProper
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
+@Deprecated
 public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jChimeraDataDaoImpl.class);
@@ -442,8 +443,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			for (Relationship relationship : node.getRelationships()) {
 				Node nodeProp = relationship.getOtherNode(node);
 				if (nodeProp.hasLabel(label)) {
-					GraphPropertyEntity propertyEntity = 
-							new GraphPropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
+					GraphPropertyEntity propertyEntity = new GraphPropertyEntity();
+//							new GraphPropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
 					
 					propertyEntity.setId(nodeProp.getId());
 					propertyEntity.setUniqueKey(uniqueKey);
@@ -490,7 +491,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 				
 		
 		for (String key : node.getPropertyKeys()) {
-			entity = new GraphPropertyEntity(key, node.getProperty(key));
+			entity = new GraphPropertyEntity();
+//			entity = new GraphPropertyEntity(key, node.getProperty(key));
 			entity.getProperties().put(key, node.getProperty(key));
 		}
 		for (Label label : node.getLabels()) entity.addLabel(label.toString());

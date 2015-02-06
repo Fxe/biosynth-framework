@@ -1,10 +1,13 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
@@ -69,24 +72,6 @@ public class Neo4jMapper {
 		
 		return curationSet;
 	}
-	
-//	public CurationSet nodeToCurationSet(Node node) {
-//	if (node == null) {
-//		LOGGER.debug("Invalid curation set node: null");
-//		return null;
-//	}
-//	
-//	if (!node.hasLabel(CurationLabel.CurationSet)) {
-//		LOGGER.debug(String.format("Invalid curation set node: ", Neo4jUtils.getLabels(node)));
-//		return null;
-//	}
-//	
-//	CurationSet curationSet = new CurationSet();
-//	curationSet.setId(node.getId());
-//	curationSet.setEntry((String)node.getProperty("entry"));
-//	
-//	return curationSet;
-//}
 	
 	public static IntegrationSet nodeToIntegrationSet(Node node) {
 		if (node == null || !node.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
@@ -191,5 +176,15 @@ public class Neo4jMapper {
 	public static void updateNodeWithIntegratedMember(Node cidNode,
 			IntegratedMember eid) {
 		throw new RuntimeException("Not implemented !!! ups :)");
+	}
+
+	public static void nodeToAbstractGraphNodeEntity(
+			AbstractGraphNodeEntity nodeEntity, Node node) {
+		nodeEntity.setId(node.getId());
+		nodeEntity.setMajorLabel((String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY));
+		nodeEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
+		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
+			
+		}
 	}
 }

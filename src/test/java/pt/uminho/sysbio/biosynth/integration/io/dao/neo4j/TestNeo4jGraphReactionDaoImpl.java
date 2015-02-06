@@ -14,7 +14,7 @@ import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitiali
 
 public class TestNeo4jGraphReactionDaoImpl {
 
-	protected final static String NEO_DATA_DB_PATH = "D:/tmp/data.db";
+	private final static String NEO_DATA_DB_PATH = "D:/tmp/testtt.db";
 	
 	private static GraphDatabaseService graphDatabaseService;
 	private static Neo4jGraphReactionDaoImpl neo4jGraphReactionDaoImpl;

@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-public class GraphReactionProxyEntity extends AbstractGraphEntity {
+public class GraphReactionProxyEntity extends AbstractGraphNodeEntity {
 
 	/**
 	 * Get the domain tag of the proxy.

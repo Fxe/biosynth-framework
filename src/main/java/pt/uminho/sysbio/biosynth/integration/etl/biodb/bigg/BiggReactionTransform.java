@@ -18,6 +18,7 @@ extends AbstractReactionTransform<BiggReactionEntity> {
 	protected void configureAdditionalPropertyLinks(
 			GraphReactionEntity centralReactionEntity,
 			BiggReactionEntity reaction) {
+//		reaction.get
 		// TODO Auto-generated method stub
 //		Annotation
 	}

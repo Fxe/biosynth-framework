@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
-import pt.uminho.sysbio.biosynth.integration.AbstractGraphEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
@@ -143,16 +143,16 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
 			}
-			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
-				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
-				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
-			}
-			for (Map<AbstractGraphEdgeEntity, AbstractGraphEntity> l : reaction.links) {
-				AbstractGraphEdgeEntity relationship = l.keySet().iterator().next();
-				AbstractGraphEntity entity = l.get(relationship);
-				LOGGER.debug(String.format("Resolving Additional Link %s", entity));
-				this.createOrLinkToNode(node, relationship, entity);
-			}
+//			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
+//				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
+//				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
+//			}
+//			for (Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> l : reaction.links) {
+//				AbstractGraphEdgeEntity relationship = l.keySet().iterator().next();
+//				AbstractGraphNodeEntity entity = l.get(relationship);
+//				LOGGER.debug(String.format("Resolving Additional Link %s", entity));
+//				this.createOrLinkToNode(node, relationship, entity);
+//			}
 			
 			node.setProperty("major-label", reaction.getMajorLabel());
 			node.setProperty("proxy", false);
@@ -174,14 +174,14 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
 			}
-			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
-				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
-				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
-			}
-			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
-				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
-				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
-			}
+//			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+//				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
+//				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
+//			}
+//			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
+//				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
+//				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);
+//			}
 			
 			node.setProperty("major-label", reaction.getMajorLabel());
 			node.setProperty("proxy", false);
@@ -191,7 +191,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		return reaction;
 	}
 	
-	private void createOrLinkToNode(Node srcNode, AbstractGraphEdgeEntity edge, AbstractGraphEntity dst) {
+	private void createOrLinkToNode(Node srcNode, AbstractGraphEdgeEntity edge, AbstractGraphNodeEntity dst) {
 		Node dstNode = getOrCreateNode(dst.getMajorLabel(), dst.uniqueKey, dst.getProperty(dst.uniqueKey, null));
 		for (String label : dst.getLabels()) {
 			dstNode.addLabel(DynamicLabel.label(label));

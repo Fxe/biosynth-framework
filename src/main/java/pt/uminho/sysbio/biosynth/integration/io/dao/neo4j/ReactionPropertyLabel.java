@@ -4,6 +4,6 @@ import org.neo4j.graphdb.Label;
 
 public enum ReactionPropertyLabel implements Label {
 	Reaction,
-	ECNumber, Name,
+	ECNumber, Name, EnzymeCommission,
 	Pathway, Orthology, EnzymaticReaction
 }

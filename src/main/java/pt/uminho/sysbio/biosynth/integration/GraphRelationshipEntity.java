@@ -1,5 +1,5 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-public class GraphRelationshipEntity extends AbstractGraphEntity {
+public class GraphRelationshipEntity extends AbstractGraphNodeEntity {
 	
 }

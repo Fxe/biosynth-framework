@@ -42,12 +42,7 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 			SeedMetaboliteEntity entity) {
 		
 		for (String name : entity.getSynonyms()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							"key", 
-							name.trim(), 
-							METABOLITE_NAME_LABEL, 
-							METABOLITE_NAME_RELATIONSHIP_TYPE));
+			this.configureNameLink(centralMetaboliteEntity, name);
 		}
 	}
 }
