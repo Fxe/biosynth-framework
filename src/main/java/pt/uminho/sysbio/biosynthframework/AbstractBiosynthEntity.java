@@ -28,9 +28,6 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	@Id
     @Column(name="id", nullable=false)
 	@GeneratedValue
-//	@GeneratedValue(strategy=GenerationType.IDENTITY)
-//    @GeneratedValue(generator="IdOrGenerated", strategy=GenerationType.IDENTITY)
-//	@GenericGenerator(name="IdOrGenerated", strategy="pt.uminho.sysbio.biosynthframework.AbstractEntityIdGenerator")
 	protected Long id;
 	public Long getId() { return this.id; }
 	public void setId(Long id) { this.id = id; }
