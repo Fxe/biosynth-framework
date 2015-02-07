@@ -7,12 +7,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynthframework.*;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
 
 public class DefaultBiggReactionParserImpl implements BiggReactionParser {
 	
+	private static Logger LOGGER = LoggerFactory.getLogger(DefaultBiggReactionParserImpl.class);
 	public static String CSV_SEP = "\t";
 
 	private BiggEquationParser equationParser;
@@ -55,9 +60,14 @@ public class DefaultBiggReactionParserImpl implements BiggReactionParser {
 		BiggReactionEntity rxn = new BiggReactionEntity();
 		rxn.setEntry(values[0]);
 		rxn.setName(values[1]);
-		for (String synonym : values[2].split(";")) {
-			if (synonym.trim().length() > 0) rxn.getSynonyms().add( synonym.trim());
+		for (String synonym_ : values[2].split(";")) {
+			for (String synonym: synonym_.split(", ")) {
+				synonym = synonym.trim();
+				if (synonym.startsWith(",")) synonym = StringUtils.removeStart(synonym, ",").trim();
+				if (!synonym.isEmpty()) rxn.getSynonyms().add( synonym.trim());
+			}
 		}
+		LOGGER.debug(values[2] + " parsed to " + rxn.getSynonyms().size() + " synonyms");
 		rxn.setEquation(values[3]);
 		
 		this.equationParser.setEquation(rxn.getEquation());
