@@ -83,7 +83,8 @@ public class SomeNodeFactory {
 		setupGraphBaseEntity(entity);
 		entity.getProperties().put(Neo4jDefinitions.PROXY_PROPERTY, false);
 		for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : this.connectedEntities) {
-			entity.getConnectedEntities().add(p);
+			entity.addConnectedEntity(p);
+//			entity.getConnectedEntities().add(p);
 		}
 	}
 	
@@ -178,5 +179,24 @@ public class SomeNodeFactory {
 		entity.setEntry(this.entry);
 		entity.getLabels().add(this.majorLabel);
 		return entity;
+	}
+	
+	public SomeNodeFactory withLeftSoitchiometry(String metaboliteEntry, MetaboliteMajorLabel majorLabel, Double stoichiometry) {
+		AbstractGraphEdgeEntity edge = new AbstractGraphEdgeEntity();
+		edge.getLabels().add(ReactionRelationshipType.left_component.toString());
+		edge.getProperties().put("stoichiometry", stoichiometry);
+		GraphMetaboliteEntity node = new SomeNodeFactory()
+			.withEntry(metaboliteEntry)
+			.buildGraphMetaboliteProxyEntity(majorLabel);
+		return withLinkTo(node, edge);
+	}
+	public SomeNodeFactory withRightSoitchiometry(String metaboliteEntry, MetaboliteMajorLabel majorLabel, Double stoichiometry) {
+		AbstractGraphEdgeEntity edge = new AbstractGraphEdgeEntity();
+		edge.getLabels().add(ReactionRelationshipType.right_component.toString());
+		edge.getProperties().put("stoichiometry", stoichiometry);
+		GraphMetaboliteEntity node = new SomeNodeFactory()
+		.withEntry(metaboliteEntry)
+		.buildGraphMetaboliteProxyEntity(majorLabel);
+		return withLinkTo(node, edge);
 	}
 }

@@ -44,22 +44,25 @@ public class IntegratedMetaboliteAssembler {
 			long eid_ = graphMetaboliteEntity.getId();
 //			formulaMap.put(eid_, graphMetaboliteEntity.getFormula());
 			
-			for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : graphMetaboliteEntity.getConnectedEntities()) {
-				AbstractGraphNodeEntity node = p.getRight();
-				if (node.getLabels().contains(GlobalLabel.MetaboliteProperty.toString())) {
-					String property = node.getMajorLabel();
-					if (!propertyMap.containsKey(property)) {
-						propertyMap.put(property, new HashMap<Object, List<Long>> ());
-					}
-					for (String key : node.getProperties().keySet()) {
-						Object value = node.getProperties().get(key);
-						if (!propertyMap.get(property).containsKey(value)) {
-							propertyMap.get(property).put(value, new ArrayList<Long> ());
+			for (String relationshipType : graphMetaboliteEntity.getConnectedEntities().keySet()) {
+				List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> pairs = graphMetaboliteEntity.getConnectedEntities().get(relationshipType);
+				for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : pairs) {
+					AbstractGraphNodeEntity node = p.getRight();
+					if (node.getLabels().contains(GlobalLabel.MetaboliteProperty.toString())) {
+						String property = node.getMajorLabel();
+						if (!propertyMap.containsKey(property)) {
+							propertyMap.put(property, new HashMap<Object, List<Long>> ());
 						}
-						propertyMap.get(property).get(value).add(eid_);
+						for (String key : node.getProperties().keySet()) {
+							Object value = node.getProperties().get(key);
+							if (!propertyMap.get(property).containsKey(value)) {
+								propertyMap.get(property).put(value, new ArrayList<Long> ());
+							}
+							propertyMap.get(property).get(value).add(eid_);
+						}
+					} else {
+						LOGGER.debug(String.format("Ignored connected link %s", node.getLabels()));
 					}
-				} else {
-					LOGGER.debug(String.format("Ignored connected link %s", node.getLabels()));
 				}
 			}
 			

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
@@ -27,16 +28,15 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 
 public class Neo4jGraphReactionDaoImpl 
-extends AbstractNeo4jDao
+extends AbstractNeo4jGraphDao<GraphReactionEntity>
 implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphReactionDaoImpl.class);
-	private static final Label REACTION_LABEL = GlobalLabel.Reaction;
-	private static final RelationshipType LEFT_RELATIONSHIP = ReactionRelationshipType.left_component;
-	private static final RelationshipType RIGHT_RELATIONSHIP = ReactionRelationshipType.right_component;
-	private static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
+	protected static final Label REACTION_LABEL = GlobalLabel.Reaction;
+	protected static final RelationshipType LEFT_RELATIONSHIP = ReactionRelationshipType.left_component;
+	protected static final RelationshipType RIGHT_RELATIONSHIP = ReactionRelationshipType.right_component;
+	protected static final RelationshipType CROSSREFERENCE_RELATIONSHIP = 
 			ReactionRelationshipType.has_crossreference_to;
-	
 	
 	public Neo4jGraphReactionDaoImpl(GraphDatabaseService graphDatabaseService) {
 		super(graphDatabaseService);
@@ -120,6 +120,24 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	@Override
 	public GraphReactionEntity saveReaction(String tag,
 			GraphReactionEntity reaction) {
+		super.saveGraphEntity(reaction);
+		Node node = graphDatabaseService.getNodeById(reaction.getId());
+		node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+		for (GraphMetaboliteProxyEntity l : reaction.getLeft().keySet()) {
+			LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
+			this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
+		}
+		for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+			LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
+			this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
+		}
+		return reaction;
+	}
+	
+	@Deprecated
+	public GraphReactionEntity saveReaction_(String tag,
+			GraphReactionEntity reaction) {
+		
 		boolean create = true;
 		
 		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
@@ -174,10 +192,10 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 				LOGGER.debug(String.format("Resolving Left Link %s", l.getEntry()));
 				this.createOrLinkToMetaboliteProxy(node, l, LEFT_RELATIONSHIP, reaction.getLeft().get(l));
 			}
-//			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
-//				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
-//				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
-//			}
+			for (GraphMetaboliteProxyEntity r : reaction.getRight().keySet()) {
+				LOGGER.debug(String.format("Resolving Right Link %s", r.getEntry()));
+				this.createOrLinkToMetaboliteProxy(node, r, RIGHT_RELATIONSHIP, reaction.getRight().get(r));
+			}
 //			for (GraphReactionProxyEntity x : reaction.getCrossreferences()) {
 //				LOGGER.debug(String.format("Resolving Crossreference Link %s", x.getEntry()));
 //				this.createOrLinkToReactionProxy(node, x, CROSSREFERENCE_RELATIONSHIP);

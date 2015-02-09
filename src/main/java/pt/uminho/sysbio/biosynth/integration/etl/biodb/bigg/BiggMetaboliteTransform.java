@@ -26,7 +26,7 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 		configureGenericPropertyLink(centralMetaboliteEntity, entity.getCharge(), MetabolitePropertyLabel.Charge, MetaboliteRelationshipType.has_charge);
 
 		for (String cmp : entity.getCompartments()) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(cmp.toLowerCase())
@@ -34,7 +34,7 @@ extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 							.withMajorLabel(GlobalLabel.BiGG)
 							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildMetaboliteEdge(
-							MetaboliteRelationshipType.has_charge)));
+							MetaboliteRelationshipType.found_in)));
 		}
 //		centralMetaboliteEntity.addPropertyEntity(
 //				this.buildPropertyLinkPair(

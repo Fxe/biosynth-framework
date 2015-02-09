@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -29,6 +30,8 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 public class Neo4jGraphMetaboliteDaoImpl 
 extends AbstractNeo4jGraphDao<GraphMetaboliteEntity>
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
+	
+	public static int RELATIONSHIP_TYPE_LIMIT = 5;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	protected static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
@@ -65,6 +68,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
 		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		metaboliteEntity.setId(node.getId());
+		metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(node));
 		setupConnectedLinks(metaboliteEntity, node);
 		
 		
@@ -90,14 +94,22 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	}
 	
 	private void setupConnectedLinks(GraphMetaboliteEntity entity, Node node) {
+		
 		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
-			Node otherNode = relationship.getOtherNode(node);
-			LOGGER.debug(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), otherNode));
-			AbstractGraphEdgeEntity edgeEntity = deserialize(relationship);
-			AbstractGraphNodeEntity nodeEntity = deserialize(otherNode);
-			LOGGER.debug(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), nodeEntity.getLabels()));
-			Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p = new ImmutablePair<>(edgeEntity, nodeEntity);
-			entity.getConnectedEntities().add(p);
+			String relationshipType = relationship.getType().name();
+			if (entity.getConnectionTypeCounter(relationshipType) < RELATIONSHIP_TYPE_LIMIT) {
+				Node otherNode = relationship.getOtherNode(node);
+				LOGGER.trace(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), otherNode));
+				AbstractGraphEdgeEntity edgeEntity = deserialize(relationship);
+				AbstractGraphNodeEntity nodeEntity = deserialize(otherNode);
+				LOGGER.trace(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), nodeEntity.getLabels()));
+				Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p = new ImmutablePair<>(edgeEntity, nodeEntity);
+				entity.addConnectedEntity(p);
+//				entity.getConnectedEntities().add(p);
+			} else {
+				entity.addConnectionTypeCounter(relationshipType);
+			}
+			
 		}
 	}
 	
@@ -131,10 +143,10 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	private boolean isMetabolitePropertyLabel(String label) {
 		try {
 			MetabolitePropertyLabel.valueOf(label);
-			LOGGER.debug(label + " is a MetabolitePropertyLabel");
+			LOGGER.trace(label + " is a MetabolitePropertyLabel");
 			return true;
 		} catch (IllegalArgumentException e) {
-			LOGGER.debug(label + " is not MetabolitePropertyLabel - " + e.getMessage());
+			LOGGER.trace(label + " is not MetabolitePropertyLabel - " + e.getMessage());
 		}
 		
 		return false;
@@ -143,10 +155,10 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	private boolean isMetaboliteMajorLabel(String label) {
 		try {
 			MetaboliteMajorLabel.valueOf(label);
-			LOGGER.debug(label + " is a MetaboliteMajorLabel");
+			LOGGER.trace(label + " is a MetaboliteMajorLabel");
 			return true;
 		} catch (IllegalArgumentException e) {
-			LOGGER.debug(label + " is not MetaboliteMajorLabel - " + e.getMessage());
+			LOGGER.trace(label + " is not MetaboliteMajorLabel - " + e.getMessage());
 		}
 		
 		return false;
@@ -154,9 +166,19 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
 	@Override
 	public GraphMetaboliteEntity saveMetabolite(String tag, GraphMetaboliteEntity metabolite) {
+		if (metabolite.getEntry() == null)
+			LOGGER.warn("Missing entry");
+		if (metabolite.getMajorLabel() == null)
+			LOGGER.warn("Missing major label");
+		if (!metabolite.getLabels().contains(GlobalLabel.Metabolite.toString()))
+			LOGGER.warn("Expected GlobalLabel.Metabolite found " + metabolite.getLabels());
+		if (metabolite.getProperty("proxy", null) == null)
+			LOGGER.warn("Proxy property not found");
+		
 		super.saveGraphEntity(metabolite);
-		Node node = graphDatabaseService.getNodeById(metabolite.getId());
-		node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+//		Node node = graphDatabaseService.getNodeById(metabolite.getId());
+//		node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+//		System.out.println(Neo4jUtils.getPropertiesMap(node));
 		return metabolite;
 	};
 	

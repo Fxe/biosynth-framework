@@ -42,7 +42,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	protected static final String PROPERTY_UNIQUE_KEY = "key";
 	protected static final String REACTION_NAME_RELATIONSHIP_TYPE = ReactionRelationshipType.has_name.toString();
 	
-	private final String majorLabel;
+	protected final String majorLabel;
 	
 	public AbstractReactionTransform(String majorLabel) {
 		this.majorLabel = majorLabel;
@@ -69,28 +69,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 		return p;
 	}
 	
-	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
-			R entity) {
-		this.configureNameLink(centralReactionEntity, entity.getName());
-		
-//		Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
-//		AbstractGraphEdgeEntity edge = buildSomeEdge(null, REACTION_NAME_RELATIONSHIP_TYPE);
-//		Map<String, Object> properties = new HashMap<> ();
-//		properties.put(PROPERTY_UNIQUE_KEY, entity.getName());
-//		AbstractGraphNodeEntity node = buildSomeNode(properties, null, REACTION_NAME_LABEL, REACTION_PROPERTY_LABEL);
-//		
-//		link.put(edge, node);
-//		centralReactionEntity.links.add(link);
-	}
-	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
-			String name) {
-		centralReactionEntity.getConnectedEntities().add(
-				this.buildPair(
-				new SomeNodeFactory().buildGraphReactionPropertyEntity(
-						ReactionPropertyLabel.Name, name), 
-				new SomeNodeFactory().buildReactionEdge(
-						ReactionRelationshipType.has_name)));
-	}
+
 	
 	public AbstractGraphNodeEntity buildSomeNode(Map<String, Object> properties, String majorLabel, String...labels) {
 		AbstractGraphNodeEntity node = new AbstractGraphNodeEntity();
@@ -146,7 +125,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 			List<?> right = List.class.cast(method.invoke(reaction));
 			for (Object stoichiometryObject : right) {
 //				System.out.println(stoichiometryObject.getClass().getSimpleName());
-				Map<String, Object> propertyContainer = 
+				Map<String, Object> stoichiometryProperties = 
 						this.propertyContainerBuilder.extractProperties(
 								stoichiometryObject, 
 								stoichiometryObject.getClass());
@@ -156,12 +135,12 @@ implements EtlTransform<R, GraphReactionEntity> {
 				entity.setEntry(stoichiometryPair.getCpdEntry());
 				//NO CLUE WHY I DID THIS ! Biocyc ?
 //				entity.setEntry(String.format("%s:%s", reaction.getSource(), stoichiometryPair.getCpdEntry()));
-				//FIXME: BAD ASSUMPTION -> Metabolite and Reaction may have distinct labels ex.: LigandReaction -> LigandCompound
-				entity.setMajorLabel(this.majorLabel);
+				
+				entity.setMajorLabel(resolveComponentLabel(stoichiometryPair.getCpdEntry()));
 				entity.addLabel(METABOLITE_LABEL);
 //				Map<String, Object> propertyContainer = new HashMap<> ();
 //				propertyContainer.put("stoichiometry", stoichiometryPair.getStoichiometry());
-				result.put(entity, propertyContainer);
+				result.put(entity, stoichiometryProperties);
 			}
 		} catch (NoSuchMethodException e) {
 			LOGGER.error(e.getMessage());
@@ -171,6 +150,15 @@ implements EtlTransform<R, GraphReactionEntity> {
 		
 		return result;
 	}
+	
+	/**
+	 * Reaction may contain components with distinct labels
+	 * ex.: Kegg Reaction may contain glycans and compounds label
+	 * resolver must be defined in the upper level
+	 * @param entry of the component
+	 * @return
+	 */
+	protected abstract String resolveComponentLabel(String entry);
 	
 	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, R reaction) {
 		LOGGER.debug("Reading Left Components");
@@ -205,7 +193,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 						ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(BioDbDictionary.translateDatabase(xref.getRef()));
 						Map<String, Object> relationshipProperteis = 
 								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
-						centralReactionEntity.getConnectedEntities().add(
+						centralReactionEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -218,6 +206,17 @@ implements EtlTransform<R, GraphReactionEntity> {
 //						proxyEntity.addLabel(REACTION_LABEL);
 //						proxyEntity.setMajorLabel(BioDbDictionary.translateDatabase(xref.getRef()));
 //						centralReactionEntity.getCrossreferences().add(proxyEntity);
+						break;
+					case MODEL:
+						centralReactionEntity.addConnectedEntity(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getRef())
+										.withMajorLabel(GlobalLabel.MetabolicModel)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildReactionEdge(ReactionRelationshipType.included_in)));
 						break;
 //					case GENE:
 //						break;
@@ -232,6 +231,35 @@ implements EtlTransform<R, GraphReactionEntity> {
 			LOGGER.error(e.getMessage());
 		} catch (InvocationTargetException | IllegalAccessException e) {
 			LOGGER.error(e.getMessage());
+		}
+	}
+	
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
+			R entity) {
+		this.configureNameLink(centralReactionEntity, entity.getName());
+		
+//		Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
+//		AbstractGraphEdgeEntity edge = buildSomeEdge(null, REACTION_NAME_RELATIONSHIP_TYPE);
+//		Map<String, Object> properties = new HashMap<> ();
+//		properties.put(PROPERTY_UNIQUE_KEY, entity.getName());
+//		AbstractGraphNodeEntity node = buildSomeNode(properties, null, REACTION_NAME_LABEL, REACTION_PROPERTY_LABEL);
+//		
+//		link.put(edge, node);
+//		centralReactionEntity.links.add(link);
+	}
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity,
+			String name) {
+		this.configureGenericPropertyLink(centralReactionEntity, name, ReactionPropertyLabel.Name, ReactionRelationshipType.has_name);
+	}
+	protected void configureGenericPropertyLink(
+			GraphReactionEntity graphReactionEntity, 
+			Object value, ReactionPropertyLabel label, 
+			ReactionRelationshipType relationship) {
+		if (value != null) {
+			graphReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory().buildGraphReactionPropertyEntity(label, value), 
+					new SomeNodeFactory().buildReactionEdge(relationship)));
 		}
 	}
 	

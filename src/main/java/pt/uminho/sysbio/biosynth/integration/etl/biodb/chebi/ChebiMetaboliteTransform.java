@@ -60,7 +60,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 			try {
 				Map<String, Object> edgeProperties = this.propertyContainerBuilder
 						.extractProperties(name, ChebiMetaboliteNameEntity.class);
-				centralMetaboliteEntity.getConnectedEntities().add(
+				centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
 							MetabolitePropertyLabel.Name, name.getName()), 
@@ -83,7 +83,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 		Long parentId = entity.getParentId();
 		if (parentId != null) {
 			MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(CHEBI_METABOLITE_LABEL);
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(Long.toString(parentId))

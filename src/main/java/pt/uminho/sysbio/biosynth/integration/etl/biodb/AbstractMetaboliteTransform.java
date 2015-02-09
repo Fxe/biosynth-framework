@@ -260,7 +260,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	}
 	protected void configureGenericPropertyLink(GraphMetaboliteEntity centralMetaboliteEntity, Object value, MetabolitePropertyLabel label, MetaboliteRelationshipType relationship) {
 		if (value != null) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory().buildGraphMetabolitePropertyEntity(label, value), 
 					new SomeNodeFactory().buildMetaboliteEdge(relationship)));
@@ -293,7 +293,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef()));
 						Map<String, Object> relationshipProperteis = 
 								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -303,7 +303,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										.buildMetaboliteEdge(MetaboliteRelationshipType.has_crossreference_to)));
 						break;
 					case MODEL:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getRef())
@@ -321,7 +321,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 						break;
 						
 					case PATENT:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -333,7 +333,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										.buildMetaboliteEdge(MetaboliteRelationshipType.has_literature)));
 						break;
 					case CITATION:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -345,7 +345,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										.buildMetaboliteEdge(MetaboliteRelationshipType.has_literature)));
 						break;
 					case PROTEIN:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -357,7 +357,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										.buildMetaboliteEdge(MetaboliteRelationshipType.related_to)));
 						break;
 					case ECNUMBER:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -369,7 +369,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 										.buildMetaboliteEdge(MetaboliteRelationshipType.related_to)));
 						break;
 					case GENE:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
@@ -388,7 +388,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 //						centralMetaboliteEntity.addPropertyEntity(g);
 						break;
 					case REACTION:
-						centralMetaboliteEntity.getConnectedEntities().add(
+						centralMetaboliteEntity.addConnectedEntity(
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())

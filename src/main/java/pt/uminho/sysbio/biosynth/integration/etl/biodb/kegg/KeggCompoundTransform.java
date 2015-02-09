@@ -34,7 +34,7 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getMol2d(), MetabolitePropertyLabel.MDLMolFile, MetaboliteRelationshipType.has_mdl_mol_file);
 
 		for (String pwy : entity.getPathways()) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(pwy)
@@ -47,12 +47,10 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 		}
 		
 		for (String ecn : entity.getEnzymes()) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(ecn)
-//							.withLabel(GlobalLabel.KEGG)
-//							.withLabel(GlobalLabel.MetabolicPathway)
 							.withMajorLabel(GlobalLabel.EnzymeCommission)
 							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildMetaboliteEdge(

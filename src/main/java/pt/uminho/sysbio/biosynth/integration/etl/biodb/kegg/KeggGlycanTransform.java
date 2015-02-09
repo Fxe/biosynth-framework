@@ -24,7 +24,7 @@ extends AbstractMetaboliteTransform<KeggGlycanMetaboliteEntity> {
 			KeggGlycanMetaboliteEntity entity) {
 		
 		for (String pwy : entity.getPathways()) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(pwy)
@@ -37,7 +37,7 @@ extends AbstractMetaboliteTransform<KeggGlycanMetaboliteEntity> {
 		}
 		
 		for (String ecn : entity.getEnzymes()) {
-			centralMetaboliteEntity.getConnectedEntities().add(
+			centralMetaboliteEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(ecn)

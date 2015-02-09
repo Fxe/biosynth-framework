@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -70,33 +71,37 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
 		Map<String, Triple<String, String, EtlCleasingType>> result =
 				new HashMap<> ();
 		
-		for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : metabolite.getConnectedEntities()) {
-			AbstractGraphNodeEntity propertyEntity = p.getRight();
-			AbstractGraphEdgeEntity relationshipEntity = p.getLeft();
-			Triple<String, String, EtlCleasingType> triple;
-//			
-			if (propertyEntity.getMajorLabel() == null) {
-				System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
-			}
-			switch (propertyEntity.getMajorLabel()) {
-				case "MolecularFormula":
-					triple = this.cleanseFormula((String)propertyEntity.getProperties().get("key"));
-					propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
-//					propertyEntity.setUniqueKey(nullToString(triple.getLeft()));
-					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
-					result.put("ChemicalFormula", triple);
-					break;
-				case "Name":
-					triple = this.cleanseName((String)propertyEntity.getProperties().get("key"));
-					propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
-					relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
-					result.put("Name", triple);
-					break;
-				default:
-					LOGGER.debug("Ignored connection: " + propertyEntity.getMajorLabel());
-					break;
+		for (String relationshipType : metabolite.getConnectedEntities().keySet()) {
+			List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> pairs = metabolite.getConnectedEntities().get(relationshipType);
+			for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : pairs) {
+				AbstractGraphNodeEntity propertyEntity = p.getRight();
+				AbstractGraphEdgeEntity relationshipEntity = p.getLeft();
+				Triple<String, String, EtlCleasingType> triple;
+//				
+				if (propertyEntity.getMajorLabel() == null) {
+					System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
+				}
+				switch (propertyEntity.getMajorLabel()) {
+					case "MolecularFormula":
+						triple = this.cleanseFormula((String)propertyEntity.getProperties().get("key"));
+						propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
+//						propertyEntity.setUniqueKey(nullToString(triple.getLeft()));
+						relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
+						result.put("ChemicalFormula", triple);
+						break;
+					case "Name":
+						triple = this.cleanseName((String)propertyEntity.getProperties().get("key"));
+						propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
+						relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
+						result.put("Name", triple);
+						break;
+					default:
+						LOGGER.debug("Ignored connection: " + propertyEntity.getMajorLabel());
+						break;
+				}
 			}
 		}
+
 		
 //		for (Pair<GraphPropertyEntity, GraphRelationshipEntity> pair : 
 //			metabolite.getPropertyEntities()) {

@@ -64,14 +64,14 @@ public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reac
 		if (connectedEntities.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
-			for (Pair<?, ?> p : connectedEntities) {
-				Object l = p.getLeft();
-				Object r = p.getRight();
-				sb.append("#").append(l.getClass().getSimpleName()).append("#")
-				  .append(l).append(" => ")
-				  .append("#").append(r.getClass().getSimpleName()).append("#")
-				  .append(r).append("\n");
-			}
+//			for (Pair<?, ?> p : connectedEntities.) {
+//				Object l = p.getLeft();
+//				Object r = p.getRight();
+//				sb.append("#").append(l.getClass().getSimpleName()).append("#")
+//				  .append(l).append(" => ")
+//				  .append("#").append(r.getClass().getSimpleName()).append("#")
+//				  .append(r).append("\n");
+//			}
 		}
 		sb.append("Left Metabolites:\n");
 		if (left.isEmpty()) {
