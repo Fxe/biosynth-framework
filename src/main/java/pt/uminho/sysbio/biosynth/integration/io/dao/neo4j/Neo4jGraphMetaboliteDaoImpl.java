@@ -116,13 +116,16 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	private AbstractGraphEdgeEntity deserialize(Relationship relationship) {
 		AbstractGraphEdgeEntity edgeEntity = new AbstractGraphEdgeEntity();
 		String label = relationship.getType().name();
+		edgeEntity.setId(relationship.getId());
 		edgeEntity.getLabels().add(label);
+//		edgeEntity.set
 		edgeEntity.setProperties(Neo4jUtils.getPropertiesMap(relationship));
 		return edgeEntity;
 	}
 	
 	private AbstractGraphNodeEntity deserialize(Node node) {
 		GraphMetaboliteEntity entity = new GraphMetaboliteEntity();
+		entity.setId(node.getId());
 		entity.setLabels(Neo4jUtils.getLabelsAsString(node));
 		entity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		String majorLabel = null;

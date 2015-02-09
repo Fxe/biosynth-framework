@@ -59,6 +59,7 @@ public class BioDbDictionary {
 		dictionary.put("Chemspider accession", MetaboliteMajorLabel.ChemSpider.toString());
 		dictionary.put("DrugBank accession", MetaboliteMajorLabel.DrugBank.toString());
 		dictionary.put("DrugBank", MetaboliteMajorLabel.DrugBank.toString());
+		dictionary.put("DRUGBANK", MetaboliteMajorLabel.DrugBank.toString());
 		
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
@@ -74,10 +75,11 @@ public class BioDbDictionary {
 		dictionary.put("BIGG", MetaboliteMajorLabel.BiGG.toString());
 		dictionary.put("bigg", MetaboliteMajorLabel.BiGG.toString());
 		dictionary.put("LIGAND-CPD", MetaboliteMajorLabel.LigandCompound.toString());
-		dictionary.put("KEGG", MetaboliteMajorLabel.LigandCompound.toString());
+//		dictionary.put("KEGG", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
 		dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());
+		dictionary.put("KEGG-GLYCAN", MetaboliteMajorLabel.LigandGlycan.toString());
 		dictionary.put("LigandBox", MetaboliteMajorLabel.LigandBox.toString());
 		//KEGG
 		dictionary.put("JCGGDB", MetaboliteMajorLabel.JCGGDB.toString());
@@ -87,6 +89,7 @@ public class BioDbDictionary {
 		dictionary.put("PUBCHEM", MetaboliteMajorLabel.PubChemCompound.toString());
 		dictionary.put("Pubchem accession", MetaboliteMajorLabel.PubChemCompound.toString());
 		dictionary.put("PubChem", MetaboliteMajorLabel.PubChemCompound.toString());
+		dictionary.put("PUBCHEM-SID", MetaboliteMajorLabel.PubChemSubstance.toString());
 		
 		dictionary.put("PDB-CCD", "PDB");
 		dictionary.put("chebi", MetaboliteMajorLabel.ChEBI.toString());
@@ -97,8 +100,6 @@ public class BioDbDictionary {
 		dictionary.put("NIKKAJI", MetaboliteMajorLabel.NIKKAJI.toString());
 		dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
 		dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
-		
-		
 		
 		dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("hmdb", MetaboliteMajorLabel.HMDB.toString());

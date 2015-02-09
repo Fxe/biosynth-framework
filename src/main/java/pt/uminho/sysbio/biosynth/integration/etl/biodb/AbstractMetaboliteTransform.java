@@ -70,10 +70,10 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 	
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
-	protected final EtlDictionary<String, String> dictionary;
-	protected final EtlDictionary<String, String> literatureDictionary;
+	protected final EtlDictionary<String, String, String> dictionary;
+	protected final EtlDictionary<String, String, String> literatureDictionary;
 	
-	public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String> dictionary) {
+	public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String, String> dictionary) {
 		this.majorLabel = majorLabel;
 		this.dictionary = dictionary;
 		this.literatureDictionary = new BiobaseLiteratureEtlDictionary<ChebiMetaboliteEntity>(ChebiMetaboliteEntity.class);
@@ -290,7 +290,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 //						graphRelationshipEntity.setProperties(properties);
 //						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
 //						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
-						MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef()));
+						MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
 						Map<String, Object> relationshipProperteis = 
 								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
 						centralMetaboliteEntity.addConnectedEntity(
@@ -325,7 +325,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.withMajorLabel(literatureDictionary.translate(xref.getRef()))
+										.withMajorLabel(literatureDictionary.translate(xref.getRef(), xref.getValue()))
 										.withLabel(GlobalLabel.Literature)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()
@@ -337,7 +337,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.withMajorLabel(literatureDictionary.translate(xref.getRef()))
+										.withMajorLabel(literatureDictionary.translate(xref.getRef(), xref.getValue()))
 										.withLabel(GlobalLabel.Literature)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()
@@ -392,7 +392,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.buildGraphReactionProxyEntity(ReactionMajorLabel.valueOf(this.dictionary.translate(xref.getRef()))), 
+										.buildGraphReactionProxyEntity(ReactionMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()))), 
 								new SomeNodeFactory()
 										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
 										.buildMetaboliteEdge(MetaboliteRelationshipType.found_in)));
@@ -410,9 +410,9 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 				}
 			}
 		} catch (NoSuchMethodException e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("NoSuchMethod" + e.getMessage());
 		} catch (InvocationTargetException | IllegalAccessException e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("InvocationTarget" + e.getMessage());
 		}
 	};
 }

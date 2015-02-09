@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +89,13 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 	}
 	
 	@Override
+	protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, BioCycMetaboliteEntity entity) {
+		String formula = entity.getFormula();
+		entity.setFormula(formulaToLower(formula));
+		super.configureFormulaLink(centralMetaboliteEntity, entity);
+	};
+	
+	@Override
 	protected void configureNameLink(
 			GraphMetaboliteEntity centralMetaboliteEntity,
 			BioCycMetaboliteEntity entity) {
@@ -99,20 +108,39 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 	}
 	
 	@Override
-		protected void configureCrossreferences(
-				GraphMetaboliteEntity centralMetaboliteEntity,
-				BioCycMetaboliteEntity metabolite) {
-			for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
-				if (xref.getRef().toLowerCase().equals("bigg")) {
-					if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
-						xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
-					}
-					LOGGER.debug("Internal Id replaced: " + xref);
+	protected void configureCrossreferences(
+			GraphMetaboliteEntity centralMetaboliteEntity,
+			BioCycMetaboliteEntity metabolite) {
+		for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+			if (xref.getRef().toLowerCase().equals("bigg")) {
+				if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+					xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
 				}
+				LOGGER.debug("Internal Id replaced: " + xref);
 			}
-			super.configureCrossreferences(centralMetaboliteEntity, metabolite);
 		}
+		super.configureCrossreferences(centralMetaboliteEntity, metabolite);
+	}
 
+	private String formulaToLower(String formula) {
+		if (formula == null || formula.trim().isEmpty()) return null;
+		String formula_ = "";
+		Pattern pattern = Pattern.compile("[A-Z]+\\d+");
+		Matcher matcher = pattern.matcher(formula);
+		while (matcher.find()) {
+			String group = matcher.group();
+			//This is dumb ...
+			String atom = group.split("\\d+")[0];
+			String count = group.split("[A-Z]+")[1];
+			String term = atom.charAt(0) + atom.substring(1).toLowerCase() + count;
+			formula_ = formula_.concat(term);
+		}
+		if (!formula.equals(formula_)) {
+			LOGGER.warn(formula + " -> " + formula_);
+		}
+		
+		return formula_;
+	}
 //	@Override
 //	protected void configureCrossreferences(
 //			CentralMetaboliteEntity centralMetaboliteEntity,

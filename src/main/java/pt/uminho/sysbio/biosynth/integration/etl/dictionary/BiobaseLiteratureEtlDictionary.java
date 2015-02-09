@@ -6,7 +6,7 @@ import java.util.Map;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 
-public class BiobaseLiteratureEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String> {
+public class BiobaseLiteratureEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String, String> {
 
 	private Map<String, LiteratureMajorLabel> dictionary = new HashMap<> ();
 	
@@ -29,7 +29,7 @@ public class BiobaseLiteratureEtlDictionary<M extends Metabolite> implements Etl
 	
 	
 	@Override
-	public String translate(String lookup) {
+	public String translate(String lookup, String reference) {
 		LiteratureMajorLabel label = dictionary.get(lookup.toLowerCase());
 		if (label == null) return lookup.toLowerCase();
 		return label.toString();
