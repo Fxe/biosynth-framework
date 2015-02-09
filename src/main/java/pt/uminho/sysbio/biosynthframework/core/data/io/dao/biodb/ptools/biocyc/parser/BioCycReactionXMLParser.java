@@ -308,8 +308,12 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				if (o instanceof JSONObject) {
 					JSONObject ecnInnerJsonObject = (JSONObject) o;
 					ecn.setEcNumber(ecnInnerJsonObject.getString("content"));
-					System.out.println("ssssssssssss" + ecnInnerJsonObject);
-					//TODO: ADD OFFCIAL STATUS
+					String official = ecnInnerJsonObject.getString("official");
+					if (official.trim().toLowerCase().equals("t")) {
+						ecn.setOfficial(true);
+					} else {
+						LOGGER.warn("UNABLE TO PARSE" + ecnInnerJsonObject);
+					}
 				} else {
 					ecn.setEcNumber((String) o);
 				}
@@ -349,7 +353,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				Object entityType = iterator.next();
 				type = entityType.toString();
 				
-				LOGGER.debug(type);
+				LOGGER.debug("Type: " + type);
 				
 				if (type.equals("compartment")) {
 					JSONObject jsonObject = stoichiometryJsonObject.getJSONObject(type).getJSONObject("cco");
@@ -369,6 +373,12 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				} else if (type.equals("content")) {
 					String cpdEntry = stoichiometryJsonObject.getString("content");
 					properties.put("cpdEntry", cpdEntry);
+				} else if (type.equals("name-slot")) {
+					properties.put("coefficient", stoichiometryJsonObject.getString("name-slot"));
+				} else if (type.equals("n-name")) {
+					properties.put("coefficient", stoichiometryJsonObject.getJSONObject("n-name").getString("content"));
+				} else if (type.equals("n-1-name")) {
+					properties.put("coefficient", stoichiometryJsonObject.getJSONObject("n-1-name").getString("content"));
 				} else {
 					LOGGER.warn(String.format("[%s] unknown stoichiometry type [%s]", this.getEntry(), stoichObj));
 				}
@@ -377,7 +387,7 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			String cpdEntry = (String) stoichObj;
 			properties.put("cpdEntry", cpdEntry);
 		}
-				
+		LOGGER.debug("Stoichiometry properties: " + properties);
 		return properties;
 	}
 	
@@ -527,12 +537,12 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 		return enzymaticReactionStrings;
 	}
 	
-	public Boolean isOrphan() {
+	public String getOrphan() {
 		if (this.base.has("orphan")) {
 			String content = this.base.getString("orphan");
-			if (content.equals("NO")) return false;
+			return content;
 			
-			System.out.println("WHAT IS " + this.base.get("orphan") + "??????????????");
+//			System.out.println("isOrphan WHAT IS " + this.base.get("orphan") + "??????????????");
 		}
 		
 		return null;

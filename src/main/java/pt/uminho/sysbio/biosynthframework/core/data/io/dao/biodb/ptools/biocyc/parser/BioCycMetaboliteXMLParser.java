@@ -67,7 +67,7 @@ implements IGenericMetaboliteParser {
 				rxnJSArray.put(rightSide);
 			}
 			for (int i = 0; i < rxnJSArray.length(); i++) {
-				rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
+				rxnIdList.add(rxnJSArray.getJSONObject(i).getString("orgid") + ":" +  rxnJSArray.getJSONObject(i).getString("frameid"));
 			}
 		}
 		
@@ -80,7 +80,7 @@ implements IGenericMetaboliteParser {
 				rxnJSArray.put(leftSide);
 			}
 			for (int i = 0; i < rxnJSArray.length(); i++) {
-				rxnIdList.add( rxnJSArray.getJSONObject(i).getString("frameid"));
+				rxnIdList.add(rxnJSArray.getJSONObject(i).getString("orgid") + ":" +  rxnJSArray.getJSONObject(i).getString("frameid"));
 				//System.out.println(rxnJSArray.getJSONObject(i).getString("frameid"));
 			}
 		}
@@ -397,11 +397,11 @@ implements IGenericMetaboliteParser {
 				if (arrayIndexObj instanceof JSONObject) {
 					JSONObject parentJsObj = (JSONObject) arrayIndexObj;
 					if (parentJsObj.has("Compound")) {
-						res.add(parentJsObj.getJSONObject("Compound").getString("frameid"));
+						res.add(parentJsObj.getJSONObject("Compound").getString("orgid") + ":" + parentJsObj.getJSONObject("Compound").getString("frameid"));
 					} else if (parentJsObj.has("Protein")) {
-						res.add(parentJsObj.getJSONObject("Protein").getString("frameid"));
+						res.add(parentJsObj.getJSONObject("Protein").getString("orgid") + ":" + parentJsObj.getJSONObject("Protein").getString("frameid"));
 					} else if (parentJsObj.has("RNA")) {
-						res.add(parentJsObj.getJSONObject("RNA").getString("frameid"));
+						res.add(parentJsObj.getJSONObject("RNA").getString("orgid") + ":" + parentJsObj.getJSONObject("RNA").getString("frameid"));
 					} else {
 						System.out.println("PARENT ERROR !");
 						System.out.println(parentJsArray);
@@ -430,11 +430,11 @@ implements IGenericMetaboliteParser {
 			for (int i = 0; i < instanceJsArray.length(); i++) {
 				JSONObject instanceJsObj = instanceJsArray.getJSONObject(i);
 				if (instanceJsObj.has("Compound")) {
-					res.add(instanceJsObj.getJSONObject("Compound").getString("frameid"));
+					res.add(instanceJsObj.getJSONObject("Compound").getString("orgid") + ":" + instanceJsObj.getJSONObject("Compound").getString("frameid"));
 				} else if (instanceJsObj.has("Protein")) {
-					res.add(instanceJsObj.getJSONObject("Protein").getString("frameid"));
+					res.add(instanceJsObj.getJSONObject("Protein").getString("orgid") + ":" + instanceJsObj.getJSONObject("Protein").getString("frameid"));
 				} else if (instanceJsObj.has("RNA")) {
-					res.add(instanceJsObj.getJSONObject("RNA").getString("frameid"));
+					res.add(instanceJsObj.getJSONObject("RNA").getString("orgid") + ":" + instanceJsObj.getJSONObject("RNA").getString("frameid"));
 				} else {
 					System.out.println("PARENT ERROR !");
 					System.out.println(instanceJsObj);
@@ -459,11 +459,11 @@ implements IGenericMetaboliteParser {
 			for (int i = 0; i < subclassJsArray.length(); i++) {
 				JSONObject subclassJsObj = subclassJsArray.getJSONObject(i);
 				if (subclassJsObj.has("Compound")) {
-					res.add(subclassJsObj.getJSONObject("Compound").getString("frameid"));
+					res.add(subclassJsObj.getJSONObject("Compound").getString("orgid") + ":" + subclassJsObj.getJSONObject("Compound").getString("frameid"));
 				} else if (subclassJsObj.has("Protein")) {
-					res.add(subclassJsObj.getJSONObject("Protein").getString("frameid"));
+					res.add(subclassJsObj.getJSONObject("Protein").getString("orgid") + ":" + subclassJsObj.getJSONObject("Protein").getString("frameid"));
 				} else if (subclassJsObj.has("RNA")) {
-					res.add(subclassJsObj.getJSONObject("RNA").getString("frameid"));
+					res.add(subclassJsObj.getJSONObject("RNA").getString("orgid") + ":" + subclassJsObj.getJSONObject("RNA").getString("frameid"));
 				} else {
 					System.out.println("PARENT ERROR !");
 					System.out.println(subclassJsObj);

@@ -29,9 +29,9 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	@MetaProperty
 	@Column(name="orphan", nullable=true)
-	private Boolean orphan;
-	public Boolean getOrphan() { return orphan;}
-	public void setOrphan(Boolean orphan) { this.orphan = orphan;}
+	private String orphan;
+	public String getOrphan() { return orphan;}
+	public void setOrphan(String orphan) { this.orphan = orphan;}
 	
 	@MetaProperty
 	@Column(name="physio_relevant", nullable=true)

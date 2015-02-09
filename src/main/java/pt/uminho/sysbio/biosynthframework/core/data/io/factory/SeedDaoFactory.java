@@ -47,14 +47,13 @@ public class SeedDaoFactory {
 	}
 	
 	public HbmSeedMetaboliteDaoImpl buildHbmSeedMetaboliteDao() {
-		HbmSeedMetaboliteDaoImpl daoImpl = new HbmSeedMetaboliteDaoImpl();
+		
 		
 		if (sessionFactory == null) {
 			
 		}
-		
-		daoImpl.setSessionFactory(sessionFactory);
-		
+		HbmSeedMetaboliteDaoImpl daoImpl = new HbmSeedMetaboliteDaoImpl(sessionFactory);
+
 		return daoImpl;
 	}
 	

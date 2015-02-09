@@ -97,17 +97,13 @@ public class KeggDaoFactory {
 	
 	
 	public HbmKeggCompoundMetaboliteDaoImpl buildHbmKeggCompoundMetaboliteDao() {
-		HbmKeggCompoundMetaboliteDaoImpl daoImpl = new HbmKeggCompoundMetaboliteDaoImpl();
-		
 		if (sessionFactory == null) {
 			initialize(
 					KeggCompoundMetaboliteEntity.class, 
 					KeggCompoundMetaboliteCrossreferenceEntity.class);
 		}
-		
+		HbmKeggCompoundMetaboliteDaoImpl daoImpl = new HbmKeggCompoundMetaboliteDaoImpl(sessionFactory);
 		BiosynthHbmConnectionManager.registerSessionFactory(daoImpl, sessionFactory);
-		
-		daoImpl.setSessionFactory(sessionFactory);
 		return daoImpl;
 	}
 	
@@ -129,16 +125,12 @@ public class KeggDaoFactory {
 	}
 	
 	public HbmKeggDrugMetaboliteDaoImpl buildHbmKeggDrugMetaboliteDao() {
-		HbmKeggDrugMetaboliteDaoImpl daoImpl = new HbmKeggDrugMetaboliteDaoImpl();
-		
 		if (sessionFactory == null) {
 			initialize(
 					KeggDrugMetaboliteEntity.class);
 		}
-		
+		HbmKeggDrugMetaboliteDaoImpl daoImpl = new HbmKeggDrugMetaboliteDaoImpl(sessionFactory);
 		BiosynthHbmConnectionManager.registerSessionFactory(daoImpl, sessionFactory);
-		
-		daoImpl.setSessionFactory(sessionFactory);
 		return daoImpl;
 	}
 	

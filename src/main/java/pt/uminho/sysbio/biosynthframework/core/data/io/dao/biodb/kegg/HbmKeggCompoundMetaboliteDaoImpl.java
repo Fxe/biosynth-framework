@@ -18,13 +18,21 @@ public class HbmKeggCompoundMetaboliteDaoImpl implements MetaboliteDao<KeggCompo
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	public SessionFactory getSessionFactory() { return sessionFactory;}
+	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 	
 	private Session getSession() {
 		return this.sessionFactory.getCurrentSession();
 	}
 	
-	public SessionFactory getSessionFactory() { return sessionFactory;}
-	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
+	@Deprecated
+	public HbmKeggCompoundMetaboliteDaoImpl() {}
+	
+	public HbmKeggCompoundMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	
 	
 	@Override
 	public KeggCompoundMetaboliteEntity getMetaboliteById(Serializable id) {

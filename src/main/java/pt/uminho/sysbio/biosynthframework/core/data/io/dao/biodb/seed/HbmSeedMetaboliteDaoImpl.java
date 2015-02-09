@@ -17,15 +17,20 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 @Repository
 public class HbmSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEntity> {
 
-	@Autowired
 	private SessionFactory sessionFactory;
+	public SessionFactory getSessionFactory() { return sessionFactory;}
+	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
+	
+	@Autowired
+	public HbmSeedMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 	
 	private Session getSession() {
 		return this.sessionFactory.getCurrentSession();
 	}
 	
-	public SessionFactory getSessionFactory() { return sessionFactory;}
-	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
+	
 
 	@Override
 	public SeedMetaboliteEntity getMetaboliteById(Serializable id) {

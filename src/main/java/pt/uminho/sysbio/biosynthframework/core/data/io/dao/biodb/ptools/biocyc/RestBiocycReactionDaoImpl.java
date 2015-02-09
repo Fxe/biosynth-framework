@@ -77,19 +77,19 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			List<String> parentStrings = parser.getParents();
 			List<String> pathwayStrings = parser.getPathways();
 			List<String> enzymaticReactionStrings = parser.getEnzymaticReactions();
-			Boolean orphan = parser.isOrphan();
+			String orphan = parser.getOrphan();
 			Boolean physioRel = parser.isPhysiologicallyRelevant();
 			Double gibbs = parser.getGibbs();
 			String direction = parser.getReactionDirection();
 			Boolean translocation = false;
 			Orientation orientation = Orientation.Unknown;
-
 			if (direction != null) {
 				switch (direction) {
 					case "LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
 					case "IRREVERSIBLE-LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
 					case "PHYSIOL-LEFT-TO-RIGHT": orientation = Orientation.LeftToRight; break;
 					case "RIGHT-TO-LEFT": orientation = Orientation.RightToLeft; break;
+					case "IRREVERSIBLE-RIGHT-TO-LEFT": orientation = Orientation.RightToLeft; break;
 					case "PHYSIOL-RIGHT-TO-LEFT": orientation = Orientation.RightToLeft; break;
 					case "REVERSIBLE": orientation = Orientation.Reversible; break;
 					default: LOGGER.warn("Not characterized direction: " + direction); break;

@@ -19,6 +19,13 @@ public class HbmKeggDrugMetaboliteDaoImpl implements MetaboliteDao<KeggDrugMetab
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@Deprecated
+	public HbmKeggDrugMetaboliteDaoImpl() {}
+	
+	public HbmKeggDrugMetaboliteDaoImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
 	private Session getSession() {
 		return this.sessionFactory.getCurrentSession();
 	}
