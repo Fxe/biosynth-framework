@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -21,11 +23,13 @@ public class BioCycReactionEcNumberEntity {
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 	
+	@MetaProperty
 	@Column(name="ec_number", nullable=false, length=255)
 	private String ecNumber;
 	public String getEcNumber() { return ecNumber;}
 	public void setEcNumber(String ecNumber) { this.ecNumber = ecNumber;}
 	
+	@MetaProperty
 	@Column(name="official", nullable=true)
 	private Boolean official;
 	public Boolean getOfficial() { return official;}
