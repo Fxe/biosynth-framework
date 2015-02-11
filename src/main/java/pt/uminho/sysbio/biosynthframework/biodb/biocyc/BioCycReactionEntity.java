@@ -53,21 +53,35 @@ public class BioCycReactionEntity extends GenericReaction {
 
 	@ElementCollection
 	@CollectionTable(name="biocyc_reaction_parent", joinColumns=@JoinColumn(name="reaction_id"))
-	@Column(name="parent_entry", length=255)
+	@Column(name="parent", length=255)
 	private List<String> parents = new ArrayList<> ();
 	public List<String> getParents() { return parents;}
 	public void setParents(List<String> parents) { this.parents = parents;}
+	
+	@ElementCollection
+	@CollectionTable(name="biocyc_reaction_instance", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="instance", length=255)
+	private List<String> instances = new ArrayList<> ();
+	public List<String> getInstances() { return instances;}
+	public void setInstances(List<String> instances) { this.instances = instances;}
+	
+	@ElementCollection
+	@CollectionTable(name="biocyc_reaction_sub_instance", joinColumns=@JoinColumn(name="reaction_id"))
+	@Column(name="reaction", length=255)
+	private List<String> subInstances = new ArrayList<> ();
+	public List<String> getSubInstances() { return subInstances;}
+	public void setSubInstances(List<String> subInstances) { this.subInstances = subInstances;}
 
 	@ElementCollection
 	@CollectionTable(name="biocyc_reaction_pathway", joinColumns=@JoinColumn(name="reaction_id"))
-	@Column(name="pathway_entry", length=255)
+	@Column(name="pathway", length=255)
 	private List<String> pathways = new ArrayList<> ();
 	public List<String> getPathways() { return pathways;}
 	public void setPathways(List<String> pathways) { this.pathways = pathways;}
 
 	@ElementCollection
 	@CollectionTable(name="biocyc_reaction_enzymatic", joinColumns=@JoinColumn(name="reaction_id"))
-	@Column(name="enzymatic_reaction_entry", length=255)
+	@Column(name="enzymatic_reaction", length=255)
 	private List<String> enzymaticReactions = new ArrayList<> ();
 	public List<String> getEnzymaticReactions() { return enzymaticReactions;}
 	public void setEnzymaticReactions(List<String> enzymaticReactions) { this.enzymaticReactions = enzymaticReactions;}

@@ -485,12 +485,48 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			JSONArray parentJsonArray = this.getJsonArray(this.base, "parent");
 			for (int i = 0; i < parentJsonArray.length(); i++) {
 				JSONObject parentJsonObject = parentJsonArray.getJSONObject(i);
-				String parentEntry = parentJsonObject.getJSONObject("Reaction").getString("frameid");
-				parentStrings.add(parentEntry.trim());
+				String frameId = parentJsonObject.getJSONObject("Reaction").getString("frameid").trim();
+				String orgId = parentJsonObject.getJSONObject("Reaction").getString("orgid").trim();
+				parentStrings.add(orgId + ":" + frameId);
 			}
 		}
 		
 		return parentStrings;
+	}
+	
+	public List<String> getSubInstances() {
+		List<String> parentStrings = new ArrayList<> ();
+		
+		if (this.base.has("reaction-list")) {
+//			JSONArray parentJsonArray = this.getJsonArray(this.base, "reaction-list");
+			JSONArray jsonArray = this.base.getJSONObject("reaction-list").getJSONArray("Reaction");
+//			System.out.println();
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+//				System.out.println(parentJsonObject);
+				String frameId = jsonObject.getString("frameid").trim();
+				String orgId = jsonObject.getString("orgid").trim();
+				parentStrings.add(orgId + ":" + frameId);
+			}
+		}
+		
+		return parentStrings;
+	}
+	
+	public List<String> getInstances() {
+		List<String> instances = new ArrayList<> ();
+		
+		if (this.base.has("instance")) {
+			JSONArray parentJsonArray = this.getJsonArray(this.base, "instance");
+			for (int i = 0; i < parentJsonArray.length(); i++) {
+				JSONObject parentJsonObject = parentJsonArray.getJSONObject(i);
+				String frameId = parentJsonObject.getJSONObject("Reaction").getString("frameid").trim();
+				String orgId = parentJsonObject.getJSONObject("Reaction").getString("orgid").trim();
+				instances.add(orgId + ":" + frameId);
+			}
+		}
+		
+		return instances;
 	}
 	
 	public List<String> getPathways() {
@@ -501,7 +537,6 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 			
 			for (int i = 0; i < pathwayJsonArray.length(); i++) {
 				JSONArray pathwayInnerJsonArray = null;
-//				System.out.println(pathwayJsonArray.getJSONObject(i));
 				if (pathwayJsonArray.getJSONObject(i).has("Pathway"))
 					pathwayInnerJsonArray = this.getJsonArray(pathwayJsonArray.getJSONObject(i), "Pathway");
 				if (pathwayJsonArray.getJSONObject(i).has("Reaction"))
@@ -509,8 +544,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 				
 				
 				for (int j = 0; j < pathwayInnerJsonArray.length(); j++) {
-					String pathwayEntry = pathwayInnerJsonArray.getJSONObject(j).getString("frameid");
-					pathwayStrings.add(pathwayEntry.trim());
+					String frameId = pathwayInnerJsonArray.getJSONObject(j).getString("frameid").trim();
+					String orgId = pathwayInnerJsonArray.getJSONObject(j).getString("orgid").trim();
+					pathwayStrings.add(orgId + ":" + frameId);
 				}
 			}
 		}
@@ -528,8 +564,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 						enzymaticReactionJsonArray.getJSONObject(i), "Enzymatic-Reaction");
 				
 				for (int j = 0; j < enzymaticReactionInnerJsonArray.length(); j++) {
-					String enzymaticEntry = enzymaticReactionInnerJsonArray.getJSONObject(j).getString("frameid");
-					enzymaticReactionStrings.add(enzymaticEntry.trim());
+					String frameId = enzymaticReactionInnerJsonArray.getJSONObject(j).getString("frameid").trim();
+					String orgId = enzymaticReactionInnerJsonArray.getJSONObject(j).getString("orgid").trim();
+					enzymaticReactionStrings.add(orgId + ":" + frameId);
 				}
 			}
 		}

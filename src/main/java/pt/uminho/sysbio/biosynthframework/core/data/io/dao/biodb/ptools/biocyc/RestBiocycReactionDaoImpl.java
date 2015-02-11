@@ -75,6 +75,8 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			List<BioCycReactionRightEntity> rightEntities = parser.getRight();
 			List<BioCycReactionCrossReferenceEntity> crossReferences = parser.getCrossReferences();
 			List<String> parentStrings = parser.getParents();
+			List<String> instances = parser.getInstances();
+			List<String> subInstances = parser.getSubInstances();
 			List<String> pathwayStrings = parser.getPathways();
 			List<String> enzymaticReactionStrings = parser.getEnzymaticReactions();
 			String orphan = parser.getOrphan();
@@ -114,6 +116,8 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 			rxn.setEcNumbers(ecNumberEntities);
 			rxn.setPhysiologicallyRelevant(physioRel);
 			rxn.setParents(parentStrings);
+			rxn.setInstances(instances);
+			rxn.setSubInstances(subInstances);
 			rxn.setPathways(pathwayStrings);
 			rxn.setEnzymaticReactions(enzymaticReactionStrings);
 			rxn.setOrphan(orphan);
@@ -173,3 +177,4 @@ public class RestBiocycReactionDaoImpl extends AbstractRestfullBiocycDao
 	}
 
 }
+
