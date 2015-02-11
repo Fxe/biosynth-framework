@@ -140,7 +140,7 @@ public class Neo4jMapper {
 		IntegratedMember integratedMember = new IntegratedMember();
 		String memberType = node.getLabels().iterator().next().toString();
 		integratedMember.setId(node.getId());
-		integratedMember.setReferenceId((Long)node.getProperty("id", null));
+		integratedMember.setReferenceId((Long)node.getProperty(Neo4jDefinitions.MEMBER_REFERENCE, null));
 		integratedMember.setEntry((String) node.getProperty("entry", null));
 		integratedMember.setMemberType(memberType);
 		integratedMember.setDescription((String) node.getProperty("description", null));

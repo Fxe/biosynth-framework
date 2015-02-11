@@ -38,7 +38,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
-	
+	private final static String MEMBER_DATA_ID_REFERENCE = Neo4jDefinitions.MEMBER_REFERENCE;
 	@Autowired
 	public Neo4jIntegrationMetadataDaoImpl(
 			GraphDatabaseService graphDatabaseService) {
@@ -224,7 +224,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		for (Long eid : eids) {
 			Set<Long> eidsFound = Neo4jUtils.collectNodeIdsFromNodes(
 					IteratorUtil.asCollection(this.graphDatabaseService
-							.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, "id", eid)));
+							.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, eid)));
 			if (!eidsFound.isEmpty()) {
 				if (eidsFound.size() > 1) LOGGER.warn("Multiple members found with reference id: " + eid);
 				long eid_ = eidsFound.iterator().next();
@@ -384,8 +384,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		if (!qualityLabels.trim().isEmpty()) qualityLabels = ":".concat(qualityLabels);
 		
 		String cypher = String.format(
-				"MERGE (cid:IntegratedCluster:%s%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
-				clusterLabel, qualityLabels);
+				"MERGE (cid:IntegratedCluster:%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
+				clusterLabel);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", cluster.getEntry());
 		params.put("description", nullToString(cluster.getDescription()));
@@ -456,7 +456,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 		for (Relationship relationship : cidNode.getRelationships(IntegrationRelationshipType.Integrates)) {
 			Node eidNode = relationship.getOtherNode(cidNode);
-			long refEid = (long) eidNode.getProperty("id");
+			long refEid = (long) eidNode.getProperty(MEMBER_DATA_ID_REFERENCE);
 			if (!refEids.contains(refEid)) {
 				LOGGER.debug("DELETE link to: " + refEid);
 				toDelete.add(relationship);
@@ -520,16 +520,23 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	public IntegratedMember saveIntegratedMember(IntegratedMember member) {
 		try {	
 			Label memberLabel = IntegrationNodeLabel.valueOf(member.getMemberType());
+			//INCORRECT CYPHER NEED ON SET / ON UPDATE DOH !
+//			String cypher = String.format(
+//					"MERGE (eid:IntegratedMember {%s:{%s}, description:{description}, member_type:{member_type}}) RETURN eid AS EID", 
+//					MEMBER_DATA_ID_REFERENCE, MEMBER_DATA_ID_REFERENCE);
 			String cypher = String.format(
-					"MERGE (eid:IntegratedMember:%s {id:{id}, description:{description}, member_type:{member_type}}) RETURN eid AS EID", 
-					memberLabel);
+					"MERGE (eid:IntegratedMember {%s:{%s}}) RETURN eid AS EID", 
+					MEMBER_DATA_ID_REFERENCE, MEMBER_DATA_ID_REFERENCE);
 			Map<String, Object> params = new HashMap<> ();
-			params.put("id", member.getReferenceId());
-			params.put("description", nullToString(member.getDescription()));
-			params.put("member_type", nullToString(member.getMemberType()));
-			
+			params.put(MEMBER_DATA_ID_REFERENCE, member.getReferenceId());
+//			params.put("description", nullToString(member.getDescription()));
+//			params.put("member_type", nullToString(member.getMemberType()));
+//			System.out.println(String.format("Execute:%s with %s", cypher, params));
 			LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
 			Node node = Neo4jUtils.getExecutionResultGetSingle("EID", this.executionEngine.execute(cypher, params));
+			node.setProperty("description", nullToString(member.getDescription()));
+			node.setProperty("member_type", nullToString(member.getMemberType()));
+			node.addLabel(memberLabel);
 			member.setId(node.getId());
 		
 		} catch (Exception e) {
@@ -590,7 +597,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 //		Node memberNode = graphDatabaseService.findNodesByLabelAndProperty(label, key, value)
 		
 		//START i=node(0) MATCH (i)-[r1:IntegratedMetaboliteCluster]->(c:MetaboliteCluster)-[r2:Integrates]->(m {id:245779}) RETURN id(m) as id
-		final String columnName = "id";
+		final String columnName = MEMBER_DATA_ID_REFERENCE;
 		final String iidToCidRelationship = IntegrationRelationshipType.IntegratedMetaboliteCluster.toString();
 		final String cidToEidRelationship = IntegrationRelationshipType.Integrates.toString();
 		final String integratedClusterLabel = IntegrationNodeLabel.MetaboliteCluster.toString();
@@ -609,7 +616,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		
 //		String query = String.format("MATCH (n {id:{id}}) RETURN id(n) AS %s", columnName);
 //		Map<String, Object> params = new HashMap<> ();
-//		params.put("id", eid);
+//		params.put(MEMBER_DATA_ID_REFERENCE, eid);
 //		
 //		List<?> a = IteratorUtil.asList(executionEngine.execute(query, params).columnAs(columnName));
 		
@@ -661,7 +668,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			}
 			
 			for (Long cid : clusters) {
-				unificationMap.put((long)memberNode.getProperty("id", -1L), cid);
+				unificationMap.put((long)memberNode.getProperty(MEMBER_DATA_ID_REFERENCE, -1L), cid);
 			}
 		}
 		
@@ -746,7 +753,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public IntegratedMember getIntegratedMemberByReferenceEid(Long referenceEid) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-				.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, "id", referenceEid));
+				.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, referenceEid));
 		return Neo4jMapper.nodeToIntegratedMember(node);
 	}
 

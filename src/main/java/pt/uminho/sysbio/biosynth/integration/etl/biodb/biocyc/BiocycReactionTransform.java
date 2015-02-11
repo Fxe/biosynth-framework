@@ -9,6 +9,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
@@ -38,7 +39,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(pwy)
-							.withMajorLabel(GlobalLabel.MetaCycPathway)
+							.withMajorLabel(ReactionMajorLabel.MetaCyc)
 							.withLabel(GlobalLabel.BioCyc)
 							.withLabel(GlobalLabel.MetabolicPathway)
 							.buildGenericNodeEntity(), 
@@ -46,16 +47,30 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 							ReactionRelationshipType.in_pathway)));
 		}
 		
-		for (String parent : reaction.getParents()) {
+		for (String rxn : reaction.getSubInstances()) {
+			LOGGER.debug("Add sub reaction link: " + rxn);
 			centralReactionEntity.addConnectedEntity(
 					this.buildPair(
 					new SomeNodeFactory()
-							.withEntry(parent)
+							.withEntry(rxn)
+							.withMajorLabel(ReactionMajorLabel.MetaCyc)
 							.withLabel(GlobalLabel.BioCyc)
-							.buildGraphReactionProxyEntity(ReactionMajorLabel.valueOf(majorLabel)), 
+							.withLabel(GlobalLabel.Reaction)
+							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildReactionEdge(
-							ReactionRelationshipType.instance_of)));
+							ReactionRelationshipType.sub_instance)));
 		}
+		
+//		for (String parent : reaction.getParents()) {
+//			centralReactionEntity.addConnectedEntity(
+//					this.buildPair(
+//					new SomeNodeFactory()
+//							.withEntry(parent)
+//							.withLabel(GlobalLabel.BioCyc)
+//							.buildGraphReactionProxyEntity(ReactionMajorLabel.valueOf(majorLabel)), 
+//					new SomeNodeFactory().buildReactionEdge(
+//							ReactionRelationshipType.instance_of)));
+//		}
 		
 		for (BioCycReactionEcNumberEntity ecn : reaction.getEcNumbers()) {
 			LOGGER.debug("Add EC number: " + ecn.getEcNumber());

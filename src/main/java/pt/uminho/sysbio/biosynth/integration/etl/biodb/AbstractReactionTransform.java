@@ -19,6 +19,8 @@ import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
@@ -51,7 +53,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	@Override
 	public GraphReactionEntity etlTransform(R entity) {
 		GraphReactionEntity centralReactionEntity = new GraphReactionEntity();
-
+		centralReactionEntity.setUniqueKey("entry");
 		this.configureProperties(centralReactionEntity, entity);
 		this.setupLeftMetabolites(centralReactionEntity, entity);
 		this.setupRightMetabolites(centralReactionEntity, entity);
@@ -91,7 +93,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	}
 
 	protected void configureProperties(GraphReactionEntity centralReactionEntity, R reaction) {
-		System.out.println(reaction);
+//		System.out.println(reaction);
 		centralReactionEntity.setMajorLabel(majorLabel);
 		centralReactionEntity.addLabel(REACTION_LABEL);
 		centralReactionEntity.addProperty("entry", reaction.getEntry());
@@ -218,8 +220,18 @@ implements EtlTransform<R, GraphReactionEntity> {
 										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
 										.buildReactionEdge(ReactionRelationshipType.included_in)));
 						break;
-//					case GENE:
-//						break;
+					case GENE:
+						centralReactionEntity.addConnectedEntity(
+								this.buildPair(
+								new SomeNodeFactory()
+										.withEntry(xref.getValue())
+										.withMajorLabel(GlobalLabel.valueOf(xref.getRef()))
+										.withLabel(GlobalLabel.Gene)
+										.buildGenericNodeEntity(), 
+								new SomeNodeFactory()
+										.withProperties(this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass()))
+										.buildReactionEdge(ReactionRelationshipType.has_gene)));
+						break;
 					default:
 						LOGGER.warn(String.format("Ignored type <%s>[%s:%s]", xref.getType(), xref.getRef(), xref.getValue()));
 						break;

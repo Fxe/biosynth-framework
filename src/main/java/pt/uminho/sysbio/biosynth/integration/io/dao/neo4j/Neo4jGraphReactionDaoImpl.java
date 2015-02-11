@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -30,7 +33,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 public class Neo4jGraphReactionDaoImpl 
 extends AbstractNeo4jGraphDao<GraphReactionEntity>
 implements ReactionHeterogeneousDao<GraphReactionEntity> {
-	
+	public static int RELATIONSHIP_TYPE_LIMIT = 20;
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphReactionDaoImpl.class);
 	protected static final Label REACTION_LABEL = GlobalLabel.Reaction;
 	protected static final RelationshipType LEFT_RELATIONSHIP = ReactionRelationshipType.left_component;
@@ -52,13 +55,13 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		GraphReactionEntity reactionEntity = new GraphReactionEntity();
 		
 		reactionEntity.setId(node.getId());
-//		reactionEntity.setEntry( (String) node.getProperty("entry", null));
+		reactionEntity.setLabels(Neo4jUtils.getLabelsAsString(node));
 		LOGGER.trace(String.format("Set Properties: %s", Neo4jUtils.getPropertiesMap(node)));
 		reactionEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
 		
 		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.left_component));
 		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.right_component));
-		
+		setupConnectedLinks(reactionEntity, node);
 		String majorLabel = (String) reactionEntity.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, null);
 		if (majorLabel == null) LOGGER.warn("Major label not found for %s:%s", node, Neo4jUtils.getLabels(node));
 		reactionEntity.setMajorLabel(majorLabel);
@@ -94,27 +97,17 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 	@Override
 	public GraphReactionEntity getReactionByEntry(String tag, String entry) {
 		ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(tag);
-		
-		List<Node> nodes = IteratorUtil.asList(graphDatabaseService
+		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(majorLabel, "entry", entry));
 		
-		if (nodes.isEmpty()) return null;
-		if (nodes.size() > 1) LOGGER.warn("Multiple Records for: " + entry);
+		if (node == null) {
+			LOGGER.debug(String.format("Reaction [%s:%s] not found", tag, entry));
+			return null;
+		}
 		
-		Node node = nodes.get(0);
+		LOGGER.debug(String.format("Found %s for %s:%s", node, tag, entry));
 		
-		LOGGER.debug("Found " + node);
-		
-		GraphReactionEntity reactionEntity = new GraphReactionEntity();
-		
-		reactionEntity.setId(node.getId());
-		reactionEntity.setEntry( (String) node.getProperty("entry", null));
-		reactionEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
-		
-		reactionEntity.setLeft(getReactionMetabolites(node, ReactionRelationshipType.left_component));
-		reactionEntity.setRight(getReactionMetabolites(node, ReactionRelationshipType.right_component));
-//		System.out.println(Neo4jUtils.getPropertiesMap(node));
-		return reactionEntity;
+		return this.getReactionById("", node.getId());
 	}
 
 	@Override
@@ -370,10 +363,52 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 		return result;
 	}
 
-//	@Override
-//	protected GraphReactionEntity nodeToObject(Node node) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
+	private void setupConnectedLinks(GraphReactionEntity entity, Node node) {
+		
+		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
+			String relationshipType = relationship.getType().name();
+			if (entity.getConnectionTypeCounter(relationshipType) < RELATIONSHIP_TYPE_LIMIT) {
+				Node otherNode = relationship.getOtherNode(node);
+				LOGGER.trace(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), otherNode));
+				AbstractGraphEdgeEntity edgeEntity = deserialize(relationship);
+				AbstractGraphNodeEntity nodeEntity = deserialize(otherNode);
+				LOGGER.trace(String.format("%s -[:%s]-> %s", node, relationship.getType().name(), nodeEntity.getLabels()));
+				Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p = new ImmutablePair<>(edgeEntity, nodeEntity);
+				entity.addConnectedEntity(p);
+//				entity.getConnectedEntities().add(p);
+			} else {
+				entity.addConnectionTypeCounter(relationshipType);
+			}
+			
+		}
+	}
+	private AbstractGraphEdgeEntity deserialize(Relationship relationship) {
+		AbstractGraphEdgeEntity edgeEntity = new AbstractGraphEdgeEntity();
+		String label = relationship.getType().name();
+		edgeEntity.setId(relationship.getId());
+		edgeEntity.getLabels().add(label);
+//		edgeEntity.set
+		edgeEntity.setProperties(Neo4jUtils.getPropertiesMap(relationship));
+		return edgeEntity;
+	}
+	
+	private AbstractGraphNodeEntity deserialize(Node node) {
+		AbstractGraphNodeEntity entity = new AbstractGraphNodeEntity();
+		entity.setId(node.getId());
+		entity.setLabels(Neo4jUtils.getLabelsAsString(node));
+		entity.setProperties(Neo4jUtils.getPropertiesMap(node));
+		String majorLabel = (String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
+//		if (entity.getLabels().contains(GlobalLabel.ReactionProperty.toString())) {
+//			for (String label : entity.getLabels()) {
+//				if (isMetabolitePropertyLabel(label)) majorLabel = label;
+//			}
+//		}
+//		if (entity.getLabels().contains(GlobalLabel.Reaction.toString())) {
+//			for (String label : entity.getLabels()) {
+//				if (isMetaboliteMajorLabel(label)) majorLabel = label;
+//			}
+//		}
+		entity.setMajorLabel(majorLabel);
+		return entity;
+	}
 }

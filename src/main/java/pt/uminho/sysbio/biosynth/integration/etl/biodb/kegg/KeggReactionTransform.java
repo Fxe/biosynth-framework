@@ -54,7 +54,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 							.withLabel(GlobalLabel.Orthology)
 							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildReactionEdge(
-							ReactionRelationshipType.in_pathway)));
+							ReactionRelationshipType.has_orthology)));
 		}
 		
 		for (String ecn : reaction.getEnzymes()) {

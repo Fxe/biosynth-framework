@@ -31,7 +31,7 @@ public class Neo4jGraphMetaboliteDaoImpl
 extends AbstractNeo4jGraphDao<GraphMetaboliteEntity>
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	
-	public static int RELATIONSHIP_TYPE_LIMIT = 5;
+	public static int RELATIONSHIP_TYPE_LIMIT = 10;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jGraphMetaboliteDaoImpl.class);
 	protected static final Label METABOLITE_LABEL = GlobalLabel.Metabolite;
@@ -46,24 +46,9 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	@Override
 	public GraphMetaboliteEntity getMetaboliteById(String tagsss, Serializable id) {
 		Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
-//		System.out.println(node);
-//		System.out.println(IteratorUtil.asCollection(node.getLabels()));
 		if (!node.hasLabel(GlobalLabel.Metabolite)) return null;
 		
 		LOGGER.debug(String.format("Found %s - %s", node, Neo4jUtils.getLabels(node)));
-		
-//		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
-//		
-//		metaboliteEntity.setId(node.getId());
-//		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
-//		metaboliteEntity.setPropertyEntities(Neo4jUtils.getPropertyEntities(node));
-//		metaboliteEntity.setCrossreferences(Neo4jUtils.getCrossreferences(node));
-//		
-//		metaboliteEntity.setMajorLabel((String) metaboliteEntity.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, null));
-//		
-//		for (Label label : node.getLabels()) metaboliteEntity.addLabel(label.toString());
-//		
-//		return metaboliteEntity;
 		
 		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
 		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
@@ -78,7 +63,6 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 	@Override
 	public GraphMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
 		MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(tag);
-		
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(majorLabel, "entry", entry));
 		

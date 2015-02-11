@@ -122,7 +122,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 		super.configureCrossreferences(centralMetaboliteEntity, metabolite);
 	}
 
-	private String formulaToLower(String formula) {
+	public static String formulaToLower(String formula) {
 		if (formula == null || formula.trim().isEmpty()) return null;
 		String formula_ = "";
 		Pattern pattern = Pattern.compile("[A-Z]+\\d+");

@@ -34,7 +34,7 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 	private Neo4jRelationship toNeo4jRelationship(Relationship relationship) {
 		Neo4jRelationship neo4jRelationship = new Neo4jRelationship();
 		neo4jRelationship.setId(relationship.getId());
-		neo4jRelationship.setType(relationship.getType().toString());
+		neo4jRelationship.setType(relationship.getType().name());
 		neo4jRelationship.setProperties(Neo4jUtils.getPropertiesMap(relationship));
 		
 		return neo4jRelationship;
