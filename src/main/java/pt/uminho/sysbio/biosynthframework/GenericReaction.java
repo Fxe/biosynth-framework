@@ -26,13 +26,11 @@ implements Reaction, Serializable, Cloneable {
 	protected Orientation orientation = Orientation.LeftToRight;
 	
 	@MetaProperty @Column(name="translocation")
-	protected boolean translocation = false;
-	
-	
+	protected Boolean translocation = false;
 	
 	@Override
-	public boolean isTranslocation() { return translocation;}
-	public void setTranslocation(boolean translocation) { this.translocation = translocation;}
+	public Boolean isTranslocation() { return translocation;}
+	public void setTranslocation(Boolean translocation) { this.translocation = translocation;}
 	
 //	protected List<StoichiometryPair> left = new ArrayList<> ();
 //	protected Map<M, Double> right = new HashMap<> ();

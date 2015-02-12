@@ -9,7 +9,7 @@ public interface Reaction {
 	public String getEntry();
 	public String getName();
 	
-	public boolean isTranslocation();
+	public Boolean isTranslocation();
 	public Orientation getOrientation();
 	public Map<String, Double> getLeftStoichiometry();
 	public void setLeftStoichiometry(Map<String, Double> left);
