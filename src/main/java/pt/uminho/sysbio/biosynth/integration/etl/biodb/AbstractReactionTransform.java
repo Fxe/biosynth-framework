@@ -18,9 +18,8 @@ import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
@@ -34,6 +33,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactionTransform.class);
 	
+	protected final EtlDictionary<String, String, String> dictionary;
 	protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
 			new AnnotationPropertyContainerBuilder();
 	
@@ -46,8 +46,9 @@ implements EtlTransform<R, GraphReactionEntity> {
 	
 	protected final String majorLabel;
 	
-	public AbstractReactionTransform(String majorLabel) {
+	public AbstractReactionTransform(String majorLabel, EtlDictionary<String, String, String> dictionary) {
 		this.majorLabel = majorLabel;
+		this.dictionary = dictionary;
 	}
 	
 	@Override
@@ -192,7 +193,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 				
 				switch (xref.getType()) {
 					case DATABASE:
-						ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(BioDbDictionary.translateDatabase(xref.getRef()));
+						ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
 						Map<String, Object> relationshipProperteis = 
 								this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
 						centralReactionEntity.addConnectedEntity(

@@ -73,28 +73,8 @@ public class GraphMetaboliteEntity extends AbstractGraphNodeEntity implements Me
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());
-		sb.append("\nStrong Properties:\n");
-		if (propertyEntities.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (Pair<?, ?> p : propertyEntities) {
-				sb.append("#").append(p.getLeft().getClass().getSimpleName()).append("#")
-				  .append(p.getLeft()).append(" => ")
-				  .append("#").append(p.getRight().getClass().getSimpleName()).append("#")
-				  .append(p.getRight()).append("\n");
-			}
-		}
-		sb.append("Crossreference Properties:\n");
-		if (crossreferences.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (Pair<?, ?> p : crossreferences) {
-				sb.append("#").append(p.getLeft().getClass().getSimpleName()).append("#")
-				  .append(p.getLeft()).append(" => ")
-				  .append("#").append(p.getRight().getClass().getSimpleName()).append("#")
-				  .append(p.getRight()).append("\n");
-			}
-		}
+		System.out.println(this.labels);
+		System.out.println(this.connectedEntities);
 		return sb.toString();
 	}
 }

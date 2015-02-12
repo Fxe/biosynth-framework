@@ -11,5 +11,6 @@ public enum ReactionRelationshipType implements RelationshipType {
 	has_orthology, InEnzymaticReaction,
 	has_gene,
 	sub_instance,
+	has_reaction_pair,
 //	Left, Right,
 }

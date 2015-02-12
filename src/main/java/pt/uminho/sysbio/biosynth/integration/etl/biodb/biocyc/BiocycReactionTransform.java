@@ -8,11 +8,12 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
 
@@ -25,7 +26,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 			new AnnotationPropertyContainerBuilder();
 	
 	public BiocycReactionTransform(String majorLabel) {
-		super(majorLabel);
+		super(majorLabel, new BiobaseMetaboliteEtlDictionary<>(BioCycMetaboliteEntity.class));
 	}
 
 	@Override

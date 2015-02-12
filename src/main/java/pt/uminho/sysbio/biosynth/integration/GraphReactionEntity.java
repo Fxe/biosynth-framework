@@ -79,10 +79,6 @@ public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reac
 		} else {
 			for (GraphMetaboliteProxyEntity l : left.keySet()) {
 				sb.append(String.format("[%s,\n%s]\n", left.get(l), l));
-//				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
-//				  .append(p.getLeft()).append(" => \n")
-//				  .append(p.getRight().getClass().getSimpleName()).append("\n")
-//				  .append(p.getRight());
 			}
 		}
 		
@@ -92,30 +88,10 @@ public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reac
 		} else {
 			for (GraphMetaboliteProxyEntity r : right.keySet()) {
 				sb.append(String.format("[%s,\n%s]\n", right.get(r), r));
-//				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
-//				  .append(p.getLeft()).append(" => \n")
-//				  .append(p.getRight().getClass().getSimpleName()).append("\n")
-//				  .append(p.getRight());
 			}
 		}
 		
-//		sb.append("Crossreference Properties:\n");
-//		if (crossreferences.isEmpty()) {
-//			sb.append("=========Empty=========\n");
-//		} else {
-//			for (GraphReactionProxyEntity x : crossreferences) {
-//				sb.append(x);
-//			}
-//		}
-		
 		return sb.toString();
-//		StringBuilder sb = new StringBuilder(super.toString()).append("\n");
-//		sb.append("MajorLabel: ").append(this.majorLabel).append("\n");
-//		sb.append("Labels: ").append(this.labels).append("\n");
-//		sb.append("Properties:\n");
-//		for (String key : this.properties.keySet())
-//			sb.append(String.format("\t%s: %s\n", key, this.properties.get(key)));
-//		return sb.toString();
 	}
 	@Override
 	public Map<String, Double> getLeftStoichiometry() {
@@ -165,7 +141,7 @@ public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reac
 
 	
 	@Override
-	public boolean isTranslocation() {
+	public Boolean isTranslocation() {
 		// TODO Auto-generated method stub
 		return false;
 	}

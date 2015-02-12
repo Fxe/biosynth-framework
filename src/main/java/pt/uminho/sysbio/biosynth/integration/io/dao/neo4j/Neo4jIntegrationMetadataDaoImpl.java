@@ -664,7 +664,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			clusters.retainAll(validClusters);
 			
 			if (clusters.size() > 1) {
-				LOGGER.warn("error more than one cluster !");
+				LOGGER.warn("error more than one cluster ! " + Neo4jUtils.getPropertiesMap(memberNode));
 			}
 			
 			for (Long cid : clusters) {

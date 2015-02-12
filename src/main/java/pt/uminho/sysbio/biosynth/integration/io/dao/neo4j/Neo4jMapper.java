@@ -144,10 +144,9 @@ public class Neo4jMapper {
 		integratedMember.setEntry((String) node.getProperty("entry", null));
 		integratedMember.setMemberType(memberType);
 		integratedMember.setDescription((String) node.getProperty("description", null));
+		integratedMember.setSource((String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, null));
 		return integratedMember;
 	}
-
-
 
 	public static CurationUser nodeToCurationUser(Node usrNode) {
 		if (usrNode == null) {

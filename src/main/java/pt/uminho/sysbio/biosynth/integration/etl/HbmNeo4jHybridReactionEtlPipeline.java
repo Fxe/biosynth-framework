@@ -106,7 +106,6 @@ implements EtlPipeline<SRC, DST> {
 			LOGGER.info(entry.toString());
 			//SRC = ETL EXTRACT(Entry)
 			SRC src = extractSubsystem.extract(entry);
-			
 			//DST = ETL TRANSFORM(SRC)
 			DST dst = transformSubsystem.etlTransform(src);
 

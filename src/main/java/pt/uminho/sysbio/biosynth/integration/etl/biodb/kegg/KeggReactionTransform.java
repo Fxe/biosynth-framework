@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
 
 public class KeggReactionTransform 
@@ -20,7 +22,7 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 //	private static final String KEGG_COMPOUND_METABOLITE_LABEL = MetaboliteMajorLabel.LigandCompound.toString();
 //	private static final String KEGG_GLYCAN_METABOLITE_LABEL = MetaboliteMajorLabel.LigandGlycan.toString();
 	
-	public KeggReactionTransform() { super(KEGG_REACTION_LABEL);}
+	public KeggReactionTransform() { super(KEGG_REACTION_LABEL, new BiobaseMetaboliteEtlDictionary<>(KeggCompoundMetaboliteEntity.class));}
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
@@ -67,6 +69,18 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildReactionEdge(
 							ReactionRelationshipType.has_ec_number)));
+		}
+		
+		for (String rpr : reaction.getRpairs()) {
+			LOGGER.debug("Add Reaction Pair: " + rpr);
+			centralReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(rpr)
+							.withMajorLabel(GlobalLabel.KeggReactionPair)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildReactionEdge(
+							ReactionRelationshipType.has_reaction_pair)));
 		}
 //			Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
 //			AbstractGraphEdgeEntity edge = buildSomeEdge(null, ReactionRelationshipType.in_pathway.toString());

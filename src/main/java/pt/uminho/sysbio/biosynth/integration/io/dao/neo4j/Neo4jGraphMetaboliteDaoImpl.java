@@ -366,4 +366,19 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 		return result;
 	}
 
+	@Override
+	public GraphMetaboliteEntity loadMetaboliteById(long id) {
+		Node node = graphDatabaseService.getNodeById(id);
+		if (!node.hasLabel(GlobalLabel.Metabolite)) return null;
+		
+		LOGGER.debug(String.format("Found %s - %s", node, Neo4jUtils.getLabels(node)));
+		
+		GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
+		metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
+		metaboliteEntity.setId(node.getId());
+		metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(node));
+		
+		return metaboliteEntity;
+	}
+
 }
