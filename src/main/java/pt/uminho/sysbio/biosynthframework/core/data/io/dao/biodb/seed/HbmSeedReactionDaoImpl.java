@@ -1,8 +1,12 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
@@ -23,8 +27,10 @@ public class HbmSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity>{
 
 	@Override
 	public SeedReactionEntity getReactionByEntry(String entry) {
-		// TODO Auto-generated method stub
-		return null;
+		Criteria criteria = this.sessionFactory.getCurrentSession().createCriteria(SeedReactionEntity.class);
+		Object o = criteria.add(Restrictions.eq("entry", entry)).uniqueResult();
+		if (o == null) return null;
+		return (SeedReactionEntity) o;
 	}
 
 	@Override
@@ -35,14 +41,18 @@ public class HbmSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity>{
 
 	@Override
 	public Set<Long> getAllReactionIds() {
-		// TODO Auto-generated method stub
-		return null;
+		Query query = this.sessionFactory.getCurrentSession().createQuery("SELECT rxn.id FROM SeedReactionEntity rxn");
+		@SuppressWarnings("unchecked")
+		Set<Long> res = new HashSet<> (query.list());
+		return res;
 	}
 
 	@Override
 	public Set<String> getAllReactionEntries() {
-		// TODO Auto-generated method stub
-		return null;
+		Query query = this.sessionFactory.getCurrentSession().createQuery("SELECT rxn.entry FROM SeedReactionEntity rxn");
+		@SuppressWarnings("unchecked")
+		Set<String> res = new HashSet<> (query.list());
+		return res;
 	}
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="seed_reaction_reagent")
@@ -23,33 +24,40 @@ public class SeedReactionReagentEntity extends StoichiometryPair {
 	public SeedReactionEntity getSeedReactionEntity() { return seedReactionEntity;}
 	public void setSeedReactionEntity(SeedReactionEntity seedReactionEntity) { this.seedReactionEntity = seedReactionEntity;}
 	
+	@MetaProperty
 	@Column(name="is_cofactor") private short isCofactor;
 	public short getIsCofactor() { return isCofactor;}
 	public void setIsCofactor(short isCofactor) { this.isCofactor = isCofactor;}
 	
+	@MetaProperty
 	@Column(name="cpd_uuid") private String compound_uuid;
 	public String getCompound_uuid() { return compound_uuid;}
 	public void setCompound_uuid(String compound_uuid) { this.compound_uuid = compound_uuid;}
 	
+	@MetaProperty
 	@Column(name="cmp_uuid") private String destinationCompartment_uuid;
 	public String getDestinationCompartment_uuid() { return destinationCompartment_uuid;}
 	public void setDestinationCompartment_uuid(String destinationCompartment_uuid) { this.destinationCompartment_uuid = destinationCompartment_uuid;}
 	
+	@MetaProperty
 	@Column(name="cmp_entry") private String cmpEntry;
 	public String getCmpEntry() { return cmpEntry;}
 	public void setCmpEntry(String cmpEntry) { this.cmpEntry = cmpEntry;}
 	
+	@MetaProperty
 	@Column(name="cmp_name") private String cmpName;
 	public String getCmpName() { return cmpName;}
 	public void setCmpName(String cmpName) { this.cmpName = cmpName;}
 
+	@MetaProperty
 	@Column(name="is_transport") private short isTransport;
 	public short getIsTransport() { return isTransport;}
 	public void setIsTransport(short isTransport) { this.isTransport = isTransport;}
 	
-	@Column(name="coefficient") private short coefficient;
-	public short getCoefficient() { return coefficient;}
-	public void setCoefficient(short coefficient) { this.coefficient = coefficient;}
+	@MetaProperty
+	@Column(name="coefficient") private double coefficient;
+	public double getCoefficient() { return coefficient;}
+	public void setCoefficient(double coefficient) { this.coefficient = coefficient;}
 	
 	@Override
 	public String toString() {

@@ -45,7 +45,7 @@ public class SeedReactionEntity extends GenericReaction {
     private List<SeedReactionCueEntity> reactionCues = new ArrayList<> ();
     
     @OneToMany(mappedBy = "seedReactionEntity", cascade = CascadeType.ALL)
-    private List<SeedReactionCrossReferenceEntity> crossReferences = new ArrayList<> ();
+    private List<SeedReactionCrossreferenceEntity> crossreferences = new ArrayList<> ();
     
 	@ElementCollection
 	@CollectionTable(name="seed_reaction_synonym", joinColumns=@JoinColumn(name="reaction_id"))
@@ -187,12 +187,12 @@ public class SeedReactionEntity extends GenericReaction {
 	}
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	public List<SeedReactionCrossReferenceEntity> getCrossReferences() {
-		return crossReferences;
+	public List<SeedReactionCrossreferenceEntity> getCrossreferences() {
+		return crossreferences;
 	}
-	public void setCrossReferences(List<SeedReactionCrossReferenceEntity> crossReferences) {
-		this.crossReferences = new ArrayList<>(crossReferences);
-		for (SeedReactionCrossReferenceEntity xref : this.crossReferences) {
+	public void setCrossReferences(List<SeedReactionCrossreferenceEntity> crossreferences) {
+		this.crossreferences = new ArrayList<>(crossreferences);
+		for (SeedReactionCrossreferenceEntity xref : this.crossreferences) {
 			xref.setSeedReactionEntity(this);
 		}
 	}

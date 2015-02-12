@@ -18,7 +18,7 @@ import org.springframework.core.io.Resource;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedAliaseSet;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompartmentEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionReagentEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
@@ -139,19 +139,20 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				//coefficient: < 0 -> left AND > 0 right
 				String cpdEntry = this.getSeedCompoundEntryFromUuid(reagent.getCompound_uuid());
 				if (cpdEntry == null) {
-					LOGGER.warn(String.format("Reaction:%s - Unable to fetch reagent entry. UUID: %s", entry_, reagent.getCompound_uuid()));
-					cpdEntry = "NOT_FOUND";
+					String msg = String.format("Reaction:%s - Unable to fetch reagent entry. UUID: %s", entry_, reagent.getCompound_uuid());
+					rxn = null;
+					throw new JsonParseException(msg, null);
 				}
 				reagent.setCpdEntry(cpdEntry);
 				
-				short coefficient = reagent.getCoefficient();
+				double coefficient = reagent.getCoefficient();
 				reagent.setStoichiometry(Math.abs(coefficient));
 				if (coefficient < 0) {
 					rxn.getLeftStoichiometry().put(cpdEntry, (double) coefficient);
 				} else if (coefficient > 0) {
 					rxn.getRightStoichiometry().put(cpdEntry, (double) coefficient);
 				} else {
-					LOGGER.error(String.format("Reagent: %s has invalid coefficient value %d", reagent, coefficient));
+					LOGGER.error(String.format("%s reagent: %s has invalid coefficient value %d", entry_, reagent, coefficient));
 				}
 				SeedCompartmentEntity compartment = this.compartmentMap.get(reagent.getDestinationCompartment_uuid());
 				String cmpEntry = compartment.getId();
@@ -165,7 +166,8 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 			} else if (compartments.size() > 1){
 				rxn.setTranslocation(true);
 			} else {
-				LOGGER.error("Invalid comparment set: " + compartments);
+				rxn.setTranslocation(null);
+				LOGGER.warn(String.format("%s invalid comparment set: %s", entry_, compartments));
 			}
 			//link to enzyme class
 			LOGGER.debug("Setup enzyme class");
@@ -185,7 +187,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				for (String nameAlias : aliases) names.add(nameAlias.toLowerCase());
 			}
 			rxn.getSynonyms().addAll(names);
-			List<SeedReactionCrossReferenceEntity> xrefs = new ArrayList<> ();
+			List<SeedReactionCrossreferenceEntity> xrefs = new ArrayList<> ();
 			//links to models
 			LOGGER.debug("Setup metabolic model references");
 			for (String modelAliasSet : MODEL_ALIAS) {
@@ -193,7 +195,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_REACTION_ATTRIBUTE, modelAliasSet, aliases));
 				for (String alias : aliases) {
-					SeedReactionCrossReferenceEntity xref = new SeedReactionCrossReferenceEntity(GenericCrossReference.Type.MODEL, modelAliasSet, alias);
+					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(GenericCrossReference.Type.MODEL, modelAliasSet, alias);
 					xrefs.add(xref);
 				}
 			}
@@ -204,7 +206,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_REACTION_ATTRIBUTE, databaseAlias, aliases));
 				for (String alias : aliases) {
-					SeedReactionCrossReferenceEntity xref = new SeedReactionCrossReferenceEntity(GenericCrossReference.Type.DATABASE, "KEGG", alias);
+					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(GenericCrossReference.Type.DATABASE, "KEGG", alias);
 					xrefs.add(xref);
 				}
 			}
@@ -259,7 +261,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 			try {
 				SeedReactionEntity rxn = this.parseJsonSeedCompound(reactions.get(i));
 				
-				List<SeedReactionCrossReferenceEntity> xrefs = new ArrayList<> ();
+				List<SeedReactionCrossreferenceEntity> xrefs = new ArrayList<> ();
 				if (refMap.containsKey(rxn.getUuid())) {
 //					System.out.println(refMap.get(cpd.getUuid()));
 					for (GenericCrossReference xref : refMap.get(rxn.getUuid())) {
@@ -275,10 +277,10 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 								}
 								break;
 							case MODEL:
-								xrefs.add(new SeedReactionCrossReferenceEntity(xref));
+								xrefs.add(new SeedReactionCrossreferenceEntity(xref));
 								break;
 							case DATABASE:
-								xrefs.add(new SeedReactionCrossReferenceEntity(xref));
+								xrefs.add(new SeedReactionCrossreferenceEntity(xref));
 								break;
 							default:
 								System.err.println(xref.getType() + " unsupported");

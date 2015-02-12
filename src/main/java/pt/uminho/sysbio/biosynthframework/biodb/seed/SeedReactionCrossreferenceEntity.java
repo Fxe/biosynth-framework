@@ -11,7 +11,7 @@ import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 
 @Entity
 @Table(name="seed_reaction_crossreference")
-public class SeedReactionCrossReferenceEntity extends GenericCrossReference{
+public class SeedReactionCrossreferenceEntity extends GenericCrossReference{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,14 +20,14 @@ public class SeedReactionCrossReferenceEntity extends GenericCrossReference{
 	@JoinColumn(name="reaction_id")
 	private SeedReactionEntity seedReactionEntity;
 	
-	public SeedReactionCrossReferenceEntity() {
+	public SeedReactionCrossreferenceEntity() {
 		super(null, null, null);
 	}
-	public SeedReactionCrossReferenceEntity(Type type, String reference, String value) {
+	public SeedReactionCrossreferenceEntity(Type type, String reference, String value) {
 		super(type, reference, value);
 	}
-	public SeedReactionCrossReferenceEntity(GenericCrossReference crossReference) {
-		super(crossReference.getType(), crossReference.getRef(), crossReference.getValue());
+	public SeedReactionCrossreferenceEntity(GenericCrossReference crossreference) {
+		super(crossreference.getType(), crossreference.getRef(), crossreference.getValue());
 	}
 
 	public SeedReactionEntity getSeedReactionEntity() {

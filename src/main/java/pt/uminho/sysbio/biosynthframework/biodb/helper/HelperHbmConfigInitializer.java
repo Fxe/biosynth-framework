@@ -42,7 +42,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetabolitePkEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteStructureEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCueEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionReagentEntity;
@@ -110,7 +110,7 @@ public class HelperHbmConfigInitializer {
 			  .addAnnotatedClass(BiggReactionRightEntity.class)
 			  .addAnnotatedClass(BiggReactionCrossReferenceEntity.class)
 			  .addAnnotatedClass(SeedReactionEntity.class)
-			  .addAnnotatedClass(SeedReactionCrossReferenceEntity.class)
+			  .addAnnotatedClass(SeedReactionCrossreferenceEntity.class)
 			  .addAnnotatedClass(SeedReactionCueEntity.class)
 			  .addAnnotatedClass(SeedReactionReagentEntity.class);
 		ServiceRegistry servReg = 

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossReferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed.JsonSeedMetaboliteDaoImpl;
@@ -135,9 +135,9 @@ public class TestParseCsvSeedMetabolite {
 			for (int i = 0; i < reactions.size(); i++ ) {
 				System.out.println(i);
 				SeedReactionEntity reaction = parseJsonSeedReaction(reactions.get(i));
-				List<SeedReactionCrossReferenceEntity> xrefs = new ArrayList<> ();
+				List<SeedReactionCrossreferenceEntity> xrefs = new ArrayList<> ();
 				for (GenericCrossReference xref : refMap.get(reaction.getUuid())) {
-					xrefs.add(new SeedReactionCrossReferenceEntity(xref));
+					xrefs.add(new SeedReactionCrossreferenceEntity(xref));
 				}
 				reaction.setCrossReferences(xrefs);
 				dao.save(reaction);
