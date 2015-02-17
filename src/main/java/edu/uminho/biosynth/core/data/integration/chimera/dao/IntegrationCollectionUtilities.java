@@ -29,6 +29,16 @@ public class IntegrationCollectionUtilities {
 		return res;
 	}
 	
+	public static<K,V> Map<V, Set<K>> invertMap(Map<K,V> map) {
+		Map<V, Set<K>> res = new HashMap<> ();
+		for (K k : map.keySet()) {
+			V v = map.get(k);
+			if (!res.containsKey(v)) res.put(v, new HashSet<K> ());
+			res.get(v).add(k);
+		}
+		return res;
+	}
+	
 	/**
 	 * Resolve conflicts between clusters.
 	 * Let C be a cluster defined by a set of elements E. Every cluster that 
@@ -47,32 +57,48 @@ public class IntegrationCollectionUtilities {
 		
 		Map<EID, Set<CID>> eidToCid = invertMapKeyToSet(clusterMap);
 		
+		/**
+		 * Build graph
+		 * res  : solution the map that maps each EID to a single CID
+		 * eids : all eids to map
+		 * graph: the graph
+		 */
 		Map<EID, CID> res = new HashMap<> ();
 		Set<EID> eids = new HashSet<> ();
 		UndirectedGraph<EID, Integer> graph = new UndirectedGraph<>();
 		Integer counter = 0;
 		for (CID cid : clusterMap.keySet()) {
 			EID prev = null;
-			for (EID eid : clusterMap.get(cid)) {
-				eids.add(eid);
-				if (prev != null) {
-					DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-					graph.addEdge(edge);
+			Set<EID> cluster = clusterMap.get(cid);
+			if (cluster.size() == 1) {
+				graph.addVertex(cluster.iterator().next());
+			} else {
+				for (EID eid : clusterMap.get(cid)) {
+					eids.add(eid);
+					if (prev != null) {
+						DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+						graph.addEdge(edge);
+					}
+					prev = eid;
 				}
-				prev = eid;
 			}
 		}
 		
+		/**
+		 * why some vertex are not found ???
+		 */
 		Set<CID> cidsSurvived = new HashSet<> ();
 		Set<EID> eidsProcessed = new HashSet<> ();
 		for (EID eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
 				Set<EID> cluster = BreadthFirstSearch.run(graph, eid);
 				eidsProcessed.addAll(cluster);
-				CID cid = eidToCid.get(cluster.iterator().next()).iterator().next();
-				cidsSurvived.add(cid);
-				for (EID eid_ : cluster) {
-					res.put(eid_, cid);
+				if (!cluster.isEmpty()) {
+					CID cid = eidToCid.get(cluster.iterator().next()).iterator().next();
+					cidsSurvived.add(cid);
+					for (EID eid_ : cluster) {
+						res.put(eid_, cid);
+					}
 				}
 //				System.out.println(cluster);
 			}

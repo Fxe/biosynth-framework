@@ -10,12 +10,27 @@ import pt.uminho.sysbio.biosynthframework.GenericReaction;
 public class IntegratedReactionEntity extends GenericReaction {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public enum MappingType {
+		MEMBER, CLUSTER
+	}
 
 	private Map<String, Map<Object, List<Long>>> properties = new HashMap<> ();
 	
 	public Map<String, Map<Object, List<Long>>> getProperties() { return properties;}
 	public void setProperties(Map<String, Map<Object, List<Long>>> properties) {
 		this.properties = properties;
+	}
+
+	private Map<Long, MappingType> metaboliteMappingType = new HashMap<> ();
+	
+	
+	public Map<Long, MappingType> getMetaboliteMappingType() {
+		return metaboliteMappingType;
+	}
+	public void setMetaboliteMappingType(
+			Map<Long, MappingType> metaboliteMappingType) {
+		this.metaboliteMappingType = metaboliteMappingType;
 	}
 
 	private Map<Long, Set<Long>> metaboliteMapping = new HashMap<> ();

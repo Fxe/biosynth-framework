@@ -22,6 +22,10 @@ public class IntegratedReactionAssembler {
 	
 	public Map<Long, Long> metaboliteUnificationMap;
 	
+	private enum ComponentType {
+		SINGLETON, OPTINAL, REQUIRED, NULL
+	}
+	
 	/**
 	 * Merge m2 to m1
 	 * @param m1
@@ -41,6 +45,105 @@ public class IntegratedReactionAssembler {
 			res.put(Long.parseLong(key), map.get(key));
 		
 		return res;
+	}
+	
+	public Map<Long, Double> resolveStoichiometry(Map<Long, Map<Long, Double>> unifiedStoichiometryMap) {
+		Map<Long, Double> stoichiometryMap = new HashMap<> ();
+		int totalReactions = unifiedStoichiometryMap.size();
+		Long[] rxn_array = new Long[totalReactions];
+		int i = 0;
+		for (Long rxnId : unifiedStoichiometryMap.keySet()) {
+			rxn_array[i++] = rxnId;
+		}
+		
+		LOGGER.trace("Reactions: " + java.util.Arrays.toString(rxn_array));
+		
+		int totalLeftMetabolites = 0;
+		for (int j = 0; j < rxn_array.length; j++) {
+			totalLeftMetabolites += unifiedStoichiometryMap.get(rxn_array[j]).size();
+		}
+
+		Long[][] left = new Long[totalReactions][totalLeftMetabolites];
+		
+		int metaboliteMaxIndex = 0;
+		Map<Long, Integer> metaboliteIndex = new HashMap <> ();
+		for (int j = 0; j < rxn_array.length; j++) {
+			for (Long cpdId : unifiedStoichiometryMap.get(rxn_array[j]).keySet()) {
+				if (!metaboliteIndex.containsKey(cpdId)) {
+					metaboliteIndex.put(cpdId, metaboliteMaxIndex++);
+				}
+				int index = metaboliteIndex.get(cpdId);
+				left[j][index] = cpdId;
+			}
+		}
+
+		ComponentType[] componentType = new ComponentType[metaboliteMaxIndex];
+		Double[][] value = new Double[totalReactions][metaboliteMaxIndex];
+		
+		for (i = 0; i < metaboliteMaxIndex; i++) {
+			ComponentType type = ComponentType.OPTINAL;
+			int nonNull = 0;
+			for (int j = 0; j < totalReactions; j++) {
+				nonNull += left[j][i] == null ? 0 : 1;
+				Double value_ = unifiedStoichiometryMap.get(rxn_array[j]).get(left[j][i]);
+				value[j][i] = value_;
+			}
+			
+			if (nonNull == totalReactions) {
+				type = ComponentType.REQUIRED;
+				double value_ = value[0][i];
+				for (int k = 1; k < rxn_array.length; k++) {
+					if (value_ != value[k][i]) {
+						LOGGER.warn("Multiple stoichiometry values");
+					}
+				}
+				stoichiometryMap.put(left[0][i], value_);
+			}
+			if (nonNull <= 0) {
+				type = ComponentType.NULL;
+				LOGGER.warn("Null component");
+			}
+			if (nonNull == 1) {
+				type = ComponentType.SINGLETON;
+				LOGGER.warn("Singleton component");
+			}
+			
+//			if (type.equals(other))
+			componentType[i] = type;
+		}
+		
+//		for (int j = 0; j < left.length; j++) {
+//			System.out.println(java.util.Arrays.toString(left[j]));
+//		}
+//		for (int j = 0; j < left.length; j++) {
+//			System.out.println(java.util.Arrays.toString(value[j]));
+//		}
+//		
+//		System.out.println(java.util.Arrays.toString(componentType));
+		
+		return stoichiometryMap;
+	}
+	
+	public Map<String, Double> translate(Map<Long, Double> map) {
+		System.out.println(map);
+		Map<String, Double> stoichiometryMap = new HashMap<> ();
+		for (Long id : map.keySet()) {
+			stoichiometryMap.put(Long.toString(id), map.get(id));
+		}
+		return stoichiometryMap;
+	}
+	
+	public IntegratedReactionEntity assemble(IntegratedReactionEntity entity) {
+//		IntegratedReactionEntity rxn = new GenericReaction();
+//		rxn.setEntry(entity.getEntry());
+//		System.out.println("left" + entity.getLeftUnifiedStoichiometry());
+//		System.out.println(entity.getRightUnifiedStoichiometry());
+//		System.out.println(entity.getMetaboliteMapping());
+		Map<Long, Double> left = resolveStoichiometry(entity.getLeftUnifiedStoichiometry());
+		Map<Long, Double> right = resolveStoichiometry(entity.getRightUnifiedStoichiometry());
+		entity.setLeftStoichiometry(translate(left));
+		entity.setRightStoichiometry(translate(right));
+		return entity;
 	}
 	
 	public IntegratedReactionEntity assemble(String entry, Set<GraphReactionEntity> graphReactionEntities) {
@@ -84,7 +187,28 @@ public class IntegratedReactionAssembler {
 			entity.getSourcesMap().put(id, proxyId);
 		}
 		
+		for (long cpdId : entity.getMetaboliteMapping().keySet()) {
+			IntegratedReactionEntity.MappingType type = 
+					this.metaboliteUnificationMap.containsKey(cpdId) ? 
+							IntegratedReactionEntity.MappingType.CLUSTER : 
+							IntegratedReactionEntity.MappingType.MEMBER;
+			entity.getMetaboliteMappingType().put(cpdId, type);
+		}
+		
 		entity.setMetaboliteMapping(metaboliteMapping);
+		
+		//decide translocation consensus
+		Boolean translocation = true;
+		for (GraphReactionEntity grxn : graphReactionEntities) {
+			Boolean trans = (Boolean) grxn.getProperty("translocation", null);
+			if (trans == null) {
+				translocation = null;
+				break;
+			}
+			translocation &= trans;
+		}
+		
+		entity.setTranslocation(translocation);
 		
 		return entity;
 	}

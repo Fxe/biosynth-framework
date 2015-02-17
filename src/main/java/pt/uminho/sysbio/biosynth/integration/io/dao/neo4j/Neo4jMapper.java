@@ -18,6 +18,7 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 
 public class Neo4jMapper {
 	
@@ -185,5 +186,12 @@ public class Neo4jMapper {
 		for (Relationship relationship : node.getRelationships(Direction.OUTGOING)) {
 			
 		}
+	}
+
+	public static DefaultMetabolicModel nodeToMetabolicModel(Node node) {
+		DefaultMetabolicModel mmd = new DefaultMetabolicModel();
+		mmd.setId(node.getId());
+		mmd.setEntry((String) node.getProperty("entry"));
+		return mmd;
 	}
 }

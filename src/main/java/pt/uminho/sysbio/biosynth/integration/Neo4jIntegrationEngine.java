@@ -88,6 +88,12 @@ public class Neo4jIntegrationEngine {
 		return uniqueMembershipClusters;
 	}
 	
+	/**
+	 * 
+	 * @param integrationSet target set
+	 * @param clusteringStrategy mapping strategy
+	 * @param eids elements to integrate
+	 */
 	public void integrate(IntegrationSet integrationSet, ClusteringStrategy clusteringStrategy, Long[] eids) {
 		this.integrate(integrationSet, clusteringStrategy, Arrays.asList(eids));
 	}
