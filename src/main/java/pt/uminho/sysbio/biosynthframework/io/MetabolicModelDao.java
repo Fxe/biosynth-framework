@@ -1,10 +1,15 @@
 package pt.uminho.sysbio.biosynthframework.io;
 
+import java.util.List;
 import java.util.Set;
 
-public interface MetabolicModelDao {
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+
+public interface MetabolicModelDao<M extends AbstractBiosynthEntity> {
 	
-	public Object getMetabolicModel();
+	public M getMetabolicModelById(long id);
+	public M getMetabolicModelByEntry(String entry);
+	public List<M> findMetabolicModelBySearchTerm(String search);
 	
 	public Set<Long> getAllCompartmentIds();
 	public Set<Long> getAllMetaboliteSpecieIds();
