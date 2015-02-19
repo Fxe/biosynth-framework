@@ -1,11 +1,15 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.helpers.collection.IteratorUtil;
 
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
@@ -13,9 +17,11 @@ import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<DefaultMetabolicModel> {
 
 	private GraphDatabaseService graphDatabaseService;
+	private ExecutionEngine executionEngine;
 	
 	public Neo4jGraphMetabolicModelDaoImpl(GraphDatabaseService graphDatabaseService) {
 		this.graphDatabaseService = graphDatabaseService;
+		this.executionEngine = new ExecutionEngine(graphDatabaseService);
 	}
 	
 	@Override
@@ -120,5 +126,16 @@ public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<Defaul
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<DefaultMetabolicModel> findAll(int page, int size) {
+		String query = String.format("MATCH (n:%s) RETURN n ORDER BY ID(n) SKIP %d LIMIT %d;", 
+				GlobalLabel.MetabolicModel, page * size, size);
+		List<Object> oo = IteratorUtil.asList(executionEngine.execute(query).columnAs("n"));
+		List<DefaultMetabolicModel> res = new ArrayList<> ();
+		for (Object o : oo) res.add(Neo4jMapper.nodeToMetabolicModel((Node) o));
+		return res;
+	}
+
 
 }

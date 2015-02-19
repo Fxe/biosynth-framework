@@ -20,5 +20,5 @@ public enum GlobalLabel implements Label {
 	//Things that I have no clue where to put !
 	UniProt, Gene, EnzymePortal, BrendaEnzyme, 
 	PROSITE, PDB, PFAM, PROTEINMODELPORTAL,
-	KeggReactionPair,
+	KeggReactionPair, Hypothetical,
 }

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
@@ -294,5 +295,16 @@ public class Neo4jUtils {
 		if (nodes.size() > 1) LOGGER.warn(String.format("Relationships not unique for %s", node));
 		
 		return nodes.iterator().next();
+	}
+	
+	public static Node mergeUniqueNode(Label label, String key, Object value, ExecutionEngine ee) {
+		String query = String.format("MERGE (n:%s {%s:{%s}}) "
+				+ "ON CREATE SET n.created_at = timestamp() "
+				+ "ON MATCH SET n.updated_at = timestamp()", 
+				label, key, key);
+		Map<String, Object> params = new HashMap<> ();
+		params.put(key, value);
+		Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
+		return node;
 	}
 }
