@@ -5,11 +5,20 @@ import java.util.Set;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
-public interface MetabolicModelDao<M extends AbstractBiosynthEntity> {
+public interface MetabolicModelDao<
+D extends AbstractBiosynthEntity> {
+/*
+M extends AbstractBiosynthEntity,
+R extends AbstractBiosynthEntity,
+S extends AbstractBiosynthEntity,
+C extends AbstractBiosynthEntity> {
+	*/
+	public D getMetabolicModelById(long id);
+	public D getMetabolicModelByEntry(String entry);
+	public List<D> findMetabolicModelBySearchTerm(String search);
+	public List<D> findAll(int page, int size);
 	
-	public M getMetabolicModelById(long id);
-	public M getMetabolicModelByEntry(String entry);
-	public List<M> findMetabolicModelBySearchTerm(String search);
+	//public C getMetabolicModelCompartment();
 	
 	public Set<Long> getAllCompartmentIds();
 	public Set<Long> getAllMetaboliteSpecieIds();

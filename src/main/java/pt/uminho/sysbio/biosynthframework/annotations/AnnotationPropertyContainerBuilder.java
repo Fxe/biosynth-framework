@@ -15,6 +15,7 @@ public class AnnotationPropertyContainerBuilder  {
 	@SuppressWarnings("unused")
 	private boolean ignoreNull = true;
 	
+	@Deprecated
 	public void extractEntityMetaProperties(Object object, Class<? extends Object> clazz) 
 			throws IllegalArgumentException, IllegalAccessException {
 		LOGGER.debug(String.format("Reflect: %s", clazz));
