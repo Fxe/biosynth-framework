@@ -3,6 +3,8 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import java.util.Map;
 import java.util.Set;
 
+import org.neo4j.graphdb.Node;
+
 import pt.uminho.sysbio.biosynth.integration.Neo4jNode;
 
 public interface Neo4jSuperDao {
@@ -12,4 +14,5 @@ public interface Neo4jSuperDao {
 	public Neo4jNode getMetaboliteNode(long id);
 	public Neo4jNode getReactionNode(long id);
 	public Neo4jNode getAnyNodeLimit(long id, int limit);
+	public void delete(Node node);
 }

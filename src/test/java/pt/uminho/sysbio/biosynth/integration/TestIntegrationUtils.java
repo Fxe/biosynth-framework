@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtils;
+
 public class TestIntegrationUtils {
 
 	@BeforeClass
@@ -33,14 +35,14 @@ public class TestIntegrationUtils {
 	@Test
 	public void test_escape_entry_1() {
 		String entry  = "MetaCyc_a 3'-phosphopolynucleotide";
-		String entry_ = IntegrationUtils.escapeEntry(entry);
+		String entry_ = BioSynthUtils.escapeEntry(entry);
 		assertEquals("MetaCyc_a_SPACE_3'-phosphopolynucleotide", entry_);
 	}
 
 	@Test
 	public void test_escape_entry_2() {
 		String entry  = "a b c";
-		String entry_ = IntegrationUtils.escapeEntry(entry);
+		String entry_ = BioSynthUtils.escapeEntry(entry);
 		assertEquals("a_SPACE_b_SPACE_c", entry_);
 	}
 }

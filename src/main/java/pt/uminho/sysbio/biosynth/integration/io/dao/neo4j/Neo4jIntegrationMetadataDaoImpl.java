@@ -110,6 +110,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 				IntegrationNodeLabel.IntegrationSet);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", entry);
+		LOGGER.trace("Cypher: " + cypher);
 		ExecutionResult executionResult = this.executionEngine.execute(cypher, params);
 		Node integrationSetNode = Neo4jUtils.getExecutionResultGetSingle("IID", executionResult);
 		
@@ -123,9 +124,6 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		integrationSet.setDescription((String) integrationSetNode.getProperty("description", ""));
 		
 		return integrationSet;
-//		System.out.println(executionResult.dumpToString());
-//		throw new RuntimeException("Not implemented !");
-//		return null;
 	}
 
 	@Override
@@ -225,12 +223,15 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			Set<Long> eidsFound = Neo4jUtils.collectNodeIdsFromNodes(
 					IteratorUtil.asCollection(this.graphDatabaseService
 							.findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, eid)));
+			LOGGER.debug("Member nodes: " + eidsFound.size());
 			if (!eidsFound.isEmpty()) {
 				if (eidsFound.size() > 1) LOGGER.warn("Multiple members found with reference id: " + eid);
 				long eid_ = eidsFound.iterator().next();
 				Node eidNode = this.graphDatabaseService.getNodeById(eid_);
 				Set<Long> cids = Neo4jUtils.collectNodeRelationshipNodeIds(eidNode, IntegrationRelationshipType.Integrates);
+				LOGGER.debug("Cluster nodes: " + cids.size());
 				cids.retainAll(cidInDomain);
+				LOGGER.debug("Cluster nodes in domain: " + cids.size());
 				cidSet.addAll(cids);
 			} else {
 				LOGGER.warn("Skip " + eid + " not found");

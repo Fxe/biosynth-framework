@@ -76,7 +76,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		return node;
 	}
 	
-	private Node generateIntegratedCluster(IntegratedCluster integratedCluster) {
+	public Node generateIntegratedCluster(IntegratedCluster integratedCluster) {
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", integratedCluster.getEntry());
 		params.put("reference_cid", integratedCluster.getId());
@@ -96,13 +96,13 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(
 						IntegrationNodeLabel.IntegratedMember, 
-						"id", referenceId));
+						Neo4jDefinitions.MEMBER_REFERENCE, referenceId));
+		
 		if (node == null) {
 			node = graphDatabaseService.createNode();
 			node.addLabel(IntegrationNodeLabel.IntegratedMember);
 			node.addLabel(label);
-			//XXX: reference id - may be changed to reference_id in future
-			node.setProperty("id", referenceId);
+			node.setProperty(Neo4jDefinitions.MEMBER_REFERENCE, referenceId);
 		}
 		
 		return node;
@@ -369,7 +369,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		for (Long eid : eidSet) {
 			Node eidNode = Neo4jUtils.getUniqueResult(
 					graphDatabaseService.findNodesByLabelAndProperty(
-							IntegrationNodeLabel.IntegratedMember, "id", eid));
+							IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE, eid));
 			
 			if (eidNode != null) {
 				LOGGER.debug(eidNode + " " + Neo4jUtils.getLabels(eidNode));
@@ -438,7 +438,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		Set<Long> eids = new HashSet<> ();
 		for (long referenceEid : referenceEids) {
 			Node eidNode = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(
-					IntegrationNodeLabel.IntegratedMember, "id", referenceEid));
+					IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE, referenceEid));
 			if (eidNode != null) {
 				eids.add(eidNode.getId());
 			} else {
@@ -452,7 +452,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		for (long eid : eids) {
 			try {
 				Node eidNode = graphDatabaseService.getNodeById(eid);
-				long refEid = (long) eidNode.getProperty("id");
+				long refEid = (long) eidNode.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
 				if (!found.contains(refEid)) {
 					Set<Long> eidSet = new HashSet<> ();
 					for (Path path : graphDatabaseService.traversalDescription()
@@ -460,7 +460,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 							.breadthFirst()
 							.traverse(eidNode)) {
 						Node node = path.endNode();
-						if (node.hasLabel(IntegrationNodeLabel.IntegratedMember)) eidSet.add((long) node.getProperty("id"));
+						if (node.hasLabel(IntegrationNodeLabel.IntegratedMember)) eidSet.add((long) node.getProperty(Neo4jDefinitions.MEMBER_REFERENCE));
 						if (node.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
 							Set<Node> nodes = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.OPERATES_ON);
 							opNodeSet.addAll(nodes);
@@ -492,8 +492,8 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 						Node next = cidNodes.get(i);
 						Node prevEid = Neo4jUtils.collectNodeRelationshipNodes(prev, IntegrationRelationshipType.Integrates).iterator().next();
 						Node nextEid = Neo4jUtils.collectNodeRelationshipNodes(next, IntegrationRelationshipType.Integrates).iterator().next();
-						long refEid1 = (long) prevEid.getProperty("id");
-						long refEid2 = (long) nextEid.getProperty("id");
+						long refEid1 = (long) prevEid.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
+						long refEid2 = (long) nextEid.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
 						LOGGER.debug(String.format("%d - REJECT -> %d", refEid1, refEid2));
 						decisionMap.addMemberRejectionPair(refEid1, refEid2);
 					}
@@ -502,11 +502,11 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 					LOGGER.debug(String.format("%s:%s TYPE: %s", node, Neo4jUtils.getLabels(node), opType));
 					Set<Node> nodes = Neo4jUtils.collectNodeRelationshipNodes(node, CurationRelationship.NOT_EQUAL);
 					for (Node node_ : nodes) {
-						long refEid1 = (long) node_.getProperty("id");
+						long refEid1 = (long) node_.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
 						LOGGER.trace("Found rejection edge " + refEid1);
 						for (Node cidNode : cidNodes) {
 							Node eidNode = Neo4jUtils.collectNodeRelationshipNodes(cidNode, IntegrationRelationshipType.Integrates).iterator().next();
-							long refEid2 = (long) eidNode.getProperty("id");
+							long refEid2 = (long) eidNode.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
 							LOGGER.debug(String.format("%d - REJECT -> %d", refEid1, refEid2));
 							decisionMap.addMemberRejectionPair(refEid1, refEid2);
 						}

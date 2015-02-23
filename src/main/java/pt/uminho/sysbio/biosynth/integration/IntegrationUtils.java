@@ -26,12 +26,7 @@ public class IntegrationUtils {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(IntegrationUtils.class);
 	
-	public static String escapeEntry(String entry) {
-		String entry_ = entry.replaceAll(" ", "_SPACE_");
-		entry_ = entry_.replaceAll(",", "_COMMA_");
-		entry_ = entry_.replaceAll(";", "_SEMICOLON_");
-		return entry_;
-	}
+
 	
 	private static void aww(Map<Long, Set<Long>> mapping, long key, long val) {
 		if (!mapping.containsKey(key)) {

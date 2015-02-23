@@ -5,17 +5,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.tooling.GlobalGraphOperations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.Neo4jNode;
 import pt.uminho.sysbio.biosynth.integration.Neo4jRelationship;
 
 public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jSuperDaoImpl.class);
+	
 	private GraphDatabaseService graphDatabaseService;
 	
 	public Neo4jSuperDaoImpl(GraphDatabaseService graphDatabaseService) {
@@ -150,6 +155,18 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 			result.get(labels).add(node.getId());
 		}
 		return result;
+	}
+
+	@Override
+	public void delete(Node node) {
+		if (node != null) {
+			for (Relationship relationship : node.getRelationships()) {
+				LOGGER.debug("Delete edge: " + relationship);
+				relationship.delete();
+			}
+			LOGGER.debug(String.format("Delete vertex - [%d*%s] ", node.getId(), StringUtils.join(Neo4jUtils.getLabels(node), ':')));
+			node.delete();
+		}
 	}
 
 }

@@ -14,12 +14,8 @@ public abstract class AbstractNeo4jDao {
 	
 	public AbstractNeo4jDao(GraphDatabaseService graphDatabaseService) {
 		this.graphDatabaseService = graphDatabaseService;
+		LOGGER.trace("Initialize ExecutionEngine");
 		this.executionEngine = new ExecutionEngine(graphDatabaseService);
-		LOGGER.debug("AbstractNeo4jDao");
-//		Transaction tx = graphDatabaseService.beginTx();
-//		LOGGER.info(String.format("%d", IteratorUtil.asList(GlobalGraphOperations.at(graphDatabaseService).getAllNodes()).size()));
-//		tx.failure();
-//		tx.close();
 	}
 	
 	public GraphDatabaseService getGraphDatabaseService() {
