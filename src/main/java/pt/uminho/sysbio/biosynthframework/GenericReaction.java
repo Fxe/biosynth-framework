@@ -13,6 +13,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtils;
 
 @MappedSuperclass
 public class GenericReaction extends AbstractBiosynthEntity 
@@ -159,5 +160,8 @@ implements Reaction, Serializable, Cloneable {
 		return new GenericReaction(this);
 	}
 
-
+	@Override
+	public String toString() {
+		return String.format("%s: %s %s %s", entry, this.getLeftStoichiometry(), BioSynthUtils.toSymbol(this.orientation),this.getRightStoichiometry());
+	}
 }

@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import pt.uminho.sysbio.biosynthframework.Orientation;
+
 public class BioSynthUtils {
 	
 	public static double EPSILON = 0;
@@ -39,5 +41,21 @@ public class BioSynthUtils {
 	public static boolean isZero(double finalFluxValue) {
 		if (finalFluxValue < EPSILON || finalFluxValue > -EPSILON) return false;
 		return true;
+	}
+	
+	public static String escapeEntry(String entry) {
+		String entry_ = entry.replaceAll(" ", "_SPACE_");
+		entry_ = entry_.replaceAll(",", "_COMMA_");
+		entry_ = entry_.replaceAll(";", "_SEMICOLON_");
+		return entry_;
+	}
+
+	public static String toSymbol(Orientation orientation) {
+		switch (orientation) {
+			case LeftToRight: return " =>";
+			case RightToLeft: return "<= ";
+			case Reversible : return "<=>";
+			default: return "<?>";
+		}
 	}
 }
