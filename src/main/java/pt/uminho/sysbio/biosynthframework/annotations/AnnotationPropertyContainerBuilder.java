@@ -38,7 +38,7 @@ public class AnnotationPropertyContainerBuilder  {
 			throws IllegalArgumentException, IllegalAccessException {
 		Map<String, Object> propertyContainer = new HashMap<> ();
 		
-		LOGGER.debug(String.format("Reflect: %s", clazz));
+		LOGGER.trace(String.format("Reflect: %s", clazz));
 		
 		while (!clazz.equals(Object.class)) {
 			for (Field property : clazz.getDeclaredFields()) {
@@ -48,7 +48,7 @@ public class AnnotationPropertyContainerBuilder  {
 				if (annotation != null) {
 					Object value = property.get(object);
 					if (value != null) {
-						LOGGER.debug(String.format("Property - %s:%s[%s]", key, value, value.getClass().getSimpleName()));
+						LOGGER.trace(String.format("Property - %s:%s[%s]", key, value, value.getClass().getSimpleName()));
 						if (annotation instanceof MetaProperty && 
 								((MetaProperty)annotation).asString()) {
 							propertyContainer.put(key, value.toString());
@@ -60,7 +60,7 @@ public class AnnotationPropertyContainerBuilder  {
 			}
 			
 			clazz = clazz.getSuperclass();
-			LOGGER.debug(String.format("Reflect: %s", clazz));
+			LOGGER.trace(String.format("Reflect: %s", clazz));
 		}
 		
 		return propertyContainer;
