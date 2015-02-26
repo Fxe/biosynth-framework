@@ -69,16 +69,24 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
 	@Override
 	public IntegrationSet saveIntegrationSet(IntegrationSet integrationSet) {
-		String cypher = String.format(
-				"MERGE (iid:%s {entry:{entry}, description:{description}}) RETURN iid AS IID", 
-				IntegrationNodeLabel.IntegrationSet);
-		Map<String, Object> params = new HashMap<> ();
-		params.put("entry", integrationSet.getEntry());
-		params.put("description", nullToString(integrationSet.getDescription()));
-
-		LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
-		Node node = Neo4jUtils.getExecutionResultGetSingle("IID", this.executionEngine.execute(cypher, params));
-		LOGGER.trace("IID: " + node.toString());
+//		String cypher = String.format(
+//				"MERGE (iid:%s {entry:{entry}, description:{description}}) RETURN iid AS IID", 
+//				IntegrationNodeLabel.IntegrationSet);
+//		Map<String, Object> params = new HashMap<> ();
+//		params.put("entry", integrationSet.getEntry());
+//		params.put("description", nullToString(integrationSet.getDescription()));
+//		LOGGER.debug(String.format("Execute:%s with %s", cypher, params));
+//		Node node = Neo4jUtils.getExecutionResultGetSingle("IID", this.executionEngine.execute(cypher, params));
+		if (integrationSet == null || integrationSet.getEntry() == null) {
+			LOGGER.warn("Invalid integration set: " + integrationSet);
+			return null;
+		}
+		Node node = Neo4jUtils.mergeUniqueNode(
+				IntegrationNodeLabel.IntegrationSet, 
+				"entry", integrationSet.getEntry(), 
+				this.executionEngine);
+		
+		LOGGER.trace("Returned node: " + node.toString());
 		
 		integrationSet.setId(node.getId());
 		return integrationSet;
@@ -120,8 +128,9 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		System.out.println(Neo4jUtils.getPropertiesMap(integrationSetNode));
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setId(integrationSetNode.getId());
-		integrationSet.setName((String) integrationSetNode.getProperty("entry", ""));
-		integrationSet.setDescription((String) integrationSetNode.getProperty("description", ""));
+		integrationSet.setEntry((String) integrationSetNode.getProperty("entry"));
+		integrationSet.setName((String) integrationSetNode.getProperty("name", ""));
+		integrationSet.setDescription((String) integrationSetNode.getProperty("description", null));
 		
 		return integrationSet;
 	}

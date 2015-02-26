@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
 import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
 
 public class IntegrationCollectionUtilities {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(IntegrationCollectionUtilities.class);
+	
 	public static<K, V> Map<V, Set<K>> invertMapKeyToSet(Map<K, Set<V>> map) {
 		Map<V, Set<K>> res = new HashMap<> ();
 		for (K key : map.keySet()) {
@@ -274,6 +279,7 @@ public class IntegrationCollectionUtilities {
 		Set<Long> eids = new HashSet<> ();
 		UndirectedGraph<Long, T> graph = new UndirectedGraph<>();
 		
+		LOGGER.debug("Building graph ...");
 		for (T entry : prevClusters.keySet()) {
 			Set<Long> members = prevClusters.get(entry);
 			eids.addAll(members);
@@ -300,6 +306,7 @@ public class IntegrationCollectionUtilities {
 		//track vertices processed
 		Set<Long> eidsProcessed = new HashSet<> ();
 		
+		LOGGER.debug("Begin traversal graph ...");
 		//begin traversal
 		for (Long eid : eids) {
 			if (!eidsProcessed.contains(eid)) {

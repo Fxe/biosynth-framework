@@ -11,15 +11,12 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
-import org.neo4j.graphdb.traversal.Evaluators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 
 public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
@@ -103,7 +100,7 @@ public class CrossreferenceTraversalStrategyImpl implements ClusteringStrategy {
 				Node node = (Node) o;
 				result += String.format("[%d]%s:%s", node.getId(), node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY), node.getProperty("entry"));
 			} else if (o instanceof Relationship) {
-				Relationship relationship = (Relationship) o;
+//				Relationship relationship = (Relationship) o;
 				result += " <?> ";
 			} else {
 				result += "[ERROR]";

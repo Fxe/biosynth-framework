@@ -81,8 +81,9 @@ public class Neo4jMapper {
 		
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setId(node.getId());
-		integrationSet.setDescription((String) node.getProperty("description"));
-		integrationSet.setName((String) node.getProperty("entry"));
+		integrationSet.setDescription((String) node.getProperty("description", null));
+		integrationSet.setEntry((String) node.getProperty("entry"));
+		integrationSet.setName((String) node.getProperty("name", null));
 		return integrationSet;
 	}
 	
@@ -107,7 +108,7 @@ public class Neo4jMapper {
 //		String clusterType = node.getLabels().iterator().next().toString();
 		integratedCluster.setId(node.getId());
 		
-		integratedCluster.setDescription((String) node.getProperty("description", ""));
+		integratedCluster.setDescription((String) node.getProperty("description", null));
 		integratedCluster.setEntry((String) node.getProperty("entry"));
 		
 		for (Label label : node.getLabels()) {

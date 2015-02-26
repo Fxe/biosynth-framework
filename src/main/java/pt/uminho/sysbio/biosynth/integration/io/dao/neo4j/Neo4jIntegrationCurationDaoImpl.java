@@ -57,11 +57,9 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	}
 	
 	public Node generateCurationSetNode(CurationSet curationSet) {
-		Map<String, Object> params = new HashMap<> ();
-		params.put("entry", curationSet.getEntry());
-		String cypherQuery = String.format("MERGE (xid:%s {entry:{entry}}) RETURN xid AS XID", CurationLabel.CurationSet);
-		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
-		Node node = Neo4jUtils.getExecutionResultGetSingle("XID", executionEngine.execute(cypherQuery, params));
+		if (curationSet == null || curationSet.getEntry() == null) return null;
+		
+		Node node = Neo4jUtils.getOrCreateNode(CurationLabel.CurationSet, "entry", curationSet.getEntry(), executionEngine);
 		
 		return node;
 	}
@@ -80,11 +78,11 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", integratedCluster.getEntry());
 		params.put("reference_cid", integratedCluster.getId());
-		params.put("description", integratedCluster.getDescription());
+//		params.put("description", integratedCluster.getDescription() == null ? );
 		params.put("cluster_type", integratedCluster.getClusterType());
 		
 		String cypherQuery = String.format(
-				"MERGE (cid:%s {entry:{entry}, reference_cid:{reference_cid}, cluster_type:{cluster_type}, description:{description}}) RETURN cid AS CID", 
+				"MERGE (cid:%s {entry:{entry}, reference_cid:{reference_cid}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
 				IntegrationNodeLabel.IntegratedCluster);
 		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
 		Node node = Neo4jUtils.getExecutionResultGetSingle("CID", executionEngine.execute(cypherQuery, params));

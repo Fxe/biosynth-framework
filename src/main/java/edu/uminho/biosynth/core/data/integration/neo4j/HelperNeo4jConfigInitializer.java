@@ -10,6 +10,7 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
@@ -71,6 +72,12 @@ public class HelperNeo4jConfigInitializer {
 		
 		for (ReactionMajorLabel label : ReactionMajorLabel.values()) {
 			String cypherQuery = String.format("CREATE CONSTRAINT ON (rxn:%s) ASSERT rxn.entry IS UNIQUE", label);
+			LOGGER.trace("Execute Constraint: " + cypherQuery);
+			engine.execute(cypherQuery);
+		}
+		
+		for (MetabolicModelLabel label : MetabolicModelLabel.values()) {
+			String cypherQuery = String.format("CREATE CONSTRAINT ON (n:%s) ASSERT n.entry IS UNIQUE", label);
 			LOGGER.trace("Execute Constraint: " + cypherQuery);
 			engine.execute(cypherQuery);
 		}

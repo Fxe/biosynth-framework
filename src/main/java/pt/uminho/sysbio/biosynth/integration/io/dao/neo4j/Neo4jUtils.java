@@ -299,12 +299,29 @@ public class Neo4jUtils {
 	
 	public static Node mergeUniqueNode(Label label, String key, Object value, ExecutionEngine ee) {
 		String query = String.format("MERGE (n:%s {%s:{%s}}) "
-				+ "ON CREATE SET n.created_at = timestamp() "
-				+ "ON MATCH SET n.updated_at = timestamp()", 
+				+ "ON CREATE SET n.created_at = timestamp(), n.updated_at = timestamp() "
+				+ "ON MATCH SET n.updated_at = timestamp() RETURN n", 
 				label, key, key);
 		Map<String, Object> params = new HashMap<> ();
 		params.put(key, value);
+		
+		LOGGER.trace(String.format("Cypher: %s - %s", query, params));
 		Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
+		return node;
+	}
+
+	public static Node getOrCreateNode(Label label,
+			String key, Object value, ExecutionEngine executionEngine) {
+		String query = String.format(
+				"MERGE (n:%s {%s:{%s}}) " + 
+				"ON CREATE SET n.created_at=timestamp(), n.updated_at=timestamp() " + 
+				"ON MATCH SET n.updated_at=timestamp() RETURN n", 
+				label, key, key);
+		LOGGER.trace("Query: " + query);
+		Map<String, Object> params = new HashMap<> ();
+		params.put(key, value);
+		Node node = Neo4jUtils.getExecutionResultGetSingle("n", executionEngine.execute(query, params));
+		
 		return node;
 	}
 }
