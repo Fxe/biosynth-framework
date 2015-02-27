@@ -54,6 +54,11 @@ public class ProcessGraph<T> implements Graph {
 		return O_.size();
 	}
 	
+	public Set<OperatingUnit<T>> neighbors(T t) {
+		Set< OperatingUnit<T>> n = new HashSet<> ();
+		return n;
+	}
+	
 	public boolean addOperatingUnit(OperatingUnit<T> op) {
 		if (this.O_.add(op)) {
 			this.M_.addAll(op.getAlpha());
