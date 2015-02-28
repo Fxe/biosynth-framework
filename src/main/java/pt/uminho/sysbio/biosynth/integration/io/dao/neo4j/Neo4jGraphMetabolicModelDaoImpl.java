@@ -1,20 +1,25 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.tooling.GlobalGraphOperations;
 
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
-public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<DefaultMetabolicModel> {
+public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<
+DefaultMetabolicModel,
+DefaultMetabolicModel,
+DefaultMetabolicModel,
+DefaultMetabolicModel,
+DefaultMetabolicModel> {
 
 	private GraphDatabaseService graphDatabaseService;
 	private ExecutionEngine executionEngine;
@@ -27,7 +32,7 @@ public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<Defaul
 	@Override
 	public DefaultMetabolicModel getMetabolicModelById(long id) {
 		Node node = graphDatabaseService.getNodeById(id);
-		if (node == null || node.hasLabel(GlobalLabel.MetabolicModel)) {
+		if (node == null || !node.hasLabel(GlobalLabel.MetabolicModel)) {
 			return null;
 		}
 		DefaultMetabolicModel mmd = Neo4jMapper.nodeToMetabolicModel(node);
@@ -50,81 +55,12 @@ public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<Defaul
 	public List<DefaultMetabolicModel> findMetabolicModelBySearchTerm(
 			String search) {
 		DefaultMetabolicModel mmd = getMetabolicModelByEntry(search);
+		
+//		executionEngine.execute(query, params)
 		List<DefaultMetabolicModel> res = new ArrayList<> ();
+		
 		if (mmd != null) res.add(mmd);
 		return res;
-	}
-
-	@Override
-	public Set<Long> getAllCompartmentIds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Long> getAllMetaboliteSpecieIds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Long> getAllReactionSpecieIds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> getAllCompartmentEntries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> getAllMetaboliteSpecieEntries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> getAllReactionSpecieEntries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void getCompartmentById(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getMetaboliteSpecieById(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getReactionSpecieById(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getCompartmentByEntry(String entry) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getMetaboliteSpecieByEntry(String entry) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getReactionSpecieByEntry(String entry) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -136,6 +72,125 @@ public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<Defaul
 		for (Object o : oo) res.add(Neo4jMapper.nodeToMetabolicModel((Node) o));
 		return res;
 	}
+
+	@Override
+	public Set<Long> getAllMetabolicModelIds() {
+		Set<Long> res = new HashSet<> ();
+		for (Node node : GlobalGraphOperations
+				.at(graphDatabaseService)
+				.getAllNodesWithLabel(GlobalLabel.MetabolicModel)) {
+			res.add(node.getId());
+		}
+		
+		return res;
+	}
+
+	@Override
+	public Set<String> getAllMetabolicModelEntries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getCompartmentById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getCompartmentByModelAndEntry(
+			DefaultMetabolicModel model, String cmpEntry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Long> getAllModelCompartmentIds(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getAllModelCompartmentEntries(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelMetaboliteSpecieById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelMetaboliteSpecieByByModelAndEntry(
+			DefaultMetabolicModel model, String spiEntry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Long> getAllModelSpecieIds(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getAllModelSpecieEntries(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelReactionById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelReactionByByModelAndEntry(
+			DefaultMetabolicModel model, String spiEntry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Long> getAllModelReactionIds(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getAllModelReactionEntries(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelMetaboliteById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel getModelMetaboliteByModelAndEntry(
+			DefaultMetabolicModel model, String spiEntry) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Long> getAllModelMetaboliteIds(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getAllModelMetaboliteEntries(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

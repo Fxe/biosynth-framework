@@ -16,7 +16,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
 public class TestNeo4jGraphMetabolicModelDaoImpl {
 
-	private static MetabolicModelDao<DefaultMetabolicModel> dao;
+	private static MetabolicModelDao<DefaultMetabolicModel, DefaultMetabolicModel, DefaultMetabolicModel, DefaultMetabolicModel, DefaultMetabolicModel> dao;
 	private static GraphDatabaseService graphDatabaseService;
 	private static Transaction tx;
 	
