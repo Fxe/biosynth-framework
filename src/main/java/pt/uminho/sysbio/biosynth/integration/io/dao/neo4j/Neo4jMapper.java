@@ -19,6 +19,8 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
+import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
+import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
 
 public class Neo4jMapper {
 	
@@ -189,10 +191,19 @@ public class Neo4jMapper {
 		}
 	}
 
-	public static DefaultMetabolicModel nodeToMetabolicModel(Node node) {
-		DefaultMetabolicModel mmd = new DefaultMetabolicModel();
+	public static OptfluxContainerMetabolicModelEntity nodeToMetabolicModel(Node node) {
+		OptfluxContainerMetabolicModelEntity mmd = new OptfluxContainerMetabolicModelEntity();
 		mmd.setId(node.getId());
 		mmd.setEntry((String) node.getProperty("entry"));
 		return mmd;
+	}
+
+	public static DefaultMetaboliteSpecie nodeToMetaboliteSpecie(Node node) {
+		DefaultMetaboliteSpecie spi = new DefaultMetaboliteSpecie();
+		spi.setId(node.getId());
+		spi.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		spi.setComparment((String) node.getProperty("comparment", null));
+		spi.setFormula((String) node.getProperty("formula", null));
+		return spi;
 	}
 }

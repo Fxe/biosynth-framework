@@ -14,6 +14,7 @@ import org.neo4j.tooling.GlobalGraphOperations;
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
+@Deprecated
 public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<
 DefaultMetabolicModel,
 DefaultMetabolicModel,
@@ -35,8 +36,8 @@ DefaultMetabolicModel> {
 		if (node == null || !node.hasLabel(GlobalLabel.MetabolicModel)) {
 			return null;
 		}
-		DefaultMetabolicModel mmd = Neo4jMapper.nodeToMetabolicModel(node);
-		return mmd;
+//		DefaultMetabolicModel mmd = Neo4jMapper.nodeToMetabolicModel(node);
+		return null;
 	}
 
 	@Override
@@ -47,8 +48,8 @@ DefaultMetabolicModel> {
 		if (node == null || node.hasLabel(GlobalLabel.MetabolicModel)) {
 			return null;
 		}
-		DefaultMetabolicModel mmd = Neo4jMapper.nodeToMetabolicModel(node);
-		return mmd;
+//		DefaultMetabolicModel mmd = Neo4jMapper.nodeToMetabolicModel(node);
+		return null;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ DefaultMetabolicModel> {
 				GlobalLabel.MetabolicModel, page * size, size);
 		List<Object> oo = IteratorUtil.asList(executionEngine.execute(query).columnAs("n"));
 		List<DefaultMetabolicModel> res = new ArrayList<> ();
-		for (Object o : oo) res.add(Neo4jMapper.nodeToMetabolicModel((Node) o));
+//		for (Object o : oo) res.add(Neo4jMapper.nodeToMetabolicModel((Node) o));
 		return res;
 	}
 
@@ -187,6 +188,40 @@ DefaultMetabolicModel> {
 
 	@Override
 	public Set<String> getAllModelMetaboliteEntries(DefaultMetabolicModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel saveMetabolicModel(DefaultMetabolicModel mmd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel saveCompartment(DefaultMetabolicModel mmd,
+			DefaultMetabolicModel cmp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel saveModelMetaboliteSpecie(
+			DefaultMetabolicModel mmd, DefaultMetabolicModel cmp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel saveModelReaction(DefaultMetabolicModel mmd,
+			DefaultMetabolicModel cmp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DefaultMetabolicModel saveModelMetabolite(DefaultMetabolicModel mmd,
+			DefaultMetabolicModel cmp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
