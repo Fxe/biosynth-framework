@@ -42,18 +42,21 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 	public Set<String> getGenes() { return genes;}
 	public void setGenes(Set<String> genes) { this.genes = genes;}
 	
+	@JsonIgnore
 	@MetaProperty
 	@Column(name="lower_bound")
 	private Double lowerBound;
 	public double getLowerBound() { return lowerBound;}
 	public void setLowerBound(Double lowerBound) { this.lowerBound = lowerBound;}
 	
+	@JsonIgnore
 	@MetaProperty
 	@Column(name="upper_bound")
 	private Double upperBound;
 	public double getUpperBound() { return upperBound;}
 	public void setUpperBound(Double upperBound) { this.upperBound = upperBound;}
 	
+	@JsonIgnore
 	@MetaProperty
 	@Column(name="container_reversible")
 	private boolean containerReversible;
@@ -89,6 +92,7 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 		}
 	}
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "reaction", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<OptfluxContainerReactionLeft> left = new ArrayList<> ();
@@ -102,6 +106,7 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 		this.left = left;
 	}
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "reaction", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<OptfluxContainerReactionRight> right = new ArrayList<> ();

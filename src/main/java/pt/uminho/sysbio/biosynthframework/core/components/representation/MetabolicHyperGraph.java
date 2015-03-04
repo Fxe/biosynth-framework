@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.GenericReactionPair;
+import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.hypergraph.DiHyperGraph;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.hypergraph.ReactionEdge;
 //import edu.uminho.biosynth.core.components.representation.basic.hypergraph.DiHyperEdge;
@@ -74,7 +75,7 @@ public class MetabolicHyperGraph extends DiHyperGraph<String, String> implements
 //		boolean origOrientation = rxn.getOrientation() >= 0; // 0, 1, 2, 3 etc ARE LEFT TO RIGHT
 		ReactionEdge edge = this.createEdge(rxn, true);
 		
-		if ( duplicateForReverse) {
+		if ( duplicateForReverse && rxn.getOrientation().equals(Orientation.Reversible)) {
 			LOGGER.trace("Add Reaction " + rxn.getEntry() + " is reversible");
 			// CREATE opposite Direction EDGE'
 			ReactionEdge edge_ = createEdge(rxn, false);

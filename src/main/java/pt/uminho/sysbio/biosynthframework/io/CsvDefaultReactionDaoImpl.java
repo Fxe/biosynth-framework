@@ -71,7 +71,7 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 						genericReaction.setReactantStoichiometry(leftMap);
 						genericReaction.setProductStoichiometry(rightMap);
 						genericReaction.setOrientation(rev ? Orientation.Reversible : Orientation.LeftToRight);
-						
+
 						this.reactionMap.put(entry, genericReaction);
 					}
 				} catch (Exception e) {
