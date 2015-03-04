@@ -20,7 +20,9 @@ import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
+import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 
 public class Neo4jMapper {
 	
@@ -202,8 +204,29 @@ public class Neo4jMapper {
 		DefaultMetaboliteSpecie spi = new DefaultMetaboliteSpecie();
 		spi.setId(node.getId());
 		spi.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		spi.setName((String) node.getProperty("name", null));
 		spi.setComparment((String) node.getProperty("comparment", null));
 		spi.setFormula((String) node.getProperty("formula", null));
 		return spi;
+	}
+
+	public static DefaultSubcellularCompartmentEntity nodeToSubcellularCompartment(
+			Node node) {
+		DefaultSubcellularCompartmentEntity cmp = new DefaultSubcellularCompartmentEntity();
+		cmp.setId(node.getId());
+		cmp.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		cmp.setName((String) node.getProperty("name", null));
+		return cmp;
+	}
+
+	public static OptfluxContainerReactionEntity nodeToModelReaction(Node node) {
+		OptfluxContainerReactionEntity rxn = new OptfluxContainerReactionEntity();
+		rxn.setId(node.getId());
+		rxn.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		rxn.setName((String) node.getProperty("name", null));
+		rxn.setGeneRule((String) node.getProperty("geneRule", null));
+		rxn.setLowerBound((Double) node.getProperty("lowerBound", null));
+		rxn.setUpperBound((Double) node.getProperty("upperBound", null));
+		return rxn;
 	}
 }

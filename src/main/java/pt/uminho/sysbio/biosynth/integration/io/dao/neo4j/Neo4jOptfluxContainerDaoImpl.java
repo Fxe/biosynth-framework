@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,12 @@ import java.util.Set;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
-import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
@@ -96,8 +97,16 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	@Override
 	public List<OptfluxContainerMetabolicModelEntity> findMetabolicModelBySearchTerm(
 			String search) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OptfluxContainerMetabolicModelEntity> res = new ArrayList<> ();
+		String query = String.format("MATCH (n:%s) WHERE n.entry =~ '%s' RETURN n", GlobalLabel.MetabolicModel, search);
+		LOGGER.trace("Query: {}", query);
+//		System.out.println(query);
+		for (Object o : IteratorUtil.asList(executionEngine.execute(query).columnAs("n"))) {
+			Node node = (Node) o;
+			OptfluxContainerMetabolicModelEntity model = this.getMetabolicModelById(node.getId());
+			if (model != null) res.add(model);
+		}
+		return res;
 	}
 
 	@Override
@@ -109,8 +118,12 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	@Override
 	public DefaultSubcellularCompartmentEntity getCompartmentById(
 			Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Node node = graphDatabaseService.getNodeById(id);
+		if (node == null || !node.hasLabel(GlobalLabel.SubcellularCompartment)) {
+			return null;
+		}
+		DefaultSubcellularCompartmentEntity cmp = Neo4jMapper.nodeToSubcellularCompartment(node);
+		return cmp;
 	}
 
 	@Override
@@ -146,8 +159,10 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	@Override
 	public Set<Long> getAllModelCompartmentIds(
 			OptfluxContainerMetabolicModelEntity model) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> res = new HashSet<> ();
+		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
+		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_compartment));
+		return res;
 	}
 
 	@Override
@@ -220,8 +235,13 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public OptfluxContainerReactionEntity getModelReactionById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Node node = graphDatabaseService.getNodeById(id);
+		if (node == null || !node.hasLabel(MetabolicModelLabel.ModelReaction)) {
+			return null;
+		}
+		OptfluxContainerReactionEntity rxn = Neo4jMapper.nodeToModelReaction(node);
+//		rxn.setRight(right);
+		return rxn;
 	}
 
 	@Override
@@ -275,8 +295,10 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	@Override
 	public Set<Long> getAllModelReactionIds(
 			OptfluxContainerMetabolicModelEntity model) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> res = new HashSet<> ();
+		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
+		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_reaction));
+		return res;
 	}
 
 	@Override
@@ -322,8 +344,10 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	@Override
 	public Set<Long> getAllModelMetaboliteIds(
 			OptfluxContainerMetabolicModelEntity model) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> res = new HashSet<> ();
+		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
+		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_metabolite));
+		return res;
 	}
 
 	@Override
