@@ -984,6 +984,11 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Map<Set<String>, Integer> countNodesByLabelSet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

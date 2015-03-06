@@ -126,4 +126,6 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 	public Map<Long, Long> getMetaboliteUnificationMap(long iid);
 	
 	public IntegratedMember getIntegratedMemberByReferenceEid(long referenceEid);
+	
+	public Map<Set<String>, Integer> countNodesByLabelSet();
 }
