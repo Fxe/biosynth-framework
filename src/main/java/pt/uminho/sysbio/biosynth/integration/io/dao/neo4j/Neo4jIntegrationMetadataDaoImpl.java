@@ -165,6 +165,9 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			nodeId = path.endNode().getId();
 		}
 		
+		//nodeId 
+		if (nodeId == null) return null;
+		
 		return getIntegratedClusterById(nodeId);
 	}
 
