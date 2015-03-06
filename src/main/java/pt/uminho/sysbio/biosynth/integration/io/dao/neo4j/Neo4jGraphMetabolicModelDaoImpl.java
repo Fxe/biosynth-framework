@@ -226,6 +226,12 @@ DefaultMetabolicModel> {
 		return null;
 	}
 
+	@Override
+	public void deleteModelMetabolite(DefaultMetabolicModel mcpd) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

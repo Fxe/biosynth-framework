@@ -310,8 +310,12 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public DefaultModelMetaboliteEntity getModelMetaboliteById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Node node = graphDatabaseService.getNodeById(id);
+		if (node == null || !node.hasLabel(MetabolicModelLabel.ModelMetabolite)) {
+			return null;
+		}
+		DefaultModelMetaboliteEntity cpd = Neo4jMapper.nodeToModelMetabolite(node);
+		return cpd;
 	}
 
 	@Override
@@ -328,17 +332,31 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 		
 		if (cpd.getSpecies().isEmpty()) return null;
 		
-		
+		Node mmdNode = graphDatabaseService.getNodeById(mmd.getId());
 		
 		try {
 			String entry = String.format("%s@%s", cpd.getEntry(), mmd.getEntry());
-//			Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, executionEngine);
+			Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, executionEngine);
+			LOGGER.debug("Created {}", node);
 			Map<String, Object> properties = a.extractProperties(cpd, DefaultModelMetaboliteEntity.class);
+			properties.remove("entry");
+			Neo4jUtils.setPropertiesMap(properties, node);
+			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+			
+			for (DefaultMetaboliteSpecie spi : cpd.getSpecies()) {
+				if (spi.getId() == null) this.saveModelMetaboliteSpecie(mmd, spi);
+				Node spiNode = graphDatabaseService.getNodeById(spi.getId());
+				node.createRelationshipTo(spiNode, MetabolicModelRelationshipType.has_specie);
+			}
+			
+			mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_metabolite);
+			cpd.setId(node.getId());
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
 			return null;
 		}
-		return null;
+		
+		return cpd;
 	}
 
 	@Override
@@ -355,6 +373,15 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 			OptfluxContainerMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteModelMetabolite(DefaultModelMetaboliteEntity mcpd) {
+		Node cpdNode = graphDatabaseService.getNodeById(mcpd.getId());
+		if (cpdNode.hasLabel(MetabolicModelLabel.ModelMetabolite)) {
+			Neo4jUtils.deleteAllRelationships(cpdNode);
+		}
+		cpdNode.delete();
 	}
 
 }

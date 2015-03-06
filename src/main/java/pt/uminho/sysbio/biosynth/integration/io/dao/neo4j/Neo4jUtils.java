@@ -324,4 +324,18 @@ public class Neo4jUtils {
 		
 		return node;
 	}
+
+	/**
+	 * Deletes all relationships of a given node
+	 * @param node
+	 * @return the number of relationships deleted
+	 */
+	public static int deleteAllRelationships(Node node) {
+		int i = 0;
+		for (Relationship relationship : node.getRelationships()) {
+			relationship.delete();
+			i++;
+		}
+		return i;
+	}
 }

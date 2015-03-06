@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
+import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
@@ -228,5 +229,14 @@ public class Neo4jMapper {
 		rxn.setLowerBound((Double) node.getProperty("lowerBound", null));
 		rxn.setUpperBound((Double) node.getProperty("upperBound", null));
 		return rxn;
+	}
+
+	public static DefaultModelMetaboliteEntity nodeToModelMetabolite(Node node) {
+		DefaultModelMetaboliteEntity cpd = new DefaultModelMetaboliteEntity();
+		cpd.setId(node.getId());
+		cpd.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		cpd.setName((String) node.getProperty("name", null));
+		cpd.setFormula((String) node.getProperty("formula", null));
+		return cpd;
 	}
 }
