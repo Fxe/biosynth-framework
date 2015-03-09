@@ -8,6 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.util.BioSynthUtils;
+
 public class AnnotationPropertyContainerBuilder  {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(AnnotationPropertyContainerBuilder.class);

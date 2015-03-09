@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 public class BioSynthUtilsIO {
@@ -99,5 +101,19 @@ public class BioSynthUtilsIO {
         fileWriter.close();
         bufferedReader.close();
         stringReader.close();
+	}
+
+	public static String readFromInputStream(InputStream inputStream) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ( (line = br.readLine()) != null ) {
+			sb.append(line).append('\n');
+		}
+		
+		br.close();
+		inputStream.close();
+
+		return sb.toString();
 	}
 }
