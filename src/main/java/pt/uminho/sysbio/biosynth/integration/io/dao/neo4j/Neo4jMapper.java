@@ -18,7 +18,6 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
-import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModel;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;

@@ -7,5 +7,5 @@ public enum MetabolicModelRelationshipType implements RelationshipType {
 	has_metabolite,
 	has_reaction,
 	has_compartment, in_compartment, 
-	left_component, right_component, 
+	left_component, right_component, has_crossreference_to, 
 }

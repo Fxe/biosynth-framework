@@ -243,6 +243,7 @@ public class Neo4jUtils {
 		}
 	}
 
+	@Deprecated
 	public static Node mergeNode(Label label, String key, Object value, GraphDatabaseService graphDatabaseService) {
 		Node node = null;
 		for (Node res : graphDatabaseService.findNodesByLabelAndProperty(label, key, value)) {
@@ -259,6 +260,7 @@ public class Neo4jUtils {
 		return node;
 	}
 	
+	@Deprecated
 	public static Node mergeNode(String label, String key, Object value, GraphDatabaseService graphDatabaseService) {
 		return mergeNode(DynamicLabel.label(label), key, value, graphDatabaseService);
 	}

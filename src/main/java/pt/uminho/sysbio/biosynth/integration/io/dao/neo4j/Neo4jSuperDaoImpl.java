@@ -10,6 +10,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,6 +168,26 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 			LOGGER.debug(String.format("Delete vertex - [%d*%s] ", node.getId(), StringUtils.join(Neo4jUtils.getLabels(node), ':')));
 			node.delete();
 		}
+	}
+
+	@Override
+	public boolean linkIfNotExists(long src, long dst,
+			RelationshipType relationshipType, Map<String, Object> properties) {
+		
+		Node srcNode = graphDatabaseService.getNodeById(src);
+		Node dstNode = graphDatabaseService.getNodeById(dst);
+		LOGGER.trace("Link if not exists {} -[{}]-> {}", src, relationshipType, dst);
+		for (Relationship relationship : srcNode.getRelationships(Direction.OUTGOING)) {
+			Node other = relationship.getOtherNode(srcNode);
+			if (other.getId() == dst) {
+				LOGGER.trace("Link exists");
+				return false;
+			}
+		}
+		LOGGER.trace("Link created");
+		Relationship relationship = srcNode.createRelationshipTo(dstNode, relationshipType);
+		Neo4jUtils.setPropertiesMap(properties, relationship);
+		return true;
 	}
 
 }
