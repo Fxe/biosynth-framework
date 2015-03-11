@@ -94,6 +94,12 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 		Set<Long> left = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.left_component);
 		Set<Long> right = Neo4jUtils.collectNodeRelationshipNodeIds(rxn, ReactionRelationshipType.right_component);
 		
+		Set<Long> result = mapReactions(left, right);
+		result.add(initialNode.getId());
+		return result;
+	}
+	
+	public Set<Long> mapReactions(Set<Long> left, Set<Long> right) {
 		Map<Long, Set<Long>> compoundToReactionMap = new HashMap<> ();
 		LOGGER.debug("Gathering Left  Metabolite Reactions ...");
 		compoundToReactionMap.putAll(this.collectCompoundReactions(left));
@@ -187,7 +193,7 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 			}
 		}
 		strongIntersection.removeAll(remove);
-		strongIntersection.add(initialNode.getId());
+		
 //		System.out.println(strongIntersection);
 		
 		return strongIntersection;
