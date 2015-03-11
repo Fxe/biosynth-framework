@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteChemicalDataEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteCommentEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteDatabaseAccession;
@@ -148,8 +148,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		for (ChebiDumpMetaboliteReferenceEntity reference: cpd.getReferences()) {
 //			System.out.println(reference);
 			ChebiMetaboliteCrossreferenceEntity xref = new ChebiMetaboliteCrossreferenceEntity();
-			GenericCrossReference.Type type = referenceDbToType(reference.getReferenceDbName().toLowerCase());
-			if ( !type.equals(GenericCrossReference.Type.UNKNOWN)) {
+			ReferenceType type = referenceDbToType(reference.getReferenceDbName().toLowerCase());
+			if ( !type.equals(ReferenceType.UNKNOWN)) {
 				xref.setType(type);
 				xref.setRef(reference.getReferenceDbName());
 				xref.setValue(reference.getReferenceId());
@@ -165,8 +165,8 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		
 		for (ChebiDumpMetaboliteDatabaseAccession reference: cpd.getAccessions()) {
 			ChebiMetaboliteCrossreferenceEntity xref = new ChebiMetaboliteCrossreferenceEntity();
-			GenericCrossReference.Type type = referenceDbToType(reference.getType().toLowerCase());
-			if ( !type.equals(GenericCrossReference.Type.UNKNOWN)) {
+			ReferenceType type = referenceDbToType(reference.getType().toLowerCase());
+			if ( !type.equals(ReferenceType.UNKNOWN)) {
 				xref.setType(type);
 				xref.setRef(reference.getType());
 				xref.setValue(reference.getAccessionNumber());
@@ -184,7 +184,7 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 			// Generate the single internal cross reference to the parent
 			if (cpd.getParentId() != null) {
 				ChebiMetaboliteCrossreferenceEntity parentXref = new ChebiMetaboliteCrossreferenceEntity();
-				parentXref.setType(GenericCrossReference.Type.DATABASE);
+				parentXref.setType(ReferenceType.DATABASE);
 				parentXref.setRef("chebi");
 				parentXref.setValue(cpd.getParentId().toString());
 				parentXref.setChebiMetaboliteEntity(res);
@@ -195,50 +195,50 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		return res;
 	}
 	
-	private GenericCrossReference.Type referenceDbToType(String db) {		
-		if (validDbEntries.contains(db)) return GenericCrossReference.Type.DATABASE;
+	private ReferenceType referenceDbToType(String db) {		
+		if (validDbEntries.contains(db)) return ReferenceType.DATABASE;
 		
-		GenericCrossReference.Type type = null;
+		ReferenceType type = null;
 		switch (db) {
 			case "pubmed citation":
-				type = GenericCrossReference.Type.CITATION;
+				type = ReferenceType.CITATION;
 				break;			
 			case "pubMed central citation":
-				type = GenericCrossReference.Type.CITATION;
+				type = ReferenceType.CITATION;
 				break;
 			case "citexplore citation":
-				type = GenericCrossReference.Type.CITATION;
+				type = ReferenceType.CITATION;
 				break;
 			case "patent":
-				type = GenericCrossReference.Type.PATENT;
+				type = ReferenceType.PATENT;
 				break;
 			case "patent accession":
-				type = GenericCrossReference.Type.PATENT;
+				type = ReferenceType.PATENT;
 				break;
 			case "pubchem":
-				type = GenericCrossReference.Type.DATABASE;
+				type = ReferenceType.DATABASE;
 				break;
 			case "uniprot":
-				type = GenericCrossReference.Type.GENE;
+				type = ReferenceType.GENE;
 				break;
 			case "reactome":
-				type = GenericCrossReference.Type.REACTION;
+				type = ReferenceType.REACTION;
 			 	break;
 			case "sabio-rk":
-				type = GenericCrossReference.Type.REACTION;
+				type = ReferenceType.REACTION;
 			 	break;
 			case "rhea":
-				type = GenericCrossReference.Type.REACTION;
+				type = ReferenceType.REACTION;
 				break;
 			case "brenda":
-				type = GenericCrossReference.Type.ECNUMBER;
+				type = ReferenceType.ECNUMBER;
 				break;
 			case "enzymeportal":
-				type = GenericCrossReference.Type.PROTEIN;
+				type = ReferenceType.PROTEIN;
 				break;
 			default:
 				LOGGER.warn("Unknown type: " + db);
-				type = GenericCrossReference.Type.UNKNOWN;
+				type = ReferenceType.UNKNOWN;
 				break;
 		}
 		
