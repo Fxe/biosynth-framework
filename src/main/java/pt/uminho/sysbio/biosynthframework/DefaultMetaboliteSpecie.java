@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 
 @Entity
 @Table(name="optflux_container_metabolite_specie")
@@ -26,10 +26,10 @@ public class DefaultMetaboliteSpecie extends GenericMetabolite {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="model_id")
-	private OptfluxContainerMetabolicModelEntity metabolicModel;
-	public OptfluxContainerMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
+	private DefaultMetabolicModelEntity metabolicModel;
+	public DefaultMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
 	public void setMetabolicModel(
-			OptfluxContainerMetabolicModelEntity metabolicModel) {
+			DefaultMetabolicModelEntity metabolicModel) {
 		this.metabolicModel = metabolicModel;
 	}
 	

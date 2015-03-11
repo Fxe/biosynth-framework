@@ -16,10 +16,6 @@ public class GenericCrossReference implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public enum Type {
-		DATABASE, MODEL, ECNUMBER, NAME, OBSOLETE, SELF, PATENT, GENE, UNKNOWN, REACTION, CITATION, OTHER, PROTEIN
-	}
-	
 	@Id
     @Column(name="id")
     @GeneratedValue
@@ -28,7 +24,7 @@ public class GenericCrossReference implements Serializable {
 	@MetaProperty(asString=true)
 	@Column(name="ref_type", length=15, nullable=false)
 	@Enumerated(EnumType.STRING)
-	protected Type type;
+	protected ReferenceType type;
 	
 	@MetaProperty
 	@Column(name="tag", length=255, nullable=false) 
@@ -40,7 +36,7 @@ public class GenericCrossReference implements Serializable {
 	
 	public GenericCrossReference() { }
 	
-	public GenericCrossReference(GenericCrossReference.Type type, String reference, String value) {
+	public GenericCrossReference(ReferenceType type, String reference, String value) {
 		this.type = type;
 		this.ref = reference;
 		this.value = value;
@@ -49,10 +45,10 @@ public class GenericCrossReference implements Serializable {
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
 
-	public Type getType() {
+	public ReferenceType getType() {
 		return type;
 	}
-	public void setType(Type type) {
+	public void setType(ReferenceType type) {
 		this.type = type;
 	}
 

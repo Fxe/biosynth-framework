@@ -66,10 +66,10 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="model_id")
-	private OptfluxContainerMetabolicModelEntity metabolicModel;
-	public OptfluxContainerMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
+	private DefaultMetabolicModelEntity metabolicModel;
+	public DefaultMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
 	public void setMetabolicModel(
-			OptfluxContainerMetabolicModelEntity metabolicModel) {
+			DefaultMetabolicModelEntity metabolicModel) {
 		this.metabolicModel = metabolicModel;
 	}
 	

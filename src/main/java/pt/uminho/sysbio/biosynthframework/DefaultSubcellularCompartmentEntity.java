@@ -5,7 +5,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,10 +18,10 @@ public class DefaultSubcellularCompartmentEntity extends AbstractBiosynthEntity 
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="model_id")
-	private OptfluxContainerMetabolicModelEntity metabolicModel;
-	public OptfluxContainerMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
+	private DefaultMetabolicModelEntity metabolicModel;
+	public DefaultMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
 	public void setMetabolicModel(
-			OptfluxContainerMetabolicModelEntity metabolicModel) {
+			DefaultMetabolicModelEntity metabolicModel) {
 		this.metabolicModel = metabolicModel;
 	}
 }

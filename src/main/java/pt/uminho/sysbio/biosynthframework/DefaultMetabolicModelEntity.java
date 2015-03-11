@@ -17,7 +17,7 @@ import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="optflux_container_model")
-public class OptfluxContainerMetabolicModelEntity extends AbstractBiosynthEntity {
+public class DefaultMetabolicModelEntity extends AbstractBiosynthEntity {
 
 	private static final long serialVersionUID = 1L;
 

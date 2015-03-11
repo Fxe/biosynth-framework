@@ -21,7 +21,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
@@ -67,7 +67,7 @@ public class XmlStreamSbmlReader {
 	}
 	
 	public XmlSbmlModel parse() throws IOException {
-		OptfluxContainerMetabolicModelEntity mmd = new OptfluxContainerMetabolicModelEntity();
+		DefaultMetabolicModelEntity mmd = new DefaultMetabolicModelEntity();
 		OptfluxContainerReactionEntity reactionEntity = null;
 		
 //		Map<String, DefaultMetaboliteSpecie> specieMap = new HashMap<> ();
