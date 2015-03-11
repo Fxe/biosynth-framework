@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
+import java.util.Map;
+
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -18,11 +20,12 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationSet;
 import pt.uminho.sysbio.biosynth.integration.curation.CurationUser;
 import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.etl.ReactionQualityLabel;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
+import pt.uminho.sysbio.biosynthframework.PropertyContainer;
 
 public class Neo4jMapper {
 	
@@ -193,8 +196,8 @@ public class Neo4jMapper {
 		}
 	}
 
-	public static OptfluxContainerMetabolicModelEntity nodeToMetabolicModel(Node node) {
-		OptfluxContainerMetabolicModelEntity mmd = new OptfluxContainerMetabolicModelEntity();
+	public static DefaultMetabolicModelEntity nodeToMetabolicModel(Node node) {
+		DefaultMetabolicModelEntity mmd = new DefaultMetabolicModelEntity();
 		mmd.setId(node.getId());
 		mmd.setEntry((String) node.getProperty("entry"));
 		return mmd;
@@ -237,5 +240,11 @@ public class Neo4jMapper {
 		cpd.setName((String) node.getProperty("name", null));
 		cpd.setFormula((String) node.getProperty("formula", null));
 		return cpd;
+	}
+	
+	public static void nodeToPropertyContainer(Node node, PropertyContainer propertyContainer) {
+		Map<String, Object> properties = Neo4jUtils.getPropertiesMap(node);
+		LOGGER.debug("Loaded {} properties", properties.size());
+		propertyContainer.setProperties(properties);
 	}
 }

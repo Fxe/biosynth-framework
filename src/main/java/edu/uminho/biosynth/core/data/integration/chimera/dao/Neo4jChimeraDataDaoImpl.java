@@ -30,7 +30,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
@@ -134,7 +134,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 				labels.remove("Compound");
 				IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
 //				GenericCrossReference xref = new GenericCrossReference();
-				xref.setType(GenericCrossReference.Type.DATABASE);
+				xref.setType(ReferenceType.DATABASE);
 				xref.setRef(labels.iterator().next());
 				xref.setValue((String)other.getProperty("entry"));
 				createAndAdd(data, "crossreferences", xref);
@@ -213,7 +213,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 						//These Compound Labels -> Crossreferences !
 						IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
 //						GenericCrossReference xref = new GenericCrossReference();
-						xref.setType(GenericCrossReference.Type.DATABASE);
+						xref.setType(ReferenceType.DATABASE);
 						xref.setRef(labels.iterator().next());
 						
 						xref.setValue((String)proxy.getProperty("entry"));

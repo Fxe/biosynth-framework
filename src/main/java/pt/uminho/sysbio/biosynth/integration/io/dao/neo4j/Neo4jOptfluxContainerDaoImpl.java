@@ -18,12 +18,16 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.ExtendedMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.ExtendedMetaboliteSpecie;
+import pt.uminho.sysbio.biosynthframework.ExtendedModelMetabolite;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionLeft;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionRight;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
-import pt.uminho.sysbio.biosynthframework.io.OptfluxMetabolicModelDao;
+import pt.uminho.sysbio.biosynthframework.io.DefaultMetabolicModelDao;
+import pt.uminho.sysbio.biosynthframework.io.ExtendedMetabolicModelDao;
 
 /**
  * Temporary DAO to manage metabolic model entities<br/>
@@ -31,7 +35,7 @@ import pt.uminho.sysbio.biosynthframework.io.OptfluxMetabolicModelDao;
  * @author Filipe
  *
  */
-public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements OptfluxMetabolicModelDao {
+public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements ExtendedMetabolicModelDao {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jOptfluxContainerDaoImpl.class);
 	private AnnotationPropertyContainerBuilder a;
@@ -42,17 +46,19 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	}
 	
 	@Override
-	public OptfluxContainerMetabolicModelEntity getMetabolicModelById(long id) {
+	public ExtendedMetabolicModelEntity getMetabolicModelById(long id) {
 		Node node = graphDatabaseService.getNodeById(id);
 		if (node == null || !node.hasLabel(GlobalLabel.MetabolicModel)) {
 			return null;
 		}
-		OptfluxContainerMetabolicModelEntity mmd = Neo4jMapper.nodeToMetabolicModel(node);
+		ExtendedMetabolicModelEntity mmd = new ExtendedMetabolicModelEntity();
+		Neo4jMapper.nodeToPropertyContainer(node, mmd);
+		mmd.setId(node.getId());
 		return mmd;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getMetabolicModelByEntry(
+	public ExtendedMetabolicModelEntity getMetabolicModelByEntry(
 			String entry) {
 		Node node = Neo4jUtils.getUniqueResult(
 				graphDatabaseService.findNodesByLabelAndProperty(
@@ -61,12 +67,12 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveMetabolicModel(
-			OptfluxContainerMetabolicModelEntity mmd) {
+	public ExtendedMetabolicModelEntity saveMetabolicModel(
+			ExtendedMetabolicModelEntity mmd) {
 		
 		try {
 			Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", mmd.getEntry(), executionEngine);
-			Map<String, Object> properties = a.extractProperties(mmd, OptfluxContainerMetabolicModelEntity.class);
+			Map<String, Object> properties = a.extractProperties(mmd, DefaultMetabolicModelEntity.class);
 			Neo4jUtils.setPropertiesMap(properties, node);
 			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 		} catch (Exception e) {
@@ -95,22 +101,22 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 	}
 
 	@Override
-	public List<OptfluxContainerMetabolicModelEntity> findMetabolicModelBySearchTerm(
+	public List<ExtendedMetabolicModelEntity> findMetabolicModelBySearchTerm(
 			String search) {
-		List<OptfluxContainerMetabolicModelEntity> res = new ArrayList<> ();
+		List<ExtendedMetabolicModelEntity> res = new ArrayList<> ();
 		String query = String.format("MATCH (n:%s) WHERE n.entry =~ '%s' RETURN n", GlobalLabel.MetabolicModel, search);
 		LOGGER.trace("Query: {}", query);
 //		System.out.println(query);
 		for (Object o : IteratorUtil.asList(executionEngine.execute(query).columnAs("n"))) {
 			Node node = (Node) o;
-			OptfluxContainerMetabolicModelEntity model = this.getMetabolicModelById(node.getId());
+			ExtendedMetabolicModelEntity model = this.getMetabolicModelById(node.getId());
 			if (model != null) res.add(model);
 		}
 		return res;
 	}
 
 	@Override
-	public List<OptfluxContainerMetabolicModelEntity> findAll(int page, int size) {
+	public List<ExtendedMetabolicModelEntity> findAll(int page, int size) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -128,14 +134,14 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public DefaultSubcellularCompartmentEntity getCompartmentByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String cmpEntry) {
+			ExtendedMetabolicModelEntity model, String cmpEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public DefaultSubcellularCompartmentEntity saveCompartment(
-			OptfluxContainerMetabolicModelEntity mmd,
+			ExtendedMetabolicModelEntity mmd,
 			DefaultSubcellularCompartmentEntity cmp) {
 		
 		try {
@@ -158,7 +164,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<Long> getAllModelCompartmentIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		Set<Long> res = new HashSet<> ();
 		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
 		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_compartment));
@@ -167,33 +173,35 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<String> getAllModelCompartmentEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DefaultMetaboliteSpecie getModelMetaboliteSpecieById(
+	public ExtendedMetaboliteSpecie getModelMetaboliteSpecieById(
 			Long id) {
 		Node node = graphDatabaseService.getNodeById(id);
 		if (node == null || !node.hasLabel(MetabolicModelLabel.MetaboliteSpecie)) {
 			return null;
 		}
-		DefaultMetaboliteSpecie spi = Neo4jMapper.nodeToMetaboliteSpecie(node);
+		ExtendedMetaboliteSpecie spi = new ExtendedMetaboliteSpecie();
+		Neo4jMapper.nodeToPropertyContainer(node, spi);
+		spi.setId(node.getId());
 		return spi;
 	}
 
 	@Override
-	public DefaultMetaboliteSpecie getModelMetaboliteSpecieByByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String spiEntry) {
+	public ExtendedMetaboliteSpecie getModelMetaboliteSpecieByByModelAndEntry(
+			ExtendedMetabolicModelEntity model, String spiEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DefaultMetaboliteSpecie saveModelMetaboliteSpecie(
-			OptfluxContainerMetabolicModelEntity mmd,
-			DefaultMetaboliteSpecie spi) {
+	public ExtendedMetaboliteSpecie saveModelMetaboliteSpecie(
+			ExtendedMetabolicModelEntity mmd,
+			ExtendedMetaboliteSpecie spi) {
 		
 		try {
 			String entry = String.format("%s@%s", spi.getEntry(), mmd.getEntry());
@@ -219,7 +227,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<Long> getAllModelSpecieIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		Set<Long> res = new HashSet<> ();
 		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
 		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_specie));
@@ -228,7 +236,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<String> getAllModelSpecieEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -246,14 +254,14 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public OptfluxContainerReactionEntity getModelReactionByByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String spiEntry) {
+			ExtendedMetabolicModelEntity model, String spiEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public OptfluxContainerReactionEntity saveModelReaction(
-			OptfluxContainerMetabolicModelEntity mmd,
+			ExtendedMetabolicModelEntity mmd,
 			OptfluxContainerReactionEntity rxn) {
 		
 		try {
@@ -294,7 +302,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<Long> getAllModelReactionIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		Set<Long> res = new HashSet<> ();
 		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
 		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_reaction));
@@ -303,32 +311,34 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<String> getAllModelReactionEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DefaultModelMetaboliteEntity getModelMetaboliteById(Long id) {
+	public ExtendedModelMetabolite getModelMetaboliteById(Long id) {
 		Node node = graphDatabaseService.getNodeById(id);
 		if (node == null || !node.hasLabel(MetabolicModelLabel.ModelMetabolite)) {
 			return null;
 		}
-		DefaultModelMetaboliteEntity cpd = Neo4jMapper.nodeToModelMetabolite(node);
+		ExtendedModelMetabolite cpd = new ExtendedModelMetabolite();
+		Neo4jMapper.nodeToPropertyContainer(node, cpd);
+		cpd.setId(node.getId());
 		return cpd;
 	}
 
 	@Override
-	public DefaultModelMetaboliteEntity getModelMetaboliteByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String spiEntry) {
+	public ExtendedModelMetabolite getModelMetaboliteByModelAndEntry(
+			ExtendedMetabolicModelEntity model, String spiEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DefaultModelMetaboliteEntity saveModelMetabolite(
-			OptfluxContainerMetabolicModelEntity mmd,
-			DefaultModelMetaboliteEntity cpd) {
+	public ExtendedModelMetabolite saveModelMetabolite(
+			ExtendedMetabolicModelEntity mmd,
+			ExtendedModelMetabolite cpd) {
 		
 		if (cpd.getSpecies().isEmpty()) return null;
 		
@@ -343,7 +353,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 			Neo4jUtils.setPropertiesMap(properties, node);
 			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 			
-			for (DefaultMetaboliteSpecie spi : cpd.getSpecies()) {
+			for (ExtendedMetaboliteSpecie spi : cpd.getSpecies()) {
 				if (spi.getId() == null) this.saveModelMetaboliteSpecie(mmd, spi);
 				Node spiNode = graphDatabaseService.getNodeById(spi.getId());
 				node.createRelationshipTo(spiNode, MetabolicModelRelationshipType.has_specie);
@@ -361,7 +371,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<Long> getAllModelMetaboliteIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		Set<Long> res = new HashSet<> ();
 		Node mmdNode = graphDatabaseService.getNodeById(model.getId());
 		res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_metabolite));
@@ -370,13 +380,13 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Op
 
 	@Override
 	public Set<String> getAllModelMetaboliteEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			ExtendedMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteModelMetabolite(DefaultModelMetaboliteEntity mcpd) {
+	public void deleteModelMetabolite(ExtendedModelMetabolite mcpd) {
 		Node cpdNode = graphDatabaseService.getNodeById(mcpd.getId());
 		if (cpdNode.hasLabel(MetabolicModelLabel.ModelMetabolite)) {
 			Neo4jUtils.deleteAllRelationships(cpdNode);

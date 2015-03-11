@@ -11,16 +11,16 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
 @Deprecated
 public class Neo4jGraphMetabolicModelDaoImpl implements MetabolicModelDao<
-OptfluxContainerMetabolicModelEntity,
-OptfluxContainerMetabolicModelEntity,
-OptfluxContainerMetabolicModelEntity,
-OptfluxContainerMetabolicModelEntity,
-OptfluxContainerMetabolicModelEntity> {
+DefaultMetabolicModelEntity,
+DefaultMetabolicModelEntity,
+DefaultMetabolicModelEntity,
+DefaultMetabolicModelEntity,
+DefaultMetabolicModelEntity> {
 
 	private GraphDatabaseService graphDatabaseService;
 	private ExecutionEngine executionEngine;
@@ -31,7 +31,7 @@ OptfluxContainerMetabolicModelEntity> {
 	}
 	
 	@Override
-	public OptfluxContainerMetabolicModelEntity getMetabolicModelById(long id) {
+	public DefaultMetabolicModelEntity getMetabolicModelById(long id) {
 		Node node = graphDatabaseService.getNodeById(id);
 		if (node == null || !node.hasLabel(GlobalLabel.MetabolicModel)) {
 			return null;
@@ -41,7 +41,7 @@ OptfluxContainerMetabolicModelEntity> {
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getMetabolicModelByEntry(String entry) {
+	public DefaultMetabolicModelEntity getMetabolicModelByEntry(String entry) {
 		Node node = Neo4jUtils.getUniqueResult(
 				graphDatabaseService.findNodesByLabelAndProperty(
 						GlobalLabel.MetabolicModel, "entry", entry));
@@ -53,23 +53,23 @@ OptfluxContainerMetabolicModelEntity> {
 	}
 
 	@Override
-	public List<OptfluxContainerMetabolicModelEntity> findMetabolicModelBySearchTerm(
+	public List<DefaultMetabolicModelEntity> findMetabolicModelBySearchTerm(
 			String search) {
-		OptfluxContainerMetabolicModelEntity mmd = getMetabolicModelByEntry(search);
+		DefaultMetabolicModelEntity mmd = getMetabolicModelByEntry(search);
 		
 //		executionEngine.execute(query, params)
-		List<OptfluxContainerMetabolicModelEntity> res = new ArrayList<> ();
+		List<DefaultMetabolicModelEntity> res = new ArrayList<> ();
 		
 		if (mmd != null) res.add(mmd);
 		return res;
 	}
 
 	@Override
-	public List<OptfluxContainerMetabolicModelEntity> findAll(int page, int size) {
+	public List<DefaultMetabolicModelEntity> findAll(int page, int size) {
 		String query = String.format("MATCH (n:%s) RETURN n ORDER BY ID(n) SKIP %d LIMIT %d;", 
 				GlobalLabel.MetabolicModel, page * size, size);
 		List<Object> oo = IteratorUtil.asList(executionEngine.execute(query).columnAs("n"));
-		List<OptfluxContainerMetabolicModelEntity> res = new ArrayList<> ();
+		List<DefaultMetabolicModelEntity> res = new ArrayList<> ();
 //		for (Object o : oo) res.add(Neo4jMapper.nodeToMetabolicModel((Node) o));
 		return res;
 	}
@@ -93,155 +93,155 @@ OptfluxContainerMetabolicModelEntity> {
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getCompartmentById(Long id) {
+	public DefaultMetabolicModelEntity getCompartmentById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getCompartmentByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String cmpEntry) {
+	public DefaultMetabolicModelEntity getCompartmentByModelAndEntry(
+			DefaultMetabolicModelEntity model, String cmpEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveMetabolicModel(
-			OptfluxContainerMetabolicModelEntity mmd) {
+	public DefaultMetabolicModelEntity saveMetabolicModel(
+			DefaultMetabolicModelEntity mmd) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveCompartment(
-			OptfluxContainerMetabolicModelEntity mmd,
-			OptfluxContainerMetabolicModelEntity cmp) {
+	public DefaultMetabolicModelEntity saveCompartment(
+			DefaultMetabolicModelEntity mmd,
+			DefaultMetabolicModelEntity cmp) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<Long> getAllModelCompartmentIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<String> getAllModelCompartmentEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelMetaboliteSpecieById(
+	public DefaultMetabolicModelEntity getModelMetaboliteSpecieById(
 			Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelMetaboliteSpecieByByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String spiEntry) {
+	public DefaultMetabolicModelEntity getModelMetaboliteSpecieByByModelAndEntry(
+			DefaultMetabolicModelEntity model, String spiEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveModelMetaboliteSpecie(
-			OptfluxContainerMetabolicModelEntity mmd,
-			OptfluxContainerMetabolicModelEntity spi) {
+	public DefaultMetabolicModelEntity saveModelMetaboliteSpecie(
+			DefaultMetabolicModelEntity mmd,
+			DefaultMetabolicModelEntity spi) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<Long> getAllModelSpecieIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<String> getAllModelSpecieEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelReactionById(Long id) {
+	public DefaultMetabolicModelEntity getModelReactionById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelReactionByByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String rxnEntry) {
+	public DefaultMetabolicModelEntity getModelReactionByByModelAndEntry(
+			DefaultMetabolicModelEntity model, String rxnEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveModelReaction(
-			OptfluxContainerMetabolicModelEntity mmd,
-			OptfluxContainerMetabolicModelEntity rxn) {
+	public DefaultMetabolicModelEntity saveModelReaction(
+			DefaultMetabolicModelEntity mmd,
+			DefaultMetabolicModelEntity rxn) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<Long> getAllModelReactionIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<String> getAllModelReactionEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelMetaboliteById(Long id) {
+	public DefaultMetabolicModelEntity getModelMetaboliteById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity getModelMetaboliteByModelAndEntry(
-			OptfluxContainerMetabolicModelEntity model, String cpdEntry) {
+	public DefaultMetabolicModelEntity getModelMetaboliteByModelAndEntry(
+			DefaultMetabolicModelEntity model, String cpdEntry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public OptfluxContainerMetabolicModelEntity saveModelMetabolite(
-			OptfluxContainerMetabolicModelEntity mmd,
-			OptfluxContainerMetabolicModelEntity cpd) {
+	public DefaultMetabolicModelEntity saveModelMetabolite(
+			DefaultMetabolicModelEntity mmd,
+			DefaultMetabolicModelEntity cpd) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteModelMetabolite(OptfluxContainerMetabolicModelEntity mcpd) {
+	public void deleteModelMetabolite(DefaultMetabolicModelEntity mcpd) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Set<Long> getAllModelMetaboliteIds(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<String> getAllModelMetaboliteEntries(
-			OptfluxContainerMetabolicModelEntity model) {
+			DefaultMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

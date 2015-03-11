@@ -11,12 +11,12 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 
 import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerMetabolicModelEntity;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
 public class TestNeo4jGraphMetabolicModelDaoImpl {
 
-	private static MetabolicModelDao<OptfluxContainerMetabolicModelEntity, OptfluxContainerMetabolicModelEntity, OptfluxContainerMetabolicModelEntity, OptfluxContainerMetabolicModelEntity, OptfluxContainerMetabolicModelEntity> dao;
+	private static MetabolicModelDao<DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity> dao;
 	private static GraphDatabaseService graphDatabaseService;
 	private static Transaction tx;
 	
