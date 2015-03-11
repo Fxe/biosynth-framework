@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedAliaseSet;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossreferenceEntity;
@@ -195,7 +196,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_REACTION_ATTRIBUTE, modelAliasSet, aliases));
 				for (String alias : aliases) {
-					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(GenericCrossReference.Type.MODEL, modelAliasSet, alias);
+					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(ReferenceType.MODEL, modelAliasSet, alias);
 					xrefs.add(xref);
 				}
 			}
@@ -206,7 +207,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_REACTION_ATTRIBUTE, databaseAlias, aliases));
 				for (String alias : aliases) {
-					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(GenericCrossReference.Type.DATABASE, "KEGG", alias);
+					SeedReactionCrossreferenceEntity xref = new SeedReactionCrossreferenceEntity(ReferenceType.DATABASE, "KEGG", alias);
 					xrefs.add(xref);
 				}
 			}
@@ -302,7 +303,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 	}
 	
 	@Deprecated
-	private void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
+	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossReference>> map, String ref) {
 		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
@@ -345,32 +346,32 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 					if (name.startsWith("i") || name.equals("AraGEM.45632")) {
 						LOGGER.debug("Building Refs for metabolic model - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.MODEL, refMap, name);
+								ReferenceType.MODEL, refMap, name);
 					} else 
 					if (name.equals("ModelSEED")) {
 						LOGGER.debug("Building Refs for compound entries - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.SELF, refMap, "SEED");
+								ReferenceType.SELF, refMap, "SEED");
 					} else
 					if (name.equals("name")) {
 						LOGGER.debug("Building Refs for compound synonyms - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.NAME, refMap, "SYNONYM");
+								ReferenceType.NAME, refMap, "SYNONYM");
 					} else
 					if (name.equals("KEGG")) {
 						LOGGER.debug("Building Refs for compound KEGG XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "KEGG");
+								ReferenceType.DATABASE, refMap, "KEGG");
 					} else
 					if (name.equals("AraCyc.45632")) {
 						LOGGER.debug("Building Refs for compound BioCyc ARA XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "BIOCYC:ARA");
+								ReferenceType.DATABASE, refMap, "BIOCYC:ARA");
 					} else
 					if (name.equals("MaizeCyc.45632")) {
 						LOGGER.debug("Building Refs for compound PlantCyc maize XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "PLANTCYC:MAIZE");
+								ReferenceType.DATABASE, refMap, "PLANTCYC:MAIZE");
 					} else
 					if (name.equals("obsolete")) {
 //						System.out.println("Building Refs for obsolete compounds - " + name + " for " + attribute);

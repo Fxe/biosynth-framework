@@ -86,7 +86,7 @@ public class DefaultBiggReactionParserImpl implements BiggReactionParser {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));
 			if (modelId != null) {
 				BiggReactionCrossReferenceEntity xrefModel = new BiggReactionCrossReferenceEntity(
-						GenericCrossReference.Type.MODEL, modelId, modelId);
+						ReferenceType.MODEL, modelId, modelId);
 				rxn.addCrossReference(xrefModel);
 			}
 		}

@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,7 +38,7 @@ public class BioCycReactionCrossReferenceEntity extends GenericCrossReference {
 	public void setUrl(String url) { this.url = url;}
 	
 	public BioCycReactionCrossReferenceEntity() { super(null, null, null); }
-	public BioCycReactionCrossReferenceEntity(Type type, String reference, String value) {
+	public BioCycReactionCrossReferenceEntity(ReferenceType type, String reference, String value) {
 		super(type, reference, value);
 	}
 	

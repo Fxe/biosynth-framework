@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 @Entity
 @Table(name="MNX_METABOLITE_CROSSREF")
@@ -24,7 +25,7 @@ public class MnxMetaboliteCrossreferenceEntity extends GenericCrossReference {
 	public MnxMetaboliteCrossreferenceEntity() {
 		super(null, null, null);
 	}
-	public MnxMetaboliteCrossreferenceEntity(Type type, String reference,
+	public MnxMetaboliteCrossreferenceEntity(ReferenceType type, String reference,
 			String value) {
 		super(type, reference, value);
 	}

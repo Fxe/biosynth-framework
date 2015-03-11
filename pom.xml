@@ -28,6 +28,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <jackson.version>2.4.3</jackson.version>
     <spring.version>4.0.3.RELEASE</spring.version>
+    <biosynth.version>0.0.1-SNAPSHOT</biosynth.version>
   </properties>
   
   <repositories>
@@ -42,7 +43,7 @@
     <dependency>
       <groupId>pt.uminho.sysbio.biosynthframework</groupId>
       <artifactId>biosynth-core</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${biosynth.version}</version>
     </dependency>
 
     <dependency>

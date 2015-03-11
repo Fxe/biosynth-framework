@@ -15,7 +15,7 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
@@ -88,7 +88,7 @@ public class CsvMnxMetaboliteDaoImpl implements MetaboliteDao<MnxMetaboliteEntit
 		String key = fields[1].trim();
 		String reference = fields[0].trim().split(":")[0].trim();
 		String entry = fields[0].trim().split(":")[1].trim();
-		MnxMetaboliteCrossreferenceEntity xref = new MnxMetaboliteCrossreferenceEntity(GenericCrossReference.Type.DATABASE, reference, entry);
+		MnxMetaboliteCrossreferenceEntity xref = new MnxMetaboliteCrossreferenceEntity(ReferenceType.DATABASE, reference, entry);
 		if (fields.length > 3) xref.setDescription(fields[3].trim());
 		xref.setEvidence(fields[2].trim());
 		if ( !xrefMap.containsKey(key)) {

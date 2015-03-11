@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.IGenericMetaboliteParser;
 
@@ -366,7 +366,7 @@ implements IGenericMetaboliteParser {
 				for (int i = 0; i < dblinkJsArray.length(); i++) {
 					JSONObject dblinkJsObj = dblinkJsArray.getJSONObject(i);
 					BioCycMetaboliteCrossreferenceEntity crossReference = new BioCycMetaboliteCrossreferenceEntity();
-					crossReference.setType(GenericCrossReference.Type.DATABASE);
+					crossReference.setType(ReferenceType.DATABASE);
 					if (dblinkJsObj.has("dblink-db"))
 						crossReference.setRef(dblinkJsObj.getString("dblink-db"));
 					if (dblinkJsObj.has("dblink-oid"))

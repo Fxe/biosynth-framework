@@ -2,12 +2,12 @@ package pt.uminho.sysbio.data.test.mother;
 
 import org.hibernate.Session;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 
 public class HbmBiggMetaboliteCrossReferenceMother extends AbstractHbmObjectMother<BiggMetaboliteCrossreferenceEntity> {
 
-	private GenericCrossReference.Type type = GenericCrossReference.Type.DATABASE;
+	private ReferenceType type = ReferenceType.DATABASE;
 	private String referenceDatabase 	= "BarBase";
 	private String referenceValue 		= "BAZ0001";
 	

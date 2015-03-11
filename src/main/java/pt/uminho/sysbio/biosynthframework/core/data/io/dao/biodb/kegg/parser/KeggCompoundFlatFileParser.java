@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.IGenericMetaboliteParser;
 
@@ -101,7 +101,7 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 			String[] xrefPair = xrefs[i].trim().split(": ");
 			for (String refValue : xrefPair[1].trim().split(" +")) {
 				KeggCompoundMetaboliteCrossreferenceEntity xref = new KeggCompoundMetaboliteCrossreferenceEntity(
-						GenericCrossReference.Type.DATABASE, xrefPair[0], refValue);
+						ReferenceType.DATABASE, xrefPair[0], refValue);
 				crossReferences.add(xref);
 			}
 		}

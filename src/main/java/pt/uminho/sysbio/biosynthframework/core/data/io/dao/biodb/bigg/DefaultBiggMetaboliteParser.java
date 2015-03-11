@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
@@ -46,12 +46,12 @@ public class DefaultBiggMetaboliteParser {
 		}
 		if (values[5].trim().length() > 0) {
 			BiggMetaboliteCrossreferenceEntity xrefKegg = new BiggMetaboliteCrossreferenceEntity(
-					GenericCrossReference.Type.DATABASE, "KEGG", values[5]);
+					ReferenceType.DATABASE, "KEGG", values[5]);
 			cpd.addCrossReference(xrefKegg);
 		}
 		if (values[6].trim().length() > 0) {
 			BiggMetaboliteCrossreferenceEntity xrefCas = new BiggMetaboliteCrossreferenceEntity(
-					GenericCrossReference.Type.DATABASE, "CAS", values[6]);
+					ReferenceType.DATABASE, "CAS", values[6]);
 			cpd.addCrossReference(xrefCas);			
 		}
 		
@@ -61,7 +61,7 @@ public class DefaultBiggMetaboliteParser {
 			String modelId = convertToModelCrossReference(Integer.parseInt(modelIntValue));
 			if (modelId != null) {
 				BiggMetaboliteCrossreferenceEntity xrefModel = new BiggMetaboliteCrossreferenceEntity(
-						GenericCrossReference.Type.MODEL, modelId, modelId);
+						ReferenceType.MODEL, modelId, modelId);
 				cpd.addCrossReference(xrefModel);
 			}
 		}

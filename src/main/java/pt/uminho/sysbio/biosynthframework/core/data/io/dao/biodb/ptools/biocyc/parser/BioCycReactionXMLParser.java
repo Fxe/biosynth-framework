@@ -14,8 +14,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.Orientation;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionLeftEntity;
@@ -466,9 +466,9 @@ public class BioCycReactionXMLParser  extends AbstractBioCycXMLParser
 					crossReference.setUrl(dblinkJsObj.getString("dblink-URL"));
 				
 				if (crossReference.getRef().equals("UNIPROT")) {
-					crossReference.setType(GenericCrossReference.Type.GENE);
+					crossReference.setType(ReferenceType.GENE);
 				} else {
-					crossReference.setType(GenericCrossReference.Type.DATABASE);
+					crossReference.setType(ReferenceType.DATABASE);
 				}
 				
 				crossReferences.add(crossReference);

@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,7 +27,7 @@ public class KeggCompoundMetaboliteCrossreferenceEntity extends GenericCrossRefe
 	}
 	
 	public KeggCompoundMetaboliteCrossreferenceEntity() { super(null, null, null); }
-	public KeggCompoundMetaboliteCrossreferenceEntity(Type type, String reference, String value) {
+	public KeggCompoundMetaboliteCrossreferenceEntity(ReferenceType type, String reference, String value) {
 		super(type, reference, value);
 	}
 	

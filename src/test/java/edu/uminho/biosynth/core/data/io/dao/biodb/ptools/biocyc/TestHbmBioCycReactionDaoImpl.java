@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEcNumberEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionEntity;
@@ -117,7 +117,7 @@ public class TestHbmBioCycReactionDaoImpl {
 		reaction.getEcNumbers().add(ecNumberEntity2);
 		
 		BioCycReactionCrossReferenceEntity crossReferenceEntity1 = new BioCycReactionCrossReferenceEntity();
-		crossReferenceEntity1.setType(GenericCrossReference.Type.DATABASE);
+		crossReferenceEntity1.setType(ReferenceType.DATABASE);
 		crossReferenceEntity1.setRef("AnotherDb");
 		crossReferenceEntity1.setValue("R123456");
 		crossReferenceEntity1.setBioCycReactionEntity(reaction);

@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteCrossreferenceEntity;
 
 public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser {
@@ -137,7 +137,7 @@ public class KeggDrugMetaboliteFlatFileParser extends AbstractKeggFlatFileParser
 			String[] xrefPair = xrefs[i].trim().split(": ");
 			for (String refValue : xrefPair[1].trim().split(" +")) {
 				KeggDrugMetaboliteCrossreferenceEntity xref = new KeggDrugMetaboliteCrossreferenceEntity(
-						GenericCrossReference.Type.DATABASE, xrefPair[0], refValue);
+						ReferenceType.DATABASE, xrefPair[0], refValue);
 				crossReferences.add(xref);
 			}
 		}

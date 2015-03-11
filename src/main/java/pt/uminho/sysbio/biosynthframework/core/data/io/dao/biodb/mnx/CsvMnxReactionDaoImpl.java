@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
@@ -62,7 +62,7 @@ public class CsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
 		String key = fields[1].trim();
 		String reference = fields[0].trim().split(":")[0].trim();
 		String entry = fields[0].trim().split(":")[1].trim();
-		MnxReactionCrossReferenceEntity xref = new MnxReactionCrossReferenceEntity(GenericCrossReference.Type.DATABASE, reference, entry);
+		MnxReactionCrossReferenceEntity xref = new MnxReactionCrossReferenceEntity(ReferenceType.DATABASE, reference, entry);
 //		if (fields.length > 3) xref.setDescription(fields[3].trim());
 //		xref.setEvidence(fields[2].trim());
 		if ( !xrefMap.containsKey(key)) {

@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.biodb.factory;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycReactionCrossReferenceEntity;
 
 public class BiocycReactionCrossreferenceFactory {
@@ -8,7 +8,7 @@ public class BiocycReactionCrossreferenceFactory {
 	private final String tag;
 	private final String entry;
 	private Long id;
-	private GenericCrossReference.Type type = GenericCrossReference.Type.DATABASE;
+	private ReferenceType type = ReferenceType.DATABASE;
 	private String url;
 	private String relationship;
 	

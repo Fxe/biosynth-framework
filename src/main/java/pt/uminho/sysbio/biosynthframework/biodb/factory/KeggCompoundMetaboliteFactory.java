@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynthframework.biodb.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 
@@ -42,7 +42,7 @@ public class KeggCompoundMetaboliteFactory {
 	
 	public KeggCompoundMetaboliteFactory withCrossreference(String tag, String entry) {
 		KeggCompoundMetaboliteCrossreferenceEntity crossreferenceEntity =
-				new KeggCompoundMetaboliteCrossreferenceEntity(GenericCrossReference.Type.DATABASE, tag, entry);
+				new KeggCompoundMetaboliteCrossreferenceEntity(ReferenceType.DATABASE, tag, entry);
 		this.crossReferences.add(crossreferenceEntity);
 		return this;
 	}

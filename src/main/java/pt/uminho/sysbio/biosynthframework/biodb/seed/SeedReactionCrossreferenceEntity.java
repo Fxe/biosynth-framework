@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 @Entity
 @Table(name="seed_reaction_crossreference")
@@ -23,7 +24,7 @@ public class SeedReactionCrossreferenceEntity extends GenericCrossReference{
 	public SeedReactionCrossreferenceEntity() {
 		super(null, null, null);
 	}
-	public SeedReactionCrossreferenceEntity(Type type, String reference, String value) {
+	public SeedReactionCrossreferenceEntity(ReferenceType type, String reference, String value) {
 		super(type, reference, value);
 	}
 	public SeedReactionCrossreferenceEntity(GenericCrossReference crossreference) {

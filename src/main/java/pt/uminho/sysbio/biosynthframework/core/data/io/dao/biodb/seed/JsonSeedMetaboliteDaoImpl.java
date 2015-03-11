@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
 import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedAliaseSet;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
@@ -106,7 +107,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 	
 	
 	@Deprecated
-	private void buildXRefMap(JsonNode node, GenericCrossReference.Type type, Map<String, List<GenericCrossReference>> map, String ref) {
+	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossReference>> map, String ref) {
 		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
@@ -219,32 +220,32 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 					if (name.startsWith("i") || name.equals("AraGEM.45632")) {
 						System.out.println("Building Refs for metabolic model - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.MODEL, refMap, name);
+								ReferenceType.MODEL, refMap, name);
 					} else 
 					if (name.equals("ModelSEED")) {
 						System.out.println("Building Refs for compound entries - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.SELF, refMap, "SEED");
+								ReferenceType.SELF, refMap, "SEED");
 					} else
 					if (name.equals("name")) {
 						System.out.println("Building Refs for compound synonyms - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.NAME, refMap, "SYNONYM");
+								ReferenceType.NAME, refMap, "SYNONYM");
 					} else
 					if (name.equals("KEGG")) {
 						System.out.println("Building Refs for compound KEGG XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "KEGG");
+								ReferenceType.DATABASE, refMap, "KEGG");
 					} else
 					if (name.equals("AraCyc.45632")) {
 						System.out.println("Building Refs for compound BioCyc ARA XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "BIOCYC:ARA");
+								ReferenceType.DATABASE, refMap, "BIOCYC:ARA");
 					} else
 					if (name.equals("MaizeCyc.45632")) {
 						System.out.println("Building Refs for compound PlantCyc maize XREF - " + name + " for " + attribute);
 						buildXRefMap(rootNode.get("aliasSets").get(i).get("aliases"), 
-								GenericCrossReference.Type.DATABASE, refMap, "PLANTCYC:MAIZE");
+								ReferenceType.DATABASE, refMap, "PLANTCYC:MAIZE");
 					} else
 					if (name.equals("obsolete")) {
 //						System.out.println("Building Refs for obsolete compounds - " + name + " for " + attribute);
@@ -337,7 +338,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_ATTRIBUTE, modelAliasSet, aliases));
 				for (String alias : aliases) {
-					SeedMetaboliteCrossreferenceEntity xref = new SeedMetaboliteCrossreferenceEntity(GenericCrossReference.Type.MODEL, modelAliasSet, alias);
+					SeedMetaboliteCrossreferenceEntity xref = new SeedMetaboliteCrossreferenceEntity(ReferenceType.MODEL, modelAliasSet, alias);
 					xrefs.add(xref);
 				}
 			}
@@ -348,7 +349,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 				if (aliases == null) aliases = new HashSet<> ();
 				LOGGER.trace(String.format("%s:%s - %s", ALIAS_ATTRIBUTE, databaseAlias, aliases));
 				for (String alias : aliases) {
-					SeedMetaboliteCrossreferenceEntity xref = new SeedMetaboliteCrossreferenceEntity(GenericCrossReference.Type.DATABASE, "KEGG", alias);
+					SeedMetaboliteCrossreferenceEntity xref = new SeedMetaboliteCrossreferenceEntity(ReferenceType.DATABASE, "KEGG", alias);
 					xrefs.add(xref);
 				}
 			}
