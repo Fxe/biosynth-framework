@@ -31,12 +31,25 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		reactionDao = new Neo4jReactionDao(db);
 	}
 	
-	public Set<Long> mapReactions(Set<Long> left, Set<Long> right) {
+	public Set<Long> mapReactions(GenericReaction pivot, Set<Long> left, Set<Long> right, List<GenericReaction> reactions) {
 		Set<Long> superResult = super.mapReactions(left, right);
 		
-		if (superResult.isEmpty()) return superResult;
+		if (superResult.isEmpty()) {
+			LOGGER.debug("No similar results - terminated");
+			return superResult;
+		}
+		//vote for a pivot
+//		long pivotId = superResult.iterator().next();
 		
-		GenericReaction rxnPivot = null;
+		List<GenericReaction> reactionsToCompare = null;
+		if (reactions == null) {
+			reactionsToCompare = new ArrayList<> ();
+		} else {
+			reactionsToCompare = reactions;
+			reactionsToCompare.clear();
+		}
+		
+		GenericReaction rxnPivot = pivot;
 		
 		for (Long rxnId : superResult) {
 			
@@ -48,22 +61,22 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 				defaultReaction.setProductStoichiometry(
 						this.reconciliateMetaboliteIds(defaultReaction.getRightStoichiometry()));
 				
-				if (rxnId == this.initialNode.getId()) {
-					reactions.add(defaultReaction);
-					rxnPivot = defaultReaction;
-				} else {
-					reactions.add(defaultReaction);
-				}
+				reactionsToCompare.add(defaultReaction);
 			} else {
 				LOGGER.warn("Reaction not found: " + rxnId);
 			}
 		}
+		reactionsToCompare.add(pivot);
 		//separate stoichiometry
-		IntegrationUtils.alignReactions(reactions);
+		IntegrationUtils.alignReactions(reactionsToCompare);
 		
 		Set<Long> strictStoichMatchSet = new HashSet<> ();
 		
 //		GenericReaction rxnPivot = reactions.get(0);
+		LOGGER.debug("Remove Proton {}", protonId);
+		rxnPivot.getLeftStoichiometry().remove(Long.toString(protonId));
+		rxnPivot.getRightStoichiometry().remove(Long.toString(protonId));
+		LOGGER.debug("{} <?> {}", rxnPivot.getLeftStoichiometry().keySet(), rxnPivot.getRightStoichiometry());
 		int l_pivot = rxnPivot.getLeftStoichiometry().size();
 		int r_pivot = rxnPivot.getRightStoichiometry().size();
 		
@@ -73,8 +86,8 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		LOGGER.debug(String.format("PIVOT::[%d]%s -> %s / %s", 
 				rxnPivot.getId(), rxnPivot.getEntry(), 
 				rxnPivot.getReactantStoichiometry().keySet(), rxnPivot.getProductStoichiometry().keySet()));
-		for (int i = 0; i < reactions.size(); i++) {
-			GenericReaction rxn = reactions.get(i);
+		for (int i = 0; i < reactionsToCompare.size(); i++) {
+			GenericReaction rxn = reactionsToCompare.get(i);
 			if (rxn.getReactantStoichiometry().size() == l_pivot
 					&& rxn.getProductStoichiometry().size() == r_pivot) {
 				LOGGER.debug(String.format("OK   ::[%d]%s -> %s / %s", 

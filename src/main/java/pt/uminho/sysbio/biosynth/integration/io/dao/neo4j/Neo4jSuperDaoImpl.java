@@ -190,4 +190,20 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 		return true;
 	}
 
+	@Override
+	public boolean unlinkIfExists(long src, long dst) {
+		Node srcNode = graphDatabaseService.getNodeById(src);
+		LOGGER.trace("Link if exists {} -[*]-> {}", src, dst);
+		boolean modified = false;
+		for (Relationship relationship : srcNode.getRelationships(Direction.OUTGOING)) {
+			Node other = relationship.getOtherNode(srcNode);
+			if (other.getId() == dst) {
+				LOGGER.trace("Deleted Link {}:{} - {}", relationship.getId(), relationship.getType().name(), Neo4jUtils.getPropertiesMap(relationship));
+				relationship.delete();
+				modified = true;
+			}
+		}
+		return modified;
+	}
+
 }

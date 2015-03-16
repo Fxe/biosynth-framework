@@ -87,6 +87,23 @@ public class Neo4jUtils {
 		return nodes;
 	}
 	
+	public static Set<Node> collectNodeRelationshipNodes(Node node, Label...labels) {
+		Set<Node> nodes = new HashSet<> ();
+		
+		for (Relationship relationship : node.getRelationships()) {
+			Node other = relationship.getOtherNode(node);
+			if (hasAnyLabel(other, labels)) nodes.add(other);
+		}
+		return nodes;
+	}
+	
+	public static boolean hasAnyLabel(Node node, Label...labels) {
+		for (Label label : labels) {
+			if (node.hasLabel(label)) return true;
+		}
+		return false;
+	}
+	
 	public static Set<Long> collectNodeRelationshipNodeIds(Node node) {
 		Set<Long> nodes = new HashSet<> ();
 		
@@ -299,6 +316,8 @@ public class Neo4jUtils {
 		return nodes.iterator().next();
 	}
 	
+
+	
 	public static Node mergeUniqueNode(Label label, String key, Object value, ExecutionEngine ee) {
 		String query = String.format("MERGE (n:%s {%s:{%s}}) "
 				+ "ON CREATE SET n.created_at = timestamp(), n.updated_at = timestamp() "
@@ -340,4 +359,6 @@ public class Neo4jUtils {
 		}
 		return i;
 	}
+
+
 }

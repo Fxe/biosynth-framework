@@ -1,7 +1,11 @@
 package pt.uminho.sysbio.biosynth.integration.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,6 +117,21 @@ public class BasicIntegrationService implements IntegrationService {
 	public IntegratedMember getIntegratedMemberById(long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public Map<IntegrationSet, Set<IntegratedCluster>> findIntegratedClusterByMemberReferenceId(
+			long refId) {
+		Map<IntegrationSet, Set<IntegratedCluster>> a = new HashMap<> ();
+		for (long iidId : this.meta.getAllIntegrationSetsId()) {
+			IntegrationSet integrationSet = this.meta.getIntegrationSet(iidId);
+			List<IntegratedCluster> ctr = this.meta.getIntegratedClusterByMemberIds(iidId, new Long[]{refId});
+			System.out.println(integrationSet);
+			System.out.println(ctr.size());
+			a.put(integrationSet, new HashSet<> (ctr));
+		}
+		
+		return a;
 	}
 
 }

@@ -179,11 +179,15 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 		for (Long ceid : compoundToReactionMap.keySet()) {
 			strongIntersection.retainAll(compoundToReactionMap.get(ceid));
 		}
+		
+		LOGGER.debug("Intersection - {}", strongIntersection.size());
 //		strongIntersection.remove(eid);
 		
 		//filter remaining
+		/*
 		Set<Long> remove = new HashSet<> ();
 		for (Long reid : strongIntersection) {
+			System.out.println(db.getNodeById(reid).getProperty("entry"));
 			Node rxnNode = db.getNodeById(reid);
 			Set<Long> compounds = Neo4jUtils.collectNodeRelationshipNodeIds(
 					rxnNode, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
@@ -193,6 +197,7 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 			}
 		}
 		strongIntersection.removeAll(remove);
+		*/
 		
 //		System.out.println(strongIntersection);
 		

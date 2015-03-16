@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
@@ -21,4 +23,5 @@ public interface IntegrationService {
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, long iid);
 	
 	public IntegratedMember getIntegratedMemberById(long id);
+	public Map<IntegrationSet, Set<IntegratedCluster>> findIntegratedClusterByMemberReferenceId(long refId);
 }

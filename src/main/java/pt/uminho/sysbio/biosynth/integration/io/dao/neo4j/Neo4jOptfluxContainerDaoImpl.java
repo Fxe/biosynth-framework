@@ -15,18 +15,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
+import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
+import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecieReference;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
-import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.ExtendedModelMetabolite;
+import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionLeft;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionRight;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
-import pt.uminho.sysbio.biosynthframework.io.DefaultMetabolicModelDao;
 import pt.uminho.sysbio.biosynthframework.io.ExtendedMetabolicModelDao;
 
 /**
@@ -72,11 +74,13 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		
 		try {
 			Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", mmd.getEntry(), executionEngine);
-			Map<String, Object> properties = a.extractProperties(mmd, DefaultMetabolicModelEntity.class);
+			Map<String, Object> properties = a.extractProperties(mmd, ExtendedMetabolicModelEntity.class);
 			Neo4jUtils.setPropertiesMap(properties, node);
 			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
+			mmd.setId(node.getId());
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -156,6 +160,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 			mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_compartment);
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -188,7 +193,40 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		ExtendedMetaboliteSpecie spi = new ExtendedMetaboliteSpecie();
 		Neo4jMapper.nodeToPropertyContainer(node, spi);
 		spi.setId(node.getId());
+		spi.setCrossreferences(getMetaboliteCrossreferences(spi.getId()));
 		return spi;
+	}
+	
+	public List<DefaultMetaboliteSpecieReference> getMetaboliteCrossreferences(Long id) {
+		List<DefaultMetaboliteSpecieReference> refs = new ArrayList<> ();
+		Node node = graphDatabaseService.getNodeById(id);
+		for (Node cpd : Neo4jUtils.collectNodeRelationshipNodes(node, MetabolicModelRelationshipType.has_crossreference_to)) {
+			if (cpd.hasLabel(GlobalLabel.Metabolite)) {
+				DefaultMetaboliteSpecieReference reference = new DefaultMetaboliteSpecieReference();
+				reference.setId(cpd.getId());
+				reference.setRef((String) cpd.getProperty("major_label"));
+				reference.setValue((String) cpd.getProperty("entry"));
+				reference.setType(ReferenceType.DATABASE);
+				refs.add(reference);
+			} else {
+				LOGGER.warn("Specie -[has_crossreference_to]-> {}", Neo4jUtils.getLabels(cpd));
+			}
+		}
+		return refs;
+	}
+	
+	public List<GenericCrossReference> getCrossreferences(Long id) {
+		List<GenericCrossReference> refs = new ArrayList<> ();
+		Node node = graphDatabaseService.getNodeById(id);
+		for (Node refNode : Neo4jUtils.collectNodeRelationshipNodes(node, MetabolicModelRelationshipType.has_crossreference_to)) {
+			GenericCrossReference reference = new GenericCrossReference();
+			reference.setId(refNode.getId());
+			reference.setRef((String) refNode.getProperty("major_label"));
+			reference.setValue((String) refNode.getProperty("entry"));
+			reference.setType(ReferenceType.DATABASE);
+			refs.add(reference);
+		}
+		return refs;
 	}
 
 	@Override
@@ -206,7 +244,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		try {
 			String entry = String.format("%s@%s", spi.getEntry(), mmd.getEntry());
 			Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.MetaboliteSpecie, "entry", entry, executionEngine);
-			Map<String, Object> properties = a.extractProperties(spi, DefaultMetaboliteSpecie.class);
+			Map<String, Object> properties = a.extractProperties(spi, ExtendedMetaboliteSpecie.class);
 			properties.remove("entry");
 			Neo4jUtils.setPropertiesMap(properties, node);
 			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
@@ -220,6 +258,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 			node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		return spi;
@@ -247,7 +286,9 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		if (node == null || !node.hasLabel(MetabolicModelLabel.ModelReaction)) {
 			return null;
 		}
+		
 		OptfluxContainerReactionEntity rxn = Neo4jMapper.nodeToModelReaction(node);
+		rxn.setCrossreferences(getCrossreferences(rxn.getId()));
 //		rxn.setRight(right);
 		return rxn;
 	}
@@ -285,6 +326,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 			}
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -325,6 +367,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		ExtendedModelMetabolite cpd = new ExtendedModelMetabolite();
 		Neo4jMapper.nodeToPropertyContainer(node, cpd);
 		cpd.setId(node.getId());
+		cpd.setCrossreferences(getMetaboliteCrossreferences(node.getId()));
 		return cpd;
 	}
 
@@ -348,7 +391,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 			String entry = String.format("%s@%s", cpd.getEntry(), mmd.getEntry());
 			Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, executionEngine);
 			LOGGER.debug("Created {}", node);
-			Map<String, Object> properties = a.extractProperties(cpd, DefaultModelMetaboliteEntity.class);
+			Map<String, Object> properties = a.extractProperties(cpd, ExtendedModelMetabolite.class);
 			properties.remove("entry");
 			Neo4jUtils.setPropertiesMap(properties, node);
 			node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
@@ -363,6 +406,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 			cpd.setId(node.getId());
 		} catch (Exception e) {
 			LOGGER.error("E - {}", e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -382,6 +426,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 	public Set<String> getAllModelMetaboliteEntries(
 			ExtendedMetabolicModelEntity model) {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

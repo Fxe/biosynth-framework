@@ -62,7 +62,14 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
 	@Override
 	public GraphMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
-		MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(tag);
+		MetaboliteMajorLabel majorLabel;
+		try {
+			majorLabel = MetaboliteMajorLabel.valueOf(tag);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("IA - {}", e.getMessage());
+			return null;
+		}
+		
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
 				.findNodesByLabelAndProperty(majorLabel, "entry", entry));
 		

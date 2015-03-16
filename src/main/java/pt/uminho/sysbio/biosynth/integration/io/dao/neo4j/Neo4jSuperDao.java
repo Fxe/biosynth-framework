@@ -18,6 +18,7 @@ public interface Neo4jSuperDao {
 	public void delete(Node node);
 	public boolean linkIfNotExists(long src, long dst, 
 			RelationshipType relationshipType, Map<String, Object> properties);
+	public boolean unlinkIfExists(long src, long dst);
 	
 	
 }

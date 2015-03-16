@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Direction;
@@ -230,7 +231,21 @@ public class Neo4jMapper {
 		rxn.setGeneRule((String) node.getProperty("geneRule", null));
 		rxn.setLowerBound((Double) node.getProperty("lowerBound", null));
 		rxn.setUpperBound((Double) node.getProperty("upperBound", null));
+		
+		rxn.setLeftStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.left_component));
+		rxn.setRightStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.right_component));
 		return rxn;
+	}
+	
+	public static Map<String, Double> getStoichiometry(Node node, MetabolicModelRelationshipType r) {
+		Map<String, Double> s = new HashMap<> ();
+		for (Relationship relationship : node.getRelationships(r)) {
+			Node other = relationship.getOtherNode(node);
+			String entry = ((String)other.getProperty("entry")).split("@")[0];
+			double val = (double) relationship.getProperty("stoichiometry");
+			s.put(entry, val);
+		}
+		return s;
 	}
 
 	public static DefaultModelMetaboliteEntity nodeToModelMetabolite(Node node) {

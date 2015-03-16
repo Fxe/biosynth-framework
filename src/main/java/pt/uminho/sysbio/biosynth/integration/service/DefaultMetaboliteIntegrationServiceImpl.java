@@ -314,5 +314,4 @@ implements MetaboliteIntegrationService {
 		return this.meta.getIntegratedMemberById(id);
 	}
 	
-
 }
