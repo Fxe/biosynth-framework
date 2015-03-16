@@ -21,7 +21,7 @@ public class BiocycFirstDegreeCrossreferenceClusteringStrategy extends AbstractN
 	
 	private String getIsotopeFormula(Node node) {
 		Set<Node> formulaNodes = new HashSet<> ();
-		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
+		for (Relationship relationship : node.getRelationships(MetaboliteRelationshipType.has_molecular_formula)) {
 			formulaNodes.add(relationship.getOtherNode(node));
 		}
 		
@@ -48,7 +48,7 @@ public class BiocycFirstDegreeCrossreferenceClusteringStrategy extends AbstractN
 		String formula = this.getIsotopeFormula(initialNode);
 		Integer charge = this.initialNode.hasProperty("charge")?(Integer)this.initialNode.getProperty("charge"):null;
 		for (Relationship relationship : this.initialNode
-				.getRelationships(MetaboliteRelationshipType.HasCrossreferenceTo)) {
+				.getRelationships(MetaboliteRelationshipType.has_crossreference_to)) {
 			
 			Node other = relationship.getOtherNode(initialNode);
 			String otherInchi = other.hasProperty("inchi")?(String)other.getProperty("inchi"):null;

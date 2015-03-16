@@ -82,9 +82,9 @@ public class YetAnotherReactionDao implements ReactionDao<GenericReaction> {
 		rxn.setId(reactionNode.getId());
 		rxn.setName((String) reactionNode.getProperty("name", null));
 
-		Map<String, Double> left = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.Left, iid);
+		Map<String, Double> left = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.left_component, iid);
 		
-		Map<String, Double> right = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.Right, iid);
+		Map<String, Double> right = this.loadStoichiometryMap(reactionNode, ReactionRelationshipType.right_component, iid);
 //		for (Long nodeId : collectNodes(reactionNode, ReactionRelationshipType.Right)) {
 //			Node node = graphDatabaseService.getNodeById(nodeId);
 //			String integratedEntry = metadataDao.lookupClusterEntryByMemberId(iid, nodeId);

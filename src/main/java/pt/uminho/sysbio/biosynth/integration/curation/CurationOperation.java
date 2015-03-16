@@ -17,11 +17,12 @@ import org.hibernate.annotations.FetchMode;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name="aaa")
-public class CurationCluster {
+public class CurationOperation {
 
 	@Id
 	private long id;
@@ -33,9 +34,17 @@ public class CurationCluster {
 	public String getEntry() { return entry;}
 	public void setEntry(String entry) { this.entry = entry; }
 	
-	private String type;
-	public String getType() { return type;}
-	public void setType(String type) { this.type = type;}
+	@Column
+	private String operationType;
+	public String getOperationType() { return operationType;}
+	public void setOperationType(String operationType) { this.operationType = operationType;}
+	public void setOperationType(Object operationType) { this.operationType = operationType.toString();}
+
+	@Column
+	private String clusterType;
+	public String getClusterType() { return clusterType;}
+	public void setClusterType(String clusterType) { this.clusterType = clusterType;}
+	public void setClusterType(Object clusterType) { this.clusterType = clusterType.toString();}
 
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="pk.cluster")
@@ -45,12 +54,33 @@ public class CurationCluster {
 	public List<IntegratedClusterMember> getMembers() { return members;}
 	public void setMembers(List<IntegratedClusterMember> members) { this.members = members;}
 	
+	private List<IntegratedMember> exclude = new ArrayList<> ();
+	public List<IntegratedMember> getExclude() { return exclude;}
+	public void setExclude(List<IntegratedMember> exclude) { this.exclude = exclude;}
+
 	private CurationSet curationSet;
 	public CurationSet getCurationSet() { return curationSet;}
 	public void setCurationSet(CurationSet curationSet) {
 		this.curationSet = curationSet;
 	}
 	
+	private long createdAt;
+	public long getCreatedAt() { return createdAt;}
+	public void setCreatedAt(long createdAt) { this.createdAt = createdAt;}
+
+	private CurationUser curationUser;
+	public CurationUser getCurationUser() { return curationUser; }
+	public void setCurationUser(CurationUser curationUser) { this.curationUser = curationUser;}
+
+	private String clusterRelationship;
+	public String getClusterRelationship() { return clusterRelationship;}
+	public void setClusterRelationship(String clusterRelationship) {
+		this.clusterRelationship = clusterRelationship;
+	}
+	public void setClusterRelationship(Object clusterRelationship) {
+		this.clusterRelationship = clusterRelationship.toString();
+	}
+
 	private List<IntegratedCluster> integratedClusters = new ArrayList<> ();
 	public List<IntegratedCluster> getIntegratedClusters() { return integratedClusters;}
 	public void setIntegratedClusters(List<IntegratedCluster> integratedClusters) { 

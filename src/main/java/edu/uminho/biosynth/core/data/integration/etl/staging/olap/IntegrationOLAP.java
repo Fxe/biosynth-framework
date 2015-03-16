@@ -10,16 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.collection.internal.PersistentSet;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
@@ -30,9 +27,10 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 import edu.uminho.biosynth.core.data.integration.generator.IKeyGenerator;
 
+@SuppressWarnings("deprecation")
 public class IntegrationOLAP {
 
-	private static Logger LOG = Logger.getLogger(IntegrationOLAP.class);
+	private static Logger LOG = LoggerFactory.getLogger(IntegrationOLAP.class);
 	
 	private boolean destroyInactiveClusters = true;
 	

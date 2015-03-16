@@ -10,7 +10,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
-public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String> {
+public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String, String> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BiobaseMetaboliteEtlDictionary.class);
 	
@@ -21,8 +21,12 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 	}
 	
 	@Override
-	public String translate(String lookup) {
+	public String translate(String lookup, String reference) {
 		String result = null;
+		
+		if (lookup.toLowerCase().trim().equals("kegg")) {
+			return translateKegg(lookup, reference);
+		}
 		
 		if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
 				 clazz.equals(KeggDrugMetaboliteEntity.class) || 
@@ -37,7 +41,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 		return result;
 	}
 	
-	public String translate(String lookup, String entry) {
+	public String translateKegg(String lookup, String entry) {
 		String result = null;
 		
 		if (entry.length() == 6 && lookup.toLowerCase().equals("kegg")) {

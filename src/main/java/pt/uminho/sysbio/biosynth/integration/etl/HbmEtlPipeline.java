@@ -7,13 +7,11 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.Metabolite;
 
-
-public class HbmMetaboliteEtlPipeline<SRC extends Metabolite, DST extends Metabolite>
+public class HbmEtlPipeline<SRC, DST>
 implements EtlPipeline<SRC, DST> {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(HbmMetaboliteEtlPipeline.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(HbmEtlPipeline.class);
 	
 	private SessionFactory sessionFactory;
 	
@@ -63,7 +61,7 @@ implements EtlPipeline<SRC, DST> {
 		
 		//DST = ETL TRANSFORM(SRC)
 		DST dst = etlTransform.etlTransform(src);
-
+		System.out.println(dst);
 		//ETL LOAD(DST)
 		if (!skipLoad) etlLoad.etlLoad(dst);
 		

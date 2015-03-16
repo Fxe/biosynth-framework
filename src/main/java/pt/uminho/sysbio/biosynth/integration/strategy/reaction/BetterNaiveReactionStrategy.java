@@ -27,6 +27,8 @@ public class BetterNaiveReactionStrategy extends LesserNaiveReactionStrategy {
 	public double getOffsetScore() { return offsetScore;}
 	public void setOffsetScore(double offsetScore) { this.offsetScore = offsetScore;}
 
+	
+	
 	@Override
 	public Set<Long> execute() {
 		Set<Long> superResult = super.execute();

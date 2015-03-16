@@ -41,7 +41,7 @@ public class TestIntegrationStatisticsServiceImpl {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File(HBM_CFG));
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
 		HbmIntegrationMetadataDaoImpl hbmChimeraMetadataDaoImpl = new HbmIntegrationMetadataDaoImpl();
 		hbmChimeraMetadataDaoImpl.setSessionFactory(sessionFactory);
 		centralMetadataDao = hbmChimeraMetadataDaoImpl;

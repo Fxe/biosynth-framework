@@ -1,104 +1,131 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractReactionTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionLeftEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionRightEntity;
 
 public class KeggReactionTransform 
 extends AbstractReactionTransform<KeggReactionEntity>{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KeggReactionTransform.class);
 	private static final String KEGG_REACTION_LABEL = ReactionMajorLabel.LigandReaction.toString();
-	private static final String KEGG_COMPOUND_METABOLITE_LABEL = MetaboliteMajorLabel.LigandCompound.toString();
-	private static final String KEGG_GLYCAN_METABOLITE_LABEL = MetaboliteMajorLabel.LigandGlycan.toString();
+//	private static final String KEGG_COMPOUND_METABOLITE_LABEL = MetaboliteMajorLabel.LigandCompound.toString();
+//	private static final String KEGG_GLYCAN_METABOLITE_LABEL = MetaboliteMajorLabel.LigandGlycan.toString();
 	
-	public KeggReactionTransform() { super(KEGG_REACTION_LABEL);}
-
-	@Override
-	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, KeggReactionEntity entity) {
-		for(KeggReactionLeftEntity left : entity.getLeft()) {
-			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
-			
-			String entry = left.getCpdEntry();
-			proxyEntity.setEntry(entry);
-			proxyEntity.addLabel("Metabolite");
-			switch (entry.charAt(0)) {
-				case 'C':
-					proxyEntity.setMajorLabel(KEGG_COMPOUND_METABOLITE_LABEL);
-					break;
-				case 'G':
-					proxyEntity.setMajorLabel(KEGG_GLYCAN_METABOLITE_LABEL);
-					break;
-				default:
-					break;
-			}
-			
-			Map<String, Object> propertyMap = null; 
-			try {
-				propertyMap = this.propertyContainerBuilder.extractProperties(left, left.getClass());
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage());
-				propertyMap = new HashMap<> ();
-				propertyMap.put("stoichiometry", left.getStoichiometry());
-			}
-			
-			centralReactionEntity.getLeft().put(proxyEntity, propertyMap);
-		}
-	}
-	
-	@Override
-	protected void setupRightMetabolites(
-			GraphReactionEntity centralReactionEntity,
-			KeggReactionEntity reaction) {
-		
-		for(KeggReactionRightEntity right : reaction.getRight()) {
-			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
-			
-			String entry = right.getCpdEntry();
-			proxyEntity.setEntry(entry);
-			proxyEntity.addLabel("Metabolite");
-			switch (entry.charAt(0)) {
-				case 'C':
-					proxyEntity.setMajorLabel(KEGG_COMPOUND_METABOLITE_LABEL);
-					break;
-				case 'G':
-					proxyEntity.setMajorLabel(KEGG_GLYCAN_METABOLITE_LABEL);
-					break;
-				default:
-					break;
-			}
-			
-			Map<String, Object> propertyMap = null; 
-			try {
-				propertyMap = this.propertyContainerBuilder.extractProperties(right, right.getClass());
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage());
-				propertyMap = new HashMap<> ();
-				propertyMap.put("stoichiometry", right.getStoichiometry());
-			}
-			
-			centralReactionEntity.getRight().put(proxyEntity, propertyMap);
-		}
-	}
+	public KeggReactionTransform() { super(KEGG_REACTION_LABEL, new BiobaseMetaboliteEtlDictionary<>(KeggCompoundMetaboliteEntity.class));}
 
 	@Override
 	protected void configureAdditionalPropertyLinks(
 			GraphReactionEntity centralReactionEntity,
 			KeggReactionEntity reaction) {
-//		centralMetaboliteEntity.putProperty("", value);
+		
+		LOGGER.debug("Building additional property links ...");
+		
+		for (String pwy : reaction.getPathways()) {
+			LOGGER.debug("Add pahtway link: " + pwy);
+			centralReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(pwy)
+							.withMajorLabel(GlobalLabel.KeggPathway)
+							.withLabel(GlobalLabel.KEGG)
+							.withLabel(GlobalLabel.MetabolicPathway)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildReactionEdge(
+							ReactionRelationshipType.in_pathway)));
+		}
+		
+		for (String ko : reaction.getOrthologies()) {
+			LOGGER.debug("Add pahtway orthology: " + ko);
+			centralReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(ko)
+							.withMajorLabel(GlobalLabel.KeggOrthology)
+							.withLabel(GlobalLabel.KEGG)
+							.withLabel(GlobalLabel.Orthology)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildReactionEdge(
+							ReactionRelationshipType.has_orthology)));
+		}
+		
+		for (String ecn : reaction.getEnzymes()) {
+			LOGGER.debug("Add EC number: " + ecn);
+			centralReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(ecn)
+							.withMajorLabel(GlobalLabel.EnzymeCommission)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildReactionEdge(
+							ReactionRelationshipType.has_ec_number)));
+		}
+		
+		for (String rpr : reaction.getRpairs()) {
+			LOGGER.debug("Add Reaction Pair: " + rpr);
+			centralReactionEntity.addConnectedEntity(
+					this.buildPair(
+					new SomeNodeFactory()
+							.withEntry(rpr)
+							.withMajorLabel(GlobalLabel.KeggReactionPair)
+							.buildGenericNodeEntity(), 
+					new SomeNodeFactory().buildReactionEdge(
+							ReactionRelationshipType.has_reaction_pair)));
+		}
+//			Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
+//			AbstractGraphEdgeEntity edge = buildSomeEdge(null, ReactionRelationshipType.in_pathway.toString());
+//			Map<String, Object> properties = new HashMap<> ();
+//			properties.put("entry", pwy);
+//			AbstractGraphNodeEntity node = buildSomeNode(properties, 
+//					GlobalLabel.KeggPathway.toString(), 
+//					GlobalLabel.KEGG.toString(),
+//					GlobalLabel.MetabolicPathway.toString());
+//			node.uniqueKey = "entry";
+//			link.put(edge, node);
+//			centralReactionEntity.links.add(link);
+			
+//			Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
+//			AbstractGraphEdgeEntity edge = buildSomeEdge(null, ReactionRelationshipType.has_orthology.toString());
+//			Map<String, Object> properties = new HashMap<> ();
+//			properties.put("entry", ko);
+//			AbstractGraphNodeEntity node = buildSomeNode(properties, 
+//					GlobalLabel.KeggOrthology.toString(), 
+//					GlobalLabel.KEGG.toString(),
+//					GlobalLabel.Orthology.toString());
+//			node.uniqueKey = "entry";
+//			link.put(edge, node);
+//			centralReactionEntity.links.add(link);
+//			LOGGER.debug(ecn);
+//			Map<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> link = new HashMap<> ();
+//			AbstractGraphEdgeEntity edge = buildSomeEdge(null, ReactionRelationshipType.has_ec_number.toString());
+//			Map<String, Object> properties = new HashMap<> ();
+//			properties.put(PROPERTY_UNIQUE_KEY, ecn);
+//			AbstractGraphNodeEntity node = buildSomeNode(properties, 
+//					null, 
+//					GlobalLabel.EnzymeCommission.toString());
+//			node.uniqueKey = PROPERTY_UNIQUE_KEY;
+//			link.put(edge, node);
+//			centralReactionEntity.links.add(link);
+		
 		
 	}
+	
+	@Override
+	protected void configureNameLink(GraphReactionEntity centralReactionEntity, KeggReactionEntity entity) {
+		for (String name : entity.getNames()) {
+			this.configureNameLink(centralReactionEntity, name);
+		}
+	};
 
 	@Override
 	protected void configureCrossreferences(
@@ -107,139 +134,92 @@ extends AbstractReactionTransform<KeggReactionEntity>{
 		
 		LOGGER.debug("Ligand Reaction does not support cross-references");
 	}
-	
-//	private void addIfNotNull(String propertie, Object value, Map<String, Object> properties) {
-//		if (value != null) {
-//			properties.put(propertie, value);
-//		}
-//	}
+
+	@Override
+	protected String resolveComponentLabel(String entry) {
+		entry = entry.toUpperCase();
+		String label = null;
+		switch (entry.charAt(0)) {
+			case 'C':
+				label = MetaboliteMajorLabel.LigandCompound.toString();
+				break;
+			case 'G':
+				label = MetaboliteMajorLabel.LigandGlycan.toString();
+				break;
+			case 'D':
+				label = MetaboliteMajorLabel.LigandDrug.toString();
+				break;
+			default:
+				label = MetaboliteMajorLabel.NOTFOUND.toString();
+				break;
+		}
+		return label;
+	}
 	
 //	@Override
-//	public CentralDataReactionEntity etlTransform(KeggReactionEntity cpd) {
-//		CentralDataReactionEntity entity = new CentralDataReactionEntity();
-//		
-//		entity.setMajorLabel(ReactionNodeLabel.LigandReaction.toString());
-//		
-//		entity.addLabel(ReactionNodeLabel.Reaction.toString());
-//		entity.addLabel(ReactionNodeLabel.KEGG.toString());
-//		entity.addLabel(ReactionNodeLabel.LigandReaction.toString());
-//		
-//		entity.setEntry(cpd.getEntry());
-//		Map<String, Object> properties = new HashMap<> ();
-//		
-//		this.addIfNotNull("name", cpd.getName(), properties);
-//		this.addIfNotNull("comment", cpd.getComment(), properties);
-//		this.addIfNotNull("remark", cpd.getRemark(), properties);
-//		this.addIfNotNull("definition", cpd.getDefinition(), properties);
-//		this.addIfNotNull("equation", cpd.getEquation(), properties);
-//		
-//		
-//		CentralDataReactionProperty nameProp = 
-//				this.buildSimpleProperty("name", cpd.getName(), 
-//						ReactionRelationshipType.HasName, 
-//						ReactionPropertyLabel.Name, ReactionPropertyLabel.Reaction);
-//		
-//		entity.getReactionProperties().add(nameProp);
-//		
-//		for (String ecnumber : cpd.getEnzymes()) {
-//			CentralDataReactionProperty ecnProp = 
-//					this.buildSimpleProperty("ecn", ecnumber, 
-//							ReactionRelationshipType.HasECNumber, 
-//							ReactionPropertyLabel.ECNumber);
-//			entity.getReactionProperties().add(ecnProp);
-//		}
-//		
-//		for (String pathway : cpd.getPathways()) {
-//			CentralDataReactionProperty pathwayProp = 
-//					this.buildSimpleProperty("entry", pathway, 
-//							ReactionRelationshipType.InPathway, 
-//							ReactionPropertyLabel.Pathway);
-//			entity.getReactionProperties().add(pathwayProp);
-//		}
-//		
-//		for (String orthology : cpd.getOrthologies()) {
-//			CentralDataReactionProperty orthologyProp = 
-//					this.buildSimpleProperty("entry", orthology, 
-//							ReactionRelationshipType.InOrthology, 
-//							ReactionPropertyLabel.Orthology);
-//			entity.getReactionProperties().add(orthologyProp);
-//		}
-//		
-//		for (KeggReactionLeftEntity leftEntity : cpd.getLeft()) {
-//			CentralDataReactionProperty dataReactionProperty = 
-//					this.buildStoichiometryProperty(
-//							leftEntity.getCpdEntry(), 
-//							leftEntity.getCoefficient(), 
-//							leftEntity.getValue(), 
-//							ReactionRelationshipType.Left.toString());
-//			entity.getReactionStoichiometryProperties().add(dataReactionProperty);
-//		}
-//		
-//		for (KeggReactionRightEntity rightEntity : cpd.getRight()) {
-//			CentralDataReactionProperty dataReactionProperty = 
-//					this.buildStoichiometryProperty(
-//							rightEntity.getCpdEntry(), 
-//							rightEntity.getCoefficient(), 
-//							rightEntity.getValue(), 
-//							ReactionRelationshipType.Right.toString());
+//	protected void setupLeftMetabolites(GraphReactionEntity centralReactionEntity, KeggReactionEntity entity) {
+//		for(KeggReactionLeftEntity left : entity.getLeft()) {
+//			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
 //			
-//			entity.getReactionStoichiometryProperties().add(dataReactionProperty);
+//			String entry = left.getCpdEntry();
+//			proxyEntity.setEntry(entry);
+//			proxyEntity.addLabel("Metabolite");
+//			switch (entry.charAt(0)) {
+//				case 'C':
+//					proxyEntity.setMajorLabel(KEGG_COMPOUND_METABOLITE_LABEL);
+//					break;
+//				case 'G':
+//					proxyEntity.setMajorLabel(KEGG_GLYCAN_METABOLITE_LABEL);
+//					break;
+//				default:
+//					break;
+//			}
+//			
+//			Map<String, Object> propertyMap = null; 
+//			try {
+//				propertyMap = this.propertyContainerBuilder.extractProperties(left, left.getClass());
+//			} catch (Exception e) {
+//				LOGGER.error(e.getMessage());
+//				propertyMap = new HashMap<> ();
+//				propertyMap.put("stoichiometry", left.getStoichiometry());
+//			}
+//			
+//			centralReactionEntity.getLeft().put(proxyEntity, propertyMap);
 //		}
-//		
-//		entity.setProperties(properties);
-//		
-//		return entity;
 //	}
 //	
-//	private CentralDataReactionProperty buildSimpleProperty(
-//			String key, Object value, 
-//			ReactionRelationshipType relationship, 
-//			ReactionPropertyLabel label, 
-//			ReactionPropertyLabel...labels) {
+//	@Override
+//	protected void setupRightMetabolites(
+//			GraphReactionEntity centralReactionEntity,
+//			KeggReactionEntity reaction) {
 //		
-//		CentralDataReactionProperty simpleProperty = new CentralDataReactionProperty();
-//		simpleProperty.setMajorLabel(label.toString());
-//		for (ReactionPropertyLabel l : labels) simpleProperty.addLabel(l.toString());
-//		
-//		simpleProperty.setUniqueKey(key);
-//		simpleProperty.setUniqueKeyValue(value);
-//		simpleProperty.setRelationshipMajorLabel(relationship.toString());
-////		simpleProperty.addRelationshipLabel(relationship.toString());
-//		
-//		return simpleProperty;
-//	}
-//	
-//	private CentralDataReactionProperty buildStoichiometryProperty(
-//			String entry, String coefficient, Double value, String position) {
-//		CentralDataReactionProperty dataReactionProperty = new CentralDataReactionProperty();
-//		Map<String, Object> relationshipProperties = new HashMap<> ();
-//		relationshipProperties.put("coefficient", coefficient);
-//		relationshipProperties.put("value", value);
-//		dataReactionProperty.setRelationshipProperties(relationshipProperties);
-////		dataReactionProperty.addRelationshipLabel(ReactionRelationshipType.Stoichiometry.toString());
-//		dataReactionProperty.setRelationshipMajorLabel(position);
-////		dataReactionProperty.addRelationshipLabel(position);
-//		
-//		dataReactionProperty.addLabel(CompoundNodeLabel.Compound.toString());
-//		dataReactionProperty.addLabel(CompoundNodeLabel.KEGG.toString());
-//		char type = entry.charAt(0);
-//		switch (type) {
-//			case 'C':
-//				dataReactionProperty.setMajorLabel(CompoundNodeLabel.LigandCompound.toString());
-//				break;
-//			case 'G':
-//				dataReactionProperty.setMajorLabel(CompoundNodeLabel.LigandGlycan.toString());
-//				break;
-//			case 'D':
-//				dataReactionProperty.setMajorLabel(CompoundNodeLabel.LigandDrug.toString());
-//				break;
-//			default:
-//				throw new RuntimeException("Unknown stoichiometry entry " + entry);
+//		for(KeggReactionRightEntity right : reaction.getRight()) {
+//			GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
+//			
+//			String entry = right.getCpdEntry();
+//			proxyEntity.setEntry(entry);
+//			proxyEntity.addLabel("Metabolite");
+//			switch (entry.charAt(0)) {
+//				case 'C':
+//					proxyEntity.setMajorLabel(KEGG_COMPOUND_METABOLITE_LABEL);
+//					break;
+//				case 'G':
+//					proxyEntity.setMajorLabel(KEGG_GLYCAN_METABOLITE_LABEL);
+//					break;
+//				default:
+//					break;
+//			}
+//			
+//			Map<String, Object> propertyMap = null; 
+//			try {
+//				propertyMap = this.propertyContainerBuilder.extractProperties(right, right.getClass());
+//			} catch (Exception e) {
+//				LOGGER.error(e.getMessage());
+//				propertyMap = new HashMap<> ();
+//				propertyMap.put("stoichiometry", right.getStoichiometry());
+//			}
+//			
+//			centralReactionEntity.getRight().put(proxyEntity, propertyMap);
 //		}
-//		
-//		dataReactionProperty.setUniqueKey("entry");
-//		dataReactionProperty.setUniqueKeyValue(entry);
-//		
-//		return dataReactionProperty;
 //	}
 }

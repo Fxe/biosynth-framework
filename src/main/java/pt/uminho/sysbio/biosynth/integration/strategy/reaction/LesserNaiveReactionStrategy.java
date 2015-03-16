@@ -31,6 +31,66 @@ public class LesserNaiveReactionStrategy extends NaiveReactionStrategy {
 		reactionDao = new Neo4jReactionDao(db);
 	}
 	
+	public Set<Long> mapReactions(Set<Long> left, Set<Long> right) {
+		Set<Long> superResult = super.mapReactions(left, right);
+		
+		if (superResult.isEmpty()) return superResult;
+		
+		GenericReaction rxnPivot = null;
+		
+		for (Long rxnId : superResult) {
+			
+			DefaultReaction defaultReaction = reactionDao.getReactionById(rxnId);
+			
+			if (defaultReaction != null) {
+				defaultReaction.setReactantStoichiometry(
+						this.reconciliateMetaboliteIds(defaultReaction.getLeftStoichiometry()));
+				defaultReaction.setProductStoichiometry(
+						this.reconciliateMetaboliteIds(defaultReaction.getRightStoichiometry()));
+				
+				if (rxnId == this.initialNode.getId()) {
+					reactions.add(defaultReaction);
+					rxnPivot = defaultReaction;
+				} else {
+					reactions.add(defaultReaction);
+				}
+			} else {
+				LOGGER.warn("Reaction not found: " + rxnId);
+			}
+		}
+		//separate stoichiometry
+		IntegrationUtils.alignReactions(reactions);
+		
+		Set<Long> strictStoichMatchSet = new HashSet<> ();
+		
+//		GenericReaction rxnPivot = reactions.get(0);
+		int l_pivot = rxnPivot.getLeftStoichiometry().size();
+		int r_pivot = rxnPivot.getRightStoichiometry().size();
+		
+		strictStoichMatchSet.add(rxnPivot.getId());
+		
+//		LOGGER.debug(String.format("Pivot sizes %s / %s", rxnPivot.getLeftStoichiometry().keySet(), rxnPivot.getLeftStoichiometry().keySet()));
+		LOGGER.debug(String.format("PIVOT::[%d]%s -> %s / %s", 
+				rxnPivot.getId(), rxnPivot.getEntry(), 
+				rxnPivot.getReactantStoichiometry().keySet(), rxnPivot.getProductStoichiometry().keySet()));
+		for (int i = 0; i < reactions.size(); i++) {
+			GenericReaction rxn = reactions.get(i);
+			if (rxn.getReactantStoichiometry().size() == l_pivot
+					&& rxn.getProductStoichiometry().size() == r_pivot) {
+				LOGGER.debug(String.format("OK   ::[%d]%s -> %s / %s", 
+						rxn.getId(), rxn.getEntry(), 
+						rxn.getReactantStoichiometry().keySet(), rxn.getProductStoichiometry().keySet()));
+				strictStoichMatchSet.add(rxn.getId());
+			} else {
+				LOGGER.debug(String.format("FAIL ::[%d]%s -> %s / %s", 
+						rxn.getId(), rxn.getEntry(), 
+						rxn.getReactantStoichiometry().keySet(), rxn.getProductStoichiometry().keySet()));
+			}
+		}
+		
+		return strictStoichMatchSet;
+	}
+	
 	@Override
 	public Set<Long> execute() {
 		Set<Long> superResult = super.execute();

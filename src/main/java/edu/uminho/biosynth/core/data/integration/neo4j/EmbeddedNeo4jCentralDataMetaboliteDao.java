@@ -6,19 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.DynamicLabel;
-import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.helpers.collection.IteratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
@@ -32,7 +31,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
  */
 public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<GraphMetaboliteEntity> {
 
-	private static final Logger LOGGER = Logger.getLogger(EmbeddedNeo4jCentralDataMetaboliteDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedNeo4jCentralDataMetaboliteDao.class);
 	
 	@Autowired
 	private GraphDatabaseService graphDatabaseService;
@@ -121,7 +120,7 @@ public class EmbeddedNeo4jCentralDataMetaboliteDao implements MetaboliteDao<Grap
 			Node xrefNode = this.getOrCreateNode(xrefMajor, "entry", xref.getEntry());
 			if ( !xrefNode.hasProperty("proxy")) xrefNode.setProperty("proxy", true);
 			
-			RelationshipType relationshipType = MetaboliteRelationshipType.HasCrossreferenceTo;
+			RelationshipType relationshipType = MetaboliteRelationshipType.has_crossreference_to;
 			Relationship relationship = node.createRelationshipTo(xrefNode, relationshipType);
 			this.updateRelationship(relationship, xref.getProperties());
 		}

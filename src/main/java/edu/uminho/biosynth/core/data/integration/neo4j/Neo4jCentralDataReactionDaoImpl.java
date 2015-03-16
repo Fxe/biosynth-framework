@@ -4,16 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDataReactionEntity> implements ReactionDao<CentralDataReactionEntity> {
 
-	public static Logger LOGGER = Logger.getLogger(Neo4jCentralDataReactionDaoImpl.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(Neo4jCentralDataReactionDaoImpl.class);
 	
 	public Neo4jCentralDataReactionDaoImpl() { }
 	

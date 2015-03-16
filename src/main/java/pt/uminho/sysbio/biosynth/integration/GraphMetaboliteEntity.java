@@ -8,9 +8,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 
-public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabolite {
+public class GraphMetaboliteEntity extends AbstractGraphNodeEntity implements Metabolite {
 
+	private static final long serialVersionUID = 1L;
+	
+	@Deprecated
 	private List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> crossreferences = new  ArrayList<> ();
+	@Deprecated
 	private List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propertyEntities = new ArrayList<> ();
 
 //	
@@ -20,32 +24,34 @@ public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabo
 //		properties.put("formula", formula);
 //	};
 	
-
+	@Deprecated
 	public void addCrossreference(Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> crossreferencePair) {
 		this.crossreferences.add(crossreferencePair);
 	}
-	
+	@Deprecated
 	public void addCrossreference(GraphMetaboliteProxyEntity proxyEntity, GraphRelationshipEntity relationshipEntity) {
 		Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity> xrefPair = new ImmutablePair<>(proxyEntity, relationshipEntity);
 		this.crossreferences.add(xrefPair);
 	}
-
+	@Deprecated
 	public List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> getCrossreferences() {
 		return crossreferences;
 	}
-
+	@Deprecated
 	public void setCrossreferences(
 			List<Pair<GraphMetaboliteProxyEntity, GraphRelationshipEntity>> crossreferences) {
 		this.crossreferences = crossreferences;
 	}
-
+	@Deprecated
 	public List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> getPropertyEntities() {
 		return propertyEntities;
 	}
+	@Deprecated
 	public void setPropertyEntities(
 			List<Pair<GraphPropertyEntity, GraphRelationshipEntity>> propertyEntities) {
 		this.propertyEntities = propertyEntities;
 	}
+	@Deprecated
 	public void addPropertyEntity(Pair<GraphPropertyEntity, GraphRelationshipEntity> propertyEntity) {
 		if (propertyEntity != null) {
 			if (propertyEntity.getLeft() == null || propertyEntity.getRight() == null) {
@@ -54,14 +60,6 @@ public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabo
 			this.propertyEntities.add(propertyEntity);
 		}
 	}
-	
-	@Override
-	public String getEntry() { return (String)this.properties.get("entry");}
-	public void setEntry(String entry) { properties.put("entry", entry);};
-
-	@Override
-	public String getName() { return (String)this.properties.get("name");}
-	public void setName(String name) { this.properties.put("name", name);}
 	
 	@Override
 	public String getFormula() { return (String)this.properties.get("formula");}
@@ -75,28 +73,8 @@ public class GraphMetaboliteEntity extends AbstractGraphEntity implements Metabo
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());
-		sb.append("\nStrong Properties:\n");
-		if (propertyEntities.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (Pair<?, ?> p : propertyEntities) {
-				sb.append("#").append(p.getLeft().getClass().getSimpleName()).append("#")
-				  .append(p.getLeft()).append(" => ")
-				  .append("#").append(p.getRight().getClass().getSimpleName()).append("#")
-				  .append(p.getRight()).append("\n");
-			}
-		}
-		sb.append("Crossreference Properties:\n");
-		if (crossreferences.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (Pair<?, ?> p : crossreferences) {
-				sb.append("#").append(p.getLeft().getClass().getSimpleName()).append("#")
-				  .append(p.getLeft()).append(" => ")
-				  .append("#").append(p.getRight().getClass().getSimpleName()).append("#")
-				  .append(p.getRight()).append("\n");
-			}
-		}
+		System.out.println(this.labels);
+		System.out.println(this.connectedEntities);
 		return sb.toString();
 	}
 }

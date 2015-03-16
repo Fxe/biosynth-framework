@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
+import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jSuperDao;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
@@ -32,11 +36,34 @@ implements MetaboliteIntegrationService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMetaboliteIntegrationServiceImpl.class);
 	
-	@Autowired
 	private MetaboliteHeterogeneousDao<M> data;
 	
 	public MetaboliteHeterogeneousDao<M> getData() { return data;}
 	public void setData(MetaboliteHeterogeneousDao<M> data) { this.data = data;}
+	
+	@Autowired
+	private Neo4jSuperDao neo4jMetaDao;
+	
+	@Autowired
+	public DefaultMetaboliteIntegrationServiceImpl(
+			MetaboliteHeterogeneousDao<M> data, 
+			IntegrationMetadataDao meta,
+			Neo4jSuperDao neo4jMetaDao) {
+		super(meta);
+		this.data = data;
+		this.neo4jMetaDao = neo4jMetaDao;
+	}
+	
+	@Override
+	public Map<Set<String>, Integer> countNodesByLabelSet() {
+		Map<Set<String>, Integer> result = new HashMap<> (); 
+		Map<Set<String>, Set<Long>> output = neo4jMetaDao.superHeavyMethod();
+		for (Set<String> key : output.keySet()) {
+			result.put(key, output.get(key).size());
+		}
+		
+		return result;
+	}
 	
 	@Override
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult,
@@ -275,6 +302,16 @@ implements MetaboliteIntegrationService {
 				iid, 
 				IntegrationNodeLabel.MetaboliteCluster.toString(), 
 				IntegrationNodeLabel.MetaboliteMember.toString());
+	}
+	
+	@Override
+	public IntegratedMember getIntegratedMemberByReferenceEid(long referenceEid) {
+		return this.meta.getIntegratedMemberByReferenceEid(referenceEid);
+	}
+	
+	@Override
+	public IntegratedMember getIntegratedMemberById(long id) {
+		return this.meta.getIntegratedMemberById(id);
 	}
 	
 

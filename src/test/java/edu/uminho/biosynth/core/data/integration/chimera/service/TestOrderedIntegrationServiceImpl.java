@@ -53,7 +53,7 @@ public class TestOrderedIntegrationServiceImpl {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(new File(HBM_CFG));
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(GRAPH_DB_PATH);
+		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
 		
 		data = new Neo4jChimeraDataDaoImpl();
 		data.setGraphDatabaseService(graphDatabaseService);
@@ -61,9 +61,8 @@ public class TestOrderedIntegrationServiceImpl {
 		meta = new HbmIntegrationMetadataDaoImpl();
 		meta.setSessionFactory(sessionFactory);
 		
-		integrationService = new OldMetaboliteIntegrationServiceImpl();
+		integrationService = new OldMetaboliteIntegrationServiceImpl(meta);
 		integrationService.setData(data);
-		integrationService.setMeta(meta);
 		integrationService.setClusterIdGenerator(new PrefixKeyGenerator("TEST"));
 	}
 

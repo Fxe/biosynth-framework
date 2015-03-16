@@ -4,7 +4,8 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompoundStructureEntity;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 
 public class SeedMetaboliteTransform
@@ -21,47 +22,37 @@ extends AbstractMetaboliteTransform<SeedMetaboliteEntity>{
 			GraphMetaboliteEntity centralMetaboliteEntity,
 			SeedMetaboliteEntity entity) {
 		
-//		throw new RuntimeException("Implement me please !");
+		this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getDefaultCharge(), MetabolitePropertyLabel.Charge, MetaboliteRelationshipType.has_charge);
+		
+//		centralMetaboliteEntity.getConnectedEntities().add(
+//				this.buildPair(
+//				new SomeNodeFactory().buildGraphMetabolitePropertyEntity(
+//						MetabolitePropertyLabel.Charge, entity.getDefaultCharge()), 
+//				new SomeNodeFactory().buildMetaboliteEdge(
+//						MetaboliteRelationshipType.has_charge)));
+//		for (SeedMetaboliteStructureEntity structure : entity.getStructures()) {
+//			centralMetaboliteEntity.addPropertyEntity(
+//					this.buildPropertyLinkPair(
+//							PROPERTY_UNIQUE_KEY, 
+//							structure.getStructure(), 
+//							METABOLITE_SMILE_LABEL, 
+//							METABOLITE_SMILE_RELATIONSHIP_TYPE));
+//		}
 //		centralMetaboliteEntity.addPropertyEntity(
 //				this.buildPropertyLinkPair(
 //						PROPERTY_UNIQUE_KEY, 
-//						entity.getInchi(), 
-//						METABOLITE_INCHI_LABEL, 
-//						METABOLITE_INCHI_RELATIONSHIP_TYPE));
-		for (SeedCompoundStructureEntity structure : entity.getStructures()) {
-			centralMetaboliteEntity.addPropertyEntity(
-					this.buildPropertyLinkPair(
-							PROPERTY_UNIQUE_KEY, 
-							structure.getStructure(), 
-							METABOLITE_SMILE_LABEL, 
-							METABOLITE_SMILE_RELATIONSHIP_TYPE));
-		}
-		centralMetaboliteEntity.addPropertyEntity(
-				this.buildPropertyLinkPair(
-						PROPERTY_UNIQUE_KEY, 
-						entity.getDefaultCharge(), 
-						METABOLITE_CHARGE_LABEL, 
-						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
+//						entity.getDefaultCharge(), 
+//						METABOLITE_CHARGE_LABEL, 
+//						METABOLITE_CHARGE_RELATIONSHIP_TYPE));
 	}
 
-//	@Override
-//	protected void configureCrossreferences(
-//			CentralMetaboliteEntity centralMetaboliteEntity,
-//			SeedMetaboliteEntity entity) {
-//		
-//		List<CentralMetaboliteProxyEntity> crossreferences = new ArrayList<> ();
-//		
-//		for (SeedMetaboliteCrossreferenceEntity xref : entity.getCrossreferences()) {
-//			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
-//			String dbEntry = xref.getValue(); //Also need to translate if necessary
-//			CentralMetaboliteProxyEntity proxy = new CentralMetaboliteProxyEntity();
-//			proxy.setEntry(dbEntry);
-//			proxy.setMajorLabel(dbLabel);
-//			proxy.addLabel(METABOLITE_LABEL);
-//			crossreferences.add(proxy);
-//		}
-//		
-//		centralMetaboliteEntity.setCrossreferences(crossreferences);
-//	}
-
+	@Override
+	protected void configureNameLink(
+			GraphMetaboliteEntity centralMetaboliteEntity,
+			SeedMetaboliteEntity entity) {
+		
+		for (String name : entity.getSynonyms()) {
+			this.configureNameLink(centralMetaboliteEntity, name);
+		}
+	}
 }

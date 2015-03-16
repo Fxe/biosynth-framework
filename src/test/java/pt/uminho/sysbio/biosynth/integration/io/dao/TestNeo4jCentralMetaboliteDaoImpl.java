@@ -24,7 +24,7 @@ public class TestNeo4jCentralMetaboliteDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		db = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(DB_PATH);
+		db = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(DB_PATH);
 		System.out.println("N:" + GlobalGraphOperations.at(db).getAllNodes());
 		System.out.println("L:" + GlobalGraphOperations.at(db).getAllLabels());
 	}

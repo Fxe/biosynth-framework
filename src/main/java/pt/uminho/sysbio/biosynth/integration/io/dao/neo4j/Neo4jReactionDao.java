@@ -36,8 +36,8 @@ public class Neo4jReactionDao extends AbstractNeo4jDao implements ReactionDao<De
 		rxn.setId(node.getId());
 		rxn.setName((String) node.getProperty("name", null));
 		
-		Map<String, Double> left = this.loadStoichiometryMap(node, ReactionRelationshipType.Left);
-		Map<String, Double> right = this.loadStoichiometryMap(node, ReactionRelationshipType.Right);
+		Map<String, Double> left = this.loadStoichiometryMap(node, ReactionRelationshipType.left_component);
+		Map<String, Double> right = this.loadStoichiometryMap(node, ReactionRelationshipType.right_component);
 		
 		rxn.setReactantStoichiometry(left);
 		rxn.setProductStoichiometry(right);

@@ -20,15 +20,27 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.Reaction;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 public class IntegrationUtils {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(IntegrationUtils.class);
 	
+
+	
+	private static void aww(Map<Long, Set<Long>> mapping, long key, long val) {
+		if (!mapping.containsKey(key)) {
+			mapping.put(key, new HashSet<Long> ());
+		}
+		mapping.get(key).add(val);
+	}
+	
 	/**
 	 * Applies a metabolite unification map to reconcialiate metabolite ids
 	 */
-	public static void reconciliateReactionMetabolites(Reaction reaction, Map<Long, Long> unificationMap) {
+	public static Map<Long, Set<Long>> reconciliateReactionMetabolites(Reaction reaction, Map<Long, Long> unificationMap) {
+		Map<Long, Set<Long>> mapping = new HashMap<> ();
+		
 		Map<String, Double> left = reaction.getLeftStoichiometry();
 		Map<String, Double> left_ = new HashMap<> ();
 		for (String id : left.keySet()) {
@@ -36,6 +48,9 @@ public class IntegrationUtils {
 			Long prev_id = Long.parseLong(id);
 			Long unifi_id = unificationMap.get(prev_id);
 			unifi_id = unifi_id == null ? prev_id : unifi_id;
+			
+			aww(mapping, unifi_id, prev_id);
+			
 			left_.put(unifi_id.toString(), stoich);
 		}
 		reaction.setLeftStoichiometry(left_);
@@ -47,9 +62,14 @@ public class IntegrationUtils {
 			Long prev_id = Long.parseLong(id);
 			Long unifi_id = unificationMap.get(prev_id);
 			unifi_id = unifi_id == null ? prev_id : unifi_id;
+			
+			aww(mapping, unifi_id, prev_id);
+			
 			right_.put(unifi_id.toString(), stoich);
 		}
 		reaction.setRightStoichiometry(right_);
+		
+		return mapping;
 	}
 	
 	public static List<IntegratedMember> collectMembersFromCluster(IntegratedCluster integratedCluster) {
@@ -148,7 +168,7 @@ public class IntegrationUtils {
 			.build();
 	}
 
-	public static Set<Long> collectClusterMemberIds(
+	public static Set<Long> collectClusterMemberRerefenceEids(
 			IntegratedCluster integratedCluster) {
 		Set<Long> eids = new HashSet<> ();
 		

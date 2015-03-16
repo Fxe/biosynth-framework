@@ -29,7 +29,7 @@ public class TestNeo4jCentralReactionDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		db = HelperNeo4jConfigInitializer.initializeNeo4jDatabaseConstraints(DB_PATH);
+		db = HelperNeo4jConfigInitializer.initializeNeo4jDataDatabaseConstraints(DB_PATH);
 		tx = db.beginTx();
 		System.out.println("N:" + IteratorUtil.asList(GlobalGraphOperations.at(db).getAllNodes()));
 		System.out.println("L:" + IteratorUtil.asList(GlobalGraphOperations.at(db).getAllLabels()));

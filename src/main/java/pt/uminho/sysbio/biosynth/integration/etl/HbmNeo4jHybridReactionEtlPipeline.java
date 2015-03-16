@@ -103,9 +103,9 @@ implements EtlPipeline<SRC, DST> {
 		
 		int i = 0;
 		for (Serializable entry : extractSubsystem.getAllKeys()) {
+			LOGGER.info(entry.toString());
 			//SRC = ETL EXTRACT(Entry)
 			SRC src = extractSubsystem.extract(entry);
-			
 			//DST = ETL TRANSFORM(SRC)
 			DST dst = transformSubsystem.etlTransform(src);
 

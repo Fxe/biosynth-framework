@@ -7,9 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteCrossreferenceEntity;
@@ -19,7 +20,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class Neo4jChebiMetaboliteDaoImpl extends AbstractNeo4jDao<ChebiMetaboliteEntity> implements MetaboliteDao<ChebiMetaboliteEntity>{
 
-	private static Logger LOGGER = Logger.getLogger(Neo4jChebiMetaboliteDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jChebiMetaboliteDaoImpl.class);
 	
 	public Neo4jChebiMetaboliteDaoImpl(GraphDatabaseService graphdb) {
 		super(graphdb);

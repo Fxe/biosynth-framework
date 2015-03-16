@@ -1,18 +1,20 @@
 package pt.uminho.sysbio.biosynth.integration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
-public class GraphReactionEntity extends AbstractGraphEntity implements Reaction {
+public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reaction {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> left = new HashMap<> ();
 	private Map<GraphMetaboliteProxyEntity, Map<String, Object>> right = new HashMap<> ();
-	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
+//	public List<GraphReactionProxyEntity> crossreferences = new ArrayList<> ();
 	
 	@Override
 	public String getEntry() { return (String)this.properties.get("entry");}
@@ -37,12 +39,12 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	public Map<GraphMetaboliteProxyEntity, Map<String, Object>> getRight() { return right;}
 	public void setRight(Map<GraphMetaboliteProxyEntity, Map<String, Object>> right) { this.right = right;}
 	
-	public List<GraphReactionProxyEntity> getCrossreferences() {
-		return crossreferences;
-	}
-	public void setCrossreferences(List<GraphReactionProxyEntity> crossreferences) {
-		this.crossreferences = crossreferences;
-	}
+//	public List<GraphReactionProxyEntity> getCrossreferences() {
+//		return crossreferences;
+//	}
+//	public void setCrossreferences(List<GraphReactionProxyEntity> crossreferences) {
+//		this.crossreferences = crossreferences;
+//	}
 //	
 //	@Override
 //	public void setReactantStoichiometry(Map<String,Double> reactantStoichiometry) {
@@ -58,16 +60,25 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(super.toString());
+		sb.append("\nStrong Properties:\n");
+		if (connectedEntities.isEmpty()) {
+			sb.append("=========Empty=========\n");
+		} else {
+//			for (Pair<?, ?> p : connectedEntities.) {
+//				Object l = p.getLeft();
+//				Object r = p.getRight();
+//				sb.append("#").append(l.getClass().getSimpleName()).append("#")
+//				  .append(l).append(" => ")
+//				  .append("#").append(r.getClass().getSimpleName()).append("#")
+//				  .append(r).append("\n");
+//			}
+		}
 		sb.append("Left Metabolites:\n");
 		if (left.isEmpty()) {
 			sb.append("=========Empty=========\n");
 		} else {
 			for (GraphMetaboliteProxyEntity l : left.keySet()) {
 				sb.append(String.format("[%s,\n%s]\n", left.get(l), l));
-//				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
-//				  .append(p.getLeft()).append(" => \n")
-//				  .append(p.getRight().getClass().getSimpleName()).append("\n")
-//				  .append(p.getRight());
 			}
 		}
 		
@@ -77,30 +88,10 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 		} else {
 			for (GraphMetaboliteProxyEntity r : right.keySet()) {
 				sb.append(String.format("[%s,\n%s]\n", right.get(r), r));
-//				sb.append(l.getLeft().getClass().getSimpleName()).append("\n")
-//				  .append(p.getLeft()).append(" => \n")
-//				  .append(p.getRight().getClass().getSimpleName()).append("\n")
-//				  .append(p.getRight());
-			}
-		}
-		
-		sb.append("Crossreference Properties:\n");
-		if (crossreferences.isEmpty()) {
-			sb.append("=========Empty=========\n");
-		} else {
-			for (GraphReactionProxyEntity x : crossreferences) {
-				sb.append(x);
 			}
 		}
 		
 		return sb.toString();
-//		StringBuilder sb = new StringBuilder(super.toString()).append("\n");
-//		sb.append("MajorLabel: ").append(this.majorLabel).append("\n");
-//		sb.append("Labels: ").append(this.labels).append("\n");
-//		sb.append("Properties:\n");
-//		for (String key : this.properties.keySet())
-//			sb.append(String.format("\t%s: %s\n", key, this.properties.get(key)));
-//		return sb.toString();
 	}
 	@Override
 	public Map<String, Double> getLeftStoichiometry() {
@@ -150,7 +141,7 @@ public class GraphReactionEntity extends AbstractGraphEntity implements Reaction
 
 	
 	@Override
-	public boolean isTranslocation() {
+	public Boolean isTranslocation() {
 		// TODO Auto-generated method stub
 		return false;
 	}

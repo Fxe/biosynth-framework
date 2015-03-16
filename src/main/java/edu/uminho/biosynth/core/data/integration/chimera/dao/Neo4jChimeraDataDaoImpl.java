@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.DynamicLabel;
@@ -23,22 +22,25 @@ import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.impl.core.NodeProxy;
 import org.neo4j.tooling.GlobalGraphOperations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
 import edu.uminho.biosynth.core.data.integration.neo4j.CentralDataReactionProperty;
 import edu.uminho.biosynth.core.data.integration.neo4j.CompoundNodeLabel;
 import scala.collection.convert.Wrappers.SeqWrapper;
 
+@Deprecated
 public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
-	private static Logger LOGGER = Logger.getLogger(Neo4jChimeraDataDaoImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jChimeraDataDaoImpl.class);
 	
 	@Autowired
 	private GraphDatabaseService graphDatabaseService;
@@ -132,7 +134,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 				labels.remove("Compound");
 				IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
 //				GenericCrossReference xref = new GenericCrossReference();
-				xref.setType(GenericCrossReference.Type.DATABASE);
+				xref.setType(ReferenceType.DATABASE);
 				xref.setRef(labels.iterator().next());
 				xref.setValue((String)other.getProperty("entry"));
 				createAndAdd(data, "crossreferences", xref);
@@ -211,7 +213,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 						//These Compound Labels -> Crossreferences !
 						IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
 //						GenericCrossReference xref = new GenericCrossReference();
-						xref.setType(GenericCrossReference.Type.DATABASE);
+						xref.setType(ReferenceType.DATABASE);
 						xref.setRef(labels.iterator().next());
 						
 						xref.setValue((String)proxy.getProperty("entry"));
@@ -366,7 +368,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		for (Relationship r:node.getRelationships()) {
 			Node n = r.getEndNode();
 			
-			if (r.getType().equals(MetaboliteRelationshipType.HasCrossreferenceTo)) {
+			if (r.getType().equals(MetaboliteRelationshipType.has_crossreference_to)) {
 				
 			} else {
 				Label label = n.getLabels().iterator().next();
@@ -441,8 +443,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			for (Relationship relationship : node.getRelationships()) {
 				Node nodeProp = relationship.getOtherNode(node);
 				if (nodeProp.hasLabel(label)) {
-					GraphPropertyEntity propertyEntity = 
-							new GraphPropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
+					GraphPropertyEntity propertyEntity = new GraphPropertyEntity();
+//							new GraphPropertyEntity(uniqueKey, nodeProp.getProperty(uniqueKey));
 					
 					propertyEntity.setId(nodeProp.getId());
 					propertyEntity.setUniqueKey(uniqueKey);
@@ -489,7 +491,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 				
 		
 		for (String key : node.getPropertyKeys()) {
-			entity = new GraphPropertyEntity(key, node.getProperty(key));
+			entity = new GraphPropertyEntity();
+//			entity = new GraphPropertyEntity(key, node.getProperty(key));
 			entity.getProperties().put(key, node.getProperty(key));
 		}
 		for (Label label : node.getLabels()) entity.addLabel(label.toString());

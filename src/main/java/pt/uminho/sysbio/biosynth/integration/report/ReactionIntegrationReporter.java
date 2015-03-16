@@ -44,7 +44,7 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 		}
 		
 		for (Relationship relationship : node
-				.getRelationships(MetaboliteRelationshipType.HasMolecularFormula)) {
+				.getRelationships(MetaboliteRelationshipType.has_molecular_formula)) {
 			
 			String status = (String) relationship.getProperty("DCS-status", null);
 			if (status == null) {
@@ -69,7 +69,7 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 		
 		boolean generic = true;
 		
-		Set<Long> cpdIds = Neo4jUtils.collectNodeRelationshipNodeIds(node, ReactionRelationshipType.Left, ReactionRelationshipType.Right);
+		Set<Long> cpdIds = Neo4jUtils.collectNodeRelationshipNodeIds(node, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
 		for (Long cpdId : cpdIds) {
 			Node cpdNode = graphDataService.getNodeById(cpdId);
 			generic &= !isGeneric(cpdNode);

@@ -43,7 +43,7 @@ public class Neo4jIntegrationEngine {
 		for (Long cid : cidSet) {
 			IntegratedCluster integratedCluster = metadataDao.getIntegratedClusterById(cid);
 			Long id = integratedCluster.getId();
-			Set<Long> eids = IntegrationUtils.collectClusterMemberIds(integratedCluster);
+			Set<Long> eids = IntegrationUtils.collectClusterMemberRerefenceEids(integratedCluster);
 			
 			clusterMemberMap.put(id, eids);
 		}
@@ -88,6 +88,12 @@ public class Neo4jIntegrationEngine {
 		return uniqueMembershipClusters;
 	}
 	
+	/**
+	 * 
+	 * @param integrationSet target set
+	 * @param clusteringStrategy mapping strategy
+	 * @param eids elements to integrate
+	 */
 	public void integrate(IntegrationSet integrationSet, ClusteringStrategy clusteringStrategy, Long[] eids) {
 		this.integrate(integrationSet, clusteringStrategy, Arrays.asList(eids));
 	}

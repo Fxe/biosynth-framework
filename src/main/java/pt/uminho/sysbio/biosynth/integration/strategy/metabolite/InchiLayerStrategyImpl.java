@@ -32,7 +32,7 @@ public class InchiLayerStrategyImpl extends AbstractNeo4jClusteringStrategy {
 		Set<Long> result = new HashSet<> ();
 		result.add(initialNode.getId());
 		
-		Set<Long> inchiNodeIdSet = Neo4jUtils.collectNodeRelationshipNodeIds(initialNode, MetaboliteRelationshipType.HasInChI);
+		Set<Long> inchiNodeIdSet = Neo4jUtils.collectNodeRelationshipNodeIds(initialNode, MetaboliteRelationshipType.has_inchi);
 		
 		for (Long inchiNodeId : inchiNodeIdSet) {
 			Node inchiNode = db.getNodeById(inchiNodeId);
@@ -58,7 +58,7 @@ public class InchiLayerStrategyImpl extends AbstractNeo4jClusteringStrategy {
 			for (Long inchiNodeId_ : intersection) {
 				Node inchiNode_ = db.getNodeById(inchiNodeId_);
 				result.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(
-						inchiNode_, MetaboliteRelationshipType.HasInChI));
+						inchiNode_, MetaboliteRelationshipType.has_inchi));
 			}
 
 		}

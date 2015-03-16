@@ -10,4 +10,9 @@ public class CurationSet {
 	public String getEntry() { return entry;}
 	public void setEntry(String entry) { this.entry = entry;}
 	
+	@Override
+	public String toString() {
+		return String.format("CurationSet[%d:%s]", this.id, this.entry);
+	}
+	
 }
