@@ -42,4 +42,12 @@ public class DefaultModelMetaboliteEntity extends GenericMetabolite {
 		this.species = species;
 	}
 	
+	private List<DefaultMetaboliteSpecieReference> crossreferences = new ArrayList<> ();
+	public List<DefaultMetaboliteSpecieReference> getCrossreferences() {
+		return crossreferences;
+	}
+	public void setCrossreferences(
+			List<DefaultMetaboliteSpecieReference> crossreferences) {
+		this.crossreferences = crossreferences;
+	}
 }

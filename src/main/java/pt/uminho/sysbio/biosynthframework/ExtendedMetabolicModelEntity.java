@@ -54,5 +54,17 @@ public class ExtendedMetabolicModelEntity extends AbstractBiosynthEntity impleme
 	@Override
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
+		if (properties.containsKey("entry")) {
+			this.entry = (String) properties.get("entry");
+		}
+		if (properties.containsKey("source")) {
+			this.source = (String) properties.get("source");
+		}
+		if (properties.containsKey("description")) {
+			this.description = (String) properties.get("description");
+		}
+		if (properties.containsKey("md5")) {
+			this.md5 = (String) properties.get("md5");
+		}
 	}
 }

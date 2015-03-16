@@ -8,7 +8,7 @@ import java.util.Map;
 public class ExtendedModelMetabolite extends GenericMetabolite implements PropertyContainer {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private ExtendedMetabolicModelEntity metabolicModel;
 	public ExtendedMetabolicModelEntity getMetabolicModel() { return metabolicModel;}
 	public void setMetabolicModel(
@@ -31,5 +31,24 @@ public class ExtendedModelMetabolite extends GenericMetabolite implements Proper
 	@Override
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;
+		if (properties.containsKey("entry")) {
+			this.entry = ((String) properties.get("entry")).split("@")[0];
+		}
+		if (properties.containsKey("source")) {
+			this.source = (String) properties.get("source");
+		}
+		if (properties.containsKey("description")) {
+			this.description = (String) properties.get("description");
+		}
+	}
+	
+	
+	private List<DefaultMetaboliteSpecieReference> crossreferences = new ArrayList<> ();
+	public List<DefaultMetaboliteSpecieReference> getCrossreferences() {
+		return crossreferences;
+	}
+	public void setCrossreferences(
+			List<DefaultMetaboliteSpecieReference> crossreferences) {
+		this.crossreferences = crossreferences;
 	}
 }

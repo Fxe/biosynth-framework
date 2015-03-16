@@ -46,14 +46,14 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 	@MetaProperty
 	@Column(name="lower_bound")
 	private Double lowerBound;
-	public double getLowerBound() { return lowerBound;}
+	public Double getLowerBound() { return lowerBound;}
 	public void setLowerBound(Double lowerBound) { this.lowerBound = lowerBound;}
 	
 	@JsonIgnore
 	@MetaProperty
 	@Column(name="upper_bound")
 	private Double upperBound;
-	public double getUpperBound() { return upperBound;}
+	public Double getUpperBound() { return upperBound;}
 	public void setUpperBound(Double upperBound) { this.upperBound = upperBound;}
 	
 	@JsonIgnore
@@ -118,6 +118,14 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 			this.getProductStoichiometry().put(entity.getCpdEntry(), entity.getStoichiometry());
 		}
 		this.right = right;
+	}
+	
+	private List<GenericCrossReference> crossreferences = new ArrayList<> ();
+	public List<GenericCrossReference> getCrossreferences() {
+		return crossreferences;
+	}
+	public void setCrossreferences(List<GenericCrossReference> crossreferences) {
+		this.crossreferences = crossreferences;
 	}
 	@Override
 	public String toString() {
