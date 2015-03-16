@@ -7,5 +7,5 @@ public enum GlobalLabel implements Label {
 	SuperMetabolite, Metabolite, MetaboliteProperty,
 	Reaction, ReactionProperty,
 	MetabolicPathway, 
-	BioCyc
+	BioCyc, Gene, EC
 }
