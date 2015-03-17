@@ -14,7 +14,6 @@ public enum GlobalLabel implements Label {
 	SuperMetabolite, Metabolite, MetaboliteProperty,
 	Reaction, ReactionProperty,
 	MetabolicPathway, 
-	
 	SubcellularCompartment,
 	
 	//Things that I have no clue where to put !
