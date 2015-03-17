@@ -5,14 +5,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="bigg_metabolite_crossref")
-public class BiggMetaboliteCrossreferenceEntity extends GenericCrossReference {
+public class BiggMetaboliteCrossreferenceEntity extends GenericCrossreference {
 	
 	private static final long serialVersionUID = 1L;
 	

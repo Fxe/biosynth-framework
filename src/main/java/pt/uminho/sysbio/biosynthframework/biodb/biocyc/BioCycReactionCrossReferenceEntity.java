@@ -6,7 +6,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="biocyc_reaction_crossref")
-public class BioCycReactionCrossReferenceEntity extends GenericCrossReference {
+public class BioCycReactionCrossReferenceEntity extends GenericCrossreference {
 
 	private static final long serialVersionUID = 2935318839395889046L;
 

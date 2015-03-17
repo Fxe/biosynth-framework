@@ -5,12 +5,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 @Entity
 @Table(name="MNX_REACTION_CROSSREF")
-public class MnxReactionCrossReferenceEntity extends GenericCrossReference {
+public class MnxReactionCrossReferenceEntity extends GenericCrossreference {
 
 	private static final long serialVersionUID = 1L;
 	

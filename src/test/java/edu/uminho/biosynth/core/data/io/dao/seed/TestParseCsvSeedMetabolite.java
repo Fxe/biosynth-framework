@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionCrossreferenceEntity;
@@ -41,7 +41,7 @@ public class TestParseCsvSeedMetabolite {
 
 	private static SessionFactory sessionFactory;
 	private static JsonNode rootNode;
-	private static Map<String, List<GenericCrossReference>> refMap;
+	private static Map<String, List<GenericCrossreference>> refMap;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -136,7 +136,7 @@ public class TestParseCsvSeedMetabolite {
 				System.out.println(i);
 				SeedReactionEntity reaction = parseJsonSeedReaction(reactions.get(i));
 				List<SeedReactionCrossreferenceEntity> xrefs = new ArrayList<> ();
-				for (GenericCrossReference xref : refMap.get(reaction.getUuid())) {
+				for (GenericCrossreference xref : refMap.get(reaction.getUuid())) {
 					xrefs.add(new SeedReactionCrossreferenceEntity(xref));
 				}
 				reaction.setCrossReferences(xrefs);

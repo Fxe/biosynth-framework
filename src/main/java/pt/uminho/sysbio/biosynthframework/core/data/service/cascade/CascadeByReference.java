@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
@@ -54,7 +54,7 @@ public class CascadeByReference implements ICascadeStrategy {
 		return result;
 	}
 	
-	private List<GenericMetabolite> lookupReference(GenericCrossReference reference) {
+	private List<GenericMetabolite> lookupReference(GenericCrossreference reference) {
 		List<GenericMetabolite> result = new ArrayList<> ();
 		Class<?> refServiceClass = MapperService.referenceStringToServiceClass(reference.getRef());
 		if (refServiceClass != null && services.containsKey(refServiceClass.getName())) {

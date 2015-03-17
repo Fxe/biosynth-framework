@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedAliaseSet;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedCompartmentEntity;
@@ -52,7 +52,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 	private Resource jsonFile;
 	private JsonNode rootNode;
 	
-	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
+	private Map<String, List<GenericCrossreference>> refMap = new HashMap<> ();
 	private Map<String, SeedReactionEntity> reactionMap = new HashMap<> ();
 	
 	public Resource getJsonFile() { return jsonFile;}
@@ -265,7 +265,7 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 				List<SeedReactionCrossreferenceEntity> xrefs = new ArrayList<> ();
 				if (refMap.containsKey(rxn.getUuid())) {
 //					System.out.println(refMap.get(cpd.getUuid()));
-					for (GenericCrossReference xref : refMap.get(rxn.getUuid())) {
+					for (GenericCrossreference xref : refMap.get(rxn.getUuid())) {
 						switch (xref.getType()) {
 							case NAME:
 //								rxn.getSynonyms().add(xref.getValue());
@@ -303,16 +303,16 @@ public class JsonSeedReactionDaoImpl implements ReactionDao<SeedReactionEntity> 
 	}
 	
 	@Deprecated
-	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossReference>> map, String ref) {
+	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossreference>> map, String ref) {
 		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
 			JsonNode uuid_array = node.get(field);
 			for (int i = 0; i < uuid_array.size(); i++) {
 				String uuid = uuid_array.get(i).asText();
-				GenericCrossReference xref = new GenericCrossReference(type, ref, field.trim());
+				GenericCrossreference xref = new GenericCrossreference(type, ref, field.trim());
 				if (!map.containsKey(uuid)) {
-					List<GenericCrossReference> xrefs = new ArrayList<> ();
+					List<GenericCrossreference> xrefs = new ArrayList<> ();
 					map.put(uuid, xrefs);
 				}
 				

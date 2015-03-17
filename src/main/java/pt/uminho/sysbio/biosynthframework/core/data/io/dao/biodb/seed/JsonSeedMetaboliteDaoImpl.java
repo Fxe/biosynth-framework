@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedAliaseSet;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteCrossreferenceEntity;
@@ -46,7 +46,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 	private Resource jsonFile;
 	
 	private JsonNode rootNode;
-	private Map<String, List<GenericCrossReference>> refMap = new HashMap<> ();
+	private Map<String, List<GenericCrossreference>> refMap = new HashMap<> ();
 	private Map<String, SeedMetaboliteEntity> metaboliteMap = new HashMap<> ();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -107,7 +107,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 	
 	
 	@Deprecated
-	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossReference>> map, String ref) {
+	private void buildXRefMap(JsonNode node, ReferenceType type, Map<String, List<GenericCrossreference>> map, String ref) {
 		Iterator<String> fields = node.fieldNames();
 		while (fields.hasNext()) {
 			String field = fields.next();
@@ -115,9 +115,9 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 			for (int i = 0; i < uuid_array.size(); i++) {
 				String uuid = uuid_array.get(i).asText();
 //				System.out.println(uuid + " -> " + field.trim());
-				GenericCrossReference xref = new GenericCrossReference(type, ref, field.trim());
+				GenericCrossreference xref = new GenericCrossreference(type, ref, field.trim());
 				if (!map.containsKey(uuid)) {
-					List<GenericCrossReference> xrefs = new ArrayList<> ();
+					List<GenericCrossreference> xrefs = new ArrayList<> ();
 					map.put(uuid, xrefs);
 				}
 				
@@ -151,7 +151,7 @@ public class JsonSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEn
 				List<SeedMetaboliteCrossreferenceEntity> xrefs = new ArrayList<> ();
 				if (refMap.containsKey(cpd.getUuid())) {
 //					System.out.println(refMap.get(cpd.getUuid()));
-					for (GenericCrossReference xref : refMap.get(cpd.getUuid())) {
+					for (GenericCrossreference xref : refMap.get(cpd.getUuid())) {
 						switch (xref.getType()) {
 							case NAME:
 								cpd.getSynonyms().add(xref.getValue());

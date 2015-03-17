@@ -6,12 +6,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 
 @Entity
 @Table(name="MNX_METABOLITE_CROSSREF")
-public class MnxMetaboliteCrossreferenceEntity extends GenericCrossReference {
+public class MnxMetaboliteCrossreferenceEntity extends GenericCrossreference {
 
 	private static final long serialVersionUID = 1L;
 	
