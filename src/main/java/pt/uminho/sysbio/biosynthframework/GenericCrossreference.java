@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @MappedSuperclass
-public class GenericCrossReference implements Serializable {
+public class GenericCrossreference implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,9 +34,9 @@ public class GenericCrossReference implements Serializable {
 	@Column(name="value", length=255, nullable=false)
 	protected String value;
 	
-	public GenericCrossReference() { }
+	public GenericCrossreference() { }
 	
-	public GenericCrossReference(ReferenceType type, String reference, String value) {
+	public GenericCrossreference(ReferenceType type, String reference, String value) {
 		this.type = type;
 		this.ref = reference;
 		this.value = value;

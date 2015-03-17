@@ -20,6 +20,9 @@ public class ExtendedMetaboliteSpecie extends DefaultMetaboliteSpecie implements
 		if (properties.containsKey("entry")) {
 			this.entry = (String) properties.get("entry");
 		}
+		if (properties.containsKey("name")) {
+			this.name = (String) properties.get("name");
+		}
 		if (properties.containsKey("formula")) {
 			this.formula = (String) properties.get("formula");
 		}

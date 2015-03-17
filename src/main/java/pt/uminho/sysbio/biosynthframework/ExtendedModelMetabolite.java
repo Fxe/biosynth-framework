@@ -34,6 +34,12 @@ public class ExtendedModelMetabolite extends GenericMetabolite implements Proper
 		if (properties.containsKey("entry")) {
 			this.entry = ((String) properties.get("entry")).split("@")[0];
 		}
+		if (properties.containsKey("name")) {
+			this.name = (String) properties.get("name");
+		}
+		if (properties.containsKey("formula")) {
+			this.formula = (String) properties.get("formula");
+		}
 		if (properties.containsKey("source")) {
 			this.source = (String) properties.get("source");
 		}

@@ -120,11 +120,11 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
 		this.right = right;
 	}
 	
-	private List<GenericCrossReference> crossreferences = new ArrayList<> ();
-	public List<GenericCrossReference> getCrossreferences() {
+	private List<GenericCrossreference> crossreferences = new ArrayList<> ();
+	public List<GenericCrossreference> getCrossreferences() {
 		return crossreferences;
 	}
-	public void setCrossreferences(List<GenericCrossReference> crossreferences) {
+	public void setCrossreferences(List<GenericCrossreference> crossreferences) {
 		this.crossreferences = crossreferences;
 	}
 	@Override
