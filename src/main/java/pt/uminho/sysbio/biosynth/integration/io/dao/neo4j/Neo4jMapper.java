@@ -226,7 +226,8 @@ public class Neo4jMapper {
 	public static OptfluxContainerReactionEntity nodeToModelReaction(Node node) {
 		OptfluxContainerReactionEntity rxn = new OptfluxContainerReactionEntity();
 		rxn.setId(node.getId());
-		rxn.setEntry(((String) node.getProperty("entry")).split("@")[0]);
+		rxn.setEntry((String) node.getProperty("entry"));
+//		rxn.setEntry(((String) node.getProperty("entry")).split("@")[0]);
 		rxn.setName((String) node.getProperty("name", null));
 		rxn.setGeneRule((String) node.getProperty("geneRule", null));
 		rxn.setLowerBound((Double) node.getProperty("lowerBound", null));

@@ -23,7 +23,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionPropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
@@ -189,7 +189,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 			Method method = reaction.getClass().getMethod("getCrossreferences");
 			List<?> xrefs = List.class.cast(method.invoke(reaction));
 			for (Object xrefObject : xrefs) {
-				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
+				GenericCrossreference xref = GenericCrossreference.class.cast(xrefObject);
 				
 				switch (xref.getType()) {
 					case DATABASE:

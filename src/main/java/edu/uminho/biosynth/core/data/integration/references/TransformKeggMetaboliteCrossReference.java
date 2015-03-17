@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCrossreferenceEntity;
 
 public class TransformKeggMetaboliteCrossReference extends AbstractTransformCrossReference<KeggCompoundMetaboliteCrossreferenceEntity>{
@@ -11,7 +11,7 @@ public class TransformKeggMetaboliteCrossReference extends AbstractTransformCros
 	}
 
 	@Override
-	public GenericCrossReference transform(
+	public GenericCrossreference transform(
 			KeggCompoundMetaboliteCrossreferenceEntity crossReference) {
 		String originalRef = crossReference.getRef().toUpperCase();
 		String originalValue = crossReference.getValue().toUpperCase();
@@ -24,7 +24,7 @@ public class TransformKeggMetaboliteCrossReference extends AbstractTransformCros
 			originalValue = valueTransformMap.get(originalRef).get(originalValue);
 		}
 		
-		GenericCrossReference xref = new GenericCrossReference(crossReference.getType(), originalRef, originalValue);
+		GenericCrossreference xref = new GenericCrossreference(crossReference.getType(), originalRef, originalValue);
 		return xref;
 	}
 }

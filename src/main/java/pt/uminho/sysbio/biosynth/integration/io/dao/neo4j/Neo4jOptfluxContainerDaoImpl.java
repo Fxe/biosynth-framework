@@ -23,7 +23,7 @@ import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.ExtendedModelMetabolite;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionLeft;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionRight;
@@ -215,11 +215,11 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 		return refs;
 	}
 	
-	public List<GenericCrossReference> getCrossreferences(Long id) {
-		List<GenericCrossReference> refs = new ArrayList<> ();
+	public List<GenericCrossreference> getCrossreferences(Long id) {
+		List<GenericCrossreference> refs = new ArrayList<> ();
 		Node node = graphDatabaseService.getNodeById(id);
 		for (Node refNode : Neo4jUtils.collectNodeRelationshipNodes(node, MetabolicModelRelationshipType.has_crossreference_to)) {
-			GenericCrossReference reference = new GenericCrossReference();
+			GenericCrossreference reference = new GenericCrossreference();
 			reference.setId(refNode.getId());
 			reference.setRef((String) refNode.getProperty("major_label"));
 			reference.setValue((String) refNode.getProperty("entry"));

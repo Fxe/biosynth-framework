@@ -1,8 +1,8 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 
-public interface IReferenceTransformer<T extends GenericCrossReference> {
+public interface IReferenceTransformer<T extends GenericCrossreference> {
 	public Class<T> getTransformerEntityClass();
-	public GenericCrossReference transform(T crossReference);
+	public GenericCrossreference transform(T crossReference);
 }

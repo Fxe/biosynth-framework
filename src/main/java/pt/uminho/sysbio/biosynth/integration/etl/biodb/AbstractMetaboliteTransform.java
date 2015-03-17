@@ -28,7 +28,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
@@ -278,7 +278,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 			List<?> xrefs = List.class.cast(method.invoke(metabolite));
 			for (Object xrefObject : xrefs) {
 				LOGGER.debug("Found cross-reference: " + xrefObject);
-				GenericCrossReference xref = GenericCrossReference.class.cast(xrefObject);
+				GenericCrossreference xref = GenericCrossreference.class.cast(xrefObject);
 				switch (xref.getType()) {
 					case DATABASE:
 //						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();

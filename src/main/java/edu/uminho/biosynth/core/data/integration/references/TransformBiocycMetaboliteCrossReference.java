@@ -1,6 +1,6 @@
 package edu.uminho.biosynth.core.data.integration.references;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 
 public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCrossReference<BioCycMetaboliteCrossreferenceEntity>{
@@ -16,7 +16,7 @@ public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCr
 	}
 
 	@Override
-	public GenericCrossReference transform(
+	public GenericCrossreference transform(
 			BioCycMetaboliteCrossreferenceEntity crossReference) {
 		
 		String originalRef = crossReference.getRef().toUpperCase();
@@ -30,7 +30,7 @@ public class TransformBiocycMetaboliteCrossReference extends AbstractTransformCr
 			originalValue = valueTransformMap.get(originalRef).get(originalValue);
 		}
 		
-		GenericCrossReference xref = new GenericCrossReference(crossReference.getType(), originalRef, originalValue);
+		GenericCrossreference xref = new GenericCrossreference(crossReference.getType(), originalRef, originalValue);
 		
 		return xref;
 	}

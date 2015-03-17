@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.BinaryGraph;
 import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
@@ -20,7 +20,7 @@ import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;
 import edu.uminho.biosynth.core.data.integration.dictionary.BioDbEntityDictionary;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 
-public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCrossReference> implements IReferenceLoader{
+public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCrossreference> implements IReferenceLoader{
 	
 	private final static Logger LOGGER = Logger.getLogger(ReferenceLoader.class.getName());
 	
@@ -76,7 +76,7 @@ public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCross
 				if (xrefObj.getClass().equals(entityReferenceClazz)) {
 					
 					// apply the transformer
-					GenericCrossReference xref = referenceTransformer.transform(entityReferenceClazz.cast(xrefObj));
+					GenericCrossreference xref = referenceTransformer.transform(entityReferenceClazz.cast(xrefObj));
 					
 					// turns the xref into reference node (graph edge)
 					ReferenceNode xrefNode = transformReferneceToNode(xref);
@@ -105,7 +105,7 @@ public class ReferenceLoader<T extends GenericMetabolite, R extends GenericCross
 		return referenceGraph;
 	}
 	
-	private ReferenceNode transformReferneceToNode(GenericCrossReference xref) {
+	private ReferenceNode transformReferneceToNode(GenericCrossreference xref) {
 		ReferenceNode xrefNode = null; 
 		
 		switch (xref.getType()) {

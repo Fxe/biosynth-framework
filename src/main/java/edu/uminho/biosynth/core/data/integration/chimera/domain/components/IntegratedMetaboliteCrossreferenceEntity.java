@@ -7,11 +7,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 
 @Entity
 @Table(name="integrated_metabolite_crossreference")
-public class IntegratedMetaboliteCrossreferenceEntity extends GenericCrossReference {
+public class IntegratedMetaboliteCrossreferenceEntity extends GenericCrossreference {
 	
 	private static final long serialVersionUID = -5148544499444983334L;
 
@@ -50,7 +50,7 @@ public class IntegratedMetaboliteCrossreferenceEntity extends GenericCrossRefere
 	}
 	
 	public IntegratedMetaboliteCrossreferenceEntity() { }
-	public IntegratedMetaboliteCrossreferenceEntity(GenericCrossReference xref) {
+	public IntegratedMetaboliteCrossreferenceEntity(GenericCrossreference xref) {
 		super(xref.getType(), xref.getRef(), xref.getValue());
 	}
 	

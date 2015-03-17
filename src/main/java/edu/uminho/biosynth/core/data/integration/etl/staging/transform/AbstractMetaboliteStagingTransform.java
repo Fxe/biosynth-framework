@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.hibernate.criterion.Restrictions;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import edu.uminho.biosynth.core.data.integration.etl.staging.IMetaboliteStagingManager;
@@ -20,7 +20,7 @@ import edu.uminho.biosynth.core.data.integration.etl.staging.components.Metaboli
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteXrefGroupDim;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 
-public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabolite, X extends GenericCrossReference> implements IMetaboliteStagingTransform<T> {
+public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabolite, X extends GenericCrossreference> implements IMetaboliteStagingTransform<T> {
 	
 	protected IGenericDao dao;
 	protected IReferenceTransformer<X> transformer;
@@ -160,7 +160,7 @@ public abstract class AbstractMetaboliteStagingTransform<T extends GenericMetabo
 		
 		//assemble xrefs either they exists from staging area or generate a new record
 		for (X xref : xrefs) {
-			GenericCrossReference xref_gen = transformer.transform(xref);
+			GenericCrossreference xref_gen = transformer.transform(xref);
 			MetaboliteXrefDim xref_dim = null;
 			for (MetaboliteXrefDim query_res : dao.criteria(MetaboliteXrefDim.class,
 					Restrictions.and(Restrictions.eq("source", xref_gen.getRef()), Restrictions.eq("value", xref_gen.getValue()))

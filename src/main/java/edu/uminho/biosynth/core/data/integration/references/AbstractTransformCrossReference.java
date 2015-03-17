@@ -3,10 +3,10 @@ package edu.uminho.biosynth.core.data.integration.references;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.uminho.sysbio.biosynthframework.GenericCrossReference;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import edu.uminho.biosynth.core.data.integration.references.IReferenceTransformer;
 
-public abstract class AbstractTransformCrossReference<T extends GenericCrossReference> implements IReferenceTransformer<T> {
+public abstract class AbstractTransformCrossReference<T extends GenericCrossreference> implements IReferenceTransformer<T> {
 	
 	protected final Map<String, String> refTransformMap = new HashMap<> ();
 	protected final Map<String, Map<String, String>> valueTransformMap = new HashMap<> ();
@@ -24,6 +24,6 @@ public abstract class AbstractTransformCrossReference<T extends GenericCrossRefe
 	abstract public Class<T> getTransformerEntityClass();
 	
 	@Override
-	abstract public GenericCrossReference transform(T crossReference);
+	abstract public GenericCrossreference transform(T crossReference);
 	
 }
