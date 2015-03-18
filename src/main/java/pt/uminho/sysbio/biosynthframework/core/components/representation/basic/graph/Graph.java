@@ -3,9 +3,7 @@ package pt.uminho.sysbio.biosynthframework.core.components.representation.basic.
 /**
  * 
  * @author Filipe Liu
- *
- * @param <V>
- * @param <E>
+ * 
  */
 public interface Graph {
 	
