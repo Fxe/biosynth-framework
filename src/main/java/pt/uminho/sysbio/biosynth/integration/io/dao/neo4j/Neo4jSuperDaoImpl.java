@@ -22,7 +22,7 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jSuperDaoImpl.class);
 	
-	private GraphDatabaseService graphDatabaseService;
+	private final GraphDatabaseService graphDatabaseService;
 	
 	public Neo4jSuperDaoImpl(GraphDatabaseService graphDatabaseService) {
 		this.graphDatabaseService = graphDatabaseService;
@@ -204,6 +204,11 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 			}
 		}
 		return modified;
+	}
+
+	@Override
+	public GraphDatabaseService getGraphDatabaseService() {
+		return this.graphDatabaseService;
 	}
 
 }
