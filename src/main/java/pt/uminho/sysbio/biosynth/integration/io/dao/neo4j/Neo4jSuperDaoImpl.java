@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -23,9 +24,11 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jSuperDaoImpl.class);
 	
 	private final GraphDatabaseService graphDatabaseService;
+	private final ExecutionEngine executionEngine;
 	
 	public Neo4jSuperDaoImpl(GraphDatabaseService graphDatabaseService) {
 		this.graphDatabaseService = graphDatabaseService;
+		this.executionEngine = new ExecutionEngine(graphDatabaseService);
 	}
 	
 	private Neo4jNode toNeo4jNode(Node node) {
@@ -209,6 +212,11 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 	@Override
 	public GraphDatabaseService getGraphDatabaseService() {
 		return this.graphDatabaseService;
+	}
+
+	@Override
+	public String executeQuery(String query, Map<String, Object> params) {
+		return this.executionEngine.execute(query, params).dumpToString();
 	}
 
 }

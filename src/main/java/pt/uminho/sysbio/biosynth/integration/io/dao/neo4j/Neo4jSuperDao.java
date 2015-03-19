@@ -21,5 +21,5 @@ public interface Neo4jSuperDao {
 	public boolean linkIfNotExists(long src, long dst, 
 			RelationshipType relationshipType, Map<String, Object> properties);
 	public boolean unlinkIfExists(long src, long dst);
-	
+	public String executeQuery(String query, Map<String, Object> params);
 }

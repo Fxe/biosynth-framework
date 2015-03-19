@@ -360,5 +360,29 @@ public class Neo4jUtils {
 		return i;
 	}
 
+	
+	/**
+	 * 
+	 * @param src Node to move
+	 * @param dst Node 
+	 * @return number of relationships moved
+	 */
+	public static int joinNodes(Node src, Node dst) {
+		int movedEdges = 0;
+		for (Relationship r : src.getRelationships()) {
+			if (r.getStartNode().getId() == src.getId()) {
+				Relationship r_ = dst.createRelationshipTo(r.getEndNode(), r.getType());
+				Neo4jUtils.setPropertiesMap(Neo4jUtils.getPropertiesMap(r), r_);
+			} else {
+				Relationship r_ = r.getEndNode().createRelationshipTo(dst, r.getType());
+				Neo4jUtils.setPropertiesMap(Neo4jUtils.getPropertiesMap(r), r_);
+			}
+			movedEdges++;
+			r.delete();
+		}
+		
+		return movedEdges;
+	}
+
 
 }
