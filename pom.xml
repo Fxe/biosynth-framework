@@ -77,6 +77,20 @@
 		<groupId>org.openscience.cdk</groupId>
 		<artifactId>cdk-bundle</artifactId>
 		<version>${cdk.version}</version>
+		      <exclusions>
+      	<exclusion>
+      		<artifactId>org.openscience.cdk</artifactId>
+      		<groupId>cdk-log4j</groupId>
+      	</exclusion>
+      	<exclusion>
+      		<artifactId>org.openscience.cdk</artifactId>
+      		<groupId>cdk-iordf</groupId>
+      	</exclusion>
+      	<exclusion>
+      		<artifactId>cdk-iordf</artifactId>
+      		<groupId>org.openscience.cdk</groupId>
+      	</exclusion>
+		      </exclusions>
     </dependency>
     
     <dependency>
