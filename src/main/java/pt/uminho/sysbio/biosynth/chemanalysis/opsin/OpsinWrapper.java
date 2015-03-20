@@ -8,6 +8,7 @@ import uk.ac.cam.ch.wwmm.opsin.NameToStructureException;
 public class OpsinWrapper {
 	
 	public static String iupacToSmiles(String name) throws NameToStructureException {
+		
 		NameToStructure nameToStructure = NameToStructure.getInstance();
 		return nameToStructure.parseToSmiles(name);
 	}
