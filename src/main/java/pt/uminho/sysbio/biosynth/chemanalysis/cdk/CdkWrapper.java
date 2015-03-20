@@ -1,14 +1,26 @@
 package pt.uminho.sysbio.biosynth.chemanalysis.cdk;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
@@ -16,8 +28,18 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.renderer.AtomContainerRenderer;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +69,11 @@ public class CdkWrapper implements FormulaReader {
 				CollectionUtils.increaseCount(atomMap, atom.getSymbol(), 1);
 			}
 		} catch (NullPointerException e) {
-			LOGGER.error("NullPointerException " + e.getMessage()); 
+			LOGGER.error(String.format("NullPointer [%s] - %s", formula, e.getMessage())); 
 		} catch (StringIndexOutOfBoundsException e) {
-			LOGGER.error("StringIndexOutOfBoundsException " + e.getMessage()); 
+			LOGGER.error(String.format("StringIndexOutOfBounds [%s] - %s", formula, e.getMessage())); 
 		} catch (NumberFormatException e) {
-			LOGGER.error("NumberFormatException " + e.getMessage()); 
+			LOGGER.error(String.format("NumberFormat [%s] - %s", formula, e.getMessage())); 
 		}
 		
 		return atomMap;
@@ -81,11 +103,11 @@ public class CdkWrapper implements FormulaReader {
 			return ret;
 		
 		} catch (NullPointerException e) {
-			LOGGER.error("NullPointerException " + e.getMessage()); 
+			LOGGER.error(String.format("NullPointer [%s] - %s", formula, e.getMessage())); 
 		} catch (StringIndexOutOfBoundsException e) {
-			LOGGER.error("StringIndexOutOfBoundsException " + e.getMessage()); 
+			LOGGER.error(String.format("StringIndexOutOfBounds [%s] - %s", formula, e.getMessage())); 
 		} catch (NumberFormatException e) {
-			LOGGER.error("NumberFormatException " + e.getMessage()); 
+			LOGGER.error(String.format("NumberFormat [%s] - %s", formula, e.getMessage())); 
 		}
 
 		return null;
@@ -169,6 +191,40 @@ public class CdkWrapper implements FormulaReader {
 	
 	
 	public static void main(String[] args) {
-		System.out.println(new CdkWrapper().getAtomCountMap("CH5O9Mg5.NaCl.Ti(FeHe3)4"));
+		IChemObjectBuilder     builder = SilentChemObjectBuilder.getInstance();
+		SmilesParser           sp      = new SmilesParser(builder);
+		try {
+			IAtomContainer pep = sp.parseSmiles("O=C(O)C(OP(=O)(O)O)=C");
+			LOGGER.info("Atoms {}", pep.getAtomCount());
+			IAtomContainer mol1 = sp.parseSmiles("CC1=CC(Br)CCC1");
+			LOGGER.info("Atoms {}", mol1.getAtomCount());
+//			Image
+//			IMolecue
+			List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
+	        generators.add(new BasicSceneGenerator());
+	        generators.add(new BasicBondGenerator());
+//	        generators.add(new RingPlateGenerator());
+	        generators.add(new BasicAtomGenerator());
+			AtomContainerRenderer renderer = new AtomContainerRenderer(generators, new AWTFontManager());
+			IAtomContainer triazole = MoleculeFactory.make123Triazole();
+	        RendererModel model = renderer.getRenderer2DModel();
+			Image image = new BufferedImage(400, 400, BufferedImage.TYPE_4BYTE_ABGR);
+	        Graphics2D g = (Graphics2D)image.getGraphics();
+	        g.setColor(Color.WHITE);
+	        g.fill(new Rectangle2D.Double(0, 0, 400, 400));
+	        renderer.paint(triazole, new AWTDrawVisitor(g), 
+	                new Rectangle2D.Double(0, 0, 400, 400), true);
+	        g.dispose();
+	        File file = new File("D:/mol1.png");
+	        ImageIO.write((RenderedImage)image, "PNG", file);
+
+		} catch (InvalidSmilesException e) {
+			LOGGER.error("IS - {}", e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOGGER.error("IO - {}", e.getMessage());
+			e.printStackTrace();
+		}
+//		System.out.println(new CdkWrapper().getAtomCountMap("CH5O9Mg5.NaCl.Ti(FeHe3)4"));
 	}
 }

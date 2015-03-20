@@ -19,16 +19,6 @@
 
   <repositories>
     <repository>
-      <id>jni-inchi</id>
-      <name>JNI-InChI Maven Repository</name>
-      <url>http://jni-inchi.sourceforge.net/m2repo</url>
-    </repository>
-    <repository>
-      <id>opsin</id>
-      <name>ch.cam.ac.uk</name>
-      <url>https://maven.ch.cam.ac.uk/content/repositories/releases/</url>
-    </repository>
-    <repository>
       <id>ebi-repo</id>
       <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
     </repository>
@@ -50,7 +40,7 @@
     <dependency>
       <groupId>net.sf.jni-inchi</groupId>
       <artifactId>jni-inchi</artifactId>
-      <version>0.7</version>
+      <version>0.8</version>
     </dependency>
     
     <dependency>
