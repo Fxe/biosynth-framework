@@ -8,12 +8,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynth.chemanalysis.inchi.JniInchi;
 import pt.uminho.sysbio.biosynth.chemanalysis.opsin.OpsinWrapper;
 
 public class TestOpsinWrapper {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		String omg = JniInchi.getInchiKeyFromInchi("InChI=1S/C8H13NO/c1-9-6-2-3-7(9)5-8(10)4-6/h6-7H,2-5H2,1H3");
+		System.out.println(omg);
 	}
 
 	@AfterClass
