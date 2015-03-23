@@ -8,6 +8,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jIntegrationMetadataDaoImpl;
@@ -41,8 +42,8 @@ public class SomeReactionQAReport implements IntegrationSetReporter {
 			System.out.println(cidEntry.getId());
 			Node cidNode = graphMetaService.getNodeById(cidEntry.getId());
 			System.out.println(Neo4jUtils.getLabels(cidNode));
-			for (String qaTag : cidEntry.getMeta().keySet()) {
-				CollectionUtils.increaseCount(frequencyCount, qaTag, 1);
+			for (IntegratedClusterMeta qaTag : cidEntry.getMeta()) {
+				CollectionUtils.increaseCount(frequencyCount, qaTag.getMetaType(), 1);
 			}
 		}
 		

@@ -4,5 +4,6 @@ import org.neo4j.graphdb.RelationshipType;
 
 public enum IntegrationRelationshipType implements RelationshipType {
 	IntegratedMetaboliteCluster, IntegratedReactionCluster,
-	Integrates
+	Integrates, 
+	has_meta_information, //CTR -> META
 }

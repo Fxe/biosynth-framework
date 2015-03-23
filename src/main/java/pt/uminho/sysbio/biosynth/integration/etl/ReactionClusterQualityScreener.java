@@ -39,7 +39,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 	public void evaluate(IntegratedCluster integratedCluster) {
 		Set<ReactionQualityLabel> labels = this.something(integratedCluster);
 		
-		Map<String, IntegratedClusterMeta> meta = new HashMap<> ();
+		List<IntegratedClusterMeta> meta = new ArrayList<> ();
 		
 		for (ReactionQualityLabel label : labels) {
 			IntegratedClusterMeta clusterMeta = new IntegratedClusterMeta();
@@ -60,7 +60,7 @@ public class ReactionClusterQualityScreener implements EtlQualityScreen<Integrat
 			clusterMeta.setMessage("massage !");
 			clusterMeta.setMetaType(label.toString());
 			
-			meta.put(clusterMeta.getMetaType(), clusterMeta);
+			meta.add(clusterMeta);
 		}
 		
 		integratedCluster.setMeta(meta);

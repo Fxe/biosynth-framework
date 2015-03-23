@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
@@ -23,6 +25,7 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
 
@@ -47,7 +50,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		
 		LOGGER.trace(labels.toString());
 		
-		Map<String, IntegratedClusterMeta> meta = new HashMap<> ();
+		List<IntegratedClusterMeta> meta = new ArrayList<> ();
 		
 		for (MetaboliteQualityLabel label : labels) {
 			IntegratedClusterMeta clusterMeta = new IntegratedClusterMeta();
@@ -84,7 +87,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 			clusterMeta.setMessage("massage !");
 			clusterMeta.setMetaType(label.toString());
 			
-			meta.put(clusterMeta.getMetaType(), clusterMeta);
+			meta.add(clusterMeta);
 		}
 		
 		integratedCluster.setMeta(meta);
@@ -94,13 +97,16 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		
 		List<GraphMetaboliteEntity> cpdList = new ArrayList<> ();
 	
-		LOGGER.debug("Load Metabolites ...");
+		LOGGER.debug("Loading {} metabolites ...", integratedCluster.getEntry());
 		for (IntegratedClusterMember member : integratedCluster.getMembers()) {
 			Long referenceId = member.getMember().getReferenceId();
 			GraphMetaboliteEntity cpd = metaboliteDao.getMetaboliteById("", referenceId);
 			
 			if (cpd != null) {
+				LOGGER.debug("{} found - {}:{}", member.getMember().getReferenceId(), cpd.getMajorLabel(), cpd.getEntry());
 				cpdList.add(cpd);
+			} else {
+				LOGGER.debug("{} not found - {}:{}", member.getMember().getReferenceId());
 			}
 		}
 		
@@ -126,8 +132,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking formulas ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.MolecularFormula.toString());
-		
+		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetaboliteRelationshipType.has_molecular_formula.toString());
 		if (occurenceMap.size() == 1) {
 			qualityLabels.add(MetaboliteQualityLabel.FORMULA_EXACT);
 			return qualityLabels;
@@ -179,7 +184,7 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking chemical charge ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.Charge.toString());
+		Map<Object, Integer> occurenceMap = this.collectPropertyKeys(cpdList, MetaboliteRelationshipType.has_charge.toString());
 		
 		if (occurenceMap.size() > 1) qualityLabels.add(MetaboliteQualityLabel.CHARGE_MISMATCH);
 		
@@ -212,8 +217,8 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 		LOGGER.debug("Checking structure ...");
 		Set<MetaboliteQualityLabel> qualityLabels = new HashSet<> ();
 		
-		Map<Object, Integer> inchiOccurenceMap = this.collectPropertyKeys(cpdList, "inchiKey", MetabolitePropertyLabel.InChI.toString());
-		Map<Object, Integer> smilesOccurenceMap = this.collectPropertyKeys(cpdList, MetabolitePropertyLabel.SMILES.toString());
+		Map<Object, Integer> inchiOccurenceMap = this.collectPropertyKeys(cpdList, "inchiKey", MetaboliteRelationshipType.has_inchi.toString());
+		Map<Object, Integer> smilesOccurenceMap = this.collectPropertyKeys(cpdList, MetaboliteRelationshipType.has_inchi.toString());
 		
 		if (inchiOccurenceMap.size() > 1) {
 			Set<String> fihbkSet = new HashSet<> ();
@@ -280,19 +285,28 @@ public class MetaboliteClusterQualityScreener implements EtlQualityScreen<Integr
 	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String majorLabel) {
 		return collectPropertyKeys(cpdList, "key", majorLabel);
 	}
-	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String key, String majorLabel) {
+	private Map<Object, Integer> collectPropertyKeys(List<GraphMetaboliteEntity> cpdList, String key, String linkType) {
+		LOGGER.trace("key: {}, linkType: {}", key, linkType);
 		Map<Object, Integer> occurenceMap = new HashMap<> ();
-		
 		for (GraphMetaboliteEntity cpd: cpdList) {
-			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
-				cpd.getPropertyEntities()) {
-				if (property.getLeft().getLabels().contains(majorLabel)) {
-					LOGGER.trace("Found: " + property.getLeft());
-					
-					GraphPropertyEntity propertyEntity = property.getLeft(); 
-					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty(key, null), 1);
+			if (cpd.getConnectedEntities().containsKey(linkType)) {
+				for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : cpd.getConnectedEntities().get(linkType)) {
+					Object propertyValue = p.getRight().getProperties().get(key);
+					LOGGER.trace("Found: {}", propertyValue);
+					CollectionUtils.increaseCount(occurenceMap, propertyValue, 1);
 				}
 			}
+			
+			
+//			for (Pair<GraphPropertyEntity, GraphRelationshipEntity> property : 
+//				cpd.getPropertyEntities()) {
+//				if (property.getLeft().getLabels().contains(linkType)) {
+//					LOGGER.trace("Found: " + property.getLeft());
+//					
+//					GraphPropertyEntity propertyEntity = property.getLeft(); 
+//					CollectionUtils.increaseCount(occurenceMap, propertyEntity.getProperty(key, null), 1);
+//				}
+//			}
 		}
 		
 		LOGGER.debug("Total: " + occurenceMap);

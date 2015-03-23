@@ -31,8 +31,10 @@ import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
+import pt.uminho.sysbio.biosynth.integration.etl.MetaboliteQualityLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.IntegrationMetadataDao;
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
@@ -219,6 +221,16 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		}
 		integratedCluster.setMembers(integratedClusterMembers);
 		
+		for (Relationship relationship : cidNode
+				.getRelationships(IntegrationRelationshipType.has_meta_information)) {
+			Node metaNode = relationship.getOtherNode(cidNode);
+			LOGGER.trace("Found meta {} - {}", Neo4jUtils.getLabels(metaNode), Neo4jUtils.getPropertiesMap(metaNode));
+			IntegratedClusterMeta meta = new IntegratedClusterMeta();
+			meta.setId(metaNode.getId());
+			meta.setMetaType((String) metaNode.getProperty("major_label"));
+			meta.setLevel(IntegrationMessageLevel.valueOf((String)metaNode.getProperty("level")));
+			integratedCluster.getMeta().add(meta);
+		}
 		return integratedCluster;
 	}
 	
@@ -341,7 +353,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		return null;
 	}
 	
-	public IntegratedCluster saveIntegratedClusterMetadata(IntegratedCluster cluster) {
+	public IntegratedCluster saveIntegratedMetaboliteClusterMetadata(IntegratedCluster cluster) {
 		if (cluster.getIntegrationSet() == null) {
 			LOGGER.error("No integration set assigned to cluster");
 			return null;
@@ -355,10 +367,19 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			return null;
 		}
 		
-		for (String meta : cluster.getMeta().keySet()) {
-			Label label = DynamicLabel.label(meta);
-			Node cidNode = graphDatabaseService.getNodeById(cluster.getId());
-			cidNode.addLabel(label);
+		
+		Node ctrNode = getNode(cluster);
+		for (IntegratedClusterMeta meta : cluster.getMeta()) {
+			Node metaNode = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType()));
+			if (metaNode == null) {
+				LOGGER.warn("{}:{} not found new node created", IntegrationNodeLabel.MetaboliteClusterMetaProperty, meta.getMetaType());
+				metaNode = Neo4jUtils.mergeUniqueNode(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType(), this.executionEngine);
+				metaNode.addLabel(DynamicLabel.label(meta.getLevel().toString()));
+				metaNode.setProperty("level", meta.getLevel().toString());
+				metaNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, meta.getMetaType());
+			}
+			
+			Relationship relationship = ctrNode.createRelationshipTo(metaNode, IntegrationRelationshipType.has_meta_information);
 		}
 		
 		return cluster;
@@ -393,8 +414,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		IntegrationNodeLabel clusterLabel = IntegrationNodeLabel.valueOf(cluster.getClusterType());
 		
 		//Make Evaluation Labels (TEMP STRATEGY ! MAYBE NODE ?)
-		String qualityLabels = StringUtils.join(cluster.getMeta().keySet(), ':');
-		if (!qualityLabels.trim().isEmpty()) qualityLabels = ":".concat(qualityLabels);
+//		String qualityLabels = StringUtils.join(cluster.getMeta().keySet(), ':');
+//		if (!qualityLabels.trim().isEmpty()) qualityLabels = ":".concat(qualityLabels);
 		
 		String cypher = String.format(
 				"MERGE (cid:IntegratedCluster:%s {entry:{entry}, description:{description}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
@@ -719,21 +740,21 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			return;
 		}
 		
-		
-		for (IntegratedClusterMeta metaEntity : integratedCluster.getMeta().values()) {
-			String type = metaEntity.getMetaType();
-			String message = metaEntity.getMessage();
-			
-			String cypherQuery = String.format("MERGE (m:%s {type:{type}}) RETURN m AS metaEntity", 
-					IntegrationNodeLabel.MetaboliteClusterMetaProperty.toString());
-			Map<String, Object> params = new HashMap<> ();
-			params.put("type", type);
-			
-			Node metaNode = Neo4jUtils.getExecutionResultGetSingle("metaEntity", this.executionEngine.execute(cypherQuery, params));
-			
-			Relationship relationship = node.createRelationshipTo(metaNode, null);
-			relationship.setProperty("message", message);
-		}
+		throw new RuntimeException("Implement me please !");
+//		for (IntegratedClusterMeta metaEntity : integratedCluster.getMeta().values()) {
+//			String type = metaEntity.getMetaType();
+//			String message = metaEntity.getMessage();
+//			
+//			String cypherQuery = String.format("MERGE (m:%s {type:{type}}) RETURN m AS metaEntity", 
+//					IntegrationNodeLabel.MetaboliteClusterMetaProperty.toString());
+//			Map<String, Object> params = new HashMap<> ();
+//			params.put("type", type);
+//			
+//			Node metaNode = Neo4jUtils.getExecutionResultGetSingle("metaEntity", this.executionEngine.execute(cypherQuery, params));
+//			
+//			Relationship relationship = node.createRelationshipTo(metaNode, null);
+//			relationship.setProperty("message", message);
+//		}
 	}
 
 	@Override

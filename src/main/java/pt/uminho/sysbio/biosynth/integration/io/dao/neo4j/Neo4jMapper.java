@@ -124,7 +124,7 @@ public class Neo4jMapper {
 				MetaboliteQualityLabel qLabel = MetaboliteQualityLabel.valueOf(label.toString());
 				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
 				integratedClusterMeta.setMetaType(qLabel.toString());
-				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
+//				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
 			} catch (Exception e) {
 				LOGGER.trace("not metabolite label .. " + label);
 			}
@@ -133,7 +133,7 @@ public class Neo4jMapper {
 				ReactionQualityLabel qLabel = ReactionQualityLabel.valueOf(label.toString());
 				IntegratedClusterMeta integratedClusterMeta = new IntegratedClusterMeta();
 				integratedClusterMeta.setMetaType(qLabel.toString());
-				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
+//				integratedCluster.getMeta().put(integratedClusterMeta.getMetaType(), integratedClusterMeta);
 			} catch (Exception e) {
 				LOGGER.trace("not reaction label .. " + label);
 			}

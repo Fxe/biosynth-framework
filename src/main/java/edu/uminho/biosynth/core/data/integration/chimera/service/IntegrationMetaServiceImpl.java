@@ -84,13 +84,13 @@ public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 		
 		Set<String> unmodified = new HashSet<> ();
 		Set<String> delete = new HashSet<> ();
-		for (String metaType : integratedCluster.getMeta().keySet()) {
-			if (metaMap.containsKey(metaType)) {
-				unmodified.add(metaType);
-			} else {
-				delete.add(metaType);
-			}
-		}
+//		for (String metaType : integratedCluster.getMeta().keySet()) {
+//			if (metaMap.containsKey(metaType)) {
+//				unmodified.add(metaType);
+//			} else {
+//				delete.add(metaType);
+//			}
+//		}
 		
 		for (String metaType : unmodified) metaMap.remove(metaType);
 		for (String metaType : delete) integratedCluster.getMeta().remove(metaType);
@@ -98,7 +98,7 @@ public class IntegrationMetaServiceImpl implements IntegrationMetaService {
 		for (String metaType : metaMap.keySet()) {
 			IntegratedClusterMeta integratedClusterMeta = metaMap.get(metaType); 
 			integratedClusterMeta.setIntegratedCluster(integratedCluster);
-			integratedCluster.getMeta().put(metaType, integratedClusterMeta);
+//			integratedCluster.getMeta().put(metaType, integratedClusterMeta);
 		}
 		
 		this.meta.saveIntegratedCluster(integratedCluster);

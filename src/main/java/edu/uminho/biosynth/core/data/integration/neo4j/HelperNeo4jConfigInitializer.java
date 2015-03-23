@@ -44,6 +44,8 @@ public class HelperNeo4jConfigInitializer {
 		String.format("CREATE CONSTRAINT ON (iid : %s) ASSERT iid.entry IS UNIQUE", IntegrationNodeLabel.IntegrationSet),
 		String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
 		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.%s IS UNIQUE", IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE),
+		String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
+		String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", IntegrationNodeLabel.ReactionClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
 	};
 	
 	private static final String[] NEO_CURA_CONSTRAINTS = {
@@ -94,6 +96,7 @@ public class HelperNeo4jConfigInitializer {
 		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
 		for (String query: NEO_META_CONSTRAINTS) {
 			engine.execute(query);
+			LOGGER.trace("Execute Constraint: " + query);
 		}
 		
 		return graphDatabaseService;
@@ -104,6 +107,7 @@ public class HelperNeo4jConfigInitializer {
 		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
 		for (String query: NEO_CURA_CONSTRAINTS) {
 			engine.execute(query);
+			LOGGER.trace("Execute Constraint: " + query);
 		}
 		
 		return graphDatabaseService;

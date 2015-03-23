@@ -2,8 +2,11 @@ package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
 public abstract class AbstractNeo4jDao {
 
@@ -24,5 +27,9 @@ public abstract class AbstractNeo4jDao {
 	
 	public ExecutionEngine getExecutionEngine() {
 		return executionEngine;
+	}
+	
+	protected Node getNode(AbstractBiosynthEntity entity) {
+		return graphDatabaseService.getNodeById(entity.getId());
 	}
 }

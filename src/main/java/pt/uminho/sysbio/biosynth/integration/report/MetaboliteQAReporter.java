@@ -10,6 +10,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
+import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
@@ -55,8 +56,8 @@ public class MetaboliteQAReporter implements IntegrationSetReporter {
 //		Long[] cids = new Long[] {26040L, 45889L};
 		for (Long cid : cids) {
 			IntegratedCluster cidEntry = neo4jIntegrationMetadataDaoImpl.getIntegratedClusterById(cid);
-			for (String qaTag : cidEntry.getMeta().keySet()) {
-				CollectionUtils.increaseCount(frequencyCount, qaTag, 1);
+			for (IntegratedClusterMeta qaTag : cidEntry.getMeta()) {
+				CollectionUtils.increaseCount(frequencyCount, qaTag.getMetaType(), 1);
 			}
 			
 			int size = cidEntry.getMembers().size();
