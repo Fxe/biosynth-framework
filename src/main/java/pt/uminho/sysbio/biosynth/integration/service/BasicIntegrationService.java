@@ -133,5 +133,10 @@ public class BasicIntegrationService implements IntegrationService {
 		
 		return a;
 	}
+	@Override
+	public IntegrationSet getIntegrationSet(String itg) {
+		
+		return null;
+	}
 
 }

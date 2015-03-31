@@ -12,8 +12,11 @@ public interface IntegrationService {
 	
 	public List<String> getAllIntegrationSetsEntries();
 	public List<Long> getAllIntegrationSetsIds();
+	@Deprecated
 	public IntegrationSet getIntegrationSetByEntry(String entry);
+	@Deprecated
 	public IntegrationSet getIntegrationSetById(Long id);
+	public IntegrationSet getIntegrationSet(String itg);
 	public IntegrationSet createIntegrationSet(String name, String description);
 	public void resetIntegrationSet(IntegrationSet integrationSet);
 	public void deleteIntegrationSet(IntegrationSet integrationSet);
