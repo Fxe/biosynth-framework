@@ -127,7 +127,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 		if (integrationSetNode == null 
 				|| !integrationSetNode.hasLabel(IntegrationNodeLabel.IntegrationSet)) return null;
 		
-		System.out.println(Neo4jUtils.getPropertiesMap(integrationSetNode));
+		//System.out.println(Neo4jUtils.getPropertiesMap(integrationSetNode));
 		IntegrationSet integrationSet = new IntegrationSet();
 		integrationSet.setId(integrationSetNode.getId());
 		integrationSet.setEntry((String) integrationSetNode.getProperty("entry"));

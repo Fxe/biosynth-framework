@@ -421,6 +421,13 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		return null;
 	}
 
+	@Override
+	public IntegratedCluster saveIntegratedMetaboliteClusterMetadata(
+			IntegratedCluster integratedCluster) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

@@ -13,21 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMeta;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.FormulaReader;
+import edu.uminho.biosynth.core.data.integration.IntegrationMessageLevel;
 
 public class MetaboliteClusterQualityScreener implements EtlQualityScreen<IntegratedCluster> {
 

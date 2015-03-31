@@ -72,6 +72,7 @@ public class IntegratedClusterMeta {
 	
 	@Override
 	public String toString() {
-		return String.format("%s:%s - %s", metaType, level, message);
+//		return String.format("%s:%s - %s", metaType, level, message);
+		return String.format("%s", metaType);
 	}
 }

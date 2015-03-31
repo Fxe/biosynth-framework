@@ -71,5 +71,6 @@ public interface IntegrationMetadataDao {
 	public String lookupClusterEntryByMemberId(Long iid, Long eid);
 	public Long lookupClusterIdByMemberId(Long iid, Long eid);
 	public Map<Long, Long> getUnificationMapping(Long iid, String fromType, String toType);
+	public IntegratedCluster saveIntegratedMetaboliteClusterMetadata(IntegratedCluster integratedCluster);
 	
 }
