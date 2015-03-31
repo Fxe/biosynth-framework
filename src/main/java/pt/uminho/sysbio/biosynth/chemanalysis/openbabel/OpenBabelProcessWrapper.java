@@ -10,6 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Very dumb move use a process instead a java thingy ...
+ * @author Filipe
+ *
+ */
+@Deprecated
 public class OpenBabelProcessWrapper {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenBabelProcessWrapper.class);
