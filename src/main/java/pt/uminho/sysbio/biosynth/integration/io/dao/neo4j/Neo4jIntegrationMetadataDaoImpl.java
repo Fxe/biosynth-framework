@@ -39,8 +39,9 @@ import edu.uminho.biosynth.core.data.integration.chimera.domain.CurationEdge;
 
 public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements IntegrationMetadataDao {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jIntegrationMetadataDaoImpl.class);
 	private final static String MEMBER_DATA_ID_REFERENCE = Neo4jDefinitions.MEMBER_REFERENCE;
+	
 	@Autowired
 	public Neo4jIntegrationMetadataDaoImpl(
 			GraphDatabaseService graphDatabaseService) {
@@ -231,14 +232,13 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 			meta.setLevel(IntegrationMessageLevel.valueOf((String)metaNode.getProperty("level")));
 			integratedCluster.getMeta().add(meta);
 		}
+		
 		return integratedCluster;
 	}
 	
 	@Override
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(
 			Long integrationSetId, Long... eids) {
-		
-		
 		
 		Node iidNode = graphDatabaseService.getNodeById(integrationSetId);
 		Set<Long> cidInDomain = Neo4jUtils.collectNodeRelationshipNodeIds(iidNode);

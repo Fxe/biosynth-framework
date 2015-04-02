@@ -12,6 +12,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
+/**
+ * 
+ * @author Filipe
+ *
+ */
 public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 
 	private static final long serialVersionUID = 1L;

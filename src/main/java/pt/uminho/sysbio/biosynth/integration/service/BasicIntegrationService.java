@@ -126,8 +126,8 @@ public class BasicIntegrationService implements IntegrationService {
 		for (long iidId : this.meta.getAllIntegrationSetsId()) {
 			IntegrationSet integrationSet = this.meta.getIntegrationSet(iidId);
 			List<IntegratedCluster> ctr = this.meta.getIntegratedClusterByMemberIds(iidId, new Long[]{refId});
-			System.out.println(integrationSet);
-			System.out.println(ctr.size());
+//			System.out.println(integrationSet);
+//			System.out.println(ctr.size());
 			a.put(integrationSet, new HashSet<> (ctr));
 		}
 		
