@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel;
 
 import org.openbabel.OBConversion;
 import org.openbabel.OBMol;

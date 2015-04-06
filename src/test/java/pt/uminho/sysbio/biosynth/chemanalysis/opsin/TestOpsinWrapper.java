@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.inchi.JniInchi;
-import pt.uminho.sysbio.biosynth.chemanalysis.opsin.OpsinWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.inchi.JniInchi;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.opsin.OpsinWrapper;
 
 public class TestOpsinWrapper {
 

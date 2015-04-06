@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.domain;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

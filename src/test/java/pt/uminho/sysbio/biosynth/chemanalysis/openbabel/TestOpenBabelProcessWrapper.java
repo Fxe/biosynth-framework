@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelProcessWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelProcessWrapper;
 
 public class TestOpenBabelProcessWrapper {
 	

@@ -2,7 +2,7 @@ package pt.uminho.sysbio.biosynth.program;
 
 import java.io.IOException;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper;
 
 public class InchiToCan {
 	public static void main(String args[]) throws IOException {

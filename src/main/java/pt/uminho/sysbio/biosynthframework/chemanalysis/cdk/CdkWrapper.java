@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.cdk;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.cdk;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

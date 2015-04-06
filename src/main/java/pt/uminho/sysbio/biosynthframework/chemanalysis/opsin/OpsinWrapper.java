@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.opsin;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.opsin;
 
 import nu.xom.Element;
 import uk.ac.cam.ch.wwmm.opsin.NameToInchi;

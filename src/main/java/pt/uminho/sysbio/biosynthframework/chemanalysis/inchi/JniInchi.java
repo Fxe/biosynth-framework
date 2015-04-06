@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.inchi;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.inchi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

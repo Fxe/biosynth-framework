@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.ChemicalStructureCoreBuilder;
-import pt.uminho.sysbio.biosynth.chemanalysis.domain.ChemicalStructureCore;
-import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.ChemicalStructureCoreBuilder;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.domain.ChemicalStructureCore;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper;
 
 public class TestChemicalStructureCoreBuilder {
 

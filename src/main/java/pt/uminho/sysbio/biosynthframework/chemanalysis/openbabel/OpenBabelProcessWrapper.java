@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel;
 
 import java.io.BufferedReader;
 import java.io.IOException;

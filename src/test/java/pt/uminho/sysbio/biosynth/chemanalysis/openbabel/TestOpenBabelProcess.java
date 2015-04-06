@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelProcess;
+
 public class TestOpenBabelProcess {
 
 	@BeforeClass

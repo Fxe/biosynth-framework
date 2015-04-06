@@ -1,13 +1,13 @@
-package pt.uminho.sysbio.biosynth.chemanalysis;
+package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
 import net.sf.jniinchi.INCHI_KEY;
 
 import org.openbabel.OBConversion;
 import org.openbabel.OBMol;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.domain.ChemicalStructureCore;
-import pt.uminho.sysbio.biosynth.chemanalysis.inchi.JniInchi;
-import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.domain.ChemicalStructureCore;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.inchi.JniInchi;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper;
 
 public class ChemicalStructureCoreBuilder {
 	

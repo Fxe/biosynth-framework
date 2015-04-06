@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
+package pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenBabelProcess {
+	private final static Logger LOGGER = LoggerFactory.getLogger(OpenBabelProcess.class);
+	
 	public static String OBABEL_PATH = "obabel.exe";
 	
 	public String[] execute(String stdin) throws IOException {		
@@ -36,6 +41,7 @@ public class OpenBabelProcess {
 		}
 		
 		ProcessBuilder pb = new ProcessBuilder(argL.toArray(new String[0]));
+		LOGGER.debug("{}", StringUtils.join(pb.command(), ' '));
 		final Process process = pb.start();
 		IOUtils.write(stdin, process.getOutputStream());
 		

@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynth.program;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.openbabel.OpenBabelWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper;
 
 public class ApplyStructureInformationToKegg {
 

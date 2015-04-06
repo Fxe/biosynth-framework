@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynth.chemanalysis.cdk.CdkWrapper;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.cdk.CdkWrapper;
 
 public class TestCdkWrapper {
 

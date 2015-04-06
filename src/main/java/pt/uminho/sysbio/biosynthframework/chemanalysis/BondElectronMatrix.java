@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.chemanalysis;
+package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
 public class BondElectronMatrix {
 	private String[] atomIndex;
