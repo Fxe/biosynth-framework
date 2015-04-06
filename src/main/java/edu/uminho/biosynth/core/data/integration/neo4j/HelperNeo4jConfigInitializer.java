@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.Neo4jSignatureLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
@@ -53,6 +54,11 @@ public class HelperNeo4jConfigInitializer {
 		String.format("CREATE CONSTRAINT ON (oid : %s) ASSERT oid.entry IS UNIQUE", CurationLabel.CurationOperation),
 		String.format("CREATE CONSTRAINT ON (usr : %s) ASSERT usr.username IS UNIQUE", CurationLabel.CurationUser),
 		String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
+		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
+	};
+	
+	private static final String[] NEO_STRU_CONSTRAINTS = {
+		String.format("CREATE CONSTRAINT ON (sig : %s) ASSERT sig.key IS UNIQUE", Neo4jSignatureLabel.Signature),
 		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
 	};
 	
@@ -113,6 +119,18 @@ public class HelperNeo4jConfigInitializer {
 		return graphDatabaseService;
 	}
 	
+	public static GraphDatabaseService initializeNeo4jStruDatabaseConstraints(
+			String databasePath) {
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+		for (String query: NEO_STRU_CONSTRAINTS) {
+			engine.execute(query);
+			LOGGER.trace("Execute Constraint: " + query);
+		}
+		
+		return graphDatabaseService;
+	}
+	
 	public static GraphDatabaseService initializeNeo4jDatabase(String databasePath) {
 		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
 		return graphDatabaseService;
@@ -123,4 +141,6 @@ public class HelperNeo4jConfigInitializer {
 //		GraphDatabaseService graphDatabaseService = new Remote
 		return null;
 	}
+
+
 }
