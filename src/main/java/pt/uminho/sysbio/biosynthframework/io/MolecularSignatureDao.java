@@ -1,10 +1,11 @@
 package pt.uminho.sysbio.biosynthframework.io;
 
-import pt.uminho.sysbio.biosynthframework.chemanalysis.SignatureSet;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.MolecularSignature;
 
 public interface MolecularSignatureDao {
-
-	public SignatureSet getMoleculeMolecularSignature(long cpdId, int h, boolean stereo);
-	public void deleteMoleculeMolecularSignature(long cpdId, int h, boolean stereo);
-	public void saveMoleculeMolecularSignature(long cpdId, SignatureSet signatureSet);
+	
+	public MolecularSignature getMolecularSignatureById(long msigId);
+	public MolecularSignature getMolecularSignature(long cpdId, int h, boolean stereo);
+	public void deleteMolecularSignature(long cpdId, int h, boolean stereo);
+	public void saveMolecularSignature(long cpdId, MolecularSignature signatureSet);
 }

@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.ProcessWorker;
+
 public class OpenBabelProcess {
 	private final static Logger LOGGER = LoggerFactory.getLogger(OpenBabelProcess.class);
 	
@@ -46,6 +48,18 @@ public class OpenBabelProcess {
 		IOUtils.write(stdin, process.getOutputStream());
 		
 		process.getOutputStream().close();
+		
+		ProcessWorker worker = new ProcessWorker(process);
+		Thread thread = new Thread(worker);
+		thread.start();
+		try {
+			thread.join(2 *  1000);
+		} catch (InterruptedException ex) {
+			thread.interrupt();
+			ex.printStackTrace();
+		} finally {
+			process.destroy();
+		}
 		
 		StringBuilder stdout = new StringBuilder();
 		StringBuilder stderr = new StringBuilder();

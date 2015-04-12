@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,13 +72,5 @@ public class TestSignatures {
 		assertEquals(2, set.size());
 	}
 	
-	@Test
-	public void test_signature_set_equal() {
-		fail("Not yet implemented");
-	}
 
-	@Test
-	public void test_signature_set_not_equal() {
-		fail("Not yet implemented");
-	}
 }

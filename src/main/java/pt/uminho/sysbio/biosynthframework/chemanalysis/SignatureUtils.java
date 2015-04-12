@@ -2,6 +2,8 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,14 +14,34 @@ import org.apache.commons.io.IOUtils;
 
 public class SignatureUtils {
 	
-	public static SignatureSet scaleSignature(SignatureSet signatureSet, double alpha) {
+	/**
+	 * a - b
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static Map<Signature, Double> diff(Map<Signature, Double> a, Map<Signature, Double> b) {
+		//too lazy to do this ... just sub and remove negatives
+		//(zeros already gone from sub)
+		Map<Signature, Double> c_ = subtract(a, b);
+		Map<Signature, Double> c = new HashMap<Signature, Double> ();
+		for (Signature s : c_.keySet()) {
+			double v = c_.get(s);
+			if (v > 0) {
+				c.put(s, v);
+			}
+		}
+		return c;
+	}
+	
+	public static MolecularSignature scaleSignature(MolecularSignature signatureSet, double alpha) {
 		if (signatureSet == null) return null;
 		Map<Signature, Double> signature = signatureSet.getSignatureMap();
 		Map<Signature, Double> r = new HashMap<> ();
 		for (Signature s : signature.keySet()) {
 			r.put(s, signature.get(s) * alpha);
 		}
-		SignatureSet signatureSet_ = new SignatureSet();
+		MolecularSignature signatureSet_ = new MolecularSignature();
 		signatureSet_.setId(signatureSet.getId());
 		signatureSet_.setSignatureMap(r);
 		signatureSet_.setH(signatureSet.getH());
@@ -27,7 +49,7 @@ public class SignatureUtils {
 		return signatureSet_;
 	}
 	
-	public static SignatureSet subtract(SignatureSet a, SignatureSet b) {
+	public static MolecularSignature subtract(MolecularSignature a, MolecularSignature b) {
 		Map<Signature, Double> r = new HashMap<> ();
 		Set<Signature> common = new HashSet<> (a.getSignatureMap().keySet());
 		common.retainAll(b.getSignatureMap().keySet());
@@ -45,15 +67,36 @@ public class SignatureUtils {
 				r.put(s, -1 * b.getSignatureMap().get(s));
 			}
 		}
-		SignatureSet c = new SignatureSet();
+		MolecularSignature c = new MolecularSignature();
 		c.setSignatureMap(r);
 		
 		return c;
 	}
 	
-	public static SignatureSet sumSignatures(List<SignatureSet> signatureList) {
+	public static Map<Signature, Double> subtract(Map<Signature, Double> a, Map<Signature, Double> b) {
+		Map<Signature, Double> c = new HashMap<> ();
+		Set<Signature> common = new HashSet<> (a.keySet());
+		common.retainAll(b.keySet());
+		for (Signature s : a.keySet()) {
+			if (common.contains(s)) {
+				double v = a.get(s) - b.get(s);
+				if (v != 0.0) c.put(s, v);
+			} else {
+				c.put(s, a.get(s));
+			}
+		}
+		
+		for (Signature s : b.keySet()) {
+			if (!common.contains(s)) {
+				c.put(s, -1 * b.get(s));
+			}
+		}
+		return c;
+	}
+	
+	public static MolecularSignature sumSignatures(List<MolecularSignature> signatureList) {
 		Map<Signature, Double> result = new HashMap<> ();
-		for (SignatureSet signatureSet : signatureList) {
+		for (MolecularSignature signatureSet : signatureList) {
 			Map<Signature, Double> signatures = signatureSet.getSignatureMap();
 			for (Signature s : signatures.keySet()) {
 				if (!result.containsKey(s)) {
@@ -66,7 +109,7 @@ public class SignatureUtils {
 			}
 		}
 		
-		SignatureSet signatureSet = new SignatureSet();
+		MolecularSignature signatureSet = new MolecularSignature();
 		signatureSet.setSignatureMap(result);
 
 		return signatureSet;
@@ -90,7 +133,7 @@ public class SignatureUtils {
 		return signatures;
 	}
 	
-	public static String toString(SignatureSet sgs) {
+	public static String toString(MolecularSignature sgs) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("id:%d, h:%d, stereo:%s\n", sgs.getId(), sgs.getH(), sgs.isStereo()));
 		for (Signature sig : sgs.getSignatureMap().keySet()) {
@@ -99,5 +142,98 @@ public class SignatureUtils {
 		}
 		
 		return sb.toString();
+	}
+	
+	public static String toString(ReactionSignature sgs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("id:%d, h:%d, stereo:%s\n", sgs.getId(), sgs.getH(), sgs.isStereo()));
+		for (Signature sig : sgs.getLeftSignatureMap().keySet()) {
+			double value = sgs.getLeftSignatureMap().get(sig);
+			sb.append(value).append("\t").append(sig).append('\n');
+		}
+		sb.append("=================\n");
+		for (Signature sig : sgs.getRightSignatureMap().keySet()) {
+			double value = sgs.getRightSignatureMap().get(sig);
+			sb.append(value).append("\t").append(sig).append('\n');
+		}
+		
+		return sb.toString();
+	}
+
+	public static Map<Signature, Double> absSignatureMap(Map<Signature, Double> map) {
+		Map<Signature, Double> r = new HashMap<> ();
+		for (Signature s : map.keySet()) {
+			double v = Math.abs(map.get(s));
+			r.put(s, v);
+		}
+		return r;
+	}
+
+	//should return multipliers
+	public static List<Signature> intersect(
+			Map<Signature, Double> sig1,
+			Map<Signature, Double> sig2) {
+		List<Signature> signatureList = new ArrayList<> ();
+		
+		Set<Signature> sigs = new HashSet<> (sig1.keySet());
+		sigs.retainAll(sig2.keySet());
+		signatureList.addAll(sigs);
+		return signatureList;
+	}
+
+	public static Map<Signature, Double> sum(
+			List<Map<Signature, Double>> lMsigs) {
+		Map<Signature, Double> result = new HashMap<> ();
+		for (Map<Signature, Double> signatures : lMsigs) {
+			for (Signature s : signatures.keySet()) {
+				if (!result.containsKey(s)) {
+					result.put(s, 0.0);
+				}
+				
+				double v = result.get(s);
+				v += signatures.get(s);
+				result.put(s, v);
+			}
+		}
+
+		return result;
+	}
+
+	public static ReactionSignature buildReactionSignature(int h, boolean stereo, MolecularSignature[] la, MolecularSignature[] ra) {
+		List<MolecularSignature> l = Arrays.asList(la);
+		List<MolecularSignature> r = Arrays.asList(ra);
+		
+		MolecularSignature l_sum = SignatureUtils.sumSignatures(l);
+		MolecularSignature r_sum = SignatureUtils.sumSignatures(r);
+		MolecularSignature r_sub = SignatureUtils.subtract(r_sum, l_sum);
+		
+		ReactionSignature rsig = new ReactionSignature(); //.subtract(r_sum, l_sum);
+		rsig.setH(h);
+		rsig.setStereo(stereo);
+		
+		for (Signature s : r_sub.getSignatureMap().keySet()) {
+			double v = r_sub.getSignatureMap().get(s);
+			if (v < 0.0) rsig.getLeftSignatureMap().put(s, v);
+		}
+		
+		for (Signature s : r_sub.getSignatureMap().keySet()) {
+			double v = r_sub.getSignatureMap().get(s);
+			if (v > 0.0) rsig.getRightSignatureMap().put(s, v);
+		}
+		
+		rsig.setLeftSignatureMap(SignatureUtils.absSignatureMap(rsig.getLeftSignatureMap()));
+		rsig.setRightSignatureMap(SignatureUtils.absSignatureMap(rsig.getRightSignatureMap()));
+		
+		return rsig;
+	}
+
+	public static double numberOfSignatures(
+			Map<Signature, Double> sigs) {
+		double s = 0.0d;
+		for (Double v : sigs.values()) {
+			s += v;
+		}
+		
+		return s;
 	}
 }

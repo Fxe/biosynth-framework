@@ -30,6 +30,7 @@ public class Signature implements Comparable<Signature> {
 	
 	@Override
 	public int hashCode() {
+//		System.out.println(signature + " " + signature.hashCode());
 		return signature.hashCode();
 	}
 	
@@ -37,6 +38,4 @@ public class Signature implements Comparable<Signature> {
 	public String toString() {
 		return signature;
 	}
-
-
 }

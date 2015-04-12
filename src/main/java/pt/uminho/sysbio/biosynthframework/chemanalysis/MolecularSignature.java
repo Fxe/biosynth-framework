@@ -3,7 +3,7 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignatureSet {
+public class MolecularSignature {
 	
 	private Long id;
 	private int h;
@@ -26,5 +26,21 @@ public class SignatureSet {
 
 	public void setSignatureMap(Map<Signature, Double> signatureMap) {
 		this.signatureMap = signatureMap;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (!(obj instanceof MolecularSignature)) return false;
+		MolecularSignature sgs = (MolecularSignature) obj;
+		
+		//for now lets ignore stereo and h
+		//sgs.h == this.h && sgs.stereo == this.stereo
+		return  sgs.signatureMap.equals(this.signatureMap);
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.signatureMap.hashCode();
 	}
 }
