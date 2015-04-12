@@ -13,7 +13,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
-import pt.uminho.sysbio.biosynthframework.chemanalysis.SignatureSet;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.MolecularSignature;
 import pt.uminho.sysbio.biosynthframework.io.MolecularSignatureDao;
 
 public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements MolecularSignatureDao {
@@ -24,7 +24,35 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		super(graphDatabaseService);
 	}
 	
-	public SignatureSet getMoleculeMolecularSignature(long cpdId, int h, boolean stereo) {
+	@Override
+	public MolecularSignature getMolecularSignatureById(long msigId) {
+		Node sigSetNode = graphDatabaseService.getNodeById(msigId);
+		int h_ = (int) sigSetNode.getProperty("h");
+		boolean stereo_ = (boolean) sigSetNode.getProperty("stereo");
+		
+		MolecularSignature signatureSet = new MolecularSignature();
+		signatureSet.setId(sigSetNode.getId());
+		signatureSet.setH(h_);
+		signatureSet.setStereo(stereo_);
+		
+		Map<Signature, Double> sigMap = new HashMap<> ();
+		
+		for (Relationship sigRel : sigSetNode.getRelationships(
+				Neo4jSignatureRelationship.has_signature)) {
+			Node sigNode = sigRel.getOtherNode(sigSetNode);
+			
+			Signature sig = new Signature(
+					(String) sigNode.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT));
+			double value = (double) sigRel.getProperty("count");
+			
+			sigMap.put(sig, value);
+		}
+		
+		signatureSet.setSignatureMap(sigMap);
+		return signatureSet;
+	}
+	
+	public MolecularSignature getMolecularSignature(long cpdId, int h, boolean stereo) {
 		Node cpdNode = Neo4jUtils.getUniqueResult(
 				graphDatabaseService.findNodesByLabelAndProperty(
 						IntegrationNodeLabel.IntegratedMember, 
@@ -39,7 +67,7 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 			boolean stereo_ = (boolean) sigSetNode.getProperty("stereo");
 			if (h_ == h && stereo_ == stereo) {
 				LOGGER.debug("Found signature set for {} with h:{} and stereo:{}", cpdId, h, stereo);
-				SignatureSet signatureSet = new SignatureSet();
+				MolecularSignature signatureSet = new MolecularSignature();
 				signatureSet.setId(sigSetNode.getId());
 				signatureSet.setH(h_);
 				signatureSet.setStereo(stereo_);
@@ -65,13 +93,13 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		return null;
 	}
 
-	public void deleteMoleculeMolecularSignature(long cpdId, int h, boolean stereo) {
+	public void deleteMolecularSignature(long cpdId, int h, boolean stereo) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void saveMoleculeMolecularSignature(long cpdId,
-			SignatureSet signatureSet) {
+	public void saveMolecularSignature(long cpdId,
+			MolecularSignature signatureSet) {
 		if (signatureSet.getH() < 1) throw new IllegalArgumentException("h must be greater or equal than 1");
 		Node cpdNode = generateMemberNode(cpdId, IntegrationNodeLabel.MetaboliteMember);
 		//check if cpd -> sigs exists
@@ -88,9 +116,11 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		
 		
 		Node sigSetNode = graphDatabaseService.createNode();
-		LOGGER.debug("created new signature set id:{}", sigSetNode.getId());
+		sigSetNode.addLabel(Neo4jSignatureLabel.MolecularSignature);
 		sigSetNode.setProperty("h", signatureSet.getH());
 		sigSetNode.setProperty("stereo", signatureSet.isStereo());
+		
+		LOGGER.debug("created new signature set id:{}", sigSetNode.getId());
 		cpdNode.createRelationshipTo(sigSetNode, Neo4jSignatureRelationship.has_signature_set);
 
 		for (Signature signature : signatureSet.getSignatureMap().keySet()) {
@@ -120,4 +150,6 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		
 		return node;
 	}
+
+
 }

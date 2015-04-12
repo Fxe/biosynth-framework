@@ -41,8 +41,6 @@ public class IntegratedMetaboliteEntity extends GenericMetabolite {
 		this.properties = properties;
 	}
 
-
-
 	//	@ElementCollection
 //	@CollectionTable(name="integrated_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
 //	@Column(name="name", length=2000, nullable=false)

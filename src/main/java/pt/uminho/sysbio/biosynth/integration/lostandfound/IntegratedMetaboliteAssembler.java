@@ -15,6 +15,7 @@ import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 
 public class IntegratedMetaboliteAssembler {
 	
@@ -38,30 +39,29 @@ public class IntegratedMetaboliteAssembler {
 		
 		Map<String, Map<Object, List<Long>>> propertyMap = new HashMap<> ();
 		
-		for (GraphMetaboliteEntity entity : graphMetaboliteEntities) {
-			LOGGER.debug(String.format("Collecting properties of %s:%s", entity.getLabels(), entity.getEntry()));
-			GraphMetaboliteEntity graphMetaboliteEntity = entity;
-			long eid_ = graphMetaboliteEntity.getId();
+		for (GraphMetaboliteEntity cpd : graphMetaboliteEntities) {
+			LOGGER.debug("Collecting properties of {}:{}", cpd.getLabels(), cpd.getEntry());
+			long eid_ = cpd.getId();
 //			formulaMap.put(eid_, graphMetaboliteEntity.getFormula());
 			
-			for (String relationshipType : graphMetaboliteEntity.getConnectedEntities().keySet()) {
-				List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> pairs = graphMetaboliteEntity.getConnectedEntities().get(relationshipType);
+			for (String relationshipType : cpd.getConnectedEntities().keySet()) {
+				List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> pairs = cpd.getConnectedEntities().get(relationshipType);
 				for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : pairs) {
 					AbstractGraphNodeEntity node = p.getRight();
 					if (node.getLabels().contains(GlobalLabel.MetaboliteProperty.toString())) {
+						LOGGER.trace("Found connected link {}", node.getLabels());
 						String property = node.getMajorLabel();
 						if (!propertyMap.containsKey(property)) {
 							propertyMap.put(property, new HashMap<Object, List<Long>> ());
 						}
-						for (String key : node.getProperties().keySet()) {
-							Object value = node.getProperties().get(key);
-							if (!propertyMap.get(property).containsKey(value)) {
-								propertyMap.get(property).put(value, new ArrayList<Long> ());
-							}
-							propertyMap.get(property).get(value).add(eid_);
+						Object value = node.getProperties().get(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT);
+						if (!propertyMap.get(property).containsKey(value)) {
+							propertyMap.get(property).put(value, new ArrayList<Long> ());
 						}
+						propertyMap.get(property).get(value).add(eid_);
+						LOGGER.trace("Added property {} - {} to {}", property, value.toString().replaceAll("\n", ""), eid_);
 					} else {
-						LOGGER.debug(String.format("Ignored connected link %s", node.getLabels()));
+						LOGGER.trace("Ignored connected link {}", node.getLabels());
 					}
 				}
 			}
