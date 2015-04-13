@@ -17,9 +17,12 @@ public interface Neo4jSuperDao {
 	public Neo4jNode getMetaboliteNode(long id);
 	public Neo4jNode getReactionNode(long id);
 	public Neo4jNode getAnyNodeLimit(long id, int limit);
+	public Set<Long> findNodesByLabelAndProperty(String label, String key, Object value);
 	public void delete(Node node);
 	public boolean linkIfNotExists(long src, long dst, 
 			RelationshipType relationshipType, Map<String, Object> properties);
 	public boolean unlinkIfExists(long src, long dst);
 	public String executeQuery(String query, Map<String, Object> params);
+	public Object getNodeProperty(long nodeId, String property);
+	
 }

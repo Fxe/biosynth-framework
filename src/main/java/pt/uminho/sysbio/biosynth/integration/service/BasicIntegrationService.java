@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class BasicIntegrationService implements IntegrationService {
 	public BasicIntegrationService(IntegrationMetadataDao meta) {
 		this.meta = meta;
 	}
+	
+	@Override
+	public IntegrationSet getIntegrationSet(String itg) {
+		if (NumberUtils.isDigits(itg)) {
+			return this.getIntegrationSetById(Long.parseLong(itg));
+		} else {
+			return this.getIntegrationSetByEntry(itg);
+		}
+	}
+
 
 	@Override
 	public IntegrationSet getIntegrationSetByEntry(String entry) {
@@ -133,10 +144,6 @@ public class BasicIntegrationService implements IntegrationService {
 		
 		return a;
 	}
-	@Override
-	public IntegrationSet getIntegrationSet(String itg) {
-		
-		return null;
-	}
+	
 
 }

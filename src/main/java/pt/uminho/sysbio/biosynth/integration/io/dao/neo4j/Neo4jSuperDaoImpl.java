@@ -8,10 +8,12 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -217,6 +219,22 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 	@Override
 	public String executeQuery(String query, Map<String, Object> params) {
 		return this.executionEngine.execute(query, params).dumpToString();
+	}
+
+	@Override
+	public Set<Long> findNodesByLabelAndProperty(String label, String key, Object value) {
+		Set<Long> idSet = new HashSet<> ();
+		for (Node node : IteratorUtil.asList(graphDatabaseService
+				.findNodesByLabelAndProperty(DynamicLabel.label(label), key, value))) {
+			idSet.add(node.getId());
+		}
+		return idSet;
+	}
+
+	@Override
+	public Object getNodeProperty(long nodeId, String property) {
+		Node node = graphDatabaseService.getNodeById(nodeId);
+		return node.getProperty(property, null);
 	}
 
 }
