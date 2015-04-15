@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -149,6 +151,23 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		}
 		
 		return node;
+	}
+
+	@Override
+	public Set<Long> getMoleculeReferencesBySignatureSet(
+			MolecularSignature signatureSet) {
+		if (signatureSet.getId() == null) return null;
+		return getMoleculeReferencesBySignatureSetId(signatureSet.getId());
+	}
+
+	@Override
+	public Set<Long> getMoleculeReferencesBySignatureSetId(long signatureSetId) {
+		Set<Long> result = new HashSet<> ();
+		Node sigSetNode = graphDatabaseService.getNodeById(signatureSetId);
+		for (Node node : Neo4jUtils.collectNodeRelationshipNodes(sigSetNode, Neo4jSignatureRelationship.has_signature_set)) {
+			result.add((long) node.getProperty(Neo4jDefinitions.MEMBER_REFERENCE));
+		}
+		return result;
 	}
 
 
