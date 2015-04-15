@@ -44,7 +44,8 @@ public class BioSynthUtils {
 	}
 	
 	public static String escapeEntry(String entry) {
-		String entry_ = entry.replaceAll(" ", "_SPACE_");
+		String entry_ = entry.replaceAll("@", "_ATSIGN_");
+		entry_ = entry_.replaceAll(" ", "_SPACE_");
 		entry_ = entry_.replaceAll(",", "_COMMA_");
 		entry_ = entry_.replaceAll(";", "_SEMICOLON_");
 		return entry_;
