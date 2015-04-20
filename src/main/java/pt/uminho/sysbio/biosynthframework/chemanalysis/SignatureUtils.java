@@ -18,6 +18,18 @@ import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class SignatureUtils {
 	
+	public static Map<Signature, Double> intersection(Map<Signature, Double> a, Map<Signature, Double> b) {
+//		Map<Signature, Double> result = new HashMap<> ();
+		
+		for (Signature s : a.keySet()) {
+			if (b.containsKey(s)) {
+				//what to do with negatives ?
+			}
+		}
+		
+		throw new RuntimeException("not implemented");
+	}
+	
 	/**
 	 * a - b
 	 * @param a
@@ -27,7 +39,7 @@ public class SignatureUtils {
 	public static Map<Signature, Double> diff(Map<Signature, Double> a, Map<Signature, Double> b) {
 		//too lazy to do this ... just sub and remove negatives
 		//(zeros already gone from sub)
-		Map<Signature, Double> c_ = subtract(a, b);
+		Map<Signature, Double> c_ = sub(a, b);
 		Map<Signature, Double> c = new HashMap<Signature, Double> ();
 		for (Signature s : c_.keySet()) {
 			double v = c_.get(s);
@@ -77,7 +89,7 @@ public class SignatureUtils {
 		return c;
 	}
 	
-	public static Map<Signature, Double> subtract(Map<Signature, Double> a, Map<Signature, Double> b) {
+	public static Map<Signature, Double> sub(Map<Signature, Double> a, Map<Signature, Double> b) {
 		Map<Signature, Double> c = new HashMap<> ();
 		Set<Signature> common = new HashSet<> (a.keySet());
 		common.retainAll(b.keySet());
@@ -201,6 +213,14 @@ public class SignatureUtils {
 		}
 
 		return result;
+	}
+	
+	public static Map<Signature, Double> sum(
+			Map<Signature, Double> a, Map<Signature, Double> b) {
+		List<Map<Signature, Double>> sum = new ArrayList<> ();
+		sum.add(a);
+		sum.add(b);
+		return sum(sum);
 	}
 
 	public static ReactionSignature buildReactionSignature(int h, boolean stereo, MolecularSignature[] la, MolecularSignature[] ra) {
