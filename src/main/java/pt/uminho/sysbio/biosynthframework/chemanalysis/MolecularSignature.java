@@ -1,7 +1,11 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class MolecularSignature {
 	
@@ -37,6 +41,10 @@ public class MolecularSignature {
 		//for now lets ignore stereo and h
 		//sgs.h == this.h && sgs.stereo == this.stereo
 		return  sgs.signatureMap.equals(this.signatureMap);
+	}
+	
+	public long hash() {
+		return SignatureUtils.hash(signatureMap);
 	}
 	
 	@Override

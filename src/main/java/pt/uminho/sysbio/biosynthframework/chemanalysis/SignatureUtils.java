@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
+
+import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class SignatureUtils {
 	
@@ -235,5 +239,17 @@ public class SignatureUtils {
 		}
 		
 		return s;
+	}
+
+	public static long hash(Map<Signature, Double> signatureMap) {
+		final long prime = 37;
+		long h = 0;
+		Iterator<Entry<Signature, Double>> i = signatureMap.entrySet().iterator();
+		while (i.hasNext()) {
+			Entry<Signature, Double> entry = i.next();
+			long hash = entry.getKey().hash() * prime + DigestUtils.hash(Double.toString(entry.getValue()));
+			h += hash;
+		}
+		return h;
 	}
 }

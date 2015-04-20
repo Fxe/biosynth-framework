@@ -22,6 +22,17 @@ public class TestSignatures {
 		
 		assertEquals(h1, h2);
 	}
+	
+	@Test
+	public void test_signature_equal_hash_2() {
+		Signature s1 = new Signature("0-42L");
+		Signature s2 = new Signature("0-43-");
+		
+		int h1 = s1.hashCode();
+		int h2 = s2.hashCode();
+		
+		assertEquals(h1, h2);
+	}
 
 	@Test
 	public void test_signature_not_equal_hash() {
@@ -32,6 +43,18 @@ public class TestSignatures {
 		int h2 = s2.hashCode();
 		
 		assertNotEquals(h1, h2);
+	}
+	
+	
+	@Test
+	public void test_signature_not_equal_hash_2() {
+		Signature s1 = new Signature("0-42L");
+		Signature s2 = new Signature("0-43-");
+		
+		long h1 = s1.hash();
+		long h2 = s2.hash();
+		
+		assertEquals(h1, h2);
 	}
 	
 	@Test
