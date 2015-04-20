@@ -39,6 +39,13 @@ public class ReactionSignature {
 				&& sgs.rightSignatureMap.equals(this.rightSignatureMap);
 	}
 	
+	public long hash() {
+		int hash = 0;
+		hash += SignatureUtils.hash(leftSignatureMap);
+		hash += SignatureUtils.hash(rightSignatureMap);
+		return hash;
+	}
+	
 	@Override
 	public int hashCode() {
 		int hash = 0;

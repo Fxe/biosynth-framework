@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
+import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
+
 public class Signature implements Comparable<Signature> {
 	private long id;
 
@@ -26,6 +28,10 @@ public class Signature implements Comparable<Signature> {
 		if (obj == null) return false;
 		if (!(obj instanceof Signature)) return false;
 		return signature.equals(((Signature) obj).signature);
+	}
+	
+	public long hash() {
+		return DigestUtils.hash(signature);
 	}
 	
 	@Override
