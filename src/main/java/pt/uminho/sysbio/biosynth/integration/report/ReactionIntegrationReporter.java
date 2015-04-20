@@ -16,6 +16,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jIntegrationMetadataDaoImpl;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
@@ -111,7 +112,7 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 			for (Relationship relationship : cidNode.getRelationships(IntegrationRelationshipType.Integrates)) {
 				Node eidNode = relationship.getOtherNode(cidNode);
 				if (eidNode.hasLabel(IntegrationNodeLabel.IntegratedMember)) {
-					eidSet.add((long)eidNode.getProperty("id"));	
+					eidSet.add((long)eidNode.getProperty(Neo4jDefinitions.MEMBER_REFERENCE));	
 				}
 			}
 		}
