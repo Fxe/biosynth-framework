@@ -72,5 +72,16 @@ public class TestSignatures {
 		assertEquals(2, set.size());
 	}
 	
+	@Test
+	public void test_signature_contains() {
+		Set<Signature> set1 = new HashSet<> ();
+		Set<Signature> set2 = new HashSet<> ();
+		set1.add(new Signature("[N]([C]([C]=[O]))"));
+		set1.add(new Signature("[N]([C](=[O][C]))"));
+		set2.add(new Signature("[N]([C]([C]=[O]))"));
+		
+		assertTrue(set1.containsAll(set2));
+	}
+	
 
 }
