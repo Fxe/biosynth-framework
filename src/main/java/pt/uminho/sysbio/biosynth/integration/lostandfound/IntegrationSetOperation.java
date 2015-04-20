@@ -15,7 +15,7 @@ public class IntegrationSetOperation {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(IntegrationSetOperation.class);
 	
-	public Map<String, Set<Long>> merge(Map<String, Set<Long>> ctr1, Map<String, Set<Long>> ctr2) {
+	public static Map<String, Set<Long>> merge(Map<String, Set<Long>> ctr1, Map<String, Set<Long>> ctr2) {
 		Map<Long, String> ctr1_ = invert(ctr1);
 		Map<Long, String> ctr2_ = invert(ctr2);
 		Map<String, Set<Long>> pass = new HashMap<> ();
