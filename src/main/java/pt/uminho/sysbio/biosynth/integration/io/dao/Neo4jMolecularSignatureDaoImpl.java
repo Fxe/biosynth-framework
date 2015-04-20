@@ -170,5 +170,46 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		return result;
 	}
 
+	@Override
+	public Set<Long> findMolecularSignatureContainedIn(
+			Map<Signature, Double> signatureMap) {
+		Set<Signature> sigs = new HashSet<> (signatureMap.keySet());
+		Set<Long> result = new HashSet<> ();
+		Set<Long> a = findMolecularSignatureContainsAny(signatureMap.keySet());
+		
+		for (long sigSetId : a) {
+			Set<Signature> sigs_ = new HashSet<> ();
+			Node sigSetNode = graphDatabaseService.getNodeById(sigSetId);
+			for (Node sig : Neo4jUtils.collectNodeRelationshipNodes(sigSetNode, Neo4jSignatureRelationship.has_signature)) {
+				sigs_.add(new Signature((String) sig.getProperty("key")));
+			}
+			
+			if (sigs.containsAll(sigs_)) {
+				//check values !
+				result.add(sigSetId);
+			}
+		}
+		
+		return result;
+	}
 
+	@Override
+	public Set<Long> findMolecularSignatureContainsAny(
+			Set<Signature> signatures) {
+		
+		Set<Long> result = new HashSet<> ();
+		for (Signature s : signatures) {
+			//get signature nodes that contains this signature SHOULD BE UNIQUE !
+			for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
+					Neo4jSignatureLabel.Signature, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, s.getSignature())) {
+				//get signature sets that contain this signature node
+				for (Relationship relationship : node.getRelationships(Neo4jSignatureRelationship.has_signature)) {
+					Node sigSetNode = relationship.getOtherNode(node);
+					result.add(sigSetNode.getId());
+				}
+			}
+		}
+		
+		return result;
+	}
 }
