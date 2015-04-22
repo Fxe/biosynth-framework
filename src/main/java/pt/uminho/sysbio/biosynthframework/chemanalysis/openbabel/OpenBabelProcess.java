@@ -43,7 +43,7 @@ public class OpenBabelProcess {
 		}
 		
 		ProcessBuilder pb = new ProcessBuilder(argL.toArray(new String[0]));
-		LOGGER.debug("{}", StringUtils.join(pb.command(), ' '));
+		LOGGER.debug("Process: {}", StringUtils.join(pb.command(), ' '));
 		final Process process = pb.start();
 		IOUtils.write(stdin, process.getOutputStream());
 		

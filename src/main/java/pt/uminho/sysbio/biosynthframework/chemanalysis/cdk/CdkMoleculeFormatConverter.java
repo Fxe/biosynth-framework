@@ -17,38 +17,55 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.SMILESWriter;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MoleculeFormat;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MoleculeFormatConverter;
 
 public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(CdkMoleculeFormatConverter.class);
+	
 	@Override
 	public String convert(InputStream input, MoleculeFormat in,
-			MoleculeFormat out) {
+			MoleculeFormat out, String...params) throws IOException {
+		
 		IAtomContainer container = null;
 		
 		try {
 			switch (in) {
 				case SMILES: container = readSmiles(input); break;
-				case INCHI:  container = readInchi(input); break;
-				default: break;
+				case InChI:  container = readInchi(input); break;
+				default: throw new IllegalArgumentException("Unsupported input format " + in);
 			}
-			System.out.println(container);
+			
+			for (String param : params) {
+				switch (param) {
+					case "-d":
+						LOGGER.debug("AtomContainerManipulator.removeHydrogens");
+						container = AtomContainerManipulator.removeHydrogens(container);
+						break;
+//					case "-h": new CDKHydrogenAdder();  //FAIL !
+					default: LOGGER.warn("Ignored param: {}", param); break;
+				}
+				
+			}
+			
 			switch (out) {
 				case SMILES: return writeSmiles(container).trim();
-				default: break;
+				case MDLMolFile: return writeMol(container);
+				default: throw new IllegalArgumentException("Unsupported output format " + out);
 			}
 		
 		} catch (CDKException e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-			return null;
+			throw new IOException(e.getMessage());
 		}
-		
-		return null;
 	}
 	
 	public IAtomContainer readSmiles(InputStream is) throws CDKException {
@@ -57,6 +74,14 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 	
 	public String writeSmiles(IAtomContainer container) throws CDKException {
 		return cdkWrite(container, new SMILESWriter());
+	}
+	
+	public String writeMol(IAtomContainer container) throws CDKException {
+		StructureDiagramGenerator structureDiagramGenerator = 
+				new StructureDiagramGenerator(container);
+		structureDiagramGenerator.generateCoordinates();
+		MDLV2000Writer writer = new MDLV2000Writer();
+		return cdkWrite(container, writer);
 	}
 
 	public IAtomContainer readInchi(InputStream is) throws CDKException {
