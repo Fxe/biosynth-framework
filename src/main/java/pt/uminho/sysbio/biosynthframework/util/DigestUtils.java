@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -8,6 +9,11 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
 public class DigestUtils {
+	
+	public static String getDigest(String str, MessageDigest md, int byteArraySize)
+			throws NoSuchAlgorithmException, IOException {
+		return getDigest(new ByteArrayInputStream(str.getBytes()), md, byteArraySize);
+	}
 	
 	public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
 			throws NoSuchAlgorithmException, IOException {
@@ -32,5 +38,13 @@ public class DigestUtils {
 			hash += prime *hash + str.charAt(i);
 		
 		return hash;
+	}
+	
+	public static String hex(int i) {
+		return Integer.toHexString(i).toLowerCase();
+	}
+	
+	public static String hex(long i) {
+		return Long.toHexString(i).toLowerCase();
 	}
 }
