@@ -332,7 +332,7 @@ public class Neo4jUtils {
 	}
 
 	public static Node getOrCreateNode(Label label,
-			String key, Object value, ExecutionEngine executionEngine) {
+			String key, Object value, ExecutionEngine ee) {
 		String query = String.format(
 				"MERGE (n:%s {%s:{%s}}) " + 
 				"ON CREATE SET n.created_at=timestamp(), n.updated_at=timestamp() " + 
@@ -341,7 +341,7 @@ public class Neo4jUtils {
 		LOGGER.trace("Query: " + query);
 		Map<String, Object> params = new HashMap<> ();
 		params.put(key, value);
-		Node node = Neo4jUtils.getExecutionResultGetSingle("n", executionEngine.execute(query, params));
+		Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
 		
 		return node;
 	}
@@ -382,6 +382,18 @@ public class Neo4jUtils {
 		}
 		
 		return movedEdges;
+	}
+
+	public static boolean exitsRelationshipBetween(Node node1,
+			Node node2, Direction direction) {
+		for (Relationship r : node1.getRelationships(direction)) {
+			Node other = r.getOtherNode(node1);
+			if (other.getId() == node2.getId()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 
