@@ -6,12 +6,13 @@ import java.io.StringWriter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.DefaultChemObjectReader;
@@ -36,14 +37,17 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 	public String convert(InputStream input, MoleculeFormat in,
 			MoleculeFormat out, String...params) throws IOException {
 		
+		IAtomContainerSet containerSet = null;
 		IAtomContainer container = null;
 		
 		try {
 			switch (in) {
-				case SMILES: container = readSmiles(input); break;
-				case InChI:  container = readInchi(input); break;
+				case SMILES: containerSet = readSmiles(input); break;
+				case InChI:  containerSet = readInchi(input); break;
 				default: throw new IllegalArgumentException("Unsupported input format " + in);
 			}
+			
+			container = containerSet.getAtomContainer(0);
 			
 			for (String param : params) {
 				switch (param) {
@@ -68,7 +72,7 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 		}
 	}
 	
-	public IAtomContainer readSmiles(InputStream is) throws CDKException {
+	public IAtomContainerSet readSmiles(InputStream is) throws CDKException {
 		return cdkRead(new SMILESReader(is));
 	}
 	
@@ -84,7 +88,7 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 		return cdkWrite(container, writer);
 	}
 
-	public IAtomContainer readInchi(InputStream is) throws CDKException {
+	public IAtomContainerSet readInchi(InputStream is) throws CDKException {
 		InChIToStructure inChIToStructure;
 		try {
 			String inchi = StringUtils.join(IOUtils.readLines(is), "");
@@ -96,24 +100,31 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 			throw new CDKException(e.getMessage());
 		}
 		
-		return inChIToStructure.getAtomContainer();
+		IAtomContainer container = inChIToStructure.getAtomContainer();
+		IAtomContainerSet containerSet = new AtomContainerSet();
+		containerSet.addAtomContainer(container);
+		return containerSet;
 	}
 	
-	public IAtomContainer readMol(InputStream is) throws CDKException {
+	public IAtomContainerSet readMol(InputStream is) throws CDKException {
 		return cdkRead(new MDLV2000Reader(is));
 	}
 	
-	public IAtomContainer cdkRead(DefaultChemObjectReader reader) throws CDKException {
-		IAtomContainer container = null;
-		
+	public IAtomContainerSet cdkRead(DefaultChemObjectReader reader) throws CDKException {
+		IAtomContainerSet containerSet = null;
+
 		try {
-			container = reader.read(new AtomContainer());
+			containerSet = reader.read(new AtomContainerSet());
 			reader.close();
 		} catch (IOException e) {
 			throw new CDKException(e.getMessage());
 		}
 		
-		return container;
+//		for (IAtomContainer container : containerSet.atomContainers()) {
+//			
+//		}
+		
+		return containerSet;
 	}
 	
 	public String cdkWrite(IChemObject container, DefaultChemObjectWriter writer) throws CDKException {
