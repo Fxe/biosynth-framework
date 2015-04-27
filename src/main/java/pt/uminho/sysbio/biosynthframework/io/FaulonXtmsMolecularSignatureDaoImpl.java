@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.io;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 	private Map<Long, Signature> signatureMap = new HashMap<> ();
 	private Map<Long, MolecularSignature> msigMap = new HashMap<> ();
 	private Map<String, Long> entryToId = new HashMap<> ();
+	private Map<Long, String> idToEntry = new HashMap<> ();
+	private Map<Signature, Set<Long>> signatureToMsig = new HashMap<> ();
 	
 	public FaulonXtmsMolecularSignatureDaoImpl(String sp, String cpmd, int h, boolean stereo) {
 		try {
@@ -35,8 +38,16 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 				msig.setStereo(stereo);
 				msig.setSignatureMap(signatureMap);
 				
+				for (Signature sig : signatureMap.keySet()) {
+					if (!signatureToMsig.containsKey(sig)) {
+						signatureToMsig.put(sig, new HashSet<Long> ());
+					}
+					signatureToMsig.get(sig).add(i);
+				}
+				
 				msigMap.put(i, msig);
 				entryToId.put(cols[0].trim(), i);
+				idToEntry.put(i, cols[0].trim());
 				i++;
 			}
 		} catch (IOException e) {
@@ -67,11 +78,18 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 	public Long getIdByEntry(String entry) {
 		return this.entryToId.get(entry);
 	}
+	
+	public String getEntryById(long id) {
+		return this.idToEntry.get(id);
+	}
+	
+	public Set<Long> listMolecularSignatureIdBySignature(Signature signature) {
+		return new HashSet<> (this.signatureToMsig.get(signature));
+	}
 
 	@Override
 	public MolecularSignature getMolecularSignatureById(long msigId) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.msigMap.get(msigId);
 	}
 
 	@Override
@@ -108,15 +126,38 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 
 	@Override
 	public Set<Long> findMolecularSignatureContainsAny(Set<Signature> signatures) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Long> result = new HashSet<> ();
+		for (Signature s : signatures) {
+			//get signature sets that contain this signature node
+			Set<Long> msigIds = this.signatureToMsig.get(s);
+			result.addAll(msigIds);
+		}
+		
+		return result;
 	}
 
 	@Override
 	public Set<Long> findMolecularSignatureContainedIn(
 			Map<Signature, Double> signatureMap) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Signature> sigs = new HashSet<> (signatureMap.keySet());
+		Set<Long> result = new HashSet<> ();
+		Set<Long> a = findMolecularSignatureContainsAny(signatureMap.keySet());
+		
+		for (long sigSetId : a) {
+			MolecularSignature msig = this.msigMap.get(sigSetId);
+			Set<Signature> sigs_ = new HashSet<> (msig.getSignatureMap().keySet());
+//			Node sigSetNode = graphDatabaseService.getNodeById(sigSetId);
+//			for (Node sig : Neo4jUtils.collectNodeRelationshipNodes(sigSetNode, Neo4jSignatureRelationship.has_signature)) {
+//				sigs_.add(new Signature((String) sig.getProperty("key")));
+//			}
+			
+			if (sigs.containsAll(sigs_)) {
+				//check values !
+				result.add(sigSetId);
+			}
+		}
+		
+		return result;
 	}
 
 }
