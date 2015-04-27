@@ -59,7 +59,7 @@ public class HelperNeo4jConfigInitializer {
 	
 	private static final String[] NEO_STRU_CONSTRAINTS = {
 		String.format("CREATE CONSTRAINT ON (sig : %s) ASSERT sig.key IS UNIQUE", Neo4jSignatureLabel.Signature),
-		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
+		String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.%s IS UNIQUE", IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE),
 		String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", Neo4jSignatureLabel.ChemicalStructure, Neo4jDefinitions.SHA256),
 	};
 	
