@@ -66,6 +66,9 @@ public class NaiveReactionStrategy extends AbstractNeo4jClusteringStrategy {
 				Set<Long> meids = metaboliteUnificationTable.getIdMappingsTo(unif_cpdId);
 				Set<Long> reids = collectNodes(meids, ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
 				
+//				if (reids == null) {
+//					LOGGER.error("{} reids empty", reids, initialNode);
+//				}
 				//non-integrated compounds matches the pivot reaction
 				if (strictIntegration && reids.isEmpty()) reids.add(this.initialNode.getId());
 				

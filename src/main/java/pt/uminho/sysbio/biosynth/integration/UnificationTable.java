@@ -37,4 +37,8 @@ public class UnificationTable {
 		
 		return unifId;
 	}
+	
+	public Long reconciliateId2(long id) {
+		return unificationMap.get(id);
+	}
 }
