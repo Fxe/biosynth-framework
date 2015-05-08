@@ -212,4 +212,23 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		
 		return result;
 	}
+	
+
+	@Override
+	public MolecularSignature getMolecularSignatureByHash(String hash64) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getMolecularSignatureHashById(long msigId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Long> listMolecularSignatureIdBySignature(Signature signature) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
