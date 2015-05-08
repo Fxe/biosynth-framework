@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,6 +13,9 @@ public class ReactionSignature {
 	
 	private Map<Signature, Double> leftSignatureMap = new TreeMap<>();
 	private Map<Signature, Double> rightSignatureMap = new TreeMap<>();
+	
+	public List<Map<Signature, Double>> l = new ArrayList<>();
+	public List<Map<Signature, Double>> r = new ArrayList<>();
 	
 	public Long getId() { return id;}
 	public void setId(Long id) { this.id = id;}
