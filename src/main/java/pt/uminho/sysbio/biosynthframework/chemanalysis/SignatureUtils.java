@@ -223,7 +223,8 @@ public class SignatureUtils {
 		return sum(sum);
 	}
 
-	public static ReactionSignature buildReactionSignature(int h, boolean stereo, MolecularSignature[] la, MolecularSignature[] ra) {
+	public static ReactionSignature buildReactionSignature(int h, boolean stereo, MolecularSignature[] la, 
+																				  MolecularSignature[] ra) {
 		List<MolecularSignature> l = Arrays.asList(la);
 		List<MolecularSignature> r = Arrays.asList(ra);
 		
@@ -262,8 +263,8 @@ public class SignatureUtils {
 	}
 
 	public static long hash(Map<Signature, Double> signatureMap) {
-		final long prime = 37;
-		long h = 0;
+	  final long prime = 37;
+	  long h = 0;
 		Iterator<Entry<Signature, Double>> i = signatureMap.entrySet().iterator();
 		while (i.hasNext()) {
 			Entry<Signature, Double> entry = i.next();
@@ -271,5 +272,10 @@ public class SignatureUtils {
 			h += hash;
 		}
 		return h;
+	}
+
+	public static void assertReaction(ReactionSignature expected, MolecularSignature[] lhs, MolecularSignature[] rhs) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -40,7 +40,7 @@ public class ReactionSignature {
 	}
 	
 	public long hash() {
-		int hash = 0;
+		long hash = 0;
 		hash += SignatureUtils.hash(leftSignatureMap);
 		hash += SignatureUtils.hash(rightSignatureMap);
 		return hash;

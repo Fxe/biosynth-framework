@@ -1,8 +1,13 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
+import java.io.Serializable;
+
 import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
-public class Signature implements Comparable<Signature> {
+public class Signature implements Comparable<Signature>, Serializable {
+
+	private static final long serialVersionUID = 1987L;
+
 	private long id;
 
 	private final String signature;

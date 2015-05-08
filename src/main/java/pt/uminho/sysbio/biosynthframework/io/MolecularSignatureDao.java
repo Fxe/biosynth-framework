@@ -8,6 +8,8 @@ import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
 
 public interface MolecularSignatureDao {
 	
+	public MolecularSignature getMolecularSignatureByHash(String hash64);
+	public String getMolecularSignatureHashById(long msigId);
 	public MolecularSignature getMolecularSignatureById(long msigId);
 	public MolecularSignature getMolecularSignature(long cpdId, int h, boolean stereo);
 	public void deleteMolecularSignature(long cpdId, int h, boolean stereo);
@@ -17,5 +19,5 @@ public interface MolecularSignatureDao {
 	
 	public Set<Long> findMolecularSignatureContainsAny(Set<Signature> signatures);
 	public Set<Long> findMolecularSignatureContainedIn(Map<Signature, Double> signatureMap);
-	
+	public Set<Long> listMolecularSignatureIdBySignature(Signature signature);
 }

@@ -1,13 +1,12 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
-
-public class MolecularSignature {
+public class MolecularSignature implements Serializable {
+	
+	private static final long serialVersionUID = 2017L;
 	
 	private Long id;
 	private int h;

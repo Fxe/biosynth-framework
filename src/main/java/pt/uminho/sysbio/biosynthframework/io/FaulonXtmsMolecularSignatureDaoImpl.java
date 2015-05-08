@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MolecularSignature;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
+import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDao {
 	
@@ -19,6 +20,8 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 	private Map<String, Long> entryToId = new HashMap<> ();
 	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<Signature, Set<Long>> signatureToMsig = new HashMap<> ();
+	private Map<String, Set<Long>> hash64ToMsigId = new HashMap<> ();
+	private Map<Long, String> msigIdToHash64 = new HashMap<> ();
 	
 	public FaulonXtmsMolecularSignatureDaoImpl(String sp, String cpmd, int h, boolean stereo) {
 		try {
@@ -44,6 +47,13 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 					}
 					signatureToMsig.get(sig).add(i);
 				}
+				
+				String hash64 = DigestUtils.hex(msig.hash());
+				if (!hash64ToMsigId.containsKey(hash64)) {
+					hash64ToMsigId.put(hash64, new HashSet<Long> ());
+				}
+				hash64ToMsigId.get(hash64).add(i);
+				msigIdToHash64.put(i, hash64);
 				
 				msigMap.put(i, msig);
 				entryToId.put(cols[0].trim(), i);
@@ -83,6 +93,17 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 		return this.idToEntry.get(id);
 	}
 	
+
+
+	public Set<Long> getMsigIdByHash(String hash) {
+		return hash64ToMsigId.get(hash);
+	}
+
+	
+	public String getMolecularSignatureHashById(long msigId) {
+		return this.msigIdToHash64.get(msigId);
+	}
+	
 	public Set<Long> listMolecularSignatureIdBySignature(Signature signature) {
 		return new HashSet<> (this.signatureToMsig.get(signature));
 	}
@@ -90,6 +111,13 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 	@Override
 	public MolecularSignature getMolecularSignatureById(long msigId) {
 		return this.msigMap.get(msigId);
+	}
+	
+	public MolecularSignature getMolecularSignatureByHash(String msigHash) {
+		Set<Long> msigIdSet = this.hash64ToMsigId.get(msigHash);
+		if (msigIdSet == null || msigIdSet.isEmpty()) return null;
+		long msigId = msigIdSet.iterator().next();
+		return getMolecularSignatureById(msigId);
 	}
 
 	@Override
@@ -100,15 +128,13 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 
 	@Override
 	public void deleteMolecularSignature(long cpdId, int h, boolean stereo) {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("unsupported operation");
 	}
 
 	@Override
 	public void saveMolecularSignature(long cpdId,
 			MolecularSignature signatureSet) {
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("unsupported operation");
 	}
 
 	@Override
@@ -159,5 +185,7 @@ public class FaulonXtmsMolecularSignatureDaoImpl implements MolecularSignatureDa
 		
 		return result;
 	}
+
+
 
 }
