@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
-import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 
 public interface MetabolicModelDao<
 MMD extends AbstractBiosynthEntity,
