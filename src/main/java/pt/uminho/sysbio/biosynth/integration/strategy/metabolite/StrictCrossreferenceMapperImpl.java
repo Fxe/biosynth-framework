@@ -34,6 +34,7 @@ public class StrictCrossreferenceMapperImpl extends AbstractNeo4jClusteringStrat
 	@Override
 	public Set<Long> execute() {
 		Set<Long> explored = new HashSet<> ();
+//		explored.add(initialNode.getId());
 		collect(initialNode, explored, 1);
 		return explored;
 	}
@@ -53,7 +54,7 @@ public class StrictCrossreferenceMapperImpl extends AbstractNeo4jClusteringStrat
 			if (!explored.contains(other.getId())
 					&& other.hasLabel(GlobalLabel.Metabolite)
 					&& valid(other, db)) {
-				LOGGER.debug("[{}] {}|- {}:{}", depth, StringUtils.repeat(' ', depth - 1), Neo4jUtils.getLabels(other), other.getProperty("entry", "-"));
+				LOGGER.debug("[{}] {}|- [{}]{}:{}", depth, StringUtils.repeat(' ', depth - 1), other.getId(), Neo4jUtils.getLabels(other), other.getProperty("entry", "-"));
 				explored.add(other.getId());
 				collect(other, explored, depth + 1);
 			}
