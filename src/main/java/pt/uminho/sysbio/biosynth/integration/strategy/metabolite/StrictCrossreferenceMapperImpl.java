@@ -34,7 +34,7 @@ public class StrictCrossreferenceMapperImpl extends AbstractNeo4jClusteringStrat
 	@Override
 	public Set<Long> execute() {
 		Set<Long> explored = new HashSet<> ();
-//		explored.add(initialNode.getId());
+		explored.add(initialNode.getId());
 		collect(initialNode, explored, 1);
 		return explored;
 	}
