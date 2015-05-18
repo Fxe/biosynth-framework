@@ -20,8 +20,10 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynth.integration.strategy.DebuggableInstanceMapper;
 
-public class DebugStrictCrossreferenceMapperImpl extends StrictCrossreferenceMapperImpl {
+public class DebugStrictCrossreferenceMapperImpl extends StrictCrossreferenceMapperImpl
+implements DebuggableInstanceMapper {
 
   private final static Logger LOGGER = LoggerFactory.getLogger(StrictCrossreferenceMapperImpl.class);
   private final static RelationshipType CROSSREFERENCE_RELATIONSHIP = MetaboliteRelationshipType.has_crossreference_to;
@@ -33,8 +35,7 @@ public class DebugStrictCrossreferenceMapperImpl extends StrictCrossreferenceMap
     super(graphDatabaseService);
   }
   
-  
-  
+  @Override
   public Map<String, Object> getDebugInformation() {
     return root;
   }

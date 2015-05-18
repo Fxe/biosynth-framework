@@ -15,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
-import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
-import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecieReference;
-import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.ExtendedMetaboliteSpecie;
