@@ -45,9 +45,9 @@ implements DebuggableInstanceMapper {
     root.clear();
     Set<Long> explored = new HashSet<> ();
     explored.add(initialNode.getId());
-    root.put("cpdId", initialNode.getId());
+    root.put("name", initialNode.getId());
     List<Map<String, Object>> childs = new ArrayList<> ();
-    root.put("childs", childs);
+    root.put("children", childs);
     collect2(initialNode, explored, 1, childs);
     return explored;
   }
@@ -66,9 +66,9 @@ implements DebuggableInstanceMapper {
       Node other = r.getOtherNode(node);
       LOGGER.trace("[{}] {}|- {}:{} -- {}:{}", depth, StringUtils.repeat(' ', depth - 1), node, Neo4jUtils.getLabels(node), other, Neo4jUtils.getLabels(other));
       Map<String, Object> treeNode = new HashMap<> ();
-      treeNode.put("cpdId", other.getId());
+      treeNode.put("name", other.getId());
       List<Map<String, Object>> childs = new ArrayList<> ();
-      treeNode.put("childs", childs);
+      treeNode.put("children", childs);
       tree.add(treeNode);
       //node is an invalid xref if points to two instances of current db
       if (!explored.contains(other.getId())
