@@ -65,18 +65,24 @@ implements DebuggableInstanceMapper {
     for (Relationship r : node.getRelationships(CROSSREFERENCE_RELATIONSHIP)) {
       Node other = r.getOtherNode(node);
       LOGGER.trace("[{}] {}|- {}:{} -- {}:{}", depth, StringUtils.repeat(' ', depth - 1), node, Neo4jUtils.getLabels(node), other, Neo4jUtils.getLabels(other));
+      
       Map<String, Object> treeNode = new HashMap<> ();
-      treeNode.put("name", other.getId());
-      List<Map<String, Object>> childs = new ArrayList<> ();
-      treeNode.put("children", childs);
-      tree.add(treeNode);
-      //node is an invalid xref if points to two instances of current db
-      if (!explored.contains(other.getId())
-          && other.hasLabel(GlobalLabel.Metabolite)
-          && valid(other, db)) {
-        LOGGER.debug("[{}] {}|- [{}]{}:{}", depth, StringUtils.repeat(' ', depth - 1), other.getId(), Neo4jUtils.getLabels(other), other.getProperty("entry", "-"));
-        explored.add(other.getId());
-        collect2(other, explored, depth + 1, childs);
+      
+      //only metabolites are taken account !!
+      if (other.hasLabel(GlobalLabel.Metabolite)) {
+	      treeNode.put("name", other.getId());
+	      List<Map<String, Object>> childs = new ArrayList<> ();
+	      treeNode.put("children", childs);
+	      tree.add(treeNode);
+      
+	      //node is an invalid xref if points to two instances of current db
+	      if (!explored.contains(other.getId())
+	          && other.hasLabel(GlobalLabel.Metabolite)
+	          && valid(other, db)) {
+	        LOGGER.debug("[{}] {}|- [{}]{}:{}", depth, StringUtils.repeat(' ', depth - 1), other.getId(), Neo4jUtils.getLabels(other), other.getProperty("entry", "-"));
+	        explored.add(other.getId());
+	        collect2(other, explored, depth + 1, childs);
+	      }
       }
 //      break;
     }
