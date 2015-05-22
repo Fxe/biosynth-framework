@@ -46,6 +46,7 @@ implements DebuggableInstanceMapper {
     Set<Long> explored = new HashSet<> ();
     explored.add(initialNode.getId());
     root.put("name", initialNode.getId());
+    root.put("cpdId", initialNode.getId());
     List<Map<String, Object>> childs = new ArrayList<> ();
     root.put("children", childs);
     collect2(initialNode, explored, 1, childs);
@@ -71,6 +72,7 @@ implements DebuggableInstanceMapper {
       //only metabolites are taken account !!
       if (other.hasLabel(GlobalLabel.Metabolite)) {
 	      treeNode.put("name", other.getId());
+	      treeNode.put("cpdId", other.getId());
 	      List<Map<String, Object>> childs = new ArrayList<> ();
 	      treeNode.put("children", childs);
 	      tree.add(treeNode);
