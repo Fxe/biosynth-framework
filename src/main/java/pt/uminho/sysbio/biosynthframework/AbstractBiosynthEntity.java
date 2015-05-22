@@ -26,12 +26,12 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 	private static final long serialVersionUID = 353453463465587L;
 
 	@Id
-    @Column(name="id", nullable=false)
+  @Column(name="id", nullable=false)
 	@GeneratedValue
 	protected Long id;
 	public Long getId() { return this.id; }
 	public void setId(Long id) { this.id = id; }
-	
+
 	@MetaProperty
 	@Column(name="entry", unique=true, length=255, nullable=false)
 	@XmlAttribute(name="entry")
