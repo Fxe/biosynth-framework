@@ -6,5 +6,6 @@ public enum Neo4jSignatureLabel implements Label {
 	ChemicalStructure,
 	InChI, InChIKey,
 	MolecularSignature, ReactionSignature,
-	Signature, SignatureSet
+	Signature, SignatureSet,
+	Hash32, Hash64, Hash256, Hash512
 }

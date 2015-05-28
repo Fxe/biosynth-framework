@@ -252,6 +252,41 @@ public class Neo4jReactionSignatureDaoImpl extends AbstractNeo4jDao implements R
 			relationship.setProperty("count", signatureSet.getRightSignatureMap().get(signature));
 		}
 	}
+	
+	 public long saveReactionSignature(ReactionSignature signatureSet) {
+	    if (signatureSet.getH() < 1) {
+	      throw new IllegalArgumentException("h must be greater or equal than 1");
+	    }
+	    
+	    Node rsigNode = graphDatabaseService.createNode();  
+	    rsigNode.addLabel(Neo4jSignatureLabel.ReactionSignature);
+	    rsigNode.setProperty("h", signatureSet.getH());
+	    rsigNode.setProperty("stereo", signatureSet.isStereo());
+
+	    for (Signature signature : signatureSet.getLeftSignatureMap().keySet()) {
+	      Node sigNode = Neo4jUtils.mergeUniqueNode(
+	          Neo4jSignatureLabel.Signature, 
+	          Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, 
+	          signature.getSignature(), executionEngine);
+	      Relationship relationship = rsigNode.createRelationshipTo(
+	          sigNode, Neo4jSignatureRelationship.left_signature);
+	      
+	      relationship.setProperty("count", signatureSet.getLeftSignatureMap().get(signature));
+	    }
+	    
+	    for (Signature signature : signatureSet.getRightSignatureMap().keySet()) {
+	      Node sigNode = Neo4jUtils.mergeUniqueNode(
+	          Neo4jSignatureLabel.Signature, 
+	          Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, 
+	          signature.getSignature(), executionEngine);
+	      Relationship relationship = rsigNode.createRelationshipTo(
+	          sigNode, Neo4jSignatureRelationship.right_signature);
+	      
+	      relationship.setProperty("count", signatureSet.getRightSignatureMap().get(signature));
+	    }
+	    
+	    return rsigNode.getId();
+	  }
 
 	public Node generateMemberNode(long referenceId, IntegrationNodeLabel label) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService

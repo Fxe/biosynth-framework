@@ -11,4 +11,5 @@ public enum Neo4jSignatureRelationship implements RelationshipType {
 	has_inchi,
 	has_inchi_key,
 	has_molecular_signature,
+	has_reaction_signature,
 }

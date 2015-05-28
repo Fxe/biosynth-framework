@@ -1,5 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MolecularSignature;
 import pt.uminho.sysbio.biosynthframework.io.MolecularSignatureDao;
+import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements MolecularSignatureDao {
 	
@@ -192,6 +196,41 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 		
 		return result;
 	}
+	
+	public MolecularSignature findMolecularSignatureByInchi(String inchi, int h, boolean stereo) {
+	  MolecularSignature msig = null;
+    String sha256;
+    
+    try {
+      
+      sha256 = DigestUtils.getDigest(inchi, MessageDigest.getInstance("SHA-256"), 2048);
+      Node node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(
+          Neo4jSignatureLabel.ChemicalStructure, Neo4jDefinitions.SHA256, sha256));
+      if (node == null) return null;
+      for (Relationship r : node.getRelationships(Neo4jSignatureRelationship.has_mdl_mol_file)) {
+        Node mdlMolNode = r.getOtherNode(node);
+        Long msigId = null;
+        for (Relationship molMolNodeR : mdlMolNode.getRelationships(Neo4jSignatureRelationship.has_signature_set)) {
+          Node msigNode = molMolNodeR.getOtherNode(mdlMolNode);
+          int h_ = (int) msigNode.getProperty("h");
+          boolean stereo_ = (boolean) msigNode.getProperty("stereo");
+          if (h_ == h && stereo_ == stereo) {
+            msigId = msigNode.getId();
+          }
+        }
+        if (msigId != null) {
+          msig = this.getMolecularSignatureById(msigId);
+        }
+      }
+      
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    return msig;
+	}
 
 	@Override
 	public Set<Long> findMolecularSignatureContainsAny(
@@ -216,19 +255,16 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 
 	@Override
 	public MolecularSignature getMolecularSignatureByHash(String hash64) {
-		// TODO Auto-generated method stub
-		return null;
+	  throw new RuntimeException("Not implemented yet !");
 	}
 
 	@Override
 	public String getMolecularSignatureHashById(long msigId) {
-		// TODO Auto-generated method stub
-		return null;
+	  throw new RuntimeException("Not implemented yet !");
 	}
 
 	@Override
 	public Set<Long> listMolecularSignatureIdBySignature(Signature signature) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented yet !");
 	}
 }
