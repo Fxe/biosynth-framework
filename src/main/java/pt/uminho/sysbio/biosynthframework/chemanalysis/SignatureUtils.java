@@ -9,14 +9,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
 public class SignatureUtils {
+  
+  private final static Logger LOGGER = LoggerFactory.getLogger(SignatureUtils.class);
 	
 	public static Map<Signature, Double> intersection(Map<Signature, Double> a, Map<Signature, Double> b) {
 //		Map<Signature, Double> result = new HashMap<> ();
@@ -278,4 +282,46 @@ public class SignatureUtils {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**
+	 * Determine the position of MolecularSignature 
+	 * @param template the reaction template portion
+	 * @param ms MolecularSignatures to determine
+	 * @param msig
+	 * @return
+	 */
+  public static int[] fixedRegionTemplateMatch(Map<Signature, Double> template, MolecularSignature[] ms, MolecularSignature msig) {
+    
+    int[] result = new int[ms.length];
+    for (int i = 0; i < ms.length; i++) {
+      LOGGER.debug("Match substrate {}", i);
+      MolecularSignature subsig = new MolecularSignature();
+      Map<Signature, Double> diff = new HashMap<> (template);
+      for (int j = 0; j < ms.length; j++) {
+        if (j != i) diff = SignatureUtils.diff(diff, ms[j].getSignatureMap());
+      }
+      subsig.setSignatureMap(diff);
+      
+      result[i] = 1;
+      for (Signature s : subsig.getSignatureMap().keySet()) {
+        //check exists
+        if (!msig.getSignatureMap().containsKey(s)) {
+          LOGGER.trace("Fail  for " + s);
+          result[i] = 0;
+          break;
+        }
+        double v1 = subsig.getSignatureMap().get(s);
+        double v2 = msig.getSignatureMap().get(s);
+        if (v2 >= v1) {
+          LOGGER.trace("Valid for " + s);
+        } else {
+          LOGGER.trace("Fail  for " + s);
+          result[i] = 0;
+          break;
+        }
+      }
+    }
+    
+    return result;
+  }
 }

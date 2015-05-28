@@ -22,6 +22,7 @@ public class ReactionGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(ReactionGenerator.class);
   
   private MolecularSignatureDao signatureDao;
+  private boolean validation = true;
   
   public ReactionGenerator(MolecularSignatureDao signatureDao) {
     this.signatureDao = signatureDao;
@@ -40,7 +41,7 @@ public class ReactionGenerator {
 //    System.out.println(template);
     List<Set<String>> leftCandidates = new ArrayList<> ();
     for (int i = 0; i < ms.length; i++) {
-      LOGGER.info("Find substrate {}", i);
+      LOGGER.debug("Find for target {}", i);
       MolecularSignature subsig = new MolecularSignature();
       Map<Signature, Double> diff = new HashMap<> (template);
       for (int j = 0; j < ms.length; j++) {
@@ -53,7 +54,7 @@ public class ReactionGenerator {
         candidates.add(hash);
       }
       leftCandidates.add(candidates);
-      LOGGER.info("Found {} candidates for substrate {}", candidates.size(), i);
+      LOGGER.debug("Found {} candidates for substrate {}", candidates.size(), i);
     }
     Set<List<String>> result = Sets.cartesianProduct(leftCandidates);
     return result;
@@ -65,11 +66,11 @@ public class ReactionGenerator {
       double v = template.get(s);
       Double v_ = sum.getSignatureMap().get(s);
       if (v_ == null) {
-        LOGGER.info("Signature {} not found", s);
+        LOGGER.trace("Signature {} not found", s);
         return false;
       }
       if (v > v_) {
-        LOGGER.info("Signature {} invalid ammount. expected >= {}, atual {}", s, v, v_);
+        LOGGER.trace("Signature {} invalid ammount. expected >= {}, atual {}", s, v, v_);
         return false;
       }
     }
@@ -81,7 +82,7 @@ public class ReactionGenerator {
     for (List<String> r : substrates) {
       List<MolecularSignature> ms = toMolecularSignature(r);
       boolean valid = validateTemplate(rsig.getLeftSignatureMap(), ms);
-      if (valid) {
+      if (validation && valid) {
         Map<Signature, Double> products = apply(ms, rsig);
         omg.clear();
         List<String> m = new ArrayList<> ();
@@ -93,18 +94,30 @@ public class ReactionGenerator {
     }
   }
   
-  public List<Pair<Map<String, Double>, Map<String, Double>>> scaffoldReactions3(ReactionSignature rsig,
-      MolecularSignature[] molecularSignatures1,
-      MolecularSignature[] molecularSignatures2) {
+  public List<Pair<Map<String, Double>, Map<String, Double>>> scaffoldReactions3(
+      ReactionSignature rsig, MolecularSignature[] lhs, MolecularSignature[] rhs) {
+    
     List<Pair<Map<String, Double>, Map<String, Double>>> result = new ArrayList<> ();
     
-    Set<List<String>> l = fixedRegionTemplateMatch(rsig.getLeftSignatureMap() , molecularSignatures1);
-    Set<List<String>> r = fixedRegionTemplateMatch(rsig.getRightSignatureMap(), molecularSignatures2);
+    if (rsig.getLeftSignatureMap().isEmpty() || rsig.getRightSignatureMap().isEmpty()) {
+      LOGGER.debug("Empty signatures ! #Lhs:{}, #Rhs:{}", 
+          rsig.getLeftSignatureMap().size(), rsig.getRightSignatureMap().size());
+      return null;
+    }
+    
+    Set<List<String>> l = fixedRegionTemplateMatch(rsig.getLeftSignatureMap() , lhs);
+    Set<List<String>> r = fixedRegionTemplateMatch(rsig.getRightSignatureMap(), rhs);
+    
+    if (l.isEmpty() || r.isEmpty()) {
+      return result;
+    }
 //    Map<String, MolecularSignature> a = new HashMap<> ();
     Map<String, Set<List<String>>> leftHashToSubstrates = new HashMap<> ();
+    int i = 0;
     for (List<String> m : l) {
+      LOGGER.debug("Test Lhs signature {}/{}", ++i, l.size());
       List<MolecularSignature> ms = toMolecularSignature(m);
-      boolean valid = validateTemplate(rsig.getLeftSignatureMap(), ms);
+      boolean valid = validation ? validateTemplate(rsig.getLeftSignatureMap(), ms) : true;
       if (valid) {
         Map<Signature, Double> products = apply(ms, rsig);
         MolecularSignature rightSignatureAssert = new MolecularSignature();
@@ -116,11 +129,15 @@ public class ReactionGenerator {
         }
         
         leftHashToSubstrates.get(hash).add(m);
+      } else {
+        
       }
     }
+    i = 0;
     for (List<String> m : r) {
+      LOGGER.debug("Test Rhs signature {}/{}", ++i, r.size());
       List<MolecularSignature> ms = toMolecularSignature(m);
-      boolean valid = validateTemplate(rsig.getRightSignatureMap(), ms);
+      boolean valid = validation ? validateTemplate(rsig.getRightSignatureMap(), ms) : true;
       if (valid) {
         MolecularSignature rmsig = SignatureUtils.sumSignatures(ms);
         String hash = DigestUtils.hex(rmsig.hash());
@@ -209,6 +226,10 @@ public class ReactionGenerator {
       }
       LOGGER.trace("{} molecular signatures contains {} with atleast value >= {}", msigIdSet_.size(), s, v1);
       intersection.add(msigIdSet_);
+    }
+    
+    if (intersection.isEmpty()) {
+      return new HashSet<> ();
     }
     
     Set<Long> result = intersection.get(0);

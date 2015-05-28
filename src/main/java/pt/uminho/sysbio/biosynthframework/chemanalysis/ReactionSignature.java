@@ -51,6 +51,10 @@ public class ReactionSignature {
 		return hash;
 	}
 	
+	public boolean isEmpty() {
+	  return this.leftSignatureMap.isEmpty() && this.rightSignatureMap.isEmpty();
+	}
+	
 	@Override
 	public int hashCode() {
 		int hash = 0;
