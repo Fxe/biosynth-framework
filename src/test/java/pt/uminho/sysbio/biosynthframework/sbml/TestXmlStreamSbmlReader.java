@@ -42,7 +42,6 @@ public class TestXmlStreamSbmlReader {
         }
       }
     }
-    fail("Not yet implemented");
   }
 
 }

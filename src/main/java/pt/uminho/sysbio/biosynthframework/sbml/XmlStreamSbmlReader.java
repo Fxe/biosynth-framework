@@ -25,6 +25,11 @@ import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
+/**
+ * Java XML Stream parser for SBML models
+ * @author Filipe Liu
+ *
+ */
 public class XmlStreamSbmlReader {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(XmlStreamSbmlReader.class);
@@ -86,7 +91,7 @@ public class XmlStreamSbmlReader {
 			while (xmlEventReader.hasNext()) {
 				XMLEvent xmlEvent = xmlEventReader.nextEvent();
 				if (xmlEvent.isStartDocument()) {
-					System.out.println("start");
+					//System.out.println("start");
 				} else if (xmlEvent.isStartElement()) {
 					StartElement startElement = xmlEvent.asStartElement();
 					String namespace = startElement.getName().getNamespaceURI();

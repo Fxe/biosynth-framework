@@ -1,15 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class XmlSbmlModel {
-	
-	public Map<String, String> attributes = new HashMap<> ();
-	public Map<String, String> getAttributes() { return attributes;}
-	public void setAttributes(Map<String, String> attributes) { this.attributes = attributes;}
+public class XmlSbmlModel extends XmlObject {
 	
 	private List<XmlSbmlSpecie> species = new ArrayList<> ();
 	private List<XmlSbmlGroup> groups = new ArrayList<> ();
