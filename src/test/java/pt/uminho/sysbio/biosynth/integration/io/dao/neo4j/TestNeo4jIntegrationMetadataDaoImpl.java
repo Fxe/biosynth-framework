@@ -14,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.test.TestGraphDatabaseFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,8 @@ public class TestNeo4jIntegrationMetadataDaoImpl extends TestNeo4jConfiguration 
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jMetaDatabaseConstraints(NEO_META_DB);
+	  graphDatabaseService = new TestGraphDatabaseFactory().newImpermanentDatabase();
+//		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jMetaDatabaseConstraints(NEO_META_DB);
 		daoImpl = new Neo4jIntegrationMetadataDaoImpl(graphDatabaseService);
 	}
 

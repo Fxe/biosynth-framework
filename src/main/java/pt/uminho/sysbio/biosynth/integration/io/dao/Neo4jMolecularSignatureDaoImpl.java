@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
-import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MolecularSignature;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
 import pt.uminho.sysbio.biosynthframework.io.MolecularSignatureDao;
 import pt.uminho.sysbio.biosynthframework.util.DigestUtils;
 
@@ -255,7 +255,24 @@ public class Neo4jMolecularSignatureDaoImpl extends AbstractNeo4jDao implements 
 
 	@Override
 	public MolecularSignature getMolecularSignatureByHash(String hash64) {
-	  throw new RuntimeException("Not implemented yet !");
+	  MolecularSignature msig = null;
+	  
+	  Node hash64Node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(
+	      Neo4jSignatureLabel.Hash64, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, hash64));
+	  for (Relationship relationship : hash64Node.getRelationships()) {
+	    Node other = relationship.getOtherNode(hash64Node);
+	    
+	    LOGGER.trace("Found node {}:{}", Neo4jUtils.getLabels(other), 
+	                                     Neo4jUtils.getPropertiesMap(other));
+	    
+	    if (other.hasLabel(Neo4jSignatureLabel.MolecularSignature)) {
+	      msig = this.getMolecularSignatureById(other.getId());
+//	      System.out.println(SignatureUtils.toString(msig));
+	    }
+
+	  }
+	  
+	  return msig;
 	}
 
 	@Override
