@@ -43,7 +43,7 @@ public class MolecularSignature implements Serializable {
 	}
 	
 	public long hash() {
-		return SignatureUtils.hash(signatureMap);
+		return SignatureUtils.hashOld(signatureMap);
 	}
 	
 	@Override

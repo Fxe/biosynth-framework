@@ -2,7 +2,9 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis.cdk;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -13,6 +15,7 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
@@ -38,14 +41,11 @@ public class CdkWrapper implements FormulaReader {
 	public Map<String, Integer> getAtomCountMap(String formula) {
 		Map<String, Integer> atomMap = null; 
 		try {
-			atomMap = new HashMap<> ();
 			IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 			IMolecularFormula molecularFormula = MolecularFormulaManipulator
 					.getMajorIsotopeMolecularFormula(formula, builder);
 			IAtomContainer container = MolecularFormulaManipulator.getAtomContainer(molecularFormula);
-			for (IAtom atom : container.atoms()) {
-				CollectionUtils.increaseCount(atomMap, atom.getSymbol(), 1);
-			}
+			atomMap = getAtomCountMap(container);
 		} catch (NullPointerException e) {
 			LOGGER.error(String.format("NullPointer [%s] - %s", formula, e.getMessage())); 
 		} catch (StringIndexOutOfBoundsException e) {
@@ -55,6 +55,30 @@ public class CdkWrapper implements FormulaReader {
 		}
 		
 		return atomMap;
+	}
+	
+	private Map<String, Integer> getAtomCountMap(IAtomContainer container) {
+	  Map<String, Integer> atomMap = new HashMap<> ();
+    for (IAtom atom : container.atoms()) {
+      CollectionUtils.increaseCount(atomMap, atom.getSymbol(), 1);
+    }
+    return atomMap;
+  }
+	
+	public List<Map<String, Integer>> getAtomCountMapFromInchi(String inchi) {
+	  List<Map<String, Integer>> result = new ArrayList<> ();
+	  try {
+      IAtomContainerSet containerSet = new CdkMoleculeFormatConverter().readInchi(new ByteArrayInputStream(inchi.getBytes()));
+      for (IAtomContainer container : containerSet.atomContainers()) {
+        Map<String, Integer> atomMap = getAtomCountMap(container);
+        result.add(atomMap);
+      }
+    } catch (CDKException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+	  
+	  return result;
 	}
 	
 	/**

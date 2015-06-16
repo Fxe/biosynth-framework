@@ -39,6 +39,10 @@ public class Signature implements Comparable<Signature>, Serializable {
 		return DigestUtils.hash(signature);
 	}
 	
+	public char getPivotAtom() {
+	  return this.signature.charAt(1);
+	}
+	
 	@Override
 	public int hashCode() {
 //		System.out.println(signature + " " + signature.hashCode());

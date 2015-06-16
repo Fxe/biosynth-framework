@@ -22,13 +22,19 @@ public class ReactionGenerator {
   private static final Logger LOGGER = LoggerFactory.getLogger(ReactionGenerator.class);
   
   private MolecularSignatureDao signatureDao;
-  private boolean validation = true;
+  private boolean validation = false;
+  
+  /**
+   * msigHash64 -> inchi set<br>
+   * A molecular signature may have multiple inchi structures
+   */
+  private Map<String, List<String>> msigHash64ToInchiMap = new HashMap<> ();
   
   public ReactionGenerator(MolecularSignatureDao signatureDao) {
     this.signatureDao = signatureDao;
   }
   
-  public List<MolecularSignature> toMolecularSignature(List<String> hashList) {
+  public List<MolecularSignature> toMolecularSignatureArray(List<String> hashList) {
     List<MolecularSignature> ms = new ArrayList<> ();
     for (String hash : hashList) {
       MolecularSignature m = signatureDao.getMolecularSignatureByHash(hash);
@@ -60,28 +66,13 @@ public class ReactionGenerator {
     return result;
   }
   
-  public static boolean validateTemplate(Map<Signature, Double> template, List<MolecularSignature> ms) {
-    MolecularSignature sum = SignatureUtils.sumSignatures(ms);
-    for (Signature s : template.keySet()) {
-      double v = template.get(s);
-      Double v_ = sum.getSignatureMap().get(s);
-      if (v_ == null) {
-        LOGGER.trace("Signature {} not found", s);
-        return false;
-      }
-      if (v > v_) {
-        LOGGER.trace("Signature {} invalid ammount. expected >= {}, atual {}", s, v, v_);
-        return false;
-      }
-    }
-    return true;
-  }
+
   
   public void scaffoldReactions2(ReactionSignature rsig, MolecularSignature[] hint) {
     Set<List<String>> substrates = fixedRegionTemplateMatch(rsig.getLeftSignatureMap(), hint);
     for (List<String> r : substrates) {
-      List<MolecularSignature> ms = toMolecularSignature(r);
-      boolean valid = validateTemplate(rsig.getLeftSignatureMap(), ms);
+      List<MolecularSignature> ms = toMolecularSignatureArray(r);
+      boolean valid = SignatureUtils.validateTemplate(rsig.getLeftSignatureMap(), ms);
       if (validation && valid) {
         Map<Signature, Double> products = apply(ms, rsig);
         omg.clear();
@@ -97,6 +88,8 @@ public class ReactionGenerator {
   public List<Pair<Map<String, Double>, Map<String, Double>>> scaffoldReactions3(
       ReactionSignature rsig, MolecularSignature[] lhs, MolecularSignature[] rhs) {
     
+    LOGGER.debug("Generating reactions for rsig: {}", DigestUtils.hex(rsig.hash()));
+    
     List<Pair<Map<String, Double>, Map<String, Double>>> result = new ArrayList<> ();
     
     if (rsig.getLeftSignatureMap().isEmpty() || rsig.getRightSignatureMap().isEmpty()) {
@@ -108,47 +101,60 @@ public class ReactionGenerator {
     Set<List<String>> l = fixedRegionTemplateMatch(rsig.getLeftSignatureMap() , lhs);
     Set<List<String>> r = fixedRegionTemplateMatch(rsig.getRightSignatureMap(), rhs);
     
+    LOGGER.debug("Match Lhs {}", l);
+    LOGGER.debug("Match Rhs {}", r);
+    
     if (l.isEmpty() || r.isEmpty()) {
       return result;
     }
+    
 //    Map<String, MolecularSignature> a = new HashMap<> ();
     Map<String, Set<List<String>>> leftHashToSubstrates = new HashMap<> ();
     int i = 0;
     for (List<String> m : l) {
       LOGGER.debug("Test Lhs signature {}/{}", ++i, l.size());
-      List<MolecularSignature> ms = toMolecularSignature(m);
-      boolean valid = validation ? validateTemplate(rsig.getLeftSignatureMap(), ms) : true;
+      List<MolecularSignature> ms = toMolecularSignatureArray(m);
+      boolean valid = validation ? SignatureUtils.validateTemplate(rsig.getLeftSignatureMap(), ms) : true;
       if (valid) {
         Map<Signature, Double> products = apply(ms, rsig);
+        
         MolecularSignature rightSignatureAssert = new MolecularSignature();
         rightSignatureAssert.setSignatureMap(products);
-        String hash = DigestUtils.hex(rightSignatureAssert.hash());
+//        System.out.println(SignatureUtils.getFormulaMap(rightSignatureAssert));
+        String rhsMsigSumHash64 = DigestUtils.hex(rightSignatureAssert.hash());
 //        a.put(hash, rightSignatureAssert);
-        if (!leftHashToSubstrates.containsKey(hash)) {
-          leftHashToSubstrates.put(hash, new HashSet<List<String>> ());
+        if (!leftHashToSubstrates.containsKey(rhsMsigSumHash64)) {
+          leftHashToSubstrates.put(rhsMsigSumHash64, new HashSet<List<String>> ());
         }
-        
-        leftHashToSubstrates.get(hash).add(m);
+//        System.out.println("Added rhsMsigSumHash64: " + rhsMsigSumHash64);
+        leftHashToSubstrates.get(rhsMsigSumHash64).add(m);
       } else {
-        
+        LOGGER.error("template mismatch !");
       }
     }
     i = 0;
     for (List<String> m : r) {
       LOGGER.debug("Test Rhs signature {}/{}", ++i, r.size());
-      List<MolecularSignature> ms = toMolecularSignature(m);
-      boolean valid = validation ? validateTemplate(rsig.getRightSignatureMap(), ms) : true;
+      List<MolecularSignature> ms = toMolecularSignatureArray(m);
+      boolean valid = validation ? SignatureUtils.validateTemplate(rsig.getRightSignatureMap(), ms) : true;
       if (valid) {
         MolecularSignature rmsig = SignatureUtils.sumSignatures(ms);
         String hash = DigestUtils.hex(rmsig.hash());
         Set<List<String>> match = leftHashToSubstrates.get(hash);
         if (match != null) {
+          LOGGER.debug("Pair Match ! {}:{} -> {}:{}", hash, match, hash, m);
+          
           Map<String, Double> products = toMap(m);
           for (List<String> substrateList : match) {
             Map<String, Double> substrates = toMap(substrateList);
             Pair<Map<String, Double>, Map<String, Double>> reaction = 
                 new ImmutablePair<>(substrates, products);
-            result.add(reaction);
+            
+            if (!validadeMsigMatch(rsig, substrateList, m)) {
+              LOGGER.error("Invalid msig pair match !");
+            } else {
+              result.add(reaction);
+            }
           }
           
 //          System.out.println(match);
@@ -156,10 +162,53 @@ public class ReactionGenerator {
 //          System.out.println("------------------------");
         }
 //        Map<Signature, Double> products = apply(ms, rsig);
+      } else {
+        LOGGER.error("template mismatch !");
       }
     }
     
     return result;
+  }
+  
+  public boolean validadeMsigMatch(ReactionSignature rsig, List<String> lhsHash64List, List<String> rhsHash64List) {
+    MolecularSignature lhsSigSum = null;
+    MolecularSignature rhsSigSum = null;
+    List<MolecularSignature> lhsMsigList = new ArrayList<> ();
+    List<MolecularSignature> rhsMsigList = new ArrayList<> ();
+    
+    for (String lhsHash64 : lhsHash64List) {
+      LOGGER.debug("S: " + lhsHash64 + " " + msigHash64ToInchiMap.get(lhsHash64));
+      MolecularSignature msig = signatureDao.getMolecularSignatureByHash(lhsHash64);
+      lhsMsigList.add(msig);
+    }
+    lhsSigSum = SignatureUtils.sumSignatures(lhsMsigList);
+    
+    for (String rhsHash64 : rhsHash64List) {
+      LOGGER.debug("R: " + rhsHash64 + " " + msigHash64ToInchiMap.get(rhsHash64));
+      MolecularSignature msig = signatureDao.getMolecularSignatureByHash(rhsHash64);
+      rhsMsigList.add(msig);
+    }
+    rhsSigSum = SignatureUtils.sumSignatures(rhsMsigList);
+    
+    LOGGER.debug(DigestUtils.hex(lhsSigSum.hash()) + " <-> " + DigestUtils.hex(rhsSigSum.hash()));
+    
+    MolecularSignature apply = new MolecularSignature();
+    apply.setSignatureMap(apply(lhsMsigList, rsig));
+    
+    if (!SignatureUtils.getFormulaMap(apply).equals(SignatureUtils.getFormulaMap(rhsSigSum))) {
+      LOGGER.debug("Atom Count mismatch !");
+      return false;
+    }
+    
+    //dump all information
+//    System.out.println(SignatureUtils.toString(lhsSigSum));
+//    System.out.println(SignatureUtils.toString(apply));
+//    System.out.println(SignatureUtils.toString(rhsSigSum));
+//    System.out.println(SignatureUtils.getFormulaMap(lhsSigSum));
+//    System.out.println(SignatureUtils.getFormulaMap(apply));
+//    System.out.println(SignatureUtils.getFormulaMap(rhsSigSum));
+    
+    return true;
   }
   
   public static Map<String, Double> toMap(List<String> l) {
@@ -174,6 +223,8 @@ public class ReactionGenerator {
   }
   
   public Set<List<String>> omg = new HashSet<> ();
+
+  
   public void zzzz(Map<Signature, Double> signatures, List<String> match) {
     for (Double v : signatures.values()) { if (v < 0.0) return; }
     if (signatures.isEmpty()) { omg.add(match); return;}
@@ -257,5 +308,9 @@ public class ReactionGenerator {
     Map<Signature, Double> sigMinusLeft = SignatureUtils.sub(sigSum,     rsig.getLeftSignatureMap());
     Map<Signature, Double> sigPlusRight = SignatureUtils.sum(sigMinusLeft,  rsig.getRightSignatureMap());
     return sigPlusRight;
+  }
+
+  public void setSomeDebug(Map<String, List<String>> msigHash64ToInchiMap) {
+    this.msigHash64ToInchiMap = msigHash64ToInchiMap;
   }
 }
