@@ -14,11 +14,11 @@
   <distributionManagement>
     <repository>
       <id>watson</id>
-      <url>http://192.168.1.99:8081/nexus/content/repositories/biosystems-releases</url>
+      <url>http://193.137.11.210/nexus/content/repositories/biosystems-releases</url>
     </repository>
     <snapshotRepository>
       <id>watson</id>
-      <url>http://192.168.1.99:8081/nexus/content/repositories/biosystems-snapshots</url>
+      <url>http://193.137.11.210/nexus/content/repositories/biosystems-snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -130,6 +130,7 @@
           </execution> 
         </executions>
       </plugin>
+      <!-- 
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -140,6 +141,7 @@
           <nexusUrl>http://192.168.1.99:8081/nexus/</nexusUrl>          
         </configuration>
       </plugin>
+       -->
     </plugins>
   </build>
 </project>
