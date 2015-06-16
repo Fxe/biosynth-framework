@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.visualization.graphviz;
 
 public class DotNode {
+	
+	public String id;
 	public String color = "black";
 	public String label = "";
 	public GraphVizShape shape = GraphVizShape.CIRCLE;
@@ -24,6 +26,6 @@ public class DotNode {
 	
 	@Override
 	public String toString() {
-		return String.format("{label:%s, shape:%s, color:%s}", label, shape, color);
+		return String.format("%s [label=\"%s\", shape=%s, color=%s]", id, label, shape, color);
 	}
 }
