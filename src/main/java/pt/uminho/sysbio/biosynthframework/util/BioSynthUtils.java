@@ -1,6 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.util.Map;
+
 import pt.uminho.sysbio.biosynthframework.Orientation;
+import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class BioSynthUtils {
 	
@@ -52,11 +55,48 @@ public class BioSynthUtils {
 	}
 
 	public static String toSymbol(Orientation orientation) {
+	  if (orientation == null) return "<n>";
+	  
 		switch (orientation) {
 			case LeftToRight: return " =>";
 			case RightToLeft: return "<= ";
 			case Reversible : return "<=>";
 			default: return "<?>";
 		}
+	}
+	
+	public static int hashReaction(Reaction reaction) {
+	  int hash = 0;
+	  final int prime = 37;
+	  
+	  int lhsHash = reaction.getLeftStoichiometry().hashCode();
+	  int rhsHash = reaction.getRightStoichiometry().hashCode();
+	  
+	  Orientation orientation = reaction.getOrientation();
+	  if (orientation == null) orientation = Orientation.Reversible;
+	  switch(orientation) {
+  	  case LeftToRight:
+  	    hash = lhsHash * prime + rhsHash;
+  	    break;
+  	  case RightToLeft:
+  	    hash = rhsHash * prime + lhsHash;
+  	    break;
+  	  case Unknown:
+  	  case Reversible:
+  	    hash = lhsHash + rhsHash;
+  	    break;
+	  }
+	  return hash;
+	}
+	
+	public static int hashStiochiometry(Map<String, Double> stoichiometryMap) {
+	  int hash = 0;
+	  final int p1 = 1987;
+	  final int p2 = 2011;
+	  for (String key : stoichiometryMap.keySet()) {
+	    Double value = stoichiometryMap.get(key);
+	    hash += (key.hashCode() * p1 * value.hashCode()) ^ p2;
+	  }
+	  return hash;
 	}
 }
