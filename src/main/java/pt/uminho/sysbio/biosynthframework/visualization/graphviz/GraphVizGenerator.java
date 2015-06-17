@@ -33,89 +33,11 @@ public class GraphVizGenerator {
 		ProcessBuilder processBuilder = new ProcessBuilder(args);
 		final Process process = processBuilder.start();
 		
-//		OutputStreamWriter outputStreamWriter = new OutputStreamWriter(process.getOutputStream());
-//		outputStreamWriter.write(stdin);
-//		outputStreamWriter.write("\u001a");
-//		outputStreamWriter.flush();
-		
-		
-		
-//		InputStreamReader stdinStreamReader = new InputStreamReader(process.getInputStream());
-//		InputStreamReader stderrStreamReader = new InputStreamReader(process.getErrorStream());
-		
 		IOUtils.write(stdin, process.getOutputStream());
 		process.getOutputStream().close();
-		
-//		IOUtils.w
+
 		stdout.append(IOUtils.toString(process.getInputStream()));
 		stderr.append(IOUtils.toString(process.getErrorStream()));
-//		
-//		BufferedReader bufferedReader;
-//		bufferedReader = new BufferedReader(stdinStreamReader);
-//		
-//		String readline;
-//		while ((readline = bufferedReader.readLine()) != null) {
-//			stdout.append(readline);
-//		}
-//		
-//		outputStreamWriter.close();
-//		stdinStreamReader.close();
-//		bufferedReader.close();
-//		
-//		bufferedReader = new BufferedReader(stderrStreamReader);
-//		while ((readline = bufferedReader.readLine()) != null) {
-//			stderr.append(readline);
-//		}
-//		stderrStreamReader.close();
-//		bufferedReader.close();
-		
-//		Thread stdinWriter = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(process.getOutputStream());
-////				outputStreamWriter.
-//			}
-//		}) {
-//		};
-//
-//		Thread stdoutReader = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream());
-//				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//				String readline;
-//				try {
-//					while ((readline = bufferedReader.readLine()) != null) {
-//						System.out.println(readline);
-//					}
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//		}) {
-//		};
-//
-//		Thread stderrReader = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				InputStreamReader inputStreamReader = new InputStreamReader(process.getErrorStream());
-//				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//				String readline;
-//				try {
-//					while ((readline = bufferedReader.readLine()) != null) {
-//						System.out.println(readline);
-//					}
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//		}) {
-//		};
-//		
-//		stdoutReader.start();
-//		stderrReader.start();
 		
 		String[] output = new String[2];
 		output[0] = stdout.toString();
