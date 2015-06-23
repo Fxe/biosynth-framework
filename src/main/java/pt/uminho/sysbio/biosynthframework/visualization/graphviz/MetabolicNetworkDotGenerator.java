@@ -18,17 +18,29 @@ import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class MetabolicNetworkDotGenerator {
-  
   private static final Logger LOGGER = LoggerFactory.getLogger(MetabolicNetworkDotGenerator.class);
   
+  private String pad = ".75";
+  private String ranksep = ".75";
+  private String nodesep = ".25";
   private Set<String> replicateNode = new HashSet<> ();
   private Map<String, Metabolite> metaboliteMap = new HashMap<> ();
   private List<Reaction> reactionList = new ArrayList<> ();
   private MetaboliteToDotNodeTransformer<Metabolite> metaboliteTransformer = null;
- 
+  private ReactionToDotNodeTransformer<Reaction> reactionTransformer = null;
+  
   
   public MetabolicNetworkDotGenerator() { }
-  
+    
+  public String getPad() { return pad;}
+  public void setPad(String pad) { this.pad = pad;}
+
+  public String getRanksep() { return ranksep;}
+  public void setRanksep(String ranksep) { this.ranksep = ranksep;}
+
+  public String getNodesep() { return nodesep;}
+  public void setNodesep(String nodesep) { this.nodesep = nodesep;}
+
   public void addNodeReplication(String node) {
     replicateNode.add(node);
   }
@@ -40,6 +52,11 @@ public class MetabolicNetworkDotGenerator {
   public void setMetaboliteTransformer(
       MetaboliteToDotNodeTransformer<Metabolite> metaboliteTransformer) {
     this.metaboliteTransformer = metaboliteTransformer;
+  }
+  
+  public void setReactionTransformer(
+      ReactionToDotNodeTransformer<Reaction> reactionTransformer) {
+    this.reactionTransformer = reactionTransformer;
   }
 
   public void addReaction(Reaction rxn) {
@@ -86,13 +103,23 @@ public class MetabolicNetworkDotGenerator {
     List<String> lines = new ArrayList<> ();
     lines.add("digraph {");
     
+//    lines.add("graph [pad=\".75\", ranksep=\"2\", nodesep=\"0.25\"];");
+    lines.add(String.format("graph [pad=\"%s\", ranksep=\"%s\", nodesep=\"%s\"];", 
+          pad, ranksep, nodesep));
+    
     Map<String, String> replicationMap = new HashMap<> ();
     
     for (Reaction rxn : reactionList) {
       DotNode node = new DotNode();
+      if (reactionTransformer != null) {
+        node = reactionTransformer.toDotNode(rxn);
+      } else {
+        node.setLabel(String.format("\"%s\"", rxn.getEntry()));
+        node.setShape(GraphVizShape.BOX);
+      }
+      
       node.id = idMap.get(rxn.getEntry());
-      node.setLabel(rxn.getEntry());
-      node.setShape(GraphVizShape.BOX);
+      
       lines.add(node.toString());
       
       for (String cpdEntry : rxn.getLeftStoichiometry().keySet()) {
@@ -126,9 +153,10 @@ public class MetabolicNetworkDotGenerator {
           node = metaboliteTransformer.toDotNode(cpd);
         } else {
           node = new DotNode();
-          node.setLabel(cpd.getEntry());
+          node.setLabel(String.format("\"%s\"", cpd.getEntry()));
+          node.setShape(GraphVizShape.PLAINTEXT);
         }
-        node.setShape(GraphVizShape.PLAINTEXT);
+        
         node.id = idMap.get(cpd.getEntry());
         lines.add(node.toString());
       }
@@ -143,7 +171,7 @@ public class MetabolicNetworkDotGenerator {
         node = metaboliteTransformer.toDotNode(cpd);
       } else {
         node = new DotNode();
-        node.setLabel(cpd.getEntry());
+        node.setLabel(String.format("\"%s\"", cpd.getEntry()));
         
       }
       node.setShape(GraphVizShape.PLAINTEXT);
@@ -201,4 +229,6 @@ public class MetabolicNetworkDotGenerator {
     lines.add("}");
     return StringUtils.join(lines, '\n');
   }
+
+
 }
