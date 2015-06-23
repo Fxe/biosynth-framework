@@ -1,22 +1,19 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis.sigmol;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.chemanalysis.Signature;
-
+@Deprecated
+@SuppressWarnings("unused")
 public class Sscan {
-	
-	private final static Logger LOGGER = LoggerFactory.getLogger(Sscan.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(Sscan.class);
 	
 	private boolean removeHydrogen = true;
 	
-	public static Map<Signature, Double> getSignatureSetFromMol(String mol, SigMolMode mode, int h) throws IOException {
+	public static Map<String, Double> getSignatureSetFromMol(String mol, String mode, int h) throws IOException {
 //		StringBuilder stdout = new StringBuilder();
 //		StringBuilder stderr = new StringBuilder();
 //		
