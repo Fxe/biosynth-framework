@@ -32,6 +32,10 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 	private boolean initialized = false;
 	private Map<String, DefaultReaction> reactionMap = new HashMap<> ();
 	
+	public CsvDefaultReactionDaoImpl(String pathname) {
+		this(new File(pathname));
+	}
+	
 	public CsvDefaultReactionDaoImpl(File csvFile) {
 		this.csvFile = csvFile;
 		initialize();
