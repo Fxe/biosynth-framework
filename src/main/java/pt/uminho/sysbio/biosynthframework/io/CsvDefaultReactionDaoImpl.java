@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 	private static final int LEFT_STOICH_INDEX = 3;
 	private static final int RIGHT_STOICH_INDEX = 4;
 	private static final int ORIENTATION_INDEX = 5;
+	private static final int DESCRIPTION_INDEX = 6;
 	
 	private File csvFile;
 	
@@ -51,10 +53,14 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 						String[] left_stoich = fields[LEFT_STOICH_INDEX].split("\\s+");
 						String[] right_stoich = fields[RIGHT_STOICH_INDEX].split("\\s+");
 						boolean rev = Integer.parseInt(fields[ORIENTATION_INDEX]) != 0;
+						
+						String description = fields[DESCRIPTION_INDEX];
+						description = StringUtils.removeEnd(description, "\"");
+						description = StringUtils.removeStart(description, "\"");
 						DefaultReaction genericReaction = new DefaultReaction();
 						genericReaction.setEntry(entry);
 						genericReaction.setName(entry);
-						
+						genericReaction.setDescription(description);
 						if (left.length != left_stoich.length || right.length != right_stoich.length) {
 							throw new IllegalArgumentException(String.format("Invalid format at line: %s", reactionString));
 						}
