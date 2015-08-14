@@ -31,6 +31,7 @@ public class HttpRequest {
 			while ( (line = buffer.readLine()) != null) {
 				ret.append(line).append('\n');
 			}
+			buffer.close();
 //		} catch (IOException ioEx) {
 //			LOGGER.error(String.format("IO ERROR - %s", ioEx.getMessage()));
 //			return null;
