@@ -1,12 +1,10 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.http;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.net.URL;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,27 +15,37 @@ public class HttpRequest {
 //	public boolean RETRY = false;
 //	public long RETRY_DELAY_MILLI = 300000;
 	
-	public static String get(String url) throws IOException {
+	public static String get(String urlStr) throws IOException {
 		StringBuilder ret = new StringBuilder();
 		
-		LOGGER.info(String.format("HttpRequest - %s", url));
+		LOGGER.info(String.format("HttpRequest - %s", urlStr));
 		
-		HttpClient client = HttpClientBuilder.create().build();
-//		try {
-			HttpGet httpGet = new HttpGet(url);
-
-			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));
-			String line;
-			while ( (line = buffer.readLine()) != null) {
-				ret.append(line).append('\n');
-			}
-			buffer.close();
+		
+		URL url = new URL(urlStr);
+		InputStream is = url.openStream();
+		String response = IOUtils.toString(is);
+		is.close();
+//		HttpClient client = HttpClientBuilder.create().build();
+////		try {
+//			HttpGet httpGet = new HttpGet(url);
+//
+//			BufferedReader buffer = new BufferedReader( new InputStreamReader( client.execute(httpGet).getEntity().getContent()));
+//			String line;
+//			while ( (line = buffer.readLine()) != null) {
+//				ret.append(line).append('\n');
+//			}
+//			buffer.close();
+//			httpGet.
 //		} catch (IOException ioEx) {
 //			LOGGER.error(String.format("IO ERROR - %s", ioEx.getMessage()));
 //			return null;
 //		}
+			
+		if (ret != null) {
+			LOGGER.info("Read {} bytes", response.getBytes().length);
+		}
 
-		return ret.toString();
+		return response;
 	}
 	
 //	public static String get(String url, int retryAtempts) IOException {
