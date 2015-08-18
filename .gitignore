@@ -1,0 +1,13 @@
+#eclipse
+.settings
+.project
+.classpath
+.gradle
+
+#target
+/target
+
+#vim
+*~
+/build/
+/bin

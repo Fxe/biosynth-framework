@@ -1,0 +1,71 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply from: "./libraries.gradle"
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': 1.0
+    }
+}
+
+allprojects {
+  apply plugin: 'java'
+  apply plugin: 'maven'
+  group = 'pt.uminho.sysbio.biosynthframework'
+  version = '0.0.1-SNAPSHOT'
+  
+  targetCompatibility = 1.7
+  sourceCompatibility = 1.7
+  
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url 'http://193.137.11.210/nexus/content/repositories/thirdparty/' }
+    maven { url 'http://193.137.11.210/nexus/content/repositories/biosystems-releases/' }
+    maven { url 'http://www.ebi.ac.uk/~maven/m2repo' }
+    maven { url 'http://193.137.11.210/nexus/content/repositories/hgthirdparty/' }
+    maven { url 'http://biojava.org/download/maven/' }
+  }
+}
+
+ext {
+  expectedGradleVersion = '2.4'
+}
+
+subprojects { subProject ->
+  apply plugin: 'idea'
+  apply plugin: 'eclipse'
+  apply plugin: 'maven'
+  
+  defaultTasks 'build'
+  buildDir = "target"
+  
+  dependencies {
+    compile libraries.guava
+    compile libraries.joda_time
+    compile libraries.commons_io, libraries.commons_codec, libraries.commons_lang3
+    compile libraries.json
+    compile libraries.json_api_core, libraries.json_api_databind, libraries.json_api_annotations
+    compile libraries.json_api_datatype_joda
+    compile 'org.jadira.usertype:usertype.core:3.0.0.CR1'
+    
+    // logging
+    compile libraries.slf4j_api
+    compile libraries.logback
+    
+    testCompile( libraries.junit )
+  }
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
