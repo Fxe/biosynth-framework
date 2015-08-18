@@ -1,1 +1,3 @@
-include 'biosynth-core'
+include 'biosynth-core',
+        'biosynth-biodb', 
+        'biosynth-biodb-chebi',
