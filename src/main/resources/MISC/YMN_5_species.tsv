@@ -1,0 +1,1695 @@
+t_0001	SBO:0000247	(1->3)-beta-D-glucan	chebi:37671
+t_0002	SBO:0000247	(1->6)-beta-D-glucan	chebi:27380
+t_0003	SBO:0000247	(2-amino-4-hydroxy-7,8-dihydropteridin-6-yl)methyl trihydrogen diphosphate	chebi:57602
+t_0004	SBO:0000247	(2E)-3-(methoxycarbonyl)pent-2-enedioic acid	chebi:57470
+t_0005	SBO:0000247	(2R,3R)-2,3-dihydroxy-3-methylpentanoate	chebi:49258
+t_0006	SBO:0000247	(2R,3S)-3-isopropylmalate	chebi:35121
+t_0007	SBO:0000247	(2S)-2-isopropyl-3-oxosuccinate(2-)	chebi:17214
+t_0008	SBO:0000247	(2S,3R)-3-hydroxybutane-1,2,3-tricarboxylic acid	chebi:57429
+t_0009	SBO:0000247	(5S,6S)-di-HETE	chebi:53026
+t_0010	SBO:0000247	(N(omega)-L-arginino)succinic acid	chebi:57472
+t_0011	SBO:0000247	(R)-2,3-dihydroxy-3-methylbutanoate	chebi:49072
+t_0012	SBO:0000247	(R)-4'-phosphopantothenic acid	chebi:15905
+t_0013	SBO:0000247	(R)-5-diphosphomevalonic acid	chebi:57557
+t_0014	SBO:0000247	(R)-5-phosphomevalonic acid	chebi:58146
+t_0015	SBO:0000247	(R)-acetoin	chebi:15686
+t_0016	SBO:0000247	(R)-carnitine	chebi:16347
+t_0017	SBO:0000247	(R)-lactate	chebi:16004
+t_0018	SBO:0000247	(R)-mevalonate	chebi:36464
+t_0019	SBO:0000247	(R)-pantoate	chebi:15980
+t_0020	SBO:0000247	(R)-pantothenate	chebi:29032
+t_0021	SBO:0000247	(R)-S-lactoylglutathione	chebi:57474
+t_0022	SBO:0000247	(R,R)-2,3-butanediol	chebi:16982
+t_0023	SBO:0000247	(S)-2,3-epoxysqualene	chebi:15441
+t_0024	SBO:0000247	(S)-2-acetyl-2-hydroxybutanoate	chebi:49256
+t_0025	SBO:0000247	(S)-3-hydroxydecanoyl-CoA	chebi:28325
+t_0026	SBO:0000247	(S)-3-hydroxyhexacosanoyl-CoA	chebi:52976
+t_0027	SBO:0000247	(S)-3-hydroxylauroyl-CoA	chebi:27668
+t_0028	SBO:0000247	(S)-3-hydroxypalmitoyl-CoA	chebi:27402
+t_0029	SBO:0000247	(S)-3-hydroxytetradecanoyl-CoA	chebi:27466
+t_0030	SBO:0000247	(S)-3-methyl-2-oxopentanoate	chebi:35146
+t_0031	SBO:0000247	(S)-dihydroorotate	chebi:30864
+t_0032	SBO:0000247	(S)-lactaldehyde	chebi:18041
+t_0033	SBO:0000247	(S)-lactate	chebi:16651
+t_0034	SBO:0000247	(S)-malate	chebi:15589
+t_0035	SBO:0000247	(Z)-tetradec-7-enoyl-ACP	
+t_0036	SBO:0000247	1,2-diacylglycerol 3-diphosphate	chebi:52643
+t_0037	SBO:0000247	1,2-dioleoyl-sn-glycero-3-phosphocholine	chebi:52319
+t_0038	SBO:0000247	1,2-dioleoylglycerol	chebi:52323
+t_0039	SBO:0000247	1,3-bisphospho-D-glycerate	chebi:57604
+t_0040	SBO:0000247	1-(2-carboxyphenylamino)-1-deoxy-D-ribulose 5-phosphate	chebi:58613
+t_0041	SBO:0000247	1-(5-phospho-D-ribosyl)-5-[(5-phospho-D-ribosylamino)methylideneamino]imidazole-4-carboxamide	chebi:58435
+t_0042	SBO:0000247	1-(5-phosphoribosyl)-5'-AMP	chebi:59457
+t_0043	SBO:0000247	1-(sn-glycero-3-phospho)-1D-myo-inositol	chebi:58444
+t_0044	SBO:0000247	1-acyl-sn-glycerol 3-phosphate	chebi:57970
+t_0045	SBO:0000247	1-acylglycerophosphocholine	chebi:11230
+t_0046	SBO:0000247	1-C-(indol-3-yl)glycerol 3-phosphate	chebi:60820
+t_0047	SBO:0000247	1-methylnicotinamide	chebi:16797
+t_0048	SBO:0000247	1-phosphatidyl-1D-myo-inositol	chebi:57880
+t_0049	SBO:0000247	1-phosphatidyl-1D-myo-inositol 3,5-bisphosphate	chebi:57923
+t_0050	SBO:0000247	1-phosphatidyl-1D-myo-inositol 3-phosphate	chebi:58088
+t_0051	SBO:0000247	1-phosphatidyl-1D-myo-inositol 4,5-bisphosphate	chebi:58456
+t_0052	SBO:0000247	1-phosphatidyl-1D-myo-inositol 4-phosphate	chebi:61083
+t_0053	SBO:0000247	1-pyrroline-3-hydroxy-5-carboxylic acid	chebi:58509
+t_0054	SBO:0000247	1-pyrroline-5-carboxylate	chebi:15893
+t_0055	SBO:0000247	10-formyl-THF	chebi:57454
+t_0056	SBO:0000247	14-demethyllanosterol	chebi:18364
+t_0057	SBO:0000247	1D-myo-inositol 1,3,4,5-tetrakisphosphate	chebi:57895
+t_0058	SBO:0000247	1D-myo-inositol 1,4,5,6-tetrakisphosphate	chebi:57627
+t_0059	SBO:0000247	1D-myo-inositol 1,4,5-trisphosphate	chebi:203600
+t_0060	SBO:0000247	1D-myo-inositol 1-phosphate	chebi:58433
+t_0061	SBO:0000247	1D-myo-inositol 3-phosphate	chebi:58401
+t_0062	SBO:0000247	1D-myo-inositol 4,5-bisphosphate	chebi:18156
+t_0063	SBO:0000247	2',3'-cyclic AMP	chebi:60879
+t_0064	SBO:0000247	2'-deoxyadenosine	chebi:17256
+t_0065	SBO:0000247	2'-deoxyguanosine	chebi:17172
+t_0066	SBO:0000247	2'-deoxyinosine	chebi:28997
+t_0067	SBO:0000247	2'-deoxyuridine	chebi:16450
+t_0068	SBO:0000247	2,3-bisphospho-D-glyceric acid	chebi:58248
+t_0069	SBO:0000247	2,5-diamino-4-hydroxy-6-(5-phosphoribosylamino)pyrimidine	chebi:58614
+t_0070	SBO:0000247	2,5-diamino-6-(5-phosphono)ribitylamino-4(3H)-pyrimidinone	chebi:52957
+t_0071	SBO:0000247	2-(3-amino-3-carboxypropyl)-L-histidine	chebi:17144
+t_0072	SBO:0000247	2-[3-carboxy-3-(methylammonio)propyl]-L-histidine	chebi:57784
+t_0073	SBO:0000247	2-acetamido-5-oxopentanoate	chebi:29123
+t_0074	SBO:0000247	2-acetyllactic acid	chebi:57774
+t_0075	SBO:0000247	2-amino-3-(3-oxoprop-1-enyl)but-2-enedioate	chebi:29044
+t_0076	SBO:0000247	2-amino-6-(hydroxymethyl)-7,8-dihydropteridin-4-ol	chebi:17083
+t_0077	SBO:0000247	2-dehydropantoate	chebi:11561
+t_0078	SBO:0000247	2-deoxy-D-ribofuranose 1-phosphate	chebi:58576
+t_0079	SBO:0000247	2-deoxy-D-ribose	chebi:28816
+t_0080	SBO:0000247	2-deoxy-D-ribose 5-phosphate	chebi:57651
+t_0081	SBO:0000247	2-hexaprenyl-5-hydroxy-6-methoxy-3-methyl-1,4-benzoquinone	chebi:28753
+t_0082	SBO:0000247	2-hexaprenyl-6-methoxy-1,4-benzoquinone	chebi:27752
+t_0083	SBO:0000247	2-hexaprenyl-6-methoxy-3-methyl-1,4-benzoquinone	chebi:28711
+t_0084	SBO:0000247	2-hexaprenyl-6-methoxyphenol	chebi:1109
+t_0085	SBO:0000247	2-hydroxy-3-oxobutyl phosphate	chebi:50606
+t_0086	SBO:0000247	2-hydroxybutyric acid	chebi:1148
+t_0087	SBO:0000247	2-hydroxyhexadecanal	chebi:50626
+t_0088	SBO:0000247	2-isopropylmalate	chebi:35129
+t_0089	SBO:0000247	2-isopropylmaleic acid	chebi:58085
+t_0090	SBO:0000247	2-methylbutanal	chebi:16182
+t_0091	SBO:0000247	2-methylbutanol	chebi:48945
+t_0092	SBO:0000247	2-methylbutyl acetate	chebi:50585
+t_0093	SBO:0000247	2-methylcitrate(3-)	chebi:15598
+t_0094	SBO:0000247	2-oxaloglutaric acid	chebi:7814
+t_0095	SBO:0000247	2-oxoadipic acid	chebi:57499
+t_0096	SBO:0000247	2-oxobutanoate	chebi:16763
+t_0097	SBO:0000247	2-oxoglutarate	chebi:16810
+t_0098	SBO:0000247	2-phenylethanol	chebi:49000
+t_0099	SBO:0000247	2-phospho-D-glyceric acid	chebi:58289
+t_0100	SBO:0000247	2-trans,6-trans,10-trans-geranylgeranyl diphosphate	chebi:58756
+t_0101	SBO:0000247	2-trans,6-trans-farnesyl diphosphate	chebi:175763
+t_0102	SBO:0000247	3',5'-cyclic AMP	chebi:58165
+t_0103	SBO:0000247	3',5'-cyclic CMP	chebi:58003
+t_0104	SBO:0000247	3',5'-cyclic dAMP	chebi:28074
+t_0105	SBO:0000247	3',5'-cyclic GMP	chebi:57746
+t_0106	SBO:0000247	3',5'-cyclic IMP	chebi:27541
+t_0107	SBO:0000247	3'-dephospho-CoA	chebi:57328
+t_0108	SBO:0000247	3'-phospho-5'-adenylyl sulfate	chebi:58339
+t_0109	SBO:0000247	3-(3-sn-phosphatidyl)-sn-glycerol 1-phosphate	chebi:60110
+t_0110	SBO:0000247	3-(4-hydroxyphenyl)lactate	chebi:36659
+t_0111	SBO:0000247	3-(4-hydroxyphenyl)pyruvate	chebi:36242
+t_0112	SBO:0000247	3-(imidazol-4-yl)-2-oxopropyl dihydrogen phosphate	chebi:57766
+t_0113	SBO:0000247	3-aminopropanal	chebi:58374
+t_0114	SBO:0000247	3-dehydro-4-methylzymosterol	chebi:50593
+t_0115	SBO:0000247	3-dehydroquinate	chebi:32364
+t_0116	SBO:0000247	3-dehydroshikimate	chebi:16630
+t_0117	SBO:0000247	3-hexaprenyl-4,5-dihydroxybenzoic acid	chebi:58373
+t_0118	SBO:0000247	3-hexaprenyl-4-hydroxy-5-methoxybenzoic acid	chebi:57916
+t_0119	SBO:0000247	3-hexaprenyl-4-hydroxybenzoic acid	chebi:31116
+t_0120	SBO:0000247	3-hydroxy-2-isopropyl-4-methoxy-4-oxobutanoate	chebi:52960
+t_0121	SBO:0000247	3-hydroxy-3-methylglutaryl-CoA	chebi:11814
+t_0122	SBO:0000247	3-hydroxy-L-kynurenine	chebi:17380
+t_0123	SBO:0000247	3-hydroxyacyl-CoA	chebi:20060
+t_0124	SBO:0000247	3-hydroxyanthranilate	chebi:36559
+t_0125	SBO:0000247	3-hydroxydocosanoyl-CoA	chebi:52325
+t_0126	SBO:0000247	3-hydroxyicosanoyl-CoA	chebi:52324
+t_0127	SBO:0000247	3-hydroxyoctadecanoyl-CoA	chebi:50583
+t_0128	SBO:0000247	3-hydroxytetracosanoyl-CoA	chebi:52326
+t_0129	SBO:0000247	3-ketosphinganine	chebi:58299
+t_0130	SBO:0000247	3-methyl-2-oxobutanoate	chebi:11851
+t_0131	SBO:0000247	3-methylbutanal	chebi:16638
+t_0132	SBO:0000247	3-oxodecanoyl-CoA	chebi:28528
+t_0133	SBO:0000247	3-oxodocosanoyl-CoA	chebi:52328
+t_0134	SBO:0000247	3-oxohexacosanoyl-CoA	chebi:52977
+t_0135	SBO:0000247	3-oxoicosanoyl-CoA	chebi:52327
+t_0136	SBO:0000247	3-oxolauroyl-CoA	chebi:27868
+t_0137	SBO:0000247	3-oxooctadecanoyl-CoA	chebi:50571
+t_0138	SBO:0000247	3-oxopalmitoyl-CoA	chebi:57349
+t_0139	SBO:0000247	3-oxotetracosanoyl-CoA	chebi:52329
+t_0140	SBO:0000247	3-oxotetradecanoyl-CoA	chebi:28726
+t_0141	SBO:0000247	3-phospho-hydroxypyruvate	chebi:18110
+t_0142	SBO:0000247	3-phospho-serine	chebi:57524
+t_0143	SBO:0000247	3-phosphoglycerate	chebi:58272
+t_0144	SBO:0000247	3-phosphoshikimic acid	chebi:145989
+t_0145	SBO:0000247	4,4-dimethyl-5alpha-cholesta-8,14,24-trien-3beta-ol	chebi:17813
+t_0146	SBO:0000247	4,5-bis(diphospho)-1D-myo-inositol tetrakisphosphate	chebi:53066
+t_0147	SBO:0000247	4-(phosphonooxy)-L-threonine	chebi:58452
+t_0148	SBO:0000247	4-acetamidobutanal	chebi:7386
+t_0149	SBO:0000247	4-acetamidobutanoate	chebi:11951
+t_0150	SBO:0000247	4-amino-2-methyl-5-diphosphomethylpyrimidine	chebi:57841
+t_0151	SBO:0000247	4-amino-2-methyl-5-phosphomethylpyrimidine	chebi:58354
+t_0152	SBO:0000247	4-amino-4-deoxychorismate(2-)	chebi:35181
+t_0153	SBO:0000247	4-amino-5-hydroxymethyl-2-methylpyrimidine	chebi:16892
+t_0154	SBO:0000247	4-aminobenzoate	chebi:17836
+t_0155	SBO:0000247	4-aminobutanal	chebi:58264
+t_0156	SBO:0000247	4-coumaroyl-CoA	chebi:57355
+t_0157	SBO:0000247	4-diphospho-1D-myo-inositol pentakisphosphate	chebi:53064
+t_0158	SBO:0000247	4-guanidinobutanamide	chebi:58365
+t_0159	SBO:0000247	4-guanidinobutanoic acid	chebi:15728
+t_0160	SBO:0000247	4-hydroxy-2-oxoglutarate(2-)	chebi:17742
+t_0161	SBO:0000247	4-hydroxy-L-threonine	chebi:28330
+t_0162	SBO:0000247	4-hydroxybenzoate	chebi:17879
+t_0163	SBO:0000247	4-hydroxybenzoyl-CoA	chebi:57356
+t_0164	SBO:0000247	4-methyl-2-oxopentanoate	chebi:17865
+t_0165	SBO:0000247	4-methyl-5-(2-phosphonooxyethyl)thiazole	chebi:58296
+t_0166	SBO:0000247	4-methylthio-2-oxobutanoate	chebi:16723
+t_0167	SBO:0000247	4-phospho-L-aspartate	chebi:30407
+t_0168	SBO:0000247	4alpha-methylzymosterol	chebi:1949
+t_0169	SBO:0000247	4beta-methylzymosterol-4alpha-carboxylic acid	chebi:50591
+t_0170	SBO:0000247	5'-adenylyl sulfate	chebi:58243
+t_0171	SBO:0000247	5'-phosphoribosyl-4-(N-succinocarboxamide)-5-aminoimidazole	chebi:58443
+t_0172	SBO:0000247	5'-phosphoribosyl-5-aminoimidazole	chebi:58592
+t_0173	SBO:0000247	5'-phosphoribosyl-N-formylglycineamide	chebi:58426
+t_0174	SBO:0000247	5'-phosphoribosyl-N-formylglycineamidine	chebi:58478
+t_0175	SBO:0000247	5'-S-methyl-5'-thioadenosine	chebi:17509
+t_0176	SBO:0000247	5,10-methenyl-THF	chebi:57455
+t_0177	SBO:0000247	5,10-methylenetetrahydrofolate(2-)	chebi:12071
+t_0178	SBO:0000247	5,6,7,8-tetrahydrofolyl-L-glutamic acid	chebi:27650
+t_0179	SBO:0000247	5,6-bis(diphospho)-1D-myo-inositol tetrakisphosphate	chebi:52965
+t_0180	SBO:0000247	5-(2-hydroxyethyl)-4-methylthiazole	chebi:17957
+t_0181	SBO:0000247	5-(methylsulfanyl)-2,3-dioxopentyl phosphate	chebi:58828
+t_0182	SBO:0000247	5-[(5-phospho-1-deoxy-D-ribulos-1-ylamino)methylideneamino]-1-(5-phospho-D-ribosyl)imidazole-4-carboxamide	chebi:58525
+t_0183	SBO:0000247	5-amino-6-(5-phosphoribitylamino)uracil	chebi:58421
+t_0184	SBO:0000247	5-amino-6-(D-ribitylamino)uracil	chebi:15934
+t_0185	SBO:0000247	5-aminolevulinate	chebi:17549
+t_0186	SBO:0000247	5-diphospho-1D-myo-inositol pentakisphosphate	chebi:58628
+t_0187	SBO:0000247	5-formyltetrahydrofolic acid	chebi:57457
+t_0188	SBO:0000247	5-methyltetrahydrofolate(2-)	chebi:18608
+t_0189	SBO:0000247	5-methyltetrahydropteroyltri-L-glutamic acid	chebi:58207
+t_0190	SBO:0000247	5-O-(1-carboxyvinyl)-3-phosphoshikimic acid	chebi:57701
+t_0191	SBO:0000247	5-phospho-ribosyl-glycineamide	chebi:58457
+t_0192	SBO:0000247	5-phosphoribosyl-ATP	chebi:58424
+t_0193	SBO:0000247	5-phosphoribosylamine	chebi:58681
+t_0194	SBO:0000247	6,7-dimethyl-8-(1-D-ribityl)lumazine	chebi:58201
+t_0195	SBO:0000247	6-(alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol	chebi:17049
+t_0196	SBO:0000247	6-(alpha-D-glucosaminyl)-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53055
+t_0197	SBO:0000247	6-(N-acetyl-alpha-D-glucosaminyl)-1-phosphatidyl-1D-myo-inositol	chebi:57265
+t_0198	SBO:0000247	6-[6-(2-aminoethylphosphoryl)-alpha-mannosyl-(1->6)-2-(2-aminoethylphosphoryl)-alpha-mannosyl-(1->6)-alpha-2-(2-aminoethylphosphoryl)mannosyl-(1->4)-alpha-glucosaminyl]-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53060
+t_0199	SBO:0000247	6-diphospho-1D-myo-inositol pentakisphosphate	chebi:53065
+t_0200	SBO:0000247	6-O-[alpha-D-mannosyl-(1->4)-alpha-D-glucosaminyl]-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53056
+t_0201	SBO:0000247	6-O-phosphono-D-glucono-1,5-lactone	chebi:57955
+t_0202	SBO:0000247	6-O-{2-O-[(2-aminoethyl)phosphoryl]-alpha-D-mannosyl-(1->4)-alpha-D-glucosaminyl}-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53057
+t_0203	SBO:0000247	6-O-{alpha-D-mannosyl-(1->2)-alpha-D-mannosyl-(1->6)-2-O-[(2-aminoethyl)phosphoryl]-alpha-D-mannosyl-(1->4)-alpha-D-glucosaminyl}-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53059
+t_0204	SBO:0000247	6-O-{alpha-D-mannosyl-(1->6)-2-O-[(2-aminoethyl)phosphoryl]-alpha-D-mannosyl-(1->4)-alpha-D-glucosaminyl}-O-acyl-1-phosphatidyl-1D-myo-inositol	chebi:53058
+t_0205	SBO:0000247	6-phospho-D-gluconate	chebi:58759
+t_0206	SBO:0000247	7,8-diaminononanoate	chebi:17830
+t_0207	SBO:0000247	7,8-dihydroneopterin	chebi:17001
+t_0208	SBO:0000247	7,8-dihydroneopterin 3'-phosphate	chebi:58762
+t_0209	SBO:0000247	7,8-dihydroneopterin 3'-triphosphate	chebi:58462
+t_0210	SBO:0000247	7,8-dihydropteroate	chebi:17839
+t_0211	SBO:0000247	7-phospho-2-dehydro-3-deoxy-D-arabino-heptonic acid	chebi:58394
+t_0212	SBO:0000247	8-amino-7-oxononanoate	chebi:15830
+t_0213	SBO:0000247	9H-xanthine	chebi:17712
+t_0214	SBO:0000247	acetaldehyde	chebi:15343
+t_0215	SBO:0000247	acetate	chebi:30089
+t_0216	SBO:0000247	acetoacetyl-CoA	chebi:57286
+t_0217	SBO:0000247	acetyl-ACP	chebi:17093
+t_0218	SBO:0000247	acetyl-CoA	chebi:57288
+t_0219	SBO:0000247	acyl-CoA	chebi:17984
+t_0220	SBO:0000247	acylglycerone phosphate	chebi:22231
+t_0221	SBO:0000247	adenine	chebi:16708
+t_0222	SBO:0000247	adenosine	chebi:16335
+t_0223	SBO:0000247	adenosine 2'-phosphate	chebi:28223
+t_0224	SBO:0000247	adenosine 3',5'-bismonophosphate	chebi:58343
+t_0225	SBO:0000247	adenylo-succinate	chebi:57567
+t_0226	SBO:0000247	ADP	chebi:456216
+t_0227	SBO:0000247	ADP-ribose	chebi:57967
+t_0228	SBO:0000247	AICAR	chebi:58475
+t_0229	SBO:0000247	Ala-tRNA(Ala)	chebi:17732
+t_0230	SBO:0000247	allantoate	chebi:17536
+t_0231	SBO:0000247	allantoin	chebi:15676
+t_0232	SBO:0000247	alpha,alpha-trehalose 6-phosphate	chebi:58429
+t_0233	SBO:0000247	alpha-D-galactose 1-phosphate	chebi:58336
+t_0234	SBO:0000247	alpha-D-glucosamine 1-phosphate	chebi:58516
+t_0235	SBO:0000247	alpha-D-glucosamine 6-phosphate	chebi:15873
+t_0236	SBO:0000247	alpha-D-mannosyl-beta-D-mannosyldiacetylchitobiosyldiphosphodolichol	chebi:28067
+t_0237	SBO:0000247	alpha-D-ribose 1-phosphate	chebi:57720
+t_0238	SBO:0000247	aminoacetaldehyde	chebi:58213
+t_0239	SBO:0000247	aminoacetone	chebi:58320
+t_0240	SBO:0000247	ammonium	chebi:28938
+t_0241	SBO:0000247	AMP	chebi:456215
+t_0242	SBO:0000247	anthranilate	chebi:16567
+t_0243	SBO:0000247	Arg-tRNA(Arg)	chebi:18366
+t_0244	SBO:0000247	Asn-tRNA(Asn)	chebi:29265
+t_0245	SBO:0000247	Asp-tRNA(Asp)	chebi:29158
+t_0246	SBO:0000247	ATP	chebi:30616
+t_0247	SBO:0000247	beta-alanine	chebi:16958
+t_0248	SBO:0000247	beta-D-fructose 2,6-bisphosphate	chebi:58579
+t_0249	SBO:0000247	beta-D-mannosyldiacetylchitobiosyldiphosphodolichol	chebi:18396
+t_0250	SBO:0000247	bicarbonate	chebi:17544
+t_0251	SBO:0000247	biomass	
+t_0252	SBO:0000247	biotin	chebi:57586
+t_0253	SBO:0000247	biotinyl-5'-AMP	chebi:62414
+t_0254	SBO:0000247	but-1-ene-1,2,4-tricarboxylic acid	chebi:58174
+t_0255	SBO:0000247	carbamoyl phosphate	chebi:58228
+t_0256	SBO:0000247	carbon dioxide	chebi:16526
+t_0257	SBO:0000247	carboxyacetyl-ACP	chebi:17330
+t_0258	SBO:0000247	cardiolipin	chebi:28494
+t_0259	SBO:0000247	CDP	chebi:58069
+t_0260	SBO:0000247	CDP-choline	chebi:16436
+t_0261	SBO:0000247	CDP-diacylglycerol	chebi:58332
+t_0262	SBO:0000247	CDP-ethanolamine	chebi:57876
+t_0263	SBO:0000247	ceramide-1 (C24)	chebi:52961
+t_0264	SBO:0000247	ceramide-1 (C26)	chebi:52962
+t_0265	SBO:0000247	ceramide-2 (C24)	chebi:52979
+t_0266	SBO:0000247	ceramide-2 (C26)	chebi:52980
+t_0267	SBO:0000247	ceramide-2' (C24)	chebi:52371
+t_0268	SBO:0000247	ceramide-2' (C26)	chebi:52372
+t_0269	SBO:0000247	ceramide-3 (C24)	chebi:52373
+t_0270	SBO:0000247	ceramide-3 (C26)	chebi:52374
+t_0271	SBO:0000247	ceramide-4 (C24)	chebi:60256
+t_0272	SBO:0000247	ceramide-4 (C26)	chebi:60384
+t_0273	SBO:0000247	cerotate	chebi:31013
+t_0274	SBO:0000247	cerotic acid	chebi:31013
+t_0275	SBO:0000247	chitin	chebi:17029
+t_0276	SBO:0000247	chitosan	chebi:16261
+t_0277	SBO:0000247	choline	chebi:15354
+t_0278	SBO:0000247	choline phosphate	chebi:295975
+t_0279	SBO:0000247	chorismate(2-)	chebi:29748
+t_0280	SBO:0000247	cis-aconitate(3-)	chebi:16383
+t_0281	SBO:0000247	cis-palmitoleoyl-ACP	
+t_0282	SBO:0000247	cis-vaccenoyl-ACP	
+t_0283	SBO:0000247	citrate(3-)	chebi:16947
+t_0284	SBO:0000247	CMP	chebi:60377
+t_0285	SBO:0000247	coenzyme A	chebi:57287
+t_0286	SBO:0000247	complex sphingolipid	chebi:26739
+t_0287	SBO:0000247	coproporphyrinogen III	chebi:57309
+t_0288	SBO:0000247	CTP	chebi:37563
+t_0289	SBO:0000247	Cys-tRNA(Cys)	chebi:29152
+t_0290	SBO:0000247	cytidine	chebi:17562
+t_0291	SBO:0000247	cytosine	chebi:16040
+t_0292	SBO:0000247	D-arabinono-1,4-lactone	chebi:16292
+t_0293	SBO:0000247	D-arabinose	chebi:17108
+t_0294	SBO:0000247	D-erythro-1-(imidazol-4-yl)glycerol 3-phosphate	chebi:58278
+t_0295	SBO:0000247	D-erythrose 4-phosphate(2-)	chebi:16897
+t_0296	SBO:0000247	D-fructose	chebi:15824
+t_0297	SBO:0000247	D-fructose 1,6-bisphosphate	chebi:16905
+t_0298	SBO:0000247	D-fructose 1-phosphate	chebi:18105
+t_0299	SBO:0000247	D-fructose 6-phosphate	chebi:57579
+t_0300	SBO:0000247	D-galactose	chebi:12936
+t_0301	SBO:0000247	D-galacturonate	chebi:12952
+t_0302	SBO:0000247	D-glucitol	chebi:17924
+t_0303	SBO:0000247	D-glucose	chebi:17634
+t_0304	SBO:0000247	D-glucose 1-phosphate	chebi:57629
+t_0305	SBO:0000247	D-glucose 6-phosphate	chebi:14314
+t_0306	SBO:0000247	D-glyceraldehyde	chebi:17378
+t_0307	SBO:0000247	D-mannose	chebi:16024
+t_0308	SBO:0000247	D-mannose 1-phosphate	chebi:35374
+t_0309	SBO:0000247	D-mannose 6-phosphate	chebi:17369
+t_0310	SBO:0000247	D-ribose	chebi:16988
+t_0311	SBO:0000247	D-ribulose 5-phosphate	chebi:58121
+t_0312	SBO:0000247	D-xylose	chebi:15936
+t_0313	SBO:0000247	D-xylulose	chebi:17140
+t_0314	SBO:0000247	D-xylulose 5-phosphate	chebi:57737
+t_0315	SBO:0000247	dADP	chebi:57667
+t_0316	SBO:0000247	dAMP	chebi:58245
+t_0317	SBO:0000247	dATP	chebi:61404
+t_0318	SBO:0000247	dCDP	chebi:58593
+t_0319	SBO:0000247	dCMP	chebi:57566
+t_0320	SBO:0000247	dCTP	chebi:57724
+t_0321	SBO:0000247	deamido-NAD(+)	chebi:18304
+t_0322	SBO:0000247	decanoate	chebi:27689
+t_0323	SBO:0000247	decanoyl-ACP	chebi:4349
+t_0324	SBO:0000247	decanoyl-CoA	chebi:61430
+t_0325	SBO:0000247	decaprenyl diphosphate	chebi:53043
+t_0326	SBO:0000247	dehydro-D-arabinono-1,4-lactone	chebi:58277
+t_0327	SBO:0000247	Delta(6)-trans,Delta(8)-cis-leukotriene B4	chebi:53027
+t_0328	SBO:0000247	deoxycytidine	chebi:15698
+t_0329	SBO:0000247	dethiobiotin	chebi:57861
+t_0330	SBO:0000247	dGDP	chebi:58595
+t_0331	SBO:0000247	dGMP	chebi:57673
+t_0332	SBO:0000247	dGTP	chebi:57794
+t_0333	SBO:0000247	dIDP	chebi:28823
+t_0334	SBO:0000247	diglyceride	chebi:18035
+t_0335	SBO:0000247	dihydrofolic acid	chebi:57451
+t_0336	SBO:0000247	dihydrolipoamide	chebi:17694
+t_0337	SBO:0000247	dihydrolipoylprotein	chebi:16194
+t_0338	SBO:0000247	dihydroxyacetone phosphate	chebi:57642
+t_0339	SBO:0000247	diphosphate	chebi:33019
+t_0340	SBO:0000247	dITP	chebi:61382
+t_0341	SBO:0000247	docosaprenyl diphosphate	chebi:53031
+t_0342	SBO:0000247	dodecaprenyl diphosphate	chebi:53041
+t_0343	SBO:0000247	dolichol	chebi:16091
+t_0344	SBO:0000247	dolichyl D-mannosyl phosphate	chebi:15809
+t_0345	SBO:0000247	dolichyl phosphate	chebi:16214
+t_0346	SBO:0000247	dTDP	chebi:58369
+t_0347	SBO:0000247	dTMP	chebi:17013
+t_0348	SBO:0000247	dTTP	chebi:58370
+t_0349	SBO:0000247	dUDP	chebi:60471
+t_0350	SBO:0000247	dUMP	chebi:246422
+t_0351	SBO:0000247	dUTP	chebi:58212
+t_0352	SBO:0000247	episterol	chebi:23929
+t_0353	SBO:0000247	episteryl oleate	chebi:52375
+t_0354	SBO:0000247	episteryl palmitoleate	chebi:52376
+t_0355	SBO:0000247	ergosta-5,7,22,24(28)-tetraen-3beta-ol	chebi:18249
+t_0356	SBO:0000247	ergosta-5,7,24(28)-trien-3beta-ol	chebi:52972
+t_0357	SBO:0000247	ergosterol	chebi:16933
+t_0358	SBO:0000247	ergosterol 3-beta-D-glucoside	chebi:52973
+t_0359	SBO:0000247	ergosterol ester	chebi:52320
+t_0360	SBO:0000247	ergosteryl oleate	chebi:52377
+t_0361	SBO:0000247	ergosteryl palmitoleate	chebi:52378
+t_0362	SBO:0000247	erythro-4-hydroxy-L-glutamic acid	chebi:21285
+t_0363	SBO:0000247	ethanol	chebi:16236
+t_0364	SBO:0000247	ethanolamine	chebi:57603
+t_0365	SBO:0000247	ethyl acetate	chebi:27750
+t_0366	SBO:0000247	FAD	chebi:57692
+t_0367	SBO:0000247	FADH2	chebi:58307
+t_0368	SBO:0000247	farnesyl diphosphate	chebi:50277
+t_0369	SBO:0000247	fatty acid	chebi:35366
+t_0370	SBO:0000247	fecosterol	chebi:17038
+t_0371	SBO:0000247	fecosterol ester	chebi:52321
+t_0372	SBO:0000247	fecosteryl oleate	chebi:52379
+t_0373	SBO:0000247	fecosteryl palmitoleate	chebi:52380
+t_0374	SBO:0000247	ferricytochrome c	chebi:15991
+t_0375	SBO:0000247	ferrocytochrome c	chebi:16928
+t_0376	SBO:0000247	ferroheme b	chebi:60344
+t_0377	SBO:0000247	fMet-tRNA(fMet)	chebi:17119
+t_0378	SBO:0000247	FMN	chebi:58210
+t_0379	SBO:0000247	FMNH2	chebi:57618
+t_0380	SBO:0000247	folic acid	chebi:27470
+t_0381	SBO:0000247	formaldehyde	chebi:16842
+t_0382	SBO:0000247	formate	chebi:15740
+t_0383	SBO:0000247	fumarate	chebi:29806
+t_0384	SBO:0000247	gamma-amino-gamma-cyanobutanoic acid	chebi:28474
+t_0385	SBO:0000247	gamma-aminobutyrate	chebi:16865
+t_0386	SBO:0000247	GDP	chebi:58189
+t_0387	SBO:0000247	GDP-alpha-D-mannose	chebi:57527
+t_0388	SBO:0000247	geranyl diphosphate	chebi:58057
+t_0389	SBO:0000247	geranylgeranyl diphosphate	chebi:15831
+t_0390	SBO:0000247	Gln-tRNA(Gln)	chebi:29166
+t_0391	SBO:0000247	Glu-tRNA(Glu)	chebi:29157
+t_0392	SBO:0000247	glutathione	chebi:57925
+t_0393	SBO:0000247	glutathione disulfide	chebi:58297
+t_0394	SBO:0000247	Gly-tRNA(Gly)	chebi:29156
+t_0395	SBO:0000247	glycan G00006	chebi:53022
+t_0396	SBO:0000247	glycan G00008	chebi:53019
+t_0397	SBO:0000247	glycan G10595	chebi:53023
+t_0398	SBO:0000247	glycan G10599	chebi:53020
+t_0399	SBO:0000247	glycan G13045	kegg:G13045
+t_0400	SBO:0000247	glycan G13046	kegg:G13046
+t_0401	SBO:0000247	glyceraldehyde 3-phosphate	chebi:58027
+t_0402	SBO:0000247	glycerol	chebi:17754
+t_0403	SBO:0000247	glycerol 3-phosphate	chebi:57597
+t_0404	SBO:0000247	glycerone	chebi:16016
+t_0405	SBO:0000247	glycerophosphatidylethanolamine	chebi:52330
+t_0406	SBO:0000247	glycogen	chebi:28087
+t_0407	SBO:0000247	glycolaldehyde	chebi:17071
+t_0408	SBO:0000247	glycylpeptide	chebi:16462
+t_0409	SBO:0000247	glyoxylate	chebi:36655
+t_0410	SBO:0000247	GMP	chebi:58115
+t_0411	SBO:0000247	GTP	chebi:57600
+t_0412	SBO:0000247	guanine	chebi:16235
+t_0413	SBO:0000247	guanosine	chebi:16750
+t_0414	SBO:0000247	H+	chebi:24636
+t_0415	SBO:0000247	H2O	chebi:15377
+t_0416	SBO:0000247	heme a	chebi:24479
+t_0417	SBO:0000247	heme o	chebi:24480
+t_0418	SBO:0000247	henicosaprenyl diphosphate	chebi:53032
+t_0419	SBO:0000247	heptadecaprenyl diphosphate	chebi:53036
+t_0420	SBO:0000247	heptaprenyl diphosphate	chebi:53046
+t_0421	SBO:0000247	hexacosanoyl-CoA	chebi:52966
+t_0422	SBO:0000247	hexadec-2-enoyl-CoA	chebi:52381
+t_0423	SBO:0000247	hexadecanal	chebi:17600
+t_0424	SBO:0000247	hexadecaprenyl diphosphate	chebi:53037
+t_0425	SBO:0000247	hexaprenyl diphosphate	chebi:53047
+t_0426	SBO:0000247	His-tRNA(His)	chebi:29155
+t_0427	SBO:0000247	homocitrate(3-)	chebi:36457
+t_0428	SBO:0000247	homoisocitrate(3-)	chebi:30904
+t_0429	SBO:0000247	hydrogen peroxide	chebi:16240
+t_0430	SBO:0000247	hydrogen sulfide	chebi:29919
+t_0431	SBO:0000247	hydroxypyruvate	chebi:17180
+t_0432	SBO:0000247	hypoxanthine	chebi:17368
+t_0433	SBO:0000247	icosaprenyl diphosphate	chebi:53033
+t_0434	SBO:0000247	IDP	chebi:58280
+t_0435	SBO:0000247	Ile-tRNA(Ile)	chebi:29160
+t_0436	SBO:0000247	IMP	chebi:58053
+t_0437	SBO:0000247	indol-3-ylacetaldehyde	chebi:18086
+t_0438	SBO:0000247	indole-3-acetate	chebi:30854
+t_0439	SBO:0000247	indole-3-pyruvate	chebi:17640
+t_0440	SBO:0000247	inosine	chebi:17596
+t_0441	SBO:0000247	inositol phosphomannosylinositol phosphoceramide	chebi:62682
+t_0442	SBO:0000247	inositol phosphomannosylinositol phosphoceramide A (C24)	chebi:60439
+t_0443	SBO:0000247	inositol phosphomannosylinositol phosphoceramide A (C26)	chebi:62715
+t_0444	SBO:0000247	inositol phosphomannosylinositol phosphoceramide B (C24)	chebi:60443
+t_0445	SBO:0000247	inositol phosphomannosylinositol phosphoceramide B (C26)	chebi:62719
+t_0446	SBO:0000247	inositol phosphomannosylinositol phosphoceramide B' (C24)	chebi:60441
+t_0447	SBO:0000247	inositol phosphomannosylinositol phosphoceramide B' (C26)	chebi:62717
+t_0448	SBO:0000247	inositol phosphomannosylinositol phosphoceramide C (C24)	chebi:60445
+t_0449	SBO:0000247	inositol phosphomannosylinositol phosphoceramide C (C26)	chebi:53005
+t_0450	SBO:0000247	inositol phosphomannosylinositol phosphoceramide D (C24)	chebi:60446
+t_0451	SBO:0000247	inositol phosphomannosylinositol phosphoceramide D (C26)	chebi:62684
+t_0452	SBO:0000247	inositol-P-ceramide	chebi:60245
+t_0453	SBO:0000247	inositol-P-ceramide A (C24)	chebi:60402
+t_0454	SBO:0000247	inositol-P-ceramide A (C26)	chebi:60405
+t_0455	SBO:0000247	inositol-P-ceramide B (C24)	chebi:60410
+t_0456	SBO:0000247	inositol-P-ceramide B (C26)	chebi:60412
+t_0457	SBO:0000247	inositol-P-ceramide B' (C24)	chebi:60406
+t_0458	SBO:0000247	inositol-P-ceramide B' (C26)	chebi:60409
+t_0459	SBO:0000247	inositol-P-ceramide C (C24)	chebi:60413
+t_0460	SBO:0000247	inositol-P-ceramide C (C26)	chebi:53004
+t_0461	SBO:0000247	inositol-P-ceramide D (C24)	chebi:60414
+t_0462	SBO:0000247	inositol-P-ceramide D (C26)	chebi:60415
+t_0463	SBO:0000247	iron(2+)	chebi:29033
+t_0464	SBO:0000247	isoamyl acetate	chebi:31725
+t_0465	SBO:0000247	isoamylol	chebi:15837
+t_0466	SBO:0000247	isobutanol	chebi:46645
+t_0467	SBO:0000247	isobutyl acetate	chebi:50569
+t_0468	SBO:0000247	isobutyraldehyde	chebi:48943
+t_0469	SBO:0000247	isocitrate(3-)	chebi:16087
+t_0470	SBO:0000247	isopentenyl diphosphate	chebi:128769
+t_0471	SBO:0000247	itaconate(2-)	chebi:17240
+t_0472	SBO:0000247	itaconyl-CoA	chebi:57381
+t_0473	SBO:0000247	ITP	chebi:61402
+t_0474	SBO:0000247	keto-phenylpyruvate	chebi:18005
+t_0475	SBO:0000247	L-2-amino-3-oxobutanoate	chebi:40673
+t_0476	SBO:0000247	L-2-aminoadipate(2-)	chebi:58672
+t_0477	SBO:0000247	L-4-hydroxyglutamic semialdehyde	chebi:27809
+t_0478	SBO:0000247	L-alanine	chebi:16977
+t_0479	SBO:0000247	L-allothreonine	chebi:28718
+t_0480	SBO:0000247	L-allysine	chebi:17917
+t_0481	SBO:0000247	L-alpha-formylglycine	chebi:58671
+t_0482	SBO:0000247	L-arabinitol	chebi:18403
+t_0483	SBO:0000247	L-arabinose	chebi:30849
+t_0484	SBO:0000247	L-arginine	chebi:32682
+t_0485	SBO:0000247	L-asparagine	chebi:17196
+t_0486	SBO:0000247	L-aspartate	chebi:29991
+t_0487	SBO:0000247	L-aspartate 4-semialdehyde	chebi:18051
+t_0488	SBO:0000247	L-citrulline	chebi:16349
+t_0489	SBO:0000247	L-cystathionine	chebi:17482
+t_0490	SBO:0000247	L-cysteine	chebi:17561
+t_0491	SBO:0000247	L-cysteinylglycine	chebi:4047
+t_0492	SBO:0000247	L-cystine	chebi:16283
+t_0493	SBO:0000247	L-gamma-glutamyl phosphate	chebi:58274
+t_0494	SBO:0000247	L-gamma-glutamyl-L-alanine	chebi:50619
+t_0495	SBO:0000247	L-gamma-glutamyl-L-cysteine	chebi:58173
+t_0496	SBO:0000247	L-glucitol	chebi:28789
+t_0497	SBO:0000247	L-glutamate	chebi:29985
+t_0498	SBO:0000247	L-glutamic 5-semialdehyde	chebi:17232
+t_0499	SBO:0000247	L-glutamine	chebi:18050
+t_0500	SBO:0000247	L-glycine	chebi:15428
+t_0501	SBO:0000247	L-histidine	chebi:15971
+t_0502	SBO:0000247	L-histidinol	chebi:57699
+t_0503	SBO:0000247	L-histidinol phosphate	chebi:57980
+t_0504	SBO:0000247	L-homocysteine	chebi:17588
+t_0505	SBO:0000247	L-homoserine	chebi:15699
+t_0506	SBO:0000247	L-isoleucine	chebi:17191
+t_0507	SBO:0000247	L-kynurenine	chebi:16946
+t_0508	SBO:0000247	L-leucine	chebi:15603
+t_0509	SBO:0000247	L-lysine	chebi:32551
+t_0510	SBO:0000247	L-methionine	chebi:16643
+t_0511	SBO:0000247	L-phenylalanine	chebi:17295
+t_0512	SBO:0000247	L-proline	chebi:17203
+t_0513	SBO:0000247	L-saccharopine	chebi:57951
+t_0514	SBO:0000247	L-serine	chebi:17115
+t_0515	SBO:0000247	L-sorbose	chebi:17266
+t_0516	SBO:0000247	L-threonine	chebi:16857
+t_0517	SBO:0000247	L-tryptophan	chebi:16828
+t_0518	SBO:0000247	L-tyrosine	chebi:17895
+t_0519	SBO:0000247	L-valine	chebi:16414
+t_0520	SBO:0000247	lanosterol	chebi:16521
+t_0521	SBO:0000247	lanosteryl oleate	chebi:52382
+t_0522	SBO:0000247	lanosteryl palmitoleate	chebi:52383
+t_0523	SBO:0000247	laurate	chebi:18262
+t_0524	SBO:0000247	lauroyl-ACP	chebi:16759
+t_0525	SBO:0000247	lauroyl-CoA	chebi:57375
+t_0526	SBO:0000247	Leu-tRNA(Leu)	chebi:16624
+t_0527	SBO:0000247	leukotriene A4	chebi:57463
+t_0528	SBO:0000247	leukotriene B4	chebi:57461
+t_0529	SBO:0000247	lignoceric acid	chebi:31014
+t_0530	SBO:0000247	linoleic acid	chebi:30245
+t_0531	SBO:0000247	lipid	chebi:18059
+t_0532	SBO:0000247	lipoamide	chebi:17460
+t_0533	SBO:0000247	lipoylprotein	chebi:15804
+t_0534	SBO:0000247	Lys-tRNA(Lys)	chebi:16047
+t_0535	SBO:0000247	malonyl-CoA	chebi:57384
+t_0536	SBO:0000247	maltose	chebi:17306
+t_0537	SBO:0000247	mannan	chebi:28808
+t_0538	SBO:0000247	mannose-(1D-myo-inositol 1-phosphate)2	chebi:60449
+t_0539	SBO:0000247	mannose-1D-myo-inositol 1-phosphate	chebi:60448
+t_0540	SBO:0000247	mannosylinositol phosphorylceramide	chebi:25168
+t_0541	SBO:0000247	mannosylinositol phosphorylceramide A (C24)	chebi:60416
+t_0542	SBO:0000247	mannosylinositol phosphorylceramide A (C26)	chebi:62706
+t_0543	SBO:0000247	mannosylinositol phosphorylceramide B (C24)	chebi:60420
+t_0544	SBO:0000247	mannosylinositol phosphorylceramide B (C26)	chebi:62710
+t_0545	SBO:0000247	mannosylinositol phosphorylceramide B' (C24)	chebi:60418
+t_0546	SBO:0000247	mannosylinositol phosphorylceramide B' (C26)	chebi:62708
+t_0547	SBO:0000247	mannosylinositol phosphorylceramide C (C24)	chebi:60422
+t_0548	SBO:0000247	mannosylinositol phosphorylceramide C (C26)	chebi:62712
+t_0549	SBO:0000247	mannosylinositol phosphorylceramide D (C24)	chebi:60435
+t_0550	SBO:0000247	mannosylinositol phosphorylceramide D (C26)	chebi:62683
+t_0551	SBO:0000247	melibiose	chebi:28053
+t_0552	SBO:0000247	Met-tRNA(Met)	chebi:16635
+t_0553	SBO:0000247	methanethiol	chebi:16007
+t_0554	SBO:0000247	methylglyoxal	chebi:17158
+t_0555	SBO:0000247	myo-inositol	chebi:17268
+t_0556	SBO:0000247	myo-inositol 1,3,4,5,6-pentakisphosphate	chebi:57733
+t_0557	SBO:0000247	myo-inositol hexakisphosphate	chebi:58130
+t_0558	SBO:0000247	myristate	chebi:30807
+t_0559	SBO:0000247	myristoleate	chebi:32370
+t_0560	SBO:0000247	myristoyl-ACP	chebi:50651
+t_0561	SBO:0000247	myristoyl-CoA	chebi:57385
+t_0562	SBO:0000247	N(1)-acetylspermidine	chebi:58324
+t_0563	SBO:0000247	N(1)-acetylspermine	chebi:58101
+t_0564	SBO:0000247	N(2)-acetyl-L-ornithine	chebi:16543
+t_0565	SBO:0000247	N(pros)-methyl-L-histidine	chebi:27596
+t_0566	SBO:0000247	N,N'-diacetylchitobiosyldiphosphodolichol	chebi:12427
+t_0567	SBO:0000247	N,N'-diformyldityrosine	chebi:50611
+t_0568	SBO:0000247	N-(5-phospho-beta-D-ribosyl)anthranilate	chebi:18277
+t_0569	SBO:0000247	N-[(R)-4-phosphonopantothenoyl]-L-cysteine	chebi:59458
+t_0570	SBO:0000247	N-acetyl-alpha-D-glucosamine 1-phosphate	chebi:16446
+t_0571	SBO:0000247	N-acetyl-D-glucosamine 6-phosphate	chebi:57513
+t_0572	SBO:0000247	N-acetyl-L-gamma-glutamyl phosphate	chebi:57936
+t_0573	SBO:0000247	N-acetyl-L-glutamate(2-)	chebi:44337
+t_0574	SBO:0000247	N-acetylputrescine	chebi:58263
+t_0575	SBO:0000247	N-carbamoyl-L-aspartate	chebi:32814
+t_0576	SBO:0000247	N-formyl-L-kynurenine	chebi:30249
+t_0577	SBO:0000247	N-formyl-L-tyrosine	chebi:50603
+t_0578	SBO:0000247	N-tetradecanoylglycylpeptide	chebi:17739
+t_0579	SBO:0000247	NAD	chebi:57540
+t_0580	SBO:0000247	NADH	chebi:57945
+t_0581	SBO:0000247	NADP(+)	chebi:58349
+t_0582	SBO:0000247	NADPH	chebi:57783
+t_0583	SBO:0000247	nicotinamide	chebi:17154
+t_0584	SBO:0000247	nicotinamide ribose	chebi:15927
+t_0585	SBO:0000247	nicotinate	chebi:32544
+t_0586	SBO:0000247	nicotinic acid D-ribonucleotide	chebi:57502
+t_0587	SBO:0000247	NMN	chebi:14649
+t_0588	SBO:0000247	nonadecaprenyl diphosphate	chebi:53034
+t_0589	SBO:0000247	nonaprenyl 4-hydroxybenzoate	chebi:18162
+t_0590	SBO:0000247	nonaprenyl diphosphate	chebi:53044
+t_0591	SBO:0000247	O-acetyl-L-homoserine	chebi:16288
+t_0592	SBO:0000247	O-acetyl-L-serine	chebi:17981
+t_0593	SBO:0000247	O-acetylcarnitine	chebi:57589
+t_0594	SBO:0000247	O-phospho-L-homoserine	chebi:57590
+t_0595	SBO:0000247	O-phosphoethanolamine	chebi:58190
+t_0596	SBO:0000247	O-succinyl-L-homoserine	chebi:57661
+t_0597	SBO:0000247	octadec-9-ynoyl-ACP	
+t_0598	SBO:0000247	octadec-9-ynoyl-CoA	chebi:53151
+t_0599	SBO:0000247	octadecaprenyl diphosphate	chebi:53035
+t_0600	SBO:0000247	octanoate	chebi:25646
+t_0601	SBO:0000247	octanoyl-ACP	chebi:7725
+t_0602	SBO:0000247	octanoyl-CoA	chebi:57386
+t_0603	SBO:0000247	octaprenyl diphosphate	chebi:53045
+t_0604	SBO:0000247	oleate	chebi:30823
+t_0605	SBO:0000247	oleoyl-CoA	chebi:57387
+t_0606	SBO:0000247	ornithine	chebi:46912
+t_0607	SBO:0000247	orotate	chebi:30839
+t_0608	SBO:0000247	orotidine 5'-(dihydrogen phosphate)	chebi:57538
+t_0609	SBO:0000247	oxaloacetate(2-)	chebi:16452
+t_0610	SBO:0000247	oxygen	chebi:15379
+t_0611	SBO:0000247	oxysterol	chebi:53030
+t_0612	SBO:0000247	P(1),P(4)-bis(5'-adenosyl) tetraphosphate	chebi:58141
+t_0613	SBO:0000247	P(1),P(4)-bis(5'-guanosyl) tetraphosphate	chebi:57553
+t_0614	SBO:0000247	P1-(5'-adenosyl),P4-(5'-guanosyl) tetraphosphate	chebi:52968
+t_0615	SBO:0000247	palmitate	chebi:7896
+t_0616	SBO:0000247	palmitoleate	chebi:32372
+t_0617	SBO:0000247	palmitoleoyl-CoA	chebi:61540
+t_0618	SBO:0000247	palmitoyl-ACP	chebi:5697
+t_0619	SBO:0000247	palmitoyl-CoA	chebi:57379
+t_0620	SBO:0000247	pantetheine 4'-phosphate	chebi:47942
+t_0621	SBO:0000247	pectin	chebi:17309
+t_0622	SBO:0000247	pentadecaprenyl diphosphate	chebi:53038
+t_0623	SBO:0000247	pentaprenyl diphosphate	chebi:53048
+t_0624	SBO:0000247	Phe-tRNA(Phe)	chebi:29153
+t_0625	SBO:0000247	phenethyl acetate	chebi:31988
+t_0626	SBO:0000247	phenylacetaldehyde	chebi:16424
+t_0627	SBO:0000247	phenylacetic acid	chebi:18401
+t_0628	SBO:0000247	phosphate	chebi:43474
+t_0629	SBO:0000247	phosphatidate	chebi:57739
+t_0630	SBO:0000247	phosphatidyl-L-serine	chebi:18303
+t_0631	SBO:0000247	phosphatidyl-N,N-dimethylethanolamine	chebi:52332
+t_0632	SBO:0000247	phosphatidyl-N-methylethanolamine	chebi:15958
+t_0633	SBO:0000247	phosphatidylcholine	chebi:49183
+t_0634	SBO:0000247	phosphatidylethanolamine	chebi:16038
+t_0635	SBO:0000247	phosphatidylglycerol	chebi:60523
+t_0636	SBO:0000247	phosphatidylinositol	chebi:28874
+t_0637	SBO:0000247	phosphoenolpyruvate	chebi:58702
+t_0638	SBO:0000247	phospholipid	chebi:16247
+t_0639	SBO:0000247	phosphoribosyl-carboxy-aminoimidazole	chebi:58564
+t_0640	SBO:0000247	phosphoribosyl-formamido-carboxamide	chebi:58467
+t_0641	SBO:0000247	phytosphingosine	chebi:46961
+t_0642	SBO:0000247	phytosphingosine 1-phosphate	chebi:46970
+t_0643	SBO:0000247	pimeloyl-CoA	chebi:57360
+t_0644	SBO:0000247	polysulphur	chebi:17909
+t_0645	SBO:0000247	porphobilinogen	chebi:58126
+t_0646	SBO:0000247	potassium	chebi:26216
+t_0647	SBO:0000247	precorrin-2	chebi:58827
+t_0648	SBO:0000247	prenyl diphosphate	chebi:57623
+t_0649	SBO:0000247	prephenate(2-)	chebi:29934
+t_0650	SBO:0000247	preuroporphyrinogen	chebi:57845
+t_0651	SBO:0000247	Pro-tRNA(Pro)	chebi:29154
+t_0652	SBO:0000247	propionyl-CoA	chebi:57392
+t_0653	SBO:0000247	protoporphyrin	chebi:36159
+t_0654	SBO:0000247	protoporphyrinogen	chebi:57307
+t_0655	SBO:0000247	PRPP	chebi:58017
+t_0656	SBO:0000247	pseudouridine 5'-phosphate	chebi:58380
+t_0657	SBO:0000247	putrescine	chebi:326268
+t_0658	SBO:0000247	pyridoxal	chebi:17310
+t_0659	SBO:0000247	pyridoxal 5'-phosphate	chebi:597326
+t_0660	SBO:0000247	pyridoxamine	chebi:57761
+t_0661	SBO:0000247	pyridoxamine 5'-phosphate	chebi:58451
+t_0662	SBO:0000247	pyridoxine	chebi:16709
+t_0663	SBO:0000247	pyridoxine 5'-phosphate	chebi:58589
+t_0664	SBO:0000247	pyruvate	chebi:15361
+t_0665	SBO:0000247	quinolinate(2-)	chebi:29959
+t_0666	SBO:0000247	riboflavin	chebi:57986
+t_0667	SBO:0000247	ribose-5-phosphate	chebi:18189
+t_0668	SBO:0000247	S(8)-aminomethyldihydrolipoamide	chebi:50622
+t_0669	SBO:0000247	S(8)-aminomethyldihydrolipoylprotein	chebi:16882
+t_0670	SBO:0000247	S(8)-succinyldihydrolipoamide	chebi:17432
+t_0671	SBO:0000247	S-adenosyl-4-methylthio-2-oxobutanoate	chebi:16490
+t_0672	SBO:0000247	S-adenosyl-L-homocysteine	chebi:16680
+t_0673	SBO:0000247	S-adenosyl-L-methionine	chebi:15414
+t_0674	SBO:0000247	S-adenosylmethioninamine	chebi:57443
+t_0675	SBO:0000247	S-formylglutathione	chebi:57688
+t_0676	SBO:0000247	S-methyl-5-thio-alpha-D-ribose 1-phosphate	chebi:58533
+t_0677	SBO:0000247	S-methyl-5-thio-D-ribulose 1-phosphate	chebi:58548
+t_0678	SBO:0000247	S-methyl-L-methionine	chebi:17728
+t_0679	SBO:0000247	sedoheptulose 1,7-bisphosphate	chebi:58335
+t_0680	SBO:0000247	sedoheptulose 7-phosphate	chebi:57483
+t_0681	SBO:0000247	Ser-tRNA(Ser)	chebi:29162
+t_0682	SBO:0000247	shikimate	chebi:36208
+t_0683	SBO:0000247	siroheme	chebi:60052
+t_0684	SBO:0000247	sirohydrochlorin	chebi:58351
+t_0685	SBO:0000247	sn-glycero-3-phosphocholine	chebi:16870
+t_0686	SBO:0000247	sodium	chebi:26708
+t_0687	SBO:0000247	spermidine	chebi:57834
+t_0688	SBO:0000247	spermine	chebi:45725
+t_0689	SBO:0000247	sphinganine	chebi:57817
+t_0690	SBO:0000247	sphinganine 1-phosphate	chebi:57939
+t_0691	SBO:0000247	squalene	chebi:15440
+t_0692	SBO:0000247	stearate	chebi:25629
+t_0693	SBO:0000247	stearoyl-ACP	
+t_0694	SBO:0000247	stearoyl-CoA	chebi:57394
+t_0695	SBO:0000247	succinate	chebi:30031
+t_0696	SBO:0000247	succinic semialdehyde	chebi:57706
+t_0697	SBO:0000247	succinyl-CoA	chebi:57292
+t_0698	SBO:0000247	sucrose	chebi:17992
+t_0699	SBO:0000247	sulphate	chebi:16189
+t_0700	SBO:0000247	sulphite	chebi:17137
+t_0701	SBO:0000247	taurine	chebi:15891
+t_0702	SBO:0000247	taurocholic acid	chebi:36257
+t_0703	SBO:0000247	TDP	chebi:45931
+t_0704	SBO:0000247	tetracosanoyl-CoA	chebi:52974
+t_0705	SBO:0000247	tetradecaprenyl diphosphate	chebi:53039
+t_0706	SBO:0000247	tetradecenoyl-CoA	
+t_0707	SBO:0000247	tetrahydropteroyltri-L-glutamic acid	chebi:58140
+t_0708	SBO:0000247	THF	chebi:20506
+t_0709	SBO:0000247	thiamine(1+)	chebi:18385
+t_0710	SBO:0000247	Thr-tRNA(Thr)	chebi:29163
+t_0711	SBO:0000247	thymidine	chebi:17748
+t_0712	SBO:0000247	thymine	chebi:17821
+t_0713	SBO:0000247	TMP	chebi:9533
+t_0714	SBO:0000247	trans-2,3-didehydroacyl-CoA	chebi:50998
+t_0715	SBO:0000247	trans-4-coumarate	chebi:12876
+t_0716	SBO:0000247	trans-4-hydroxy-L-proline	chebi:18095
+t_0717	SBO:0000247	trans-aconitate(3-)	chebi:15708
+t_0718	SBO:0000247	trans-dec-2-enoyl-CoA	chebi:61406
+t_0719	SBO:0000247	trans-dodec-2-enoyl-CoA	chebi:57330
+t_0720	SBO:0000247	trans-hexacos-2-enoyl-CoA	chebi:52975
+t_0721	SBO:0000247	trans-octadec-2-enoyl-CoA	chebi:50570
+t_0722	SBO:0000247	trans-tetradec-2-enoyl-CoA	chebi:61405
+t_0723	SBO:0000247	trehalose	chebi:16551
+t_0724	SBO:0000247	tridecaprenyl diphosphate	chebi:53040
+t_0725	SBO:0000247	triglyceride	chebi:17855
+t_0726	SBO:0000247	trimethylenediamine	chebi:57484
+t_0727	SBO:0000247	Trp-tRNA(Trp)	chebi:29159
+t_0728	SBO:0000247	tryptophol	chebi:17890
+t_0729	SBO:0000247	TTP	chebi:58938
+t_0730	SBO:0000247	Tyr-tRNA(Tyr)	chebi:29161
+t_0731	SBO:0000247	ubiquinol-6	chebi:52970
+t_0732	SBO:0000247	ubiquinone-6	chebi:52971
+t_0733	SBO:0000247	UDP	chebi:58223
+t_0734	SBO:0000247	UDP-D-galactose	chebi:58439
+t_0735	SBO:0000247	UDP-D-glucose	chebi:58367
+t_0736	SBO:0000247	UDP-N-acetyl-alpha-D-glucosamine	chebi:57705
+t_0737	SBO:0000247	UMP	chebi:57865
+t_0738	SBO:0000247	undecaprenyl diphosphate	chebi:53042
+t_0739	SBO:0000247	uracil	chebi:17568
+t_0740	SBO:0000247	urea	chebi:16199
+t_0741	SBO:0000247	urea-1-carboxylic acid	chebi:15832
+t_0742	SBO:0000247	ureidoglycolic acid	chebi:49050
+t_0743	SBO:0000247	uridine	chebi:16704
+t_0744	SBO:0000247	uroporphyrinogen III	chebi:57308
+t_0745	SBO:0000247	UTP	chebi:46398
+t_0746	SBO:0000247	Val-tRNA(Val)	chebi:29164
+t_0747	SBO:0000247	xanthosine	chebi:18107
+t_0748	SBO:0000247	xanthosine-5-phosphate	chebi:57464
+t_0749	SBO:0000247	xylitol	chebi:17151
+t_0750	SBO:0000247	zymosterol	chebi:18252
+t_0751	SBO:0000247	zymosterol ester	chebi:52322
+t_0752	SBO:0000247	zymosterol intermediate 1a	chebi:52388
+t_0753	SBO:0000247	zymosterol intermediate 1b	chebi:52615
+t_0754	SBO:0000247	zymosterol intermediate 1c	chebi:52389
+t_0755	SBO:0000247	zymosterol intermediate 2	chebi:52386
+t_0756	SBO:0000247	zymosteryl oleate	chebi:52384
+t_0757	SBO:0000247	zymosteryl palmitoleate	chebi:52385
+t_0758	SBO:0000250	tRNA(Ala), cytoplasmic	chebi:29170
+t_0759	SBO:0000250	tRNA(Arg), cytoplasmic	
+t_0760	SBO:0000250	tRNA(Arg), mitchondrial	
+t_0761	SBO:0000250	tRNA(Asn), cytoplasmic	
+t_0762	SBO:0000250	tRNA(Asn), mitchondrial	
+t_0763	SBO:0000250	tRNA(Asp), cytoplasmic	
+t_0764	SBO:0000250	tRNA(Asp), mitchondrial	
+t_0765	SBO:0000250	tRNA(Cys), cytoplasmic	chebi:29167
+t_0766	SBO:0000250	tRNA(Gln), cytoplasmic	chebi:29168
+t_0767	SBO:0000250	tRNA(Glu), cytoplasmic	
+t_0768	SBO:0000250	tRNA(Glu), mitchondrial	
+t_0769	SBO:0000250	tRNA(Gly), cytoplasmic	chebi:29176
+t_0770	SBO:0000250	tRNA(His), cytoplasmic	
+t_0771	SBO:0000250	tRNA(His), mitchondrial	
+t_0772	SBO:0000250	tRNA(Ile), cytoplasmic	
+t_0773	SBO:0000250	tRNA(Ile), mitchondrial	
+t_0774	SBO:0000250	tRNA(Leu), cytoplasmic	
+t_0775	SBO:0000250	tRNA(Leu), mitchondrial	
+t_0776	SBO:0000250	tRNA(Lys), cytoplasmic	
+t_0777	SBO:0000250	tRNA(Lys), mitchondrial	
+t_0778	SBO:0000250	tRNA(Met), cytoplasmic	
+t_0779	SBO:0000250	tRNA(Met), mitchondrial	
+t_0780	SBO:0000250	tRNA(Phe), cytoplasmic	
+t_0781	SBO:0000250	tRNA(Phe), mitchondrial	
+t_0782	SBO:0000250	tRNA(Pro), cytoplasmic	chebi:29177
+t_0783	SBO:0000250	tRNA(Ser), cytoplasmic	chebi:29179
+t_0784	SBO:0000250	tRNA(Thr), cytoplasmic	
+t_0785	SBO:0000250	tRNA(Thr), mitchondrial	
+t_0786	SBO:0000250	tRNA(Trp), cytoplasmic	
+t_0787	SBO:0000250	tRNA(Trp), mitchondrial	
+t_0788	SBO:0000250	tRNA(Tyr), cytoplasmic	
+t_0789	SBO:0000250	tRNA(Tyr), mitchondrial	
+t_0790	SBO:0000250	tRNA(Val), cytoplasmic	
+t_0791	SBO:0000250	tRNA(Val), mitchondrial	
+t_0792	SBO:0000252	AAC1	http://identifiers.org/uniprot/P04710
+t_0793	SBO:0000252	AAC3	http://identifiers.org/uniprot/P18238
+t_0794	SBO:0000252	AAH1	http://identifiers.org/uniprot/P53909
+t_0795	SBO:0000252	AAT1	http://identifiers.org/uniprot/Q01802
+t_0796	SBO:0000252	AAT2	http://identifiers.org/uniprot/P23542
+t_0797	SBO:0000252	ABZ1	http://identifiers.org/uniprot/P37254
+t_0798	SBO:0000252	ABZ2	http://identifiers.org/uniprot/Q03266
+t_0799	SBO:0000252	ACC1	http://identifiers.org/uniprot/Q00955
+t_0800	SBO:0000252	ACH1	http://identifiers.org/uniprot/P32316
+t_0801	SBO:0000252	ACO1	http://identifiers.org/uniprot/P19414
+t_0802	SBO:0000252	ACO2	http://identifiers.org/uniprot/P39533
+t_0803	SBO:0000252	ACS1	http://identifiers.org/uniprot/Q01574
+t_0804	SBO:0000252	ACS2	http://identifiers.org/uniprot/P52910
+t_0805	SBO:0000252	acyl-carrier protein	chebi:13534
+t_0806	SBO:0000252	ADE1	http://identifiers.org/uniprot/P27616
+t_0807	SBO:0000252	ADE12	http://identifiers.org/uniprot/P80210
+t_0808	SBO:0000252	ADE13	http://identifiers.org/uniprot/Q05911
+t_0809	SBO:0000252	ADE16	http://identifiers.org/uniprot/P54113
+t_0810	SBO:0000252	ADE17	http://identifiers.org/uniprot/P38009
+t_0811	SBO:0000252	ADE2	http://identifiers.org/uniprot/P21264
+t_0812	SBO:0000252	ADE3	http://identifiers.org/uniprot/P07245
+t_0813	SBO:0000252	ADE4	http://identifiers.org/uniprot/P04046
+t_0814	SBO:0000252	ADE5,7	http://identifiers.org/uniprot/P07244
+t_0815	SBO:0000252	ADE6	http://identifiers.org/uniprot/P38972
+t_0816	SBO:0000252	ADE8	http://identifiers.org/uniprot/P04161
+t_0817	SBO:0000252	ADH1	http://identifiers.org/uniprot/P00330
+t_0818	SBO:0000252	ADH2	http://identifiers.org/uniprot/P00331
+t_0819	SBO:0000252	ADH3	http://identifiers.org/uniprot/P07246
+t_0820	SBO:0000252	ADH4	http://identifiers.org/uniprot/P10127
+t_0821	SBO:0000252	ADH5	http://identifiers.org/uniprot/P38113
+t_0822	SBO:0000252	ADH6	http://identifiers.org/uniprot/Q04894
+t_0823	SBO:0000252	ADH7	http://identifiers.org/uniprot/P25377
+t_0824	SBO:0000252	ADK1	http://identifiers.org/uniprot/P07170
+t_0825	SBO:0000252	ADK2	http://identifiers.org/uniprot/P26364
+t_0826	SBO:0000252	ADO1	http://identifiers.org/uniprot/P47143
+t_0827	SBO:0000252	ADY2	http://identifiers.org/uniprot/P25613
+t_0828	SBO:0000252	AGC1	http://identifiers.org/uniprot/Q12482
+t_0829	SBO:0000252	AGP1	http://identifiers.org/uniprot/P25376
+t_0830	SBO:0000252	AGP2	http://identifiers.org/uniprot/P38090
+t_0831	SBO:0000252	AGP3	http://identifiers.org/uniprot/P43548
+t_0832	SBO:0000252	AGX1	http://identifiers.org/uniprot/P43567
+t_0833	SBO:0000252	AKR1	http://identifiers.org/uniprot/P39010
+t_0834	SBO:0000252	ALA1	http://identifiers.org/uniprot/P40825
+t_0835	SBO:0000252	ALD2	http://identifiers.org/uniprot/P47771
+t_0836	SBO:0000252	ALD3	http://identifiers.org/uniprot/P54114
+t_0837	SBO:0000252	ALD4	http://identifiers.org/uniprot/P46367
+t_0838	SBO:0000252	ALD5	http://identifiers.org/uniprot/P40047
+t_0839	SBO:0000252	ALD6	http://identifiers.org/uniprot/P54115
+t_0840	SBO:0000252	ALE1	http://identifiers.org/uniprot/Q08548
+t_0841	SBO:0000252	ALG1	http://identifiers.org/uniprot/P16661
+t_0842	SBO:0000252	ALG3	http://identifiers.org/uniprot/P38179
+t_0843	SBO:0000252	ALO1	http://identifiers.org/uniprot/P54783
+t_0844	SBO:0000252	ALP1	http://identifiers.org/uniprot/P38971
+t_0845	SBO:0000252	ALT1	http://identifiers.org/uniprot/P52893
+t_0846	SBO:0000252	AMD1	http://identifiers.org/uniprot/P15274
+t_0847	SBO:0000252	ANT1	http://identifiers.org/uniprot/Q06497
+t_0848	SBO:0000252	APA1	http://identifiers.org/uniprot/P16550
+t_0849	SBO:0000252	APA2	http://identifiers.org/uniprot/P22108
+t_0850	SBO:0000252	APT1	http://identifiers.org/uniprot/P49435
+t_0851	SBO:0000252	AQY1	http://identifiers.org/uniprot/P0CD91
+t_0852	SBO:0000252	AQY2	http://identifiers.org/uniprot/P0CD90
+t_0853	SBO:0000252	ARA1	http://identifiers.org/uniprot/P38115
+t_0854	SBO:0000252	ARA2	http://identifiers.org/uniprot/Q04212
+t_0855	SBO:0000252	ARE1	http://identifiers.org/uniprot/P25628
+t_0856	SBO:0000252	ARE2	http://identifiers.org/uniprot/P53629
+t_0857	SBO:0000252	ARG1	http://identifiers.org/uniprot/P22768
+t_0858	SBO:0000252	ARG2	http://identifiers.org/uniprot/P40360
+t_0859	SBO:0000252	ARG3	http://identifiers.org/uniprot/P05150
+t_0860	SBO:0000252	ARG4	http://identifiers.org/uniprot/P04076
+t_0861	SBO:0000252	ARG5,6	http://identifiers.org/uniprot/Q01217
+t_0862	SBO:0000252	ARG7	http://identifiers.org/uniprot/Q04728
+t_0863	SBO:0000252	ARG8	http://identifiers.org/uniprot/P18544
+t_0864	SBO:0000252	ARG82	http://identifiers.org/uniprot/P07250
+t_0865	SBO:0000252	ARO1	http://identifiers.org/uniprot/P08566
+t_0866	SBO:0000252	ARO10	http://identifiers.org/uniprot/Q06408
+t_0867	SBO:0000252	ARO2	http://identifiers.org/uniprot/P28777
+t_0868	SBO:0000252	ARO3	http://identifiers.org/uniprot/P14843
+t_0869	SBO:0000252	ARO4	http://identifiers.org/uniprot/P32449
+t_0870	SBO:0000252	ARO7	http://identifiers.org/uniprot/P32178
+t_0871	SBO:0000252	ARO8	http://identifiers.org/uniprot/P53090
+t_0872	SBO:0000252	ARO9	http://identifiers.org/uniprot/P38840
+t_0873	SBO:0000252	ASN1	http://identifiers.org/uniprot/P49089
+t_0874	SBO:0000252	ASN2	http://identifiers.org/uniprot/P49090
+t_0875	SBO:0000252	ASP1	http://identifiers.org/uniprot/P38986
+t_0876	SBO:0000252	ASP3-1	
+t_0877	SBO:0000252	ASP3-2	
+t_0878	SBO:0000252	ASP3-3	
+t_0879	SBO:0000252	ASP3-4	
+t_0880	SBO:0000252	ATF1	http://identifiers.org/uniprot/P40353
+t_0881	SBO:0000252	ATF2	http://identifiers.org/uniprot/P53296
+t_0882	SBO:0000252	ATG22	http://identifiers.org/uniprot/P25568
+t_0883	SBO:0000252	ATG26	http://identifiers.org/uniprot/Q06321
+t_0884	SBO:0000252	ATH1	http://identifiers.org/uniprot/P48016
+t_0885	SBO:0000252	ATO3	http://identifiers.org/uniprot/Q12359
+t_0886	SBO:0000252	AUS1	http://identifiers.org/uniprot/Q08409
+t_0887	SBO:0000252	AVT1	http://identifiers.org/uniprot/P47082
+t_0888	SBO:0000252	AVT3	http://identifiers.org/uniprot/P36062
+t_0889	SBO:0000252	AVT4	http://identifiers.org/uniprot/P50944
+t_0890	SBO:0000252	AVT6	http://identifiers.org/uniprot/P40074
+t_0891	SBO:0000252	BAP2	http://identifiers.org/uniprot/P38084
+t_0892	SBO:0000252	BAP3	http://identifiers.org/uniprot/P41815
+t_0893	SBO:0000252	BAT1	http://identifiers.org/uniprot/P38891
+t_0894	SBO:0000252	BAT2	http://identifiers.org/uniprot/P47176
+t_0895	SBO:0000252	BDH1	http://identifiers.org/uniprot/P39714
+t_0896	SBO:0000252	BGL2	http://identifiers.org/uniprot/P15703
+t_0897	SBO:0000252	BIO2	http://identifiers.org/uniprot/P32451
+t_0898	SBO:0000252	BIO3	http://identifiers.org/uniprot/P50277
+t_0899	SBO:0000252	BIO4	http://identifiers.org/uniprot/P53630
+t_0900	SBO:0000252	BIO5	http://identifiers.org/uniprot/P53744
+t_0901	SBO:0000252	BNA1	http://identifiers.org/uniprot/P47096
+t_0902	SBO:0000252	BNA2	http://identifiers.org/uniprot/P47125
+t_0903	SBO:0000252	BNA3	http://identifiers.org/uniprot/P47039
+t_0904	SBO:0000252	BNA4	http://identifiers.org/uniprot/P38169
+t_0905	SBO:0000252	BNA5	http://identifiers.org/uniprot/Q05979
+t_0906	SBO:0000252	BNA6	http://identifiers.org/uniprot/P43619
+t_0907	SBO:0000252	BPH1	http://identifiers.org/uniprot/P25356
+t_0908	SBO:0000252	BPL1	http://identifiers.org/uniprot/P48445
+t_0909	SBO:0000252	BPT1	http://identifiers.org/uniprot/P14772
+t_0910	SBO:0000252	BST1	http://identifiers.org/uniprot/P43571
+t_0911	SBO:0000252	BTS1	http://identifiers.org/uniprot/Q12051
+t_0912	SBO:0000252	CAB1	http://identifiers.org/uniprot/Q04430
+t_0913	SBO:0000252	CAB2	http://identifiers.org/uniprot/P40506
+t_0914	SBO:0000252	CAB3	http://identifiers.org/uniprot/P36076
+t_0915	SBO:0000252	CAB4	http://identifiers.org/uniprot/P53332
+t_0916	SBO:0000252	CAB5	http://identifiers.org/uniprot/Q03941
+t_0917	SBO:0000252	CAN1	http://identifiers.org/uniprot/P04817
+t_0918	SBO:0000252	CAR1	http://identifiers.org/uniprot/P00812
+t_0919	SBO:0000252	CAR2	http://identifiers.org/uniprot/P07991
+t_0920	SBO:0000252	CAT2	http://identifiers.org/uniprot/P32796
+t_0921	SBO:0000252	CDA1	http://identifiers.org/uniprot/Q06702
+t_0922	SBO:0000252	CDA2	http://identifiers.org/uniprot/Q06703
+t_0923	SBO:0000252	CDC19	http://identifiers.org/uniprot/P00549
+t_0924	SBO:0000252	CDC21	http://identifiers.org/uniprot/P06785
+t_0925	SBO:0000252	CDC60	http://identifiers.org/uniprot/P26637
+t_0926	SBO:0000252	CDC8	http://identifiers.org/uniprot/P00572
+t_0927	SBO:0000252	CDD1	http://identifiers.org/uniprot/Q06549
+t_0928	SBO:0000252	CDS1	http://identifiers.org/uniprot/P38221
+t_0929	SBO:0000252	CHA1	http://identifiers.org/uniprot/P25379
+t_0930	SBO:0000252	CHO1	http://identifiers.org/uniprot/P08456
+t_0931	SBO:0000252	CHO2	http://identifiers.org/uniprot/P05374
+t_0932	SBO:0000252	CHS1	http://identifiers.org/uniprot/P08004
+t_0933	SBO:0000252	CHS2	http://identifiers.org/uniprot/P14180
+t_0934	SBO:0000252	CHS3	http://identifiers.org/uniprot/P29465
+t_0935	SBO:0000252	CIT1	http://identifiers.org/uniprot/P00890
+t_0936	SBO:0000252	CIT2	http://identifiers.org/uniprot/P08679
+t_0937	SBO:0000252	CIT3	http://identifiers.org/uniprot/P43635
+t_0938	SBO:0000252	CKI1	http://identifiers.org/uniprot/P20485
+t_0939	SBO:0000252	COQ1	http://identifiers.org/uniprot/P18900
+t_0940	SBO:0000252	COQ2	http://identifiers.org/uniprot/P32378
+t_0941	SBO:0000252	COX10	http://identifiers.org/uniprot/P21592
+t_0942	SBO:0000252	CPD1	http://identifiers.org/uniprot/P53314
+t_0943	SBO:0000252	CPT1	http://identifiers.org/uniprot/P17898
+t_0944	SBO:0000252	CRC1	http://identifiers.org/uniprot/Q12289
+t_0945	SBO:0000252	CRD1	http://identifiers.org/uniprot/Q07560
+t_0946	SBO:0000252	CTA1	http://identifiers.org/uniprot/P15202
+t_0947	SBO:0000252	CTP1	http://identifiers.org/uniprot/P38152
+t_0948	SBO:0000252	CTT1	http://identifiers.org/uniprot/P06115
+t_0949	SBO:0000252	CYR1	http://identifiers.org/uniprot/P08678
+t_0950	SBO:0000252	CYS3	http://identifiers.org/uniprot/P31373
+t_0951	SBO:0000252	CYS4	http://identifiers.org/uniprot/P32582
+t_0952	SBO:0000252	DAK1	http://identifiers.org/uniprot/P54838
+t_0953	SBO:0000252	DAK2	http://identifiers.org/uniprot/P43550
+t_0954	SBO:0000252	DAL1	http://identifiers.org/uniprot/P32375
+t_0955	SBO:0000252	DAL2	http://identifiers.org/uniprot/P25335
+t_0956	SBO:0000252	DAL3	http://identifiers.org/uniprot/P32459
+t_0957	SBO:0000252	DAL4	http://identifiers.org/uniprot/Q04895
+t_0958	SBO:0000252	DAL5	http://identifiers.org/uniprot/P15365
+t_0959	SBO:0000252	DAL7	http://identifiers.org/uniprot/P21826
+t_0960	SBO:0000252	DCD1	http://identifiers.org/uniprot/P06773
+t_0961	SBO:0000252	DDP1	http://identifiers.org/uniprot/Q99321
+t_0962	SBO:0000252	DED81	http://identifiers.org/uniprot/P38707
+t_0963	SBO:0000252	DEG1	http://identifiers.org/uniprot/P31115
+t_0964	SBO:0000252	DFR1	http://identifiers.org/uniprot/P07807
+t_0965	SBO:0000252	DGA1	http://identifiers.org/uniprot/Q08650
+t_0966	SBO:0000252	DIA4	http://identifiers.org/uniprot/P38705
+t_0967	SBO:0000252	DIC1	http://identifiers.org/uniprot/Q06143
+t_0968	SBO:0000252	DIE2	http://identifiers.org/uniprot/P50076
+t_0969	SBO:0000252	DIP5	http://identifiers.org/uniprot/P53388
+t_0970	SBO:0000252	DIT1	http://identifiers.org/uniprot/P21623
+t_0971	SBO:0000252	DNF1	http://identifiers.org/uniprot/P32660
+t_0972	SBO:0000252	DNF2	http://identifiers.org/uniprot/Q12675
+t_0973	SBO:0000252	DNF3	http://identifiers.org/uniprot/Q12674
+t_0974	SBO:0000252	DPH5	http://identifiers.org/uniprot/P32469
+t_0975	SBO:0000252	DPL1	http://identifiers.org/uniprot/Q05567
+t_0976	SBO:0000252	DPM1	http://identifiers.org/uniprot/P14020
+t_0977	SBO:0000252	DPP1	http://identifiers.org/uniprot/Q05521
+t_0978	SBO:0000252	DPS1	http://identifiers.org/uniprot/P04802
+t_0979	SBO:0000252	DSE4	http://identifiers.org/uniprot/P53753
+t_0980	SBO:0000252	DTR1	http://identifiers.org/uniprot/P38125
+t_0981	SBO:0000252	DUR1,2	http://identifiers.org/uniprot/P32528
+t_0982	SBO:0000252	DUR3	http://identifiers.org/uniprot/P33413
+t_0983	SBO:0000252	DUT1	http://identifiers.org/uniprot/P33317
+t_0984	SBO:0000252	DYS1	http://identifiers.org/uniprot/P38791
+t_0985	SBO:0000252	ECM31	http://identifiers.org/uniprot/P38122
+t_0986	SBO:0000252	ECM38	http://identifiers.org/uniprot/Q05902
+t_0987	SBO:0000252	ECT1	http://identifiers.org/uniprot/P33412
+t_0988	SBO:0000252	EKI1	http://identifiers.org/uniprot/Q03764
+t_0989	SBO:0000252	ELO1	http://identifiers.org/uniprot/P39540
+t_0990	SBO:0000252	ENO1	http://identifiers.org/uniprot/P00924
+t_0991	SBO:0000252	ENO2	http://identifiers.org/uniprot/P00925
+t_0992	SBO:0000252	EPT1	http://identifiers.org/uniprot/P22140
+t_0993	SBO:0000252	ERG10	http://identifiers.org/uniprot/P41338
+t_0994	SBO:0000252	ERG12	http://identifiers.org/uniprot/P07277
+t_0995	SBO:0000252	ERG13	http://identifiers.org/uniprot/P54839
+t_0996	SBO:0000252	ERG2	http://identifiers.org/uniprot/P32352
+t_0997	SBO:0000252	ERG20	http://identifiers.org/uniprot/P08524
+t_0998	SBO:0000252	ERG24	http://identifiers.org/uniprot/P32462
+t_0999	SBO:0000252	ERG25	http://identifiers.org/uniprot/P53045
+t_1000	SBO:0000252	ERG26	http://identifiers.org/uniprot/P53199
+t_1001	SBO:0000252	ERG27	http://identifiers.org/uniprot/Q12452
+t_1002	SBO:0000252	ERG3	http://identifiers.org/uniprot/P32353
+t_1003	SBO:0000252	ERG4	http://identifiers.org/uniprot/P25340
+t_1004	SBO:0000252	ERG6	http://identifiers.org/uniprot/P25087
+t_1005	SBO:0000252	ERG7	http://identifiers.org/uniprot/P38604
+t_1006	SBO:0000252	ERG8	http://identifiers.org/uniprot/P24521
+t_1007	SBO:0000252	ERG9	http://identifiers.org/uniprot/P29704
+t_1008	SBO:0000252	ERS1	http://identifiers.org/uniprot/P17261
+t_1009	SBO:0000252	EXG1	http://identifiers.org/uniprot/P23776
+t_1010	SBO:0000252	EXG2	http://identifiers.org/uniprot/P52911
+t_1011	SBO:0000252	FAA1	http://identifiers.org/uniprot/P30624
+t_1012	SBO:0000252	FAA2	http://identifiers.org/uniprot/P39518
+t_1013	SBO:0000252	FAA3	http://identifiers.org/uniprot/P39002
+t_1014	SBO:0000252	FAA4	http://identifiers.org/uniprot/P47912
+t_1015	SBO:0000252	FAB1	http://identifiers.org/uniprot/P34756
+t_1016	SBO:0000252	FAD1	http://identifiers.org/uniprot/P38913
+t_1017	SBO:0000252	FAT1	http://identifiers.org/uniprot/P38225
+t_1018	SBO:0000252	FAU1	http://identifiers.org/uniprot/P40099
+t_1019	SBO:0000252	FBA1	http://identifiers.org/uniprot/P14540
+t_1020	SBO:0000252	FBP1	http://identifiers.org/uniprot/P09201
+t_1021	SBO:0000252	FBP26	http://identifiers.org/uniprot/P32604
+t_1022	SBO:0000252	FCY1	http://identifiers.org/uniprot/Q12178
+t_1023	SBO:0000252	FCY2	http://identifiers.org/uniprot/P17064
+t_1024	SBO:0000252	FCY21	http://identifiers.org/uniprot/P40039
+t_1025	SBO:0000252	FCY22	http://identifiers.org/uniprot/Q12119
+t_1026	SBO:0000252	FDH1	http://identifiers.org/uniprot/Q08911
+t_1027	SBO:0000252	FEN1	http://identifiers.org/uniprot/P25358
+t_1028	SBO:0000252	FEN2	http://identifiers.org/uniprot/P25621
+t_1029	SBO:0000252	FET4	http://identifiers.org/uniprot/P40988
+t_1030	SBO:0000252	FIG4	http://identifiers.org/uniprot/P42837
+t_1031	SBO:0000252	FKS1	http://identifiers.org/uniprot/P38631
+t_1032	SBO:0000252	FLX1	http://identifiers.org/uniprot/P40464
+t_1033	SBO:0000252	FMN1	http://identifiers.org/uniprot/Q03778
+t_1034	SBO:0000252	FMS1	http://identifiers.org/uniprot/P50264
+t_1035	SBO:0000252	FMT1	http://identifiers.org/uniprot/P32785
+t_1036	SBO:0000252	FOL1	http://identifiers.org/uniprot/P53848
+t_1037	SBO:0000252	FOL2	http://identifiers.org/uniprot/P51601
+t_1038	SBO:0000252	FOL3	http://identifiers.org/uniprot/Q12676
+t_1039	SBO:0000252	FOX2	http://identifiers.org/uniprot/Q02207
+t_1040	SBO:0000252	FPS1	http://identifiers.org/uniprot/P23900
+t_1041	SBO:0000252	FUI1	http://identifiers.org/uniprot/P38196
+t_1042	SBO:0000252	FUM1	http://identifiers.org/uniprot/P08417
+t_1043	SBO:0000252	FUN26	http://identifiers.org/uniprot/P31381
+t_1044	SBO:0000252	FUR1	http://identifiers.org/uniprot/P18562
+t_1045	SBO:0000252	FUR4	http://identifiers.org/uniprot/P05316
+t_1046	SBO:0000252	GAD1	http://identifiers.org/uniprot/Q04792
+t_1047	SBO:0000252	GAL1	http://identifiers.org/uniprot/P04385
+t_1048	SBO:0000252	GAL10	http://identifiers.org/uniprot/P04397
+t_1049	SBO:0000252	GAL2	http://identifiers.org/uniprot/P13181
+t_1050	SBO:0000252	GAL7	http://identifiers.org/uniprot/P08431
+t_1051	SBO:0000252	GAP1	http://identifiers.org/uniprot/P19145
+t_1052	SBO:0000252	GCY1	http://identifiers.org/uniprot/P14065
+t_1053	SBO:0000252	GDA1	http://identifiers.org/uniprot/P32621
+t_1054	SBO:0000252	GDB1	http://identifiers.org/uniprot/Q06625
+t_1055	SBO:0000252	GDE1	http://identifiers.org/uniprot/Q02979
+t_1056	SBO:0000252	GDH1	http://identifiers.org/uniprot/P07262
+t_1057	SBO:0000252	GDH2	http://identifiers.org/uniprot/P33327
+t_1058	SBO:0000252	GDH3	http://identifiers.org/uniprot/P39708
+t_1059	SBO:0000252	GET3	http://identifiers.org/uniprot/Q12154
+t_1060	SBO:0000252	GFA1	http://identifiers.org/uniprot/P14742
+t_1061	SBO:0000252	GGC1	http://identifiers.org/uniprot/P38988
+t_1062	SBO:0000252	GIT1	http://identifiers.org/uniprot/P25346
+t_1063	SBO:0000252	GLK1	http://identifiers.org/uniprot/P17709
+t_1064	SBO:0000252	GLN1	http://identifiers.org/uniprot/P32288
+t_1065	SBO:0000252	GLN4	http://identifiers.org/uniprot/P13188
+t_1066	SBO:0000252	GLO1	http://identifiers.org/uniprot/P50107
+t_1067	SBO:0000252	GLO2	http://identifiers.org/uniprot/Q05584
+t_1068	SBO:0000252	GLO4	http://identifiers.org/uniprot/Q12320
+t_1069	SBO:0000252	GLT1	http://identifiers.org/uniprot/Q12680
+t_1070	SBO:0000252	GLY1	http://identifiers.org/uniprot/P37303
+t_1071	SBO:0000252	GNA1	http://identifiers.org/uniprot/P43577
+t_1072	SBO:0000252	GND1	http://identifiers.org/uniprot/P38720
+t_1073	SBO:0000252	GND2	http://identifiers.org/uniprot/P53319
+t_1074	SBO:0000252	GNP1	http://identifiers.org/uniprot/P48813
+t_1075	SBO:0000252	GPD1	http://identifiers.org/uniprot/A5YWB0
+t_1076	SBO:0000252	GPD2	http://identifiers.org/uniprot/P41911
+t_1077	SBO:0000252	GPH1	http://identifiers.org/uniprot/P06738
+t_1078	SBO:0000252	GPI10	http://identifiers.org/uniprot/P30777
+t_1079	SBO:0000252	GPI11	http://identifiers.org/uniprot/Q06636
+t_1080	SBO:0000252	GPI12	http://identifiers.org/uniprot/P23797
+t_1081	SBO:0000252	GPI13	http://identifiers.org/uniprot/Q07830
+t_1082	SBO:0000252	GPI18	http://identifiers.org/uniprot/P38211
+t_1083	SBO:0000252	GPM1	http://identifiers.org/uniprot/P00950
+t_1084	SBO:0000252	GPT2	http://identifiers.org/uniprot/P36148
+t_1085	SBO:0000252	GPX1	http://identifiers.org/uniprot/P36014
+t_1086	SBO:0000252	GPX2	http://identifiers.org/uniprot/P38143
+t_1087	SBO:0000252	GRE2	http://identifiers.org/uniprot/Q12068
+t_1088	SBO:0000252	GRE3	http://identifiers.org/uniprot/P38715
+t_1089	SBO:0000252	GRS1	http://identifiers.org/uniprot/P38088
+t_1090	SBO:0000252	GRS2	http://identifiers.org/uniprot/Q06817
+t_1091	SBO:0000252	GRX1	http://identifiers.org/uniprot/P25373
+t_1092	SBO:0000252	GRX2	http://identifiers.org/uniprot/P17695
+t_1093	SBO:0000252	GRX5	http://identifiers.org/uniprot/Q02784
+t_1094	SBO:0000252	GSC2	http://identifiers.org/uniprot/P40989
+t_1095	SBO:0000252	GSH1	http://identifiers.org/uniprot/P32477
+t_1096	SBO:0000252	GSH2	http://identifiers.org/uniprot/Q08220
+t_1097	SBO:0000252	GUA1	http://identifiers.org/uniprot/P38625
+t_1098	SBO:0000252	GUD1	http://identifiers.org/uniprot/Q07729
+t_1099	SBO:0000252	GUK1	http://identifiers.org/uniprot/P15454
+t_1100	SBO:0000252	GUP1	http://identifiers.org/uniprot/P53154
+t_1101	SBO:0000252	GUP2	http://identifiers.org/uniprot/Q08929
+t_1102	SBO:0000252	GUS1	http://identifiers.org/uniprot/P46655
+t_1103	SBO:0000252	GUT1	http://identifiers.org/uniprot/P32190
+t_1104	SBO:0000252	GUT2	http://identifiers.org/uniprot/P32191
+t_1105	SBO:0000252	GWT1	http://identifiers.org/uniprot/P47026
+t_1106	SBO:0000252	HEM1	http://identifiers.org/uniprot/P09950
+t_1107	SBO:0000252	HEM12	http://identifiers.org/uniprot/P32347
+t_1108	SBO:0000252	HEM13	http://identifiers.org/uniprot/P11353
+t_1109	SBO:0000252	HEM14	http://identifiers.org/uniprot/P40012
+t_1110	SBO:0000252	HEM15	http://identifiers.org/uniprot/P16622
+t_1111	SBO:0000252	HEM2	http://identifiers.org/uniprot/P05373
+t_1112	SBO:0000252	HEM3	http://identifiers.org/uniprot/P28789
+t_1113	SBO:0000252	HEM4	http://identifiers.org/uniprot/P06174
+t_1114	SBO:0000252	HER2	http://identifiers.org/uniprot/Q03557
+t_1115	SBO:0000252	HES1	http://identifiers.org/uniprot/P35843
+t_1116	SBO:0000252	HFA1	http://identifiers.org/uniprot/P32874
+t_1117	SBO:0000252	HIP1	http://identifiers.org/uniprot/P06775
+t_1118	SBO:0000252	HIS1	http://identifiers.org/uniprot/P00498
+t_1119	SBO:0000252	HIS2	http://identifiers.org/uniprot/P38635
+t_1120	SBO:0000252	HIS3	http://identifiers.org/uniprot/P06633
+t_1121	SBO:0000252	HIS4	http://identifiers.org/uniprot/P00815
+t_1122	SBO:0000252	HIS5	http://identifiers.org/uniprot/P07172
+t_1123	SBO:0000252	HIS6	http://identifiers.org/uniprot/P40545
+t_1124	SBO:0000252	HIS7	http://identifiers.org/uniprot/P33734
+t_1125	SBO:0000252	HMG1	http://identifiers.org/uniprot/P12683
+t_1126	SBO:0000252	HMG2	http://identifiers.org/uniprot/P12684
+t_1127	SBO:0000252	HMT1	http://identifiers.org/uniprot/P38074
+t_1128	SBO:0000252	HNM1	http://identifiers.org/uniprot/P19807
+t_1129	SBO:0000252	HNT2	http://identifiers.org/uniprot/P49775
+t_1130	SBO:0000252	HOM2	http://identifiers.org/uniprot/P13663
+t_1131	SBO:0000252	HOM3	http://identifiers.org/uniprot/P10869
+t_1132	SBO:0000252	HOM6	http://identifiers.org/uniprot/P31116
+t_1133	SBO:0000252	HOR2	http://identifiers.org/uniprot/P40106
+t_1134	SBO:0000252	HPT1	http://identifiers.org/uniprot/Q04178
+t_1135	SBO:0000252	HST1	http://identifiers.org/uniprot/P53685
+t_1136	SBO:0000252	HST2	http://identifiers.org/uniprot/P53686
+t_1137	SBO:0000252	HST3	http://identifiers.org/uniprot/P53687
+t_1138	SBO:0000252	HST4	http://identifiers.org/uniprot/P53688
+t_1139	SBO:0000252	HTS1	http://identifiers.org/uniprot/P07263
+t_1140	SBO:0000252	HUT1	http://identifiers.org/uniprot/Q12520
+t_1141	SBO:0000252	HXK1	http://identifiers.org/uniprot/P04806
+t_1142	SBO:0000252	HXK2	http://identifiers.org/uniprot/P04807
+t_1143	SBO:0000252	HXT1	http://identifiers.org/uniprot/P32465
+t_1144	SBO:0000252	HXT10	http://identifiers.org/uniprot/P43581
+t_1145	SBO:0000252	HXT11	http://identifiers.org/uniprot/P54862
+t_1146	SBO:0000252	HXT13	http://identifiers.org/uniprot/P39924
+t_1147	SBO:0000252	HXT14	http://identifiers.org/uniprot/P42833
+t_1148	SBO:0000252	HXT15	http://identifiers.org/uniprot/P54854
+t_1149	SBO:0000252	HXT16	http://identifiers.org/uniprot/P47185
+t_1150	SBO:0000252	HXT17	http://identifiers.org/uniprot/P53631
+t_1151	SBO:0000252	HXT2	http://identifiers.org/uniprot/P23585
+t_1152	SBO:0000252	HXT3	http://identifiers.org/uniprot/P32466
+t_1153	SBO:0000252	HXT4	http://identifiers.org/uniprot/P32467
+t_1154	SBO:0000252	HXT5	http://identifiers.org/uniprot/P38695
+t_1155	SBO:0000252	HXT6	http://identifiers.org/uniprot/P39003
+t_1156	SBO:0000252	HXT7	http://identifiers.org/uniprot/P39004
+t_1157	SBO:0000252	HXT8	http://identifiers.org/uniprot/P40886
+t_1158	SBO:0000252	HXT9	http://identifiers.org/uniprot/P40885
+t_1159	SBO:0000252	HYR1	http://identifiers.org/uniprot/P40581
+t_1160	SBO:0000252	IAH1	http://identifiers.org/uniprot/P41734
+t_1161	SBO:0000252	ICL1	http://identifiers.org/uniprot/P28240
+t_1162	SBO:0000252	ICL2	http://identifiers.org/uniprot/Q12031
+t_1163	SBO:0000252	IDI1	http://identifiers.org/uniprot/P15496
+t_1164	SBO:0000252	IDP1	http://identifiers.org/uniprot/P21954
+t_1165	SBO:0000252	IDP2	http://identifiers.org/uniprot/P41939
+t_1166	SBO:0000252	IDP3	http://identifiers.org/uniprot/P53982
+t_1167	SBO:0000252	IFA38	http://identifiers.org/uniprot/P38286
+t_1168	SBO:0000252	ILS1	http://identifiers.org/uniprot/P09436
+t_1169	SBO:0000252	ILV1	http://identifiers.org/uniprot/P00927
+t_1170	SBO:0000252	ILV3	http://identifiers.org/uniprot/P39522
+t_1171	SBO:0000252	ILV5	http://identifiers.org/uniprot/P06168
+t_1172	SBO:0000252	IMA1	http://identifiers.org/uniprot/P53051
+t_1173	SBO:0000252	IMD2	http://identifiers.org/uniprot/P38697
+t_1174	SBO:0000252	IMD3	http://identifiers.org/uniprot/P50095
+t_1175	SBO:0000252	IMD4	http://identifiers.org/uniprot/P50094
+t_1176	SBO:0000252	INM1	http://identifiers.org/uniprot/P38710
+t_1177	SBO:0000252	INM2	http://identifiers.org/uniprot/Q05533
+t_1178	SBO:0000252	INO1	http://identifiers.org/uniprot/P11986
+t_1179	SBO:0000252	INP51	http://identifiers.org/uniprot/P40559
+t_1180	SBO:0000252	INP52	http://identifiers.org/uniprot/P50942
+t_1181	SBO:0000252	INP53	http://identifiers.org/uniprot/Q12271
+t_1182	SBO:0000252	INP54	http://identifiers.org/uniprot/Q08227
+t_1183	SBO:0000252	IPK1	http://identifiers.org/uniprot/Q06667
+t_1184	SBO:0000252	IPP1	http://identifiers.org/uniprot/P00817
+t_1185	SBO:0000252	IPT1	http://identifiers.org/uniprot/P38954
+t_1186	SBO:0000252	ISC1	http://identifiers.org/uniprot/P40015
+t_1187	SBO:0000252	ISM1	http://identifiers.org/uniprot/P48526
+t_1188	SBO:0000252	ISN1	http://identifiers.org/uniprot/Q99312
+t_1189	SBO:0000252	ITR1	http://identifiers.org/uniprot/P30605
+t_1190	SBO:0000252	ITR2	http://identifiers.org/uniprot/Q12273
+t_1191	SBO:0000252	JEN1	http://identifiers.org/uniprot/P36035
+t_1192	SBO:0000252	JLP1	http://identifiers.org/uniprot/Q12358
+t_1193	SBO:0000252	KCS1	http://identifiers.org/uniprot/Q12494
+t_1194	SBO:0000252	KES1	http://identifiers.org/uniprot/P35844
+t_1195	SBO:0000252	KRE2	http://identifiers.org/uniprot/P27809
+t_1196	SBO:0000252	KRE6	http://identifiers.org/uniprot/P32486
+t_1197	SBO:0000252	KRS1	http://identifiers.org/uniprot/P15180
+t_1198	SBO:0000252	KTR1	http://identifiers.org/uniprot/P27810
+t_1199	SBO:0000252	KTR2	http://identifiers.org/uniprot/P33550
+t_1200	SBO:0000252	KTR3	http://identifiers.org/uniprot/P38130
+t_1201	SBO:0000252	KTR4	http://identifiers.org/uniprot/P38131
+t_1202	SBO:0000252	KTR5	http://identifiers.org/uniprot/P53966
+t_1203	SBO:0000252	KTR6	http://identifiers.org/uniprot/P54070
+t_1204	SBO:0000252	LAP2	http://identifiers.org/uniprot/Q10740
+t_1205	SBO:0000252	LCB3	http://identifiers.org/uniprot/P47013
+t_1206	SBO:0000252	LCB4	http://identifiers.org/uniprot/Q12246
+t_1207	SBO:0000252	LCB5	http://identifiers.org/uniprot/Q06147
+t_1208	SBO:0000252	LEM3	http://identifiers.org/uniprot/P42838
+t_1209	SBO:0000252	LEU1	http://identifiers.org/uniprot/P07264
+t_1210	SBO:0000252	LEU2	http://identifiers.org/uniprot/P04173
+t_1211	SBO:0000252	LEU4	http://identifiers.org/uniprot/P06208
+t_1212	SBO:0000252	LEU5	http://identifiers.org/uniprot/P38702
+t_1213	SBO:0000252	LEU9	http://identifiers.org/uniprot/Q12166
+t_1214	SBO:0000252	LOT6	http://identifiers.org/uniprot/Q07923
+t_1215	SBO:0000252	LPP1	http://identifiers.org/uniprot/Q04396
+t_1216	SBO:0000252	LSB6	http://identifiers.org/uniprot/P42951
+t_1217	SBO:0000252	LYP1	http://identifiers.org/uniprot/P32487
+t_1218	SBO:0000252	LYS1	http://identifiers.org/uniprot/P38998
+t_1219	SBO:0000252	LYS12	http://identifiers.org/uniprot/P40495
+t_1220	SBO:0000252	LYS20	http://identifiers.org/uniprot/P48570
+t_1221	SBO:0000252	LYS21	http://identifiers.org/uniprot/Q12122
+t_1222	SBO:0000252	LYS4	http://identifiers.org/uniprot/P49367
+t_1223	SBO:0000252	LYS9	http://identifiers.org/uniprot/P38999
+t_1224	SBO:0000252	MAE1	http://identifiers.org/uniprot/P36013
+t_1225	SBO:0000252	MAL11	http://identifiers.org/uniprot/P53048
+t_1226	SBO:0000252	MAL12	http://identifiers.org/uniprot/P53341
+t_1227	SBO:0000252	MAL31	http://identifiers.org/uniprot/P38156
+t_1228	SBO:0000252	MAL32	http://identifiers.org/uniprot/P38158
+t_1229	SBO:0000252	MCD4	http://identifiers.org/uniprot/P36051
+t_1230	SBO:0000252	MDH1	http://identifiers.org/uniprot/P17505
+t_1231	SBO:0000252	MDH2	http://identifiers.org/uniprot/P22133
+t_1232	SBO:0000252	MDH3	http://identifiers.org/uniprot/P32419
+t_1233	SBO:0000252	MEP1	http://identifiers.org/uniprot/P40260
+t_1234	SBO:0000252	MEP2	http://identifiers.org/uniprot/P41948
+t_1235	SBO:0000252	MEP3	http://identifiers.org/uniprot/P53390
+t_1236	SBO:0000252	MES1	http://identifiers.org/uniprot/P00958
+t_1237	SBO:0000252	MET1	http://identifiers.org/uniprot/P36150
+t_1238	SBO:0000252	MET10	http://identifiers.org/uniprot/P39692
+t_1239	SBO:0000252	MET12	http://identifiers.org/uniprot/P46151
+t_1240	SBO:0000252	MET13	http://identifiers.org/uniprot/P53128
+t_1241	SBO:0000252	MET14	http://identifiers.org/uniprot/Q02196
+t_1242	SBO:0000252	MET17	http://identifiers.org/uniprot/P06106
+t_1243	SBO:0000252	MET2	http://identifiers.org/uniprot/P08465
+t_1244	SBO:0000252	MET22	http://identifiers.org/uniprot/P32179
+t_1245	SBO:0000252	MET3	http://identifiers.org/uniprot/P08536
+t_1246	SBO:0000252	MET5	http://identifiers.org/uniprot/P47169
+t_1247	SBO:0000252	MET6	http://identifiers.org/uniprot/P05694
+t_1248	SBO:0000252	MET7	http://identifiers.org/uniprot/Q08645
+t_1249	SBO:0000252	MET8	http://identifiers.org/uniprot/P15807
+t_1250	SBO:0000252	MEU1	http://identifiers.org/uniprot/Q07938
+t_1251	SBO:0000252	MHT1	http://identifiers.org/uniprot/Q12525
+t_1252	SBO:0000252	MIR1	http://identifiers.org/uniprot/P23641
+t_1253	SBO:0000252	MIS1	http://identifiers.org/uniprot/P09440
+t_1254	SBO:0000252	MLS1	http://identifiers.org/uniprot/P30952
+t_1255	SBO:0000252	MMP1	http://identifiers.org/uniprot/Q12372
+t_1256	SBO:0000252	MPH2	http://identifiers.org/uniprot/P0CD99
+t_1257	SBO:0000252	MPH3	http://identifiers.org/uniprot/P47186
+t_1258	SBO:0000252	MSD1	http://identifiers.org/uniprot/P15179
+t_1259	SBO:0000252	MSE1	http://identifiers.org/uniprot/P48525
+t_1260	SBO:0000252	MSF1	http://identifiers.org/uniprot/P08425
+t_1261	SBO:0000252	MSK1	http://identifiers.org/uniprot/P32048
+t_1262	SBO:0000252	MSM1	http://identifiers.org/uniprot/P22438
+t_1263	SBO:0000252	MSR1	http://identifiers.org/uniprot/P38714
+t_1264	SBO:0000252	MSS4	http://identifiers.org/uniprot/P38994
+t_1265	SBO:0000252	MST1	http://identifiers.org/uniprot/P07236
+t_1266	SBO:0000252	MSW1	http://identifiers.org/uniprot/P04803
+t_1267	SBO:0000252	MSY1	http://identifiers.org/uniprot/P48527
+t_1268	SBO:0000252	MTD1	http://identifiers.org/uniprot/Q02046
+t_1269	SBO:0000252	MUP1	http://identifiers.org/uniprot/P50276
+t_1270	SBO:0000252	MUP3	http://identifiers.org/uniprot/P38734
+t_1271	SBO:0000252	MVD1	http://identifiers.org/uniprot/P32377
+t_1272	SBO:0000252	NAM2	http://identifiers.org/uniprot/P11325
+t_1273	SBO:0000252	NDE1	http://identifiers.org/uniprot/P40215
+t_1274	SBO:0000252	NDE2	http://identifiers.org/uniprot/Q07500
+t_1275	SBO:0000252	NDI1	http://identifiers.org/uniprot/P32340
+t_1276	SBO:0000252	NHA1	http://identifiers.org/uniprot/Q99271
+t_1277	SBO:0000252	NMA1	http://identifiers.org/uniprot/Q06178
+t_1278	SBO:0000252	NMA2	http://identifiers.org/uniprot/P53204
+t_1279	SBO:0000252	NMT1	http://identifiers.org/uniprot/P14743
+t_1280	SBO:0000252	NNT1	http://identifiers.org/uniprot/Q05874
+t_1281	SBO:0000252	NPT1	http://identifiers.org/uniprot/P39683
+t_1282	SBO:0000252	NPY1	http://identifiers.org/uniprot/P53164
+t_1283	SBO:0000252	NRK1	http://identifiers.org/uniprot/P53915
+t_1284	SBO:0000252	NRT1	http://identifiers.org/uniprot/Q08485
+t_1285	SBO:0000252	NTE1	http://identifiers.org/uniprot/Q04958
+t_1286	SBO:0000252	NTH1	http://identifiers.org/uniprot/P32356
+t_1287	SBO:0000252	NTH2	http://identifiers.org/uniprot/P35172
+t_1288	SBO:0000252	OAC1	http://identifiers.org/uniprot/P32332
+t_1289	SBO:0000252	ODC1	http://identifiers.org/uniprot/Q03028
+t_1290	SBO:0000252	ODC2	http://identifiers.org/uniprot/Q99297
+t_1291	SBO:0000252	OLE1	http://identifiers.org/uniprot/P21147
+t_1292	SBO:0000252	OPI3	http://identifiers.org/uniprot/P05375
+t_1293	SBO:0000252	OPT1	http://identifiers.org/uniprot/P40897
+t_1294	SBO:0000252	ORT1	http://identifiers.org/uniprot/Q12375
+t_1295	SBO:0000252	OSH2	http://identifiers.org/uniprot/Q12451
+t_1296	SBO:0000252	OSH3	http://identifiers.org/uniprot/P38713
+t_1297	SBO:0000252	OSM1	http://identifiers.org/uniprot/P21375
+t_1298	SBO:0000252	PAN5	http://identifiers.org/uniprot/P38787
+t_1299	SBO:0000252	PAN6	http://identifiers.org/uniprot/P40459
+t_1300	SBO:0000252	PCK1	http://identifiers.org/uniprot/P10963
+t_1301	SBO:0000252	PCM1	http://identifiers.org/uniprot/P38628
+t_1302	SBO:0000252	PCT1	http://identifiers.org/uniprot/P13259
+t_1303	SBO:0000252	PDC1	http://identifiers.org/uniprot/P06169
+t_1304	SBO:0000252	PDC5	http://identifiers.org/uniprot/P16467
+t_1305	SBO:0000252	PDC6	http://identifiers.org/uniprot/P26263
+t_1306	SBO:0000252	PDE1	http://identifiers.org/uniprot/P22434
+t_1307	SBO:0000252	PDE2	http://identifiers.org/uniprot/P06776
+t_1308	SBO:0000252	PDH1	http://identifiers.org/uniprot/Q12428
+t_1309	SBO:0000252	PDR11	http://identifiers.org/uniprot/P40550
+t_1310	SBO:0000252	PDX3	http://identifiers.org/uniprot/P38075
+t_1311	SBO:0000252	PET8	http://identifiers.org/uniprot/P38921
+t_1312	SBO:0000252	PET9	http://identifiers.org/uniprot/P18239
+t_1313	SBO:0000252	PFA3	http://identifiers.org/uniprot/P42836
+t_1314	SBO:0000252	PFA4	http://identifiers.org/uniprot/Q12006
+t_1315	SBO:0000252	PFK26	http://identifiers.org/uniprot/P40433
+t_1316	SBO:0000252	PFK27	http://identifiers.org/uniprot/Q12471
+t_1317	SBO:0000252	PGC1	http://identifiers.org/uniprot/Q08959
+t_1318	SBO:0000252	PGI1	http://identifiers.org/uniprot/P12709
+t_1319	SBO:0000252	PGK1	http://identifiers.org/uniprot/P00560
+t_1320	SBO:0000252	PGM1	http://identifiers.org/uniprot/P33401
+t_1321	SBO:0000252	PGM2	http://identifiers.org/uniprot/P37012
+t_1322	SBO:0000252	PGM3	http://identifiers.org/uniprot/Q03262
+t_1323	SBO:0000252	PGS1	http://identifiers.org/uniprot/P25578
+t_1324	SBO:0000252	PGU1	http://identifiers.org/uniprot/P47180
+t_1325	SBO:0000252	PHA2	http://identifiers.org/uniprot/P32452
+t_1326	SBO:0000252	PHO11	http://identifiers.org/uniprot/P35842
+t_1327	SBO:0000252	PHO3	http://identifiers.org/uniprot/P24031
+t_1328	SBO:0000252	PHO5	http://identifiers.org/uniprot/P00635
+t_1329	SBO:0000252	PHO8	http://identifiers.org/uniprot/P11491
+t_1330	SBO:0000252	PHO84	http://identifiers.org/uniprot/P25297
+t_1331	SBO:0000252	PHO87	http://identifiers.org/uniprot/P25360
+t_1332	SBO:0000252	PHO89	http://identifiers.org/uniprot/P38361
+t_1333	SBO:0000252	PHO90	http://identifiers.org/uniprot/P39535
+t_1334	SBO:0000252	PHO91	http://identifiers.org/uniprot/P27514
+t_1335	SBO:0000252	PHS1	http://identifiers.org/uniprot/P40857
+t_1336	SBO:0000252	PIB1	http://identifiers.org/uniprot/Q06651
+t_1337	SBO:0000252	PIC2	http://identifiers.org/uniprot/P40035
+t_1338	SBO:0000252	PIK1	http://identifiers.org/uniprot/P39104
+t_1339	SBO:0000252	PIS1	http://identifiers.org/uniprot/P06197
+t_1340	SBO:0000252	PLB1	http://identifiers.org/uniprot/P39105
+t_1341	SBO:0000252	PLB2	http://identifiers.org/uniprot/Q03674
+t_1342	SBO:0000252	PLB3	http://identifiers.org/uniprot/Q08108
+t_1343	SBO:0000252	PLC1	http://identifiers.org/uniprot/P32383
+t_1344	SBO:0000252	PMI40	http://identifiers.org/uniprot/P29952
+t_1345	SBO:0000252	PMT3	http://identifiers.org/uniprot/P47190
+t_1346	SBO:0000252	PMT4	http://identifiers.org/uniprot/P46971
+t_1347	SBO:0000252	PMT5	http://identifiers.org/uniprot/P52867
+t_1348	SBO:0000252	PNC1	http://identifiers.org/uniprot/P53184
+t_1349	SBO:0000252	PNP1	http://identifiers.org/uniprot/Q05788
+t_1350	SBO:0000252	POS5	http://identifiers.org/uniprot/Q06892
+t_1351	SBO:0000252	POT1	http://identifiers.org/uniprot/P27796
+t_1352	SBO:0000252	POX1	http://identifiers.org/uniprot/P13711
+t_1353	SBO:0000252	PPA2	http://identifiers.org/uniprot/P28239
+t_1354	SBO:0000252	PPT2	http://identifiers.org/uniprot/Q12036
+t_1355	SBO:0000252	PRO1	http://identifiers.org/uniprot/P32264
+t_1356	SBO:0000252	PRO2	http://identifiers.org/uniprot/P54885
+t_1357	SBO:0000252	PRO3	http://identifiers.org/uniprot/P32263
+t_1358	SBO:0000252	protein with CAAX motif at C terminal, X={Leu,Phe}	
+t_1359	SBO:0000252	protein with CAAX motif at C terminal, X={Ser,Cys,Met,Ala}	
+t_1360	SBO:0000252	protein with dicysteine at C-terminal	
+t_1361	SBO:0000252	protein with GPI signal	
+t_1362	SBO:0000252	protein with N-terminal(Met-Glu)	
+t_1363	SBO:0000252	protein with N-terminal(Met-Ile)	
+t_1364	SBO:0000252	protein with N-terminal(Met-Leu)	
+t_1365	SBO:0000252	protein with N-terminal(Met-Phe)	
+t_1366	SBO:0000252	protein with N-terminal(Met-Trp)	
+t_1367	SBO:0000252	PSA1	http://identifiers.org/uniprot/P41940
+t_1368	SBO:0000252	PSD1	http://identifiers.org/uniprot/P39006
+t_1369	SBO:0000252	PSD2	http://identifiers.org/uniprot/P53037
+t_1370	SBO:0000252	PUS1	http://identifiers.org/uniprot/Q12211
+t_1371	SBO:0000252	PUS2	http://identifiers.org/uniprot/P53167
+t_1372	SBO:0000252	PUS4	http://identifiers.org/uniprot/P48567
+t_1373	SBO:0000252	PUT1	http://identifiers.org/uniprot/P09368
+t_1374	SBO:0000252	PUT2	http://identifiers.org/uniprot/P07275
+t_1375	SBO:0000252	PUT4	http://identifiers.org/uniprot/P15380
+t_1376	SBO:0000252	PXA1	http://identifiers.org/uniprot/P41909
+t_1377	SBO:0000252	PYC1	http://identifiers.org/uniprot/P11154
+t_1378	SBO:0000252	PYC2	http://identifiers.org/uniprot/P32327
+t_1379	SBO:0000252	PYK2	http://identifiers.org/uniprot/P52489
+t_1380	SBO:0000252	QNS1	http://identifiers.org/uniprot/P38795
+t_1381	SBO:0000252	QRI1	http://identifiers.org/uniprot/P43123
+t_1382	SBO:0000252	Ras protein with CaaX motif at C terminal, a=aliphatic residue, X=any residue	
+t_1383	SBO:0000252	RBK1	http://identifiers.org/uniprot/P25332
+t_1384	SBO:0000252	RER2	http://identifiers.org/uniprot/P35196
+t_1385	SBO:0000252	RHR2	http://identifiers.org/uniprot/P41277
+t_1386	SBO:0000252	RIB1	http://identifiers.org/uniprot/P38066
+t_1387	SBO:0000252	RIB2	http://identifiers.org/uniprot/Q12362
+t_1388	SBO:0000252	RIB3	http://identifiers.org/uniprot/Q99258
+t_1389	SBO:0000252	RIB4	http://identifiers.org/uniprot/P50861
+t_1390	SBO:0000252	RIB5	http://identifiers.org/uniprot/P38145
+t_1391	SBO:0000252	RIB7	http://identifiers.org/uniprot/P33312
+t_1392	SBO:0000252	RIM2	http://identifiers.org/uniprot/P38127
+t_1393	SBO:0000252	RKI1	http://identifiers.org/uniprot/Q12189
+t_1394	SBO:0000252	RMA1	http://identifiers.org/uniprot/P36001
+t_1395	SBO:0000252	RNR1	http://identifiers.org/uniprot/P21524
+t_1396	SBO:0000252	RNR2	http://identifiers.org/uniprot/P09938
+t_1397	SBO:0000252	RNR3	http://identifiers.org/uniprot/P21672
+t_1398	SBO:0000252	RNR4	http://identifiers.org/uniprot/P49723
+t_1399	SBO:0000252	RPE1	http://identifiers.org/uniprot/P46969
+t_1400	SBO:0000252	SAC1	http://identifiers.org/uniprot/P32368
+t_1401	SBO:0000252	SAH1	http://identifiers.org/uniprot/P39954
+t_1402	SBO:0000252	SAM1	http://identifiers.org/uniprot/P10659
+t_1403	SBO:0000252	SAM2	http://identifiers.org/uniprot/P19358
+t_1404	SBO:0000252	SAM3	http://identifiers.org/uniprot/Q08986
+t_1405	SBO:0000252	SAM4	http://identifiers.org/uniprot/Q08985
+t_1406	SBO:0000252	SCS7	http://identifiers.org/uniprot/Q03529
+t_1407	SBO:0000252	SCT1	http://identifiers.org/uniprot/P32784
+t_1408	SBO:0000252	SDT1	http://identifiers.org/uniprot/P53078
+t_1409	SBO:0000252	SEC53	http://identifiers.org/uniprot/P07283
+t_1410	SBO:0000252	SEC59	http://identifiers.org/uniprot/P20048
+t_1411	SBO:0000252	secretory protein with appropriate seryl or threonyl group	
+t_1412	SBO:0000252	SER1	http://identifiers.org/uniprot/P33330
+t_1413	SBO:0000252	SER2	http://identifiers.org/uniprot/P42941
+t_1414	SBO:0000252	SER3	http://identifiers.org/uniprot/P40054
+t_1415	SBO:0000252	SER33	http://identifiers.org/uniprot/P40510
+t_1416	SBO:0000252	SES1	http://identifiers.org/uniprot/P07284
+t_1417	SBO:0000252	SFA1	http://identifiers.org/uniprot/P32771
+t_1418	SBO:0000252	SFC1	http://identifiers.org/uniprot/P33303
+t_1419	SBO:0000252	SGA1	http://identifiers.org/uniprot/P08019
+t_1420	SBO:0000252	SHM1	http://identifiers.org/uniprot/P37292
+t_1421	SBO:0000252	SHM2	http://identifiers.org/uniprot/P37291
+t_1422	SBO:0000252	SIR2	http://identifiers.org/uniprot/P06700
+t_1423	SBO:0000252	SKN1	http://identifiers.org/uniprot/P33336
+t_1424	SBO:0000252	SLC1	http://identifiers.org/uniprot/P33333
+t_1425	SBO:0000252	SLM1	http://identifiers.org/uniprot/P40485
+t_1426	SBO:0000252	SLM2	http://identifiers.org/uniprot/P53955
+t_1427	SBO:0000252	SLM5	http://identifiers.org/uniprot/P25345
+t_1428	SBO:0000252	SNC1	http://identifiers.org/uniprot/P31109
+t_1429	SBO:0000252	SOL3	http://identifiers.org/uniprot/P38858
+t_1430	SBO:0000252	SOL4	http://identifiers.org/uniprot/P53315
+t_1431	SBO:0000252	SOR1	http://identifiers.org/uniprot/P35497
+t_1432	SBO:0000252	SPE1	http://identifiers.org/uniprot/P08432
+t_1433	SBO:0000252	SPE2	http://identifiers.org/uniprot/P21182
+t_1434	SBO:0000252	SPE3	http://identifiers.org/uniprot/Q12074
+t_1435	SBO:0000252	SPE4	http://identifiers.org/uniprot/Q12455
+t_1436	SBO:0000252	SPO14	http://identifiers.org/uniprot/P36126
+t_1437	SBO:0000252	SPR1	http://identifiers.org/uniprot/P32603
+t_1438	SBO:0000252	SRT1	http://identifiers.org/uniprot/Q03175
+t_1439	SBO:0000252	SSU1	http://identifiers.org/uniprot/P41930
+t_1440	SBO:0000252	STE14	http://identifiers.org/uniprot/P32584
+t_1441	SBO:0000252	STE24	http://identifiers.org/uniprot/P47154
+t_1442	SBO:0000252	STL1	http://identifiers.org/uniprot/P39932
+t_1443	SBO:0000252	STR2	http://identifiers.org/uniprot/P47164
+t_1444	SBO:0000252	STR3	http://identifiers.org/uniprot/P53101
+t_1445	SBO:0000252	STT4	http://identifiers.org/uniprot/P37297
+t_1446	SBO:0000252	SUC2	http://identifiers.org/uniprot/P00724
+t_1447	SBO:0000252	SUL1	http://identifiers.org/uniprot/P38359
+t_1448	SBO:0000252	SUL2	http://identifiers.org/uniprot/Q12325
+t_1449	SBO:0000252	SUR2	http://identifiers.org/uniprot/P38992
+t_1450	SBO:0000252	SWF1	http://identifiers.org/uniprot/Q04629
+t_1451	SBO:0000252	SWH1	http://identifiers.org/uniprot/P35845
+t_1452	SBO:0000252	SYN8	http://identifiers.org/uniprot/P31377
+t_1453	SBO:0000252	TAL1	http://identifiers.org/uniprot/P15019
+t_1454	SBO:0000252	TAT1	http://identifiers.org/uniprot/P38085
+t_1455	SBO:0000252	TAT2	http://identifiers.org/uniprot/P38967
+t_1456	SBO:0000252	TAZ1	http://identifiers.org/uniprot/Q06510
+t_1457	SBO:0000252	TDH1	http://identifiers.org/uniprot/P00360
+t_1458	SBO:0000252	TDH2	http://identifiers.org/uniprot/P00358
+t_1459	SBO:0000252	TDH3	http://identifiers.org/uniprot/P00359
+t_1460	SBO:0000252	TES1	http://identifiers.org/uniprot/P41903
+t_1461	SBO:0000252	TGL1	http://identifiers.org/uniprot/P34163
+t_1462	SBO:0000252	TGL2	http://identifiers.org/uniprot/P54857
+t_1463	SBO:0000252	TGL3	http://identifiers.org/uniprot/P40308
+t_1464	SBO:0000252	TGL4	http://identifiers.org/uniprot/P36165
+t_1465	SBO:0000252	TGL5	http://identifiers.org/uniprot/Q12043
+t_1466	SBO:0000252	THI20	http://identifiers.org/uniprot/Q08224
+t_1467	SBO:0000252	THI21	http://identifiers.org/uniprot/Q08975
+t_1468	SBO:0000252	THI22	http://identifiers.org/uniprot/Q06490
+t_1469	SBO:0000252	THI3	http://identifiers.org/uniprot/Q07471
+t_1470	SBO:0000252	THI6	http://identifiers.org/uniprot/P41835
+t_1471	SBO:0000252	THI7	http://identifiers.org/uniprot/Q05998
+t_1472	SBO:0000252	THI72	http://identifiers.org/uniprot/Q12113
+t_1473	SBO:0000252	THI80	http://identifiers.org/uniprot/P35202
+t_1474	SBO:0000252	THR1	http://identifiers.org/uniprot/P17423
+t_1475	SBO:0000252	THR4	http://identifiers.org/uniprot/P16120
+t_1476	SBO:0000252	THS1	http://identifiers.org/uniprot/P04801
+t_1477	SBO:0000252	TKL1	http://identifiers.org/uniprot/P23254
+t_1478	SBO:0000252	TKL2	http://identifiers.org/uniprot/P33315
+t_1479	SBO:0000252	TLG1	http://identifiers.org/uniprot/Q03322
+t_1480	SBO:0000252	TMT1	http://identifiers.org/uniprot/P32643
+t_1481	SBO:0000252	TNA1	http://identifiers.org/uniprot/P53322
+t_1482	SBO:0000252	TPC1	http://identifiers.org/uniprot/P53257
+t_1483	SBO:0000252	TPI1	http://identifiers.org/uniprot/P00942
+t_1484	SBO:0000252	TPN1	http://identifiers.org/uniprot/P53099
+t_1485	SBO:0000252	TPO1	http://identifiers.org/uniprot/Q07824
+t_1486	SBO:0000252	TPO2	http://identifiers.org/uniprot/P53283
+t_1487	SBO:0000252	TPO3	http://identifiers.org/uniprot/Q06451
+t_1488	SBO:0000252	TPO4	http://identifiers.org/uniprot/Q12256
+t_1489	SBO:0000252	TPO5	http://identifiers.org/uniprot/P36029
+t_1490	SBO:0000252	TRK1	http://identifiers.org/uniprot/P12685
+t_1491	SBO:0000252	TRP1	http://identifiers.org/uniprot/P00912
+t_1492	SBO:0000252	TRP3	http://identifiers.org/uniprot/P00937
+t_1493	SBO:0000252	TRP4	http://identifiers.org/uniprot/P07285
+t_1494	SBO:0000252	TRP5	http://identifiers.org/uniprot/P00931
+t_1495	SBO:0000252	TRR1	http://identifiers.org/uniprot/P29509
+t_1496	SBO:0000252	TRX1	chebi:15967
+t_1497	SBO:0000252	TRX2	http://identifiers.org/uniprot/P22803
+t_1498	SBO:0000252	TSC10	http://identifiers.org/uniprot/P38342
+t_1499	SBO:0000252	TYR1	http://identifiers.org/uniprot/P20049
+t_1500	SBO:0000252	TYS1	http://identifiers.org/uniprot/P36421
+t_1501	SBO:0000252	UGA1	http://identifiers.org/uniprot/P17649
+t_1502	SBO:0000252	UGA2	http://identifiers.org/uniprot/P38067
+t_1503	SBO:0000252	UGA4	http://identifiers.org/uniprot/P32837
+t_1504	SBO:0000252	UGP1	http://identifiers.org/uniprot/P32861
+t_1505	SBO:0000252	URA1	http://identifiers.org/uniprot/P28272
+t_1506	SBO:0000252	URA10	http://identifiers.org/uniprot/P30402
+t_1507	SBO:0000252	URA2	http://identifiers.org/uniprot/P07259
+t_1508	SBO:0000252	URA3	http://identifiers.org/uniprot/P03962
+t_1509	SBO:0000252	URA4	http://identifiers.org/uniprot/P20051
+t_1510	SBO:0000252	URA5	http://identifiers.org/uniprot/P13298
+t_1511	SBO:0000252	URA6	http://identifiers.org/uniprot/P15700
+t_1512	SBO:0000252	URA7	http://identifiers.org/uniprot/P28274
+t_1513	SBO:0000252	URA8	http://identifiers.org/uniprot/P38627
+t_1514	SBO:0000252	URH1	http://identifiers.org/uniprot/Q04179
+t_1515	SBO:0000252	URK1	http://identifiers.org/uniprot/P27515
+t_1516	SBO:0000252	UTR1	http://identifiers.org/uniprot/P21373
+t_1517	SBO:0000252	VAC8	http://identifiers.org/uniprot/P39968
+t_1518	SBO:0000252	VAS1	http://identifiers.org/uniprot/P07806
+t_1519	SBO:0000252	VBA1	http://identifiers.org/uniprot/Q04301
+t_1520	SBO:0000252	VBA2	http://identifiers.org/uniprot/P38358
+t_1521	SBO:0000252	VBA3	http://identifiers.org/uniprot/P25594
+t_1522	SBO:0000252	VHT1	http://identifiers.org/uniprot/P53241
+t_1523	SBO:0000252	VIP1	http://identifiers.org/uniprot/Q06685
+t_1524	SBO:0000252	VPS34	http://identifiers.org/uniprot/P22543
+t_1525	SBO:0000252	VRG4	http://identifiers.org/uniprot/P40107
+t_1526	SBO:0000252	WRS1	http://identifiers.org/uniprot/Q12109
+t_1527	SBO:0000252	XKS1	http://identifiers.org/uniprot/P42826
+t_1528	SBO:0000252	XPT1	http://identifiers.org/uniprot/P47165
+t_1529	SBO:0000252	XYL2	http://identifiers.org/uniprot/Q07993
+t_1530	SBO:0000252	YAT1	http://identifiers.org/uniprot/P80235
+t_1531	SBO:0000252	YAT2	http://identifiers.org/uniprot/P40017
+t_1532	SBO:0000252	YBT1	http://identifiers.org/uniprot/P32386
+t_1533	SBO:0000252	YCF1	http://identifiers.org/uniprot/P39109
+t_1534	SBO:0000252	YDC1	http://identifiers.org/uniprot/Q02896
+t_1535	SBO:0000252	YDR341C	http://identifiers.org/uniprot/Q05506
+t_1536	SBO:0000252	YEA6	http://identifiers.org/uniprot/P39953
+t_1537	SBO:0000252	YEF1	http://identifiers.org/uniprot/P32622
+t_1538	SBO:0000252	YEH1	http://identifiers.org/uniprot/Q07804
+t_1539	SBO:0000252	YEH2	http://identifiers.org/uniprot/Q07950
+t_1540	SBO:0000252	YEL047C	http://identifiers.org/uniprot/P32614
+t_1541	SBO:0000252	YGR012W	http://identifiers.org/uniprot/P53206
+t_1542	SBO:0000252	YHM2	http://identifiers.org/uniprot/Q04013
+t_1543	SBO:0000252	YHR020W	http://identifiers.org/uniprot/P38708
+t_1544	SBO:0000252	YIA6	http://identifiers.org/uniprot/P40556
+t_1545	SBO:0000252	YJL068C	http://identifiers.org/uniprot/P40363
+t_1546	SBO:0000252	YLR043C disulphide	chebi:18191
+t_1547	SBO:0000252	YLR118C	http://identifiers.org/uniprot/Q12354
+t_1548	SBO:0000252	YMR1	http://identifiers.org/uniprot/P47147
+t_1549	SBO:0000252	YMR226C	http://identifiers.org/uniprot/Q05016
+t_1550	SBO:0000252	YND1	http://identifiers.org/uniprot/P40009
+t_1551	SBO:0000252	YNK1	http://identifiers.org/uniprot/P36010
+t_1552	SBO:0000252	YNL247W	http://identifiers.org/uniprot/P53852
+t_1553	SBO:0000252	YPC1	http://identifiers.org/uniprot/P38298
+t_1554	SBO:0000252	YPR1	http://identifiers.org/uniprot/Q12458
+t_1555	SBO:0000252	YSR3	http://identifiers.org/uniprot/P23501
+t_1556	SBO:0000252	YUR1	http://identifiers.org/uniprot/P26725
+t_1557	SBO:0000252	ZWF1	http://identifiers.org/uniprot/P11412
+t_1558	SBO:0000297	1D-myo-inositol 4,5-bisphosphate:AVO1:AVO2:BIT61:LST8:SLM1:TOR2:TSC11	
+t_1559	SBO:0000297	1D-myo-inositol 4,5-bisphosphate:AVO1:AVO2:BIT61:LST8:SLM2:TOR2:TSC11	
+t_1560	SBO:0000297	1D-myo-inositol 4,5-bisphosphate:SLM1	
+t_1561	SBO:0000297	1D-myo-inositol 4,5-bisphosphate:SLM2	
+t_1562	SBO:0000297	ACB1:ACC1:FAS1:FAS2	
+t_1563	SBO:0000297	acetylated protein with terminal(Met-Glu)	
+t_1564	SBO:0000297	acetylated protein with terminal(Met-Ile)	
+t_1565	SBO:0000297	acetylated protein with terminal(Met-Leu)	
+t_1566	SBO:0000297	acetylated protein with terminal(Met-Phe)	
+t_1567	SBO:0000297	acetylated protein with terminal(Met-Trp)	
+t_1568	SBO:0000297	ACP1:CEM1:ETR1:HTD2:MCT1:OAR1	
+t_1569	SBO:0000297	ADI1:UTR4	
+t_1570	SBO:0000297	AHP1:TRX1	
+t_1571	SBO:0000297	AHP1:TRX2	
+t_1572	SBO:0000297	ARH1:COX15:YAH1	
+t_1573	SBO:0000297	ATP1:ATP14:ATP15:ATP16:ATP17:ATP18:ATP2:ATP20:ATP3:ATP4:ATP5:ATP6:ATP7:ATP8:OLI1	
+t_1574	SBO:0000297	ATP1:ATP14:ATP15:ATP16:ATP17:ATP18:ATP2:ATP3:ATP4:ATP5:ATP6:ATP7:ATP8:OLI1:TIM11	
+t_1575	SBO:0000297	AUR1:KEI1	
+t_1576	SBO:0000297	AVO1:AVO2:BIT61:LST8:TOR2:TSC11	
+t_1577	SBO:0000297	CAT5:COQ3:COQ4:COQ5:COQ6:COQ8:COQ9	
+t_1578	SBO:0000297	CBR1:CYB5:ERG1	
+t_1579	SBO:0000297	CBR1:CYB5:ERG11	
+t_1580	SBO:0000297	CBR1:CYB5:ERG5	
+t_1581	SBO:0000297	CCP1:CYC1	
+t_1582	SBO:0000297	CCP1:CYC7	
+t_1583	SBO:0000297	CDC43:RAM2	
+t_1584	SBO:0000297	COB:COR1:CYC1:CYT1:QCR10:QCR2:QCR6:QCR7:QCR8:QCR9:RIP1	
+t_1585	SBO:0000297	COB:COR1:CYC7:CYT1:QCR10:QCR2:QCR6:QCR7:QCR8:QCR9:RIP1	
+t_1586	SBO:0000297	COX1:COX12:COX13:COX2:COX3:COX4:COX5A:COX6:COX7:COX8:COX9:CYC1	
+t_1587	SBO:0000297	COX1:COX12:COX13:COX2:COX3:COX4:COX5A:COX6:COX7:COX8:COX9:CYC7	
+t_1588	SBO:0000297	COX1:COX12:COX13:COX2:COX3:COX4:COX5B:COX6:COX7:COX8:COX9:CYC1	
+t_1589	SBO:0000297	COX1:COX12:COX13:COX2:COX3:COX4:COX5B:COX6:COX7:COX8:COX9:CYC7	
+t_1590	SBO:0000297	CPA1:CPA2	
+t_1591	SBO:0000297	CSG2:CSH1	
+t_1592	SBO:0000297	CSG2:SUR1	
+t_1593	SBO:0000297	CYB2:CYC1	
+t_1594	SBO:0000297	CYB2:CYC7	
+t_1595	SBO:0000297	CYB5:ERG11:MCR1	
+t_1596	SBO:0000297	CYB5:ERG1:MCR1	
+t_1597	SBO:0000297	CYB5:ERG5:MCR1	
+t_1598	SBO:0000297	CYC1:DLD1	
+t_1599	SBO:0000297	CYC1:DLD2	
+t_1600	SBO:0000297	CYC1:DLD3	
+t_1601	SBO:0000297	CYC7:DLD1	
+t_1602	SBO:0000297	CYC7:DLD2	
+t_1603	SBO:0000297	CYC7:DLD3	
+t_1604	SBO:0000297	DCI1:ECI1:FOX2:POT1:POX1:SPS19	
+t_1605	SBO:0000297	DCI1:FOX2:POT1:POX1	
+t_1606	SBO:0000297	DCI1:FOX2:POT1:POX1:SPS19	
+t_1607	SBO:0000297	DIT2:NCP1	
+t_1608	SBO:0000297	DOT5:TRX1	
+t_1609	SBO:0000297	DOT5:TRX2	
+t_1610	SBO:0000297	ECI1:FOX2:POT1:POX1	
+t_1611	SBO:0000297	ECI1:FOX2:POT1:POX1:SPS19	
+t_1612	SBO:0000297	ERF2:SHR5	
+t_1613	SBO:0000297	ERG11:NCP1	
+t_1614	SBO:0000297	ERG1:NCP1	
+t_1615	SBO:0000297	ERG5:NCP1	
+t_1616	SBO:0000297	farnesylated protein with AAX motif at C terminal, X={Ser,Cys,Met,Ala}	
+t_1617	SBO:0000297	farnesylated protein with hydroxyl C-terminal	
+t_1618	SBO:0000297	farnesylated protein with methylated C-terminal	
+t_1619	SBO:0000297	FAS1:FAS2	
+t_1620	SBO:0000297	FEN1:SUR4:TSC13	
+t_1621	SBO:0000297	FOX2:POT1:POX1	
+t_1622	SBO:0000297	FRS1:FRS2	
+t_1623	SBO:0000297	GAA1:GAB1:GPI16:GPI17:GPI8	
+t_1624	SBO:0000297	GCV1:GCV2:GCV3:LPD1	
+t_1625	SBO:0000297	GCV1:GCV2:GCV3:PDA1:PDB1	
+t_1626	SBO:0000297	geranylgeranylated protein with AAX motif at C terminal, X={Leu,Phe}	
+t_1627	SBO:0000297	geranylgeranylated protein with hydroxyl C-terminal	
+t_1628	SBO:0000297	geranylgeranylated protein with methylated C-terminal	
+t_1629	SBO:0000297	GLG1:GSY1	
+t_1630	SBO:0000297	GLG1:GSY2	
+t_1631	SBO:0000297	GLG2:GSY1	
+t_1632	SBO:0000297	GLG2:GSY2	
+t_1633	SBO:0000297	GLR1:GRX1	
+t_1634	SBO:0000297	GLR1:GRX2	
+t_1635	SBO:0000297	GLR1:GRX3	
+t_1636	SBO:0000297	GLR1:GRX4	
+t_1637	SBO:0000297	GLR1:GRX5	
+t_1638	SBO:0000297	GLR1:TRX3	
+t_1639	SBO:0000297	GPI14:PBN1	
+t_1640	SBO:0000297	HES1:oxysterol	
+t_1641	SBO:0000297	IDH1:IDH2	
+t_1642	SBO:0000297	ILV2:ILV6	
+t_1643	SBO:0000297	KES1:oxysterol	
+t_1644	SBO:0000297	KGD1:KGD2:LPD1	
+t_1645	SBO:0000297	LAC1:LIP1	
+t_1646	SBO:0000297	LAG1:LIP1	
+t_1647	SBO:0000297	LAT1:LPD1:PDA1:PDB1:PDX1	
+t_1648	SBO:0000297	LCB1:LCB2	
+t_1649	SBO:0000297	LCB1:LCB2:TSC3	
+t_1650	SBO:0000297	LSC1:LSC2	
+t_1651	SBO:0000297	LYS2:LYS5	
+t_1652	SBO:0000297	MAK10:MAK3:MAK31	
+t_1653	SBO:0000297	MET16:TRX1	
+t_1654	SBO:0000297	MET16:TRX2	
+t_1655	SBO:0000297	MEU1:PNP1:URH1	
+t_1656	SBO:0000297	O-mannosylated protein	
+t_1657	SBO:0000297	OSH2:oxysterol	
+t_1658	SBO:0000297	OSH3:oxysterol	
+t_1659	SBO:0000297	palmitoylated protein	
+t_1660	SBO:0000297	palmitoylated Ras protein	
+t_1661	SBO:0000297	palmitoylated YAL014C	
+t_1662	SBO:0000297	palmitoylated YAL030W	
+t_1663	SBO:0000297	palmitoylated YBR023C	
+t_1664	SBO:0000297	palmitoylated YDR468C	
+t_1665	SBO:0000297	palmitoylated YEL013W	
+t_1666	SBO:0000297	PFK1:PFK2	
+t_1667	SBO:0000297	PIB1:phosphatidylinositol 3-phosphate	
+t_1668	SBO:0000297	PMA1:PMP1:PMP2	
+t_1669	SBO:0000297	PMA2:PMP1:PMP2	
+t_1670	SBO:0000297	PMT1:PMT2	
+t_1671	SBO:0000297	PRS1:PRS3	
+t_1672	SBO:0000297	PRS2:PRS5	
+t_1673	SBO:0000297	PRS4:PRS5	
+t_1674	SBO:0000297	PRX1:TRX3	
+t_1675	SBO:0000297	PXA1:PXA2	
+t_1676	SBO:0000297	RAM1:RAM2	
+t_1677	SBO:0000297	RNR1:RNR2	
+t_1678	SBO:0000297	RNR1:RNR4	
+t_1679	SBO:0000297	RNR2:RNR3	
+t_1680	SBO:0000297	RNR3:RNR4	
+t_1681	SBO:0000297	SDH1:SDH2:SDH3:SDH4	
+t_1682	SBO:0000297	SDH2:SDH3:SDH4:YJL045W	
+t_1683	SBO:0000297	STV1:VMA1:VMA10:VMA11:VMA13:VMA16:VMA2:VMA3:VMA4:VMA5:VMA6:VMA7:VMA8	
+t_1684	SBO:0000297	SWH1:oxysterol	
+t_1685	SBO:0000297	TPS1:TPS2:TPS3	
+t_1686	SBO:0000297	TPS1:TPS2:TSL1	
+t_1687	SBO:0000297	TRP2:TRP3	
+t_1688	SBO:0000297	TRR1:TRX1	
+t_1689	SBO:0000297	TRR1:TRX2	
+t_1690	SBO:0000297	TRR2:TRX3	
+t_1691	SBO:0000297	TRX1:TSA2	
+t_1692	SBO:0000297	TRX2:TSA2	
+t_1693	SBO:0000297	VMA1:VMA10:VMA11:VMA13:VMA16:VMA2:VMA3:VMA4:VMA5:VMA6:VMA7:VMA8:VPH1	
+t_1694	SBO:0000297	YHR005C, myristoylated at G2	
+t_1695	SBO:0000297	YHR005C, myristoylated at G2, palmitoylated at C3	

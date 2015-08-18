@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+   <session-factory>
+   <property name="hibernate.dialect">
+      org.hibernate.dialect.MySQLDialect
+   </property>
+   <property name="hibernate.connection.driver_class">
+      com.mysql.jdbc.Driver
+   </property>
+   <property name="show_sql">false</property>
+
+   <!-- Assume test is the database name -->
+   <property name="hibernate.connection.url">
+      jdbc:mysql://localhost/seed
+   </property>
+   <property name="hibernate.connection.username">
+      root
+   </property>
+   <property name="hibernate.connection.password"></property>
+   <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+   <mapping class="edu.uminho.biosynth.core.components.biodb.seed.SeedMetaboliteEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundStructureEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundPkEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCueEntity"></mapping>
+   <mapping class="edu.uminho.biosynth.core.components.biodb.seed.components.SeedCompoundCrossReferenceEntity"></mapping>
+   
+</session-factory>
+</hibernate-configuration>

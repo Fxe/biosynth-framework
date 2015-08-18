@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.username">fliu</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.url">jdbc:postgresql://193.136.19.72:5432/hibernate_test</property>
+        <property name="hibernate.default_catalog">hibernate_test</property>
+        <property name="hibernate.default_schema">biosynth_integration</property>
+        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+        
+        <!-- 
+        <property name="hibernate.hbm2ddl.auto">update</property> -->
+        
+        <property name="show_sql">true</property>
+
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.biocyc.BioCycMetaboliteEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.biocyc.components.BioCycMetaboliteCrossReferenceEntity"></mapping>
+	    <!--  
+	    <mapping class="edu.uminho.biosynth.core.components.biocyc.BioCycReactionEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionLeftEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biocyc.components.BioCycReactionRightEntity"></mapping> -->
+	
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.KeggMetaboliteEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.components.KeggMetaboliteCrossReferenceEntity"></mapping>
+	   
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.kegg.KeggReactionEntity"></mapping>
+	   
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.bigg.BiggMetaboliteEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.bigg.components.BiggMetaboliteCrossReferenceEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.bigg.BiggReactionEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.bigg.components.BiggReactionCrossReferenceEntity"></mapping>
+	   
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.MnxMetaboliteEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.components.MnxMetaboliteCrossReferenceEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.MnxReactionEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionProductEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionReactantEntity"></mapping>
+	    <mapping class="edu.uminho.biosynth.core.components.biodb.mnx.components.MnxReactionCrossReferenceEntity"></mapping>
+    </session-factory>
+</hibernate-configuration>

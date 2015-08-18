@@ -1,0 +1,9 @@
+abbreviation	name	formula	charge	compartment	kegg_id	cas_id	internal_id	found in: 1) E. coli iJR904; 2) H. sapiens Recon 1; 3) H. pylori iIT341; 4) P. putida iJN746; 5) E. coli iAF1260; 6) S. cerevisiae iND750; 7) S. aureus iSB619; 8) E. coli textbook; 9) M. barkeri iAF692; 10) M. tuberculosis iNJ661; 	
+11	a b c	C1H1	-3	Cy	C12345		35542	1,10,2,3,4,5,6,7,8,9	
+2bl	a b c	C1H1	-3	ppp	C00000	0-0-0	34	1	
+	1,2-a-c-b-d (d, n:0)	X	-3	c-p		1-1-1	234	1,10	
+aA	''''	Y	-3	c-p, e-n, k	G12345	11-11-11		2,4,6,8,10	
+Aa	(aa:aa)	Zn	-3	C		None	2344444	1,10,2,3,4,5,6,7,8,9	
+a-a	(aa':aa')	Ze8S8X	-3	K		none	11111111	1,10,2,3,4,5,6,7,8,9	
+11	(aa':aa')-(-:-)	Ze8S8X	-3	K		SE: KKK	11111111	1,10,2,3,4,5,6,7,8,9	
+						

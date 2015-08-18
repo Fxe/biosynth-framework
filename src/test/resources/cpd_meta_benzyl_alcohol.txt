@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ptools-xml ptools-version='17.5' xml:base='http://BioCyc.org/getxml?META:BENZYL-ALCOHOL'>
+  <metadata>
+    <url>http://BioCyc.org/</url>
+    <service_name>getxml</service_name>
+    <query>META:BENZYL-ALCOHOL</query>
+    <num_results>1</num_results>
+    <PGDB orgid='META' version='17.5'>
+      <species datatype='string'>MetaCyc</species>
+    </PGDB>
+  </metadata>
+  <Compound ID='META:BENZYL-ALCOHOL' orgid='META' frameid='BENZYL-ALCOHOL' detail='full'>
+    <parent>
+      <Compound resource='getxml?META:Alcohols' orgid='META' frameid='Alcohols' class='true'/>
+    </parent>
+    <parent>
+      <Compound resource='getxml?META:Aromatics' orgid='META' frameid='Aromatics' class='true'/>
+    </parent>
+    <cml>
+      <molecule id='BENZYL-ALCOHOL' title='benzyl+alcohol' formalCharge='0'>
+        <atomArray>
+          <atom id='BENZYL-ALCOHOL-atom1' elementType='C' x2='2896.0' y2='744.0'/>
+          <atom id='BENZYL-ALCOHOL-atom2' elementType='C' x2='2188.0' y2='327.0'/>
+          <atom id='BENZYL-ALCOHOL-atom3' elementType='C' x2='3613.0' y2='327.0'/>
+          <atom id='BENZYL-ALCOHOL-atom4' elementType='C' x2='2188.0' y2='-499.0'/>
+          <atom id='BENZYL-ALCOHOL-atom5' elementType='C' x2='3613.0' y2='-499.0'/>
+          <atom id='BENZYL-ALCOHOL-atom6' elementType='C' x2='2894.0' y2='-1725.0'/>
+          <atom id='BENZYL-ALCOHOL-atom7' elementType='C' x2='2896.0' y2='-908.0'/>
+          <atom id='BENZYL-ALCOHOL-atom8' elementType='O' x2='3600.0' y2='-2136.0'/>
+        </atomArray>
+        <bondArray>
+          <bond id='BENZYL-ALCOHOL-bond1' atomRefs='BENZYL-ALCOHOL-atom6 BENZYL-ALCOHOL-atom8' order='1'/>
+          <bond id='BENZYL-ALCOHOL-bond2' atomRefs='BENZYL-ALCOHOL-atom7 BENZYL-ALCOHOL-atom6' order='1'/>
+          <bond id='BENZYL-ALCOHOL-bond3' atomRefs='BENZYL-ALCOHOL-atom7 BENZYL-ALCOHOL-atom5' order='2'/>
+          <bond id='BENZYL-ALCOHOL-bond4' atomRefs='BENZYL-ALCOHOL-atom5 BENZYL-ALCOHOL-atom3' order='1'/>
+          <bond id='BENZYL-ALCOHOL-bond5' atomRefs='BENZYL-ALCOHOL-atom3 BENZYL-ALCOHOL-atom1' order='2'/>
+          <bond id='BENZYL-ALCOHOL-bond6' atomRefs='BENZYL-ALCOHOL-atom1 BENZYL-ALCOHOL-atom2' order='1'/>
+          <bond id='BENZYL-ALCOHOL-bond7' atomRefs='BENZYL-ALCOHOL-atom2 BENZYL-ALCOHOL-atom4' order='2'/>
+          <bond id='BENZYL-ALCOHOL-bond8' atomRefs='BENZYL-ALCOHOL-atom4 BENZYL-ALCOHOL-atom7' order='1'/>
+        </bondArray>
+        <formula concise='C 7 H 8 O 1'/>
+        <float title='molecularWeight' units='g/mol'>108.14</float>
+        <string title='smiles'>C(C1(C=CC=CC=1))O</string>
+      </molecule>
+    </cml>
+    <inchi datatype='string'>InChI=1S/C7H8O/c8-6-7-4-2-1-3-5-7/h1-5,8H,6H2</inchi>
+    <dblink>
+      <dblink-db>CHEMSPIDER</dblink-db>
+      <dblink-oid>13276106</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.chemspider.com/13276106</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>PUBCHEM</dblink-db>
+      <dblink-oid>244</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=244</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>LIGAND-CPD</dblink-db>
+      <dblink-oid>C00556</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.genome.ad.jp/dbget-bin/www_bget?C00556</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>CHEBI</dblink-db>
+      <dblink-oid>17987</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+      <dblink-URL>http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17987</dblink-URL>
+    </dblink>
+    <dblink>
+      <dblink-db>CAS</dblink-db>
+      <dblink-oid>100-51-6</dblink-oid>
+      <dblink-relationship>unification</dblink-relationship>
+    </dblink>
+    <synonym datatype='string'>&amp;alpha;-hydroxytoluene</synonym>
+    <synonym datatype='string'>benzenemethanol</synonym>
+    <synonym datatype='string'>phenylmethanol</synonym>
+    <synonym datatype='string'>phenylcarbinol</synonym>
+    <synonym datatype='string'>hydroxymethylbenzene</synonym>
+    <molecular-weight datatype='float' units='Daltons'>108.14</molecular-weight>
+    <regulates>
+      <Regulation ID='META:REG0-7569' orgid='META' frameid='REG0-7569' detail='low'>
+        <parent>
+          <Regulation resource='getxml?META:Regulation-of-Enzyme-Activity' orgid='META' frameid='Regulation-of-Enzyme-Activity' class='true'/>
+        </parent>
+        <regulator>
+          <Compound resource='#META:BENZYL-ALCOHOL' orgid='META' frameid='BENZYL-ALCOHOL'/>
+        </regulator>
+        <regulated-entity>
+          <Enzymatic-Reaction ID='META:PHES-ENZRXN' orgid='META' frameid='PHES-ENZRXN' detail='low'>
+            <enzyme>
+              <Protein resource='getxml?META:PHES-CPLX' orgid='META' frameid='PHES-CPLX'/>
+            </enzyme>
+            <reaction>
+              <Reaction resource='getxml?META:PHENYLALANINE--TRNA-LIGASE-RXN' orgid='META' frameid='PHENYLALANINE--TRNA-LIGASE-RXN'/>
+            </reaction>
+            <synonym datatype='string'>PheRS</synonym>
+            <common-name datatype='string'>phenylalanyl-tRNA synthetase</common-name>
+          </Enzymatic-Reaction>
+        </regulated-entity>
+        <mode datatype='string'>-</mode>
+      </Regulation>
+      <Regulation ID='META:REG-12323' orgid='META' frameid='REG-12323' detail='low'>
+        <parent>
+          <Regulation resource='getxml?META:Regulation-of-Enzyme-Activity' orgid='META' frameid='Regulation-of-Enzyme-Activity' class='true'/>
+        </parent>
+        <regulator>
+          <Compound resource='#META:BENZYL-ALCOHOL' orgid='META' frameid='BENZYL-ALCOHOL'/>
+        </regulator>
+        <regulated-entity>
+          <Enzymatic-Reaction ID='META:ENZRXN-15320' orgid='META' frameid='ENZRXN-15320' detail='low'>
+            <enzyme>
+              <Protein resource='getxml?META:MONOMER-14144' orgid='META' frameid='MONOMER-14144'/>
+            </enzyme>
+            <reaction>
+              <Reaction resource='getxml?META:MANDELONITRILE-LYASE-RXN' orgid='META' frameid='MANDELONITRILE-LYASE-RXN'/>
+            </reaction>
+            <common-name datatype='string'>mandelonitrile lyase</common-name>
+          </Enzymatic-Reaction>
+        </regulated-entity>
+        <mode datatype='string'>-</mode>
+      </Regulation>
+      <Regulation ID='META:REG-10632' orgid='META' frameid='REG-10632' detail='low'>
+        <parent>
+          <Regulation resource='getxml?META:Regulation-of-Enzyme-Activity' orgid='META' frameid='Regulation-of-Enzyme-Activity' class='true'/>
+        </parent>
+        <regulator>
+          <Compound resource='#META:BENZYL-ALCOHOL' orgid='META' frameid='BENZYL-ALCOHOL'/>
+        </regulator>
+        <regulated-entity>
+          <Enzymatic-Reaction ID='META:ENZRXN-964' orgid='META' frameid='ENZRXN-964' detail='low'>
+            <enzyme>
+              <Protein resource='getxml?META:CPLX-725' orgid='META' frameid='CPLX-725'/>
+            </enzyme>
+            <reaction>
+              <Reaction resource='getxml?META:RXN-863' orgid='META' frameid='RXN-863'/>
+            </reaction>
+            <synonym datatype='string'>BSS</synonym>
+            <common-name datatype='string'>benzylsuccinate synthase</common-name>
+          </Enzymatic-Reaction>
+        </regulated-entity>
+        <mode datatype='string'>-</mode>
+      </Regulation>
+    </regulates>
+    <appears-in-right-side-of>
+      <Reaction resource='getxml?META:RXN-13696' orgid='META' frameid='RXN-13696'/>
+      <Reaction resource='getxml?META:RXN-13693' orgid='META' frameid='RXN-13693'/>
+      <Reaction resource='getxml?META:RXN-11272' orgid='META' frameid='RXN-11272'/>
+      <Reaction resource='getxml?META:N-BENZYLOXYCARBONYLGLYCINE-HYDROLASE-RXN' orgid='META' frameid='N-BENZYLOXYCARBONYLGLYCINE-HYDROLASE-RXN'/>
+      <Reaction resource='getxml?META:3.5.1.64-RXN' orgid='META' frameid='3.5.1.64-RXN'/>
+      <Reaction resource='getxml?META:CETRAXATE-BENZYLESTERASE-RXN' orgid='META' frameid='CETRAXATE-BENZYLESTERASE-RXN'/>
+      <Reaction resource='getxml?META:TOLUENE-SIDE-CHAIN-MONOOXYGENASE-RXN' orgid='META' frameid='TOLUENE-SIDE-CHAIN-MONOOXYGENASE-RXN'/>
+    </appears-in-right-side-of>
+    <appears-in-left-side-of>
+      <Reaction resource='getxml?META:RXN-6762' orgid='META' frameid='RXN-6762'/>
+      <Reaction resource='getxml?META:RXN-6724' orgid='META' frameid='RXN-6724'/>
+      <Reaction resource='getxml?META:RXN-12256' orgid='META' frameid='RXN-12256'/>
+      <Reaction resource='getxml?META:RXN-12253' orgid='META' frameid='RXN-12253'/>
+      <Reaction resource='getxml?META:BENZYL-ALC-DEHYDROGENASE-RXN' orgid='META' frameid='BENZYL-ALC-DEHYDROGENASE-RXN'/>
+    </appears-in-left-side-of>
+    <gibbs-0 datatype='float'>-6.6
+      <evidence>
+        <Evidence-Code ID='META:EV-EXP-TAS' orgid='META' frameid='EV-EXP-TAS' detail='full' class='true'>
+          <parent>
+            <Evidence-Code resource='getxml?META:EV-EXP' orgid='META' frameid='EV-EXP' class='true'/>
+          </parent>
+          <comment datatype='string'>Traceable author statement to experimental support.  The assertion was made in a publication -- such as a review or 
+in another database -- that itself did not describe an experiment supporting the
+assertion.  However, the statement did reference another publication describing an experiment 
+that supports the assertion.  The difference between the codes EV-EXP-TAS and EV-AS-TAS 
+is that the former code is used when it is certain that experimental evidence supports the
+assertion, and the latter code is used when there is a possibility that an experiment was
+not done to support the assertion.
+In general, references to the primary literature are preferred,
+but this code can be used when the original article is difficult to locate.</comment>
+          <common-name datatype='string'>Traceable author statement to experimental support</common-name>
+        </Evidence-Code>
+        <Publication ID='META:PUB-18645197' orgid='META' frameid='PUB-18645197' detail='full'>
+          <year datatype='integer'>2008</year>
+          <author datatype='string'>Jankowski MD</author>
+          <author datatype='string'>Henry CS</author>
+          <author datatype='string'>Broadbelt LJ</author>
+          <author datatype='string'>Hatzimanikatis V</author>
+          <pubmed-id datatype='string'>18645197</pubmed-id>
+          <source datatype='string'>Biophys J 95(3);1487-99</source>
+          <title datatype='string'>Group contribution method for thermodynamic analysis of complex metabolic networks.</title>
+        </Publication>
+      </evidence>
+    </gibbs-0>
+    <common-name datatype='string'>benzyl alcohol</common-name>
+  </Compound>
+</ptools-xml>
