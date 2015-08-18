@@ -16,11 +16,8 @@ jsbml.log
 /bin
 */bin
 */**/bin
+=======
 
 #vim
 *~
 /build/
-=======
-
-#target
-/target
