@@ -1,22 +1,18 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply from: "./libraries.gradle"
 
+/*
 jar {
     manifest {
         attributes 'Implementation-Title': 'Gradle Quickstart',
                    'Implementation-Version': 1.0
     }
 }
+*/
 
 allprojects {
-  apply plugin: 'java'
-  group = 'pt.uminho.sysbio.biosynthframework'
-  version = '0.0.1-SNAPSHOT'
-  
-  targetCompatibility = 1.7
-  sourceCompatibility = 1.7
-  
+  //apply plugin: 'java'
   repositories {
     mavenCentral()
     mavenLocal()
@@ -35,7 +31,14 @@ ext {
 subprojects { subProject ->
   apply plugin: 'idea'
   apply plugin: 'eclipse'
+  apply plugin: 'java'
   apply plugin: 'maven'
+  
+  group = 'pt.uminho.sysbio.biosynthframework'
+  version = '0.0.1-SNAPSHOT'
+  
+  targetCompatibility = 1.7
+  sourceCompatibility = 1.7
   
   defaultTasks 'build'
   buildDir = "target"
@@ -55,16 +58,17 @@ subprojects { subProject ->
     
     testCompile( libraries.junit )
   }
-}
-
-test {
-    systemProperties 'property': 'value'
-}
-
-uploadArchives {
+  
+  test {
+  	systemProperties 'property': 'value'
+  }
+  
+  uploadArchives {
     repositories {
        flatDir {
            dirs 'repos'
        }
-    }
+  }
 }
+}
+
