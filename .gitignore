@@ -8,3 +8,5 @@
 
 #vim
 *~
+/build/
+/bin/
