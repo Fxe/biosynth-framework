@@ -35,8 +35,6 @@ public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEnt
 	private Map<Long, String> idToEntry = new HashMap<> ();
 	private Map<String, BiggMetaboliteEntity> cachedData = new HashMap<> ();
 
-
-
 	@Override
 	public Serializable save(BiggMetaboliteEntity entity) {
 		throw new RuntimeException("Not Supported Operation");

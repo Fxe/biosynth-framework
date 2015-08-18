@@ -11,3 +11,5 @@ jsbml.log
 
 #vim
 *~
+/build/
+/bin/
