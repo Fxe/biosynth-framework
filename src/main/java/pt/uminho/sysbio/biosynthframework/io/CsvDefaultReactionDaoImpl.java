@@ -58,9 +58,15 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 						String[] right_stoich = fields[RIGHT_STOICH_INDEX].split("\\s+");
 						boolean rev = Integer.parseInt(fields[ORIENTATION_INDEX]) != 0;
 						
-						String description = fields[DESCRIPTION_INDEX];
-						description = StringUtils.removeEnd(description, "\"");
-						description = StringUtils.removeStart(description, "\"");
+						String description = null;
+						//read description if exists
+						if (fields.length > DESCRIPTION_INDEX) {
+  						description = fields[DESCRIPTION_INDEX];
+  						description = StringUtils.removeEnd(description, "\"");
+  						description = StringUtils.removeStart(description, "\"");
+						}
+						
+						//setup reaction
 						DefaultReaction genericReaction = new DefaultReaction();
 						genericReaction.setEntry(entry);
 						genericReaction.setName(entry);

@@ -1,5 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.core.components.optimization;
 
-public interface Solution<V> {
-	public void setProperty(String key, V value);
+public interface Solution {
+	public void setProperty(String key, Object value);
 }

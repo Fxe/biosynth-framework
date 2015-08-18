@@ -1,12 +1,12 @@
 package pt.uminho.sysbio.biosynthframework.core.components.optimization;
 
-public class SimpleOptimizationSolution implements Solution<String>{
+public class SimpleOptimizationSolution implements Solution {
 
 	private String type;
-	private String value;
+	private Object value;
 	
 	@Override
-	public void setProperty(String key, String value) {
+	public void setProperty(String key, Object value) {
 		this.type = key;
 		this.value = value;
 	}
