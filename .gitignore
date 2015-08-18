@@ -2,7 +2,10 @@
 .settings
 .project
 .classpath
+<<<<<<< HEAD
 .gradle
+=======
+>>>>>>> 8cb3e69fafd0ab7b50bf834b9302c3f740a06fd3
 
 #target
 /target
