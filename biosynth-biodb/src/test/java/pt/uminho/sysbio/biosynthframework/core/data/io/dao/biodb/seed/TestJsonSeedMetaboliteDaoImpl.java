@@ -13,7 +13,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedMetaboliteEntity;
 public class TestJsonSeedMetaboliteDaoImpl {
 
 	private static JsonSeedMetaboliteDaoImpl metaboliteDao;
-	private static String FOLDER = "D:/home/data/seed";
+	private static String FOLDER = "D:/var/biodb/seed";
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
