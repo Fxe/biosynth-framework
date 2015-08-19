@@ -17,7 +17,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 public class TestJsonSeedReactionDaoImpl {
 	
 	private static JsonSeedReactionDaoImpl reactionDao;
-	private static String FOLDER = "D:/var/biodb/seed";
+	private static String FOLDER = "D:/home/data/seed";
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -55,7 +55,7 @@ public class TestJsonSeedReactionDaoImpl {
 		assertEquals("rxn00148", seedReactionEntity.getEntry());
 		assertEquals("C54B3DEE-C209-11E1-9982-998743BA47CD", seedReactionEntity.getUuid());
 		assertEquals("PYK", seedReactionEntity.getAbbreviation());
-//		assertThat(seedReactionEntity.getEnzymeClass(), null);
+		assertThat(seedReactionEntity.getEnzymeClass(), null);
 	}
 	
 	@Test
@@ -65,6 +65,6 @@ public class TestJsonSeedReactionDaoImpl {
 		assertEquals("rxn00001", seedReactionEntity.getEntry());
 		assertEquals("C581718E-C209-11E1-9982-998743BA47CD", seedReactionEntity.getUuid());
 		assertEquals("PPA", seedReactionEntity.getAbbreviation());
-//		assertThat(seedReactionEntity.getEnzymeClass(), null);
+		assertThat(seedReactionEntity.getEnzymeClass(), null);
 	}
 }

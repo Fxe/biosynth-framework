@@ -37,7 +37,7 @@ public class TestDefaultBiggReactionParser {
 		assertThat(rxn.getCompartments(), hasItems("Cytosol"));
 		assertEquals(Orientation.LeftToRight, rxn.getOrientation());
 		assertEquals(false, rxn.isTranslocation());
-		assertEquals(1800860, (long)rxn.getInternalId());
+		assertEquals(1800860, (long)rxn.getId());
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class TestDefaultBiggReactionParser {
 		assertThat(rxn.getCompartments(), hasItems("Cytosol"));
 		assertEquals(Orientation.LeftToRight, rxn.getOrientation());
 		assertEquals(false, rxn.isTranslocation());
-		assertEquals(2304732, (long)rxn.getInternalId());
+		assertEquals(2304732, (long)rxn.getId());
 	}
 
 }

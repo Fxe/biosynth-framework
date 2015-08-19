@@ -1,5 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
-public class KeggKOEntiry {
+public class KeggModuleEntity extends KeggEntity{
 
 }

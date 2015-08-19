@@ -37,7 +37,7 @@ public class TestRestBiocycReactionDaoImpl {
 	public void tearDown() throws Exception {
 	}
 
-//	@Test
+	@Test
 	public void test_META_PORPHOBILSYNTH_RXN() {
 		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("PORPHOBILSYNTH-RXN");
 		
@@ -54,7 +54,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(-33.084015, rxn.getGibbs(), EPSILON);
 	}
 
-//	@Test
+	@Test
 	public void test_META_FLAVONE_APIOSYLTRANSFERASE_RXN() {
 		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("FLAVONE-APIOSYLTRANSFERASE-RXN");
 		
@@ -108,7 +108,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(null, rxn.getGibbs());
 	}
 	
-//	@Test
+	@Test
 	public void test_META_1_2_1_66_RXN() {
 		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("1.2.1.66-RXN");
 		
@@ -130,7 +130,7 @@ public class TestRestBiocycReactionDaoImpl {
 	}
 	
 	
-//	@Test
+	@Test
 	public void test_META_RXN0_3283() {
 		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("RXN0-3283");
 		
@@ -151,7 +151,7 @@ public class TestRestBiocycReactionDaoImpl {
 		assertEquals(null, rxn.getGibbs());
 	}
 	
-//	@Test
+	@Test
 	public void test_META_3_OXOACYL_ACP_REDUCT_RXN() {
 		BioCycReactionEntity rxn = restBiocycReactionDaoImpl.getReactionByEntry("3-OXOACYL-ACP-REDUCT-RXN");
 		

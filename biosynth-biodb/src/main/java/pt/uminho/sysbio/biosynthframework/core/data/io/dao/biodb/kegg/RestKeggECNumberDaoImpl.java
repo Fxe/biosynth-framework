@@ -8,11 +8,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggECNumberEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggReactionFlatFileParser;
-import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGenericEntityFlatFileParser;
 
 public class RestKeggECNumberDaoImpl
 extends AbstractRestfulKeggDao {
@@ -23,40 +20,20 @@ extends AbstractRestfulKeggDao {
 	private static final String restRxnQuery = "http://rest.kegg.jp/get/ec:%s";
 
 	
-	public String getECNumberByEntry(String entry) {
+	public KeggECNumberEntity getECNumberByEntry(String entry) {
 		String restRxnQuery = String.format(RestKeggECNumberDaoImpl.restRxnQuery, entry);
 		String localPath =getPathFolder() + entry ;
-		
-		
-		KeggECNumberEntity ec = new KeggECNumberEntity();
-		
-		String rnFlatFile = null;
+		KeggECNumberEntity ec = null;
 		
 		try {
 			LOGGER.info(restRxnQuery);
 			LOGGER.info(localPath);
-			rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath  +".txt");
-			
-//			KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
-//			ec.setEntry(parser.getEntry());
-//			ec.setName(parser.getName());
-//			ec.setComment(parser.getComment());
-//			ec.setRemark(parser.getRemark());
-//			rxn.setDefinition(parser.getDefinition());
-//			rxn.setEquation(parser.getEquation());
-//			rxn.setEnzymes(parser.getEnzymes());
-//			rxn.setPathways(parser.getPathways());
-//			rxn.setRpairs(parser.getRPairs());
-//			rxn.setOrthologies(parser.getOrthologies());
-//			rxn.setLeft(parser.getLeft());
-//			rxn.setRight(parser.getRight());
-			
-		} catch (IOException e) {
+			String rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath  +".txt");
+			ec = KeggGenericEntityFlatFileParser.parse(KeggECNumberEntity.class, rnFlatFile);
+		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
-			
-			return null;
 		}
-		return rnFlatFile;
+		return ec;
 	}
 
 	public Set<String> getAllEntries() {
