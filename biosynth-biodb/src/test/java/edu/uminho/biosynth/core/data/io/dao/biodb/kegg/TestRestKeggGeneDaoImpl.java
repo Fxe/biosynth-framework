@@ -26,6 +26,8 @@ public class TestRestKeggGeneDaoImpl {
 		System.out.println(geneEntity.getEntry());
 		System.out.println(geneEntity.getAminoacidsSeq());
 		System.out.println(geneEntity.getPropertyValues("DBLINKS"));
+		for(String e : geneEntity.getEcNumbers())
+			System.out.println(e);
 	}
 
 }
