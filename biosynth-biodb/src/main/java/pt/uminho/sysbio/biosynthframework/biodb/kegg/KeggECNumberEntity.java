@@ -13,6 +13,7 @@ public class KeggECNumberEntity extends KeggEntity{
 	protected Set<String> genes;
 	protected Set<String> pathways;
 	protected Set<String> orthologs;
+	protected Set<String> reactions;
 	
 	
 	public void addGenes(Collection<String> gs){
@@ -33,6 +34,15 @@ public class KeggECNumberEntity extends KeggEntity{
 		orthologs.add(ortholog);
 	}
 	
+	public void addReaction(String reaction){
+		if(reactions==null)
+			reactions = new HashSet<>();
+		reactions.add(reaction);
+	}
+	
+	public String getReactionFromValue(String value){
+		return retrieveValueRegExp(value, KeggTokens.EC_NUMBER_REACTION);
+	}
 	
 	public Set<String> getGenes() {
 		return genes;
@@ -51,6 +61,12 @@ public class KeggECNumberEntity extends KeggEntity{
 	}
 	public void setOrthologs(Set<String> orthologs) {
 		this.orthologs = orthologs;
+	}
+	public Set<String> getReactions() {
+		return reactions;
+	}
+	public void setReactions(Set<String> reactions) {
+		this.reactions = reactions;
 	}
 
 	
@@ -81,6 +97,11 @@ public class KeggECNumberEntity extends KeggEntity{
 		{
 			addedValue = getPathwayFromValue(value);
 			addPathway((String) addedValue);
+		}
+		else if(key.equals(KeggTokens.REACTION))
+		{
+			addedValue = getReactionFromValue(value);
+			addReaction((String) addedValue);
 		}
 		
 		if(addedValue==null)
