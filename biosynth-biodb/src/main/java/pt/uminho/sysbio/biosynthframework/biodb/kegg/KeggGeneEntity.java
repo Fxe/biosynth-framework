@@ -1,10 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
@@ -13,6 +12,9 @@ public class KeggGeneEntity extends KeggEntity{
 	protected String nucleotidesSeq;
 	protected String aminoacidsSeq;
 	protected Set<String> ecNumbers;
+	protected Set<String> modules;
+	protected Set<String> pathways;
+	protected Set<String> orthologs;
 	
 	
 	public void addEcNumber(String ec){
@@ -21,20 +23,76 @@ public class KeggGeneEntity extends KeggEntity{
 		ecNumbers.add(ec);
 	}
 	
+	public void addEcNumbers(Collection<String> ecs){
+		if(ecNumbers==null)
+			ecNumbers = new HashSet<>();
+		ecNumbers.addAll(ecs);
+	}
+	
+	public void addModule(String module){
+		if(modules==null)
+			modules = new HashSet<>();
+		modules.add(module);
+	}
+
+	public void addPathway(String pathway){
+		if(pathways==null)
+			pathways = new HashSet<>();
+		pathways.add(pathway);
+	}
+	
+	public void addOrtholog(String ortholog){
+		if(orthologs==null)
+			orthologs = new HashSet<>();
+		orthologs.add(ortholog);
+	}
+	
+	
+	public String getNucleotidesSeq() {
+		return nucleotidesSeq;
+	}
+	public void setNucleotidesSeq(String nucleotidesSeq) {
+		this.nucleotidesSeq = nucleotidesSeq;
+	}
+	public String getAminoacidsSeq() {
+		return aminoacidsSeq;
+	}
+	public void setAminoacidsSeq(String aminoacidsSeq) {
+		this.aminoacidsSeq = aminoacidsSeq;
+	}
+	public Set<String> getEcNumbers() {
+		return ecNumbers;
+	}
+	public void setEcNumbers(Set<String> ecNumbers) {
+		this.ecNumbers = ecNumbers;
+	}
+	public Set<String> getModules() {
+		return modules;
+	}
+	public void setModules(Set<String> modules) {
+		this.modules = modules;
+	}
+	public Set<String> getPathways() {
+		return pathways;
+	}
+	public void setPathways(Set<String> pathways) {
+		this.pathways = pathways;
+	}
+	public Set<String> getOrthologs() {
+		return orthologs;
+	}
+	public void setOrthologs(Set<String> orthologs) {
+		this.orthologs = orthologs;
+	}
+	
+	
 	@Override
 	public void addProperty(String key, String value) {
+		Object addedValue = null;
 		if(key.equals(KeggTokens.DEFINITION))
 		{
-			Pattern p = Pattern.compile("\\(EC:([^\\)]+)\\)");
-			Matcher m = p.matcher(value);
-			if(m.find())
-			{
-				String ecs = m.group();
-				p = Pattern.compile(KeggTokens.ECNUMBER_REGEXP);
-				m = p.matcher(ecs);
-				while(m.find())
-					addEcNumber(m.group());
-			}
+			addedValue = getEcNumbersFromDefinition(value);
+			addEcNumbers((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.AASEQ))
 		{
@@ -44,6 +102,7 @@ public class KeggGeneEntity extends KeggEntity{
 					aminoacidsSeq = value;
 				else
 					aminoacidsSeq += value;
+				addedValue = aminoacidsSeq;
 			}
 		}
 		else if(key.equals(KeggTokens.NTSEQ))
@@ -54,9 +113,25 @@ public class KeggGeneEntity extends KeggEntity{
 					nucleotidesSeq = value;
 				else
 					nucleotidesSeq += value;
+				addedValue = nucleotidesSeq;
 			}
 		}
-		else
+		else if(key.equals(KeggTokens.ORTHOLOGY))
+		{
+			addedValue = getOrthologyFromValue(value);
+			addOrtholog((String) addedValue);
+		}
+		else if(key.equals(KeggTokens.MODULE))
+		{
+			addedValue = getModuleFromValue(value);
+			addModule((String) addedValue);
+		}
+		else if(key.equals(KeggTokens.PATHWAY))
+		{
+			addedValue = getPathwayFromValue(value);
+			addPathway((String) addedValue);
+		}
+		if(addedValue==null)
 			super.addProperty(key, value);
 	}
 	
@@ -77,26 +152,6 @@ public class KeggGeneEntity extends KeggEntity{
 		}
 		else
 			super.addProperty(key, values);
-	}
-	
-
-	public String getNucleotidesSeq() {
-		return nucleotidesSeq;
-	}
-	public void setNucleotidesSeq(String nucleotidesSeq) {
-		this.nucleotidesSeq = nucleotidesSeq;
-	}
-	public String getAminoacidsSeq() {
-		return aminoacidsSeq;
-	}
-	public void setAminoacidsSeq(String aminoacidsSeq) {
-		this.aminoacidsSeq = aminoacidsSeq;
-	}
-	public Set<String> getEcNumbers() {
-		return ecNumbers;
-	}
-	public void setEcNumbers(Set<String> ecNumbers) {
-		this.ecNumbers = ecNumbers;
 	}
 	
 }

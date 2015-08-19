@@ -8,9 +8,6 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggEntity;
 
 public class KeggGenericEntityFlatFileParser {
 	
-	static final public String PROP_KEY_VALUE_SEPARATOR = "\\s{2,}|\\t+";
-	static final public String END_OF_FILE = "///";
-	
 	static public <T extends KeggEntity> T parse(Class<T> entityClass, String rawText) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		Pattern p = Pattern.compile("\\n");
 		Matcher m = p.matcher(rawText);
@@ -27,16 +24,18 @@ public class KeggGenericEntityFlatFileParser {
 		do
 		{	
 			line = rawText.substring(i, m.start()).trim();
-			if(!line.equals("") && !line.equals(END_OF_FILE))
+			if(!line.equals("") && !line.equals(KeggTokens.END_OF_FILE_REGEXP))
 			{
-				String[] ts = line.split(PROP_KEY_VALUE_SEPARATOR);
-				if(ts.length>1)
+				Pattern p2 = Pattern.compile(KeggTokens.KEY_VALUES_REGEXP);
+				Matcher m2 = p2.matcher(line);
+
+				if(m2.find())
 				{
-					currProp = ts[0];
-					entity.addProperty(currProp, ts[1]);
+					currProp = m2.group(1);
+					entity.addProperty(currProp, m2.group(3));
 				}
 				else
-					entity.addProperty(currProp, ts[0]);
+					entity.addProperty(currProp, line);
 				i=m.end();
 			}
 			
@@ -45,7 +44,7 @@ public class KeggGenericEntityFlatFileParser {
 	}
 	
 	static protected <T extends KeggEntity> void parseFirstRow(String line, T entity){
-		String[] ts = line.split(PROP_KEY_VALUE_SEPARATOR);
+		String[] ts = line.split(KeggTokens.PROP_KEY_VALUE_SEPARATOR_REGEXP);
 		if(ts.length%2==0)
 			for(int i=0; i<ts.length; i+=2)
 				entity.addProperty(ts[i], ts[i+1]);

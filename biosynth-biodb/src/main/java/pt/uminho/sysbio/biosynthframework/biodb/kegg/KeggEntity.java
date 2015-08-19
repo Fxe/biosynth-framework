@@ -2,8 +2,14 @@ package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
 public abstract class KeggEntity {
 	
@@ -59,6 +65,59 @@ public abstract class KeggEntity {
 				properties.put(key, new ArrayList<String>());
 			properties.get(key).addAll(values);
 		}
+	}
+	
+	public Set<String> getGenesFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.KOG_GENES_REGEXP);
+		Matcher m = p.matcher(value);
+		Set<String> gs = null;
+		if(m.find())
+		{
+			gs = new HashSet<>();
+			String org = m.group(1).toLowerCase();
+			p = Pattern.compile(KeggTokens.GENE_WITH_NAME);
+			for(String g : m.group(2).split("\\s+"))
+			{
+				m = p.matcher(g);
+				gs.add(m.find() ? org+":"+m.group(1) : org+":"+g);
+			}
+		}
+		return gs;
+	}
+	
+	public String getModuleFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.MODULE_WITH_NAME);
+		Matcher m = p.matcher(value);
+		return m.find() ? m.group(1) : null;
+	}
+	
+	public String getPathwayFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.PATHWAY_WITH_NAME);
+		Matcher m = p.matcher(value);
+		return m.find() ? m.group(1) : null;
+	}
+	
+	public String getOrthologyFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.ORTHOLOGY_WITH_NAME);
+		Matcher m = p.matcher(value);
+		return m.find() ? m.group(1) : null;
+	}
+	
+	public Set<String> getEcNumbersFromDefinition(String value){
+		Pattern p = Pattern.compile(KeggTokens.GENE_DEFINITION_EC_REGEXP);
+		Matcher m = p.matcher(value);
+		Set<String> res = null;
+		
+		if(m.find())
+		{
+			res = new HashSet<>();
+			String ecs = m.group();
+			p = Pattern.compile(KeggTokens.ECNUMBER_REGEXP);
+			m = p.matcher(ecs);
+			while(m.find())
+				res.add(m.group());
+		}
+		return res;
 	}
 	
 	public List<String> removeProperty(String key){
