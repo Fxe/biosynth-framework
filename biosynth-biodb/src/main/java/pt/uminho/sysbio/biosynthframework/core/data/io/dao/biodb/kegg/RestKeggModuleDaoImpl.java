@@ -55,7 +55,7 @@ extends AbstractRestfulKeggDao {
 	}
 	
 	public String getPathFolder(){
-		return this.getLocalStorage()  + "kos" + "/";
+		return this.getLocalStorage()  + "modules" + "/";
 	}
 	
 	public void createFolder(){

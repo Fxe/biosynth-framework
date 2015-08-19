@@ -14,7 +14,9 @@ public class KeggTokens {
 	static final public String MODULE_WITH_NAME = "(M\\d+)\\s+(.+)";
 	static final public String PATHWAY_WITH_NAME = "([a-z]+\\d+)\\s+(.+)";
 	static final public String ORTHOLOGY_WITH_NAME = "(K\\d+)\\s+(.+)";
-	
+	static final public String COMPOUND_WITH_NAME = "(C\\d+)\\s+(.+)";
+	static final public String REACTION_WITH_NAME = "(R\\d+)\\s+(.+)";
+
 	static final public String ENTRY = "ENTRY";
 	static final public String NAME = "NAME";
 	static final public String DEFINITION = "DEFINITION";
@@ -24,10 +26,8 @@ public class KeggTokens {
 	static final public String MODULE = "MODULE";
 	static final public String PATHWAY = "PATHWAY";
 	static final public String ORTHOLOGY = "ORTHOLOGY";
-	
-	
-	
-	
-	
+	static final public String COMPOUND = "COMPOUND";
+	static final public String REACTION = "REACTION";
+
 
 }

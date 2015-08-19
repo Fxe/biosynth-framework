@@ -86,19 +86,27 @@ public abstract class KeggEntity {
 	}
 	
 	public String getModuleFromValue(String value){
-		Pattern p = Pattern.compile(KeggTokens.MODULE_WITH_NAME);
-		Matcher m = p.matcher(value);
-		return m.find() ? m.group(1) : null;
+		return retrieveValueFromPairRegExp(value, KeggTokens.MODULE_WITH_NAME);
 	}
 	
 	public String getPathwayFromValue(String value){
-		Pattern p = Pattern.compile(KeggTokens.PATHWAY_WITH_NAME);
-		Matcher m = p.matcher(value);
-		return m.find() ? m.group(1) : null;
+		return retrieveValueFromPairRegExp(value, KeggTokens.PATHWAY_WITH_NAME);
+	}
+	
+	public String getCompoundFromValue(String value){
+		return retrieveValueFromPairRegExp(value, KeggTokens.COMPOUND_WITH_NAME);
+	}
+	
+	public String getReactionFromValue(String value){
+		return retrieveValueFromPairRegExp(value, KeggTokens.REACTION_WITH_NAME);
 	}
 	
 	public String getOrthologyFromValue(String value){
-		Pattern p = Pattern.compile(KeggTokens.ORTHOLOGY_WITH_NAME);
+		return retrieveValueFromPairRegExp(value, KeggTokens.ORTHOLOGY_WITH_NAME);
+	}
+	
+	protected String retrieveValueFromPairRegExp(String value, String exp){
+		Pattern p = Pattern.compile(exp);
 		Matcher m = p.matcher(value);
 		return m.find() ? m.group(1) : null;
 	}
