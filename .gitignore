@@ -1,5 +1,5 @@
 #JSBML
-jsbml.log
+*.log
 
 #eclipse
 .settings
@@ -16,7 +16,6 @@ jsbml.log
 /bin
 */bin
 */**/bin
-=======
 
 #vim
 *~
