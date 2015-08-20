@@ -76,7 +76,7 @@ public class TestDotGraphFactory {
 		System.out.println(graph);
 		
 		assertEquals(5, graph.order());
-		assertEquals(3, graph.size());
+		assertEquals(4, graph.size());
 	}
 
 	

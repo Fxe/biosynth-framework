@@ -58,16 +58,16 @@ public class TestMetabolicNetworkDotGenerator {
 		generator.addReaction(rxn3);
 		String dotStr = generator.build();
 		
-		try {
-		  String[] out = GraphVizGenerator.executeGraphviz(dotStr, "D:/opt/graphviz-2.38/bin/dot", "-Tpng", "-o", "D:/aaaaa.png");
-		  System.out.println(out[0]);
-		  System.out.println(out[1]);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+//		try {
+//		  String[] out = GraphVizGenerator.executeGraphviz(dotStr, "D:/opt/graphviz-2.38/bin/dot", "-Tpng", "-o", "D:/aaaaa.png");
+//		  System.out.println(out[0]);
+//		  System.out.println(out[1]);
+//    } catch (IOException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
 		System.out.println(dotStr);
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 }
