@@ -15,8 +15,6 @@ public class TestRestKeggGeneDaoImpl {
 	public static void setUpBeforeClass() throws Exception {
 		rest = new RestKeggGenesDaoImpl();
 		rest.setLocalStorage(folder);
-		rest.setSaveLocalStorage(true);
-		rest.setUseLocalStorage(true);
 		rest.createFolder();
 	}
 	
