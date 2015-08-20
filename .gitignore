@@ -1,10 +1,22 @@
+#JSBML
+*.log
+
 #eclipse
 .settings
 .project
 .classpath
+.gradle
 
 #target
 /target
+*/target
+*/**/target
+
+#bin
+/bin
+*/bin
+*/**/bin
 
 #vim
 *~
+/build/
