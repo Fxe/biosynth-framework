@@ -79,29 +79,34 @@ public class KeggECNumberEntity extends KeggEntity{
 			Matcher m = p.matcher(value);
 			if(m.find())
 			{
-				entry = m.group();
-				addedValue = entry;
+				addedValue = m.group();
+				if(addedValue!=null)
+					entry = (String) addedValue;				
 			}
 		}
 		else if(key.equals(KeggTokens.GENES))
 		{
 			addedValue = getGenesFromValue(value);
-			addGenes((Set<String>) addedValue);
+			if(addedValue!=null)
+				addGenes((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.ORTHOLOGY))
 		{
 			addedValue = getOrthologyFromValue(value);
-			addOrtholog((String) addedValue);
+			if(addedValue!=null)
+				addOrtholog((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
 			addedValue = getPathwayFromValue(value);
-			addPathway((String) addedValue);
+			if(addedValue!=null)
+				addPathway((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.REACTION))
 		{
 			addedValue = getReactionFromValue(value);
-			addReaction((String) addedValue);
+			if(addedValue!=null)
+				addReaction((String) addedValue);
 		}
 		
 		if(addedValue==null)

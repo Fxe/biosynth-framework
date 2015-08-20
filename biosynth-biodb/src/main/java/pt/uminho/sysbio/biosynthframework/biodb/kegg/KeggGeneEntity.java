@@ -92,7 +92,8 @@ public class KeggGeneEntity extends KeggEntity{
 		if(key.equals(KeggTokens.DEFINITION))
 		{
 			addedValue = getEcNumbersFromDefinition(value);
-			addEcNumbers((Set<String>) addedValue);
+			if(addedValue!=null)
+				addEcNumbers((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.AASEQ))
 		{
@@ -119,17 +120,20 @@ public class KeggGeneEntity extends KeggEntity{
 		else if(key.equals(KeggTokens.ORTHOLOGY))
 		{
 			addedValue = getOrthologyFromValue(value);
-			addOrtholog((String) addedValue);
+			if(addedValue!=null)
+				addOrtholog((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.MODULE))
 		{
 			addedValue = getModuleFromValue(value);
-			addModule((String) addedValue);
+			if(addedValue!=null)
+				addModule((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
 			addedValue = getPathwayFromValue(value);
-			addPathway((String) addedValue);
+			if(addedValue!=null)
+				addPathway((String) addedValue);
 		}
 		if(addedValue==null)
 			super.addProperty(key, value);

@@ -39,6 +39,8 @@ extends AbstractRestfulKeggDao  {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
+		
+		System.out.println(geneEntity.getDefinition());
 		return geneEntity;
 	}
 

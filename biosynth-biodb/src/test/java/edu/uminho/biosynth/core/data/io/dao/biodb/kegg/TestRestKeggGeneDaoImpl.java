@@ -23,23 +23,27 @@ public class TestRestKeggGeneDaoImpl {
 	@Test
 	public void test1(){
 //		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b0002");
-		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b0002");
+		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b3862");
 		
 		System.out.println(geneEntity.getEntry());
 		System.out.println(geneEntity.getAminoacidsSeq());
 		System.out.println(geneEntity.getPropertyValues("DBLINKS"));
 		System.out.println("Modules:");
-		for(String e : geneEntity.getModules())
-			System.out.println(e);
+		if(geneEntity.getModules()!=null)
+			for(String e : geneEntity.getModules())
+				System.out.println(e);
 		System.out.println("Orthology:");
-		for(String e : geneEntity.getOrthologs())
-			System.out.println(e);
+		if(geneEntity.getOrthologs()!=null)
+			for(String e : geneEntity.getOrthologs())
+				System.out.println(e);
 		System.out.println("Paths:");
-		for(String e : geneEntity.getPathways())
-			System.out.println(e);
+		if(geneEntity.getPathways()!=null)
+			for(String e : geneEntity.getPathways())
+				System.out.println(e);
 		System.out.println("ECs:");
-		for(String e : geneEntity.getEcNumbers())
-			System.out.println(e);
+		if(geneEntity.getEcNumbers()!=null)
+			for(String e : geneEntity.getEcNumbers())
+				System.out.println(e);
 	}
 
 }

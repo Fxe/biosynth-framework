@@ -72,22 +72,26 @@ public class KeggModuleEntity extends KeggEntity{
 		if(key.equals(KeggTokens.COMPOUND))
 		{
 			addedValue = getCompoundFromValue(value);
-			addCompound((String) addedValue);
+			if(addedValue!=null)
+				addCompound((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.REACTION))
 		{
 			addedValue = getReactionFromValue(value);
-			addReaction((String) addedValue);
+			if(addedValue!=null)
+				addReaction((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.ORTHOLOGY))
 		{
 			addedValue = getOrthologyFromValue(value);
-			addOrtholog((String) addedValue);
+			if(addedValue!=null)
+				addOrtholog((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
 			addedValue = getPathwayFromValue(value);
-			addPathway((String) addedValue);
+			if(addedValue!=null)
+				addPathway((String) addedValue);
 		}
 		
 		if(addedValue==null)

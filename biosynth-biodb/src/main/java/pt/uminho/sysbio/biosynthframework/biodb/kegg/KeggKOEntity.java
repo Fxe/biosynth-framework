@@ -63,17 +63,20 @@ public class KeggKOEntity extends KeggEntity{
 		if(key.equals(KeggTokens.GENES))
 		{
 			addedValue = getGenesFromValue(value);
-			addGenes((Set<String>) addedValue);
+			if(addedValue!=null)
+				addGenes((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.MODULE))
 		{
 			addedValue = getModuleFromValue(value);
-			addModule((String) addedValue);
+			if(addedValue!=null)
+				addModule((String) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
 			addedValue = getPathwayFromValue(value);
-			addPathway((String) addedValue);
+			if(addedValue!=null)
+				addPathway((String) addedValue);
 		}
 		if(addedValue==null)
 			super.addProperty(key, value);
