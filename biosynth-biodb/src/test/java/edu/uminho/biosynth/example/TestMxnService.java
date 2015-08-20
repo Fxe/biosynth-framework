@@ -30,61 +30,61 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 @SuppressWarnings({ "unused", "deprecation", "null" })
 public class TestMxnService {
 	
-	private static SessionFactory sessionFactory;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		sessionFactory.close();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		sessionFactory.openSession();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		sessionFactory.getCurrentSession().close();
-	}
-
-	@Test
-	public void test() {
-		final String[] keggId = {"R08101", "R08105", "R08108", "R08109", "R08110"};
-		
-		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
-		MnxService service = new MnxService(dao);
-		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
-		List<MnxReactionCrossReferenceEntity> res = service.getReactionCrossreferences("kegg", "R00066");
-		for (MnxReactionCrossReferenceEntity xrefKegg : res) {
-			for (MnxReactionCrossReferenceEntity rxnXref : xrefKegg.getMnxReactionEntity().getCrossreferences()) {
-				if (rxnXref.getRef().equals("metacyc")) {
-					System.out.println(rxnXref);
-				}
-			}
-		}
-		tx.commit();
-		
-	}
-	
-	@Test
-	public void tmp() {
-		
-		
-		List<Metabolite> list = new ArrayList<> ();
-		
-//		MetaboliteDao<?> dao = ;
-		MetaboliteDao<?> metaboliteDao = null;
-		
-		for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
-			list.add(metaboliteDao.getMetaboliteByEntry(entry));
-		}
-		
-		System.out.println(list.size());
-	}
+//	private static SessionFactory sessionFactory;
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		sessionFactory.close();
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		sessionFactory.openSession();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		sessionFactory.getCurrentSession().close();
+//	}
+//
+//	@Test
+//	public void test() {
+//		final String[] keggId = {"R08101", "R08105", "R08108", "R08109", "R08110"};
+//		
+//		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
+//		MnxService service = new MnxService(dao);
+//		Transaction tx = sessionFactory.getCurrentSession().beginTransaction();
+//		List<MnxReactionCrossReferenceEntity> res = service.getReactionCrossreferences("kegg", "R00066");
+//		for (MnxReactionCrossReferenceEntity xrefKegg : res) {
+//			for (MnxReactionCrossReferenceEntity rxnXref : xrefKegg.getMnxReactionEntity().getCrossreferences()) {
+//				if (rxnXref.getRef().equals("metacyc")) {
+//					System.out.println(rxnXref);
+//				}
+//			}
+//		}
+//		tx.commit();
+//		
+//	}
+//	
+//	@Test
+//	public void tmp() {
+//		
+//		
+//		List<Metabolite> list = new ArrayList<> ();
+//		
+////		MetaboliteDao<?> dao = ;
+//		MetaboliteDao<?> metaboliteDao = null;
+//		
+//		for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
+//			list.add(metaboliteDao.getMetaboliteByEntry(entry));
+//		}
+//		
+//		System.out.println(list.size());
+//	}
 
 }

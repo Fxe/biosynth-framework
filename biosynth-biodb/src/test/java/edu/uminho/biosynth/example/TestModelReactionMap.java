@@ -29,27 +29,27 @@ import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
 @SuppressWarnings({ "unused", "deprecation" })
 public class TestModelReactionMap {
 	
-	private static SessionFactory sessionFactory;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		sessionFactory.close();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		sessionFactory.openSession();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		sessionFactory.getCurrentSession().close();
-	}
+//	private static SessionFactory sessionFactory;
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		sessionFactory.close();
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		sessionFactory.openSession();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		sessionFactory.getCurrentSession().close();
+//	}
 
 	@Test
 	public void testMetabolitePairIdentification() throws IOException {
