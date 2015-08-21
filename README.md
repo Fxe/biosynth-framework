@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Fxe/biosynth-framework.svg?branch=master)](https://travis-ci.org/Fxe/biosynth-framework)
-[![Software License](https://img.shields.io/github/license/mashape/apistatus.svg](LICENSE.txt)
+[![Software License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE.txt)
 
 ## Biosynth Framework
 
@@ -30,5 +30,10 @@ extracted from the JDK download.
 ### Compile and test; build all jars, distribution zips, and docs
 `./gradlew build`
 
-... and discover more commands with `./gradlew tasks`. See also the [Gradle
-build and release FAQ][].
+... and discover more commands with `./gradlew tasks`. See also the [Gradle build and release FAQ][].
+
+[Gradle]: http://gradle.org
+[`./gradlew`]: http://vimeo.com/34436402
+[Git]: http://help.github.com/set-up-git-redirect
+[JDK8 build]: http://www.oracle.com/technetwork/java/javase/downloads
+[Gradle build and release FAQ]: https://github.com/spring-projects/spring-framework/wiki/Gradle-build-and-release-FAQ
