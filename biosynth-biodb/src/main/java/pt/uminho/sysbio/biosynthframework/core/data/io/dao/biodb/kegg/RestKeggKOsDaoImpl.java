@@ -29,7 +29,7 @@ extends AbstractRestfulKeggDao {
 		try {
 			LOGGER.info(restRxnQuery);
 			LOGGER.info(localPath);
-			String koFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + entry +".txt");
+			String koFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + ".txt");
 			ko = KeggGenericEntityFlatFileParser.parse(KeggKOEntity.class, koFlatFile);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

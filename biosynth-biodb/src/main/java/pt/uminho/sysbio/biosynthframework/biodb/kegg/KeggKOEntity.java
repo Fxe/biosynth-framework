@@ -11,6 +11,7 @@ public class KeggKOEntity extends KeggEntity{
 	protected Set<String> genes;
 	protected Set<String> modules;
 	protected Set<String> pathways;
+	protected Set<String> ecNumbers;
 	
 	
 	public void addGene(String gene){
@@ -37,6 +38,13 @@ public class KeggKOEntity extends KeggEntity{
 		pathways.add(pathway);
 	}
 	
+	public void addEcNumbers(Collection<String> ecs){
+		if(ecNumbers==null)
+			ecNumbers = new HashSet<>();
+		ecNumbers.addAll(ecs);
+	}
+	
+	
 	public Set<String> getGenes() {
 		return genes;
 	}
@@ -55,12 +63,24 @@ public class KeggKOEntity extends KeggEntity{
 	public void setPathways(Set<String> pathways) {
 		this.pathways = pathways;
 	}
+	public Set<String> getEcNumbers() {
+		return ecNumbers;
+	}
+	public void setEcNumbers(Set<String> ecNumbers) {
+		this.ecNumbers = ecNumbers;
+	}
 	
 
 	@Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
-		if(key.equals(KeggTokens.GENES))
+		if(key.equals(KeggTokens.DEFINITION))
+		{
+			addedValue = getEcNumbersFromDefinition(value);
+			if(addedValue!=null)
+				addEcNumbers((Set<String>) addedValue);
+		}
+		else if(key.equals(KeggTokens.GENES))
 		{
 			addedValue = getGenesFromValue(value);
 			if(addedValue!=null)
