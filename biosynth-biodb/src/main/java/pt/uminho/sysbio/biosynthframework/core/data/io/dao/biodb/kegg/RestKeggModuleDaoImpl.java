@@ -40,7 +40,7 @@ extends AbstractRestfulKeggDao {
 	public Set<String> getAllModuleEntries() {
 		Set<String> rnIds = new HashSet<>();
 		String restListRnQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "md");
-		String localPath = this.getLocalStorage() + "query" + "/kos.txt";
+		String localPath = this.getLocalStorage() + "query" + "/mds.txt";
 		try {
 			String httpResponseString = getLocalOrWeb(restListRnQuery, localPath);
 			String[] httpResponseLine = httpResponseString.split("\n");
