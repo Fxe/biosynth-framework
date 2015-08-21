@@ -95,14 +95,14 @@ public abstract class AbstractTestHbmMetaboliteDaoTemplate<M extends GenericMeta
 		assertNotNull(cpd);
 	}
 	
-	@Test
-	public void testGetMetaboliteByIdSuccess() {
-		M instance = hbmObjectMother.instance();
-		Long id = this.id == null ? instance.getId():this.id;
-		M cpd = metaboliteDao.getMetaboliteById(id);
-		
-		assertNotNull(cpd);
-	}
+//	@Test
+//	public void testGetMetaboliteByIdSuccess() {
+//		M instance = hbmObjectMother.instance();
+//		Long id = this.id == null ? instance.getId():this.id;
+//		M cpd = metaboliteDao.getMetaboliteById(id);
+//		
+//		assertNotNull(cpd);
+//	}
 	
 	@Test
 	public void testGetMetaboliteByEntryFail() {

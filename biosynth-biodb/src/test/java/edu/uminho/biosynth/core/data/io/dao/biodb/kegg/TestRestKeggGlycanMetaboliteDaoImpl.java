@@ -32,23 +32,23 @@ public class TestRestKeggGlycanMetaboliteDaoImpl {
 	public void tearDown() throws Exception {
 	}
 	
-	@Test
-	public void testSomething() {
-		RestKeggGlycanMetaboliteDaoImpl dao = new RestKeggGlycanMetaboliteDaoImpl();
-		dao.setSaveLocalStorage(true);
-		dao.setUseLocalStorage(true);
-		dao.setLocalStorage("D:/home/data/kegg/");
-		
-		for (Serializable cpdId : dao.getAllMetaboliteIds()) {
-			String ff = dao.getMetaboliteFlatFile(cpdId);
-			System.out.println(ff);
-			KeggGlycanMetaboliteFlatFileParser parser = new KeggGlycanMetaboliteFlatFileParser(ff);
-			System.out.println(parser.getTabs());
-			KeggGlycanMetaboliteEntity cpd = dao.getMetaboliteById(cpdId);
-			System.out.println(cpd);
-		}
-		assertEquals("", "");
-	}
+//	@Test
+//	public void testSomething() {
+//		RestKeggGlycanMetaboliteDaoImpl dao = new RestKeggGlycanMetaboliteDaoImpl();
+//		dao.setSaveLocalStorage(true);
+//		dao.setUseLocalStorage(true);
+//		dao.setLocalStorage("D:/home/data/kegg/");
+//		
+//		for (Serializable cpdId : dao.getAllMetaboliteIds()) {
+//			String ff = dao.getMetaboliteFlatFile(cpdId);
+//			System.out.println(ff);
+//			KeggGlycanMetaboliteFlatFileParser parser = new KeggGlycanMetaboliteFlatFileParser(ff);
+//			System.out.println(parser.getTabs());
+//			KeggGlycanMetaboliteEntity cpd = dao.getMetaboliteById(cpdId);
+//			System.out.println(cpd);
+//		}
+//		assertEquals("", "");
+//	}
 
 //	@Test
 //	public void testD00066() {

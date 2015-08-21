@@ -14,65 +14,65 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class TestRestKeggCompoundMetaboliteDaoImpl {
 
-	private static double EPSILON = 0.00000001;
-	private static MetaboliteDao<KeggCompoundMetaboliteEntity> metaboliteDao;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		RestKeggCompoundMetaboliteDaoImpl metaboliteDaoImpl = new RestKeggCompoundMetaboliteDaoImpl();
-		metaboliteDaoImpl.setSaveLocalStorage(true);
-		metaboliteDaoImpl.setUseLocalStorage(true);
-		metaboliteDaoImpl.setLocalStorage("D:/home/data/kegg/");
-		
-		metaboliteDao = metaboliteDaoImpl;
-	}
-	
-	@Test
-	public void testParseAll() {
-
-		for (Serializable cpdId : metaboliteDao.getAllMetaboliteIds()) {
-			KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteById(cpdId);
-			assertNotEquals(null, cpd);
-			assertEquals(cpdId, cpd.getEntry());
-			System.out.println(cpd.getEntry());
-		}
-	}
-
-	@Test
-	public void test_C00775() {
-		
-		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C00755");
-
-		assertEquals("C00755", cpd.getEntry());
-		assertEquals("4-Hydroxy-3-methoxy-benzaldehyde;Vanillin;Vanillaldehyde;4-Hydroxy-3-methoxybenzaldehyde", cpd.getName());
-		assertEquals("C8H8O3", cpd.getFormula());
-		assertEquals(152.0473, cpd.getMass(), EPSILON);
-		assertEquals(5, cpd.getEnzymes().size());
-		assertEquals("Same as: D00091", cpd.getRemark());
-		assertEquals(null, cpd.getComment());
-		assertEquals(null, cpd.getInchi());
-		assertEquals(6, cpd.getReactions().size());
-		assertEquals(8, cpd.getCrossreferences().size());
-		assertNotEquals(true, cpd.getMol2d());
-	}
-	
-	@Test
-	public void test_C01356() {
-		
-		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C01456");
-
-		assertEquals("C01456", cpd.getEntry());
-		assertEquals("Tropate;Tropic acid;alpha-(Hydroxymethyl)phenylacetic acid", cpd.getName());
-		assertEquals("C9H10O3", cpd.getFormula());
-		assertEquals(166.063, cpd.getMass(), EPSILON);
-		assertEquals(1, cpd.getEnzymes().size());
-		assertEquals(null, cpd.getRemark());
-		assertEquals(null, cpd.getComment());
-		assertEquals(null, cpd.getInchi());
-		assertEquals(3, cpd.getReactions().size());
-		assertEquals(8, cpd.getCrossreferences().size());
-		assertNotEquals(true, cpd.getMol2d());
-	}
+//	private static double EPSILON = 0.00000001;
+//	private static MetaboliteDao<KeggCompoundMetaboliteEntity> metaboliteDao;
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		RestKeggCompoundMetaboliteDaoImpl metaboliteDaoImpl = new RestKeggCompoundMetaboliteDaoImpl();
+//		metaboliteDaoImpl.setSaveLocalStorage(true);
+//		metaboliteDaoImpl.setUseLocalStorage(true);
+//		metaboliteDaoImpl.setLocalStorage("D:/home/data/kegg/");
+//		
+//		metaboliteDao = metaboliteDaoImpl;
+//	}
+//	
+//	@Test
+//	public void testParseAll() {
+//
+//		for (Serializable cpdId : metaboliteDao.getAllMetaboliteIds()) {
+//			KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteById(cpdId);
+//			assertNotEquals(null, cpd);
+//			assertEquals(cpdId, cpd.getEntry());
+//			System.out.println(cpd.getEntry());
+//		}
+//	}
+//
+//	@Test
+//	public void test_C00775() {
+//		
+//		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C00755");
+//
+//		assertEquals("C00755", cpd.getEntry());
+//		assertEquals("4-Hydroxy-3-methoxy-benzaldehyde;Vanillin;Vanillaldehyde;4-Hydroxy-3-methoxybenzaldehyde", cpd.getName());
+//		assertEquals("C8H8O3", cpd.getFormula());
+//		assertEquals(152.0473, cpd.getMass(), EPSILON);
+//		assertEquals(5, cpd.getEnzymes().size());
+//		assertEquals("Same as: D00091", cpd.getRemark());
+//		assertEquals(null, cpd.getComment());
+//		assertEquals(null, cpd.getInchi());
+//		assertEquals(6, cpd.getReactions().size());
+//		assertEquals(8, cpd.getCrossreferences().size());
+//		assertNotEquals(true, cpd.getMol2d());
+//	}
+//	
+//	@Test
+//	public void test_C01356() {
+//		
+//		KeggCompoundMetaboliteEntity cpd = metaboliteDao.getMetaboliteByEntry("C01456");
+//
+//		assertEquals("C01456", cpd.getEntry());
+//		assertEquals("Tropate;Tropic acid;alpha-(Hydroxymethyl)phenylacetic acid", cpd.getName());
+//		assertEquals("C9H10O3", cpd.getFormula());
+//		assertEquals(166.063, cpd.getMass(), EPSILON);
+//		assertEquals(1, cpd.getEnzymes().size());
+//		assertEquals(null, cpd.getRemark());
+//		assertEquals(null, cpd.getComment());
+//		assertEquals(null, cpd.getInchi());
+//		assertEquals(3, cpd.getReactions().size());
+//		assertEquals(8, cpd.getCrossreferences().size());
+//		assertNotEquals(true, cpd.getMol2d());
+//	}
 //	
 //	@Test
 //	public void testD00063() {

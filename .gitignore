@@ -1,11 +1,12 @@
 #JSBML
-jsbml.log
+*.log
 
 #eclipse
 .settings
 .project
 .classpath
 .gradle
+*/.gitignore
 
 #target
 /target
@@ -16,7 +17,6 @@ jsbml.log
 /bin
 */bin
 */**/bin
-=======
 
 #vim
 *~

@@ -22,52 +22,52 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.remote.BioCycRemoteSource
 @SuppressWarnings("deprecation")
 public class TestBiocycDao {
 	
-	private static SessionFactory sessionFactory;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		sessionFactory.close();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		sessionFactory.openSession();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		sessionFactory.getCurrentSession().close();
-	}
-
-	@Test
-	public void testInsertDeleteBiocycMetaboliteDao() {
-		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
-		Transaction tx;
-		BioCycMetaboliteEntity cpd = null;
-		List<BioCycMetaboliteEntity> res = null;
-		tx = sessionFactory.getCurrentSession().beginTransaction();
-		
-		BioCycRemoteSource remote = new BioCycRemoteSource("META");
-		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
-		if (res.size() < 1) {
-			cpd = remote.getMetaboliteInformation("CPD-14641");
-			dao.save(cpd);
-			System.out.println(cpd);
-		}
-		tx.commit();
-		
-		tx = sessionFactory.getCurrentSession().beginTransaction();
-		
-		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
-		assertEquals(true, res.size() > 0);
-		
-		dao.remove(res.iterator().next());
-		
-		tx.commit();
-	}
+//	private static SessionFactory sessionFactory;
+//
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("");
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		sessionFactory.close();
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		sessionFactory.openSession();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		sessionFactory.getCurrentSession().close();
+//	}
+//
+//	@Test
+//	public void testInsertDeleteBiocycMetaboliteDao() {
+//		IGenericDao dao = new GenericEntityDaoImpl(sessionFactory);
+//		Transaction tx;
+//		BioCycMetaboliteEntity cpd = null;
+//		List<BioCycMetaboliteEntity> res = null;
+//		tx = sessionFactory.getCurrentSession().beginTransaction();
+//		
+//		BioCycRemoteSource remote = new BioCycRemoteSource("META");
+//		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
+//		if (res.size() < 1) {
+//			cpd = remote.getMetaboliteInformation("CPD-14641");
+//			dao.save(cpd);
+//			System.out.println(cpd);
+//		}
+//		tx.commit();
+//		
+//		tx = sessionFactory.getCurrentSession().beginTransaction();
+//		
+//		res = dao.criteria(BioCycMetaboliteEntity.class, Restrictions.eq("entry", "CPD-14641"));
+//		assertEquals(true, res.size() > 0);
+//		
+//		dao.remove(res.iterator().next());
+//		
+//		tx.commit();
+//	}
 }

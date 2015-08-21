@@ -1,3 +1,5 @@
 include 'biosynth-core',
         'biosynth-biodb', 
-        'biosynth-biodb-chebi'
+        'biosynth-biodb-chebi',
+        'biosynth-chemanalysis',
+        'biosynth-visualization'

@@ -16,11 +16,13 @@
                             http://www.springframework.org/schema/tx
                             http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
                             
-  <bean id="csvBiggReactionDao" class="edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggReactionDaoImpl">
-    <property name="csvFile" value="file:D:/home/data/bigg/BiGGreactionList.tsv"/>
+  <bean id="csvBiggReactionDao"
+  	class="pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.CsvBiggReactionDaoImpl">
+    <property name="csvFile" value="classpath:BiGGreactionList.tsv"/>
   </bean>
 
-  <bean id="csvBiggMetaboliteDao" class="edu.uminho.biosynth.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl">
-    <property name="csvFile" value="file:D:/home/data/bigg/BiGGmetaboliteList.tsv"/>
+  <bean id="csvBiggMetaboliteDao"
+  	class="pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.CsvBiggMetaboliteDaoImpl">
+    <property name="csvFile" value="classpath:bigg_metabolite_valid.tsv"/>
   </bean>
 </beans>
