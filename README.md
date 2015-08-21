@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Fxe/biosynth-framework.svg?branch=master)](https://travis-ci.org/Fxe/biosynth-framework)
-[![Software License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE.txt)
+[![Software License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
 ## Biosynth Framework
 
