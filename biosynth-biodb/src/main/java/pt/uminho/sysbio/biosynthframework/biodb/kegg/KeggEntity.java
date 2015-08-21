@@ -74,12 +74,13 @@ public abstract class KeggEntity {
 		if(m.find())
 		{
 			gs = new HashSet<>();
-			String org = m.group(1).toLowerCase();
+//			String org = m.group(1).toLowerCase();
 			p = Pattern.compile(KeggTokens.GENE_WITH_NAME);
 			for(String g : m.group(2).split("\\s+"))
 			{
 				m = p.matcher(g);
-				gs.add(m.find() ? org+":"+m.group(1) : org+":"+g);
+//				gs.add(m.find() ? org+":"+m.group(1) : org+":"+g);
+				gs.add(m.find() ? m.group(1) : g);
 			}
 		}
 		return gs;
