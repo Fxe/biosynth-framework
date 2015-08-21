@@ -86,6 +86,7 @@ public class KeggGeneEntity extends KeggEntity{
 	}
 	
 	
+	
 	@Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;

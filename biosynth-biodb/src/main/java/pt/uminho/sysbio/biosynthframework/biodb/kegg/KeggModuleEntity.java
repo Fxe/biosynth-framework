@@ -97,5 +97,11 @@ public class KeggModuleEntity extends KeggEntity{
 		if(addedValue==null)
 			super.addProperty(key, value);
 	}
+	
+	// TODO orthologs by reaction or EC
+	@Override
+	public String getOrthologyFromValue(String value) {
+		return null;
+	}
 
 }
