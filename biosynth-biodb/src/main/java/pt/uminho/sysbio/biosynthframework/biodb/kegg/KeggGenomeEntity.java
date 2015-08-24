@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
+
 public class KeggGenomeEntity extends KeggEntity{
 
 //	protected String entry;
@@ -22,7 +24,6 @@ public class KeggGenomeEntity extends KeggEntity{
 	protected String taxonomy;
 	
 	
-	
 	public String getLineage() {
 		return lineage;
 	}
@@ -38,7 +39,12 @@ public class KeggGenomeEntity extends KeggEntity{
 	
 	@Override
 	public void addProperty(String key, String value) {
-		if(key.equals("LINEAGE"))
+		if(key.equals(KeggTokens.ENTRY))
+		{
+			String[] ts = value.split("\\s+");
+			entry = ts[0];
+		}
+		else if(key.equals("LINEAGE"))
 			lineage = value;
 		else if(key.equals("TAXONOMY"))
 			taxonomy = value;

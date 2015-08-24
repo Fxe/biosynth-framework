@@ -23,13 +23,15 @@ public class TestRestKeggModuleDaoImpl {
 	@Test
 	public void test1(){
 		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00016");
-		System.out.println(moduleEntity.getEntry());
+		System.out.println("Entry: " + moduleEntity.getEntry());
+		System.out.println("Module type: " + moduleEntity.getType());
 		System.out.println("Paths:");
 		for(String e : moduleEntity.getPathways())
 			System.out.println(e);
 		System.out.println("Orthologs:");
-		for(String e : moduleEntity.getOrthologs())
-			System.out.println(e);
+		if(moduleEntity.getOrthologs()!=null)
+			for(String e : moduleEntity.getOrthologs())
+				System.out.println(e);
 		System.out.println("Compounds:");
 		for(String e : moduleEntity.getCompounds())
 			System.out.println(e);

@@ -13,12 +13,16 @@ public class KeggTokens {
 	static final public String GENE_WITH_NAME = "([^\\(]+)\\(([^\\)]+)\\)";
 	static final public String MODULE_WITH_NAME = "(M\\d+)\\s+(.+)";
 	static final public String PATHWAY_WITH_NAME = "([a-z]+\\d+)\\s+(.+)";
-	static final public String ORTHOLOGY_WITH_NAME = "(K\\d+)\\s+(.+)";
+	static final public String ORTHOLOG_REGEXP = "(K\\d+)";
+	static final public String ORTHOLOGY_WITH_NAME = ORTHOLOG_REGEXP + "\\s+(.+)";
 	static final public String COMPOUND_WITH_NAME = "(C\\d+)\\s+(.+)";
 	static final public String REACTION_WITH_NAME = "(R\\d+)\\s+(.+)";
 	static final public String EC_NUMBER_REACTION = "\\[RN:(R\\d+)\\]";
+	static final public String MODULE_ENTRY_AND_TYPE = "(M\\d+)\\s+([^\\s]+)";
 
 	static final public String ENTRY = "ENTRY";
+	static final public String LINEAGE = "LINEAGE";
+	static final public String TAXONOMY = "TAXONOMY";
 	static final public String NAME = "NAME";
 	static final public String DEFINITION = "DEFINITION";
 	static final public String AASEQ = "AASEQ";
@@ -29,5 +33,4 @@ public class KeggTokens {
 	static final public String ORTHOLOGY = "ORTHOLOGY";
 	static final public String COMPOUND = "COMPOUND";
 	static final public String REACTION = "REACTION";
-
 }

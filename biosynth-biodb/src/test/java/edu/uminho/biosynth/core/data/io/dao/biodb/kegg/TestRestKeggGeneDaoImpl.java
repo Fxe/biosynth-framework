@@ -20,11 +20,12 @@ public class TestRestKeggGeneDaoImpl {
 	
 	@Test
 	public void test1(){
-//		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b0002");
-		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b3862");
+		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b0002");
+//		KeggGeneEntity geneEntity = rest.getGeneByEntry("eco:b3862");
 		
-		System.out.println(geneEntity.getEntry());
+		System.out.println("Entry: " + geneEntity.getEntry());
 		System.out.println(geneEntity.getAminoacidsSeq());
+		System.out.println(geneEntity.getNucleotidesSeq());
 		System.out.println(geneEntity.getPropertyValues("DBLINKS"));
 		System.out.println("Modules:");
 		if(geneEntity.getModules()!=null)

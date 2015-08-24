@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
@@ -47,6 +49,10 @@ public class KeggGeneEntity extends KeggEntity{
 		orthologs.add(ortholog);
 	}
 	
+	public String[] getEntryAndCDSFromValue(String value){
+		String[] ts = value.split("\\s+");
+		return ts.length>2 ? new String[]{ts[0], ts[1], ts[2]} : new String[]{ts[0]};
+	}
 	
 	public String getNucleotidesSeq() {
 		return nucleotidesSeq;
@@ -90,7 +96,15 @@ public class KeggGeneEntity extends KeggEntity{
 	@Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
-		if(key.equals(KeggTokens.DEFINITION))
+		if(key.equals(KeggTokens.ENTRY))
+		{
+			addedValue = getEntryAndCDSFromValue(value);
+			String[] v = (String[]) addedValue;
+			entry = v[0];
+			if(v.length>2)
+				super.addProperty(v[1], v[2]);
+		}
+		else if(key.equals(KeggTokens.DEFINITION))
 		{
 			addedValue = getEcNumbersFromDefinition(value);
 			if(addedValue!=null)

@@ -4,7 +4,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
 
 public class TestRestKeggGennomeDaoImpl {
@@ -24,7 +23,8 @@ public class TestRestKeggGennomeDaoImpl {
 	@Test
 	public void test1(){
 		KeggGenomeEntity genomeEntity = rest.getGenomeByEntry("T00007");
-		System.out.println(genomeEntity.getEntry());
+		System.out.println("Entry: " + genomeEntity.getEntry());
+		System.out.println("Name: " + genomeEntity.getNames());
 		System.out.println(genomeEntity.getLineage());
 		System.out.println(genomeEntity.getTaxonomy());
 		System.out.println(genomeEntity.getPropertyValues("SEQUENCE"));

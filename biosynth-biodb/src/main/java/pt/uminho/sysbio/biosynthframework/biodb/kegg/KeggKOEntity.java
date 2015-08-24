@@ -3,6 +3,8 @@ package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
@@ -44,6 +46,12 @@ public class KeggKOEntity extends KeggEntity{
 		ecNumbers.addAll(ecs);
 	}
 	
+	public String getEntryFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.ORTHOLOG_REGEXP);
+		Matcher m = p.matcher(value);
+		return m.find() ? m.group(1) : null;
+	}
+	
 	
 	public Set<String> getGenes() {
 		return genes;
@@ -74,7 +82,14 @@ public class KeggKOEntity extends KeggEntity{
 	@Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
-		if(key.equals(KeggTokens.DEFINITION))
+		
+		if(key.equals(KeggTokens.ENTRY))
+		{
+			addedValue = getEntryFromValue(value);
+			if(addedValue!=null)
+				entry = (String) addedValue;
+		}
+		else if(key.equals(KeggTokens.DEFINITION))
 		{
 			addedValue = getEcNumbersFromDefinition(value);
 			if(addedValue!=null)

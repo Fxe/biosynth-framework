@@ -14,14 +14,15 @@ public class KeggGenericEntityFlatFileParser {
 
 		T entity = entityClass.getDeclaredConstructor().newInstance();
 		
-		m.find();
 		int i=0;
-		String line = rawText.substring(i, m.start()).trim();
-		parseFirstRow(line, entity);
 		String currProp=null;
-		i = m.end();
-		m.find();
-		do
+		String line;
+//		m.find();
+//		String line = rawText.substring(i, m.start()).trim();
+//		parseFirstRow(line, entity);
+//		i = m.end();
+
+		while(m.find())
 		{	
 			line = rawText.substring(i, m.start()).trim();
 			if(!line.equals("") && !line.equals(KeggTokens.END_OF_FILE_REGEXP))
@@ -39,12 +40,13 @@ public class KeggGenericEntityFlatFileParser {
 				i=m.end();
 			}
 			
-		}while(m.find());
+		}
 		return entity;
 	}
 	
 	static protected <T extends KeggEntity> void parseFirstRow(String line, T entity){
 		String[] ts = line.split(KeggTokens.PROP_KEY_VALUE_SEPARATOR_REGEXP);
+		
 		if(ts.length%2==0)
 			for(int i=0; i<ts.length; i+=2)
 				entity.addProperty(ts[i], ts[i+1]);

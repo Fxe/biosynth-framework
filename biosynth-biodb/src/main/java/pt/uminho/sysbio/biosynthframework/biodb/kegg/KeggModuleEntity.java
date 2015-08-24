@@ -2,11 +2,15 @@ package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
 public class KeggModuleEntity extends KeggEntity{
 
+	
+	protected KeggModuleType type;
 	
 	protected Set<String> pathways;
 	protected Set<String> orthologs;
@@ -38,6 +42,11 @@ public class KeggModuleEntity extends KeggEntity{
 		reactions.add(reaction);
 	}
 	
+	public String[] getEntryAndModuleTypeFromValue(String value){
+		Pattern p = Pattern.compile(KeggTokens.MODULE_ENTRY_AND_TYPE);
+		Matcher m = p.matcher(value);
+		return m.find() ? new String[]{m.group(1), m.group(2)} : null;
+	}
 	
 	
 	public Set<String> getPathways() {
@@ -64,12 +73,28 @@ public class KeggModuleEntity extends KeggEntity{
 	public void setReactions(Set<String> reactions) {
 		this.reactions = reactions;
 	}
-	
+	public KeggModuleType getType() {
+		return type;
+	}
+	public void setType(KeggModuleType type) {
+		this.type = type;
+	}
 
+	
 	@Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
-		if(key.equals(KeggTokens.COMPOUND))
+		
+		if(key.equals(KeggTokens.ENTRY))
+		{
+			addedValue = getEntryAndModuleTypeFromValue(value);
+			if(addedValue!=null)
+			{
+				entry = ((String[]) addedValue)[0];
+				type = KeggModuleType.getType(((String[]) addedValue)[1]);
+			}
+		}
+		else if(key.equals(KeggTokens.COMPOUND))
 		{
 			addedValue = getCompoundFromValue(value);
 			if(addedValue!=null)
