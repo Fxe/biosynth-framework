@@ -7,7 +7,7 @@ public class KeggTokens {
 	static final public String KEY_VALUES_REGEXP = KEY_REGEXP + PROP_KEY_VALUE_SEPARATOR_REGEXP + "(.+)"; 
 	static final public String END_OF_FILE_REGEXP = "///";
 	
-	static final public String ECNUMBER_REGEXP = "(\\d+\\.\\d+\\.\\d+\\.\\d+[a-z]?|\\d+\\.\\d+\\.\\d+\\.\\-|\\d+\\.\\d+\\.[\\d+\\-].\\-|\\d+\\.[\\d+\\-]\\.\\-.\\-)";
+	static final public String ECNUMBER_REGEXP = "(\\d+\\.\\d+\\.\\d+\\.\\d+[a-z]?|\\d+\\.\\d+\\.\\d+\\.\\-|\\d+\\.\\d+\\.[\\d+\\-]\\.\\-|\\d+\\.[\\d+\\-]\\.\\-.\\-)";
 	static final public String GENE_DEFINITION_EC_REGEXP = "\\(EC:([^\\)]+)\\)";
 	static final public String KOG_GENES_REGEXP = "([A-Z]+):\\s+(.+)";
 	static final public String GENE_WITH_NAME = "([^\\(]+)\\(([^\\)]+)\\)";
