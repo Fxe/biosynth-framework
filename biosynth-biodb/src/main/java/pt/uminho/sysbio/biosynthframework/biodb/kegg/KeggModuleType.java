@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
-public enum KeggModuleType {
+import java.io.Serializable;
+
+public enum KeggModuleType implements Serializable {
 
 	Pathway("pathway"),
 	Complex("complex"),
