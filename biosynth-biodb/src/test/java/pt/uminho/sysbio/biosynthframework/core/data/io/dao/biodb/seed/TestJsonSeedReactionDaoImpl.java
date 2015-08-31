@@ -15,7 +15,7 @@ import org.junit.Test;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.SeedReactionEntity;
 
 public class TestJsonSeedReactionDaoImpl {
-	
+
 //	private static JsonSeedReactionDaoImpl reactionDao;
 //	private static String FOLDER = "D:/var/biodb/seed";
 //	
@@ -67,4 +67,5 @@ public class TestJsonSeedReactionDaoImpl {
 //		assertEquals("PPA", seedReactionEntity.getAbbreviation());
 ////		assertThat(seedReactionEntity.getEnzymeClass(), null);
 //	}
+
 }

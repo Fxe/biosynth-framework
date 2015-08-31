@@ -171,6 +171,7 @@ public class TestRestBiocycReactionDaoImpl {
 //		assertEquals(23, rxn.getCrossreferences().size());
 //		assertEquals(2.330017, rxn.getGibbs(), EPSILON);
 //	}
+
 //	@Test
 //	public void testGetAllReactions() {
 //		for (String rxnEntry : reactionDao.getAllReactionEntries()) {

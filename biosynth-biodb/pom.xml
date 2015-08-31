@@ -10,7 +10,7 @@
 	<name>Biosynth BioDB</name>
 	<url>http://maven.apache.org</url>
 	<description>Metabolic Database Management Components</description>
-
+<!-- ola abc -->
 	<distributionManagement>
 		<repository>
 			<id>watson</id>
@@ -175,6 +175,11 @@
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
+		<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>2.4</version>
+</dependency>
 	</dependencies>
 
 	<build>
