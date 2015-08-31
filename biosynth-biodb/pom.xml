@@ -10,7 +10,7 @@
 	<name>Biosynth BioDB</name>
 	<url>http://maven.apache.org</url>
 	<description>Metabolic Database Management Components</description>
-
+<!-- ola -->
 	<distributionManagement>
 		<repository>
 			<id>watson</id>
