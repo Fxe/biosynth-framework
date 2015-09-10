@@ -113,20 +113,12 @@ public abstract class KeggEntity {
 	}
 	
 	public Set<String> getEcNumbersFromDefinition(String value){
-		Pattern p = Pattern.compile(KeggTokens.GENE_DEFINITION_EC_REGEXP);
-		Matcher m = p.matcher(value);
-		Set<String> res = null;
-		
-		if(m.find())
-		{
-			res = new HashSet<>();
-			String ecs = m.group();
-			p = Pattern.compile(KeggTokens.ECNUMBER_REGEXP);
-			m = p.matcher(ecs);
-			while(m.find())
-				res.add(m.group());
-		}
-		return res;
+		Set<String> res = new HashSet<>();
+		Pattern	p = Pattern.compile(KeggTokens.ECNUMBER_REGEXP);
+		Matcher	m = p.matcher(value);
+		while(m.find())
+			res.add(m.group());
+		return res.size()==0 ? null : res;
 	}
 	
 	public List<String> removeProperty(String key){
