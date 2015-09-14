@@ -19,6 +19,8 @@ public class KeggTokens {
 	static final public String REACTION_WITH_NAME = "(R\\d+)\\s+(.+)";
 	static final public String EC_NUMBER_REACTION = "\\[RN:(R\\d+)\\]";
 	static final public String MODULE_ENTRY_AND_TYPE = "(M\\d+)\\s+([^\\s]+)";
+	static final public String PATHWAY_GENE_ORTHOLOG_EC = ".+\\s+\\[KO:([^\\]]+)\\]\\s+\\[EC:([^\\]]+)\\]$";
+	static final public String PATHWAY_GENE_ORTHOLOG = ".+\\s+\\[KO:([^\\]]+)\\]$";
 
 	static final public String ENTRY = "ENTRY";
 	static final public String LINEAGE = "LINEAGE";
@@ -28,6 +30,7 @@ public class KeggTokens {
 	static final public String AASEQ = "AASEQ";
 	static final public String NTSEQ = "NTSEQ";
 	static final public String GENES = "GENES";
+	static final public String PATHWAY_GENE = "GENE";
 	static final public String MODULE = "MODULE";
 	static final public String PATHWAY = "PATHWAY";
 	static final public String ORTHOLOGY = "ORTHOLOGY";
