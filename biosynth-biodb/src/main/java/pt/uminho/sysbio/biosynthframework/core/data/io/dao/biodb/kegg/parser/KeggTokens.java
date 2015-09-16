@@ -17,7 +17,8 @@ public class KeggTokens {
 	static final public String ORTHOLOGY_WITH_NAME = ORTHOLOG_REGEXP + "\\s+(.+)";
 	static final public String COMPOUND_WITH_NAME = "(C\\d+)\\s+(.+)";
 	static final public String REACTION_WITH_NAME = "(R\\d+)\\s+(.+)";
-	static final public String EC_NUMBER_REACTION = "\\[RN:(R\\d+)\\]";
+	static final public String EC_NUMBER_REACTIONS = "\\[RN:([^\\]]+)\\]";
+	static final public String REACTION_ID_EXP = "R\\d+";
 	static final public String MODULE_ENTRY_AND_TYPE = "(M\\d+)\\s+([^\\s]+)";
 	static final public String PATHWAY_GENE_ORTHOLOG_EC = ".+\\s+\\[KO:([^\\]]+)\\]\\s+\\[EC:([^\\]]+)\\]$";
 	static final public String PATHWAY_GENE_ORTHOLOG = ".+\\s+\\[KO:([^\\]]+)\\]$";

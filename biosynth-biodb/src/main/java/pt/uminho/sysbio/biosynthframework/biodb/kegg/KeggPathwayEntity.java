@@ -78,6 +78,28 @@ public class KeggPathwayEntity extends KeggEntity{
 		return tokens[0];
 	}
 	
+	public Set<String> getAllEcNumbers(){
+		Set<String> ecs = new TreeSet<>();
+		if(geneStepEcs!=null)
+		{
+			for(Set<String> es : geneStepEcs.values())
+				ecs.addAll(es);
+		}
+		return ecs.size()==0 ? null : ecs;
+	}
+	
+	public Set<String> getGenesFromEc(String ec){
+		Set<String> gs = new TreeSet<>();
+		for(String g : geneStepEcs.keySet())
+			if(geneStepEcs.get(g).contains(ec))
+				gs.add(g);
+		return gs.size()==0 ? null : gs;
+	}
+	
+	public Set<String> getGeneStepOrthologs(String gene) {
+		return geneStepOrthologs.containsKey(gene) ? geneStepOrthologs.get(gene) : null;
+	}
+	
 	public Set<String> getModules() {
 		return modules;
 	}
