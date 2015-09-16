@@ -1,17 +1,21 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
-public abstract class KeggEntity {
+public abstract class KeggEntity implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	
 	protected String entry;
 	protected List<String> names;
@@ -110,6 +114,15 @@ public abstract class KeggEntity {
 		Pattern p = Pattern.compile(exp);
 		Matcher m = p.matcher(value);
 		return m.find() ? m.group(1) : null;
+	}
+	
+	protected Set<String> retrieveValuesRegExp(String value, String exp){
+		Pattern p = Pattern.compile(exp);
+		Matcher m = p.matcher(value);
+		Set<String> res = new TreeSet<>();
+		while(m.find())
+			res.add(m.group());
+		return res.size()==0 ? null : res;
 	}
 	
 	public Set<String> getEcNumbersFromDefinition(String value){

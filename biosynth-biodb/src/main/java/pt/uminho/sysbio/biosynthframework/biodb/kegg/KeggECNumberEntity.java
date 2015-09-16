@@ -40,8 +40,9 @@ public class KeggECNumberEntity extends KeggEntity{
 		reactions.add(reaction);
 	}
 	
-	public String getReactionFromValue(String value){
-		return retrieveValueRegExp(value, KeggTokens.EC_NUMBER_REACTION);
+	public Set<String> getReactionsFromValue(String value){
+		String reactionsValue = retrieveValueRegExp(value, KeggTokens.EC_NUMBER_REACTIONS);
+		return reactionsValue==null ? null : retrieveValuesRegExp(reactionsValue, KeggTokens.REACTION_ID_EXP);
 	}
 	
 	public Set<String> getGenes() {
@@ -104,9 +105,10 @@ public class KeggECNumberEntity extends KeggEntity{
 		}
 		else if(key.equals(KeggTokens.REACTION))
 		{
-			addedValue = getReactionFromValue(value);
+			addedValue = getReactionsFromValue(value);
 			if(addedValue!=null)
-				addReaction((String) addedValue);
+				for(String r : (Set<String>) addedValue)
+					addReaction(r);
 		}
 		
 		if(addedValue==null)
