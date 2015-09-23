@@ -33,7 +33,7 @@ public class TestRestKeggEcNumberDaoImpl {
 			System.out.println(e);
 		System.out.println("Genes:");
 		System.out.println(ecEntity.getGenes());
-		System.out.println("Reactions:");
+		System.out.println("Reactions (" + ecEntity.getReactions().size() + "):");
 		for(String e : ecEntity.getReactions())
 			System.out.println(e);
 		System.out.println("Substrates:");

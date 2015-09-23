@@ -37,4 +37,5 @@ public class KeggTokens {
 	static final public String ORTHOLOGY = "ORTHOLOGY";
 	static final public String COMPOUND = "COMPOUND";
 	static final public String REACTION = "REACTION";
+	static final public String ALL_REACTIONS = "ALL_REAC";
 }
