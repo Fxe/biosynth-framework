@@ -26,44 +26,44 @@ import edu.uminho.biosynth.core.data.integration.references.TransformBiocycMetab
 
 public class TestReferenceLoader {
 
-	private static SessionFactory sessionFactory;
-	private static IGenericDao dao;
-	private static Transaction tx;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_debug_pgsql.cfg.xml");
-		dao = new GenericEntityDaoImpl(sessionFactory);
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		tx = sessionFactory.getCurrentSession().beginTransaction();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		tx.commit();
-	}
-
-	@Test
-	public void test() {
-		IReferenceTransformer<BioCycMetaboliteCrossreferenceEntity> biocycXrefTrans = 
-				new TransformBiocycMetaboliteCrossReference();
-		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossreferenceEntity> biocycLoader = 
-				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossreferenceEntity.class, 
-						biocycXrefTrans);
-		IMetaboliteService<BioCycMetaboliteEntity> biocycService = new BiocycService(dao);
-		biocycLoader.setService(biocycService);
-		biocycLoader.setReferenceTransformer(biocycXrefTrans);
-		BinaryGraph<ReferenceNode, ReferenceLink> refGraph = biocycLoader.getMetaboliteReferences("WATER");
-		
-		assertEquals(2, refGraph.size());
-		assertEquals(3, refGraph.order());
-	}
+//	private static SessionFactory sessionFactory;
+//	private static IGenericDao dao;
+//	private static Transaction tx;
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_debug_pgsql.cfg.xml");
+//		dao = new GenericEntityDaoImpl(sessionFactory);
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		tx = sessionFactory.getCurrentSession().beginTransaction();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		tx.commit();
+//	}
+//
+//	@Test
+//	public void test() {
+//		IReferenceTransformer<BioCycMetaboliteCrossreferenceEntity> biocycXrefTrans = 
+//				new TransformBiocycMetaboliteCrossReference();
+//		ReferenceLoader<BioCycMetaboliteEntity, BioCycMetaboliteCrossreferenceEntity> biocycLoader = 
+//				new ReferenceLoader<>(BioCycMetaboliteEntity.class, BioCycMetaboliteCrossreferenceEntity.class, 
+//						biocycXrefTrans);
+//		IMetaboliteService<BioCycMetaboliteEntity> biocycService = new BiocycService(dao);
+//		biocycLoader.setService(biocycService);
+//		biocycLoader.setReferenceTransformer(biocycXrefTrans);
+//		BinaryGraph<ReferenceNode, ReferenceLink> refGraph = biocycLoader.getMetaboliteReferences("WATER");
+//		
+//		assertEquals(2, refGraph.size());
+//		assertEquals(3, refGraph.order());
+//	}
 
 }

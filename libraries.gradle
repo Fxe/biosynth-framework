@@ -63,8 +63,8 @@ ext {
     cdk_sdg: "org.openscience.cdk:cdk-sdg:${cdkVersion}",
     
     //jung
-    jung2_algo: "net.sf.jung:jung-algorithms:${jungVersion}"
-    jung2_impl: "net.sf.jung:jung-graph-impl:${jungVersion}"
+    jung2_algo: "net.sf.jung:jung-algorithms:${jungVersion}",
+    jung2_impl: "net.sf.jung:jung-graph-impl:${jungVersion}",
     
     // mew
     mew_biocomponents: "pt.uminho.ceb.biosystems.mew:biocomponents:${mewVersion}",

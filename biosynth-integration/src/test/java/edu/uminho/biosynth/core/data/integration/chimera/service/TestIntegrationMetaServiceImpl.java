@@ -23,68 +23,68 @@ import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitiali
 
 public class TestIntegrationMetaServiceImpl {
 
-	private static final String GRAPH_DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.central";
-	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
-	private static IntegrationMetaService integrationMetaService;
-	private static IntegrationDataDao data;
-	private static IntegrationMetadataDao meta;
-	private static SessionFactory sessionFactory;
-	private static GraphDatabaseService graphDatabaseService;
-	
-	private static org.neo4j.graphdb.Transaction data_tx;
-	private static org.hibernate.Transaction meta_tx;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(
-				new File(HBM_CFG));
-		graphDatabaseService = HelperNeo4jConfigInitializer
-				.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
-		HbmIntegrationMetadataDaoImpl chimeraMetadataDaoImpl = 
-				new HbmIntegrationMetadataDaoImpl();
-		chimeraMetadataDaoImpl.setSessionFactory(sessionFactory);
-		
-		Neo4jChimeraDataDaoImpl chimeraDataDaoImpl =
-				new Neo4jChimeraDataDaoImpl();
-		chimeraDataDaoImpl.setGraphDatabaseService(graphDatabaseService);
-		
-		data = chimeraDataDaoImpl;
-		meta = chimeraMetadataDaoImpl;
-		
-		IntegrationMetaServiceImpl integrationMetaServiceImpl = 
-				new IntegrationMetaServiceImpl();
-		integrationMetaServiceImpl.setData(data);
-		integrationMetaServiceImpl.setMeta(meta);
-		
-		integrationMetaService = integrationMetaServiceImpl;
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		sessionFactory.close();
-		graphDatabaseService.shutdown();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
-		data_tx = graphDatabaseService.beginTx();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		meta_tx.rollback();
-		data_tx.success();
-	}
-
-	@Test
-	public void test() {
-		IntegrationSet integrationSet = meta.getIntegrationSet(1L);
-		Map<String, Integer> warningsCount = 
-				integrationMetaService.countWarnings(integrationSet);
-
-		System.out.println(warningsCount);
-	
-	}
+//	private static final String GRAPH_DB_PATH = "D:/opt/neo4j-community-2.1.0-M01/data/graph.db.central";
+//	private static final String HBM_CFG = "D:/home/data/java_config/hbm_mysql_chimera_meta.cfg.xml";
+//	private static IntegrationMetaService integrationMetaService;
+//	private static IntegrationDataDao data;
+//	private static IntegrationMetadataDao meta;
+//	private static SessionFactory sessionFactory;
+//	private static GraphDatabaseService graphDatabaseService;
+//	
+//	private static org.neo4j.graphdb.Transaction data_tx;
+//	private static org.hibernate.Transaction meta_tx;
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory = HelperHbmConfigInitializer.initializeHibernateSession(
+//				new File(HBM_CFG));
+//		graphDatabaseService = HelperNeo4jConfigInitializer
+//				.initializeNeo4jDataDatabaseConstraints(GRAPH_DB_PATH);
+//		HbmIntegrationMetadataDaoImpl chimeraMetadataDaoImpl = 
+//				new HbmIntegrationMetadataDaoImpl();
+//		chimeraMetadataDaoImpl.setSessionFactory(sessionFactory);
+//		
+//		Neo4jChimeraDataDaoImpl chimeraDataDaoImpl =
+//				new Neo4jChimeraDataDaoImpl();
+//		chimeraDataDaoImpl.setGraphDatabaseService(graphDatabaseService);
+//		
+//		data = chimeraDataDaoImpl;
+//		meta = chimeraMetadataDaoImpl;
+//		
+//		IntegrationMetaServiceImpl integrationMetaServiceImpl = 
+//				new IntegrationMetaServiceImpl();
+//		integrationMetaServiceImpl.setData(data);
+//		integrationMetaServiceImpl.setMeta(meta);
+//		
+//		integrationMetaService = integrationMetaServiceImpl;
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		sessionFactory.close();
+//		graphDatabaseService.shutdown();
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		meta_tx = sessionFactory.getCurrentSession().beginTransaction();
+//		data_tx = graphDatabaseService.beginTx();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		meta_tx.rollback();
+//		data_tx.success();
+//	}
+//
+//	@Test
+//	public void test() {
+//		IntegrationSet integrationSet = meta.getIntegrationSet(1L);
+//		Map<String, Integer> warningsCount = 
+//				integrationMetaService.countWarnings(integrationSet);
+//
+//		System.out.println(warningsCount);
+//	
+//	}
 
 }
