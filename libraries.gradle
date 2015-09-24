@@ -6,6 +6,7 @@ ext {
   hibernateVersion = '4.3.5.Final'
   neo4jVersion = '2.1.5'
   cdkVersion = '1.5.10'
+  jungVersion = '2.0.1'
   mewVersion = '0.0.1'
   
   libraries = [
@@ -60,6 +61,10 @@ ext {
     cdk_renderextra: "org.openscience.cdk:cdk-renderextra:${cdkVersion}",
     cdk_renderawt: "org.openscience.cdk:cdk-renderawt:${cdkVersion}",
     cdk_sdg: "org.openscience.cdk:cdk-sdg:${cdkVersion}",
+    
+    //jung
+    jung2_algo: "net.sf.jung:jung-algorithms:${jungVersion}"
+    jung2_impl: "net.sf.jung:jung-graph-impl:${jungVersion}"
     
     // mew
     mew_biocomponents: "pt.uminho.ceb.biosystems.mew:biocomponents:${mewVersion}",
