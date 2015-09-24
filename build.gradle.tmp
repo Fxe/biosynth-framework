@@ -1,0 +1,14 @@
+
+
+dependencies {
+  compile( project(':biosynth-core') )
+  compile( project(':biosynth-biodb') )
+  compile( project(':biosynth-biodb-chebi') )
+  compile( project(':biosynth-chemanalysis') )
+//  compile( project(':biosynth-graph') )
+  compile( libraries.jung2)
+  compile( 'net.sf.jung:jung-algorithms:2.0.1')
+  compile( 'net.sf.jung:jung-graph-impl:2.0.1')
+  compile( libraries.neo4j_community)
+  testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '2.1.5', classifier: 'tests'
+}
