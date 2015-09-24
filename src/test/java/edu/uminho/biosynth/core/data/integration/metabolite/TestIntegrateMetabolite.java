@@ -34,7 +34,6 @@ import pt.uminho.sysbio.biosynthframework.core.data.service.BiocycService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.IMetaboliteService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.KeggService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
-import pt.uminho.sysbio.metropolis.network.graph.algorithm.GraphCluster;
 import edu.uminho.biosynth.core.data.integration.DefaultMetaboliteIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.IIntegrationStrategy;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
@@ -148,8 +147,8 @@ public class TestIntegrateMetabolite {
 		
 		System.out.println(graph);
 		
-		GraphCluster<ReferenceNode, ReferenceLink> clusterAlgorithm = new GraphCluster<>();
-		clusterAlgorithm.generateClusters(graph);
+//		GraphCluster<ReferenceNode, ReferenceLink> clusterAlgorithm = new GraphCluster<>();
+//		clusterAlgorithm.generateClusters(graph);
 		
 		
 		// should have a service manager and the reference loader would ask the service manager instead
@@ -159,53 +158,53 @@ public class TestIntegrateMetabolite {
 		serviceMap.put(mxnService.getServiceId(), mxnService);
 		serviceMap.put(biggService.getServiceId(), biggService);
 		serviceMap.put(biggService2.getServiceId(), biggService2);
-		for (String clusterId : clusterAlgorithm.getClustersToListOfVertex().keySet()) {
-			System.out.println(clusterId + ":");
-			System.out.println(clusterAlgorithm.getClustersToListOfVertex().get(clusterId));
-			List<GenericMetabolite> cluster = new ArrayList<> ();
-			for (ReferenceNode node : clusterAlgorithm.getClustersToListOfVertex().get(clusterId)) {
-				String entry = node.getEntryTypePair().getFirst();
-				for (String serviceId : node.getRelatedServiceIds()) {
-					if (serviceMap.containsKey(serviceId)) {
-						GenericMetabolite cpd = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
-						cluster.add(cpd);
-						System.out.println(cpd.getEntry() + ":" + serviceId);
-					} else {
-						System.out.println("No Service For: " + entry);
-					}
-				}
-			}
+//		for (String clusterId : clusterAlgorithm.getClustersToListOfVertex().keySet()) {
+//			System.out.println(clusterId + ":");
+//			System.out.println(clusterAlgorithm.getClustersToListOfVertex().get(clusterId));
+//			List<GenericMetabolite> cluster = new ArrayList<> ();
+//			for (ReferenceNode node : clusterAlgorithm.getClustersToListOfVertex().get(clusterId)) {
+//				String entry = node.getEntryTypePair().getFirst();
+//				for (String serviceId : node.getRelatedServiceIds()) {
+//					if (serviceMap.containsKey(serviceId)) {
+//						GenericMetabolite cpd = serviceMap.get(serviceId).getMetaboliteByEntry(entry);
+//						cluster.add(cpd);
+//						System.out.println(cpd.getEntry() + ":" + serviceId);
+//					} else {
+//						System.out.println("No Service For: " + entry);
+//					}
+//				}
+//			}
+//			
+//			IKeyGenerator<String> generator = new IKeyGenerator<String>() {
+//				@Override
+//				public String generateKey() {
+//					return "CPD-0";
+//				}
+//
+//				@Override
+//				public void reset() {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//				
+//				@Override
+//				public void generateFromLastElement(String key) {
+//					System.out.println("bzbzbbzbzb");
+//				}
+//
+//				@Override
+//				public String getCurrentKey() {
+//					// TODO Auto-generated method stub
+//					return null;
+//				}
+//			};
 			
-			IKeyGenerator<String> generator = new IKeyGenerator<String>() {
-				@Override
-				public String generateKey() {
-					return "CPD-0";
-				}
-
-				@Override
-				public void reset() {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void generateFromLastElement(String key) {
-					System.out.println("bzbzbbzbzb");
-				}
-
-				@Override
-				public String getCurrentKey() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			};
-			
-			IIntegrationStrategy<GenericMetabolite, IntegratedMetabolite> integrationStrategy =
-					new DefaultMetaboliteIntegrationStrategy();
-			((DefaultMetaboliteIntegrationStrategy)integrationStrategy).setEntryGenerator(generator);
-			
-			System.out.println(integrationStrategy.integrate(cluster));
-		}
+//			IIntegrationStrategy<GenericMetabolite, IntegratedMetabolite> integrationStrategy =
+//					new DefaultMetaboliteIntegrationStrategy();
+//			((DefaultMetaboliteIntegrationStrategy)integrationStrategy).setEntryGenerator(generator);
+//			
+//			System.out.println(integrationStrategy.integrate(cluster));
+//		}
 		
 //		System.out.println(clusterAlgorithm.getClustersToListOfVertex().keySet());
 //		for (String clusterId : clusterAlgorithm.getClustersToListOfVertex().keySet()) {
@@ -215,7 +214,7 @@ public class TestIntegrateMetabolite {
 //			}
 //		}
 		
-		assertEquals(60, graph.size());
+//		assertEquals(60, graph.size());
 	}
 
 }

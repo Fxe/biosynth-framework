@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pt.uminho.sysbio.biosynth.integration.BFS;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
@@ -21,9 +22,8 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jSuperDao;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
-import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
-import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
-import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
+import edu.uci.ics.jung.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uminho.biosynth.core.data.integration.chimera.service.ConflictDecision;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStrategy;
 import edu.uminho.biosynth.core.data.integration.chimera.strategy.SplitStrategy;
@@ -219,7 +219,7 @@ implements MetaboliteIntegrationService {
 	private List<Set<Long>> resolveMembershipConflict(List<Set<Long>> clusterList) {
 		List<Set<Long>> uniqueMembershipClusters = new ArrayList<> ();
 		
-		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
+		UndirectedGraph<Long, Integer> graph = new UndirectedSparseGraph<>();  
 		Integer counter = 0;
 		Set<Long> eids = new HashSet<> ();
 		for (Set<Long> cluster : clusterList) {
@@ -228,8 +228,9 @@ implements MetaboliteIntegrationService {
 				for (Long eid : cluster) {
 					eids.add(eid);
 					if (prev != null) {
-						DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-						graph.addEdge(edge);
+					  graph.addEdge(counter++, prev, eid);
+//						DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//						graph.addEdge(edge);
 					}
 					prev = eid;
 				}
@@ -244,7 +245,8 @@ implements MetaboliteIntegrationService {
 		Set<Long> eidsProcessed = new HashSet<> ();
 		for (Long eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
-				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+			  
+				Set<Long> cluster = BFS.run(graph, eid);
 				eidsProcessed.addAll(cluster);
 				uniqueMembershipClusters.add(cluster);
 			}

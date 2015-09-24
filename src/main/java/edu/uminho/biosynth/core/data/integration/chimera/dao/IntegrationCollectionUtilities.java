@@ -10,9 +10,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.DefaultBinaryEdge;
-import pt.uminho.sysbio.biosynthframework.core.components.representation.basic.graph.UndirectedGraph;
-import pt.uminho.sysbio.metropolis.network.graph.algorithm.BreadthFirstSearch;
+import pt.uminho.sysbio.biosynth.integration.BFS;
+import edu.uci.ics.jung.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class IntegrationCollectionUtilities {
 
@@ -70,7 +70,7 @@ public class IntegrationCollectionUtilities {
 		 */
 		Map<EID, CID> res = new HashMap<> ();
 		Set<EID> eids = new HashSet<> ();
-		UndirectedGraph<EID, Integer> graph = new UndirectedGraph<>();
+		UndirectedGraph<EID, Integer> graph = new UndirectedSparseGraph<>();
 		Integer counter = 0;
 		for (CID cid : clusterMap.keySet()) {
 			EID prev = null;
@@ -81,8 +81,9 @@ public class IntegrationCollectionUtilities {
 				for (EID eid : clusterMap.get(cid)) {
 					eids.add(eid);
 					if (prev != null) {
-						DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-						graph.addEdge(edge);
+					  graph.addEdge(counter++, prev, eid);
+//						DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//						graph.addEdge(edge);
 					}
 					prev = eid;
 				}
@@ -96,7 +97,7 @@ public class IntegrationCollectionUtilities {
 		Set<EID> eidsProcessed = new HashSet<> ();
 		for (EID eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
-				Set<EID> cluster = BreadthFirstSearch.run(graph, eid);
+				Set<EID> cluster = BFS.run(graph, eid);
 				eidsProcessed.addAll(cluster);
 				if (!cluster.isEmpty()) {
 					CID cid = eidToCid.get(cluster.iterator().next()).iterator().next();
@@ -129,7 +130,7 @@ public class IntegrationCollectionUtilities {
 		
 		Map<CID, Set<EID>> res = new HashMap<> ();
 		Set<EID> eids = new HashSet<> ();
-		UndirectedGraph<EID, Integer> graph = new UndirectedGraph<>();
+		UndirectedGraph<EID, Integer> graph = new UndirectedSparseGraph<>();
 		Integer counter = 0;
 		for (CID cid : clusterMap.keySet()) {
 			EID prev = null;
@@ -143,8 +144,9 @@ public class IntegrationCollectionUtilities {
 				for (EID eid : eids_) {
 					eids.add(eid);
 					if (prev != null) {
-						DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-						graph.addEdge(edge);
+					  graph.addEdge(counter++, prev, eid);
+//						DefaultBinaryEdge<Integer, EID> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//						graph.addEdge(edge);
 					}
 					prev = eid;
 				}
@@ -154,7 +156,7 @@ public class IntegrationCollectionUtilities {
 		Set<EID> eidsProcessed = new HashSet<> ();
 		for (EID eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
-				Set<EID> cluster = BreadthFirstSearch.run(graph, eid);
+				Set<EID> cluster = BFS.run(graph, eid);
 				eidsProcessed.addAll(cluster);
 				CID cid = eidToCid.get(cluster.iterator().next()).iterator().next();
 				res.put(cid, cluster);
@@ -277,7 +279,8 @@ public class IntegrationCollectionUtilities {
 		
 		Map<Long, Set<T>> elementToClusterId = new HashMap<> ();
 		Set<Long> eids = new HashSet<> ();
-		UndirectedGraph<Long, T> graph = new UndirectedGraph<>();
+		UndirectedGraph<Long, T> graph = new UndirectedSparseGraph<>();
+//		UndirectedGraph<Long, T> graph = new UndirectedGraph<>();
 		
 		LOGGER.debug("Building graph ...");
 		for (T entry : prevClusters.keySet()) {
@@ -294,8 +297,9 @@ public class IntegrationCollectionUtilities {
 				elementToClusterId.get(eid).add(entry);
 				
 				if (prev != null) {
-					DefaultBinaryEdge<T, Long> edge = new DefaultBinaryEdge<T, Long>(entry, prev, eid);
-					graph.addEdge(edge);
+				  graph.addEdge(entry, prev, eid);
+//					DefaultBinaryEdge<T, Long> edge = new DefaultBinaryEdge<T, Long>(entry, prev, eid);
+//					graph.addEdge(edge);
 				} else if (members.size() < 2) {
 					graph.addVertex(eid);
 				}
@@ -310,7 +314,7 @@ public class IntegrationCollectionUtilities {
 		//begin traversal
 		for (Long eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
-				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+				Set<Long> cluster = BFS.run(graph, eid);
 				
 				if (!cluster.isEmpty()) {
 					eidsProcessed.addAll(cluster);
@@ -383,7 +387,8 @@ public class IntegrationCollectionUtilities {
 			}
 		}
 		
-		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
+		UndirectedGraph<Long, Integer> graph = new UndirectedSparseGraph<>();
+//		UndirectedGraph<Long, Integer> graph = new UndirectedGraph<>();
 		Integer counter = 0;
 		Set<Long> eids = new HashSet<> ();
 		for (Set<Long> cluster : uniqueMembershipClusters) {
@@ -391,8 +396,9 @@ public class IntegrationCollectionUtilities {
 			for (Long eid : cluster) {
 				eids.add(eid);
 				if (prev != null) {
-					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-					graph.addEdge(edge);
+				  graph.addEdge(counter++, prev, eid);
+//					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//					graph.addEdge(edge);
 				} else if (cluster.size() < 2) {
 					graph.addVertex(eid);
 				}
@@ -410,8 +416,9 @@ public class IntegrationCollectionUtilities {
 			for (Long eid : cluster) {
 				eids.add(eid);
 				if (prev != null) {
-					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
-					graph.addEdge(edge);
+				  graph.addEdge(counter++, prev, eid);
+//					DefaultBinaryEdge<Integer, Long> edge = new DefaultBinaryEdge<>(counter++, prev, eid);
+//					graph.addEdge(edge);
 				} else if (cluster.size() < 2) {
 					graph.addVertex(eid);
 				}
@@ -422,7 +429,7 @@ public class IntegrationCollectionUtilities {
 		Set<Long> eidsProcessed = new HashSet<> ();
 		for (Long eid : eids) {
 			if (!eidsProcessed.contains(eid)) {
-				Set<Long> cluster = BreadthFirstSearch.run(graph, eid);
+				Set<Long> cluster = BFS.run(graph, eid);
 				
 				if (!cluster.isEmpty()) {
 					eidsProcessed.addAll(cluster);
