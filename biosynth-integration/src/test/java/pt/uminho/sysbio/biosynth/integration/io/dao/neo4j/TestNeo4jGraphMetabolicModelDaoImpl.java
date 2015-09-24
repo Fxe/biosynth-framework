@@ -16,45 +16,45 @@ import pt.uminho.sysbio.biosynthframework.io.MetabolicModelDao;
 
 public class TestNeo4jGraphMetabolicModelDaoImpl {
 
-	private static MetabolicModelDao<DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity> dao;
-	private static GraphDatabaseService graphDatabaseService;
-	private static Transaction tx;
-	
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabase("D:/tmp/data.db");
-		dao = new Neo4jGraphMetabolicModelDaoImpl(graphDatabaseService);
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		graphDatabaseService.shutdown();
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		tx = graphDatabaseService.beginTx();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		tx.failure(); tx.close();
-	}
-
-	@Test
-	public void test_page_alot() {
-		System.out.println(dao.findAll(0, 10000).size());
-	}
-	
-	@Test
-	public void test_page_zero() {
-		System.out.println(dao.findAll(0, 1));
-	}
-	
-	@Test
-	public void test_pagination() {
-		System.out.println(dao.findAll(0, 10000).size());
-	}
+//	private static MetabolicModelDao<DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity, DefaultMetabolicModelEntity> dao;
+//	private static GraphDatabaseService graphDatabaseService;
+//	private static Transaction tx;
+//	
+//	
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		graphDatabaseService = HelperNeo4jConfigInitializer.initializeNeo4jDatabase("D:/tmp/data.db");
+//		dao = new Neo4jGraphMetabolicModelDaoImpl(graphDatabaseService);
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		graphDatabaseService.shutdown();
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		tx = graphDatabaseService.beginTx();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		tx.failure(); tx.close();
+//	}
+//
+//	@Test
+//	public void test_page_alot() {
+//		System.out.println(dao.findAll(0, 10000).size());
+//	}
+//	
+//	@Test
+//	public void test_page_zero() {
+//		System.out.println(dao.findAll(0, 1));
+//	}
+//	
+//	@Test
+//	public void test_pagination() {
+//		System.out.println(dao.findAll(0, 10000).size());
+//	}
 
 }

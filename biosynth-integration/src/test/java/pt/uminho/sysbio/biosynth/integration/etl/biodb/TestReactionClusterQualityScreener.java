@@ -51,7 +51,7 @@ public class TestReactionClusterQualityScreener {
 		assertEquals(0, rql.size());
 	}
 	
-	@Test
+//	@Test
 	public void testSingleton() {
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		DefaultReaction defaultReaction1 = new DefaultReaction();
@@ -63,7 +63,7 @@ public class TestReactionClusterQualityScreener {
 		assertEquals(0, rql.size());
 	}
 	
-	@Test
+//	@Test
 	public void test_Proton_Label_With_Align() {
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		DefaultReaction defaultReaction1 = new DefaultReactionFactory()
@@ -85,7 +85,7 @@ public class TestReactionClusterQualityScreener {
 		assertEquals(0, rql.size());
 	}
 	
-	@Test
+//	@Test
 	public void test_Proton_Label_Without_Aligned() {
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		DefaultReaction defaultReaction1 = new DefaultReactionFactory()
@@ -107,7 +107,7 @@ public class TestReactionClusterQualityScreener {
 		assertEquals(0, rql.size());
 	}
 	
-	@Test
+//	@Test
 	public void test_Mismatch_Label_Without_Align() {
 		List<GenericReaction> rxnList = new ArrayList<> ();
 		DefaultReaction defaultReaction1 = new DefaultReactionFactory()

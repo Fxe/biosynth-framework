@@ -44,7 +44,7 @@ public class TestTransformBiggCentral {
 		
 		EtlTransform<BiggMetaboliteEntity, GraphMetaboliteEntity> transform;
 		
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionLeftEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionRightEntity;
@@ -59,7 +60,7 @@ public class TestBiggReactionTransform {
 		
 		assertEquals("DHCR242r", graphReactionEntity.getEntry());
 		assertEquals(MetaboliteMajorLabel.BiGG.toString(), graphReactionEntity.getMajorLabel());
-		assertEquals(null, graphReactionEntity.getOrientation());
+		assertEquals(Orientation.LeftToRight, graphReactionEntity.getOrientation());
 	}
 
 }

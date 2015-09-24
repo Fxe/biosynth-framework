@@ -48,9 +48,9 @@ public class TestAnnotationEntityToGraphEntityTransform {
 		AnnotationEntityToGraphEntityTransform<BiggReactionEntity> entityTransform =
 				new AnnotationEntityToGraphEntityTransform<BiggReactionEntity>();
 		
-		GraphReactionEntity graphReactionEntity = entityTransform.etlTransform(biggReactionEntity);
+//		GraphReactionEntity graphReactionEntity = entityTransform.etlTransform(biggReactionEntity);
 		
-		System.out.println(graphReactionEntity);
+//		System.out.println(graphReactionEntity);
 	}
 
 }

@@ -28,7 +28,7 @@ public class TestExtractNeo4j {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 }

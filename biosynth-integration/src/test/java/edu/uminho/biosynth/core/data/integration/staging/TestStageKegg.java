@@ -26,83 +26,83 @@ import edu.uminho.biosynth.core.data.integration.references.TransformKeggMetabol
 
 public class TestStageKegg {
 	
-	public static SessionFactory sessionFactory_stga;
-	public static SessionFactory sessionFactory_kegg;
-	private static IGenericDao dao_stga;
-	private static IGenericDao dao_kegg;
-	private static Transaction tx_stga;
-	private static Transaction tx_kegg;
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
-		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
-		sessionFactory_kegg = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
-		dao_kegg = new GenericEntityDaoImpl(sessionFactory_kegg);
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		
-		
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
-		tx_kegg = sessionFactory_kegg.getCurrentSession().beginTransaction();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		tx_stga.commit();
-		tx_kegg.commit();
-	}
-
-	@Test
-	public void testStageKegg() {
-		HbmMetaboliteStagingManagerImpl manager = new HbmMetaboliteStagingManagerImpl();
-		manager.setDao(dao_stga);
-		MetaboliteServiceDim service = new MetaboliteServiceDim("KEGG_LIVE", "0.0.1-SNAPSHOT", null);
-		service = manager.createOrGetService(service);
-		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
-		
-		Set<String> skipEntries = new HashSet<> ();
-		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
-			skipEntries.add(cpd.getTextKey());
-		}
-		
-		TransformKeggMetaboliteCrossReference keggXrefTrans = new TransformKeggMetaboliteCrossReference();
-		keggXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
-		
-		KeggMetaboliteStagingTransform loader = new KeggMetaboliteStagingTransform();
-		loader.setManager(manager);
-		loader.setDao(dao_stga);
-		loader.setTransformer(keggXrefTrans);
-		
-		int counter = 0;
-		int total = 0;
-		for (KeggCompoundMetaboliteEntity cpdKegg : dao_kegg.findAll(KeggCompoundMetaboliteEntity.class)) {
-//			if ( cpdKegg.getEntry().equals("C00001"))
-			if ( !skipEntries.contains(cpdKegg.getEntry())) {
-				System.out.println(cpdKegg.getEntry());
-				System.out.println(cpdKegg.getFormula());
-				MetaboliteStga cpd_stga = loader.etlTransform(cpdKegg);
-				cpd_stga.setMetaboliteServiceDim(service);
-				
-				dao_stga.save(cpd_stga);			
-				counter++;
-				if (counter % 50 == 0) {
-					tx_stga.commit();
-					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
-				}
-			}
-			total++;
-		}
-		
-		System.out.println(total);
-		
-		assertEquals(28162, total);
-	}
+//	public static SessionFactory sessionFactory_stga;
+//	public static SessionFactory sessionFactory_kegg;
+//	private static IGenericDao dao_stga;
+//	private static IGenericDao dao_kegg;
+//	private static Transaction tx_stga;
+//	private static Transaction tx_kegg;
+//
+//	@BeforeClass
+//	public static void setUpBeforeClass() throws Exception {
+//		sessionFactory_stga = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_staging_pgsql.cfg.xml");
+//		dao_stga = new GenericEntityDaoImpl(sessionFactory_stga);
+//		sessionFactory_kegg = HelperHbmConfigInitializer.initializeHibernateSession("hibernate_production_pgsql.cfg.xml");
+//		dao_kegg = new GenericEntityDaoImpl(sessionFactory_kegg);
+//	}
+//
+//	@AfterClass
+//	public static void tearDownAfterClass() throws Exception {
+//		
+//		
+//	}
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+//		tx_kegg = sessionFactory_kegg.getCurrentSession().beginTransaction();
+//	}
+//
+//	@After
+//	public void tearDown() throws Exception {
+//		tx_stga.commit();
+//		tx_kegg.commit();
+//	}
+//
+//	@Test
+//	public void testStageKegg() {
+//		HbmMetaboliteStagingManagerImpl manager = new HbmMetaboliteStagingManagerImpl();
+//		manager.setDao(dao_stga);
+//		MetaboliteServiceDim service = new MetaboliteServiceDim("KEGG_LIVE", "0.0.1-SNAPSHOT", null);
+//		service = manager.createOrGetService(service);
+//		System.out.println(service.getServiceName() + " " + service.getServiceVersion());
+//		
+//		Set<String> skipEntries = new HashSet<> ();
+//		for (MetaboliteStga cpd : service.getMetaboliteStgas()) {
+//			skipEntries.add(cpd.getTextKey());
+//		}
+//		
+//		TransformKeggMetaboliteCrossReference keggXrefTrans = new TransformKeggMetaboliteCrossReference();
+//		keggXrefTrans.setRefTransformMap(BioDbDictionary.getDbDictionary());
+//		
+//		KeggMetaboliteStagingTransform loader = new KeggMetaboliteStagingTransform();
+//		loader.setManager(manager);
+//		loader.setDao(dao_stga);
+//		loader.setTransformer(keggXrefTrans);
+//		
+//		int counter = 0;
+//		int total = 0;
+//		for (KeggCompoundMetaboliteEntity cpdKegg : dao_kegg.findAll(KeggCompoundMetaboliteEntity.class)) {
+////			if ( cpdKegg.getEntry().equals("C00001"))
+//			if ( !skipEntries.contains(cpdKegg.getEntry())) {
+//				System.out.println(cpdKegg.getEntry());
+//				System.out.println(cpdKegg.getFormula());
+//				MetaboliteStga cpd_stga = loader.etlTransform(cpdKegg);
+//				cpd_stga.setMetaboliteServiceDim(service);
+//				
+//				dao_stga.save(cpd_stga);			
+//				counter++;
+//				if (counter % 50 == 0) {
+//					tx_stga.commit();
+//					tx_stga = sessionFactory_stga.getCurrentSession().beginTransaction();
+//				}
+//			}
+//			total++;
+//		}
+//		
+//		System.out.println(total);
+//		
+//		assertEquals(28162, total);
+//	}
 
 }
