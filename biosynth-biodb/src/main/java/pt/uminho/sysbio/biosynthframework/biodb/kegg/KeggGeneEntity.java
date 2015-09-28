@@ -112,7 +112,9 @@ public class KeggGeneEntity extends KeggEntity{
 		}
 		else if(key.equals(KeggTokens.AASEQ))
 		{
-			if(!value.matches("[0-9]+")) // ignoring first row with the symbols counting
+			if(value.matches("[0-9]+")) // ignoring first row with the symbols counting
+				addedValue = "";
+			else
 			{
 				if(aminoacidsSeq==null)
 					aminoacidsSeq = value;
@@ -120,10 +122,13 @@ public class KeggGeneEntity extends KeggEntity{
 					aminoacidsSeq += value;
 				addedValue = aminoacidsSeq;
 			}
+			
 		}
 		else if(key.equals(KeggTokens.NTSEQ))
 		{
-			if(!value.matches("[0-9]+")) // ignoring first row with the symbols counting
+			if(value.matches("[0-9]+")) // ignoring first row with the symbols counting
+				addedValue = "";
+			else
 			{
 				if(nucleotidesSeq==null)
 					nucleotidesSeq = value;
