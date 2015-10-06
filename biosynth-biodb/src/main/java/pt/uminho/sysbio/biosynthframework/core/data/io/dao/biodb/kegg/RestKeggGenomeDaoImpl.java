@@ -33,6 +33,8 @@ extends AbstractRestfulKeggDao {
 			LOGGER.info(localPath);
 			rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath +".txt");
 			
+			LOGGER.debug("{}", rnFlatFile.getBytes().length);
+			
 //			KeggGenomeFlatFileParser parser = new KeggGenomeFlatFileParser(rnFlatFile);
 //			rxn.setEntry(parser.getEntry());
 //			rxn.setName(parser.getName());

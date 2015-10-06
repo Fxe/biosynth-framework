@@ -2,10 +2,11 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis;
 
 import java.util.Map;
 
+@Deprecated
 public class MolecularFormula {
 
-	private String formula;
-	private String formulaRaw;
-	private boolean generic;
-	private Map<String, Integer> atomMap;
+	public String formula;
+	public String formulaRaw;
+	public boolean generic;
+	public Map<String, Integer> atomMap;
 }

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProcessWorker implements Runnable {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(ProcessWorker.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProcessWorker.class);
 	
 	private final Process process;
 	private Integer exit;
@@ -18,7 +18,7 @@ public class ProcessWorker implements Runnable {
 	public void run() {
 		try {
 			exit = process.waitFor();
-			LOGGER.trace("exit status for {}: {}", process, exit);
+			logger.trace("exit status for {}: {}", process, exit);
 		} catch (InterruptedException e) {
 			return;
 		}

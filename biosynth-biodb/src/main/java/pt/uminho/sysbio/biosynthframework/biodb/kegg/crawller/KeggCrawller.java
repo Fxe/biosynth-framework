@@ -116,7 +116,7 @@ public class KeggCrawller {
 			
 			Collection<Runnable> work = generateRunnable(folder, threads);
 			
-			List<Future> list = new ArrayList<>();
+			List<Future<?>> list = new ArrayList<>();
 			for(Runnable r : work){
 				list.add(executor.submit(r));
 			}

@@ -8,20 +8,13 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.Orientation;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggReactionFlatFileParser;
-import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
-
 public class RestKeggKOsDaoImpl
 extends AbstractRestfulKeggDao {
 
 	public static boolean DELAY_ON_IO_ERROR = false;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggKOsDaoImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestKeggKOsDaoImpl.class);
 	private static final String restRxnQuery = "http://rest.kegg.jp/get/ko:%s";
-	
-	
 
 	public String getKOByEntry(String entry) {
 		String restRxnQuery = String.format(RestKeggKOsDaoImpl.restRxnQuery, entry);
@@ -32,8 +25,8 @@ extends AbstractRestfulKeggDao {
 		String rnFlatFile = null;
 		
 		try {
-			LOGGER.info(restRxnQuery);
-			LOGGER.info(localPath);
+			logger.info(restRxnQuery);
+			logger.info(localPath);
 			rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + entry +".txt");
 			
 //			KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
@@ -52,7 +45,7 @@ extends AbstractRestfulKeggDao {
 //			rxn.setRight(parser.getRight());
 			
 		} catch (IOException e) {
-			LOGGER.error(e.getMessage());
+			logger.error(e.getMessage());
 			
 //			if (DELAY_ON_IO_ERROR) {
 //				try {

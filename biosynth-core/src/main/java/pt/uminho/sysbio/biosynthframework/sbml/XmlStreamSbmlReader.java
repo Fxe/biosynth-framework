@@ -32,11 +32,11 @@ import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
  */
 public class XmlStreamSbmlReader {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(XmlStreamSbmlReader.class);
+	private static final Logger logger = LoggerFactory.getLogger(XmlStreamSbmlReader.class);
 	
-	private final static String BQBIOL_IS = "is";
-	private final static String BQBIOL_IS_ENCODED_BY = "isEncodedBy";
-	private final static String BQBIOL_IS_VERSION_OF = "isVersionOf";
+	private static final String BQBIOL_IS = "is";
+	private static final String BQBIOL_IS_ENCODED_BY = "isEncodedBy";
+	private static final String BQBIOL_IS_VERSION_OF = "isVersionOf";
 	
 	
 	private final static String RDF_LIST_ITEM = "li";
@@ -63,12 +63,12 @@ public class XmlStreamSbmlReader {
 	
 	public XmlStreamSbmlReader(String path) throws IOException {
 		data = BioSynthUtilsIO.readFromFile(new File(path));
-		LOGGER.debug("Loaded {} bytes", data.getBytes().length);
+		logger.debug("Loaded {} bytes", data.getBytes().length);
 	}
 	
 	public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
 		data = BioSynthUtilsIO.readFromInputStream(inputStream);
-		LOGGER.debug("Loaded {} bytes", data.getBytes().length);
+		logger.debug("Loaded {} bytes", data.getBytes().length);
 	}
 	
 	public XmlSbmlModel parse() throws IOException {
@@ -120,7 +120,7 @@ public class XmlStreamSbmlReader {
 							fluxBound.setAttributes(getAttributes(startElement));
 							break;
 						default: 
-							LOGGER.trace("+?+ " + startElement.getName().getLocalPart());
+							logger.trace("+?+ " + startElement.getName().getLocalPart());
 							break;
 					}
 				} else if (xmlEvent.isEndElement()) {
@@ -140,7 +140,7 @@ public class XmlStreamSbmlReader {
 							fluxBounds.add(fluxBound);
 							break;
 						default:
-							LOGGER.trace("-?- " + endElement.getName().getLocalPart());
+							logger.trace("-?- " + endElement.getName().getLocalPart());
 							break;
 					}
 				} else if (xmlEvent.isEndDocument()) {
@@ -173,7 +173,7 @@ public class XmlStreamSbmlReader {
 	}
 
 	public XmlSbmlSpecie parseSpecie(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-		LOGGER.debug("+++ reading metabolite specie");
+		logger.debug("+++ reading metabolite specie");
 		boolean read = true;
 		XmlSbmlSpecie xmlSbmlSpecie = new XmlSbmlSpecie();
 		xmlSbmlSpecie.setAttributes(getAttributes(specieStartElement));
@@ -239,12 +239,12 @@ public class XmlStreamSbmlReader {
 				
 			}
 		}
-		LOGGER.debug("--- reading metabolite specie");
+		logger.debug("--- reading metabolite specie");
 		return xmlSbmlSpecie;
 	}
 	
 	public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader) throws XMLStreamException {
-		LOGGER.debug("+++ reading reaction");
+		logger.debug("+++ reading reaction");
 		boolean read = true;
 		XmlSbmlReaction sbmlReaction = new XmlSbmlReaction();
 		while (xmlEventReader.hasNext() && read) {
@@ -272,12 +272,12 @@ public class XmlStreamSbmlReader {
 			}
 		}
 		
-		LOGGER.debug("--- reading reaction");
+		logger.debug("--- reading reaction");
 		return sbmlReaction;
 	}
 	
 	public XmlSbmlGroup parseGroup(XMLEventReader xmlEventReader, StartElement groupStartElement) throws XMLStreamException {
-		LOGGER.debug("+++ reading group");
+		logger.debug("+++ reading group");
 		boolean read = true;
 		XmlSbmlGroup sbmlGroup = new XmlSbmlGroup();
 		sbmlGroup.setAttributes(getAttributes(groupStartElement));
@@ -298,7 +298,7 @@ public class XmlStreamSbmlReader {
 						member.getAttributes().putAll(getAttributes(startElement));
 						break;
 					default: 
-						LOGGER.trace("+?+ " + startElement.getName().getLocalPart());
+						logger.trace("+?+ " + startElement.getName().getLocalPart());
 						break;
 				}
 			} else if (xmlEvent.isEndElement()) {
@@ -313,14 +313,14 @@ public class XmlStreamSbmlReader {
 						read = false;
 						break;
 					default:
-						LOGGER.trace("-?- " + endElement.getName().getLocalPart());
+						logger.trace("-?- " + endElement.getName().getLocalPart());
 						break;
 				}
 			} else if (xmlEvent.isEndDocument()) {
 				
 			}
 		}
-		LOGGER.debug("--- reading group");
+		logger.debug("--- reading group");
 		
 		return sbmlGroup;
 	}
