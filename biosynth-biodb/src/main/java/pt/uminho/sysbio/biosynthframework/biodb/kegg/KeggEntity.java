@@ -39,7 +39,12 @@ public abstract class KeggEntity implements Serializable{
 			names.add(value);
 		}
 		else if(key.equals("DEFINITION"))
-			definition = value;
+		{
+			if(definition==null)
+				definition = value;
+			else
+				definition += "<br>" + value;
+		}
 		else
 		{
 			if(!properties.containsKey(key))
@@ -106,8 +111,8 @@ public abstract class KeggEntity implements Serializable{
 		return retrieveValueRegExp(value, KeggTokens.REACTION_WITH_NAME);
 	}
 	
-	public String getOrthologyFromValue(String value){
-		return retrieveValueRegExp(value, KeggTokens.ORTHOLOGY_WITH_NAME);
+	public Set<String> getOrthologyFromValue(String value){
+		return retrieveValuesRegExp(value, KeggTokens.ORTHOLOG_REGEXP);
 	}
 	
 	protected String retrieveValueRegExp(String value, String exp){

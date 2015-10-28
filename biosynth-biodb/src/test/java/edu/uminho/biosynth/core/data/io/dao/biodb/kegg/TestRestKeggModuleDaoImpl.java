@@ -22,8 +22,11 @@ public class TestRestKeggModuleDaoImpl {
 	
 	@Test
 	public void test1(){
-		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00016");
+//		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00016");
+		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00763");
+		
 		System.out.println("Entry: " + moduleEntity.getEntry());
+		System.out.println("Definition: " + moduleEntity.getDefinition());
 		System.out.println("Module type: " + moduleEntity.getType());
 		System.out.println("Paths:");
 		for(String e : moduleEntity.getPathways())
@@ -39,5 +42,5 @@ public class TestRestKeggModuleDaoImpl {
 		for(String e : moduleEntity.getReactions())
 			System.out.println(e);
 	}
-
+	
 }

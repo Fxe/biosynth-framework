@@ -112,6 +112,7 @@ public class KeggGeneEntity extends KeggEntity{
 		}
 		else if(key.equals(KeggTokens.AASEQ))
 		{
+			System.out.println(">" + value + "<");
 			if(value.matches("[0-9]+")) // ignoring first row with the symbols counting
 				addedValue = "";
 			else

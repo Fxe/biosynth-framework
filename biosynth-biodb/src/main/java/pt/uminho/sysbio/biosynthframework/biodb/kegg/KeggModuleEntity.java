@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -24,10 +25,10 @@ public class KeggModuleEntity extends KeggEntity{
 		pathways.add(pathway);
 	}
 	
-	public void addOrtholog(String ortholog){
+	public void addOrtholog(Collection<String> kos){
 		if(orthologs==null)
 			orthologs = new HashSet<>();
-		orthologs.add(ortholog);
+		orthologs.addAll(kos);
 	}
 	
 	public void addCompound(String compound){
@@ -110,7 +111,7 @@ public class KeggModuleEntity extends KeggEntity{
 		{
 			addedValue = getOrthologyFromValue(value);
 			if(addedValue!=null)
-				addOrtholog((String) addedValue);
+				addOrtholog((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
@@ -124,9 +125,9 @@ public class KeggModuleEntity extends KeggEntity{
 	}
 	
 	// TODO orthologs by reaction or EC
-	@Override
-	public String getOrthologyFromValue(String value) {
-		return null;
-	}
+//	@Override
+//	public String getOrthologyFromValue(String value) {
+//		return null;
+//	}
 
 }
