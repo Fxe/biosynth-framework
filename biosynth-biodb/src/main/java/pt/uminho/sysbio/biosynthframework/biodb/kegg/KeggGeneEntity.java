@@ -43,10 +43,10 @@ public class KeggGeneEntity extends KeggEntity{
 		pathways.add(pathway);
 	}
 	
-	public void addOrtholog(String ortholog){
+	public void addOrthologs(Set<String> ortholog){
 		if(orthologs==null)
 			orthologs = new HashSet<>();
-		orthologs.add(ortholog);
+		orthologs.addAll(ortholog);
 	}
 	
 	public String[] getEntryAndCDSFromValue(String value){
@@ -142,7 +142,7 @@ public class KeggGeneEntity extends KeggEntity{
 		{
 			addedValue = getOrthologyFromValue(value);
 			if(addedValue!=null)
-				addOrtholog((String) addedValue);
+				addOrthologs((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.MODULE))
 		{

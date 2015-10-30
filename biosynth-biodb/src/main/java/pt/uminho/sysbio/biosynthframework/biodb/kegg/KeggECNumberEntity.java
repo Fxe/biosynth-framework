@@ -28,10 +28,10 @@ public class KeggECNumberEntity extends KeggEntity{
 		pathways.add(pathway);
 	}
 	
-	public void addOrtholog(String ortholog){
+	public void addOrthologs(Set<String> ortholog){
 		if(orthologs==null)
 			orthologs = new HashSet<>();
-		orthologs.add(ortholog);
+		orthologs.addAll(ortholog);
 	}
 	
 	public void addReaction(String reaction){
@@ -96,7 +96,7 @@ public class KeggECNumberEntity extends KeggEntity{
 		{
 			addedValue = getOrthologyFromValue(value);
 			if(addedValue!=null)
-				addOrtholog((String) addedValue);
+				addOrthologs((Set<String>) addedValue);
 		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
