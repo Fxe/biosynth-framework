@@ -32,13 +32,13 @@ public abstract class KeggEntity implements Serializable{
 	public void addProperty(String key, String value){
 		if(key.equals("ENTRY"))
 			entry = value;
-		else if(key.equals("NAME"))
+		else if(key.equals(KeggTokens.NAME))
 		{
 			if(names==null)
 				names = new ArrayList<>();
 			names.add(value);
 		}
-		else if(key.equals("DEFINITION"))
+		else if(key.equals(KeggTokens.DEFINITION))
 		{
 			if(definition==null)
 				definition = value;
@@ -56,13 +56,13 @@ public abstract class KeggEntity implements Serializable{
 	public void addProperty(String key, List<String> values){
 		if(key.equals("ENTRY"))
 			entry = values.get(0);
-		else if(key.equals("NAME"))
+		else if(key.equals(KeggTokens.NAME))
 		{
 			if(names==null)
 				names = new ArrayList<>();
 			names.addAll(values);
 		}
-		else if(key.equals("DEFINITION"))
+		else if(key.equals(KeggTokens.DEFINITION))
 		{
 			definition = "";
 			for(String s : values)

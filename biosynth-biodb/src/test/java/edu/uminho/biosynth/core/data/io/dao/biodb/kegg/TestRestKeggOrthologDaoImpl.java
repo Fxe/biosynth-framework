@@ -22,7 +22,7 @@ public class TestRestKeggOrthologDaoImpl {
 	
 	@Test
 	public void test1(){
-		KeggKOEntity koEntity = rest.getKOByEntry("K02238");
+		KeggKOEntity koEntity = rest.getKOByEntry("K00688");
 		System.out.println("Entry: " + koEntity.getEntry());
 		System.out.println("Pathways:");
 		if(koEntity.getPathways()!=null)

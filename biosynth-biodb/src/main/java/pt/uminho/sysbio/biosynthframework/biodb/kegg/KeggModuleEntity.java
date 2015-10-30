@@ -95,6 +95,12 @@ public class KeggModuleEntity extends KeggEntity{
 				type = KeggModuleType.getType(((String[]) addedValue)[1]);
 			}
 		}
+		else if(key.equals(KeggTokens.DEFINITION)) // Still call the super add property method to add the definition
+		{
+			Set<String> kos = getOrthologyFromValue(value);
+			if(kos!=null)
+				addOrtholog(kos);
+		}
 		else if(key.equals(KeggTokens.COMPOUND))
 		{
 			addedValue = getCompoundFromValue(value);
@@ -107,12 +113,12 @@ public class KeggModuleEntity extends KeggEntity{
 			if(addedValue!=null)
 				addReaction((String) addedValue);
 		}
-		else if(key.equals(KeggTokens.ORTHOLOGY))
-		{
-			addedValue = getOrthologyFromValue(value);
-			if(addedValue!=null)
-				addOrtholog((Set<String>) addedValue);
-		}
+//		else if(key.equals(KeggTokens.ORTHOLOGY))
+//		{
+//			addedValue = getOrthologyFromValue(value);
+//			if(addedValue!=null)
+//				addOrtholog((Set<String>) addedValue);
+//		}
 		else if(key.equals(KeggTokens.PATHWAY))
 		{
 			addedValue = getPathwayFromValue(value);
