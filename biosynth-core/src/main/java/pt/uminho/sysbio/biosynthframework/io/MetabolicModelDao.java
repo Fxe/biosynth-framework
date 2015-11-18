@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 
 public interface MetabolicModelDao<
 MMD extends AbstractBiosynthEntity,
@@ -39,6 +40,7 @@ C extends AbstractBiosynthEntity> {
 	
 	public RXN getModelReactionById(Long id);
 	public RXN getModelReactionByByModelAndEntry(MMD model, String rxnEntry);
+	public boolean updateModelReaction(RXN rxn);
 	public RXN saveModelReaction(MMD mmd, RXN rxn);
 	public Set<Long>   getAllModelReactionIds(MMD model);
 	public Set<String> getAllModelReactionEntries(MMD model);
@@ -49,5 +51,6 @@ C extends AbstractBiosynthEntity> {
 	public void deleteModelMetabolite(CPD mcpd);
 	public Set<Long>   getAllModelMetaboliteIds(MMD model);
 	public Set<String> getAllModelMetaboliteEntries(MMD model);
+  
 	
 }

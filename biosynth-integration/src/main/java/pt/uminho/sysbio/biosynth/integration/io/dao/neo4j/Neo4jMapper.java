@@ -25,6 +25,7 @@ import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
+import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.PropertyContainer;
 
@@ -232,7 +233,7 @@ public class Neo4jMapper {
 		rxn.setGeneRule((String) node.getProperty("geneRule", null));
 		rxn.setLowerBound((Double) node.getProperty("lowerBound", null));
 		rxn.setUpperBound((Double) node.getProperty("upperBound", null));
-		
+		rxn.setEntityType(EntityType.valueOf((String)node.getProperty("entityType", "REACTION")));
 		rxn.setLeftStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.left_component));
 		rxn.setRightStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.right_component));
 		return rxn;
@@ -242,9 +243,10 @@ public class Neo4jMapper {
 		Map<String, Double> s = new HashMap<> ();
 		for (Relationship relationship : node.getRelationships(r)) {
 			Node other = relationship.getOtherNode(node);
-			String entry = ((String)other.getProperty("entry")).split("@")[0];
+//			String entry = ((String)other.getProperty("entry")).split("@")[0];
+			String id = Long.toString(other.getId());
 			double val = (double) relationship.getProperty("stoichiometry");
-			s.put(entry, val);
+			s.put(id, val);
 		}
 		return s;
 	}

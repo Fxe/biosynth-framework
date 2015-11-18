@@ -245,4 +245,10 @@ DefaultMetabolicModelEntity> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+  @Override
+  public boolean updateModelReaction(DefaultMetabolicModelEntity rxn) {
+    // TODO Auto-generated method stub
+    return false;
+  }
 }

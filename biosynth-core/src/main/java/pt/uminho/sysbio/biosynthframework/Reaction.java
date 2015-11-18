@@ -17,6 +17,8 @@ public interface Reaction {
 	public Map<String, Double> getRightStoichiometry();
 	public void setRightStoichiometry(Map<String, Double> right);
 	
+	public Map<String, Double> getStoichiometry();
+	public void setStoichiometry(Map<String, Double> map);
 //	public List<StoichiometryPair> getLeft();
 //	public Map<M, Double> getRight();
 }
