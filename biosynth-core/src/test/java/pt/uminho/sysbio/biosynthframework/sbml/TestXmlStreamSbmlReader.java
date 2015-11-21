@@ -31,19 +31,19 @@ public class TestXmlStreamSbmlReader {
 
   @Test
   public void test() throws IOException {
-    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
-        new FileInputStream("D:/var/biomodels/sbml/MODEL1109130000.xml"));
-    XmlSbmlModel model = sbmlReader.parse();
-    for (XmlSbmlSpecie specie : model.getSpecies()) {
-      System.out.println(specie.getAttributes());
-      for (String type : specie.getListOfAnnotations().keySet()) {
-        System.out.println("\t" + type);
-        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
-          System.out.println("\t\t" + o.getAttributes().get("resource"));
-        }
-      }
-      break;
-    }
+//    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
+//        new FileInputStream("D:/var/biomodels/sbml/MODEL1109130000.xml"));
+//    XmlSbmlModel model = sbmlReader.parse();
+//    for (XmlSbmlSpecie specie : model.getSpecies()) {
+//      System.out.println(specie.getAttributes());
+//      for (String type : specie.getListOfAnnotations().keySet()) {
+//        System.out.println("\t" + type);
+//        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
+//          System.out.println("\t\t" + o.getAttributes().get("resource"));
+//        }
+//      }
+//      break;
+//    }
   }
 
 }
