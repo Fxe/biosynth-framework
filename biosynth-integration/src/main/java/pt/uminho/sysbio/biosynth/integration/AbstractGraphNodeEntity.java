@@ -108,7 +108,7 @@ public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 	
 	@Override
 	public String toString() {
-		String str = String.format("%s::%s: %s", majorLabel, labels, this.properties);
+		String str = String.format("%d[%s]::%s", this.id, majorLabel, labels);
 		return str;
 	}
 }

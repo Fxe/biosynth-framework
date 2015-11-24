@@ -36,7 +36,7 @@ import pt.uminho.sysbio.biosynthframework.io.ExtendedMetabolicModelDao;
  */
 public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements ExtendedMetabolicModelDao {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger(Neo4jOptfluxContainerDaoImpl.class);
+  private final static Logger logger = LoggerFactory.getLogger(Neo4jOptfluxContainerDaoImpl.class);
   private AnnotationPropertyContainerBuilder a;
 
   public Neo4jOptfluxContainerDaoImpl(GraphDatabaseService graphDatabaseService) {
@@ -64,7 +64,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
             GlobalLabel.MetabolicModel, "entry", entry));
 
     if (node == null) {
-      LOGGER.debug("Metabolite Specie [{}:{}] not found", GlobalLabel.MetabolicModel, entry);
+      logger.debug("Metabolite Specie [{}:{}] not found", GlobalLabel.MetabolicModel, entry);
       return null;
     }
 
@@ -82,7 +82,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
       mmd.setId(node.getId());
     } catch (Exception e) {
-      LOGGER.error("E - {}", e.getMessage());
+      logger.error("E - {}", e.getMessage());
       e.printStackTrace();
       return null;
     }
@@ -112,7 +112,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       String search) {
     List<ExtendedMetabolicModelEntity> res = new ArrayList<> ();
     String query = String.format("MATCH (n:%s) WHERE n.entry =~ '%s' RETURN n", GlobalLabel.MetabolicModel, search);
-    LOGGER.trace("Query: {}", query);
+    logger.trace("Query: {}", query);
     //		System.out.println(query);
     for (Object o : IteratorUtil.asList(executionEngine.execute(query).columnAs("n"))) {
       Node node = (Node) o;
@@ -162,7 +162,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       Node mmdNode = graphDatabaseService.getNodeById(mmd.getId());
       mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_compartment);
     } catch (Exception e) {
-      LOGGER.error("E - {}", e.getMessage());
+      logger.error("E - {}", e.getMessage());
       e.printStackTrace();
       return null;
     }
@@ -214,7 +214,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
         reference.setType(ReferenceType.DATABASE);
         refs.add(reference);
       } else {
-        LOGGER.warn("Specie -[has_crossreference_to]-> {}", Neo4jUtils.getLabels(cpd));
+        logger.warn("Specie -[has_crossreference_to]-> {}", Neo4jUtils.getLabels(cpd));
       }
     }
     return refs;
@@ -237,12 +237,16 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   @Override
   public ExtendedMetaboliteSpecie getModelMetaboliteSpecieByByModelAndEntry(
       ExtendedMetabolicModelEntity model, String spiEntry) {
-    String spiEntry_ = String.format("%s@%s", spiEntry, model.getEntry());
+    
+    if (!spiEntry.contains("@")) {
+      spiEntry = String.format("%s@%s", spiEntry, model.getEntry());
+    }
+    
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
+        .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry));
 
     if (node == null) {
-      LOGGER.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.MetaboliteSpecie, spiEntry_);
+      logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.MetaboliteSpecie, spiEntry);
       return null;
     }
 
@@ -270,7 +274,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
           .findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
       node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
     } catch (Exception e) {
-      LOGGER.error("E - {}", e.getMessage());
+      logger.error("E - {}", e.getMessage());
       e.printStackTrace();
       return null;
     }
@@ -308,9 +312,21 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
   @Override
   public OptfluxContainerReactionEntity getModelReactionByByModelAndEntry(
-      ExtendedMetabolicModelEntity model, String spiEntry) {
-    // TODO Auto-generated method stub
-    return null;
+      ExtendedMetabolicModelEntity model, String rxnEntry) {
+    
+    if (!rxnEntry.contains("@")) {
+      rxnEntry = String.format("%s@%s", rxnEntry, model.getEntry());
+    }
+    
+    Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
+        .findNodesByLabelAndProperty(MetabolicModelLabel.ModelReaction, "entry", rxnEntry));
+
+    if (node == null) {
+      logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.ModelReaction, rxnEntry);
+      return null;
+    }
+    
+    return this.getModelReactionById(node.getId());
   }
 
   @Override
@@ -338,7 +354,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
             a.extractProperties(r, OptfluxContainerReactionRight.class), MetabolicModelRelationshipType.right_component);
       }
     } catch (Exception e) {
-      LOGGER.error("E - {}", e.getMessage());
+      logger.error("E - {}", e.getMessage());
       e.printStackTrace();
       return null;
     }
@@ -419,7 +435,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     try {
       String entry = String.format("%s@%s", cpd.getEntry(), mmd.getEntry());
       Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, executionEngine);
-      LOGGER.debug("Created {}", node);
+      logger.debug("Created {}", node);
       Map<String, Object> properties = a.extractProperties(cpd, ExtendedModelMetabolite.class);
       properties.remove("entry");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -434,7 +450,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_metabolite);
       cpd.setId(node.getId());
     } catch (Exception e) {
-      LOGGER.error("E - {}", e.getMessage());
+      logger.error("E - {}", e.getMessage());
       e.printStackTrace();
       return null;
     }

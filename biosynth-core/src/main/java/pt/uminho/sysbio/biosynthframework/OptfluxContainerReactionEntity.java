@@ -94,8 +94,7 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
       this.orientation = null;
     }
   }
-
-  @JsonIgnore
+  
   @OneToMany(mappedBy = "reaction", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
   private List<OptfluxContainerReactionLeft> left = new ArrayList<> ();
@@ -109,7 +108,6 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
     this.left = left;
   }
 
-  @JsonIgnore
   @OneToMany(mappedBy = "reaction", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
   @Fetch(FetchMode.SUBSELECT)
   private List<OptfluxContainerReactionRight> right = new ArrayList<> ();

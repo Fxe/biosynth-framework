@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtils;
 
@@ -97,7 +99,8 @@ implements Reaction, Serializable, Cloneable {
     this.reactantStoichiometry = rxn.reactantStoichiometry == null ? 
         null : new HashMap<> (rxn.reactantStoichiometry);
   }
-
+  
+  @JsonIgnore
   public String getFullDetails() {
     StringBuilder ret = new StringBuilder();
     ret.append("id: ").append( this.id).append('\n');
@@ -173,7 +176,9 @@ implements Reaction, Serializable, Cloneable {
       result.put(v, -1 * this.getLeftStoichiometry().get(v));
     }
     for (String  v : this.getRightStoichiometry().keySet()) {
-      result.put(v, this.getRightStoichiometry().get(v));
+      Double prev = result.get(v);
+      prev = prev == null ? 0.0 : prev;
+      result.put(v, prev + this.getRightStoichiometry().get(v));
     }
     
     return result;
