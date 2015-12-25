@@ -29,41 +29,50 @@ public class TestNeo4jOptfluxContainerDaoImpl {
   
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
+/*
     logger.info("initialize db ...");
     graphDatabaseService = HelperNeo4jConfigInitializer
         .initializeNeo4jDataDatabaseConstraints(
             TestNeo4jConfiguration.NEO_DATA_DB);
-    
+  */  
     
   }
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
+/*
     if (graphDatabaseService != null) {
       logger.info("shutdown db ...");
       graphDatabaseService.shutdown();
     }
+*/
   }
 
   @Before
   public void setUp() throws Exception {
+/*
     dao = new Neo4jOptfluxContainerDaoImpl(graphDatabaseService);
     tx = graphDatabaseService.beginTx();
+*/
   }
 
   @After
   public void tearDown() throws Exception {
+/*
     tx.success();
     tx.close();
+*/
   }
 
   @Test
   public void test() {
+/*
     ExtendedMetaboliteSpecie spi = dao.getModelMetaboliteSpecieById(1765674L);
     System.out.println(spi);
     System.out.println(spi.getComparment());
+*/
   }
-  
+  /*
   @Test
   public void test_get_reaction() {
     OptfluxContainerReactionEntity rxn = dao.getModelReactionById(1765719L);
@@ -77,4 +86,5 @@ public class TestNeo4jOptfluxContainerDaoImpl {
     rxn.setEntityType(EntityType.BIOMASS);
     dao.updateModelReaction(rxn);
   }
+*/
 }
