@@ -1,5 +1,22 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
-public class XmlSbmlReaction extends XmlObject {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+public class XmlSbmlReaction extends XmlObject {
+  
+  private Map<String, List<XmlObject>> listOfAnnotations = new HashMap<> ();
+  private List<XmlObject> listOfReactants = new ArrayList<> ();
+  private List<XmlObject> listOfProducts  = new ArrayList<> ();
+  
+  public Map<String, List<XmlObject>> getListOfAnnotations() { return listOfAnnotations;}
+  public void setListOfAnnotations(Map<String, List<XmlObject>> listOfAnnotations) { this.listOfAnnotations = listOfAnnotations;}
+  
+  public List<XmlObject> getListOfReactants() { return listOfReactants;}
+  public void setListOfReactants(List<XmlObject> listOfReactants) { this.listOfReactants = listOfReactants;}
+  
+  public List<XmlObject> getListOfProducts() { return listOfProducts;}
+  public void setListOfProducts(List<XmlObject> listOfProducts) { this.listOfProducts = listOfProducts;}
 }

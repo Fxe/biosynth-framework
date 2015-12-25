@@ -251,4 +251,10 @@ DefaultMetabolicModelEntity> {
     // TODO Auto-generated method stub
     return false;
   }
+
+  @Override
+  public Set<Long> getAllModelSubsystemsIds(DefaultMetabolicModelEntity model) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

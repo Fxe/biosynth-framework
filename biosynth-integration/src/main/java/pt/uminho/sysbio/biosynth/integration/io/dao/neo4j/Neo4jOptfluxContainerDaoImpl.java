@@ -189,16 +189,22 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   @Override
   public ExtendedMetaboliteSpecie getModelMetaboliteSpecieById(
       Long id) {
-    Node node = graphDatabaseService.getNodeById(id);
-    if (node == null || !node.hasLabel(MetabolicModelLabel.MetaboliteSpecie)) {
+    Node spiNode = graphDatabaseService.getNodeById(id);
+    if (spiNode == null || !spiNode.hasLabel(MetabolicModelLabel.MetaboliteSpecie)) {
       return null;
     }
     ExtendedMetaboliteSpecie spi = new ExtendedMetaboliteSpecie();
-    Neo4jMapper.nodeToPropertyContainer(node, spi);
-    spi.setId(node.getId());
+    Neo4jMapper.nodeToPropertyContainer(spiNode, spi);
+    spi.setId(spiNode.getId());
     spi.setCrossreferences(getMetaboliteCrossreferences(spi.getId()));
-    spi.setComparment((String) node.getProperty("comparment", null));
-
+    spi.setComparment((String) spiNode.getProperty("comparment", null));
+    
+    int reactionDegree = Neo4jUtils.collectNodeRelationshipNodeIds(spiNode, 
+        MetabolicModelRelationshipType.left_component,
+        MetabolicModelRelationshipType.right_component).size();
+    
+    spi.setReactionDegree(reactionDegree);
+    
     return spi;
   }
 
@@ -482,6 +488,15 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       Neo4jUtils.deleteAllRelationships(cpdNode);
     }
     cpdNode.delete();
+  }
+
+  @Override
+  public Set<Long> getAllModelSubsystemsIds(ExtendedMetabolicModelEntity model) {
+    Set<Long> res = new HashSet<> ();
+    Node mmdNode = graphDatabaseService.getNodeById(model.getId());
+    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(
+        mmdNode, MetabolicModelRelationshipType.has_subsystem));
+    return res;
   }
 
 }

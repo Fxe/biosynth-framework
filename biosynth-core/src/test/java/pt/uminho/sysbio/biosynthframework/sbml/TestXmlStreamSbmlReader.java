@@ -31,19 +31,31 @@ public class TestXmlStreamSbmlReader {
 
   @Test
   public void test() throws IOException {
-//    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
-//        new FileInputStream("D:/var/biomodels/sbml/MODEL1109130000.xml"));
-//    XmlSbmlModel model = sbmlReader.parse();
-//    for (XmlSbmlSpecie specie : model.getSpecies()) {
-//      System.out.println(specie.getAttributes());
-//      for (String type : specie.getListOfAnnotations().keySet()) {
-//        System.out.println("\t" + type);
-//        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
-//          System.out.println("\t\t" + o.getAttributes().get("resource"));
-//        }
-//      }
-//      break;
-//    }
+    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";
+//    final String SBML_PATH = "D:/var/yeast/sbml/yeast_7.6_cobra.xml";
+    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
+        new FileInputStream(SBML_PATH));
+    XmlSbmlModel model = sbmlReader.parse();
+    for (XmlSbmlSpecie specie : model.getSpecies()) {
+      System.out.println(specie.getAttributes());
+      for (String type : specie.getListOfAnnotations().keySet()) {
+        System.out.println("\t" + type);
+        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
+          System.out.println("\t\t" + o.getAttributes().get("resource"));
+        }
+      }
+      break;
+    }
+    for (XmlSbmlReaction reaction : model.getReactions()) {
+      System.out.println(reaction.getAttributes());
+      for (String type : reaction.getListOfAnnotations().keySet()) {
+        System.out.println("\t" + type);
+        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {
+          System.out.println("\t\t" + o.getAttributes().get("resource"));
+        }
+      }
+      break;
+    }
   }
 
 }
