@@ -29,6 +29,7 @@ public class LayoutNode extends AbstractBiosynthEntity {
   public Double y;
   
   public Map<String, Map<Long, String>> annotation = new HashMap<> ();
+  public Map<String, Map<Long, String>> modelAnnotation = new HashMap<> ();
   
   public void addAnnotation(String database, long id, String entry) {
     if (!this.annotation.containsKey(database)) {
@@ -37,9 +38,15 @@ public class LayoutNode extends AbstractBiosynthEntity {
     this.annotation.get(database).put(id, entry);
   }
   
+  public void addModelAnnotation(String model, long id, String entry) {
+    if (!this.modelAnnotation.containsKey(model)) {
+      this.modelAnnotation.put(model, new HashMap<Long, String> ());
+    }
+    this.modelAnnotation.get(model).put(id, entry);
+  }
+  
   @Override
   public String toString() {
-    // TODO Auto-generated method stub
     return String.format("LayoutNode[%d:%s, %.2f, %.2f]", id, type, x, y);
   }
 }

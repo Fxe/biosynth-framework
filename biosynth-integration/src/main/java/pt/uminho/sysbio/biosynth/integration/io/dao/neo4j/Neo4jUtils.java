@@ -36,7 +36,15 @@ import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
  */
 public class Neo4jUtils {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Neo4jUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(Neo4jUtils.class);
+
+  public static void setCreatedTimestamp(Node node) {
+    node.setProperty("created_at", System.currentTimeMillis());
+  }
+
+  public static void setUpdatedTimestamp(Node node) {
+    node.setProperty("updated_at", System.currentTimeMillis()); 
+  }
 
   public static Set<Long> collectNodes(Node node) {
     return null;
@@ -154,7 +162,7 @@ public class Neo4jUtils {
 
     for (String key : properties.keySet()) { 
       Object value = properties.get(key);
-      LOGGER.trace(String.format("Assign property - %s:%s", key, value));
+      logger.trace(String.format("Assign property - %s:%s", key, value));
       propertyContainer.setProperty(key, value);
     }
   }
@@ -164,7 +172,7 @@ public class Neo4jUtils {
     labels_.remove(GlobalLabel.MetaboliteProperty.toString());
     labels_.remove(GlobalLabel.ReactionProperty.toString());
 
-    if (labels_.size() > 1) LOGGER.warn("Multiple labels " + labels_);
+    if (labels_.size() > 1) logger.warn("Multiple labels " + labels_);
 
     if (labels_.isEmpty()) return null;
 
@@ -288,7 +296,7 @@ public class Neo4jUtils {
 
     for (Node node_ : findNodesByLabelAndProperty) {
       if (node != null) {
-        LOGGER.warn("Resource not unique");
+        logger.warn("Resource not unique");
       }
       node = node_;
     }
@@ -301,7 +309,7 @@ public class Neo4jUtils {
 
     Node node = null;
     for (Object object : IteratorUtil.asList(executionResult.columnAs(column))) {
-      if (node != null) LOGGER.warn("Integrity failure. Not unique result.");
+      if (node != null) logger.warn("Integrity failure. Not unique result.");
       node = (Node) object;
     }
     return node;
@@ -311,7 +319,7 @@ public class Neo4jUtils {
     Set<Node> nodes = collectNodeRelationshipNodes(node, relationshipTypes);
     if (nodes.isEmpty()) return null;
 
-    if (nodes.size() > 1) LOGGER.warn(String.format("Relationships not unique for %s", node));
+    if (nodes.size() > 1) logger.warn(String.format("Relationships not unique for %s", node));
 
     return nodes.iterator().next();
   }
@@ -326,7 +334,7 @@ public class Neo4jUtils {
     Map<String, Object> params = new HashMap<> ();
     params.put(key, value);
 
-    LOGGER.trace(String.format("Cypher: %s - %s", query, params));
+    logger.trace(String.format("Cypher: %s - %s", query, params));
     Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
     return node;
   }
@@ -338,7 +346,7 @@ public class Neo4jUtils {
             "ON CREATE SET n.created_at=timestamp(), n.updated_at=timestamp() " + 
             "ON MATCH SET n.updated_at=timestamp() RETURN n", 
             label, key, key);
-    LOGGER.trace("Query: " + query);
+    logger.trace("Query: " + query);
     Map<String, Object> params = new HashMap<> ();
     params.put(key, value);
     Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
@@ -395,7 +403,7 @@ public class Neo4jUtils {
 
     return false;
   }
-  
+
   public static Relationship getRelationshipBetween(Node node1,
       Node node2, Direction direction) {
     for (Relationship r : node1.getRelationships(direction)) {

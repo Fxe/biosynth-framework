@@ -33,6 +33,8 @@ public class TestXmlStreamSbmlReader {
   public void test() throws IOException {
 //    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";
 //    final String SBML_PATH = "D:/var/yeast/sbml/yeast_7.6_cobra.xml";
+//    final String SBML_PATH = "/var/human/Recon2_v02.xml";
+//    final String SBML_PATH = "/var/human/Recon1.xml";
 //    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
 //        new FileInputStream(SBML_PATH));
 //    XmlSbmlModel model = sbmlReader.parse();
@@ -46,8 +48,10 @@ public class TestXmlStreamSbmlReader {
 //      }
 //      break;
 //    }
+//    
 //    for (XmlSbmlReaction reaction : model.getReactions()) {
 //      System.out.println(reaction.getAttributes());
+//      System.out.println(reaction.getNotes());
 //      for (String type : reaction.getListOfAnnotations().keySet()) {
 //        System.out.println("\t" + type);
 //        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {

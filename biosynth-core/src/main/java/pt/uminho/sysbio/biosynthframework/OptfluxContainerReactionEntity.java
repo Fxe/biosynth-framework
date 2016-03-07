@@ -75,7 +75,15 @@ public class OptfluxContainerReactionEntity extends GenericReaction {
       DefaultMetabolicModelEntity metabolicModel) {
     this.metabolicModel = metabolicModel;
   }
-
+  
+  private MetabolicModelSubsystem subsystem;
+  public MetabolicModelSubsystem getSubsystem() {
+    return subsystem;
+  }
+  public void setSubsystem(MetabolicModelSubsystem subsystem) {
+    this.subsystem = subsystem;
+  }
+  
   public void computeOrientation() {
     if (lowerBound != null && upperBound != null) {
       if (lowerBound < 0 && upperBound > 0) {

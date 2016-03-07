@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration.etl.biodb;
+package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,7 +16,6 @@ import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
-import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BioDbDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;

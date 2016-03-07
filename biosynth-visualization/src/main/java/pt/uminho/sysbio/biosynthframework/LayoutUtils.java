@@ -174,9 +174,8 @@ public class LayoutUtils {
     return escherMap;
   }
   
-  public static MetabolicLayout toMetabolicLayout(EscherMap map,
-                                           MetaboliteDao<?> metaboliteDao,
-                                           ReactionDao<?> reactionDao) {
+  public static MetabolicLayout toMetabolicLayout(
+      EscherMap map, MetaboliteDao<?> metaboliteDao, ReactionDao<?> reactionDao) {
     MetabolicLayout layout = new MetabolicLayout();
     
     long nodeId = 0;
@@ -188,21 +187,27 @@ public class LayoutUtils {
       if (node.bigg_id != null) {
         String cpdEntry = cleanEntry(node.bigg_id);
         Metabolite cpd = metaboliteDao.getMetaboliteByEntry(cpdEntry);
+
+        
+        LayoutNode layoutNode = new LayoutNode();
+        layoutNode.id = nodeId;
+        layoutNode.label = cpdEntry;
+        layoutNode.type = LayoutNodeType.SPECIE;
+        layoutNode.compartment = LayoutUtils.identityCompartment(node.bigg_id);
+        layoutNode.x = node.x;
+        layoutNode.y = node.y;
+        
         if (cpd == null) {
           logger.warn("Not found: {} - {}", node.bigg_id, cpdEntry);
+          layout.nodes.put(layoutNode.id, layoutNode);
         } else {
-          LayoutNode layoutNode = new LayoutNode();
-          layoutNode.id = nodeId;
-          layoutNode.label = cpdEntry;
-          layoutNode.type = LayoutNodeType.SPECIE;
-          layoutNode.compartment = LayoutUtils.identityCompartment(node.bigg_id);
-          layoutNode.x = node.x;
-          layoutNode.y = node.y;
           layout.addLayoutNode("BiGG", cpdEntry, layoutNode);
-          nodeId++;
-          
-          idMap.put(id, layoutNode.id);
         }
+        
+        nodeId++;
+        
+        idMap.put(id, layoutNode.id);
+        
       }
     }
     
@@ -229,43 +234,54 @@ public class LayoutUtils {
         reactionNodes.get(toNode.node_type).add(toNodeId);
       }
       
-      if (rxn == null) {
-        logger.warn("Reaction not found: {}", erxn.bigg_id);
+      
+      identifiedRxnNodes.add(id);
+      if (reactionNodes.get("midmarker").size() != 1) {
+        //midmarker is the rxn marker it self must be 1
+        //cry because something is wrong !
       } else {
-        identifiedRxnNodes.add(id);
-        if (reactionNodes.get("midmarker").size() != 1) {
-          //midmarker is the rxn marker it self must be 1
-          //cry because something is wrong !
-        } else {
-          long midmarkerId = reactionNodes.get("midmarker").iterator().next();
-          EscherNode rxnNode = map.nodes.get(midmarkerId);
-          
-          LayoutNode primaryNode = new LayoutNode();
-          primaryNode.id = nodeId++;
-          primaryNode.label = erxn.bigg_id;
-          primaryNode.type = LayoutNodeType.REACTION;
-          primaryNode.x = rxnNode.x;
-          primaryNode.y = rxnNode.y;
-          LayoutReaction layoutReaction = new LayoutReaction();
-          layoutReaction.primary = primaryNode;
-          if (reactionNodes.containsKey("multimarker")) {
-            for (long markerId : reactionNodes.get("multimarker")) {
-              EscherNode erxnMarkerNode = map.nodes.get(markerId);
-              LayoutNode markerNode = new LayoutNode();
-              markerNode.id = nodeId++;
-              markerNode.label = erxn.bigg_id;
-              markerNode.type = LayoutNodeType.REACTION_MARKER;
-              markerNode.x = erxnMarkerNode.x;
-              markerNode.y = erxnMarkerNode.y;
-              layoutReaction.markers.add(markerNode);
-              idMap.put(markerId, markerNode.id);
-            }
+        long midmarkerId = reactionNodes.get("midmarker").iterator().next();
+        EscherNode rxnNode = map.nodes.get(midmarkerId);
+        
+        LayoutNode primaryNode = new LayoutNode();
+        primaryNode.id = nodeId++;
+        primaryNode.label = erxn.bigg_id;
+        primaryNode.type = LayoutNodeType.REACTION;
+        primaryNode.x = rxnNode.x;
+        primaryNode.y = rxnNode.y;
+        LayoutReaction layoutReaction = new LayoutReaction();
+        layoutReaction.primary = primaryNode;
+        if (reactionNodes.containsKey("multimarker")) {
+          for (long markerId : reactionNodes.get("multimarker")) {
+            EscherNode erxnMarkerNode = map.nodes.get(markerId);
+            LayoutNode markerNode = new LayoutNode();
+            markerNode.id = nodeId++;
+            markerNode.label = erxn.bigg_id;
+            markerNode.type = LayoutNodeType.REACTION_MARKER;
+            markerNode.x = erxnMarkerNode.x;
+            markerNode.y = erxnMarkerNode.y;
+            layoutReaction.markers.add(markerNode);
+            idMap.put(markerId, markerNode.id);
           }
-          idMap.put(midmarkerId, primaryNode.id);
+        }
+        idMap.put(midmarkerId, primaryNode.id);
+        
+        
+        if (rxn == null) {
+          logger.warn("Reaction not found: {}", erxn.bigg_id);
+          layout.nodes.put(layoutReaction.primary.id, layoutReaction.primary);
+          Set<Long> markers = new HashSet<> ();
+          for (LayoutNode n : layoutReaction.markers) {
+            markers.add(n.id);
+            layout.nodes.put(n.id, n);
+          }
+        } else {
           layout.addLayoutReaction("BiGG", erxn.bigg_id, layoutReaction);
         }
         
       }
+        
+      
     }
     
     for (long id : identifiedRxnNodes) {

@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
-import pt.uminho.sysbio.biosynth.integration.etl.biodb.AbstractMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.AbstractMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;

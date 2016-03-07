@@ -6,15 +6,16 @@ public enum MetaboliteMajorLabel implements Label {
 	//KEGG universe
 	LigandCompound, LigandDrug, LigandGlycan,
 	//BioCyc
-	MetaCyc, EcoCyc, HumanCyc,
+	MetaCyc, EcoCyc, HumanCyc, YeastCyc, AraCyc,
 	HMDB, YMDB,
-	BiGG, MetaNetX, Seed, MaizeCyc, AraCyc, ChEBI, 
+	BiGG, MetaNetX, Seed, MaizeCyc, ChEBI, 
 	Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS, DrugBank,
 	PubChemCompound, PubChemSubstance,
 	LipidMAPS, ChemSpider,
 	EawagBBDCompound,
 	MET3D, NIKKAJI, PDB, NCI, LipidBank, JCGGDB, GlycomeDB, CCSD, Wikipedia,
 	LigandBox,
-	NOTFOUND, 
+	MetaboLights, Metabolomics,
+	NOTFOUND,
 	;
 }

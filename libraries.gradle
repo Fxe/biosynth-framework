@@ -25,6 +25,7 @@ ext {
     json_api_databind: "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
     json_api_annotations: "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
     json_api_datatype_joda: "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}",
+    json_api_dataformat_xml: "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}",
     
     // data
     hibernate_core: "org.hibernate:hibernate-core:${hibernateVersion}",

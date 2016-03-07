@@ -26,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.DefaultMetaboliteSpecie;
 import pt.uminho.sysbio.biosynthframework.DefaultModelMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.DefaultSubcellularCompartmentEntity;
 import pt.uminho.sysbio.biosynthframework.EntityType;
+import pt.uminho.sysbio.biosynthframework.MetabolicModelSubsystem;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
 import pt.uminho.sysbio.biosynthframework.PropertyContainer;
 
@@ -236,6 +237,15 @@ public class Neo4jMapper {
 		rxn.setEntityType(EntityType.valueOf((String)node.getProperty("entityType", "REACTION")));
 		rxn.setLeftStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.left_component));
 		rxn.setRightStoichiometry(getStoichiometry(node, MetabolicModelRelationshipType.right_component));
+		Relationship r = node.getSingleRelationship(MetabolicModelRelationshipType.in_subsystem, Direction.BOTH);
+		if (r != null) {
+    		Node pwyNode = r.getOtherNode(node);
+    		MetabolicModelSubsystem subsystem = new MetabolicModelSubsystem();
+    		subsystem.setId(pwyNode.getId());
+    		subsystem.setEntry((String) pwyNode.getProperty("entry"));
+    		subsystem.setName((String) pwyNode.getProperty("name", null));
+    		rxn.setSubsystem(subsystem);
+		}
 		return rxn;
 	}
 	
