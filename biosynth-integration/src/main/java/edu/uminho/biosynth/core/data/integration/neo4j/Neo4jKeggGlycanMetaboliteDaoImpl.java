@@ -80,7 +80,7 @@ public class Neo4jKeggGlycanMetaboliteDaoImpl extends AbstractNeo4jDao<KeggGlyca
 			executionEngine.execute("MATCH (cpd:KEGG {entry:{entry}}), (n:Name {name:{name}}) MERGE (cpd)-[r:HasName]->(n)", params);
 		}
 		
-		for (KeggGlycanMetaboliteCrossreferenceEntity xref : cpd.getCrossReferences()) {
+		for (KeggGlycanMetaboliteCrossreferenceEntity xref : cpd.getCrossreferences()) {
 			String dbLabel = BioDbDictionary.translateDatabase(xref.getRef());
 			String dbEntry = xref.getValue(); //Also need to translate if necessary
 			params.put("dbEntry", dbEntry);

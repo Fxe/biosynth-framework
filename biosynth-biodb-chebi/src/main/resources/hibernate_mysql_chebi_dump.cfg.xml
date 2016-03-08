@@ -7,24 +7,24 @@
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password"></property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/chebi_dump</property>
-        <property name="hibernate.default_schema">chebi_dump</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/chebi</property>
+        <property name="hibernate.default_schema">chebi</property>
         <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
         
         <property name="show_sql">false</property>
 
-	    <mapping class="edu.uminho.biosynth.core.components.biodb.chebi.ChebiDumpMetaboliteEntity" />
-	    <mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteChemicalDataEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteCommentEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteNameEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteStructuresEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteReferenceEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ChebiDumpMetaboliteDatabaseAccession"/>
+	    <mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteEntity" />
+	    <mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteChemicalDataEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteCommentEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteNameEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteStructuresEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteReferenceEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpMetaboliteDatabaseAccession"/>
 		
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyVertexEntity"/>
-		<mapping class="edu.uminho.biosynth.core.components.biodb.chebi.components.ontology.ChebiDumpOntologyRelationEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyVertexEntity"/>
+		<mapping class="pt.uminho.sysbio.biosynthframework.biodb.ChebiDumpOntologyRelationEntity"/>
 		
     </session-factory>
 </hibernate-configuration>

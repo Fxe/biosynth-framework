@@ -51,7 +51,8 @@ extends AbstractMetaboliteTransform<KeggCompoundMetaboliteEntity> {
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(ecn)
-							.withMajorLabel(GlobalLabel.EnzymeCommission)
+							.withMajorLabel(GlobalLabel.KEGG)
+							.withLabel(GlobalLabel.EnzymeCommission)
 							.buildGenericNodeEntity(), 
 					new SomeNodeFactory().buildMetaboliteEdge(
 							MetaboliteRelationshipType.related_to)));

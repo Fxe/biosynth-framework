@@ -40,7 +40,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(pwy)
-							.withMajorLabel(ReactionMajorLabel.MetaCyc)
+							.withMajorLabel(this.majorLabel)
 							.withLabel(GlobalLabel.BioCyc)
 							.withLabel(GlobalLabel.MetabolicPathway)
 							.buildGenericNodeEntity(), 
@@ -54,7 +54,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(rxn)
-							.withMajorLabel(ReactionMajorLabel.MetaCyc)
+							.withMajorLabel(this.majorLabel)
 							.withLabel(GlobalLabel.BioCyc)
 							.withLabel(GlobalLabel.Reaction)
 							.buildGenericNodeEntity(), 
@@ -81,7 +81,8 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
 						this.buildPair(
 						new SomeNodeFactory()
 								.withEntry(ecn.getEcNumber())
-								.withMajorLabel(GlobalLabel.EnzymeCommission)
+								.withMajorLabel(this.majorLabel)
+								.withLabel(GlobalLabel.EnzymeCommission)
 								.buildGenericNodeEntity(), 
 						new SomeNodeFactory()
 								.withProperties(properties)

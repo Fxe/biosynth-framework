@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
@@ -122,6 +123,8 @@ public class BioDbDictionary {
 		dictionary.put("Reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
+		
+		dictionary.put("UNIPROT", GlobalLabel.UniProt.toString());
 		return dictionary;
 	}
 	

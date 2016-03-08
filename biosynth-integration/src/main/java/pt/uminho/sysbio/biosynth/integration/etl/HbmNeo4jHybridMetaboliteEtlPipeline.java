@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -105,37 +106,39 @@ implements EtlPipeline<SRC, DST> {
 	@Override
 	public void etl() {
 		
-		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+//		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
 		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
 		
 		int i = 0;
+		
 		for (Serializable entry : etlExtract.getAllKeys()) {
 			//SRC = ETL EXTRACT(Entry)
 			SRC src = etlExtract.extract(entry);
-			
-			//DST = ETL TRANSFORM(SRC)
-			DST dst = etlTransform.etlTransform(src);
-			
-			//ETL CLEAN(DST)
-			if (this.dataCleasingSubsystem != null)
-				dataCleasingSubsystem.etlCleanse(dst);
-			
-			//ETL LOAD(DST)
-			if (!skipLoad) etlLoad.etlLoad(dst);
-			
-			i++;
-			if ((i % batchSize) == 0) {
-				LOGGER.debug(String.format("Commit ! %d", i));
-				neoTx.success();
-				neoTx.close();
-				neoTx = graphDatabaseService.beginTx();
+			if (src != null){
+				//DST = ETL TRANSFORM(SRC)
+				DST dst = etlTransform.etlTransform(src);
 				
-				hbmTx.rollback();
-				hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+				//ETL CLEAN(DST)
+				if (this.dataCleasingSubsystem != null)
+					dataCleasingSubsystem.etlCleanse(dst);
+				
+				//ETL LOAD(DST)
+				if (!skipLoad) etlLoad.etlLoad(dst);
+				
+				i++;
+				if ((i % batchSize) == 0) {
+					LOGGER.debug(String.format("Commit ! %d", i));
+					neoTx.success();
+					neoTx.close();
+					neoTx = graphDatabaseService.beginTx();
+					
+	//				hbmTx.rollback();
+	//				hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+				}
 			}
 		}
 		
-		hbmTx.rollback();
+//		hbmTx.rollback();
 		neoTx.success();
 		neoTx.close();
 	}

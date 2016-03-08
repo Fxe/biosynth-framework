@@ -63,7 +63,7 @@ public class KeggGlycanMetaboliteEntity extends AbstractKeggMetabolite {
 	@OneToMany(mappedBy = "keggGlycanMetaboliteEntity", cascade = CascadeType.ALL)
 	private List<KeggGlycanMetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
 	
-	public List<KeggGlycanMetaboliteCrossreferenceEntity> getCrossReferences() {
+	public List<KeggGlycanMetaboliteCrossreferenceEntity> getCrossreferences() {
 		return crossReferences;
 	}
 	public void setCrossReferences(List<KeggGlycanMetaboliteCrossreferenceEntity> crossReferences) {

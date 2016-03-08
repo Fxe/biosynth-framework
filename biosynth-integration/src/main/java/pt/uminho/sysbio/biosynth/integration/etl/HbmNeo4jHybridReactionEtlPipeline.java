@@ -98,7 +98,7 @@ implements EtlPipeline<SRC, DST> {
 			LOGGER.warn("No data cleasing system attached");
 		}
 		
-		org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+		//org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
 		org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
 		
 		int i = 0;
@@ -122,12 +122,12 @@ implements EtlPipeline<SRC, DST> {
 				neoTx.close();
 				neoTx = graphDatabaseService.beginTx();
 				
-				hbmTx.rollback();
-				hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+				//hbmTx.rollback();
+				//hbmTx = sessionFactory.getCurrentSession().beginTransaction();
 			}
 		}
 		
-		hbmTx.rollback();
+		//hbmTx.rollback();
 		neoTx.success();
 		neoTx.close();
 	}
