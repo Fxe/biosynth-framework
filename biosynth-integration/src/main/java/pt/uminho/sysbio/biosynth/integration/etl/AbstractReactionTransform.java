@@ -225,7 +225,7 @@ implements EtlTransform<R, GraphReactionEntity> {
 								this.buildPair(
 								new SomeNodeFactory()
 										.withEntry(xref.getValue())
-										.withMajorLabel(GlobalLabel.valueOf(xref.getRef()))
+										.withMajorLabel(GlobalLabel.valueOf(BioDbDictionary.translateDatabase(xref.getRef())))
 										.withLabel(GlobalLabel.Gene)
 										.buildGenericNodeEntity(), 
 								new SomeNodeFactory()

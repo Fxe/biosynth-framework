@@ -142,6 +142,7 @@ public class BioDbDictionary {
 		dictionary.put("Reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
+		dictionary.put("UNIPROT", GlobalLabel.UniProt.toString());
 		dictionary.put("METABOLOMICS_ID", MetaboliteMajorLabel.Metabolomics.toString());
 		return dictionary;
 	}

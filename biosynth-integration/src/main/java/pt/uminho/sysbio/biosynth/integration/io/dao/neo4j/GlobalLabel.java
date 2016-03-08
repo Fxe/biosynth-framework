@@ -20,4 +20,7 @@ public enum GlobalLabel implements Label {
 	UniProt, Gene, EnzymePortal, BrendaEnzyme, 
 	PROSITE, PDB, PFAM, PROTEINMODELPORTAL,
 	KeggReactionPair, Hypothetical,
+	
+	LogicalOperator,
+	Protein, ProteinProperty
 }

@@ -33,7 +33,7 @@ extends AbstractReactionTransform<BioCycReactionEntity> {
   protected void configureAdditionalPropertyLinks(
       GraphReactionEntity centralReactionEntity,
       BioCycReactionEntity reaction) {
-
+	
     for (String pwy : reaction.getPathways()) {
       logger.debug("Add pathway link: " + pwy);
       centralReactionEntity.addConnectedEntity(
