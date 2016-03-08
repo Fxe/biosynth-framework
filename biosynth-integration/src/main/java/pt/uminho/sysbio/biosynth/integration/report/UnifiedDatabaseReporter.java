@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.report;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -14,6 +16,11 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabe
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 
+/**
+ * 
+ * @author Filipe Liu
+ *
+ */
 public class UnifiedDatabaseReporter implements GlobalReporter {
 
 	private GraphDatabaseService graphDataService;
@@ -28,6 +35,7 @@ public class UnifiedDatabaseReporter implements GlobalReporter {
 		for (Label label : GlobalGraphOperations.at(graphDataService).getAllLabels()) {
 			System.out.println(label);
 		}
+		
 		
 		System.out.println("Total Nodes: " + IteratorUtil.asCollection(GlobalGraphOperations.at(graphDataService).getAllNodes()).size());
 		

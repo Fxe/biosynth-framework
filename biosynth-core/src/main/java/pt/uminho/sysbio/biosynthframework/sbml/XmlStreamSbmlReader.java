@@ -56,10 +56,14 @@ public class XmlStreamSbmlReader {
   private final static String SBML_LIST_OF_FLUX_BOUNDS = "listOfFluxBounds";
   private final static String SBML_FLUX_BOUND = "fluxBound";
 
+  private final static String SBML_NOTES = "notes";
+  
   private final static String SBML_REACTION = "reaction";
   private final static String SBML_REACTION_LIST_OF_REACTANTS = "listOfReactants";
   private final static String SBML_REACTION_LIST_OF_PRODUCTS = "listOfProducts";
   private final static String SBML_REACTION_SPECIES_REFERENCE = "speciesReference";
+  
+  private final static String SBML_NOTES_BODY = "body";
 
   private String data = null;
 
@@ -298,6 +302,7 @@ public class XmlStreamSbmlReader {
           case "RDF": break;
           case "Description": break;
           case "Bag": break;
+          case BQBIOL_IS_VERSION_OF:
           case BQBIOL_IS:
           case BQBIOL_IS_DESCRIBED_BY:
             bqbiolOntology = startElement.getName().getLocalPart();
@@ -318,6 +323,7 @@ public class XmlStreamSbmlReader {
           case "Description": break;
           case "Bag": break;
           case "annotation": read = false; break;
+          case BQBIOL_IS_VERSION_OF:
           case BQBIOL_IS:
           case BQBIOL_IS_DESCRIBED_BY:
             bqbiolOntology = null;
@@ -336,12 +342,57 @@ public class XmlStreamSbmlReader {
     logger.debug("--- reading annotation");
     return annotation;
   }
+  
+  public List<String> parseNotes(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    boolean read = true;
+    boolean readBody = false;
+    List<String> notes = new ArrayList<> ();
+    String note = null;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
 
-  public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+        switch (startElement.getName().getLocalPart()) {
+          case "p":
+          case SBML_NOTES_BODY: readBody = true; break;
+          default: break;
+        }
+        if (readBody) {
+          note = String.format("<%s>", startElement.getName().getLocalPart());
+        }
+      }
+      if (xmlEvent.isCharacters()) {
+        String data = xmlEvent.asCharacters().getData();
+        if (readBody) {
+          note += data.trim();
+        }
+      }
+      
+      if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        if (readBody) {
+          note += String.format("</%s>", endElement.getName().getLocalPart());
+          notes.add(note);
+          note = null;
+        }
+        switch (endElement.getName().getLocalPart()) {
+          case SBML_NOTES: read = false; break;
+          case "p":
+          case SBML_NOTES_BODY: readBody = false; break;
+          default: break;
+        }
+
+      }
+    }
+    return notes;
+  }
+
+  public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
     logger.debug("+++ reading reaction");
     boolean read = true;
     XmlSbmlReaction sbmlReaction = new XmlSbmlReaction();
-    sbmlReaction.setAttributes(getAttributes(specieStartElement));
+    sbmlReaction.setAttributes(getAttributes(reactionStartElement));
     
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -349,6 +400,11 @@ public class XmlStreamSbmlReader {
         StartElement startElement = xmlEvent.asStartElement();
         String namespace = startElement.getName().getNamespaceURI();
         switch (startElement.getName().getLocalPart()) {
+          case SBML_NOTES: {
+            List<String> notes = parseNotes(xmlEventReader, startElement);
+            sbmlReaction.setNotes(notes);
+            break;
+          }
           case SBML_REACTION: {
           //						specieObject = new XMLObject();  
           //						specieObject.attributes.putAll(getAttributes(startElement));

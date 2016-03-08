@@ -1,6 +1,10 @@
 package pt.uminho.sysbio.biosynthframework;
 
 public enum SubcellularCompartment {
+  ANY,
+  MULTIPLE,
+  UNKNOWN,
+  
   BOUNDARY, 
   EXTRACELLULAR,
   CYTOSOL,

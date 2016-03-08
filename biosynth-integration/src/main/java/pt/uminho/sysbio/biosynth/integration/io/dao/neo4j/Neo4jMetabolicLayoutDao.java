@@ -70,6 +70,11 @@ public class Neo4jMetabolicLayoutDao implements MetabolicLayoutDao {
     Node node = Neo4jUtils.getUniqueResult(
         service.findNodesByLabelAndProperty(Neo4jLayoutLabel.MetabolicLayout, 
                                             "entry", entry));
+    
+    if (node == null) {
+      return null;
+    }
+    
     return findById(node.getId());
   }
 
@@ -119,8 +124,21 @@ public class Neo4jMetabolicLayoutDao implements MetabolicLayoutDao {
 
   @Override
   public boolean delete(MetabolicLayout entity) {
-    // TODO Auto-generated method stub
-    return false;
+    long layoutId = entity.getId();
+    
+    Node layoutNode = service.getNodeById(layoutId);
+    for (Node node : Neo4jUtils.collectNodeRelationshipNodes(
+        layoutNode, Neo4jLayoutRelationship.has_layout_node)) {
+      //delete Layout Node relations + Node
+      for (Relationship r : node.getRelationships()) {
+        r.delete();
+      }
+      node.delete();
+    }
+    
+    layoutNode.delete();
+    
+    return true;
   }
 
   @Override

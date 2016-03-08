@@ -85,6 +85,15 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
       layoutNode.addAnnotation(database, refId, entry);
     }
     
+    for (Node refNode : Neo4jUtils.collectNodeRelationshipNodes(
+        node, Neo4jLayoutRelationship.is_a_model_entity)) {
+      //assume database property is the model reference
+      String model = (String) refNode.getProperty("database");
+      String entry = (String) refNode.getProperty("entry");
+      long refId = (long) refNode.getProperty(Neo4jDefinitions.MEMBER_REFERENCE);
+      layoutNode.addModelAnnotation(model, refId, entry);
+    }
+    
     return layoutNode;
   }
 
@@ -217,6 +226,41 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
     
     for (Relationship relationship : node.getRelationships(
         Neo4jLayoutRelationship.is_a)) {
+      if (!annotationRelationshipIds.contains(relationship.getId())) {
+        logger.trace("{} -X-[{}]-> {}", relationship.getStartNode(), relationship.getType().name(), relationship.getEndNode());
+        relationship.delete();
+      }
+    }
+  }
+  
+  @Override
+  public void updateModelAnnotation(long nodeId, 
+                               Map<String, Map<Long, String>> modelAnnotation, 
+                               String referenceType) {
+    Node node = service.getNodeById(nodeId);
+    
+    Neo4jLayoutLabel referenceLabel = Neo4jLayoutLabel.valueOf(referenceType);
+    Set<Long> annotationRelationshipIds = new HashSet<> ();
+    for (String model : modelAnnotation.keySet()) {
+      for (long id : modelAnnotation.get(model).keySet()) {
+        Node refNode = getOrCreateReferenceNode(model, 
+            modelAnnotation.get(model).get(id), id, referenceLabel);
+        
+        Relationship relationship = Neo4jUtils.getRelationshipBetween(
+            node, refNode, Direction.BOTH);
+        if (relationship == null) {
+          relationship = node.createRelationshipTo(
+              refNode, Neo4jLayoutRelationship.is_a_model_entity);
+          logger.trace("{} -N-[{}]-> {}", node, relationship.getType().name(), refNode);
+        } else {
+          logger.trace("{} -O-[{}]-> {}", node, relationship.getType().name(), refNode);
+        }
+        annotationRelationshipIds.add(relationship.getId());
+      }
+    }
+    
+    for (Relationship relationship : node.getRelationships(
+        Neo4jLayoutRelationship.is_a_model_entity)) {
       if (!annotationRelationshipIds.contains(relationship.getId())) {
         logger.trace("{} -X-[{}]-> {}", relationship.getStartNode(), relationship.getType().name(), relationship.getEndNode());
         relationship.delete();

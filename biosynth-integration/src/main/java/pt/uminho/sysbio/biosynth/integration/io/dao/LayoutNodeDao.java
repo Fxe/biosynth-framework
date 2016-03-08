@@ -8,7 +8,10 @@ import pt.uminho.sysbio.biosynthframework.io.BiosynthDao;
 
 public interface LayoutNodeDao extends BiosynthDao<LayoutNode> {
   public Map<Long, LayoutNode> listNodes(Set<Long> nodeIds);
-  public void updateAnnotation(long nodeId, Map<String, 
-                               Map<Long, String>> annotation,
+  public void updateAnnotation(long nodeId, 
+                               Map<String, Map<Long, String>> annotation,
                                String referenceType);
+  public void updateModelAnnotation(long nodeId,
+                                    Map<String, Map<Long, String>> model, 
+                                    String referenceType);
 }

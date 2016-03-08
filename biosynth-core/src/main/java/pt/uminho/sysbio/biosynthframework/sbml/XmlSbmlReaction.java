@@ -10,6 +10,7 @@ public class XmlSbmlReaction extends XmlObject {
   private Map<String, List<XmlObject>> listOfAnnotations = new HashMap<> ();
   private List<XmlObject> listOfReactants = new ArrayList<> ();
   private List<XmlObject> listOfProducts  = new ArrayList<> ();
+  private List<String> notes  = new ArrayList<> ();
   
   public Map<String, List<XmlObject>> getListOfAnnotations() { return listOfAnnotations;}
   public void setListOfAnnotations(Map<String, List<XmlObject>> listOfAnnotations) { this.listOfAnnotations = listOfAnnotations;}
@@ -19,4 +20,8 @@ public class XmlSbmlReaction extends XmlObject {
   
   public List<XmlObject> getListOfProducts() { return listOfProducts;}
   public void setListOfProducts(List<XmlObject> listOfProducts) { this.listOfProducts = listOfProducts;}
+  
+  public List<String> getNotes() { return notes;}
+  public void setNotes(List<String> notes) { this.notes = notes;}
+  
 }

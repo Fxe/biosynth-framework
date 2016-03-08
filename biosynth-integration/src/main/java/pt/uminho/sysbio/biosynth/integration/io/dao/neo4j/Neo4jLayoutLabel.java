@@ -4,6 +4,5 @@ import org.neo4j.graphdb.Label;
 
 public enum Neo4jLayoutLabel implements Label {
   MetabolicLayout, LayoutNode, 
-  MetaboliteReference, ReactionReference,
-  
+  MetaboliteReference, ReactionReference, ModelReference
 }

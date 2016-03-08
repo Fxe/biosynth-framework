@@ -9,9 +9,11 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	instance_of,			//Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
 	parent_of,
 	has_inchi,				//Metabolite -[has_inchi]-> InChI
+	has_inchikey,             //Metabolite -[has_inchi]-> InChI
 	has_charge,				//Metabolite -[has_charge]-> Charge
 	has_smiles,				//Metabolite -[has_smiles]-> SMILES
 	Isomorphic,				//Metabolite -[Isomorphic]-> ???
+	has_secondary_accession,//Metabolite -[has_secondary_accession]-> Metabolite
 	included_in,			//Metabolite -[included_in]-> MetabolicModel 1) metabolite can be found in metabolic models
 	found_in,				//Metabolite -[found_in]-> SubcellularCompartment 1) metabolite can be found in SubcellularCompartment
 	chebi_parent,			//Metabolite:ChEBI -[chebi_parent]-> Metabolite:ChEBI

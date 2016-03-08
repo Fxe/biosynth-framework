@@ -45,11 +45,14 @@ public class BioDbDictionary {
 		Map<String, String> dictionary = new HashMap<> ();
 		dictionary.put("NCI", "NCI");
 		
+		dictionary.put("METABOLIGHTS", MetaboliteMajorLabel.MetaboLights.toString());
 		
 		dictionary.put("Wikipedia", MetaboliteMajorLabel.Wikipedia.toString());
+		dictionary.put("wikipidia", MetaboliteMajorLabel.Wikipedia.toString());
 		dictionary.put("Wikipedia accession", MetaboliteMajorLabel.Wikipedia.toString());
 		
 		dictionary.put("LipidBank", MetaboliteMajorLabel.LipidBank.toString());
+		dictionary.put("LIPIDBANK_ID", MetaboliteMajorLabel.LipidBank.toString());
 		
 		dictionary.put("LIPID_MAPS", MetaboliteMajorLabel.LipidMAPS.toString());
 		dictionary.put("lipidmaps", MetaboliteMajorLabel.LipidMAPS.toString());
@@ -57,6 +60,7 @@ public class BioDbDictionary {
 		dictionary.put("LIPID MAPS instance accession", MetaboliteMajorLabel.LipidMAPS.toString());
 		
 		dictionary.put("CHEMSPIDER", MetaboliteMajorLabel.ChemSpider.toString());
+		dictionary.put("chemspider_id", MetaboliteMajorLabel.ChemSpider.toString());
 		dictionary.put("Chemspider accession", MetaboliteMajorLabel.ChemSpider.toString());
 		dictionary.put("DrugBank accession", MetaboliteMajorLabel.DrugBank.toString());
 		dictionary.put("DrugBank", MetaboliteMajorLabel.DrugBank.toString());
@@ -65,17 +69,22 @@ public class BioDbDictionary {
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
 		//BioCyc
+		dictionary.put("ECOCYC", MetaboliteMajorLabel.EcoCyc.toString());
 		dictionary.put("KNAPSACK", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("KNApSAcK", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("KNApSAcK accession", MetaboliteMajorLabel.KNApSAcK.toString());
 		dictionary.put("BIOCYC:ARA", "BioCyc:AraCyc");
 		dictionary.put("METACYC", MetaboliteMajorLabel.MetaCyc.toString());
 		dictionary.put("metacyc", MetaboliteMajorLabel.MetaCyc.toString());
+		dictionary.put("biocyc_id", MetaboliteMajorLabel.MetaCyc.toString());
 		dictionary.put("MetaCyc accession", MetaboliteMajorLabel.MetaCyc.toString());
 		
 		dictionary.put("BIGG", MetaboliteMajorLabel.BiGG.toString());
 		dictionary.put("bigg", MetaboliteMajorLabel.BiGG.toString());
+		dictionary.put("bigg_id", MetaboliteMajorLabel.BiGG.toString());
 		dictionary.put("LIGAND-CPD", MetaboliteMajorLabel.LigandCompound.toString());
+		dictionary.put("KEGG_ID", GlobalLabel.KEGG.toString());
+		dictionary.put("kegg_id", GlobalLabel.KEGG.toString());
 //		dictionary.put("KEGG", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
 		dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
@@ -88,22 +97,32 @@ public class BioDbDictionary {
 		dictionary.put("CCSD", MetaboliteMajorLabel.CCSD.toString());
 		
 		dictionary.put("PUBCHEM", MetaboliteMajorLabel.PubChemCompound.toString());
+		dictionary.put("pubchem_compound_id", MetaboliteMajorLabel.PubChemCompound.toString());
 		dictionary.put("Pubchem accession", MetaboliteMajorLabel.PubChemCompound.toString());
 		dictionary.put("PubChem", MetaboliteMajorLabel.PubChemCompound.toString());
 		dictionary.put("PUBCHEM-SID", MetaboliteMajorLabel.PubChemSubstance.toString());
+		dictionary.put("PUBCHEM_SID", MetaboliteMajorLabel.PubChemSubstance.toString());
+		dictionary.put("PUBCHEM_CID", MetaboliteMajorLabel.PubChemCompound.toString());
 		
 		dictionary.put("PDB-CCD", "PDB");
 		dictionary.put("chebi", MetaboliteMajorLabel.ChEBI.toString());
 		dictionary.put("ChEBI", MetaboliteMajorLabel.ChEBI.toString());
 		dictionary.put("CHEBI", MetaboliteMajorLabel.ChEBI.toString());
+		dictionary.put("CHEBI_ID", MetaboliteMajorLabel.ChEBI.toString());
+		dictionary.put("chebi_id", MetaboliteMajorLabel.ChEBI.toString());
+		
 		dictionary.put("CAS", MetaboliteMajorLabel.CAS.toString());
 		dictionary.put("CAS Registry Number", MetaboliteMajorLabel.CAS.toString());
+		dictionary.put("cas_registry_number", MetaboliteMajorLabel.CAS.toString());
+		
 		dictionary.put("NIKKAJI", MetaboliteMajorLabel.NIKKAJI.toString());
 		dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
 		dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
+//		dictionary.put("dghgkjk", MetaboliteMajorLabel.)
 		
 		dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("hmdb", MetaboliteMajorLabel.HMDB.toString());
+		dictionary.put("HMDBID", MetaboliteMajorLabel.HMDB.toString());
 		dictionary.put("YMDB accession", MetaboliteMajorLabel.YMDB.toString());
 		
 		dictionary.put("HMDB accession", MetaboliteMajorLabel.HMDB.toString());
@@ -123,8 +142,8 @@ public class BioDbDictionary {
 		dictionary.put("Reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("reactome", ReactionMajorLabel.Reactome.toString());
 		dictionary.put("UM-BBD-CPD", MetaboliteMajorLabel.EawagBBDCompound.toString());
-		
 		dictionary.put("UNIPROT", GlobalLabel.UniProt.toString());
+		dictionary.put("METABOLOMICS_ID", MetaboliteMajorLabel.Metabolomics.toString());
 		return dictionary;
 	}
 	
