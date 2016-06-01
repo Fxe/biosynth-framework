@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -990,6 +991,16 @@ System.out.println("Ok ! [" + (end - start) + "]");
 		// TODO Auto-generated method stub
 		return null;
 	}
+  @Override
+  public Pair<Set<Long>, Set<Long>> remapIntegrationSet(long itgId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  @Override
+  public Map<Long, Set<Long>> sortMembers(Set<Long> ids, long itgId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 
 }

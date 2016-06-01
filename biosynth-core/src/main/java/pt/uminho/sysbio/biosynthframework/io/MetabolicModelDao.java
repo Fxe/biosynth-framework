@@ -30,6 +30,7 @@ C extends AbstractBiosynthEntity> {
   public CMP saveCompartment(MMD mmd, CMP cmp);
   public Set<Long>   getAllModelCompartmentIds(MMD model);
   public Set<String> getAllModelCompartmentEntries(MMD model);
+  public void updateCompartment(CMP cmp);
 
   public SPI getModelMetaboliteSpecieById(Long id);
   public SPI getModelMetaboliteSpecieByByModelAndEntry(MMD model, String spiEntry);

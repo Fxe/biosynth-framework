@@ -257,4 +257,10 @@ DefaultMetabolicModelEntity> {
     // TODO Auto-generated method stub
     return null;
   }
+
+  @Override
+  public void updateCompartment(DefaultMetabolicModelEntity cmp) {
+    // TODO Auto-generated method stub
+    
+  }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -26,6 +27,7 @@ import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionLeft;
 import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionRight;
 import pt.uminho.sysbio.biosynthframework.ReferenceSource;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
+import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
 import pt.uminho.sysbio.biosynthframework.io.ExtendedMetabolicModelDao;
 
@@ -128,23 +130,123 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     // TODO Auto-generated method stub
     return null;
   }
+  
+  public Node getGcmpNode(SubcellularCompartment gcmp) {
+    Node gcmpNode = Neo4jUtils.getUniqueResult(
+        graphDatabaseService.findNodesByLabelAndProperty(
+            GlobalLabel.SubcellularCompartment, "entry", gcmp.toString()));
+    if (gcmpNode == null) {
+      gcmpNode = graphDatabaseService.createNode();
+      gcmpNode.addLabel(GlobalLabel.SubcellularCompartment);
+      Neo4jUtils.setCreatedTimestamp(gcmpNode);
+      Neo4jUtils.setUpdatedTimestamp(gcmpNode);
+      logger.warn("CREATE [V] {} -> {} [{}]{}", gcmp, gcmpNode.getId(), Neo4jUtils.getLabels(gcmpNode), Neo4jUtils.getPropertiesMap(gcmpNode));
+    }
+    
+    return gcmpNode;
+  }
+  
+  @Override
+  public void updateCompartment(DefaultSubcellularCompartmentEntity cmp) {
+    if (cmp == null || cmp.getId() == null) {
+      logger.trace("invalid SubcellularCompartment {}", cmp);
+      return;
+    }
+    
+    Node node = graphDatabaseService.getNodeById(cmp.getId());;
+    
+    if (node == null || !node.hasLabel(GlobalLabel.SubcellularCompartment)) {
+      logger.trace("{} not a SubcellularCompartment", node);
+      return;
+    }
+    
+    Relationship linkToGcmp = node.getSingleRelationship(
+        MetabolicModelRelationshipType.has_crossreference_to, Direction.BOTH);
+    
+//    Node gcmp = Neo4jUtils.getSingleRelationshipNode(
+//        node, MetabolicModelRelationshipType.has_crossreference_to);
+    SubcellularCompartment actual = cmp.getCompartment();    
+    if (actual == null) {
+      actual = SubcellularCompartment.UNKNOWN;
+    }
+    Node actualGcmpNode = getGcmpNode(actual);
+    
+    //no link -> create new
+    if (linkToGcmp == null) {
+      Relationship r = node.createRelationshipTo(
+          actualGcmpNode, MetabolicModelRelationshipType.has_crossreference_to);
+      logger.debug("CREATE [E] [{}] -[{}]-> [{}]",
+          r.getStartNode().getId(),
+          r.getType().name(),
+          r.getEndNode().getId());
+      Neo4jUtils.setCreatedTimestamp(r);
+      Neo4jUtils.setUpdatedTimestamp(r);
+    //exist link check if is equal
+    } else {
+      Node gcmp = linkToGcmp.getOtherNode(node);
+      SubcellularCompartment previous = SubcellularCompartment.valueOf(
+          (String) gcmp.getProperty("entry"));
+      if (!previous.equals(actual)) {
+        logger.debug("DELETE [E] [{}] -[{}]-> [{}]",
+            linkToGcmp.getStartNode().getId(),
+            linkToGcmp.getType().name(),
+            linkToGcmp.getEndNode().getId());
+        linkToGcmp.delete();
+        
+        Relationship r = node.createRelationshipTo(
+            actualGcmpNode, MetabolicModelRelationshipType.has_crossreference_to);
+        logger.debug("CREATE [E] [{}] -[{}]-> [{}]",
+            r.getStartNode().getId(),
+            r.getType().name(),
+            r.getEndNode().getId());
+        Neo4jUtils.setCreatedTimestamp(r);
+        Neo4jUtils.setUpdatedTimestamp(r);
+      }
+    }
+  }
 
   @Override
-  public DefaultSubcellularCompartmentEntity getCompartmentById(
-      Long id) {
+  public DefaultSubcellularCompartmentEntity getCompartmentById(Long id) {
     Node node = graphDatabaseService.getNodeById(id);
+    
     if (node == null || !node.hasLabel(GlobalLabel.SubcellularCompartment)) {
+      logger.trace("{} not a SubcellularCompartment", node);
       return null;
     }
+    
     DefaultSubcellularCompartmentEntity cmp = Neo4jMapper.nodeToSubcellularCompartment(node);
+    SubcellularCompartment compartment = SubcellularCompartment.UNKNOWN;
+    //get generic compartment
+    Relationship r = null; 
+    for (Relationship r_ : node.getRelationships(MetabolicModelRelationshipType.has_crossreference_to)) {
+      if (r != null) {
+        logger.warn("Error multiple compartment annotations [{}] -> [{}]", 
+            r.getId(), r_.getId());
+      }
+      r = r_;
+    }
+    
+    if (r != null) {
+      Node gcmp = r.getOtherNode(node);
+      compartment = 
+          SubcellularCompartment.valueOf((String) gcmp.getProperty("entry"));
+    }
+    
+    cmp.setCompartment(compartment);
     return cmp;
   }
 
   @Override
   public DefaultSubcellularCompartmentEntity getCompartmentByModelAndEntry(
       ExtendedMetabolicModelEntity model, String cmpEntry) {
-    // TODO Auto-generated method stub
-    return null;
+    if (!cmpEntry.contains("@")) {
+      cmpEntry = String.format("%s@%s", cmpEntry, model.getEntry());
+    }
+    
+    Node cmpNode = Neo4jUtils.getUniqueResult(
+        graphDatabaseService.findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, 
+                                     "entry", cmpEntry));
+    return this.getCompartmentById(cmpNode.getId());
   }
 
   @Override

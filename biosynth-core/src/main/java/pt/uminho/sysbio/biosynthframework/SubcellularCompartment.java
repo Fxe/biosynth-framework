@@ -13,7 +13,9 @@ public enum SubcellularCompartment {
   NUCLEUS,
   PEROXISOME,
   GLYOXYSOME,
+  LYSOSOME,
   GOLGI,
   PERIPLASM,
   RETICULUM,
+  
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
@@ -15,6 +17,15 @@ public interface MetaboliteIntegrationService extends IntegrationService {
 	
 	public List<IntegratedCluster> pageClusters(Long iid, int firstResult, int maxResults);
 	public int countIntegratedClustersByIntegrationId(Long iid);
+	
+	/**
+	 * 
+	 * @param itgId IntegrationSet ID
+	 * @return Tuple with a set o integrated members, and newly mapped members
+	 */
+	public Pair<Set<Long>, Set<Long>> remapIntegrationSet(long itgId);
+	
+	public Map<Long, Set<Long>> sortMembers(Set<Long> ids, long itgId);
 	
 	public void lalal(String type, long iid, int page, int limit);
 	

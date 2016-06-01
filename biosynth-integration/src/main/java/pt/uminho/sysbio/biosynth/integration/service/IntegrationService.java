@@ -27,4 +27,6 @@ public interface IntegrationService {
 	
 	public IntegratedMember getIntegratedMemberById(long id);
 	public Map<IntegrationSet, Set<IntegratedCluster>> findIntegratedClusterByMemberReferenceId(long refId);
+	
+	
 }

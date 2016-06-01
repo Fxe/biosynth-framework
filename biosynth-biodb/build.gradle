@@ -4,6 +4,7 @@ dependencies {
   compile( libraries.spring_context)
   compile( libraries.spring_tx)
   compile( libraries.retrofit)
+  compile( libraries.okhttp)
   compile( libraries.http_client)
   
   testCompile ( libraries.spring_test)

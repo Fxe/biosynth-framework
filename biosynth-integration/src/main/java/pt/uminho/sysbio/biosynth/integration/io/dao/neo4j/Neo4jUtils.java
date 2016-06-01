@@ -38,11 +38,11 @@ public class Neo4jUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(Neo4jUtils.class);
 
-  public static void setCreatedTimestamp(Node node) {
+  public static void setCreatedTimestamp(PropertyContainer node) {
     node.setProperty("created_at", System.currentTimeMillis());
   }
 
-  public static void setUpdatedTimestamp(Node node) {
+  public static void setUpdatedTimestamp(PropertyContainer node) {
     node.setProperty("updated_at", System.currentTimeMillis()); 
   }
 
@@ -162,8 +162,26 @@ public class Neo4jUtils {
 
     for (String key : properties.keySet()) { 
       Object value = properties.get(key);
-      logger.trace(String.format("Assign property - %s:%s", key, value));
-      propertyContainer.setProperty(key, value);
+      
+      
+      if (value instanceof String ||
+          value instanceof Long ||
+          value instanceof Double ||
+          value instanceof Float ||
+          value instanceof Integer) {
+        logger.trace(String.format("Assign property - %s:%s", key, value));
+        propertyContainer.setProperty(key, value);
+      } else {
+        logger.trace(String.format("Assign property (toString) - %s:%s", key, value));
+        propertyContainer.setProperty(key, value.toString());
+      }
+//      try {
+//        propertyContainer.setProperty(key, value);
+//      } catch (IllegalArgumentException e) {
+//        if (value != null) {
+//          propertyContainer.setProperty(key, value.toString());
+//        }
+//      }
     }
   }
 
@@ -418,6 +436,16 @@ public class Neo4jUtils {
 
   public static boolean isConnected(Node node1, Node node2) {
     return exitsRelationshipBetween(node1, node2, Direction.BOTH);
+  }
+
+  public static Node getSingleRelationshipNode(Node node, RelationshipType type) {
+    
+    Relationship relationship = node.getSingleRelationship(type, Direction.BOTH);
+    if (relationship == null) {
+      return null;
+    }
+    
+    return relationship.getOtherNode(node);
   }
 
 

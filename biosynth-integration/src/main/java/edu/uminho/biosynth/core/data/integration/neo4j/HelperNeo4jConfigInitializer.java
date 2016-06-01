@@ -30,8 +30,9 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE CONSTRAINT ON (cmp : %s) ASSERT cmp.entry IS UNIQUE", GlobalLabel.SubcellularCompartment),
       String.format("CREATE CONSTRAINT ON (rpr : %s) ASSERT rpr.entry IS UNIQUE", GlobalLabel.KeggReactionPair),
       String.format("CREATE CONSTRAINT ON (pwy : %s) ASSERT pwy.entry IS UNIQUE", GlobalLabel.KeggPathway),
-//      String.format("CREATE CONSTRAINT ON (ecn : %s) ASSERT ecn.entry IS UNIQUE", GlobalLabel.EnzymeCommission),
+      String.format("CREATE CONSTRAINT ON (ecn : %s) ASSERT ecn.entry IS UNIQUE", GlobalLabel.EnzymeCommission),
       String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.UniProt),
+      String.format("CREATE CONSTRAINT ON (tax : %s) ASSERT tax.entry IS UNIQUE", GlobalLabel.EntrezTaxonomy),
       //		String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.BrendaEnzyme),
       String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.EnzymePortal),
       String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureMajorLabel.Patent),
@@ -43,11 +44,16 @@ public class HelperNeo4jConfigInitializer {
   };
 
   private static final String[] NEO_META_CONSTRAINTS = {
-      String.format("CREATE CONSTRAINT ON (iid : %s) ASSERT iid.entry IS UNIQUE", IntegrationNodeLabel.IntegrationSet),
-      String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
-      String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.%s IS UNIQUE", IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE),
-      String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
-      String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", IntegrationNodeLabel.ReactionClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
+      String.format("CREATE CONSTRAINT ON (iid : %s) ASSERT iid.entry IS UNIQUE", 
+          IntegrationNodeLabel.IntegrationSet),
+      String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE",
+          IntegrationNodeLabel.IntegratedCluster),
+      String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.%s IS UNIQUE", 
+          IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE),
+      String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", 
+          IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
+      String.format("CREATE CONSTRAINT ON (n : %s) ASSERT n.%s IS UNIQUE", 
+          IntegrationNodeLabel.ReactionClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT),
   };
 
   private static final String[] NEO_CURA_CONSTRAINTS = {

@@ -75,6 +75,7 @@ ext {
     
     // misc
     retrofit: 'com.squareup.retrofit:retrofit:1.9.0',
+    okhttp: 'com.squareup.okhttp:okhttp:2.7.4',
     jsbml: 'org.sbml.jsbml:jsbml:1.0',
     
     // logging

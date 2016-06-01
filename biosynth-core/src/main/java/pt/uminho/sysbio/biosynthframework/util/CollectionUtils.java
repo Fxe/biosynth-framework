@@ -62,4 +62,15 @@ public class CollectionUtils {
     }
     return rev;
   }
+  
+  public static<E> double jaccard(Collection<E> a, Collection<E> b) {
+    if (a.isEmpty() && b.isEmpty()) return 1.0;
+
+    Set<E> A_union_B = new HashSet<> (a);
+    A_union_B.addAll(b);
+    Set<E> A_intersect_B = new HashSet<> (a);
+    A_intersect_B.retainAll(b);
+
+    return A_intersect_B.size() / (double)A_union_B.size();
+  }
 }
