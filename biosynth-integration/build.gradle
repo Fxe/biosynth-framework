@@ -10,5 +10,6 @@ dependencies {
   compile( libraries.jung2_impl)
 
   compile( libraries.neo4j_community)
+  compile( libraries.jgrapht_core)
   testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '2.1.5', classifier: 'tests'
 }

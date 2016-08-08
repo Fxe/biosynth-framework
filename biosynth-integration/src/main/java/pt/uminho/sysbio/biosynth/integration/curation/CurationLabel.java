@@ -9,4 +9,9 @@ public enum CurationLabel implements Label{
 	CurationProperty,
 	CurationOperation,
 	CurationUser,
+	
+	UniversalSpecie,
+	
+	UniversalMetabolite,
+	UniversalReaction,
 }

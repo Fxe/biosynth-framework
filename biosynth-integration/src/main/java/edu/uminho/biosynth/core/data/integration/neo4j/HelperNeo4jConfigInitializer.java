@@ -62,6 +62,9 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE CONSTRAINT ON (usr : %s) ASSERT usr.username IS UNIQUE", CurationLabel.CurationUser),
       String.format("CREATE CONSTRAINT ON (cid : %s) ASSERT cid.entry IS UNIQUE", IntegrationNodeLabel.IntegratedCluster),
       String.format("CREATE CONSTRAINT ON (eid : %s) ASSERT eid.reference_eid IS UNIQUE", IntegrationNodeLabel.IntegratedMember),
+      String.format("CREATE CONSTRAINT ON (uid : %s) ASSERT uid.entry IS UNIQUE", CurationLabel.UniversalMetabolite),
+      String.format("CREATE CONSTRAINT ON (uid : %s) ASSERT uid.entry IS UNIQUE", CurationLabel.UniversalSpecie),
+      String.format("CREATE CONSTRAINT ON (uid : %s) ASSERT uid.entry IS UNIQUE", CurationLabel.UniversalReaction),
   };
 
   private static final String[] NEO_STRU_CONSTRAINTS = {

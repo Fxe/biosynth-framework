@@ -8,6 +8,7 @@ ext {
   cdkVersion = '1.5.10'
   jungVersion = '2.0.1'
   mewVersion = '0.0.1'
+  jgraphtVersion = '0.9.2'
   
   libraries = [
     // core
@@ -66,6 +67,9 @@ ext {
     //jung
     jung2_algo: "net.sf.jung:jung-algorithms:${jungVersion}",
     jung2_impl: "net.sf.jung:jung-graph-impl:${jungVersion}",
+    
+    //jgrapht
+    jgrapht_core : "org.jgrapht:jgrapht-core:${jgraphtVersion}",
     
     // mew
     mew_biocomponents: "pt.uminho.ceb.biosystems.mew:biocomponents:${mewVersion}",

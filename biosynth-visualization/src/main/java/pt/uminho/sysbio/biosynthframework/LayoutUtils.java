@@ -1,12 +1,16 @@
 package pt.uminho.sysbio.biosynthframework;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +33,7 @@ import pt.uminho.sysbio.biosynthframework.Reaction;
 import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.visualization.escher.EscherModel;
 
 public class LayoutUtils {
   
@@ -172,6 +177,50 @@ public class LayoutUtils {
     escherMap.canvas = canvas;
     
     return escherMap;
+  }
+  
+  public static EscherModel loadEscherModel(InputStream is) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+    JsonNode node = mapper.readTree(is);
+    Iterator<String> it = node.fieldNames();
+    while (it.hasNext()) {
+      String name = it.next();
+      
+      JsonNode node_ = node.get(name);
+      System.out.println(name + " " + node_.getNodeType());
+    }
+    System.out.println();
+    System.out.println(node.get("version"));
+    EscherModel model = mapper.readValue(node.toString(), EscherModel.class);
+//    
+//    Map<Long, EscherReaction> reactions = mapper.readValue(
+//          node.get(1).get("reactions").toString(), 
+//          new TypeReference<Map<Long, EscherReaction>>() {});
+//    Map<Long, EscherNode> nodes = mapper.readValue(
+//        node.get(1).get("nodes").toString(), 
+//        new TypeReference<Map<Long, EscherNode>>() {});
+//    EscherCanvas canvas = mapper.readValue(node.get(1).get("canvas").toString(), 
+//                                           EscherCanvas.class);
+//    
+//    escherMap.nodes = nodes;
+//    escherMap.reactions = reactions;
+//    escherMap.canvas = canvas;
+    
+    return model;
+  }
+  
+  public static void writeModel(EscherModel model, String path) {
+    ObjectMapper mapper = new ObjectMapper();
+    OutputStream os = null;
+    try {
+      os = new FileOutputStream(path);
+      mapper.writeValue(os, model);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(os);
+    }
   }
   
   public static MetabolicLayout toMetabolicLayout(

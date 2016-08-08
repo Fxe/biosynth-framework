@@ -8,4 +8,5 @@ public enum CurationRelationship implements RelationshipType {
 	CurationEqualSet,
 	HAS_CURATION_OPERATION, PERFORMED_CURATION_OPERATION, 
 	NOT_EQUAL, EQUAL,
+	has_universal_entity,
 }

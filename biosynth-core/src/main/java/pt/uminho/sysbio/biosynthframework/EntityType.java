@@ -1,5 +1,14 @@
 package pt.uminho.sysbio.biosynthframework;
 
 public enum EntityType {
-  BIOMASS, DRAIN, TRANSLOCATION, AUXILIAR, REACTION, ATPM, CURRENCY
+  BIOMASS, 
+  DRAIN, 
+  TRANSLOCATION, 
+  AUXILIAR, 
+  REACTION, 
+  ATPM, 
+  CURRENCY, 
+  SPECIE, 
+  GENE,
+  VIRTUAL,
 }

@@ -48,20 +48,28 @@ public class Neo4jUtilsIntegration {
       typeLabel = IntegrationNodeLabel.MetaboliteMember;
     } else if (dataNode.hasLabel(GlobalLabel.Reaction)) {
       typeLabel = IntegrationNodeLabel.ReactionMember;
+    } else if (dataNode.hasLabel(MetabolicModelLabel.MetaboliteSpecie)) {
+      typeLabel = IntegrationNodeLabel.ModelSpecieMember;
+    } else if (dataNode.hasLabel(MetabolicModelLabel.ModelReaction)) {
+      typeLabel = IntegrationNodeLabel.ModelReactionMember;
     } else {
-      throw new RuntimeException("Invalid reference id. Must be either Metabolite/Reaction");
+      throw new RuntimeException("Invalid reference id. Must be either MetaboliteSpecie/Metabolite/Reaction");
     }
+    
     String entry = (String) dataNode.getProperty("entry");
-    String database = (String) dataNode.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
-    refNode = targetDb.createNode(IntegrationNodeLabel.IntegratedMember);
+
+    refNode = targetDb.createNode(IntegrationNodeLabel.IntegratedMember, typeLabel);
     Neo4jUtils.setCreatedTimestamp(refNode);
     Neo4jUtils.setUpdatedTimestamp(refNode);
     refNode.setProperty(Neo4jDefinitions.MEMBER_REFERENCE, refId);
-    refNode.addLabel(typeLabel);
     refNode.setProperty("entry", entry);
-    refNode.setProperty("database", database);
     
-    logger.debug("created member {} - [{}]{}", database, refNode.getId(), entry);
+    if (dataNode.hasProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY)) {
+      String database = (String) dataNode.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
+      refNode.setProperty("database", database);
+    }
+    
+    logger.debug("created {} [{}]{}", typeLabel, refNode.getId(), entry);
     
     return refNode;
   }
