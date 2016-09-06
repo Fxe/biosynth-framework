@@ -8,7 +8,7 @@ import java.util.List;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 
 public class RestKeggGlycanMetaboliteDaoImpl 
@@ -58,7 +58,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 			
 			glMolFile = getLocalOrWeb(restGlMolQuery, localPath + ".mol");
 			if (glMolFile == null) {
-				BioSynthUtilsIO.writeToFile("null", localPath + ".mol");
+			  IOUtils.writeToFile("null", localPath + ".mol");
 			}
 //			System.out.println(drFlatFile);
 		} catch (IOException e) {

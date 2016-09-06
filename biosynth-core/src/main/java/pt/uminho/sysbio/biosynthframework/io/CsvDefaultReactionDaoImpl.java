@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.DefaultReaction;
 import pt.uminho.sysbio.biosynthframework.Orientation;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 
@@ -45,7 +45,7 @@ public class CsvDefaultReactionDaoImpl implements ReactionDao<DefaultReaction> {
 		reactionMap.clear();
 		
 		try {
-			String data = BioSynthUtilsIO.readFromFile(csvFile);
+			String data = IOUtils.readFromFile(csvFile);
 			String[] reactionRecords = data.split("\n");
 			for (String reactionString : reactionRecords) {
 				try {

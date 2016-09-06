@@ -448,5 +448,31 @@ public class Neo4jUtils {
     return relationship.getOtherNode(node);
   }
 
-
+  /**
+   * Gets entity node
+   * @param label
+   * @param entry
+   * @param db
+   * @return
+   */
+  public static Node getNodeByEntry(Label label, String entry, GraphDatabaseService db) {
+    Node node = getUniqueResult(
+        db.findNodesByLabelAndProperty(label, 
+            Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry));
+    return node;
+  }
+  
+  /**
+   * Gets property node
+   * @param label
+   * @param entry
+   * @param db
+   * @return
+   */
+  public static Node getNodeByKey(Label label, String entry, GraphDatabaseService db) {
+    Node node = getUniqueResult(
+        db.findNodesByLabelAndProperty(label, 
+            Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, entry));
+    return node;
+  }
 }

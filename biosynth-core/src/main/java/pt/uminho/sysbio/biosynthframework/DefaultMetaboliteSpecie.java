@@ -21,6 +21,7 @@ public class DefaultMetaboliteSpecie extends GenericMetabolite {
 
   @MetaProperty
   @Column(name="compartment")
+  //FIXME: fix next release :( TYPO !!! comparment -> compartment
   private String comparment;
   public String getComparment() { return comparment;}
   public void setComparment(String comparment) { this.comparment = comparment;}

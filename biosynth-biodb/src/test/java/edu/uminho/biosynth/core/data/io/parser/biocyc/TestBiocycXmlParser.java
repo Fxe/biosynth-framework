@@ -1,7 +1,5 @@
 package edu.uminho.biosynth.core.data.io.parser.biocyc;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.After;
@@ -14,7 +12,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossrefe
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycReactionXMLParser;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public class TestBiocycXmlParser {
 
@@ -36,7 +34,7 @@ public class TestBiocycXmlParser {
 
 	@Test
 	public void testCpd1() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_vanillin.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_vanillin.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -84,7 +82,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testCpd2() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_water.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_water.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -132,7 +130,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testCpd3() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_aryl_aldehyde.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_aryl_aldehyde.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -180,7 +178,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testCpd4() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_alcohol.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_alcohol.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -228,7 +226,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testCpd5() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_benzyl_alcohol.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_benzyl_alcohol.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -276,7 +274,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testCpd6() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/cpd_meta_aryl_alcohol.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/cpd_meta_aryl_alcohol.txt");
 		BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlString);
 		Long id = 0L;
 		String source = parser.getSource();
@@ -324,7 +322,7 @@ public class TestBiocycXmlParser {
 	
 	@Test
 	public void testc() throws Exception {
-		String xmlString = BioSynthUtilsIO.readFromFile("./src/test/resources/rxn_meta_1_2_1_67_rxn.txt");
+		String xmlString = IOUtils.readFromFile("./src/test/resources/rxn_meta_1_2_1_67_rxn.txt");
 		BioCycReactionXMLParser parser = new BioCycReactionXMLParser(xmlString);
 		parser.parseContent();
 //		fail("Not yet implemented");

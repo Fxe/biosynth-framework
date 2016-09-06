@@ -10,26 +10,26 @@ import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
 public abstract class AbstractNeo4jDao {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractNeo4jDao.class);
-	
-	protected final GraphDatabaseService graphDatabaseService;
-	protected final ExecutionEngine executionEngine;
-	
-	public AbstractNeo4jDao(GraphDatabaseService graphDatabaseService) {
-		this.graphDatabaseService = graphDatabaseService;
-		LOGGER.trace("Initialize ExecutionEngine");
-		this.executionEngine = new ExecutionEngine(graphDatabaseService);
-	}
-	
-	public GraphDatabaseService getGraphDatabaseService() {
-		return graphDatabaseService;
-	}
-	
-	public ExecutionEngine getExecutionEngine() {
-		return executionEngine;
-	}
-	
-	protected Node getNode(AbstractBiosynthEntity entity) {
-		return graphDatabaseService.getNodeById(entity.getId());
-	}
+  private static final Logger logger = LoggerFactory.getLogger(AbstractNeo4jDao.class);
+
+  protected final GraphDatabaseService graphDatabaseService;
+  protected final ExecutionEngine executionEngine;
+
+  public AbstractNeo4jDao(GraphDatabaseService graphDatabaseService) {
+    this.graphDatabaseService = graphDatabaseService;
+    logger.trace("Initialize ExecutionEngine");
+    this.executionEngine = new ExecutionEngine(graphDatabaseService);
+  }
+
+  public GraphDatabaseService getGraphDatabaseService() {
+    return graphDatabaseService;
+  }
+
+  public ExecutionEngine getExecutionEngine() {
+    return executionEngine;
+  }
+
+  protected Node getNode(AbstractBiosynthEntity entity) {
+    return graphDatabaseService.getNodeById(entity.getId());
+  }
 }

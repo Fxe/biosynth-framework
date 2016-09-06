@@ -26,7 +26,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.p
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycReactionXMLParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 @Deprecated
 public class BioCycRemoteSource implements IRemoteSource {
@@ -183,9 +183,9 @@ public class BioCycRemoteSource implements IRemoteSource {
 		if ( !dataFile.exists()) {
 			String arg = String.format("%s:%s", biocycDatabase, entry);
 			entryXml = HttpRequest.get(xmlGet + arg);
-			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryXml, dataFileStr);
+			if (SAVETOCACHE) IOUtils.writeToFile(entryXml, dataFileStr);
 		} else {
-			entryXml = BioSynthUtilsIO.readFromFile(dataFileStr);
+			entryXml = IOUtils.readFromFile(dataFileStr);
 		}
 		
 		return entryXml;
@@ -402,9 +402,9 @@ public class BioCycRemoteSource implements IRemoteSource {
 				if ( !queryFile.exists()) {
 					String arg = URLEncoder.encode(String.format("[x:x<-%s^^%ss]", "META", "compound"), "UTF-8");
 					xmlResponse = HttpRequest.get(xmlquery + arg);
-					BioSynthUtilsIO.writeToFile(xmlResponse, queryFileStr);
+					IOUtils.writeToFile(xmlResponse, queryFileStr);
 				} else {
-					xmlResponse = BioSynthUtilsIO.readFromFile(queryFileStr);
+					xmlResponse = IOUtils.readFromFile(queryFileStr);
 				}
 			} else {
 				String arg = URLEncoder.encode(String.format("[x:x<-%s^^%ss]", "META", "compound"), "UTF-8");

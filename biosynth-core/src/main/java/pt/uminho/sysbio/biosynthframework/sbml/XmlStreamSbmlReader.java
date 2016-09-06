@@ -21,9 +21,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.DefaultMetabolicModelEntity;
-import pt.uminho.sysbio.biosynthframework.OptfluxContainerReactionEntity;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 /**
  * Java XML Stream parser for SBML models
@@ -43,6 +41,7 @@ public class XmlStreamSbmlReader {
 
   private final static String RDF_LIST_ITEM = "li";
 
+  private final static String SBML = "sbml";
   private final static String SBML_MODEL = "model";
 
   private final static String SBML_COMPARTMENT = "compartment";
@@ -62,33 +61,39 @@ public class XmlStreamSbmlReader {
   private final static String SBML_REACTION_LIST_OF_REACTANTS = "listOfReactants";
   private final static String SBML_REACTION_LIST_OF_PRODUCTS = "listOfProducts";
   private final static String SBML_REACTION_SPECIES_REFERENCE = "speciesReference";
+  private final static String SBML_REACTION_KINETIC_LAW = "kineticLaw";
+  
+  private final static String SBML_KINETIC_LAW_PARAMETER = "parameter";
+  private final static String SBML_KINETIC_LAW_MATH = "math";
   
   private final static String SBML_NOTES_BODY = "body";
 
   private String data = null;
 
   public XmlStreamSbmlReader(String path) throws IOException {
-    data = BioSynthUtilsIO.readFromFile(new File(path));
+    data = IOUtils.readFromFile(new File(path));
     logger.debug("Loaded {} bytes", data.getBytes().length);
   }
 
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
-    data = BioSynthUtilsIO.readFromInputStream(inputStream);
+    data = IOUtils.readFromInputStream(inputStream);
     logger.debug("Loaded {} bytes", data.getBytes().length);
   }
 
   public XmlSbmlModel parse() throws IOException {
-    DefaultMetabolicModelEntity mmd = new DefaultMetabolicModelEntity();
-    OptfluxContainerReactionEntity reactionEntity = null;
+//    DefaultMetabolicModelEntity mmd = new DefaultMetabolicModelEntity();
+//    OptfluxContainerReactionEntity reactionEntity = null;
 
     //		Map<String, DefaultMetaboliteSpecie> specieMap = new HashMap<> ();
     //		Map<String, DefaultMetaboliteSpecie> reactionMap = new HashMap<> ();
     //		Map<String, DefaultMetaboliteSpecie> metaboliteMap = new HashMap<> ();
 
-    List<XmlSbmlGroup>    groups    = new ArrayList<> ();
-    List<XmlSbmlSpecie>   species   = new ArrayList<> ();
-    List<XmlSbmlReaction> reactions = new ArrayList<> ();
+    List<XmlSbmlCompartment> compartments = new ArrayList<> ();
+    List<XmlSbmlGroup>       groups       = new ArrayList<> ();
+    List<XmlSbmlSpecie>      species      = new ArrayList<> ();
+    List<XmlSbmlReaction>    reactions    = new ArrayList<> ();
     List<XmlObject> fluxBounds = new ArrayList<> ();
+    Map<String, String> sbmlAttributes = new HashMap<> ();
     XmlObject fluxBound = null;
     XmlSbmlModel model = null;
     try {
@@ -101,11 +106,20 @@ public class XmlStreamSbmlReader {
           //System.out.println("start");
         } else if (xmlEvent.isStartElement()) {
           StartElement startElement = xmlEvent.asStartElement();
+          String startElementLocalPart = startElement.getName().getLocalPart();
           String namespace = startElement.getName().getNamespaceURI();
-          switch (startElement.getName().getLocalPart()) {
+          logger.trace("+ {} {}", namespace, startElementLocalPart);
+          switch (startElementLocalPart) {
+          case SBML:
+            sbmlAttributes = getAttributes(startElement);
+            break;
           case SBML_MODEL:
             model = new XmlSbmlModel();
             model.setAttributes(getAttributes(startElement));
+            break;
+          case SBML_COMPARTMENT:
+            XmlSbmlCompartment xmlSbmlCompartment = parseCompartment(xmlEventReader, startElement);
+            compartments.add(xmlSbmlCompartment);
             break;
           case SBML_SPECIE: 
             XmlSbmlSpecie xmlSbmlSpecie = parseSpecie(xmlEventReader, startElement);
@@ -138,10 +152,12 @@ public class XmlStreamSbmlReader {
           //						case RELATION: kgmlRelationList.add(kgmlRelation); break;
           //						case RELATION_SUBTYPE: kgmlRelation.setSubtype(kgmlRelationSubtype); break;
           case SBML_MODEL:
+            model.setCompartments(compartments);
             model.setSpecies(species);
             model.setGroups(groups);
             model.setReactions(reactions);
             model.setFluxBounds(fluxBounds);
+            model.setSbmlAttributes(sbmlAttributes);
             break;
           case SBML_LIST_OF_FLUX_BOUNDS:
             break;
@@ -180,22 +196,71 @@ public class XmlStreamSbmlReader {
 
     return model;
   }
+  
+  public XmlSbmlCompartment parseCompartment(XMLEventReader xmlEventReader, 
+      StartElement specieStartElement) throws XMLStreamException {
+    logger.debug("+++ <compartment> reading compartment");
+    boolean read = true;
+    XmlSbmlCompartment xmlSbmlCompartment = new XmlSbmlCompartment();
+    xmlSbmlCompartment.setAttributes(getAttributes(specieStartElement));
+    
+//    XmlObject rdfListItem = null;
+//    String bqbiolOntology = null;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        String startElementLocalPart = startElement.getName().getLocalPart();
+        logger.debug(" ++ <{}> reading metabolite specie", startElementLocalPart);
+        //              String namespace = startElement.getName().getNamespaceURI();
+        switch (startElementLocalPart) {
+        case SBML_COMPARTMENT: {
+          //                        specieObject = new XMLObject();  
+          //                        specieObject.attributes.putAll(getAttributes(startElement));
+        } break;
+        default: 
+          //                        LOGGER.trace("+?+ " + startElement.getName().getLocalPart());
+          break;
+        }
+      } else if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+        case SBML_COMPARTMENT:
+          read = false;
+          break;
+        default:
+          //                        LOGGER.trace("-?- " + endElement.getName().getLocalPart());
+          break;
+        }
+      } else if (xmlEvent.isEndDocument()) {
+
+      }
+    }
+    logger.debug("--- reading metabolite specie");
+    return xmlSbmlCompartment;
+  }
 
   public XmlSbmlSpecie parseSpecie(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    logger.debug("+++ reading metabolite specie");
+    logger.debug("+++ <species> reading metabolite specie");
     boolean read = true;
     XmlSbmlSpecie xmlSbmlSpecie = new XmlSbmlSpecie();
     xmlSbmlSpecie.setAttributes(getAttributes(specieStartElement));
-    XmlObject xmlObject = new XmlObject();
+//    XmlObject xmlObject = new XmlObject();
     XmlObject rdfListItem = null;
     String bqbiolOntology = null;
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
+        String startElementLocalPart = startElement.getName().getLocalPart();
+        logger.debug(" ++ <{}> reading metabolite specie", startElementLocalPart);
         //				String namespace = startElement.getName().getNamespaceURI();
-
-        switch (startElement.getName().getLocalPart()) {
+        switch (startElementLocalPart) {
+        case SBML_NOTES: {
+          List<String> notes = parseNotes(xmlEventReader, startElement);
+          xmlSbmlSpecie.setNotes(notes);
+          break;
+        }
         case BQBIOL_IS:
           bqbiolOntology = BQBIOL_IS;
           if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
@@ -387,10 +452,90 @@ public class XmlStreamSbmlReader {
     }
     return notes;
   }
+  
+  public List<XmlObject> parseKineticLaw(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    boolean read = true;
+    List<XmlObject> parameters = new ArrayList<> ();
+    
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
 
+        switch (startElement.getName().getLocalPart()) {
+          case SBML_KINETIC_LAW_PARAMETER:
+            XmlObject parameter = new XmlObject();
+            parameter.setAttributes(getAttributes(startElement));
+            parameters.add(parameter);
+            break;
+          case SBML_KINETIC_LAW_MATH:
+            //for now do nothing !
+            break;
+          default: break;
+        }
+//        if (readBody) {
+//          note = String.format("<%s>", startElement.getName().getLocalPart());
+//        }
+      }
+//      if (xmlEvent.isCharacters()) {
+//        String data = xmlEvent.asCharacters().getData();
+//        if (readBody) {
+//          note += data.trim();
+//        }
+//      }
+      
+      if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+//        if (readBody) {
+//          note += String.format("</%s>", endElement.getName().getLocalPart());
+//          notes.add(note);
+//          note = null;
+//        }
+        switch (endElement.getName().getLocalPart()) {
+          case SBML_REACTION_KINETIC_LAW: read = false; break;
+          default: break;
+        }
+
+      }
+    }
+    return parameters;
+  }
+
+  public List<XmlObject> parseSpeciesReference(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<XmlObject> list = new ArrayList<> ();
+    boolean read = true;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+
+        switch (startElement.getName().getLocalPart()) {
+          case SBML_REACTION_SPECIES_REFERENCE:
+            XmlObject object = new XmlObject();
+            object.setAttributes(getAttributes(startElement));
+            list.add(object);
+            break;
+          default: break;
+        }
+      }
+      
+      if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+          case SBML_REACTION_LIST_OF_PRODUCTS: read = false; break;
+          case SBML_REACTION_LIST_OF_REACTANTS: read = false; break;
+          default: break;
+        }
+      }
+    }
+    return list;
+  }
+  
   public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
     logger.debug("+++ reading reaction");
     boolean read = true;
+//    List<XmlObject> listOfReactants = new ArrayList<> ();
+//    List<XmlObject> listOfProducts = new ArrayList<> ();
     XmlSbmlReaction sbmlReaction = new XmlSbmlReaction();
     sbmlReaction.setAttributes(getAttributes(reactionStartElement));
     
@@ -398,19 +543,31 @@ public class XmlStreamSbmlReader {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
+        
         String namespace = startElement.getName().getNamespaceURI();
+        logger.trace("{}", namespace);
         switch (startElement.getName().getLocalPart()) {
-          case SBML_NOTES: {
+          case SBML_NOTES:
             List<String> notes = parseNotes(xmlEventReader, startElement);
             sbmlReaction.setNotes(notes);
             break;
-          }
-          case SBML_REACTION: {
-          //						specieObject = new XMLObject();  
-          //						specieObject.attributes.putAll(getAttributes(startElement));
-          } break;
+//          case SBML_REACTION: {
+//          //						specieObject = new XMLObject();  
+//          //						specieObject.attributes.putAll(getAttributes(startElement));
+//          } break;
           case "annotation":
             sbmlReaction.setListOfAnnotations(parseAnnotation(xmlEventReader));
+            break;
+          case SBML_REACTION_LIST_OF_REACTANTS:
+            sbmlReaction.getListOfReactants().addAll(
+                parseSpeciesReference(xmlEventReader, startElement));
+            break;
+          case SBML_REACTION_LIST_OF_PRODUCTS:
+            sbmlReaction.getListOfProducts().addAll(
+                parseSpeciesReference(xmlEventReader, startElement));
+            break;
+          case SBML_REACTION_KINETIC_LAW:
+            sbmlReaction.getListOfParameters().addAll(parseKineticLaw(xmlEventReader, startElement));
             break;
           default: 
 //            System.out.println("###reaction###what do with " + startElement.getName().getLocalPart()); 

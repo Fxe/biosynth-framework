@@ -6,7 +6,13 @@ public enum IntegrationNodeLabel implements Label {
 	IntegrationSet,
 	IntegratedCluster, IntegratedMember,
 	MetaboliteClusterMetaProperty, ReactionClusterMetaProperty,
-	MetaboliteCluster, ReactionCluster,
-	ModelReactionCluster, ModelSpecieCluster,
+	
+	MetaboliteCluster, 
+	ReactionCluster,
+	
+	ModelReactionCluster,
+	ModelMetaboliteCluster,
+	ModelSpecieCluster,
+	//quite useless use
 	MetaboliteMember, ReactionMember, ModelReactionMember, ModelSpecieMember
 }

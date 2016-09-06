@@ -6,8 +6,7 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	has_molecular_formula,	//Metabolite -[has_molecular_formula]-> Formula
 	has_name,				//Metabolite -[has_name]-> Name
 	has_crossreference_to,	//Metabolite -[has_crossreference_to]-> Metabolite
-	instance_of,			//Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
-	parent_of,
+
 	has_inchi,				//Metabolite -[has_inchi]-> InChI
 	has_inchikey,             //Metabolite -[has_inchi]-> InChI
 	has_charge,				//Metabolite -[has_charge]-> Charge
@@ -22,4 +21,8 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	related_to,				//Metabolite -[related_to?]-> [Reaction|ec number|Gene|protein ?] e c number 1) this is a generic connection
 	has_literature, 
 	has_ontology,			//Metabolite -[has_ontology]-> Metabolite an ontology reference
+	
+	instance_of,            //Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
+	parent_of,
+    subclass_of,
 }

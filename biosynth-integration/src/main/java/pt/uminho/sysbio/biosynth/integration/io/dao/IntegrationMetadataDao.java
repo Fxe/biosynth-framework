@@ -20,6 +20,8 @@ public interface IntegrationMetadataDao {
 	public IntegrationSet getIntegrationSet(Long id);
 	public IntegrationSet getIntegrationSet(String id);
 	
+	public Map<String, Integer> getIntegrationStatus(long itgId);
+	
 	public IntegratedCluster getIntegratedClusterByEntry(String entry, Long integrationSetId);
 	public IntegratedCluster getIntegratedClusterById(Long id);
 	public List<IntegratedCluster> getIntegratedClusterByMemberIds(Long integrationSetId, Long...memberIds);

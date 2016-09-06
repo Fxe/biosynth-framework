@@ -16,6 +16,7 @@ import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
  */
 public interface BiodbService {
   public String getEntryById(long id);
+  public Long getIdByEntryAndDatabase(String entry, String database);
   public String getNamePropertyById(long id);
   public String getFormulaPropertyById(long id);
   public Map<Long, Double> getStoichiometry(long id);
@@ -24,8 +25,28 @@ public interface BiodbService {
   
   public Set<Long> getIdsByDatabaseAndType(String database, String type);
   
-  public long getSpecieCompartmentId(long spiId);
+  public String getDatabaseById(long id);
+  
+  public Long getSpecieCompartmentId(long spiId);
+  
+  /**
+   * Returns integrated {@link SubcellularCompartment SubcellularCompartment}
+   * from specie Id. Returns <tt>UNKNOWN</tt> if compartment is not integrated.
+   * Returns overridden compartment if found.
+   * @param cmpId ID of compartment
+   * @return
+   */
   public SubcellularCompartment getCompartmentSubcellularLocation(long cmpId);
+  
+  /**
+   * Returns integrated {@link SubcellularCompartment SubcellularCompartment}
+   * from specie Id. Returns <tt>UNKNOWN</tt> if compartment is not integrated.
+   * Returns overridden compartment if found.
+   * @param spiId ID of specie
+   * @return
+   */
+  public SubcellularCompartment getSpecieSubcellularLocation(long spiId);
+  
   /**
    * Returns references from entities
    * @param id
@@ -81,4 +102,9 @@ public interface BiodbService {
    * @return
    */
   public Set<Long> getSpecieUnification(long spiId, long itgId);
+  
+  public Map<Long, Long> getMetaboliteUnificationMap();
+  public Map<Long, Long> getReactionUnificationMap();
+  public Map<Long, Long> getModelSpecieUnificationMap();
+  public Map<Long, Long> getModelReactionUnificationMap();
 }

@@ -18,6 +18,9 @@ public interface IntegrationService {
 	public IntegrationSet getIntegrationSetById(Long id);
 	public IntegrationSet getIntegrationSet(String itg);
 	public IntegrationSet createIntegrationSet(String name, String description);
+	
+	public Map<String, Integer> getIntegrationStatus(long itgId);
+	
 	public void resetIntegrationSet(IntegrationSet integrationSet);
 	public void deleteIntegrationSet(IntegrationSet integrationSet);
 	public List<IntegrationSet> getAllIntegrationSets();

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggDrugMetaboliteFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public class RestKeggDrugMetaboliteDaoImpl
 extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity>{
@@ -63,7 +63,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
 			drMolFile = getLocalOrWeb(restDrMolQuery, localPath + ".mol");
 			
 			if (drMolFile == null) {
-				BioSynthUtilsIO.writeToFile("null", localPath + ".mol");
+			  IOUtils.writeToFile("null", localPath + ".mol");
 			}
 			
 //			System.out.println(drFlatFile);

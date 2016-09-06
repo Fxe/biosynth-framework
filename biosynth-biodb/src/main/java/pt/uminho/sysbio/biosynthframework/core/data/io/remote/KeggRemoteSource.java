@@ -22,7 +22,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.kegg.KEGGEnzymeFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.kegg.KEGGRPairFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.kegg.KEGGReactionFlatFileParser;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 @Deprecated
 public class KeggRemoteSource implements IRemoteSource {
@@ -48,9 +48,9 @@ public class KeggRemoteSource implements IRemoteSource {
 		System.out.println(dataFile);
 		if ( !dataFile.exists()) {
 			entryFlatFile =  HttpRequest.get(restGet + String.format("%s:%s", entityType, entry));
-			if (SAVETOCACHE) BioSynthUtilsIO.writeToFile(entryFlatFile, dataFileStr);
+			if (SAVETOCACHE) IOUtils.writeToFile(entryFlatFile, dataFileStr);
 		} else {
-			entryFlatFile = BioSynthUtilsIO.readFromFile(dataFileStr);
+			entryFlatFile = IOUtils.readFromFile(dataFileStr);
 		}
 		
 		return entryFlatFile;

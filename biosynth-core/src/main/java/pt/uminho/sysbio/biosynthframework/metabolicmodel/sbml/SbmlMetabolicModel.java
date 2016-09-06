@@ -13,7 +13,7 @@ import pt.uminho.sysbio.biosynthframework.metabolicmodel.AbstractMetabolicModel;
 
 @Entity
 @Table(name="SBML_MODEL")
-public class SbmlMetabolicModel extends AbstractMetabolicModel{
+public class SbmlMetabolicModel extends AbstractMetabolicModel {
 
 	@OneToMany(mappedBy = "sbmlMetabolicModel", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true)
 	protected List<SbmlMetaboliteEntity> sbmlMetabolites = new ArrayList<> ();

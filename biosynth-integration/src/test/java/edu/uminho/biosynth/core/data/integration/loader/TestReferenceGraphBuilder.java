@@ -36,7 +36,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.service.BiocycService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.IMetaboliteService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.KeggService;
 import pt.uminho.sysbio.biosynthframework.core.data.service.MnxService;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 import edu.uminho.biosynth.core.data.integration.ReferenceGraphBuilder;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceLink;
 import edu.uminho.biosynth.core.data.integration.components.ReferenceNode;

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggCompoundFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 @Repository
 public class RestKeggCompoundMetaboliteDaoImpl 
@@ -38,7 +38,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
 			
 			cpdMolFile = getLocalOrWeb(restCpdMolQuery, localPath + ".mol");
 			if (cpdMolFile == null) {
-				BioSynthUtilsIO.writeToFile("null", localPath + ".mol");
+			  IOUtils.writeToFile("null", localPath + ".mol");
 			}
 //			System.out.println(drFlatFile);
 		} catch (IOException e) {

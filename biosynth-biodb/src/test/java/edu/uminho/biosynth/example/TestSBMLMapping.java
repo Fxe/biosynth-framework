@@ -26,7 +26,6 @@ import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.IGenericDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.hibernate.GenericEntityDaoImpl;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
 
 @SuppressWarnings({ "unused", "deprecation" })
 public class TestSBMLMapping {

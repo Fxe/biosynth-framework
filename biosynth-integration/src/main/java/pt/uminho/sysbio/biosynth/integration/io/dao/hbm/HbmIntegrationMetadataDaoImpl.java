@@ -428,6 +428,12 @@ public class HbmIntegrationMetadataDaoImpl implements IntegrationMetadataDao {
 		return null;
 	}
 
+  @Override
+  public Map<String, Integer> getIntegrationStatus(long itgId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 
 
 

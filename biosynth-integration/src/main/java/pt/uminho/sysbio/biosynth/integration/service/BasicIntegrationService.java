@@ -144,6 +144,10 @@ public class BasicIntegrationService implements IntegrationService {
 		
 		return a;
 	}
+  @Override
+  public Map<String, Integer> getIntegrationStatus(long itgId) {
+    return this.meta.getIntegrationStatus(itgId);
+  }
 	
 
 }

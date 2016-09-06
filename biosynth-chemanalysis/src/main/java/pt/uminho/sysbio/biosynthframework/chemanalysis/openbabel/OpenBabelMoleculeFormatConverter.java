@@ -17,7 +17,7 @@ public class OpenBabelMoleculeFormatConverter implements MoleculeFormatConverter
 	private OpenBabelProcess obb;
 	
 	public OpenBabelMoleculeFormatConverter(String path) {
-		OpenBabelProcess.OBABEL_PATH = path;
+		OpenBabelProcess.DEFAULT_PATH = path;
 		obb = new OpenBabelProcess();
 	}
 	

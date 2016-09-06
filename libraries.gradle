@@ -70,6 +70,7 @@ ext {
     
     //jgrapht
     jgrapht_core : "org.jgrapht:jgrapht-core:${jgraphtVersion}",
+    jgrapht_ext  : "org.jgrapht:jgrapht-ext:${jgraphtVersion}",
     
     // mew
     mew_biocomponents: "pt.uminho.ceb.biosystems.mew:biocomponents:${mewVersion}",

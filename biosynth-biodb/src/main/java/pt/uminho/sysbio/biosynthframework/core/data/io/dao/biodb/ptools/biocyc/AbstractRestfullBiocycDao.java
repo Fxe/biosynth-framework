@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
-import pt.uminho.sysbio.biosynthframework.util.BioSynthUtilsIO;
+import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 
@@ -34,7 +34,7 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
     //check local file
     if (useLocalStorage && dataFile.exists()) {
       //file not exist then fetch !
-      httpResponseString = BioSynthUtilsIO.readFromFile(dataFile.getAbsolutePath());
+      httpResponseString = IOUtils.readFromFile(dataFile.getAbsolutePath());
     } else {
       //either not using local or datafile does not exists
       httpResponseString = HttpRequest.get(restQuery);
@@ -44,7 +44,7 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 
     if (saveLocalStorage && didFetch) {
       logger.debug("Write: " + localPath);
-      BioSynthUtilsIO.writeToFile(httpResponseString, localPath);			
+      IOUtils.writeToFile(httpResponseString, localPath);			
     }
 
     return httpResponseString;
