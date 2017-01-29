@@ -25,19 +25,37 @@ public class BHashMap<K, V> extends HashMap<K, V> implements BMap<K, V> {
     }
   }
   
+  private void deleteReverse(V prev, Object key) {
+    
+    if (prev != null) {
+      reverse.get(prev).remove(key);
+      if (reverse.get(prev).isEmpty()) {
+        reverse.remove(prev);
+      }
+    }
+    
+  }
+  
   @Override
   public V put(K key, V value) {
+    V prev = super.put(key, value);
+    
+    deleteReverse(prev, key);
+    
     if (!reverse.containsKey(value)) {
       reverse.put(value, new HashSet<K> ());
     }
     reverse.get(value).add(key);
-    return super.put(key, value);
+    return prev;
   }
   
   @Override
   public V remove(Object key) {
+    V prev = super.remove(key);
     
-    return super.remove(key);
+    deleteReverse(prev, key);
+    
+    return prev;
   }
   
   @Override

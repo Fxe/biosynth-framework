@@ -25,4 +25,10 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	instance_of,            //Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
 	parent_of,
     subclass_of,
+    
+    /**
+     * Model -[has_gpr_gene]-> ModelGene<br>
+     * ModelReaction -[has_gpr_gene]-> ModelGene
+     */
+    has_gpr_gene,
 }

@@ -25,6 +25,12 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
   public String translate(String lookup, String reference) {
     String result = null;
 
+//    if (lookup.toLowerCase().trim().equals("chebi")) {
+//      if (reference.toLowerCase().startsWith("chebi:")) {
+//        return StringUtils.removeStart(reference.toLowerCase(), "chebi:");
+//      }
+//    }
+
     if (lookup.toLowerCase().trim().equals("kegg")) {
       return translateKegg(lookup, reference);
     }
@@ -32,7 +38,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
     if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
          clazz.equals(KeggDrugMetaboliteEntity.class) || 
          clazz.equals(ChebiMetaboliteEntity.class)) && 
-         lookup.equals("PubChem")) {
+        lookup.equals("PubChem")) {
       result = MetaboliteMajorLabel.PubChemSubstance.toString();
     } else {
       result = BioDbDictionary.translateDatabase(lookup);
@@ -44,10 +50,10 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
       result = resolveKeggDatabase(reference); 
       logger.debug(String.format("KEGG resolve %s -> %s", lookup, result, clazz));
     }
-    
+
     return result;
   }
-  
+
   /**
    * Determines KEGG database type from entry
    * @param entry a valid KEGG entry (C|D|G|R)XXXXX
@@ -57,18 +63,18 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
     if (entry.length() == 6) {
       char initial = entry.charAt(0);
       switch (initial) {
-        case 'C': return MetaboliteMajorLabel.LigandCompound.toString();
-        case 'D': return MetaboliteMajorLabel.LigandDrug.toString();
-        case 'G': return MetaboliteMajorLabel.LigandGlycan.toString();
-        case 'R': return ReactionMajorLabel.LigandReaction.toString();
-        default:
-          logger.warn("Unknown KEGG initial - {}", entry);
-          break;
+      case 'C': return MetaboliteMajorLabel.LigandCompound.toString();
+      case 'D': return MetaboliteMajorLabel.LigandDrug.toString();
+      case 'G': return MetaboliteMajorLabel.LigandGlycan.toString();
+      case 'R': return ReactionMajorLabel.LigandReaction.toString();
+      default:
+        logger.warn("Unknown KEGG initial - {}", entry);
+        break;
       }
     } else {
       logger.warn("Invalid KEGG size - [{}] (length != 6)", entry);
     }
-    
+
     return MetaboliteMajorLabel.NOTFOUND.toString();
   }
 

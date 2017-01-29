@@ -9,6 +9,8 @@ import org.hibernate.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2MetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2MetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionCrossReferenceEntity;
@@ -81,6 +83,8 @@ public class HelperHbmConfigInitializer {
     Configuration config = new Configuration().configure(cfg);
     config.addAnnotatedClass(BiggMetaboliteEntity.class)
     .addAnnotatedClass(BiggMetaboliteCrossreferenceEntity.class)
+    .addAnnotatedClass(Bigg2MetaboliteEntity.class)
+    .addAnnotatedClass(Bigg2MetaboliteCrossreferenceEntity.class)
     .addAnnotatedClass(BioCycMetaboliteEntity.class)
     .addAnnotatedClass(BioCycMetaboliteCrossreferenceEntity.class)
     .addAnnotatedClass(KeggCompoundMetaboliteEntity.class)

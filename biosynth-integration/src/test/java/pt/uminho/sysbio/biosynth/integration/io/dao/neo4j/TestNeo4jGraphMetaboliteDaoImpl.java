@@ -58,8 +58,7 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
     assertTrue(node.hasProperty("proxy"));
     assertTrue(node.hasLabel(MetaboliteMajorLabel.MetaCyc));
     assertTrue(node.hasLabel(GlobalLabel.Metabolite));
-    //dunno what changed to return a string ..
-    assertTrue(Boolean.parseBoolean((String) node.getProperty("proxy")));
+    assertTrue((boolean) node.getProperty("proxy"));
     tx.failure();
     tx.close();
   }
@@ -86,9 +85,7 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
     assertTrue(node.hasProperty("proxy"));
     assertTrue(node.hasLabel(MetaboliteMajorLabel.LigandCompound));
     assertTrue(node.hasLabel(GlobalLabel.KEGG));    
-    //dunno what changed to return a string ..
-    assertFalse(Boolean.parseBoolean((String) node.getProperty("proxy")));
-//    assertFalse((boolean) node.getProperty("proxy"));
+    assertFalse((boolean) node.getProperty("proxy"));
     tx.failure();
     tx.close();
   }

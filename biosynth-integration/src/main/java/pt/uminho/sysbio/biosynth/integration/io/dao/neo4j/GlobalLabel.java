@@ -18,10 +18,11 @@ public enum GlobalLabel implements Label {
 	
 	//Things that I have no clue where to put !
 	EntrezTaxonomy,
-	UniProt, Gene, EnzymePortal, BrendaEnzyme, 
+	UniProt, Gene, EnzymePortal, BrendaEnzyme, SGD, Phenotype, ExPASy,
 	PROSITE, PDB, PFAM, PROTEINMODELPORTAL,
 	KeggReactionPair, Hypothetical,
 	
 	LogicalOperator,
-	Protein, ProteinProperty
+	Protein, ProteinProperty,
+	
 }

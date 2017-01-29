@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
   
@@ -31,46 +32,9 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     super(graphDatabaseService);
   }
   
-  public static String extractString(String string) {
-    String[] split = string.replace("</p>", "").split(":");
-    if (split.length > 1) {
-      String formula = split[1].trim();
-      if (!formula.isEmpty()) {
-        return formula;
-      }
-    }
-    
-    return null;
-  }
+
   
-  public static Map<String, String> parseNotes(List<String> notes) {
-    Map<String, String> data = new HashMap<> ();
-    Map<String, String> fields = new HashMap<> ();
-    fields.put("FORMULA:", "formula");
-    fields.put("GENE_ASSOCIATION:", "gene_association");
-    fields.put("PROTEIN_ASSOCIATION:", "protein_association");
-    fields.put("SUBSYSTEM:", "subsystem");
-    fields.put("PROTEIN_CLASS:", "protein_class");
-    
-    for (String line : notes) {
-      boolean detected = false;
-      for (String field : fields.keySet()) {
-        detected = true;
-        if (line.toUpperCase().contains(field)) {
-          String str = extractString(line);
-          if (str != null) {
-            data.put(fields.get(field), str);
-          }
-        }
-      }
-      
-      if (!detected) {
-        logger.warn("Unknown field: {}", line);
-      }
-    }
-    
-    return data;
-  }
+
   
   protected static Map<String, Object> getProperties(XmlObject xmlObject) {
     Map<String, Object> properties = new HashMap<> ();
@@ -110,17 +74,21 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     //OBJECTIVE_COEFFICIENT_constant = "false"
     for (XmlObject o : rxn.getListOfParameters()) {
       String id = o.getAttributes().get("id");
-      //translate known ids
-      if (fields.containsKey(id)) {
-        id = fields.get(id);
-      }
-      String value = o.getAttributes().get("value");
-      if (NumberUtils.isNumber(value)) {
-        node.setProperty(id, Double.parseDouble(value));
+      if (id != null) {
+        //translate known ids
+        if (fields.containsKey(id)) {
+          id = fields.get(id);
+        }
+        String value = o.getAttributes().get("value");
+        if (NumberUtils.isNumber(value)) {
+          node.setProperty(id, Double.parseDouble(value));
+        } else {
+          node.setProperty(id, value);
+        }
+        units.add(o.getAttributes().get("units"));
       } else {
-        node.setProperty(id, value);
+        logger.debug("ignored parameter {} missing id", o.getAttributes());
       }
-      units.add(o.getAttributes().get("units"));
     }
     units.remove(null);
     if (units.size() > 1) {
@@ -129,6 +97,61 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     if (!units.isEmpty()) {
       node.setProperty("units", units.iterator().next());
     }
+  }
+  
+  protected static void mergeFBC(XmlSbmlReaction xrxn, Node node, List<XmlObject> modelParameters) {
+    logger.debug("mergeFBC {}", modelParameters);
+    if (modelParameters != null && !modelParameters.isEmpty()) {
+      String ub = xrxn.getAttributes().get("upperBound");
+      String lb = xrxn.getAttributes().get("lowerBound");
+      logger.trace("[{}, {}] flux bounds", lb, ub);
+      if (xrxn.getAttributes().containsKey("upperFluxBound")) {
+        String ufbcId = xrxn.getAttributes().get("upperFluxBound");
+        logger.trace("looking for parameter {}", ufbcId);
+        for (XmlObject xo : modelParameters) {
+          String id = xo.getAttributes().get("id");
+          if (id != null && id.equals(ufbcId)) {
+            
+            String valueStr = xo.getAttributes().get("value");
+            logger.trace("found parameter {} with value", ufbcId, valueStr);
+            if (ub != null && !ub.equals(valueStr)) {
+              logger.warn("fbc conflict with reaction parameters [{}] -> [{}]", valueStr, ub);
+            } else {
+              if (NumberUtils.isNumber(valueStr)) {
+                node.setProperty("upperBound", Double.parseDouble(valueStr));
+              } else {
+                node.setProperty("upperBound", valueStr);
+              }
+            }
+          }
+        }
+      }
+      
+      if (xrxn.getAttributes().containsKey("lowerFluxBound")) {
+        String ufbcId = xrxn.getAttributes().get("lowerFluxBound");
+        for (XmlObject xo : modelParameters) {
+          String id = xo.getAttributes().get("id");
+          if (id != null && id.equals(ufbcId)) {
+            String valueStr = xo.getAttributes().get("value");
+            if (lb != null && !lb.equals(valueStr)) {
+              logger.warn("fbc conflict with reaction parameters [{}] -> [{}]", valueStr, lb);
+            } else {
+              if (NumberUtils.isNumber(valueStr)) {
+                node.setProperty("lowerBound", Double.parseDouble(valueStr));
+              } else {
+                node.setProperty("lowerBound", valueStr);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  public Node saveModel(XmlSbmlModel mmd) {
+    
+    
+    return null;
   }
   
   public XmlSbmlModel saveMetabolicModel(XmlSbmlModel mmd) {
@@ -189,7 +212,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       Map<String, Object> properties = getProperties(spi);
       properties.remove("id");
       Neo4jUtils.setPropertiesMap(properties, node);
-      mergeNotes(parseNotes(spi.getNotes()), node);
+      mergeNotes(SbmlUtils.parseNotes(spi.getNotes()), node);
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
       Node mmdNode = graphDatabaseService.getNodeById(getNeo4jId(mmd));
@@ -225,8 +248,9 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       Node rxnNode = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, executionEngine);
       Map<String, Object> properties = getProperties(rxn);
       properties.remove("id");
-      mergeNotes(parseNotes(rxn.getNotes()), rxnNode);
+      mergeNotes(SbmlUtils.parseNotes(rxn.getNotes()), rxnNode);
       mergeParameters(rxn, rxnNode);
+      mergeFBC(rxn, rxnNode, mmd.getListOfParameters());
       Neo4jUtils.setPropertiesMap(properties, rxnNode);
       rxnNode.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
@@ -272,12 +296,24 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     return rxn;
   }
   
+  public void toDouble(Map<String, Object> properties, String attribute) {
+    if (properties.containsKey(attribute)) {
+      Object o = properties.get(attribute);
+      if (o instanceof String) {
+        double d = Double.parseDouble(o.toString());
+        properties.put(attribute, d);
+        logger.trace("{} parse to Double {}", attribute, o);
+      }
+    }
+  }
+  
   public void createStoichiometryLink(String spiEntry, String mmdEntry, Node rxn, Map<String, Object> properties, MetabolicModelRelationshipType r) {
     String spiEntry_ = String.format("%s@%s", spiEntry, mmdEntry);
     Node spiNode = Neo4jUtils.getUniqueResult(graphDatabaseService
         .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
     
     Relationship relationship = rxn.createRelationshipTo(spiNode, r);
+    toDouble(properties, "stoichiometry");
     Neo4jUtils.setPropertiesMap(properties, relationship);
     //XXX: another hammer fix
     if (relationship.hasProperty("species")) {

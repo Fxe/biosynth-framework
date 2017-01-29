@@ -13,6 +13,7 @@ public class XmlSbmlModel extends XmlObject {
   private List<XmlSbmlReaction> reactions = new ArrayList<> ();
   private List<XmlSbmlGroup> groups = new ArrayList<> ();
   private List<XmlObject> fluxBounds = new ArrayList<>();
+  private List<XmlObject> listOfParameters = new ArrayList<>();
   
   public Map<String, String> getSbmlAttributes() {
     return sbmlAttributes;
@@ -35,5 +36,7 @@ public class XmlSbmlModel extends XmlObject {
   
   public List<XmlObject> getFluxBounds() { return fluxBounds;}
   public void setFluxBounds(List<XmlObject> fluxBounds) { this.fluxBounds = fluxBounds;}
-
+  
+  public List<XmlObject> getListOfParameters() { return listOfParameters;}
+  public void setListOfParameters(List<XmlObject> listOfParameters) { this.listOfParameters = listOfParameters;}
 }

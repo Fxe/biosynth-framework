@@ -10,4 +10,5 @@ public enum MetabolicModelRelationshipType implements RelationshipType {
 	in_subsystem,
 	has_compartment, in_compartment, 
 	left_component, right_component, has_crossreference_to, 
+	has_gpr_gene,
 }

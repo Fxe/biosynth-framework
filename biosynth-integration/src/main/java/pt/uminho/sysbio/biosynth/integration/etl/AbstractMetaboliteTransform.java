@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -300,6 +301,10 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
           //						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
           //						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
           MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
+          if (majorLabel.equals(MetaboliteMajorLabel.ChEBI) && 
+              xref.getValue().toLowerCase().startsWith("chebi:")) {
+            xref.setValue(StringUtils.removeStart(xref.getValue().toLowerCase(), "chebi:"));
+          }
           Map<String, Object> relationshipProperteis = 
               this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
           centralMetaboliteEntity.addConnectedEntity(

@@ -168,7 +168,8 @@ public class Neo4jUtils {
           value instanceof Long ||
           value instanceof Double ||
           value instanceof Float ||
-          value instanceof Integer) {
+          value instanceof Integer ||
+          value instanceof Boolean) {
         logger.trace(String.format("Assign property - %s:%s", key, value));
         propertyContainer.setProperty(key, value);
       } else {

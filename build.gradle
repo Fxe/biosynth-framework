@@ -11,6 +11,8 @@ jar {
 }
 */
 
+
+
 allprojects {
   //apply plugin: 'java'
   repositories {
@@ -41,6 +43,7 @@ subprojects { subProject ->
   
   defaultTasks 'build'
   buildDir = "target"
+  //org.gradle.java.home = 'C:/Program Files/Java/jdk1.8.0_101'
   
   dependencies {
     compile libraries.guava

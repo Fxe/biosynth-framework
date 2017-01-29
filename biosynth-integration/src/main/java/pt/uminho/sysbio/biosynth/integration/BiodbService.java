@@ -19,6 +19,21 @@ public interface BiodbService {
   public Long getIdByEntryAndDatabase(String entry, String database);
   public String getNamePropertyById(long id);
   public String getFormulaPropertyById(long id);
+  
+  /**
+   * Major type classification Metabolite, Reaction, ModelMetabolite, etc.
+   * @param id entity ID
+   * @return
+   */
+  public String getTypeById(long id);
+  
+  /**
+   * Lower type classification Drain, Biomass, Auxiliary, etc.
+   * @param id entity ID
+   * @return
+   */
+  public String getSubTypeById(long id);
+  
   public Map<Long, Double> getStoichiometry(long id);
   public List<Pair<Long, Double>> getRawStoichiometry(long id);
   public Set<Long> getIdsByStoichiometry(Map<Long, Double> stoich);

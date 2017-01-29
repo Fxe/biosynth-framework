@@ -44,6 +44,10 @@ public class ExtendedMetabolicModelEntity extends AbstractBiosynthEntity impleme
   public Map<Long, String> getSubsystems() { return subsystems;}
   public void setSubsystems(Map<Long, String> subsystems) { this.subsystems = subsystems;}
   
+  private Map<Long, String> genes = new HashMap<> ();
+  public Map<Long, String> getGenes() { return genes;}
+  public void setGenes(Map<Long, String> genes) { this.genes = genes;}
+  
   @Override
   public String toString() {
     return String.format("MetabolicModel[%d:%s]", id, entry);
