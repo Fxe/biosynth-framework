@@ -56,81 +56,81 @@ public class TestXmlStreamSbmlReader {
 //    }
     
     
-    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
-        new FileInputStream(SBML_PATH));
-    XmlSbmlModel model = sbmlReader.parse();
-    System.out.println(model.getSbmlAttributes());
-    System.out.println(model);
-    for (XmlSbmlCompartment compartment : model.getCompartments()) {
-      System.out.println(compartment);
-      break;
-    }
-    for (XmlSbmlSpecie specie : model.getSpecies()) {
-      System.out.println("Attributes: " + specie);
-      for (String type : specie.getListOfAnnotations().keySet()) {
-        System.out.println("\t" + type);
-        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
-          System.out.println("\t\t" + o.getAttributes().get("resource"));
-        }
-      }
-      System.out.println("Notes: " + specie.getNotes());
-      break;
-    }
-    
-    Map<String, XmlSbmlReaction> rxnMap = new HashMap<> ();
-    for (XmlSbmlReaction reaction : model.getReactions()) {
-      System.out.println("Attributes: " + reaction);
-      System.out.println("Notes: " + reaction.getNotes());
-      for (XmlObject o : reaction.getListOfParameters()) {
-        System.out.println("  * " +  o);
-      }
-      for (String type : reaction.getListOfAnnotations().keySet()) {
-        System.out.println("Annotation: " + type);
-        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {
-          System.out.println("\t" + o.getAttributes());
-        }
-      }
-      for (XmlObject o : reaction.getListOfReactants()) {
-        System.out.println("  - " +  o);
-      }
-      for (XmlObject o : reaction.getListOfProducts()) {
-        System.out.println("  + " +  o);
-      }
-      rxnMap.put(reaction.getAttributes().get("id"), reaction);
-    }
-    
-    {
-      XmlSbmlReaction reaction = rxnMap.get("R_EX_glc__e");
-      System.out.println("============ test rxn " + reaction);
-      System.out.println("Attributes: " + reaction);
-      System.out.println("Notes: " + reaction.getNotes());
-      for (XmlObject o : reaction.getListOfParameters()) {
-        System.out.println("  * " +  o);
-      }
-      for (String type : reaction.getListOfAnnotations().keySet()) {
-        System.out.println("Annotation: " + type);
-        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {
-          System.out.println("\t" + o.getAttributes());
-        }
-      }
-      for (XmlObject o : reaction.getListOfReactants()) {
-        System.out.println("  - " +  o);
-      }
-      for (XmlObject o : reaction.getListOfProducts()) {
-        System.out.println("  + " +  o);
-      }
-    }
-
-    
-    for (XmlObject parameter : model.getListOfParameters()) {
-      System.out.println(parameter);
-      break;
-    }
-    
-    for (XmlObject fluxBound : model.getFluxBounds()) {
-      System.out.println(fluxBound);
-      break;
-    }
+//    XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
+//        new FileInputStream(SBML_PATH));
+//    XmlSbmlModel model = sbmlReader.parse();
+//    System.out.println(model.getSbmlAttributes());
+//    System.out.println(model);
+//    for (XmlSbmlCompartment compartment : model.getCompartments()) {
+//      System.out.println(compartment);
+//      break;
+//    }
+//    for (XmlSbmlSpecie specie : model.getSpecies()) {
+//      System.out.println("Attributes: " + specie);
+//      for (String type : specie.getListOfAnnotations().keySet()) {
+//        System.out.println("\t" + type);
+//        for (XmlObject o : specie.getListOfAnnotations().get(type)) {
+//          System.out.println("\t\t" + o.getAttributes().get("resource"));
+//        }
+//      }
+//      System.out.println("Notes: " + specie.getNotes());
+//      break;
+//    }
+//    
+//    Map<String, XmlSbmlReaction> rxnMap = new HashMap<> ();
+//    for (XmlSbmlReaction reaction : model.getReactions()) {
+//      System.out.println("Attributes: " + reaction);
+//      System.out.println("Notes: " + reaction.getNotes());
+//      for (XmlObject o : reaction.getListOfParameters()) {
+//        System.out.println("  * " +  o);
+//      }
+//      for (String type : reaction.getListOfAnnotations().keySet()) {
+//        System.out.println("Annotation: " + type);
+//        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {
+//          System.out.println("\t" + o.getAttributes());
+//        }
+//      }
+//      for (XmlObject o : reaction.getListOfReactants()) {
+//        System.out.println("  - " +  o);
+//      }
+//      for (XmlObject o : reaction.getListOfProducts()) {
+//        System.out.println("  + " +  o);
+//      }
+//      rxnMap.put(reaction.getAttributes().get("id"), reaction);
+//    }
+//    
+//    {
+//      XmlSbmlReaction reaction = rxnMap.get("R_EX_glc__e");
+//      System.out.println("============ test rxn " + reaction);
+//      System.out.println("Attributes: " + reaction);
+//      System.out.println("Notes: " + reaction.getNotes());
+//      for (XmlObject o : reaction.getListOfParameters()) {
+//        System.out.println("  * " +  o);
+//      }
+//      for (String type : reaction.getListOfAnnotations().keySet()) {
+//        System.out.println("Annotation: " + type);
+//        for (XmlObject o : reaction.getListOfAnnotations().get(type)) {
+//          System.out.println("\t" + o.getAttributes());
+//        }
+//      }
+//      for (XmlObject o : reaction.getListOfReactants()) {
+//        System.out.println("  - " +  o);
+//      }
+//      for (XmlObject o : reaction.getListOfProducts()) {
+//        System.out.println("  + " +  o);
+//      }
+//    }
+//
+//    
+//    for (XmlObject parameter : model.getListOfParameters()) {
+//      System.out.println(parameter);
+//      break;
+//    }
+//    
+//    for (XmlObject fluxBound : model.getFluxBounds()) {
+//      System.out.println(fluxBound);
+//      break;
+//    }
   }
 
 }

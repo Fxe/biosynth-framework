@@ -1,0 +1,6 @@
+dependencies {
+  compile( project(':biosynth-core') )
+  compile('org.biojava:biojava-core:4.2.5') {
+    exclude group: 'org.apache.logging.log4j'
+  }
+}

@@ -17,7 +17,6 @@ public class EntrezTaxon {
   
   @Override
   public String toString() {
-    // TODO Auto-generated method stub
     return String.format("[%d]%s", TaxId, ScientificName);
   }
 }

@@ -14,4 +14,16 @@ public interface EutilsService {
   @GET("/efetch.fcgi?db=taxonomy")
   public EntrezTaxaSet efetchTaxonomy(@Query("id") String id, 
                                       @Query("retmode") EntrezRetmode retmode);
+  
+  @GET("/efetch.fcgi?db=gene")
+  public EntrezGeneSet efetchGene(@Query("id") String id, 
+                                  @Query("retmode") EntrezRetmode retmode);
+
+  //esearch.fcgi?db=gene&term=txid326442&retstart=38&retmax=100
+  @GET("/esearch.fcgi")
+  public EntrezSearchResult esearch(@Query("db") EntrezDatabase db, 
+                                    @Query("term") String term,
+                                    @Query("retmax") int retmax,
+                                    @Query("retstart") int retstart);
+
 }
