@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.biodb.eutils;
+package pt.uminho.sysbio.biosynthframework.biodb.uniprot;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -13,11 +13,11 @@ import retrofit.converter.Converter;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 
-public class EntrezTaxonomyConverter implements Converter {
+public class UniprotEntryConverter implements Converter {
 
   private final ObjectMapper mapper;
   
-  public EntrezTaxonomyConverter() {
+  public UniprotEntryConverter() {
     mapper = new XmlMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
@@ -39,7 +39,7 @@ public class EntrezTaxonomyConverter implements Converter {
 
   @Override
   public TypedOutput toBody(Object object) {
-    System.out.println("!!");
+    // TODO Auto-generated method stub
     return null;
   }
 

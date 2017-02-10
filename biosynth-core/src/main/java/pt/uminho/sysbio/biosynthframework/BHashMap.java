@@ -27,7 +27,7 @@ public class BHashMap<K, V> extends HashMap<K, V> implements BMap<K, V> {
   
   private void deleteReverse(V prev, Object key) {
     
-    if (prev != null) {
+    if (prev != null && reverse.containsKey(prev)) {
       reverse.get(prev).remove(key);
       if (reverse.get(prev).isEmpty()) {
         reverse.remove(prev);

@@ -29,9 +29,22 @@ public class DotGraphFactory {
   private Map<String, DotNode> reactionDotMap = new HashMap<> ();
   private Map<String, List<String>> pathways = new HashMap<> ();
   private Map<String, String> pathwayColor = new HashMap<> ();
+  
+  private Map<String, String> cpdColor = new HashMap<> ();
+  private Map<String, String> rxnColor = new HashMap<> ();
 
   public DotGraphFactory withName(String name) {
     this.name = name;
+    return this;
+  }
+  
+  public DotGraphFactory withCompoundColor(Map<String, String> color) {
+    this.cpdColor = color;
+    return this;
+  }
+
+  public DotGraphFactory withReactionColor(Map<String, String> color) {
+    this.rxnColor = color;
     return this;
   }
 
@@ -92,6 +105,7 @@ public class DotGraphFactory {
       Metabolite cpd = metaboliteMap.get(cpdEntry);
       //Use a transformer interface to generate node !
       DotNode dotNode = new DotNode();
+      dotNode.setColor(cpdColor.get(cpdEntry) == null ? defaultColor : cpdColor.get(cpdEntry));
       dotNode.setShape(compoundShape);
       //			String htmlLabel = String.format("<%s>", cpd.getEntry() + "\n" + cpd.getName());
       dotNode.setLabel(cpd.getEntry() + "\n" + cpd.getName());
@@ -104,6 +118,7 @@ public class DotGraphFactory {
     for (String rxnEntry : reactionMap.keySet()) {
       Reaction rxn = reactionMap.get(rxnEntry);
       DotNode dotNode = new DotNode();
+      dotNode.setColor(rxnColor.get(rxnEntry) == null ? defaultColor : rxnColor.get(rxnEntry));
       dotNode.setShape(reactionShape);
       //			dotNode.setLabel(rxn.getEntry());
       dotNode.setLabel(rxn.getName() ==null? rxn.getEntry():rxn.getName());

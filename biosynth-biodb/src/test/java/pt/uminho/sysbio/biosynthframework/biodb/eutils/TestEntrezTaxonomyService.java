@@ -42,17 +42,21 @@ public class TestEntrezTaxonomyService {
     System.out.println(taxon.RetStart);
     System.out.println(taxon.QueryTranslation);
     System.out.println(taxon.IdList);
-    for (long  id :taxon.IdList) {
-      Object o =service.fetch(EntrezDatabase.gene, id);
-      System.out.println("\t" + o);
-    }
+//    for (long  id :taxon.IdList) {
+//      Object o =service.fetch(EntrezDatabase.gene, id);
+//      System.out.println("\t" + o);
+//    }
+    taxon.IdList.add(3711490L);
     for (EntrezGene o : service.getGenes(taxon.IdList)) {
       System.out.println("\t" + o.Entrezgene_track_info);
       System.out.println("\t" + o.Entrezgene_gene);
       System.out.println("\t" + o.Entrezgene_gene_source);
       System.out.println("\t" + o.Entrezgene_locus);
+      System.out.println("\t" + o.Entrezgene_comments);
       System.out.println("\t" + o.Entrezgene_prot);
       System.out.println("\t" + o.Entrezgene_source);
+      System.out.println("\t" + o.Entrezgene_xtra_iq);
+      System.out.println("\t" + o.Entrezgene_non_unique_keys);
       System.out.println("---------");
     }
     

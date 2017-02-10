@@ -17,7 +17,8 @@ public enum GlobalLabel implements Label {
 	SubcellularCompartment,
 	
 	//Things that I have no clue where to put !
-	EntrezTaxonomy,
+	EntrezTaxonomy, NCBIGene, NCBINucleotide, NCBIProtein,
+	UniProtAccession,
 	UniProt, Gene, EnzymePortal, BrendaEnzyme, SGD, Phenotype, ExPASy,
 	PROSITE, PDB, PFAM, PROTEINMODELPORTAL,
 	KeggReactionPair, Hypothetical,
