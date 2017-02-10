@@ -9,6 +9,6 @@ public class GeneralDriver {
     k.setSaveLocalStorage(true);
     k.setUseLocalStorage(true);
     //      System.out.println(k.getAllKOEntries());
-    System.out.println(k.getKeggOrthologyById("K03472"));
+    System.out.println(k.getKOByEntry("K03472"));
   }
 }
