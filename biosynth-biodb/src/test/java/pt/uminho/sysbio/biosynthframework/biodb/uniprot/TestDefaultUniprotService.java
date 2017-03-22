@@ -31,7 +31,7 @@ public class TestDefaultUniprotService {
   public void tearDown() throws Exception {
   }
 
-  @Test
+//  @Test
   public void test() {
 //    Map<String, Object> o = (Map<String, Object>) service.getEntry_("P12345.xml");
 //    System.out.println(o.get("entry"));

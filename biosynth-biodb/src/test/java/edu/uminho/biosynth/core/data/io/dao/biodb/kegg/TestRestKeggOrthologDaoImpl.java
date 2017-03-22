@@ -17,10 +17,10 @@ public class TestRestKeggOrthologDaoImpl {
 		rest.setLocalStorage(folder);
 		rest.setSaveLocalStorage(true);
 		rest.setUseLocalStorage(true);
-		rest.createFolder();
+//		rest.createFolder();
 	}
 	
-	@Test
+//	@Test
 	public void test1(){
 		KeggKOEntity koEntity = rest.getKOByEntry("K00688");
 		System.out.println("Entry: " + koEntity.getEntry());
