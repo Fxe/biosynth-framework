@@ -8,6 +8,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.Joiner;
 
+import pt.uminho.sysbio.biosynthframework.util.JsonMapUtils;
+
 @JacksonXmlRootElement(localName ="entry")
 public class UniprotEntry {
   
@@ -28,7 +30,7 @@ public class UniprotEntry {
   public Object protein;
   
   
-  public Object gene;
+  public Map<String, Object> gene;
   
 //  @JacksonXmlElementWrapper(useWrapping=false)
   public UniprotOrganism organism;
@@ -51,10 +53,10 @@ public class UniprotEntry {
   public UniprotSequence sequence;
   
   public String getLocus() {
-    if (gene == null) {
-      return null;
+    if (gene != null && gene.containsKey("name")) {
+      return JsonMapUtils.getString(gene, "name", "");
     }
-    return gene.toString();
+    return null;
   }
   
   @Override

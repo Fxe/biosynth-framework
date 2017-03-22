@@ -8,6 +8,13 @@ public class KeggGenomeFlatFileParser extends AbstractKeggFlatFileParser {
 		super(flatfile);
 		this.parseContent();
 	}
+	
+	   public String getTaxonomy() {
+	        int tabIndex = this.getTabIndex("TAXONOMY");
+	        String content = this.tabContent_.get(tabIndex);
+	        
+	        return content;
+	    }
 
 	public String getEntry() {
 		int tabIndex = this.getTabIndex("ENTRY");

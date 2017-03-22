@@ -8,6 +8,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.Joiner;
 
+import pt.uminho.sysbio.biosynthframework.util.JsonMapUtils;
+
 @JacksonXmlRootElement(localName = "organism")
 public class UniprotOrganism {
   
@@ -17,6 +19,22 @@ public class UniprotOrganism {
   
   @JacksonXmlElementWrapper(useWrapping=false)
   public List<Object> dbReference;
+  
+  public Long getNCBITaxonomyId() {
+    if (dbReference != null) {
+      for (Object o : dbReference) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> map = (Map<String, Object>) o;
+        String t = JsonMapUtils.getString(map, "type");
+        if (t != null && t.equals("NCBI Taxonomy")) {
+//          System.out.println(o);
+          return Long.parseLong(JsonMapUtils.getString(map, "id")); 
+        }
+      }
+    }
+    
+    return null;
+  }
   
   @Override
   public String toString() {

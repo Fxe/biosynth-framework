@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
+
 public class XmlSbmlReaction extends XmlObject {
   
   private Map<String, List<XmlObject>> listOfAnnotations = new HashMap<> ();
   private List<XmlObject> listOfReactants = new ArrayList<> ();
   private List<XmlObject> listOfProducts  = new ArrayList<> ();
   private List<XmlObject> listOfParameters  = new ArrayList<> ();
+  private MultiNodeTree<Object> gpr = null;
   
   private List<String> notes  = new ArrayList<> ();
   
@@ -28,5 +31,8 @@ public class XmlSbmlReaction extends XmlObject {
   
   public List<String> getNotes() { return notes;}
   public void setNotes(List<String> notes) { this.notes = notes;}
+  
+  public MultiNodeTree<Object> getGpr() { return gpr;}
+  public void setGpr(MultiNodeTree<Object> gpr) { this.gpr = gpr;}
   
 }

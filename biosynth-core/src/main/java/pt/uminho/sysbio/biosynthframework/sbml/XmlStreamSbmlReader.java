@@ -21,22 +21,33 @@ import javax.xml.stream.events.XMLEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
+import pt.uminho.sysbio.biosynthframework.Operator;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
+import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 /**
- * Java XML Stream parser for SBML models
+ * Java XML reader for SBML models
  * @author Filipe Liu
  *
  */
 public class XmlStreamSbmlReader {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlStreamSbmlReader.class);
-
+  
+  private static final String RDF_RDF = "RDF";
+  private static final String RDF_DESCRIPTION = "Description";
+  private static final String RDF_Bag = "Bag";
+  
+  private static final String BQBIOL_U_QUALIFIER = "unknownQualifier";
   private static final String BQBIOL_IS = "is";
   private static final String BQBIOL_IS_ENCODED_BY   = "isEncodedBy";
   private static final String BQBIOL_IS_DESCRIBED_BY = "isDescribedBy";
   private static final String BQBIOL_IS_VERSION_OF   = "isVersionOf";
   private static final String BQBIOL_HAS_PART        = "hasPart";
+  
+  
   
   private static final String KEY_VALUE_DATA_LIST = "listOfKeyValueData";
   private static final String KEY_VALUE_DATA_ITEM = "data";
@@ -54,6 +65,9 @@ public class XmlStreamSbmlReader {
   private final static String SBML_COMPARTMENT = "compartment";
 
   private final static String SBML_SPECIE = "species";
+  private final static String SBML_LIST_OF_SPECIES = "listOfSpecies";
+  private final static String SBML_LIST_OF_COMPARTMENTS = "listOfCompartments";
+  private final static String SBML_LIST_OF_REACTIONS = "listOfReactions";
 
   private final static String SBML_GROUP = "group";
   private final static String SBML_GROUP_MEMBER = "member";
@@ -62,8 +76,15 @@ public class XmlStreamSbmlReader {
   private final static String SBML_LIST_OF_FLUX_BOUNDS = "listOfFluxBounds";
   private final static String SBML_FLUX_BOUND = "fluxBound";
 
+  private final static String SBML_ANNOTATION = "annotation";
+  
   private final static String SBML_NOTES = "notes";
   private final static String SBML_LIST_OF_PARAMETERS = "listOfParameters";
+  private final static String SBML_LIST_OF_UNIT_DEFINITIONS = "listOfUnitDefinitions";
+  
+  private final static String SBML_UNIT_DEFINITION = "unitDefinition";
+  private final static String SBML_LIST_OF_UNITS = "listOfUnits";
+  private final static String SBML_LIST_OF_UNITS_UNIT = "unit";
   private final static String SBML_REACTION = "reaction";
   private final static String SBML_REACTION_LIST_OF_REACTANTS = "listOfReactants";
   private final static String SBML_REACTION_LIST_OF_PRODUCTS = "listOfProducts";
@@ -76,6 +97,8 @@ public class XmlStreamSbmlReader {
   private final static String SBML_NOTES_BODY = "body";
 
   private String data = null;
+  
+  public Map<String, Integer> rejectedElements = new HashMap<> ();
 
   public XmlStreamSbmlReader(String path) throws IOException {
     data = IOUtils.readFromFile(new File(path));
@@ -123,8 +146,22 @@ public class XmlStreamSbmlReader {
             break;
           case SBML_MODEL:
             model = new XmlSbmlModel();
+            model.columnNumber = startElement.getLocation().getColumnNumber();
+            model.lineNumber = startElement.getLocation().getLineNumber();
             model.setAttributes(getAttributes(startElement));
             break;
+          case SBML_NOTES:
+            if (model != null) {
+              model.setNotes(parseNotes(xmlEventReader, startElement));
+            }
+            break;
+          case SBML_LIST_OF_UNIT_DEFINITIONS:
+            model.units.addAll(parseSbmlUnits(xmlEventReader, startElement, SBML_LIST_OF_UNIT_DEFINITIONS));
+            break;
+          case SBML_LIST_OF_COMPARTMENTS: break;
+          case SBML_LIST_OF_SPECIES: break;
+          case SBML_LIST_OF_REACTIONS: break;
+
           case SBML_COMPARTMENT:
             XmlSbmlCompartment xmlSbmlCompartment = parseCompartment(xmlEventReader, startElement);
             compartments.add(xmlSbmlCompartment);
@@ -155,6 +192,7 @@ public class XmlStreamSbmlReader {
             break;
           default: 
             logger.trace("+?+ " + startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
           }
         } else if (xmlEvent.isEndElement()) {
@@ -235,6 +273,7 @@ public class XmlStreamSbmlReader {
         } break;
         default: 
           //                        LOGGER.trace("+?+ " + startElement.getName().getLocalPart());
+          CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
           break;
         }
       } else if (xmlEvent.isEndElement()) {
@@ -259,9 +298,10 @@ public class XmlStreamSbmlReader {
     logger.debug("+++ <species> reading metabolite specie");
     boolean read = true;
     XmlSbmlSpecie xmlSbmlSpecie = new XmlSbmlSpecie();
-    xmlSbmlSpecie.lineNumber = specieStartElement.getLocation().getLineNumber();
-    xmlSbmlSpecie.columnNumber = specieStartElement.getLocation().getColumnNumber();
-    xmlSbmlSpecie.setAttributes(getAttributes(specieStartElement));
+    setupObject(xmlSbmlSpecie, specieStartElement);
+//    xmlSbmlSpecie.lineNumber = specieStartElement.getLocation().getLineNumber();
+//    xmlSbmlSpecie.columnNumber = specieStartElement.getLocation().getColumnNumber();
+//    xmlSbmlSpecie.setAttributes(getAttributes(specieStartElement));
 //    XmlObject xmlObject = new XmlObject();
     XmlObject rdfListItem = null;
     String bqbiolOntology = null;
@@ -278,43 +318,24 @@ public class XmlStreamSbmlReader {
           xmlSbmlSpecie.setNotes(notes);
           break;
         }
-        case BQBIOL_IS:
-          bqbiolOntology = BQBIOL_IS;
-          if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
-            xmlSbmlSpecie.getListOfAnnotations().put(
-                bqbiolOntology, new ArrayList<XmlObject> ());
-          break;
-        case BQBIOL_IS_ENCODED_BY:
-          bqbiolOntology = BQBIOL_IS_ENCODED_BY;
-          if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
-            xmlSbmlSpecie.getListOfAnnotations().put(
-                bqbiolOntology, new ArrayList<XmlObject> ());
-          break;
-        case BQBIOL_IS_DESCRIBED_BY:
-          bqbiolOntology = BQBIOL_IS_DESCRIBED_BY;
-          if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
-            xmlSbmlSpecie.getListOfAnnotations().put(
-                bqbiolOntology, new ArrayList<XmlObject> ());
-          break;
-        case BQBIOL_HAS_PART:
-          bqbiolOntology = BQBIOL_HAS_PART;
-          if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
-            xmlSbmlSpecie.getListOfAnnotations().put(
-                bqbiolOntology, new ArrayList<XmlObject> ());
-        case BQBIOL_IS_VERSION_OF:
-          bqbiolOntology = BQBIOL_IS_VERSION_OF;
-          if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
-            xmlSbmlSpecie.getListOfAnnotations().put(
-                bqbiolOntology, new ArrayList<XmlObject> ());
+        case SBML_ANNOTATION:
+          Map<String, List<XmlObject>> annotation = parseAnnotation(xmlEventReader);
+          xmlSbmlSpecie.setListOfAnnotations(annotation);
           break;
         case DC_RELATION:
-          bqbiolOntology = DC_RELATION;
+        case BQBIOL_IS_VERSION_OF:
+        case BQBIOL_HAS_PART:
+        case BQBIOL_IS_DESCRIBED_BY:
+        case BQBIOL_IS_ENCODED_BY:
+        case BQBIOL_IS:
+        case BQBIOL_U_QUALIFIER:
+          bqbiolOntology = startElementLocalPart;
           if (!xmlSbmlSpecie.getListOfAnnotations().containsKey(bqbiolOntology))
             xmlSbmlSpecie.getListOfAnnotations().put(
                 bqbiolOntology, new ArrayList<XmlObject> ());
           break;
         case RDF_LIST_ITEM:
-          rdfListItem = new XmlObject();
+          rdfListItem = assembleObject(startElement);
           rdfListItem.getAttributes().putAll(getAttributes(startElement));
           break;
         case SBML_SPECIE: {
@@ -322,24 +343,17 @@ public class XmlStreamSbmlReader {
           //						specieObject.attributes.putAll(getAttributes(startElement));
         } break;
         default: 
-          //						LOGGER.trace("+?+ " + startElement.getName().getLocalPart());
+          logger.trace("+?+ " + startElement.getName().getLocalPart());
+          CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
           break;
         }
       } else if (xmlEvent.isEndElement()) {
         EndElement endElement = xmlEvent.asEndElement();
         switch (endElement.getName().getLocalPart()) {
         case BQBIOL_IS:
-          bqbiolOntology = null;
-          break;
         case BQBIOL_IS_ENCODED_BY:
-          bqbiolOntology = null;
-          break;
         case BQBIOL_IS_DESCRIBED_BY:
-          bqbiolOntology = null;
-          break;
         case BQBIOL_HAS_PART:
-          bqbiolOntology = null;
-          break;
         case DC_RELATION:
           bqbiolOntology = null;
           break;
@@ -354,6 +368,8 @@ public class XmlStreamSbmlReader {
           }
           //          System.out.println(xmlSbmlSpecie.getAttributes());
           //          System.out.println(bqbiolOntology);
+//          System.out.println(bqbiolOntology);
+//          System.out.println(rdfListItem);
           xmlSbmlSpecie.getListOfAnnotations()
                        .get(bqbiolOntology)
                        .add(rdfListItem);
@@ -379,7 +395,7 @@ public class XmlStreamSbmlReader {
     }
   }
   
-  public static  List<XmlObject> parseKeyValueDataList(XMLEventReader xmlEventReader) throws XMLStreamException {
+  public List<XmlObject> parseKeyValueDataList(XMLEventReader xmlEventReader) throws XMLStreamException {
     List<XmlObject> kvd = new ArrayList<> ();
     boolean read = true;
     while (xmlEventReader.hasNext() && read) {
@@ -394,6 +410,7 @@ public class XmlStreamSbmlReader {
             break;
           default:
             logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
       } else if (xmlEvent.isEndElement()) {
@@ -430,6 +447,7 @@ public class XmlStreamSbmlReader {
             break;
           default:
             logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
       } else if (xmlEvent.isEndElement()) {
@@ -452,7 +470,7 @@ public class XmlStreamSbmlReader {
     Map<String, List<XmlObject>> annotation = new HashMap<> ();
     boolean read = true;
     String bqbiolOntology = null;
-    XmlObject rdfListItem = null;
+//    XmlObject rdfListItem_ = null;
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
@@ -466,9 +484,9 @@ public class XmlStreamSbmlReader {
             }
             annotation.get(KEY_VALUE_DATA_LIST).addAll(kvdArray);
             break;
-          case "RDF": break;
-          case "Description": break;
-          case "Bag": break;
+          case RDF_RDF: break;
+          case RDF_DESCRIPTION: break;
+          case RDF_Bag: break;
           case FLUXNS_LIMIT:
             bqbiolOntology = "fluxnsLimit";
             initMapList(annotation, bqbiolOntology);
@@ -483,6 +501,8 @@ public class XmlStreamSbmlReader {
 //            System.out.println("FOUND LIMIT ! " + startElement.getName().getNamespaceURI());
 //            System.out.println(getAttributes(startElement));
             break;
+          case BQBIOL_U_QUALIFIER:
+          case BQBIOL_IS_ENCODED_BY:
           case BQBIOL_IS_VERSION_OF:
           case BQBIOL_IS:
           case DC_RELATION:
@@ -491,20 +511,26 @@ public class XmlStreamSbmlReader {
             initMapList(annotation, bqbiolOntology);
             break;
           case RDF_LIST_ITEM:
-            rdfListItem = new XmlObject();
-            rdfListItem.getAttributes().putAll(getAttributes(startElement));
+            if (bqbiolOntology == null) {
+              logger.debug("unknown bqbiolOntology");
+            } else {
+              annotation.get(bqbiolOntology).add(assembleObject(startElement));
+            }
+            
+//            rdfListItem = new XmlObject();
+//            rdfListItem.getAttributes().putAll(getAttributes(startElement));
             break;
           default:
-            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.trace("ignored +++ {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
       } else if (xmlEvent.isEndElement()) {
         EndElement endElement = xmlEvent.asEndElement();
         switch (endElement.getName().getLocalPart()) {
-          case "RDF": break;
-          case "Description": break;
-          case "Bag": break;
-          case "annotation": read = false; break;
+          case RDF_RDF: break;
+          case RDF_DESCRIPTION: break;
+          case RDF_Bag: break;
           case FLUXNS_LIMIT:
           case BQBIOL_IS_VERSION_OF:
           case BQBIOL_IS:
@@ -513,10 +539,11 @@ public class XmlStreamSbmlReader {
             bqbiolOntology = null;
             break;
           case RDF_LIST_ITEM:
-            annotation.get(bqbiolOntology).add(rdfListItem);
+//            annotation.get(bqbiolOntology).add(rdfListItem);
             break;
+          case SBML_ANNOTATION: read = false; break;
           default:
-            logger.warn("ignored --- {}", endElement.getName().getLocalPart());
+            logger.debug("ignored --- {}", endElement.getName().getLocalPart());
             break;
         }
       } else if (xmlEvent.isEndDocument()) {
@@ -540,7 +567,9 @@ public class XmlStreamSbmlReader {
         switch (startElement.getName().getLocalPart()) {
           case "p":
           case SBML_NOTES_BODY: readBody = true; break;
-          default: break;
+          default:
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
         }
         if (readBody) {
           note = String.format("<%s>", startElement.getName().getLocalPart());
@@ -597,7 +626,8 @@ public class XmlStreamSbmlReader {
           case SBML_KINETIC_LAW_MATH:
             //for now do nothing !
             break;
-          default: break;
+          default:
+            break;
         }
 //        if (readBody) {
 //          note = String.format("<%s>", startElement.getName().getLocalPart());
@@ -655,6 +685,67 @@ public class XmlStreamSbmlReader {
     return list;
   }
   
+  public MultiNodeTree<Object> parseFbcGeneProductAssociation(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
+    MultiNodeTree<Object> tree = null;
+    while (xmlEventReader.hasNext()) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        logger.debug("+++ {}", startElement.getName().getLocalPart());
+        switch (startElement.getName().getLocalPart()) {
+          case "and":
+            MultiNodeTree<Object> andTree = new MultiNodeTree<>(Operator.AND);
+            if (tree != null) {
+              tree.addChild(andTree);
+            }
+            tree = andTree;
+            break;
+          case "or":
+            MultiNodeTree<Object> orTree = new MultiNodeTree<>(Operator.OR);
+            if (tree != null) {
+              tree.addChild(orTree);
+            }
+            tree = orTree;
+            break;
+          case "geneProductRef":
+            MultiNodeTree<Object> leaf = 
+              new MultiNodeTree<>(getAttributes(startElement));
+//            System.out.println(getAttributes(startElement));
+            if (tree == null) {
+              tree = leaf;
+            } else {
+              tree.addChild(leaf);
+            }
+            break;
+          default:
+            logger.debug("??? {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
+        }
+      } else if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+          // and|or go back !
+          case "and":
+          case "or":
+            if (tree.parent != null) {
+              tree = tree.parent;
+            }
+            break;
+        }
+        boolean end = xmlEvent.isEndElement() && 
+            xmlEvent.asEndElement().getName().getLocalPart().equals("geneProductAssociation");
+
+        if (end) {
+          logger.debug("end");
+          break;
+        }
+      }
+    }
+    
+    return tree;
+  }
+  
   public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
     logger.debug("+++ reading reaction");
     boolean read = true;
@@ -695,8 +786,13 @@ public class XmlStreamSbmlReader {
           case SBML_REACTION_KINETIC_LAW:
             sbmlReaction.getListOfParameters().addAll(parseKineticLaw(xmlEventReader, startElement));
             break;
-          default: 
-//            System.out.println("###reaction###what do with " + startElement.getName().getLocalPart()); 
+          case "geneProductAssociation":
+            MultiNodeTree<Object> gpr = parseFbcGeneProductAssociation(xmlEventReader, startElement);
+            sbmlReaction.setGpr(gpr);
+            break;
+          default:
+            logger.debug("??? {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
       } else if (xmlEvent.isEndElement()) {
@@ -714,6 +810,69 @@ public class XmlStreamSbmlReader {
     return sbmlReaction;
   }
 
+  
+  public XmlObject assembleObject(StartElement startElement) {
+    XmlObject object = new XmlObject();
+    setupObject(object, startElement);
+    
+    return object;
+  }
+  
+  public void setupObject(XmlObject xo, StartElement startElement) {
+    xo.columnNumber = startElement.getLocation().getColumnNumber();
+    xo.lineNumber = startElement.getLocation().getLineNumber();
+    xo.setAttributes(getAttributes(startElement));
+  }
+  
+  public List<XmlUnitDefinition> parseSbmlUnits(XMLEventReader xmlEventReader, StartElement groupStartElement, String end) throws XMLStreamException {
+    List<XmlUnitDefinition> units = new ArrayList<> ();
+    boolean read = true;
+    XmlUnitDefinition definition = new XmlUnitDefinition();
+    XmlObject unit = null;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        switch (startElement.getName().getLocalPart()) {
+          case SBML_UNIT_DEFINITION:
+            definition = new XmlUnitDefinition();
+            setupObject(definition, startElement);
+            break;
+          case SBML_LIST_OF_UNITS:
+            break;
+          case SBML_LIST_OF_UNITS_UNIT:
+            unit = assembleObject(startElement);
+            definition.listOfUnits.add(unit);
+            break;
+          case SBML_ANNOTATION:
+            Map<String, List<XmlObject>> annotation = parseAnnotation(xmlEventReader);
+            definition.setListOfAnnotations(annotation);
+            break;
+          default:
+            logger.info("+?+ " + startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
+        }
+      } else if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        String localPart = endElement.getName().getLocalPart();
+        if (localPart.equals(end)) {
+          read = false;
+        }
+        switch (localPart) {
+          case SBML_LIST_OF_UNITS:
+            units.add(definition);
+            break;
+          default:
+            logger.trace("-?- " + endElement.getName().getLocalPart());
+            break;
+        }
+      }
+    }
+    
+    return units;
+  }
+  
   public XmlSbmlGroup parseGroup(XMLEventReader xmlEventReader, StartElement groupStartElement) throws XMLStreamException {
     logger.debug("+++ reading group");
     boolean read = true;
@@ -735,8 +894,9 @@ public class XmlStreamSbmlReader {
           member= new XmlObject();
           member.getAttributes().putAll(getAttributes(startElement));
           break;
-        default: 
+        default:
           logger.trace("+?+ " + startElement.getName().getLocalPart());
+          CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
           break;
         }
       } else if (xmlEvent.isEndElement()) {

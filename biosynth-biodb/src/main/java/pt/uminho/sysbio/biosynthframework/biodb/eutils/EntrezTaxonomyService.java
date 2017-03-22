@@ -13,7 +13,7 @@ import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 
 public class EntrezTaxonomyService {
-  private EutilsService eutilsService;
+  public EutilsService eutilsService;
 
   public EntrezTaxonomyService() {
     

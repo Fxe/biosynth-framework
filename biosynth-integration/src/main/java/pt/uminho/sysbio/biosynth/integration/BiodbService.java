@@ -122,4 +122,14 @@ public interface BiodbService {
   public Map<Long, Long> getReactionUnificationMap();
   public Map<Long, Long> getModelSpecieUnificationMap();
   public Map<Long, Long> getModelReactionUnificationMap();
+  
+  //taxonomy
+  public Long getModelTaxonomyId(long modelId);
+  
+  public Long getTaxonomyParentId(long txId);
+  
+  public Set<Long> getAllTaxonomyIds();
+  
+  //taxa proteins
+  public Set<Long> getAllTaxonomyProteins(long txId);
 }

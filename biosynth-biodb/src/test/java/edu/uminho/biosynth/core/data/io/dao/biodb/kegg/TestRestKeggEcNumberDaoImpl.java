@@ -13,31 +13,31 @@ public class TestRestKeggEcNumberDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		rest = new RestKeggECNumberDaoImpl();
-		rest.setLocalStorage(folder);
-		rest.setSaveLocalStorage(true);
-		rest.setUseLocalStorage(true);
-		rest.createFolder();
+//		rest = new RestKeggECNumberDaoImpl();
+//		rest.setLocalStorage(folder);
+//		rest.setSaveLocalStorage(true);
+//		rest.setUseLocalStorage(true);
+//		rest.createFolder();
 	}
 	
 	@Test
 	public void test1(){
-//		KeggECNumberEntity ecEntity = rest.getECNumberByEntry("2.4.1.44");
-		KeggECNumberEntity ecEntity = rest.getECNumberByEntry("1.1.1.1");
-		System.out.println("Entry: " + ecEntity.getEntry());
-		System.out.println("Paths:");
-		for(String e : ecEntity.getPathways())
-			System.out.println(e);
-		System.out.println("Orthologs:");
-		for(String e : ecEntity.getOrthologs())
-			System.out.println(e);
-		System.out.println("Genes:");
-		System.out.println(ecEntity.getGenes());
-		System.out.println("Reactions (" + ecEntity.getReactions().size() + "):");
-		for(String e : ecEntity.getReactions())
-			System.out.println(e);
-		System.out.println("Substrates:");
-		System.out.println(ecEntity.getPropertyValues("SUBSTRATE"));
+////		KeggECNumberEntity ecEntity = rest.getECNumberByEntry("2.4.1.44");
+//		KeggECNumberEntity ecEntity = rest.getECNumberByEntry("1.1.1.1");
+//		System.out.println("Entry: " + ecEntity.getEntry());
+//		System.out.println("Paths:");
+//		for(String e : ecEntity.getPathways())
+//			System.out.println(e);
+//		System.out.println("Orthologs:");
+//		for(String e : ecEntity.getOrthologs())
+//			System.out.println(e);
+//		System.out.println("Genes:");
+//		System.out.println(ecEntity.getGenes());
+//		System.out.println("Reactions (" + ecEntity.getReactions().size() + "):");
+//		for(String e : ecEntity.getReactions())
+//			System.out.println(e);
+//		System.out.println("Substrates:");
+//		System.out.println(ecEntity.getPropertyValues("SUBSTRATE"));
 	}
 
 }

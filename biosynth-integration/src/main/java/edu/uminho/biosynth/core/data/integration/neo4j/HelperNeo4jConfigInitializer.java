@@ -31,7 +31,9 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE CONSTRAINT ON (rpr : %s) ASSERT rpr.entry IS UNIQUE", GlobalLabel.KeggReactionPair),
       String.format("CREATE CONSTRAINT ON (pwy : %s) ASSERT pwy.entry IS UNIQUE", GlobalLabel.KeggPathway),
       String.format("CREATE CONSTRAINT ON (ecn : %s) ASSERT ecn.entry IS UNIQUE", GlobalLabel.EnzymeCommission),
-      String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.UniProt),
+//      String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.UniProt),
+      String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.UniProtAccession),
+      String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.UniProtProtein),
       String.format("CREATE CONSTRAINT ON (sgd : %s) ASSERT sgd.entry IS UNIQUE", GlobalLabel.SGD),
 //      String.format("CREATE CONSTRAINT ON (exp : %s) ASSERT exp.entry IS UNIQUE", GlobalLabel.ExPASy),
       String.format("CREATE CONSTRAINT ON (tax : %s) ASSERT tax.entry IS UNIQUE", GlobalLabel.EntrezTaxonomy),
@@ -48,6 +50,7 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE INDEX ON :%s(proxy)", GlobalLabel.Reaction),
       String.format("CREATE INDEX ON :%s(proxy)", GlobalLabel.Gene),
       
+      String.format("CREATE INDEX ON :%s(locus)", GlobalLabel.UniProtProtein),
       String.format("CREATE INDEX ON :%s(locus)", GlobalLabel.NCBIGene),
       String.format("CREATE INDEX ON :%s(old_locus)", GlobalLabel.NCBIGene),
       String.format("CREATE INDEX ON :%s(accession)", GlobalLabel.NCBIGene),

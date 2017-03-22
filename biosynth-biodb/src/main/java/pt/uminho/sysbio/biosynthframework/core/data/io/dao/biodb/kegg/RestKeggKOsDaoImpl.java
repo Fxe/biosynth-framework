@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggKOEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGenericEntityFlatFileParser;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggOrthologyFlatFileParser;
 
 public class RestKeggKOsDaoImpl
 extends AbstractRestfulKeggDao {
@@ -27,10 +28,13 @@ extends AbstractRestfulKeggDao {
         KeggKOEntity ko = null;
         
         try {
-            LOGGER.info(restRxnQuery);
-            LOGGER.info(localPath);
+            LOGGER.debug(restRxnQuery);
+            LOGGER.debug(localPath);
             String koFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + ".txt");
+            KeggOrthologyFlatFileParser parser = new KeggOrthologyFlatFileParser(koFlatFile);
+            
             ko = KeggGenericEntityFlatFileParser.parse(KeggKOEntity.class, koFlatFile);
+            ko.g.addAll(parser.getGenes());
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }

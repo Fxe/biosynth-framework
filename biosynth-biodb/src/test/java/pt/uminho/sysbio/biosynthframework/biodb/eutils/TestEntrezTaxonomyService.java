@@ -32,7 +32,13 @@ public class TestEntrezTaxonomyService {
   public void tearDown() throws Exception {
   }
   
-  @Test
+//  @Test
+  public void test_nuccore() {
+    EntrezTaxonomyService service = new EntrezTaxonomyService();
+    service.eutilsService.efetchNucleotide("", EntrezRetmode.xml, "");
+  }
+  
+//  @Test
   public void test_search_yeast() {
     EntrezTaxonomyService service = new EntrezTaxonomyService();
     EntrezSearchResult taxon = service.searchGenes(326442L, 2, 0);

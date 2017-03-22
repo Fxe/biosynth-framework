@@ -19,6 +19,7 @@ public enum GlobalLabel implements Label {
 	//Things that I have no clue where to put !
 	EntrezTaxonomy, NCBIGene, NCBINucleotide, NCBIProtein,
 	UniProtAccession,
+	UniProtProtein,
 	UniProt, Gene, EnzymePortal, BrendaEnzyme, SGD, Phenotype, ExPASy,
 	PROSITE, PDB, PFAM, PROTEINMODELPORTAL,
 	KeggReactionPair, Hypothetical,

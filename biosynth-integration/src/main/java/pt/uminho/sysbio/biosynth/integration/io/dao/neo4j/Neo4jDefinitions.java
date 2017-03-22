@@ -48,4 +48,9 @@ public interface Neo4jDefinitions {
    * Object category
    */
   public final static String ENTITY_TYPE = "entityType";
+  
+  /**
+   * Origin of the annotation
+   */
+  public final static String ANNOTATION_SOURCE = "source";
 }

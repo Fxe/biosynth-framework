@@ -37,6 +37,14 @@ public class DefaultUniprotService {
     return null;
   }
   
+  //proteome:UP000001425
+  public UniprotResult getGetEntriesByProteome(String uprotmEntry) {
+    String query = String.format("proteome:%s", uprotmEntry);
+    UniprotResult result = service.query(query, "xml");
+    return result;
+  }
+  
+  
   public UniprotResult getGetEntriesByTaxonomy(long txid) {
     String query = String.format("organism:%d", txid);
     UniprotResult result = service.query(query, "xml");

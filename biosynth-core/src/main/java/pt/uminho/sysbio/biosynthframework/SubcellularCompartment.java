@@ -24,6 +24,7 @@ public enum SubcellularCompartment {
   CARBOXYSOME,
   
   THYLAKOID_LUMEN,
+  THYLAKOID_MEMBRANE,
   
          GOLGI_MEMBRANE,
   MITOCHONDRIA_MEMBRANE,

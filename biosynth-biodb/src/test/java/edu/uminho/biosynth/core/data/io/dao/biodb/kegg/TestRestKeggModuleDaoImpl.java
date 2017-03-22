@@ -13,34 +13,34 @@ public class TestRestKeggModuleDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		rest = new RestKeggModuleDaoImpl();
-		rest.setLocalStorage(folder);
-		rest.setSaveLocalStorage(true);
-		rest.setUseLocalStorage(true);
-		rest.createFolder();
+//		rest = new RestKeggModuleDaoImpl();
+//		rest.setLocalStorage(folder);
+//		rest.setSaveLocalStorage(true);
+//		rest.setUseLocalStorage(true);
+//		rest.createFolder();
 	}
 	
 	@Test
 	public void test1(){
-//		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00016");
-		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00763");
-		
-		System.out.println("Entry: " + moduleEntity.getEntry());
-		System.out.println("Definition: " + moduleEntity.getDefinition());
-		System.out.println("Module type: " + moduleEntity.getType());
-		System.out.println("Paths:");
-		for(String e : moduleEntity.getPathways())
-			System.out.println(e);
-		System.out.println("Orthologs:");
-		if(moduleEntity.getOrthologs()!=null)
-			for(String e : moduleEntity.getOrthologs())
-				System.out.println(e);
-		System.out.println("Compounds:");
-		for(String e : moduleEntity.getCompounds())
-			System.out.println(e);
-		System.out.println("Reactions:");
-		for(String e : moduleEntity.getReactions())
-			System.out.println(e);
+////		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00016");
+//		KeggModuleEntity moduleEntity = rest.getModuleByEntry("M00763");
+//		
+//		System.out.println("Entry: " + moduleEntity.getEntry());
+//		System.out.println("Definition: " + moduleEntity.getDefinition());
+//		System.out.println("Module type: " + moduleEntity.getType());
+//		System.out.println("Paths:");
+//		for(String e : moduleEntity.getPathways())
+//			System.out.println(e);
+//		System.out.println("Orthologs:");
+//		if(moduleEntity.getOrthologs()!=null)
+//			for(String e : moduleEntity.getOrthologs())
+//				System.out.println(e);
+//		System.out.println("Compounds:");
+//		for(String e : moduleEntity.getCompounds())
+//			System.out.println(e);
+//		System.out.println("Reactions:");
+//		for(String e : moduleEntity.getReactions())
+//			System.out.println(e);
 	}
 	
 }

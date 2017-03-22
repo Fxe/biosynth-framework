@@ -34,11 +34,11 @@ public class TestRestKeggPathwayDaoImpl {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		rest = new RestKeggPathwaysDaoImpl();
-		rest.setLocalStorage(folder);
-		rest.setSaveLocalStorage(true);
-		rest.setUseLocalStorage(true);
-		rest.createFolder();
+//		rest = new RestKeggPathwaysDaoImpl();
+//		rest.setLocalStorage(folder);
+//		rest.setSaveLocalStorage(true);
+//		rest.setUseLocalStorage(true);
+//		rest.createFolder();
 	}
 	
 //	@Test
@@ -89,7 +89,7 @@ public class TestRestKeggPathwayDaoImpl {
 	}
 	
 	
-	@Test
+//	@Test
 	public void testPaths(){
 		int i=0, total=paths.length;
 		Set<String> pathsWithStepsWithNoEc = new TreeSet<>();

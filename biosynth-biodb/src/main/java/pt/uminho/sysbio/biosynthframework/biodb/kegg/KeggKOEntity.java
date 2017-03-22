@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
 public class KeggKOEntity extends KeggEntity{
@@ -14,7 +16,7 @@ public class KeggKOEntity extends KeggEntity{
     protected Set<String> modules;
     protected Set<String> pathways;
     protected Set<String> ecNumbers;
-    
+    public Set<Pair<String, String>> g = new HashSet<> ();
     
     public void addGene(String gene){
         if(genes==null)

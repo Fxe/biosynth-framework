@@ -37,7 +37,7 @@ public abstract class AbstractRestfulKeggDao {
 		if (httpResponseString.isEmpty()) return null;
 		
 		if (saveLocalStorage && didFetch) {
-//			System.out.println("SAVING !" + localPath);
+			System.out.println("SAVING !" + localPath);
 		  IOUtils.writeToFile(httpResponseString, localPath);			
 		}
 		

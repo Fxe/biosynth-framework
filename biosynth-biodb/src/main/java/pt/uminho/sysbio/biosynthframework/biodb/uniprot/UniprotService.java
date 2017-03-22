@@ -17,5 +17,5 @@ public interface UniprotService {
   
   @GET("/uniprot/{entry}")
   public Object getByEntry_(@Path("entry") String entry);
-
+  //proteome:UP000001425
 }

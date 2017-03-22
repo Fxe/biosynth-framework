@@ -26,23 +26,28 @@ extends AbstractRestfulKeggDao  {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestKeggGenesDaoImpl.class);
 	private static final String restGeneQuery = "http://rest.kegg.jp/get/%s";
-	
+	public boolean replace = false;
 
 	public KeggGeneEntity getGeneByEntry(String entry) {
 		String restGeneQuery = String.format(RestKeggGenesDaoImpl.restGeneQuery, entry);
 		String localPath = getPathFolder() + entry ;
 		KeggGeneEntity geneEntity = null;
 		
+		if (replace) {
+		  localPath = localPath.replace(':', '_');
+		}
+		
 		try {
-			LOGGER.info(restGeneQuery);
-			LOGGER.info(localPath);
+			LOGGER.debug(restGeneQuery);
+			LOGGER.debug(localPath);
 			String rnFlatFile = this.getLocalOrWeb(restGeneQuery, localPath + ".txt");
+//			System.out.println(rnFlatFile);
 			geneEntity = KeggGenericEntityFlatFileParser.parse(KeggGeneEntity.class, rnFlatFile);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
 		
-		System.out.println(geneEntity.getDefinition());
+//		System.out.println(geneEntity.getDefinition());
 		return geneEntity;
 	}
 

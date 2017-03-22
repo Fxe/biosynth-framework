@@ -40,11 +40,21 @@ public class TestDefaultUniprotService {
     
 //    UniprotResult result = service.getGetEntriesByTaxonomy(160488);
     //9986
-    UniprotResult result = service.getGetEntriesByTaxonomy(559292L);
+    //566546
+    //559292L
+    //566546L ecoli W
+    //1148L -> 1111708L
+//    UniprotResult result = service.getGetEntriesByTaxonomy(63612L);
+//    UniprotResult result = service.getGetEntriesByTaxonomy(343509L);
+    //UP000031874
+    //UP000001425 Synechocystis sp. (strain PCC 6803 / Kazusa)
     
+    UniprotResult result = service.getGetEntriesByProteome("UP000031874");
     for (UniprotEntry e : result.entries) {
-      System.out.println(e.name + "\t" + e.accession);
-      System.out.println("\t" + e.getLocus());
+      System.out.println(e.dataset + "\t" + e.name + "\t" + e.accession + "\t" + e.getLocus());
+      System.out.println("\t" + e.evidence);
+//      System.out.println("\t" + e.sequence.sequence.trim());
+      System.out.println("\t" + e.organism.getNCBITaxonomyId());
     }
     System.out.println(result.entries.size());
     

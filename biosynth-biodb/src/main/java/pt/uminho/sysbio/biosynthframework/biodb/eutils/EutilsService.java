@@ -25,5 +25,10 @@ public interface EutilsService {
                                     @Query("term") String term,
                                     @Query("retmax") int retmax,
                                     @Query("retstart") int retstart);
-
+  
+  @GET("/efetch.fcgi?db=nuccore")
+  public EntrezGeneSet efetchNucleotide(@Query("id") String id, 
+                                        @Query("retmode") EntrezRetmode retmode,
+                                        @Query("retmode") String rettype);
+//efetch.fcgi?db=nuccore&id=383394742&retmode=xml
 }

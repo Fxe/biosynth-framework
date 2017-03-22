@@ -221,7 +221,9 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       String cmpEntry = String.format("%s@%s", spiCmp, modelEntry);
       Node cmpNode = Neo4jUtils.getUniqueResult(graphDatabaseService
           .findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
-      node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
+      if (cmpNode != null) {
+        node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
+      }
       
       //FIXME: temp hammer to fix typo ... and field names
       if (node.hasProperty("compartment")) {

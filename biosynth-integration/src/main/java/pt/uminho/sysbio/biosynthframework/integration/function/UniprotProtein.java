@@ -23,6 +23,8 @@ public class UniprotProtein implements Function<UniprotEntry, Map<String, Object
     properties.put("modified", entry.modified);
     properties.put("dataset", entry.dataset);
     properties.put("version", entry.version);
+    properties.put("locus", entry.getLocus());
+    
 //    properties.put("ParentTaxId", taxon.ParentTaxId);
 //    properties.put("PubDate", taxon.PubDate);
 //    properties.put("rank", taxon.rank);
@@ -57,6 +59,7 @@ public class UniprotProtein implements Function<UniprotEntry, Map<String, Object
     result.put(Neo4jDefinitions.PROXY_PROPERTY, false);
     return result;
   }
+
   
   @Override
   public Map<String, Object> apply(UniprotEntry entry) {

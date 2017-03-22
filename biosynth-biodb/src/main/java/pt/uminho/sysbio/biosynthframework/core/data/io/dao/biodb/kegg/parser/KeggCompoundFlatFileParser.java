@@ -15,7 +15,6 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 
 	public KeggCompoundFlatFileParser(String flatfile) {
 		super(flatfile);
-		
 		this.parseContent();
 	}
 	
@@ -23,7 +22,6 @@ public class KeggCompoundFlatFileParser extends AbstractKeggFlatFileParser imple
 	public String getEntry() {
 		int tabIndex = this.getTabIndex("ENTRY");
 		String content = this.tabContent_.get(tabIndex);
-		
 		return content;
 	}
 
