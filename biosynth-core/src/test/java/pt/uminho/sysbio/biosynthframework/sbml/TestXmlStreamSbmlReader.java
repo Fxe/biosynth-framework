@@ -64,7 +64,7 @@ public class TestXmlStreamSbmlReader {
 //      e.printStackTrace();
 //    }
     
-    
+/*    
     XmlStreamSbmlReader sbmlReader = new XmlStreamSbmlReader(
         new FileInputStream(SBML_PATH));
     XmlSbmlModel model = sbmlReader.parse();
@@ -75,6 +75,7 @@ public class TestXmlStreamSbmlReader {
       System.out.println("\t" + xud.listOfUnits);
     }
     System.out.println(sbmlReader.rejectedElements);
+*/
 //    System.out.println(model.getSbmlAttributes());
 //    System.out.println(model);
 //    for (XmlSbmlCompartment compartment : model.getCompartments()) {
