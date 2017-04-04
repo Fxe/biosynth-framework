@@ -73,4 +73,9 @@ public class XmlSbmlSpecieToNeo4jNodeTransform implements EtlTransform<XmlSbmlSp
 		}
 	}
 
+  @Override
+  public DefaultNeo4jEntityNode apply(XmlSbmlSpecie t) {
+    return etlTransform(t);
+  }
+
 }

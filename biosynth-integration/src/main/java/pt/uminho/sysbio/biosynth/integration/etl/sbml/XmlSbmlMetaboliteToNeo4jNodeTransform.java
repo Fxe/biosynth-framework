@@ -33,4 +33,9 @@ public class XmlSbmlMetaboliteToNeo4jNodeTransform extends AbstractNeo4jDao impl
 		return true;
 	}
 
+  @Override
+  public Node apply(XMLSbmlMetabolicModel t) {
+    return etlTransform(t);
+  }
+
 }

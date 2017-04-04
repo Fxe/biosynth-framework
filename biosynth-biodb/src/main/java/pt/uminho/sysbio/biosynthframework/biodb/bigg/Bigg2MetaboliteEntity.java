@@ -43,17 +43,17 @@ public class Bigg2MetaboliteEntity extends GenericMetabolite {
   public void setModelList(List<String> modelList) { this.modelList = modelList;}
   
   @OneToMany(mappedBy = "bigg2MetaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-  private List<Bigg2MetaboliteCrossreferenceEntity> crossReferences = new ArrayList<> ();
-  public List<Bigg2MetaboliteCrossreferenceEntity> getCrossreferences() { return crossReferences; }
+  private List<Bigg2MetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();
+  public List<Bigg2MetaboliteCrossreferenceEntity> getCrossreferences() { return crossreferences; }
   public void setCrossReferences(List<Bigg2MetaboliteCrossreferenceEntity> crossReferences) {
-    this.crossReferences = new ArrayList<>(crossReferences);
-    for (Bigg2MetaboliteCrossreferenceEntity crossReference : this.crossReferences) {
+    this.crossreferences = new ArrayList<>(crossReferences);
+    for (Bigg2MetaboliteCrossreferenceEntity crossReference : this.crossreferences) {
       crossReference.setBigg2MetaboliteEntity(this);
     }
   }
   
   public void addCrossReference(Bigg2MetaboliteCrossreferenceEntity crossReference) {
-    this.crossReferences.add(crossReference);
+    this.crossreferences.add(crossReference);
     crossReference.setBigg2MetaboliteEntity(this);
   }
 }

@@ -95,6 +95,11 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 
     return centralMetaboliteEntity;
   }
+  
+  @Override
+  public GraphMetaboliteEntity apply(M t) {
+    return etlTransform(t);
+  }
 
   protected void configureProperties(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite) {
     centralMetaboliteEntity.setMajorLabel(majorLabel);
@@ -268,7 +273,6 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
   }
   protected void configureGenericPropertyLink(GraphMetaboliteEntity centralMetaboliteEntity, Object value, MetabolitePropertyLabel label, MetaboliteRelationshipType relationship) {
     if (value != null) {
-      
       centralMetaboliteEntity.addConnectedEntity(
           this.buildPair(
               new SomeNodeFactory().buildGraphMetabolitePropertyEntity(label, value), 

@@ -64,6 +64,11 @@ implements EtlTransform<R, GraphReactionEntity> {
 		return centralReactionEntity;
 	}
 	
+	@Override
+	public GraphReactionEntity apply(R t) {
+	  return etlTransform(t);
+	}
+	
 	protected Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
 			AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
 		Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p =

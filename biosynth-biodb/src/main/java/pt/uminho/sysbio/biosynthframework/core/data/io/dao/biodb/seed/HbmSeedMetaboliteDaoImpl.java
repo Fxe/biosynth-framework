@@ -17,72 +17,69 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 @Repository
 public class HbmSeedMetaboliteDaoImpl implements MetaboliteDao<SeedMetaboliteEntity> {
 
-	private SessionFactory sessionFactory;
-	public SessionFactory getSessionFactory() { return sessionFactory;}
-	public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
-	
-	@Autowired
-	public HbmSeedMetaboliteDaoImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-	
-	private Session getSession() {
-		return this.sessionFactory.getCurrentSession();
-	}
-	
-	
+  private SessionFactory sessionFactory;
+  public SessionFactory getSessionFactory() { return sessionFactory;}
+  public void setSessionFactory(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory;}
 
-	@Override
-	public SeedMetaboliteEntity getMetaboliteById(Serializable id) {
-		Object cpd = this.getSession().get(SeedMetaboliteEntity.class, id);
-		return SeedMetaboliteEntity.class.cast(cpd);
-	}
+  @Autowired
+  public HbmSeedMetaboliteDaoImpl(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
 
-	@Override
-	public SeedMetaboliteEntity saveMetabolite(
-			SeedMetaboliteEntity metabolite) {
-		this.getSession().save(metabolite);
-		return metabolite;
-	}
+  private Session getSession() {
+    return this.sessionFactory.getCurrentSession();
+  }
 
-	@Override
-	public List<Serializable> getAllMetaboliteIds() {
-		Query query = this.getSession().createQuery("SELECT cpd.id FROM SeedMetaboliteEntity cpd");
-		@SuppressWarnings("unchecked")
-		List<Serializable> res = query.list();
-		return res;
-	}
+  @Override
+  public SeedMetaboliteEntity getMetaboliteById(Serializable id) {
+    Object cpd = this.getSession().get(SeedMetaboliteEntity.class, id);
+    return SeedMetaboliteEntity.class.cast(cpd);
+  }
 
-	@Override
-	public Serializable save(SeedMetaboliteEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public SeedMetaboliteEntity saveMetabolite(
+      SeedMetaboliteEntity metabolite) {
+    this.getSession().save(metabolite);
+    return metabolite;
+  }
 
-	@Override
-	public Serializable saveMetabolite(Object metabolite) {
-		this.getSession().save(metabolite);
-		return null;
-	}
+  @Override
+  public List<Serializable> getAllMetaboliteIds() {
+    Query query = this.getSession().createQuery("SELECT cpd.id FROM SeedMetaboliteEntity cpd");
+    @SuppressWarnings("unchecked")
+    List<Serializable> res = query.list();
+    return res;
+  }
 
-	@Override
-	public SeedMetaboliteEntity getMetaboliteByEntry(String entry) {
-		SeedMetaboliteEntity cpd = null;
-		Criteria criteria = this.getSession().createCriteria(SeedMetaboliteEntity.class);
-		List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
-		if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
-		for (Object o: res) {
-			cpd = SeedMetaboliteEntity.class.cast(o);
-		}
-		return cpd;
-	}
+  @Override
+  public Serializable save(SeedMetaboliteEntity entity) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	public List<String> getAllMetaboliteEntries() {
-		Query query = this.getSession().createQuery("SELECT cpd.entry FROM SeedMetaboliteEntity cpd");
-		@SuppressWarnings("unchecked")
-		List<String> res = query.list();
-		return res;
-	}
+  @Override
+  public Serializable saveMetabolite(Object metabolite) {
+    return this.getSession().save(metabolite);
+  }
+
+  @Override
+  public SeedMetaboliteEntity getMetaboliteByEntry(String entry) {
+    SeedMetaboliteEntity cpd = null;
+    Criteria criteria = this.getSession().createCriteria(SeedMetaboliteEntity.class);
+    List<?> res = criteria.add(Restrictions.eq("entry", entry)).list();
+    if (res.size() > 1) throw new RuntimeException("Entry uniqueness fail multiple records found for [" + entry + "]");
+    for (Object o: res) {
+      cpd = SeedMetaboliteEntity.class.cast(o);
+    }
+    return cpd;
+  }
+
+  @Override
+  public List<String> getAllMetaboliteEntries() {
+    Query query = this.getSession().createQuery("SELECT cpd.entry FROM SeedMetaboliteEntity cpd");
+    @SuppressWarnings("unchecked")
+    List<String> res = query.list();
+    return res;
+  }
 
 }

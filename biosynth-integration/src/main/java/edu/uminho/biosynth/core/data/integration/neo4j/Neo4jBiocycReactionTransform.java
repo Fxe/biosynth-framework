@@ -152,4 +152,9 @@ public class Neo4jBiocycReactionTransform implements EtlTransform<BioCycReaction
 		
 		return dataReactionProperty;
 	}
+
+  @Override
+  public CentralDataReactionEntity apply(BioCycReactionEntity t) {
+    return etlTransform(t);
+  }
 }

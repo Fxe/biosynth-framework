@@ -7,6 +7,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
+@Deprecated
 public class FixMe implements EtlTransform<BiggMetaboliteEntity, GraphMetaboliteEntity> {
 
 	@Override
@@ -27,5 +28,10 @@ public class FixMe implements EtlTransform<BiggMetaboliteEntity, GraphMetabolite
 //		
 		return metaboliteEntity;
 	}
+
+  @Override
+  public GraphMetaboliteEntity apply(BiggMetaboliteEntity t) {
+    return etlTransform(t);
+  }
 
 }

@@ -95,5 +95,6 @@ ext {
     // testing
     junit: "junit:junit:${junitVersion}",
     h2: "com.h2database:h2:${h2Version}",
+    mysql: "mysql:mysql-connector-java:6.0.6",
   ]
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -15,6 +16,8 @@ public abstract class AbstractHbmMetaboliteDao<T extends Metabolite> implements 
 
   protected final SessionFactory sessionFactory;
   private final Class<T> clazz;
+  private final String listIdQuery;
+  private final String listEntryQuery;
   
   protected Session getSession() {
       return this.sessionFactory.getCurrentSession();
@@ -26,6 +29,8 @@ public abstract class AbstractHbmMetaboliteDao<T extends Metabolite> implements 
   public AbstractHbmMetaboliteDao(SessionFactory sessionFactory, Class<T> clazz) {
     this.sessionFactory = sessionFactory;
     this.clazz = clazz;
+    this.listIdQuery = String.format("SELECT cpd.id FROM %s cpd", clazz.getSimpleName());
+    this.listEntryQuery = String.format("SELECT cpd.entry FROM %s cpd", clazz.getSimpleName());
   }
   
   @Override
@@ -57,10 +62,20 @@ public abstract class AbstractHbmMetaboliteDao<T extends Metabolite> implements 
   }
 
   @Override
-  public abstract List<Serializable> getAllMetaboliteIds();
+  public List<Serializable> getAllMetaboliteIds() {
+    Query query = this.getSession().createQuery(listIdQuery);
+    @SuppressWarnings("unchecked")
+    List<Serializable> res = query.list();
+    return res;
+  }
 
   @Override
-  public abstract List<String> getAllMetaboliteEntries();
+  public List<String> getAllMetaboliteEntries() {
+    Query query = this.getSession().createQuery(listEntryQuery);
+    @SuppressWarnings("unchecked")
+    List<String> res = query.list();
+    return res;
+  }
 
   @Override
   public Serializable save(T entity) {

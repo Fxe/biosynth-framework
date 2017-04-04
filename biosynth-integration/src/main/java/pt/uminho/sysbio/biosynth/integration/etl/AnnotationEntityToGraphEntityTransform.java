@@ -78,4 +78,9 @@ public class AnnotationEntityToGraphEntityTransform<R> implements EtlTransform<R
 		return result;
 	}
 
+  @Override
+  public GraphReactionEntity apply(R t) {
+    return etlTransform(t);
+  }
+
 }

@@ -13,15 +13,22 @@ import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
 public class BioDbDictionary {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(BioDbDictionary.class);
+	private final static Logger logger = LoggerFactory.getLogger(BioDbDictionary.class);
 	
 	public static String translateDatabase(String db) {
-		if (getDbDictionary().containsKey(db)) {
-			return getDbDictionary().get(db);
-		}
-		
-		LOGGER.error(String.format("[%s] not found in translation dictionary", db));
-		return "NOTFOUND";
+	  try {
+	    MetaboliteMajorLabel database = MetaboliteMajorLabel.valueOf(db);
+	    return database.toString();
+	  } catch (IllegalArgumentException e) {
+	    logger.trace("not framework standard database {}, try translate...", db);
+	  }
+
+	  if (getDbDictionary().containsKey(db)) {
+	    return getDbDictionary().get(db);
+	  }
+
+	  logger.error(String.format("[%s] not found in translation dictionary", db));
+	  return "NOTFOUND";
 	}
 	
 //	public static String translateToLabel(String db) {

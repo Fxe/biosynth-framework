@@ -9,4 +9,5 @@ dependencies {
   
   testCompile ( libraries.spring_test)
   testCompile ( libraries.h2)
+  testCompile ( libraries.mysql)
 }
