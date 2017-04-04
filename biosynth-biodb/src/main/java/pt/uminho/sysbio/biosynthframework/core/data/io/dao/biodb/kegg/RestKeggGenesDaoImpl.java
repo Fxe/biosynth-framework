@@ -8,15 +8,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import pt.uminho.sysbio.biosynthframework.Orientation;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggECNumberEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGeneEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionEntity;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGeneFlatFileParser;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGenericEntityFlatFileParser;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggReactionFlatFileParser;
-import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 
 public class RestKeggGenesDaoImpl

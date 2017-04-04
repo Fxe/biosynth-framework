@@ -25,7 +25,6 @@ import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.Operator;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
-import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 /**
  * Java XML reader for SBML models

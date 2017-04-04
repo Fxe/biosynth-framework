@@ -12,6 +12,8 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.Keg
 
 public class KeggKOEntity extends KeggEntity{
     
+  private static final long serialVersionUID = 1L;
+  
     protected Set<String> genes;
     protected Set<String> modules;
     protected Set<String> pathways;
@@ -81,6 +83,7 @@ public class KeggKOEntity extends KeggEntity{
     }
     
 
+    @SuppressWarnings("unchecked")
     @Override
     public void addProperty(String key, String value) {
         Object addedValue = null;

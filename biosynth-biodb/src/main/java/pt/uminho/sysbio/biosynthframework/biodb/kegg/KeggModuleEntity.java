@@ -10,8 +10,9 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.Keg
 
 public class KeggModuleEntity extends KeggEntity{
 
-	
-	protected KeggModuleType type;
+  private static final long serialVersionUID = 1L;
+
+  protected KeggModuleType type;
 	
 	protected Set<String> pathways;
 	protected Set<String> orthologs;

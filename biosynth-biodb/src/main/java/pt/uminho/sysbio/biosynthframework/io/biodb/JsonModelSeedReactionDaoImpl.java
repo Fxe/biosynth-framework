@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReaction;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class JsonModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReactionEntity>{
@@ -25,6 +29,25 @@ public class JsonModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReacti
   private static final Logger logger = LoggerFactory.getLogger(JsonModelSeedReactionDaoImpl.class);
   
   public Map<String, ModelSeedReaction> data = new HashMap<> ();
+  
+  public Function<String, ModelSeedReactionReagentEntity> stoichParser = 
+      new Function<String, ModelSeedReactionReagentEntity>() {
+
+    @Override
+    public ModelSeedReactionReagentEntity apply(String t) {
+      ModelSeedReactionReagentEntity reagent = 
+          new ModelSeedReactionReagentEntity();
+      String[] data = t.split(":");
+      //STOICH:CPDXXXXX:CMP:??:NAME
+      reagent.setStoichiometry(Double.parseDouble(data[0]));
+      reagent.setCpdEntry(data[1]);
+      reagent.setCompartment(Integer.parseInt(data[2]));
+      if (reagent.getStoichiometry() == 0.0) {
+        logger.warn("stoichiometry value {}", reagent.getStoichiometry());
+      }
+      return reagent;
+    }
+  };
   
   public Function<ModelSeedReaction, ModelSeedReactionEntity> function = 
       new Function<ModelSeedReaction, ModelSeedReactionEntity>() {
@@ -34,12 +57,59 @@ public class JsonModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReacti
           ModelSeedReactionEntity rxn = new ModelSeedReactionEntity();
           rxn.setEntry(t.id);
           rxn.setName(t.name);
-          rxn.setCode(t.code);
+          
           rxn.setAbbreviation(t.abbreviation);
+          rxn.setCode(t.code);
           rxn.setDefinition(t.definition);
           rxn.setDirection(t.direction);
-//          rxn.setOrientation(t.);
-          //TODO: finish this !
+          rxn.setReversibility(t.reversibility);
+          rxn.setEquation(t.equation);
+          
+          rxn.setDeltag(t.deltag);
+          rxn.setDeltagerr(t.deltagerr);
+          rxn.setStatus(t.status);
+          rxn.setObsolete(JsonModelSeedMetaboliteDaoImpl.integerToBoolean(t.is_obsolete));
+          
+          rxn.setNames(t.names);
+          for (String ecStr : t.ec_numbers) {
+            for (String a : ecStr.split(",")) {
+              for (String b : a.split("\\s+")) {
+                if (b != null && !b.trim().isEmpty()) {
+                  rxn.getEc().add(b);
+                }
+              }
+            }
+          }
+          
+          List<ModelSeedReactionReagentEntity> reagents = new ArrayList<> ();
+          for (String s : t.stoichiometry) {
+            ModelSeedReactionReagentEntity reagent = stoichParser.apply(s);
+            reagents.add(reagent);
+          }
+          rxn.setReagents(reagents);
+          
+          List<ModelSeedReactionCrossreferenceEntity> refs = new ArrayList<> ();
+          for (String bigg : t.bigg_aliases) {
+            refs.add(new ModelSeedReactionCrossreferenceEntity(
+                ReferenceType.DATABASE, "BiGG", bigg));
+          }
+          for (String kegg : t.kegg_aliases) {
+            refs.add(new ModelSeedReactionCrossreferenceEntity(
+                ReferenceType.DATABASE, "LigandReaction", kegg));
+          }
+          for (String metacyc : t.metacyc_aliases) {
+            refs.add(new ModelSeedReactionCrossreferenceEntity(
+                ReferenceType.DATABASE, "MetaCyc", "META:" + metacyc));
+          }
+          rxn.setCrossreferences(refs);
+          
+          
+          /*
+           * skipped roles, templates, subsystems!, linked_reactions?
+           * pathways: aracyc, plantcyc, metacyc, kegg, ecocyc, hop
+           * complexes
+           */
+          
           return rxn;
         }
   };

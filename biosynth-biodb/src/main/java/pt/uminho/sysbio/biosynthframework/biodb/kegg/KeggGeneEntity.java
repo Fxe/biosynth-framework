@@ -4,14 +4,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
 public class KeggGeneEntity extends KeggEntity{
 
-	protected String nucleotidesSeq;
+  private static final long serialVersionUID = 1L;
+  
+  protected String nucleotidesSeq;
 	protected String aminoacidsSeq;
 	protected Set<String> ecNumbers;
 	protected Set<String> modules;
@@ -93,7 +93,8 @@ public class KeggGeneEntity extends KeggEntity{
 	
 	
 	
-	@Override
+	@SuppressWarnings("unchecked")
+  @Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
 		if(key.equals(KeggTokens.ENTRY))

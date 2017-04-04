@@ -11,8 +11,10 @@ import java.util.regex.Pattern;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
 public class KeggPathwayEntity extends KeggEntity{
-	
-	protected Set<String> modules;
+
+  private static final long serialVersionUID = 1L;
+
+  protected Set<String> modules;
 	
 	/** Map<Gene, [EC Number]> */
 	protected Map<String, Set<String>> geneStepEcs;

@@ -28,7 +28,7 @@ public class JsonModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeedMe
   
   private Map<String, ModelSeedCompound> data = new HashMap<> ();
   
-  public Boolean integerToBoolean(Integer i) {
+  public static Boolean integerToBoolean(Integer i) {
     if ( i == null) {
       return null;
     }

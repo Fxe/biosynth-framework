@@ -1,15 +1,24 @@
 package pt.uminho.sysbio.biosynthframework.biodb.seed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
+@Entity
+@Table(name="modelseed_reaction")
 public class ModelSeedReactionEntity extends GenericReaction {
 
   private static final long serialVersionUID = 1L;
@@ -54,8 +63,21 @@ public class ModelSeedReactionEntity extends GenericReaction {
   @Column(name="code")
   private String code;
   
+  @ElementCollection
+  @CollectionTable(name="modelseed_reaction_name", joinColumns=@JoinColumn(name="reaction_id"))
+  @Column(name="name", length=255)
+  private List<String> names = new ArrayList<> ();
+  
+  @ElementCollection
+  @CollectionTable(name="modelseed_reaction_ec", joinColumns=@JoinColumn(name="reaction_id"))
+  @Column(name="ec", length=40)
+  private List<String> ec = new ArrayList<> ();
+  
   @OneToMany (mappedBy = "modelSeedReactionEntity", cascade = CascadeType.ALL)
   private List<ModelSeedReactionReagentEntity> reagents = new ArrayList<> ();
+  
+  @OneToMany (mappedBy = "modelSeedReactionEntity", cascade = CascadeType.ALL)
+  private List<ModelSeedReactionCrossreferenceEntity> crossreferences = new ArrayList<> ();
 
   public String getAbbreviation() {
     return abbreviation;
@@ -137,13 +159,49 @@ public class ModelSeedReactionEntity extends GenericReaction {
     this.code = code;
   }
 
-  public List<ModelSeedReactionReagentEntity> getReagents() {
-    return reagents;
-  }
+  public List<ModelSeedReactionReagentEntity> getReagents() { return reagents;}
 
   public void setReagents(List<ModelSeedReactionReagentEntity> reagents) {
+    for (ModelSeedReactionReagentEntity r : reagents) {
+      r.setModelSeedReactionEntity(this);
+    }
     this.reagents = reagents;
   }
+
+  public List<String> getNames() { return names;}
+  public void setNames(List<String> names) { this.names = names;}
   
+  public List<String> getEc() { return ec;}
+  public void setEc(List<String> ec) { this.ec = ec;}
+
+  public List<ModelSeedReactionCrossreferenceEntity> getCrossreferences() { return crossreferences;}
+
+  public void setCrossreferences(List<ModelSeedReactionCrossreferenceEntity> crossreferences) {
+    for (ModelSeedReactionCrossreferenceEntity r : crossreferences) {
+      r.setModelSeedReactionEntity(this);
+    }
+    this.crossreferences = crossreferences;
+  }
   
+  @Override
+  public Map<String, Double> getLeftStoichiometry() {
+    Map<String, Double> lhs = new HashMap<> ();
+    for (ModelSeedReactionReagentEntity r : this.reagents) {
+      if (r.getStoichiometry() < 0.0) {
+        lhs.put(r.getCpdEntry(), r.getStoichiometry());
+      }
+    }
+    return lhs;
+  }
+  
+  @Override
+  public Map<String, Double> getRightStoichiometry() {
+    Map<String, Double> rhs = new HashMap<> ();
+    for (ModelSeedReactionReagentEntity r : this.reagents) {
+      if (r.getStoichiometry() > 0.0) {
+        rhs.put(r.getCpdEntry(), r.getStoichiometry());
+      }
+    }
+    return rhs;
+  }
 }

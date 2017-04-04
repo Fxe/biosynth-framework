@@ -78,17 +78,21 @@ public class BioSynthUtils {
     Orientation orientation = reaction.getOrientation();
     if (orientation == null) orientation = Orientation.Reversible;
     switch(orientation) {
-    case LeftToRight:
-      hash = lhsHash * prime + rhsHash;
-      break;
-    case RightToLeft:
-      hash = rhsHash * prime + lhsHash;
-      break;
-    case Unknown:
-    case Reversible:
-      hash = lhsHash + rhsHash;
-      break;
+      case LeftToRight:
+        hash = lhsHash * prime + rhsHash;
+        break;
+      case RightToLeft:
+        hash = rhsHash * prime + lhsHash;
+        break;
+      case Unknown:
+      case Reversible:
+        hash = lhsHash + rhsHash;
+        break;
+      default:
+        System.err.println("unknown action for " + orientation);
+        break;
     }
+    
     return hash;
   }
 

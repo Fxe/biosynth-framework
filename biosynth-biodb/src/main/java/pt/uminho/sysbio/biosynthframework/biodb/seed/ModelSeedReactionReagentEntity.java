@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.biodb.seed;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +20,20 @@ public class ModelSeedReactionReagentEntity extends StoichiometryPair {
   @ManyToOne
   @JoinColumn(name="reaction_id")
   private ModelSeedReactionEntity modelSeedReactionEntity;
+  
+  @Column(name="compartment") 
+  protected Integer compartment;
+
+  public ModelSeedReactionEntity getModelSeedReactionEntity() {
+    return modelSeedReactionEntity;
+  }
+
+  public void setModelSeedReactionEntity(ModelSeedReactionEntity modelSeedReactionEntity) {
+    this.modelSeedReactionEntity = modelSeedReactionEntity;
+  }
+
+  public Integer getCompartment() { return compartment;}
+  public void setCompartment(Integer compartment) { this.compartment = compartment;}
   
   
 }

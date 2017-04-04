@@ -10,7 +10,11 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.Keg
 
 public class KeggECNumberEntity extends KeggEntity{
 	
-	protected Set<String> genes;
+	/**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+  protected Set<String> genes;
 	protected Set<String> pathways;
 	protected Set<String> orthologs;
 	protected Set<String> reactions;
@@ -72,7 +76,8 @@ public class KeggECNumberEntity extends KeggEntity{
 	}
 
 	
-	@Override
+	@SuppressWarnings("unchecked")
+  @Override
 	public void addProperty(String key, String value) {
 		Object addedValue = null;
 		if(key.equals(KeggTokens.ENTRY))

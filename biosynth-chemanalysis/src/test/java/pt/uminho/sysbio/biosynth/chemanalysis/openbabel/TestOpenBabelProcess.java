@@ -9,10 +9,10 @@ import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelProces
 
 public class TestOpenBabelProcess {
 
-//	@BeforeClass
-//	public static void init() {
-//		OpenBabelProcess.OBABEL_PATH = "D:/home/workspace/java/biosynth-chemanalysis/lib/obabel.exe";
-//	}
+	@BeforeClass
+	public static void init() {
+		OpenBabelProcess.DEFAULT_PATH = "D:/home/workspace/java/biosynth-chemanalysis/lib/obabel.exe";
+	}
 //	
 //	@Test
 //	public void test_inchi_to_smi() throws IOException {

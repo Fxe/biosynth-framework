@@ -20,7 +20,9 @@ public class KeggGenomeEntity extends KeggEntity{
 //	protected String jornal;
 //	protected String annotation;
 	
-	protected String lineage;
+  private static final long serialVersionUID = 1L;
+  
+  protected String lineage;
 	protected String taxonomy;
 	
 	
