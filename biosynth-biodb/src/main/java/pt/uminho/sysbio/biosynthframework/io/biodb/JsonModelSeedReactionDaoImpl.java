@@ -39,11 +39,12 @@ public class JsonModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReacti
           new ModelSeedReactionReagentEntity();
       String[] data = t.split(":");
       //STOICH:CPDXXXXX:CMP:??:NAME
-      reagent.setStoichiometry(Double.parseDouble(data[0]));
+      reagent.setStoichiometry(Math.abs(Double.parseDouble(data[0])));
+      reagent.setCoefficient(Double.parseDouble(data[0]));
       reagent.setCpdEntry(data[1]);
       reagent.setCompartment(Integer.parseInt(data[2]));
-      if (reagent.getStoichiometry() == 0.0) {
-        logger.warn("stoichiometry value {}", reagent.getStoichiometry());
+      if (reagent.getCoefficient() == 0.0) {
+        logger.warn("coefficient value {}", reagent.getStoichiometry());
       }
       return reagent;
     }
@@ -103,9 +104,17 @@ public class JsonModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReacti
           }
           rxn.setCrossreferences(refs);
           
+          for (String role : t.roles) {
+            String id = role.split(";")[0];
+            rxn.getRoles().add(id);
+          }
+          for (String subsystem : t.subsystems) {
+            String id = subsystem.split(";")[0];
+            rxn.getSubsystems().add(id);
+          }
           
           /*
-           * skipped roles, templates, subsystems!, linked_reactions?
+           * skipped templates, linked_reactions?
            * pathways: aracyc, plantcyc, metacyc, kegg, ecocyc, hop
            * complexes
            */

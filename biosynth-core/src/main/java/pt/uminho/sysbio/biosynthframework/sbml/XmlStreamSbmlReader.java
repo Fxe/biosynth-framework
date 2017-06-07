@@ -122,6 +122,7 @@ public class XmlStreamSbmlReader {
     List<XmlSbmlSpecie>      species      = new ArrayList<> ();
     List<XmlSbmlReaction>    reactions    = new ArrayList<> ();
     List<XmlObject>          fluxBounds = new ArrayList<> ();
+    List<XmlObject> listOfGeneProducts = new ArrayList<> ();
     List<XmlObject> listOfParameters = new ArrayList<> ();
     Map<String, String> sbmlAttributes = new HashMap<> ();
     XmlObject fluxBound = null;
@@ -189,8 +190,14 @@ public class XmlStreamSbmlReader {
             List<XmlObject> xmlObjects = parseListOfParameters(xmlEventReader);
             listOfParameters.addAll(xmlObjects);
             break;
+            //fbc
+          case "listOfGeneProducts":
+            listOfGeneProducts.addAll(parseListOfGeneProducts(xmlEventReader));
+//            List<XmlObject> xmlObjects = parseListOfParameters(xmlEventReader);
+            break;
           default: 
-            logger.trace("+?+ " + startElement.getName().getLocalPart());
+            logger.info("+?+ {}", startElement.getName().getLocalPart());
+            logger.info("+?+ {} {}", startElement.getName().getNamespaceURI(), startElement.getName().getPrefix());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
           }
@@ -208,6 +215,7 @@ public class XmlStreamSbmlReader {
             model.setFluxBounds(fluxBounds);
             model.setSbmlAttributes(sbmlAttributes);
             model.setListOfParameters(listOfParameters);
+            model.setListOfGeneProducts(listOfGeneProducts);
             break;
           case SBML_LIST_OF_FLUX_BOUNDS:
             break;
@@ -428,6 +436,81 @@ public class XmlStreamSbmlReader {
     return kvd;
   }
   
+  public List<XmlObject> parseListOfGeneProducts(XMLEventReader xmlEventReader) throws XMLStreamException {
+    List<XmlObject> result = new ArrayList<> ();
+    boolean read = true;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        switch (startElement.getName().getLocalPart()) {
+          case "geneProduct":
+            result.add(buildSimpleObject(startElement));
+            break;
+//            XmlObject parameter = new XmlObject();
+//            parameter.lineNumber = startElement.getLocation().getLineNumber();
+//            parameter.columnNumber = startElement.getLocation().getColumnNumber();
+//            parameter.setAttributes(getAttributes(startElement));
+//            listOfParameters.add(parameter);
+//            break;
+          default:
+            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
+        }
+      } else if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+          case "geneProduct": break;
+          case "listOfGeneProducts": read = false; break;
+          default:
+//            logger.warn("ignored --- {}", endElement.getName().getLocalPart());
+            break;
+        }
+      }
+    }
+    
+    return result;
+  }
+  
+  //TODO:fix this
+  public List<XmlObject> parseListOfObjectives(XMLEventReader xmlEventReader) throws XMLStreamException {
+    List<XmlObject> result = new ArrayList<> ();
+    boolean read = true;
+    while (xmlEventReader.hasNext() && read) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        switch (startElement.getName().getLocalPart()) {
+//          case "geneProduct":
+//            result.add(buildSimpleObject(startElement));
+//            break;
+//            XmlObject parameter = new XmlObject();
+//            parameter.lineNumber = startElement.getLocation().getLineNumber();
+//            parameter.columnNumber = startElement.getLocation().getColumnNumber();
+//            parameter.setAttributes(getAttributes(startElement));
+//            listOfParameters.add(parameter);
+//            break;
+          default:
+            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
+        }
+      } else if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+//          case "geneProduct": break;
+          case "listOfObjectives": read = false; break;
+          default:
+//            logger.warn("ignored --- {}", endElement.getName().getLocalPart());
+            break;
+        }
+      }
+    }
+    
+    return result;
+  }
+  
   public List<XmlObject> parseListOfParameters(XMLEventReader xmlEventReader) throws XMLStreamException {
     List<XmlObject> listOfParameters = new ArrayList<> ();
     logger.debug("+++ reading listOfParameters");
@@ -438,11 +521,11 @@ public class XmlStreamSbmlReader {
         StartElement startElement = xmlEvent.asStartElement();
         switch (startElement.getName().getLocalPart()) {
           case SBML_PARAMETER:
-            XmlObject parameter = new XmlObject();
-            parameter.lineNumber = startElement.getLocation().getLineNumber();
-            parameter.columnNumber = startElement.getLocation().getColumnNumber();
-            parameter.setAttributes(getAttributes(startElement));
-            listOfParameters.add(parameter);
+//            XmlObject parameter = new XmlObject();
+//            parameter.lineNumber = startElement.getLocation().getLineNumber();
+//            parameter.columnNumber = startElement.getLocation().getColumnNumber();
+//            parameter.setAttributes(getAttributes(startElement));
+            listOfParameters.add(buildSimpleObject(startElement));
             break;
           default:
             logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
@@ -684,6 +767,43 @@ public class XmlStreamSbmlReader {
     return list;
   }
   
+  public List<XmlObject> parseModifiers(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<XmlObject> result = new ArrayList<> ();
+    while (xmlEventReader.hasNext()) {
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
+      if (xmlEvent.isStartElement()) {
+        StartElement startElement = xmlEvent.asStartElement();
+        logger.debug("+++ {}", startElement.getName().getLocalPart());
+        switch (startElement.getName().getLocalPart()) {
+          case "modifierSpeciesReference":
+            result.add(buildSimpleObject(startElement));
+            break;
+          default:
+            logger.debug("??? {}", startElement.getName().getLocalPart());
+            CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
+            break;
+        }
+      }
+      
+      if (xmlEvent.isEndElement()) {
+        EndElement endElement = xmlEvent.asEndElement();
+        switch (endElement.getName().getLocalPart()) {
+//          case SBML_REACTION_LIST_OF_PRODUCTS: read = false; break;
+//          case SBML_REACTION_LIST_OF_REACTANTS: read = false; break;
+          default: break;
+        }
+        boolean end = xmlEvent.isEndElement() && 
+            xmlEvent.asEndElement().getName().getLocalPart().equals("listOfModifiers");
+
+        if (end) {
+          logger.debug("end");
+          break;
+        }
+      }
+    }
+    return result;
+  }
+  
   public MultiNodeTree<Object> parseFbcGeneProductAssociation(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
     MultiNodeTree<Object> tree = null;
     while (xmlEventReader.hasNext()) {
@@ -788,6 +908,9 @@ public class XmlStreamSbmlReader {
           case "geneProductAssociation":
             MultiNodeTree<Object> gpr = parseFbcGeneProductAssociation(xmlEventReader, startElement);
             sbmlReaction.setGpr(gpr);
+            break;
+          case "listOfModifiers":
+            sbmlReaction.getListOfModifiers().addAll(parseModifiers(xmlEventReader, startElement));
             break;
           default:
             logger.debug("??? {}", startElement.getName().getLocalPart());

@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynth.integration.etl.biodb.seed;
+package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
 import java.util.HashSet;
 import java.util.Set;

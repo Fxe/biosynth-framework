@@ -31,6 +31,15 @@ public class TestDefaultUniprotService {
   public void tearDown() throws Exception {
   }
 
+  @Test
+  public void getProtein() {
+    //P77555
+    UniprotResult o = service.service.getByEntry("P77555.xml");
+    for (UniprotEntry e : o.entries) {
+      System.out.println(e.getLocus());
+      
+    }
+  }
 //  @Test
   public void test() {
 //    Map<String, Object> o = (Map<String, Object>) service.getEntry_("P12345.xml");

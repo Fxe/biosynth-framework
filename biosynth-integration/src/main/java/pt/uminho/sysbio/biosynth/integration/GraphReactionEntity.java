@@ -5,11 +5,15 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynthframework.Orientation;
 import pt.uminho.sysbio.biosynthframework.Reaction;
 
 public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reaction {
-
+  
+  
+  private final String PROXY = Neo4jDefinitions.PROXY_PROPERTY;
+  
   private static final long serialVersionUID = 1L;
 
   private Map<GraphMetaboliteProxyEntity, Map<String, Object>> left = new HashMap<> ();
@@ -147,8 +151,8 @@ public class GraphReactionEntity extends AbstractGraphNodeEntity implements Reac
   }
 
   public Boolean isProxy() {
-    if (!this.properties.containsKey("proxy")) return null;
-    return (boolean) this.properties.get("proxy");
+    if (!this.properties.containsKey(PROXY)) return null;
+    return (boolean) this.properties.get(PROXY);
   }
   
   @Override

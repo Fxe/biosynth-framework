@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.biodb.uniprot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class UniprotEntry {
   public Object protein;
   
   
-  public Map<String, Object> gene;
+  public List<Map<String, Object>> gene;
   
 //  @JacksonXmlElementWrapper(useWrapping=false)
   public UniprotOrganism organism;
@@ -52,11 +53,21 @@ public class UniprotEntry {
   
   public UniprotSequence sequence;
   
-  public String getLocus() {
-    if (gene != null && gene.containsKey("name")) {
-      return JsonMapUtils.getString(gene, "name", "");
+  public List<String> getLocus() {
+    List<String> locus = new ArrayList<> ();
+    
+    if (gene != null) {
+      for (Map<String, Object> gdata : gene) {
+        if (gdata != null && "ordered locus".equals(gdata.get("type"))) {
+          Object o = gdata.get("");
+          if (o != null && !o.toString().isEmpty()) {
+            locus.add(gdata.get("").toString());
+          }
+        }
+      }
     }
-    return null;
+    
+    return locus;
   }
   
   @Override

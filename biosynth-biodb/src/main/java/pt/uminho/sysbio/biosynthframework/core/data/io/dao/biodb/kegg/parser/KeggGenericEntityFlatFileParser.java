@@ -21,15 +21,14 @@ public class KeggGenericEntityFlatFileParser {
 //		String line = rawText.substring(i, m.start()).trim();
 //		parseFirstRow(line, entity);
 //		i = m.end();
-
 		while(m.find())
 		{	
 			line = rawText.substring(i, m.start()).trim();
 			if(!line.equals("") && !line.equals(KeggTokens.END_OF_FILE_REGEXP))
 			{
+			  
 				Pattern p2 = Pattern.compile(KeggTokens.KEY_VALUES_REGEXP);
 				Matcher m2 = p2.matcher(line);
-
 				if(m2.find())
 				{
 					currProp = m2.group(1);

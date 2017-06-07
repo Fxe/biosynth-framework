@@ -8,6 +8,7 @@ public enum GlobalLabel implements Label {
 	KEGG, BioCyc,
 	Orthology,
 	KeggPathway, MetaCycPathway,
+	ModelSeedRole, ModelSeedSubsystem,
 	KeggOrthology,
 	EnzymeCommission,
 	MetabolicModel,
@@ -17,6 +18,7 @@ public enum GlobalLabel implements Label {
 	SubcellularCompartment,
 	
 	//Things that I have no clue where to put !
+	KeggOrganism, KeggGene,
 	EntrezTaxonomy, NCBIGene, NCBINucleotide, NCBIProtein,
 	UniProtAccession,
 	UniProtProtein,

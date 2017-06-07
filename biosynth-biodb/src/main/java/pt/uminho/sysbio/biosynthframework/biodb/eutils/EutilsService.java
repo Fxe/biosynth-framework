@@ -11,6 +11,12 @@ public interface EutilsService {
                        @Query("id") String id, 
                        @Query("retmode") EntrezRetmode retmode);
   
+  @GET("/efetch.fcgi")
+  public Object efetch(@Query("db") EntrezDatabase db, 
+                       @Query("id") String id, 
+                       @Query("rettype") String rettype, 
+                       @Query("retmode") EntrezRetmode retmode);
+  
   @GET("/efetch.fcgi?db=taxonomy")
   public EntrezTaxaSet efetchTaxonomy(@Query("id") String id, 
                                       @Query("retmode") EntrezRetmode retmode);
@@ -18,6 +24,10 @@ public interface EutilsService {
   @GET("/efetch.fcgi?db=gene")
   public EntrezGeneSet efetchGene(@Query("id") String id, 
                                   @Query("retmode") EntrezRetmode retmode);
+  
+  @GET("/efetch.fcgi?db=protein")
+  public EntrezProtein efetchProtein(@Query("id") String id, 
+                                     @Query("retmode") EntrezRetmode retmode);
 
   //esearch.fcgi?db=gene&term=txid326442&retstart=38&retmax=100
   @GET("/esearch.fcgi")

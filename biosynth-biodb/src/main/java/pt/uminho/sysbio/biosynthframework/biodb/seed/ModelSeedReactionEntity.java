@@ -73,59 +73,39 @@ public class ModelSeedReactionEntity extends GenericReaction {
   @Column(name="ec", length=40)
   private List<String> ec = new ArrayList<> ();
   
+  @ElementCollection
+  @CollectionTable(name="modelseed_reaction_role", joinColumns=@JoinColumn(name="reaction_id"))
+  @Column(name="role", length=40)
+  private List<String> roles = new ArrayList<> ();
+  
+  @ElementCollection
+  @CollectionTable(name="modelseed_reaction_subsystem", joinColumns=@JoinColumn(name="reaction_id"))
+  @Column(name="subsystem", length=40)
+  private List<String> subsystems = new ArrayList<> ();
+  
   @OneToMany (mappedBy = "modelSeedReactionEntity", cascade = CascadeType.ALL)
   private List<ModelSeedReactionReagentEntity> reagents = new ArrayList<> ();
   
   @OneToMany (mappedBy = "modelSeedReactionEntity", cascade = CascadeType.ALL)
   private List<ModelSeedReactionCrossreferenceEntity> crossreferences = new ArrayList<> ();
 
-  public String getAbbreviation() {
-    return abbreviation;
-  }
+  public String getAbbreviation() { return abbreviation;}
+  public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation;}
 
-  public void setAbbreviation(String abbreviation) {
-    this.abbreviation = abbreviation;
-  }
+  public String getStatus() { return status;}
+  public void setStatus(String status) { this.status = status;}
 
-  public String getStatus() {
-    return status;
-  }
+  public String getDirection() { return direction;}
+  public void setDirection(String direction) { this.direction = direction;}
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+  public String getReversibility() { return reversibility;}
+  public void setReversibility(String reversibility) { this.reversibility = reversibility;}
 
-  public String getDirection() {
-    return direction;
-  }
+  public Double getDeltagerr() { return deltagerr;}
+  public void setDeltagerr(Double deltagerr) { this.deltagerr = deltagerr;}
 
-  public void setDirection(String direction) {
-    this.direction = direction;
-  }
-
-  public String getReversibility() {
-    return reversibility;
-  }
-
-  public void setReversibility(String reversibility) {
-    this.reversibility = reversibility;
-  }
-
-  public Double getDeltagerr() {
-    return deltagerr;
-  }
-
-  public void setDeltagerr(Double deltagerr) {
-    this.deltagerr = deltagerr;
-  }
-
-  public Double getDeltag() {
-    return deltag;
-  }
-
-  public void setDeltag(Double deltag) {
-    this.deltag = deltag;
-  }
+  public Double getDeltag() { return deltag;}
+  public void setDeltag(Double deltag) { this.deltag = deltag;}
 
   public Boolean getObsolete() {
     return obsolete;
@@ -174,6 +154,12 @@ public class ModelSeedReactionEntity extends GenericReaction {
   public List<String> getEc() { return ec;}
   public void setEc(List<String> ec) { this.ec = ec;}
 
+  public List<String> getRoles() { return roles;}
+  public void setRoles(List<String> roles) { this.roles = roles;}
+  
+  public List<String> getSubsystems() { return subsystems;}
+  public void setSubsystems(List<String> subsystems) { this.subsystems = subsystems;}
+  
   public List<ModelSeedReactionCrossreferenceEntity> getCrossreferences() { return crossreferences;}
 
   public void setCrossreferences(List<ModelSeedReactionCrossreferenceEntity> crossreferences) {

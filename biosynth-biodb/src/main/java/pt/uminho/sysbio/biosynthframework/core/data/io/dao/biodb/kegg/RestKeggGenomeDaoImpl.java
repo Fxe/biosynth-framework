@@ -36,9 +36,11 @@ extends AbstractRestfulKeggDao {
 			
 			KeggGenomeFlatFileParser parser = new KeggGenomeFlatFileParser(rnFlatFile);
 			genome.setEntry(parser.getEntry());
+			genome.setName(parser.getName());
 			genome.setDefinition(parser.getDefinition());
 			genome.setTaxonomy(parser.getTaxonomy());
-			
+			genome.setAnnotation(parser.getAnnotation());
+			genome.setDataSource(parser.getDataSource());
 		} catch (IOException e) {
 //			String genomeFlatFile = this.getLocalOrWeb(restRxnQuery, localPath +".txt");
 //			genome = KeggGenericEntityFlatFileParser.parse(KeggGenomeEntity.class, genomeFlatFile);

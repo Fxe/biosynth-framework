@@ -17,7 +17,6 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 @Repository
 public class HbmBigg2MetaboliteDaoImpl implements MetaboliteDao<Bigg2MetaboliteEntity> {
 
-  @Autowired
   private SessionFactory sessionFactory;
   
   private Session getSession() {

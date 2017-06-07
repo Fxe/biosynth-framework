@@ -54,7 +54,7 @@ public class TestXmlStreamSbmlReader {
     System.out.println("\t" + xud.getListOfAnnotations());
     System.out.println("\t" + xud.listOfUnits);
   }
-  System.out.println(sbmlReader.rejectedElements);
+  
 
 //  System.out.println(model.getSbmlAttributes());
 //  System.out.println(model);
@@ -108,8 +108,12 @@ public class TestXmlStreamSbmlReader {
     for (XmlObject o : reaction.getListOfProducts()) {
       System.out.println("  + " +  o);
     }
+    for (XmlObject o : reaction.getListOfModifiers()) {
+      System.out.println("  M " +  o);
+    }
     rxnMap.put(reaction.getAttributes().get("id"), reaction);
     System.out.println(SbmlUtils.gprTreeToString(reaction.getGpr(), f));
+    break;
   }
   
 //  {
@@ -144,6 +148,7 @@ public class TestXmlStreamSbmlReader {
     System.out.println(fluxBound);
     break;
   }
+  System.out.println(sbmlReader.rejectedElements);
   }
   
   @Test
@@ -157,8 +162,10 @@ public class TestXmlStreamSbmlReader {
     SBML_PATH = "/var/biomodels/sbml/hsa/RECON1.xml";
     SBML_PATH = "/var/biomodels/dirty/sMtb.xml";
     SBML_PATH = "/var/biomodels/sbml/iTO977.xml";
+    SBML_PATH = "/var/biomodels/joana/iSB1139.xml";
+    SBML_PATH = "/var/biomodels/joana/iJL432.xml";
     System.out.println(SBML_PATH);
-    
+    testModel(SBML_PATH);
 //    SBML_PATH = "/var/biomodels/hvo_26_01_17.xml";
     
 //    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";

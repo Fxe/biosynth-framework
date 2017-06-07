@@ -38,6 +38,12 @@ public class HelperNeo4jConfigInitializer {
 //      String.format("CREATE CONSTRAINT ON (exp : %s) ASSERT exp.entry IS UNIQUE", GlobalLabel.ExPASy),
       String.format("CREATE CONSTRAINT ON (tax : %s) ASSERT tax.entry IS UNIQUE", GlobalLabel.EntrezTaxonomy),
       String.format("CREATE CONSTRAINT ON (gne : %s) ASSERT gne.entry IS UNIQUE", GlobalLabel.NCBIGene),
+      
+      String.format("CREATE CONSTRAINT ON (mss : %s) ASSERT mss.entry IS UNIQUE", GlobalLabel.ModelSeedSubsystem),
+      String.format("CREATE CONSTRAINT ON (msr : %s) ASSERT msr.entry IS UNIQUE", GlobalLabel.ModelSeedRole),
+      
+      String.format("CREATE CONSTRAINT ON (org : %s) ASSERT org.entry IS UNIQUE", GlobalLabel.KeggOrganism),
+      String.format("CREATE CONSTRAINT ON (kgn : %s) ASSERT kgn.entry IS UNIQUE", GlobalLabel.KeggGene),
       //		String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.BrendaEnzyme),
       String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.EnzymePortal),
       String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureMajorLabel.Patent),
@@ -54,6 +60,11 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE INDEX ON :%s(locus)", GlobalLabel.NCBIGene),
       String.format("CREATE INDEX ON :%s(old_locus)", GlobalLabel.NCBIGene),
       String.format("CREATE INDEX ON :%s(accession)", GlobalLabel.NCBIGene),
+      
+      String.format("CREATE INDEX ON :%s(universalEntry)", MetaboliteMajorLabel.BiGG2),
+      String.format("CREATE INDEX ON :%s(abbreviation)", MetaboliteMajorLabel.ModelSeed),
+      
+      
   };
 
   private static final String[] NEO_META_CONSTRAINTS = {

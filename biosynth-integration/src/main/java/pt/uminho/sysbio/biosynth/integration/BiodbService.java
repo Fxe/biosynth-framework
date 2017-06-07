@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 
 /**
@@ -132,4 +133,10 @@ public interface BiodbService {
   
   //taxa proteins
   public Set<Long> getAllTaxonomyProteins(long txId);
+  
+  public Double[] getReactionBounds(long rxnId);
+  
+  public EntityType getEntityType(long id);
+  
+  public<T> T getAttribute(long id, String attribute, Class<T> clazz);
 }

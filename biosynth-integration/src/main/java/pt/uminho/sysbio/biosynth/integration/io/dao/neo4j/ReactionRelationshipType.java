@@ -12,5 +12,6 @@ public enum ReactionRelationshipType implements RelationshipType {
 	has_gene,
 	sub_instance,
 	has_reaction_pair,
+	has_modelseed_role,
 //	Left, Right,
 }

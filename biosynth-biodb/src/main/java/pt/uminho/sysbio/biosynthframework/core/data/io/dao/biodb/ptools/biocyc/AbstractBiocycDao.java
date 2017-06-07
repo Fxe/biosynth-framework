@@ -14,8 +14,8 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
 public class AbstractBiocycDao {
 	protected String pgdb = "META";
 	
-	protected final static String xmlGet = "http://biocyc.org/getxml?%s:%s";
-	protected final String xmlquery = "http://biocyc.org/xmlquery?%s";
+	protected final static String xmlGet = "https://biocyc.org/getxml?%s:%s";
+	protected final String xmlquery = "https://biocyc.org/xmlquery?%s";
 	
 	public Set<String> getAllBioCycPGDB() {
 		try {

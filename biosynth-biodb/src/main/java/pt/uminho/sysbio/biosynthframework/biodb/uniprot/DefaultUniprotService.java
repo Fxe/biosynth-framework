@@ -9,7 +9,7 @@ import retrofit.RestAdapter.LogLevel;
 import retrofit.client.OkClient;
 
 public class DefaultUniprotService {
-  private final UniprotService service;
+  public final UniprotService service;
   
   public DefaultUniprotService() {
     String endPoint = "http://www.uniprot.org";

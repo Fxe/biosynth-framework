@@ -20,7 +20,14 @@ public class BioDbDictionary {
 	    MetaboliteMajorLabel database = MetaboliteMajorLabel.valueOf(db);
 	    return database.toString();
 	  } catch (IllegalArgumentException e) {
-	    logger.trace("not framework standard database {}, try translate...", db);
+	    logger.trace("not a framework standard metabolite database {}, try translate...", db);
+	  }
+	  
+	  try {
+	    ReactionMajorLabel database = ReactionMajorLabel.valueOf(db);
+	    return database.toString();
+	  } catch (IllegalArgumentException e) {
+	    logger.trace("not a framework standard reaction database {}, try translate...", db);
 	  }
 
 	  if (getDbDictionary().containsKey(db)) {
@@ -73,6 +80,8 @@ public class BioDbDictionary {
 		dictionary.put("DrugBank accession", MetaboliteMajorLabel.DrugBank.toString());
 		dictionary.put("DrugBank", MetaboliteMajorLabel.DrugBank.toString());
 		dictionary.put("DRUGBANK", MetaboliteMajorLabel.DrugBank.toString());
+		
+		dictionary.put("ChEMBL", MetaboliteMajorLabel.ChEMBL.toString());
 		
 		//PlantCyc
 		dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");

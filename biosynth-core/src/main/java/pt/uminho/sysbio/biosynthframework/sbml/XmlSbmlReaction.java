@@ -13,6 +13,7 @@ public class XmlSbmlReaction extends XmlObject {
   private List<XmlObject> listOfReactants = new ArrayList<> ();
   private List<XmlObject> listOfProducts  = new ArrayList<> ();
   private List<XmlObject> listOfParameters  = new ArrayList<> ();
+  private List<XmlObject> listOfModifiers  = new ArrayList<> ();
   private MultiNodeTree<Object> gpr = null;
   
   private List<String> notes  = new ArrayList<> ();
@@ -28,6 +29,9 @@ public class XmlSbmlReaction extends XmlObject {
   
   public List<XmlObject> getListOfParameters() { return listOfParameters;}
   public void setListOfParameters(List<XmlObject> listOfParameters) { this.listOfParameters = listOfParameters;}
+  
+  public List<XmlObject> getListOfModifiers() { return listOfModifiers;}
+  public void setListOfModifiers(List<XmlObject> listOfModifiers) { this.listOfModifiers = listOfModifiers;}
   
   public List<String> getNotes() { return notes;}
   public void setNotes(List<String> notes) { this.notes = notes;}

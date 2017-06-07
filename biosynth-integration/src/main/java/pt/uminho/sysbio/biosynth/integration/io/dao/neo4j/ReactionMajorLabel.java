@@ -7,8 +7,10 @@ public enum ReactionMajorLabel implements Label {
 	BRENDA, 
 	Rhea, 
 	BiGG, 
+	BiGG2Reaction,
 	Seed, Reactome, 
 	MetaCyc, HumanCyc, EcoCyc,
 	BioPath, UniPathway, 
 	NOTFOUND,
+	ModelSeedReaction,
 }

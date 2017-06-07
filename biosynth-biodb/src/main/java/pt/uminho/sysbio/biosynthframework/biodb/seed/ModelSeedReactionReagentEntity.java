@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="modelseed_reaction_reagent")
@@ -21,8 +22,14 @@ public class ModelSeedReactionReagentEntity extends StoichiometryPair {
   @JoinColumn(name="reaction_id")
   private ModelSeedReactionEntity modelSeedReactionEntity;
   
-  @Column(name="compartment") 
-  protected Integer compartment;
+  @MetaProperty
+  @Column(name="compartment")
+  private int compartment;
+  
+  @MetaProperty
+  @Column(name="coefficient") 
+  private double coefficient;
+
 
   public ModelSeedReactionEntity getModelSeedReactionEntity() {
     return modelSeedReactionEntity;
@@ -31,9 +38,12 @@ public class ModelSeedReactionReagentEntity extends StoichiometryPair {
   public void setModelSeedReactionEntity(ModelSeedReactionEntity modelSeedReactionEntity) {
     this.modelSeedReactionEntity = modelSeedReactionEntity;
   }
+  
+  public double getCoefficient() { return coefficient;}
+  public void setCoefficient(double coefficient) { this.coefficient = coefficient;}
 
-  public Integer getCompartment() { return compartment;}
-  public void setCompartment(Integer compartment) { this.compartment = compartment;}
+  public int getCompartment() { return compartment;}
+  public void setCompartment(int compartment) { this.compartment = compartment;}
   
   
 }

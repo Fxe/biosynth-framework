@@ -32,6 +32,15 @@ public class TestEntrezTaxonomyService {
   public void tearDown() throws Exception {
   }
   
+  @Test
+  public void test_get() {
+    //NP_414548.1
+    EntrezTaxonomyService service = new EntrezTaxonomyService();
+    Object o = service.eutilsService.efetch(EntrezDatabase.protein, "NP_415050.1", EntrezRetmode.xml);
+    System.out.println(o);
+    service.getProtein("NP_415050.1");
+  }
+  
 //  @Test
   public void test_nuccore() {
     EntrezTaxonomyService service = new EntrezTaxonomyService();
@@ -70,7 +79,7 @@ public class TestEntrezTaxonomyService {
 //    fail("Not yet implemented");
   }
 
-  @Test
+//  @Test
   public void test_get_yeast() {
     EntrezTaxonomyService service = new EntrezTaxonomyService();
     EntrezTaxon taxon = service.getTaxonomy(4932);
@@ -78,7 +87,7 @@ public class TestEntrezTaxonomyService {
 //    fail("Not yet implemented");
   }
   
-  @Test
+//  @Test
   public void test_get_sce_hsa_eco() {
     Set<Long> taxIds = new HashSet<> ();
     taxIds.add(4932L);
@@ -91,7 +100,7 @@ public class TestEntrezTaxonomyService {
 //    fail("Not yet implemented");
   }
   
-  @Test
+//  @Test
   public void test_get_sce_eco() {
     Set<Long> taxIds = new HashSet<> ();
     taxIds.add(559292L);

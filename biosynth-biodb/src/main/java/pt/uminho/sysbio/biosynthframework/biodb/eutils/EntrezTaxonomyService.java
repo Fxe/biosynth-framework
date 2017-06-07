@@ -40,6 +40,12 @@ public class EntrezTaxonomyService {
     return eutilsService.efetch(db, Long.toString(id), EntrezRetmode.xml);
   }
   
+  public EntrezProtein getProtein(String id) {
+    EntrezProtein proteinSet = eutilsService.efetchProtein(id, EntrezRetmode.xml);
+    System.out.println(proteinSet);
+    return null;
+  }
+  
   public EntrezSearchResult searchGenes(long txId, int max, int start) {
     EntrezSearchResult taxaSet = eutilsService.esearch(
         EntrezDatabase.gene, String.format("txid%d", txId), max, start);
@@ -50,6 +56,8 @@ public class EntrezTaxonomyService {
     
     return taxaSet;
   }
+  
+  
   
   public List<EntrezGene> getGenes(Collection<Long> ids) {
     EntrezGeneSet geneSet = eutilsService.efetchGene(

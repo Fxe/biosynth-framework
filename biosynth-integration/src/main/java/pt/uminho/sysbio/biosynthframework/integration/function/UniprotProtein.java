@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
+import pt.uminho.sysbio.biosynthframework.biodb.uniprot.DefaultUniprotService;
 import pt.uminho.sysbio.biosynthframework.biodb.uniprot.UniprotEntry;
+import pt.uminho.sysbio.biosynthframework.biodb.uniprot.UniprotResult;
 
 public class UniprotProtein implements Function<UniprotEntry, Map<String, Object>> {
 
@@ -23,7 +27,10 @@ public class UniprotProtein implements Function<UniprotEntry, Map<String, Object
     properties.put("modified", entry.modified);
     properties.put("dataset", entry.dataset);
     properties.put("version", entry.version);
-    properties.put("locus", entry.getLocus());
+    if (entry.getLocus() != null && !entry.getLocus().isEmpty()) {
+      properties.put("locus", StringUtils.join(entry.getLocus(), ";"));
+    }
+    
     
 //    properties.put("ParentTaxId", taxon.ParentTaxId);
 //    properties.put("PubDate", taxon.PubDate);
@@ -77,4 +84,16 @@ public class UniprotProtein implements Function<UniprotEntry, Map<String, Object
     return mproperties;
   }
 
+  public static void main(String[] args) {
+    //b3125
+    String seqStr = null;
+  String gene = "b3125";
+  DefaultUniprotService service = new DefaultUniprotService();
+  UniprotResult r = service.service.query(gene, "xml");
+  for (UniprotEntry p : r.entries) {
+    if (p != null && p.getLocus() != null && p.getLocus().contains(gene)) {
+
+    }
+  }
+  }
 }

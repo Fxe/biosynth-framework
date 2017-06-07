@@ -19,6 +19,8 @@ import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
  */
 public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 
+  private final String ENTRY = Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT;
+  
 	private static final long serialVersionUID = 1L;
 
 	protected String majorLabel;
@@ -98,9 +100,9 @@ public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 	}
 	
 	@Override
-	public String getEntry() { return (String)this.properties.get("entry");}
+	public String getEntry() { return (String) this.properties.get(ENTRY);}
 	@Override
-	public void setEntry(String entry) { properties.put("entry", entry);};
+	public void setEntry(String entry) { properties.put(ENTRY, entry);};
 	
 	@Override
 	public String getName() { return (String)this.properties.get("name");}
@@ -108,7 +110,7 @@ public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 	
 	@Override
 	public String toString() {
-		String str = String.format("%d[%s]::%s", this.id, majorLabel, labels);
+		String str = String.format("%d[%s]%s::%s", this.id, majorLabel, getEntry(), labels);
 		return str;
 	}
 }

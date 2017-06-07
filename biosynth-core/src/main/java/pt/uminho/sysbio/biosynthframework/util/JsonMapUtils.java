@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +38,22 @@ public class JsonMapUtils {
     return (List<Object>) map.get(key);
   }
 
-
+  public static Map<String, Object> cleanNullsAndStrings(Map<String, Object> map) {
+    Map<String, Object> result = new HashMap<> ();
+    
+    for (String k : map.keySet()) {
+      Object o = map.get(k);
+      
+      if (o != null) {
+        boolean isString = o instanceof String;
+        if (isString && !o.toString().trim().isEmpty()) {
+          result.put(k, o.toString().trim());
+        } else if (!isString) {
+          result.put(k, o);
+        }
+      }
+    }
+    
+    return result;
+  }
 }

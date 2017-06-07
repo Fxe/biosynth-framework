@@ -2,12 +2,15 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +32,7 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
   //	private final String urlRxnGeneAPI = "http://biocyc.org/apixml?fn=genes-of-reaction&id=META:";
   //	private final String urlRxnEnzymeAPI = "http://biocyc.org/apixml?fn=enzymes-of-reaction&id=%s:%s&detail=full";
 
-  public void createFolderIfNotExists(String path) {
+  public static void createFolderIfNotExists(String path) {
     File file = new File(path);
 
     if (!file.exists()) {
@@ -37,6 +40,7 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
       file.mkdirs();
     }
   }
+  
 
   @Override
   public BioCycMetaboliteEntity getMetaboliteById(Serializable id) {
@@ -81,7 +85,13 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
       String xmlDoc = null;
 
       logger.debug(String.format("Local Path: %s", localPath));
+//      URL url = new URL("https://biocyc.org/getxml?META:CPD-882");
+//      InputStream is = url.openConnection().getInputStream();
+//      List<String> lines = IOUtils.readLines(is);
+//      System.out.println(lines);
+//      System.out.println(restCpdQuery);
       xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
+//      System.out.println(xmlDoc);
       BioCycMetaboliteXMLParser parser = new BioCycMetaboliteXMLParser(xmlDoc);
 
       if (!parser.isValid()) return null;

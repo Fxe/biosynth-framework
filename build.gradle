@@ -26,8 +26,18 @@ allprojects {
 }
 
 ext {
-  expectedGradleVersion = '2.4'
+  expectedGradleVersion = '3.5'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5' //we want gradle 2.10 to run this project
+}
+
+configurations {
+    compile
+}
+
+
 
 subprojects { subProject ->
   apply plugin: 'java'
@@ -40,6 +50,11 @@ subprojects { subProject ->
   
   targetCompatibility = 1.8
   sourceCompatibility = 1.8
+  
+  task copyRuntimeLibs(type: Copy) {
+    into "../jars"
+    from configurations.compile
+  }
   
   defaultTasks 'build'
   buildDir = "target"
