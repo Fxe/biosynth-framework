@@ -37,8 +37,6 @@ configurations {
     compile
 }
 
-
-
 subprojects { subProject ->
   apply plugin: 'java'
   apply plugin: 'maven'
@@ -48,8 +46,8 @@ subprojects { subProject ->
   group = 'pt.uminho.sysbio.biosynthframework'
   version = '0.0.1-SNAPSHOT'
   
-  targetCompatibility = 1.8
-  sourceCompatibility = 1.8
+  targetCompatibility = 1.7
+  sourceCompatibility = 1.7
   
   task copyRuntimeLibs(type: Copy) {
     into "../jars"

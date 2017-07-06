@@ -126,4 +126,36 @@ public class BioSynthUtils {
 
     throw new ParseException("check fail - " + dt + " -> " + check, 1);
   }
+  
+  public boolean toBoolean(Object o, boolean defaultValue) {
+    if (o == null) {
+      return defaultValue;
+    }
+    
+    return Boolean.parseBoolean(o.toString());
+  }
+  
+  public double toDouble(Object o, double defaultValue) {
+    if (o == null) {
+      return defaultValue;
+    }
+    
+    return Double.parseDouble(o.toString());
+  }
+  
+  public Boolean toBoolean(Object o) {
+    if (o != null) {
+      return Boolean.parseBoolean(o.toString());
+    }
+    
+    return null;
+  }
+  
+  public Double toDouble(Object o) {
+    if (o != null) {
+      return Double.parseDouble(o.toString());
+    }
+    
+    return null;
+  }
 }

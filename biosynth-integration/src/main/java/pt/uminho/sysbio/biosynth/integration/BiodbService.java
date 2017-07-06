@@ -63,6 +63,8 @@ public interface BiodbService {
    */
   public SubcellularCompartment getSpecieSubcellularLocation(long spiId);
   
+  public boolean isProxy(long id);
+  
   /**
    * Returns references from entities
    * @param id

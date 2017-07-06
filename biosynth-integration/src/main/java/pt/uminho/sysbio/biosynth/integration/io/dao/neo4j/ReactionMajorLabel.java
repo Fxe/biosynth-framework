@@ -13,4 +13,5 @@ public enum ReactionMajorLabel implements Label {
 	BioPath, UniPathway, 
 	NOTFOUND,
 	ModelSeedReaction,
+	MetaNetXReaction,
 }

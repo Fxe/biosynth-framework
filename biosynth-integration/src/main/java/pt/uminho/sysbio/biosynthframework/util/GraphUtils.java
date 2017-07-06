@@ -1,5 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +25,19 @@ public class GraphUtils {
       return true;
     }
     return false;
+  }
+  
+  public static <V> void addConnectedSet(Graph<V, ?> g, Collection<V> v) {
+    Iterator<V> it = v.iterator();
+    if (it.hasNext()) {
+      V pivot = it.next();
+      addVertexIfNotExists(g, pivot);
+      while (it.hasNext()) {
+        V e = it.next();
+        addVertexIfNotExists(g, e);
+        g.addEdge(pivot, e);
+      }
+    }
   }
   
   public static<V, E> List<Set<V>> getConnectedComponents(

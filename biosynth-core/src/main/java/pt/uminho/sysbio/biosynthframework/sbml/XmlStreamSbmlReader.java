@@ -196,8 +196,8 @@ public class XmlStreamSbmlReader {
 //            List<XmlObject> xmlObjects = parseListOfParameters(xmlEventReader);
             break;
           default: 
-            logger.info("+?+ {}", startElement.getName().getLocalPart());
-            logger.info("+?+ {} {}", startElement.getName().getNamespaceURI(), startElement.getName().getPrefix());
+            logger.debug("+?+ {}", startElement.getName().getLocalPart());
+            logger.debug("+?+ {} {}", startElement.getName().getNamespaceURI(), startElement.getName().getPrefix());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
           }
@@ -416,7 +416,7 @@ public class XmlStreamSbmlReader {
             kvd.add(xo);
             break;
           default:
-            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -428,7 +428,7 @@ public class XmlStreamSbmlReader {
             read = false;
             break;
           default:
-            logger.warn("ignored --- {}", endElement.getName().getLocalPart());
+            logger.debug("ignored --- {}", endElement.getName().getLocalPart());
             break;
         }
       }
@@ -454,7 +454,7 @@ public class XmlStreamSbmlReader {
 //            listOfParameters.add(parameter);
 //            break;
           default:
-            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -492,7 +492,7 @@ public class XmlStreamSbmlReader {
 //            listOfParameters.add(parameter);
 //            break;
           default:
-            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -528,7 +528,7 @@ public class XmlStreamSbmlReader {
             listOfParameters.add(buildSimpleObject(startElement));
             break;
           default:
-            logger.warn("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -562,7 +562,7 @@ public class XmlStreamSbmlReader {
           case KEY_VALUE_DATA_LIST:
             List<XmlObject> kvdArray = parseKeyValueDataList(xmlEventReader);
             if (!annotation.containsKey(KEY_VALUE_DATA_LIST)) {
-              annotation.put(KEY_VALUE_DATA_LIST, new ArrayList<> ());
+              annotation.put(KEY_VALUE_DATA_LIST, new ArrayList<XmlObject> ());
             }
             annotation.get(KEY_VALUE_DATA_LIST).addAll(kvdArray);
             break;
@@ -813,22 +813,21 @@ public class XmlStreamSbmlReader {
         logger.debug("+++ {}", startElement.getName().getLocalPart());
         switch (startElement.getName().getLocalPart()) {
           case "and":
-            MultiNodeTree<Object> andTree = new MultiNodeTree<>(Operator.AND);
+            MultiNodeTree<Object> andTree = new MultiNodeTree<Object>(Operator.AND);
             if (tree != null) {
               tree.addChild(andTree);
             }
             tree = andTree;
             break;
           case "or":
-            MultiNodeTree<Object> orTree = new MultiNodeTree<>(Operator.OR);
+            MultiNodeTree<Object> orTree = new MultiNodeTree<Object>(Operator.OR);
             if (tree != null) {
               tree.addChild(orTree);
             }
             tree = orTree;
             break;
           case "geneProductRef":
-            MultiNodeTree<Object> leaf = 
-              new MultiNodeTree<>(getAttributes(startElement));
+            MultiNodeTree<Object> leaf = new MultiNodeTree<Object>(getAttributes(startElement));
 //            System.out.println(getAttributes(startElement));
             if (tree == null) {
               tree = leaf;
@@ -971,7 +970,7 @@ public class XmlStreamSbmlReader {
             definition.setListOfAnnotations(annotation);
             break;
           default:
-            logger.info("+?+ " + startElement.getName().getLocalPart());
+            logger.debug("+?+ " + startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }

@@ -22,8 +22,13 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
   }
 
   @Override
-  public String translate(String lookup, String reference) {
-    String result = null;
+  public String translate(String lookup, String entry) {
+    BioDbDictionary.setupDefaults();
+    String result = BioDbDictionary.translate(clazz, lookup);
+    
+    if (result != null) {
+      return result;
+    }
 
 //    if (lookup.toLowerCase().trim().equals("chebi")) {
 //      if (reference.toLowerCase().startsWith("chebi:")) {
@@ -32,7 +37,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 //    }
 
     if (lookup.toLowerCase().trim().equals("kegg")) {
-      return translateKegg(lookup, reference);
+      return translateKegg(lookup, entry);
     }
 
     if ((clazz.equals(KeggCompoundMetaboliteEntity.class) || 
@@ -47,7 +52,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
     logger.debug(String.format("Translated %s -> %s using modifier %s", lookup, result, clazz));
 
     if (result.equals(GlobalLabel.KEGG.toString())) {
-      result = resolveKeggDatabase(reference); 
+      result = resolveKeggDatabase(entry); 
       logger.debug(String.format("KEGG resolve %s -> %s", lookup, result, clazz));
     }
 

@@ -1,19 +1,19 @@
 package pt.uminho.sysbio.biosynthframework.biodb.bigg;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
@@ -32,6 +32,13 @@ public class Bigg2ReactionEntity extends GenericReaction {
   @Column(name="pseudoreaction")
   private Boolean pseudoreaction;
   
+  @MetaProperty
+  @Column(name="ec_number")
+  private String ecNumber;
+  
+  public String getEcNumber() { return ecNumber;}
+  public void setEcNumber(String ecNumber) { this.ecNumber = ecNumber;}
+
   @OneToMany(mappedBy = "bigg2ReactionEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
   private List<Bigg2ReactionMetaboliteEntity> metabolites = new ArrayList<> ();
   
@@ -56,7 +63,14 @@ public class Bigg2ReactionEntity extends GenericReaction {
   @OneToMany(mappedBy = "bigg2ReactionEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
   private List<Bigg2ReactionCrossreferenceEntity> crossreferences = new ArrayList<> ();
 
-
+  @JsonIgnore
+  @ElementCollection()
+  @CollectionTable(name="bigg2_reaction_model", joinColumns=@JoinColumn(name="reaction_id"))
+  @Column(name="model", length=127)
+  private List<String> models = new ArrayList<> ();
+  public List<String> getModels() { return models;}
+  public void setModels(List<String> models) { this.models = models;}
+  
   public List<Bigg2ReactionCrossreferenceEntity> getCrossreferences() {
     return crossreferences;
   }

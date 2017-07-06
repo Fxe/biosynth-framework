@@ -35,17 +35,17 @@ public class MultiNodeTree<T> {
   }
 
   public static void main(String[] args) {
-    MultiNodeTree<Object> s = new MultiNodeTree<>("alone");
-    MultiNodeTree<Object> gpr = new MultiNodeTree<>(Operator.OR);
-    MultiNodeTree<Object> gpr2 = new MultiNodeTree<>(Operator.AND);
+    MultiNodeTree<Object> s = new MultiNodeTree<Object>("alone");
+    MultiNodeTree<Object> gpr = new MultiNodeTree<Object>(Operator.OR);
+    MultiNodeTree<Object> gpr2 = new MultiNodeTree<Object>(Operator.AND);
     gpr2.addChild(new MultiNodeTree<Object>("A"));
     gpr2.addChild(new MultiNodeTree<Object>("B"));
     
-    MultiNodeTree<Object> gpr3 = new MultiNodeTree<>(Operator.AND);
+    MultiNodeTree<Object> gpr3 = new MultiNodeTree<Object>(Operator.AND);
     gpr3.addChild(new MultiNodeTree<Object>("C"));
     gpr3.addChild(new MultiNodeTree<Object>("D"));
     
-    MultiNodeTree<Object> gpr4 = new MultiNodeTree<>(Operator.OR);
+    MultiNodeTree<Object> gpr4 = new MultiNodeTree<Object>(Operator.OR);
     gpr4.addChild(new MultiNodeTree<Object>("K"));
     gpr4.addChild(new MultiNodeTree<Object>("J"));
     gpr3.addChild(gpr4);

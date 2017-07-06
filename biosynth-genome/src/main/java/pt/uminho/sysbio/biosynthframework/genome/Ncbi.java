@@ -66,7 +66,7 @@ public class Ncbi {
       is = new FileInputStream("/var/genome/iMF721_1.txt");
       FastaReader<DNASequence, NucleotideCompound> fastaReader = 
           new FastaReader<>(is, 
-                            new GenericFastaHeaderParser<>(), 
+                            new GenericFastaHeaderParser<DNASequence, NucleotideCompound>(), 
                             new DNASequenceCreator(
                                 AmbiguityDNACompoundSet.getDNACompoundSet()));
       
