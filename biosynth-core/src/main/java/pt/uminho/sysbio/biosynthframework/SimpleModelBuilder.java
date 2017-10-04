@@ -17,7 +17,7 @@ public class SimpleModelBuilder {
   }
   
   public static SimpleModelReaction from(XmlSbmlReaction xrxn) {
-    SimpleModelReaction result = new SimpleModelReaction();
+    SimpleModelReaction<String> result = new SimpleModelReaction<>(null, 0.0, 0.0);
     result.id = xrxn.getAttributes().get("id");
     result.name = xrxn.getAttributes().get("name");
     result.lb = 0.0;

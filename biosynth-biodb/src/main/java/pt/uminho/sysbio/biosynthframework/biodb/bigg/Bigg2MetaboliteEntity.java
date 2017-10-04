@@ -28,6 +28,10 @@ public class Bigg2MetaboliteEntity extends GenericMetabolite {
   @Column(name="universal_entry")
   private String universalEntry;
   
+  @MetaProperty
+  @Column(name="old_identifiers")
+  private String oldIdentifiers;
+  
   @JsonIgnore
   @ElementCollection()
   @CollectionTable(name="bigg2_metabolite_model", joinColumns=@JoinColumn(name="metabolite_id"))
@@ -35,9 +39,11 @@ public class Bigg2MetaboliteEntity extends GenericMetabolite {
   private List<String> modelList = new ArrayList<> ();
 
   public String getUniversalEntry() { return universalEntry;}
-
   public void setUniversalEntry(String universalEntry) { this.universalEntry = universalEntry;}
 
+  public String getOldIdentifiers() { return oldIdentifiers;}
+  public void setOldIdentifiers(String oldIdentifiers) { this.oldIdentifiers = oldIdentifiers;}
+  
   public List<String> getModelList() { return modelList;}
 
   public void setModelList(List<String> modelList) { this.modelList = modelList;}

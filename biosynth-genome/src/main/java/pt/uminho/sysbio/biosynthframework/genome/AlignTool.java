@@ -13,7 +13,7 @@ import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
 import org.biojava.nbio.core.util.ConcurrencyTools;
 
-public class AlignTool {
+public class AlignTool implements Aligner {
   
   private SubstitutionMatrix<AminoAcidCompound> matrix;
   
@@ -49,6 +49,30 @@ public class AlignTool {
             PairwiseSequenceAlignerType.LOCAL, new SimpleGapPenalty(), matrix);
     ConcurrencyTools.shutdown();
     return a;
+  }
+
+  @Override
+  public Object localAlignment(String seq1, String seq2) {
+    try {
+      ProteinSequence pseq1 = new ProteinSequence(seq1); 
+      ProteinSequence pseq2 = new ProteinSequence(seq2);
+      return this.lalign(pseq1, pseq2);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public Object globalAlignment(String seq1, String seq2) {
+    try {
+      ProteinSequence pseq1 = new ProteinSequence(seq1); 
+      ProteinSequence pseq2 = new ProteinSequence(seq2);
+      return this.galign(pseq1, pseq2);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
   
 }

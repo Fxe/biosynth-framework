@@ -16,18 +16,15 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
-import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionProxyEntity;
-import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
 import pt.uminho.sysbio.biosynth.integration.io.dao.ReactionHeterogeneousDao;
 
 public class Neo4jGraphReactionDaoImpl 
@@ -205,7 +202,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     return reaction;
   }
 
-  private void createOrLinkToNode(Node srcNode, AbstractGraphEdgeEntity edge, AbstractGraphNodeEntity dst) {
+  @Deprecated
+  protected void createOrLinkToNode(Node srcNode, AbstractGraphEdgeEntity edge, AbstractGraphNodeEntity dst) {
     Node dstNode = getOrCreateNode(dst.getMajorLabel(), dst.uniqueKey, dst.getProperty(dst.uniqueKey, null));
     for (String label : dst.getLabels()) {
       dstNode.addLabel(DynamicLabel.label(label));
@@ -229,7 +227,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     return node;
   }
 
-  private void createOrLinkToReactionProxy(
+  @Deprecated
+  protected  void createOrLinkToReactionProxy(
       Node parent, 
       GraphReactionProxyEntity proxy,
       RelationshipType relationshipType
@@ -268,7 +267,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     }
   }
 
-  private Node createNode(Map<String, Object> nodeProperties) {
+  @Deprecated
+  protected  Node createNode(Map<String, Object> nodeProperties) {
     Node node = graphDatabaseService.createNode();
     for (String key : nodeProperties.keySet()) {
       node.setProperty(key, nodeProperties.get(key));
@@ -277,7 +277,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     return node;
   }
 
-  private Relationship createRelationship(Node src, Node dst, RelationshipType relationshipType, Map<String, Object> relationshipProperties) {
+  @Deprecated
+  protected  Relationship createRelationship(Node src, Node dst, RelationshipType relationshipType, Map<String, Object> relationshipProperties) {
     Relationship relationship = src.createRelationshipTo(dst, relationshipType);
     for (String key : relationshipProperties.keySet()) {
       relationship.setProperty(key, relationshipProperties.get(key));

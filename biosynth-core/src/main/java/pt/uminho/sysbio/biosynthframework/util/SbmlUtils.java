@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.Operator;
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 
 public class SbmlUtils {
@@ -31,7 +31,9 @@ public class SbmlUtils {
     return null;
   }
   
-  public static List<String> gprTreeToString(MultiNodeTree<Object> tree, Function<Object, String> f) {
+  public static List<String> gprTreeToString(MultiNodeTree<Object> tree
+      , BFunction<Object, String> f
+      ) {
     if (tree == null) {
       return null;
     }
@@ -40,6 +42,7 @@ public class SbmlUtils {
       String opStr = ((Operator) tree.body).toString().toLowerCase();
       for (MultiNodeTree<Object> c : tree.getChilds()) {
         terms.addAll(gprTreeToString(c, f));
+//        terms.addAll(gprTreeToString(c));
 //        sb.append(gprTreeToString(c, o) + " " + op);
       }
       String expr = StringUtils.join(terms, " " + opStr + " ");
@@ -52,6 +55,7 @@ public class SbmlUtils {
       return w;
     } else {
       List<String> terms = new ArrayList<> ();
+//      terms.add(tree.body.toString());
       terms.add(f.apply(tree.body));
       return terms;
     }

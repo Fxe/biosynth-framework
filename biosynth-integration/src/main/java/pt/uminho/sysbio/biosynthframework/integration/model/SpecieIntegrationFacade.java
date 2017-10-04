@@ -13,6 +13,7 @@ import com.google.common.base.Joiner;
 
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -27,13 +28,19 @@ public class SpecieIntegrationFacade {
   public Map<String, ?> names = new HashMap<> ();
   public IntegrationMap<String, MetaboliteMajorLabel> dbLinks;
   
+  public ConflictResolver specieConflictResolve = null;
+  public Map<MetaboliteMajorLabel, BFunction<List<Set<String>>, List<Set<String>>>> 
+  matchResolver = new HashMap<> ();
+  
   public Object stringTokenizer;
   public Object dictionary;
   
-  public List<Map<String, Map<MetaboliteMajorLabel, Set<String>>>> isets = new ArrayList<> ();
+  public Map<String, Map<MetaboliteMajorLabel, String>> clean;
+  
+  public List<IntegrationMap<String, MetaboliteMajorLabel>> isets = new ArrayList<> ();
   public Map<String, Map<MetaboliteMajorLabel, List<Set<String>>>> mintegration;
   
-  public List<BaseIntegrationEngine> baseEngines = new ArrayList<> ();
+  public Map<String, BaseIntegrationEngine> baseEngines = new HashMap<> ();
   public List<List<IntegrationEngine>> engines = new ArrayList<> ();
   
   public void generatePatterns() {
@@ -139,8 +146,9 @@ public class SpecieIntegrationFacade {
     
     mapping.add(new ArrayList<IntegrationMap<String, MetaboliteMajorLabel>> ());
     //do base
-    for (BaseIntegrationEngine engine : baseEngines) {
-      logger.debug("[BASE] {}", engine);
+    for (String engineId : baseEngines.keySet()) {
+      BaseIntegrationEngine engine = baseEngines.get(engineId);
+      logger.debug("[BASE] {}", engineId);
       IntegrationMap<String, MetaboliteMajorLabel> ret = engine.integrate();
       status(ret);
       mapping.get(0).add(ret);
@@ -230,28 +238,24 @@ public class SpecieIntegrationFacade {
     status(mintegration);
     
     Map<String, Map<MetaboliteMajorLabel, String>> consensus = 
-        IntegrationMapUtils.consensus(mintegration);
+        IntegrationMapUtils.consensus2(mintegration, matchResolver);
    
     status2(consensus);
     
-    Map<String, Map<MetaboliteMajorLabel, String>> clean = 
-        cleanConflicts(consensus, null, spiToCompartment);
+    this.clean = cleanConflicts(consensus, null, spiToCompartment);
     
     status2(clean);
-    
-    
     return consensus;
   }
   
-  public static Map<String, Map<MetaboliteMajorLabel, String>> cleanConflicts(
+  public Map<String, Map<MetaboliteMajorLabel, String>> cleanConflicts(
       Map<String, Map<MetaboliteMajorLabel, String>> dbSwap, String model, Map<String, String> spiToCmp) {
     Map<String, Map<MetaboliteMajorLabel, String>> result = new HashMap<> ();
 
     //DATABASE -> SPI_OLD -> SPI_NEW
+//    Map<String, String> oldToNewMap = new HashMap<> ();
     Map<MetaboliteMajorLabel, BMap<String, String>> dbMapping = new HashMap<>();
     for (String id : dbSwap.keySet()) {
-//      String spiEntry = String.format("%s@%s", id, model);
-      
         Map<MetaboliteMajorLabel, String> mapping = dbSwap.get(id);
         String cmpEntry = spiToCmp.get(id);
 //        long cmpId = biodbService.getSpecieCompartmentId(spiNode.getId());
@@ -272,8 +276,13 @@ public class SpecieIntegrationFacade {
         BMap<String, String> dbMap = dbMapping.get(database);
         String dbSpiEntry = dbMap.get(id);
         Set<String> species = dbMap.bget(dbSpiEntry);
+        if (specieConflictResolve != null) {
+          species = specieConflictResolve.resolve(id, species);
+        }
         if (species.size() == 1) {
           result.get(id).put(database, mapping.get(database));
+        } else {
+          logger.trace("s:{} dbSpiEntry: {}", species, dbSpiEntry);
         }
 //        logger.info("{} : {} -> {} -> {}", id, database, dbSpiEntry, species);
       }

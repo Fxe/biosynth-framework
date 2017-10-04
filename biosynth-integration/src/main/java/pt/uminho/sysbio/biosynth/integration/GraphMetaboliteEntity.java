@@ -82,8 +82,8 @@ public class GraphMetaboliteEntity extends AbstractGraphNodeEntity implements Me
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder(super.toString());
-    System.out.println(this.labels);
-    System.out.println(this.connectedEntities);
+//    System.out.println(this.labels);
+//    System.out.println(this.connectedEntities);
     return sb.toString();
   }
 }

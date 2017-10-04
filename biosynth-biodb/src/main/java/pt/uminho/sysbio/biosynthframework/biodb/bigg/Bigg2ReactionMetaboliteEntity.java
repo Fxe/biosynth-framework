@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.biodb.bigg;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -8,6 +9,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 @Entity
 @Table(name="bigg2_reaction_metabolite")
@@ -20,8 +22,12 @@ public class Bigg2ReactionMetaboliteEntity extends StoichiometryPair {
   @JoinColumn(name="reaction_id")
   private Bigg2ReactionEntity bigg2ReactionEntity;
   
-  private String compartment_bigg_id;
+  @MetaProperty
+  @Column(name="compartment_bigg_id")
+  private String compartmentBiggId;
   
+  @MetaProperty
+  @Column(name="name")
   private String name;
 
   public Bigg2ReactionEntity getBigg2ReactionEntity() { return bigg2ReactionEntity;}
@@ -29,12 +35,12 @@ public class Bigg2ReactionMetaboliteEntity extends StoichiometryPair {
     this.bigg2ReactionEntity = bigg2ReactionEntity;
   }
 
-  public String getCompartment_bigg_id() {
-    return compartment_bigg_id;
+  public String getCompartmentBiggId() {
+    return compartmentBiggId;
   }
 
-  public void setCompartment_bigg_id(String compartment_bigg_id) {
-    this.compartment_bigg_id = compartment_bigg_id;
+  public void setCompartmentBiggId(String compartmentBiggId) {
+    this.compartmentBiggId = compartmentBiggId;
   }
 
   public String getName() { return name;}

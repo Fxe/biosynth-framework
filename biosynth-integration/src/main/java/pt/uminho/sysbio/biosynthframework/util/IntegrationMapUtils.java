@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 
 public class IntegrationMapUtils {
   
@@ -36,7 +38,7 @@ public class IntegrationMapUtils {
   }
   
   public static Map<String, Map<MetaboliteMajorLabel, List<Set<String>>>> merge(
-      List<Map<String, Map<MetaboliteMajorLabel, Set<String>>>> integration) {
+      List<IntegrationMap<String, MetaboliteMajorLabel>> integration) {
     
     Map<String, Map<MetaboliteMajorLabel, List<Set<String>>>> result = new HashMap<> ();
     int size = integration.size();
@@ -129,6 +131,40 @@ public class IntegrationMapUtils {
         }
         if (best.size() == 1) {
           consensus.get(id).put(database, best.iterator().next());
+        }
+      }
+    }
+    
+//    dataTx.failure();
+//    dataTx.close();
+    
+    return consensus;
+  }
+  
+  public static Map<String, Map<MetaboliteMajorLabel, String>> consensus2(
+      Map<String, Map<MetaboliteMajorLabel, List<Set<String>>>> integrations,
+      Map<MetaboliteMajorLabel, BFunction<List<Set<String>>, List<Set<String>>>> matchResolver) {
+    Map<String, Map<MetaboliteMajorLabel, String>> consensus = new HashMap<> ();
+    
+//    Transaction dataTx = graphDataService.beginTx();
+    
+    for (String id : integrations.keySet()) {
+      consensus.put(id, new HashMap<MetaboliteMajorLabel, String> ());
+      Map<MetaboliteMajorLabel, List<Set<String>>> sets = integrations.get(id);
+      for (MetaboliteMajorLabel database : sets.keySet()) {
+        List<Set<String>> matches = sets.get(database);
+        BFunction<List<Set<String>>, List<Set<String>>> f = null;
+        if (matchResolver != null) {
+          f = matchResolver.get(database);
+        }
+        if (f != null) {
+          matches = f.apply(matches);
+        }
+        Set<String> best = bestMatch(matches);
+        if (best.size() == 1) {
+          consensus.get(id).put(database, best.iterator().next());
+        } else {
+//          System.out.println("discarded " + id + " " + best);
         }
       }
     }

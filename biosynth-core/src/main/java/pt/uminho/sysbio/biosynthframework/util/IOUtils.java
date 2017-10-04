@@ -14,9 +14,11 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,19 +93,20 @@ public class IOUtils {
   }
 
   public static String readFromFile(File file) throws FileNotFoundException, IOException {
-    StringBuilder sb = new StringBuilder();
-
-    FileReader reader = new FileReader(file);
-    BufferedReader br = new BufferedReader(reader);
-    String line;
-    while ( (line = br.readLine()) != null ) {
-      sb.append(line).append('\n');
-    }
-
-    br.close();
-    reader.close();
-
-    return sb.toString();
+    return readFromInputStream(new FileInputStream(file));
+//    StringBuilder sb = new StringBuilder();
+//
+//    FileReader reader = new FileReader(file);
+//    BufferedReader br = new BufferedReader(reader);
+//    String line;
+//    while ( (line = br.readLine()) != null ) {
+//      sb.append(line).append('\n');
+//    }
+//
+//    br.close();
+//    reader.close();
+//
+//    return sb.toString();
   }
   
   public static void writeToFile(InputStream is, File file) throws IOException {
@@ -144,16 +147,18 @@ public class IOUtils {
   }
 
   public static String readFromInputStream(InputStream inputStream) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-    StringBuilder sb = new StringBuilder();
-    String line;
-    while ( (line = br.readLine()) != null ) {
-      sb.append(line).append('\n');
-    }
+    List<String> lines = org.apache.commons.io.IOUtils.readLines(inputStream, "UTF-8");
+    org.apache.commons.io.IOUtils.closeQuietly(inputStream);
+//    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//    StringBuilder sb = new StringBuilder();
+//    String line;
+//    while ( (line = br.readLine()) != null ) {
+//      sb.append(line).append('\n');
+//    }
+//
+//    br.close();
+//    inputStream.close();
 
-    br.close();
-    inputStream.close();
-
-    return sb.toString();
+    return StringUtils.join(lines, '\n');
   }
 }

@@ -7,7 +7,9 @@ public enum ReactionMajorLabel implements Label {
 	BRENDA, 
 	Rhea, 
 	BiGG, 
+	@Deprecated
 	BiGG2Reaction,
+	BiGGReaction,
 	Seed, Reactome, 
 	MetaCyc, HumanCyc, EcoCyc,
 	BioPath, UniPathway, 

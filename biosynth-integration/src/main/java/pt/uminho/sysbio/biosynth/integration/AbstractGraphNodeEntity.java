@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Joiner;
+
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
@@ -110,6 +114,16 @@ public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 	
 	@Override
 	public String toString() {
+	    if (labels.contains(GlobalLabel.MetaboliteProperty.toString()) ||
+	        labels.contains(GlobalLabel.ReactionProperty.toString())) {
+	      Set<String> l = new HashSet<> (labels);
+	      l.remove(GlobalLabel.MetaboliteProperty.toString());
+	      l.remove(GlobalLabel.ReactionProperty.toString());
+	      return String.format("PropertyNode[%d::%s]<%s>", 
+	          id, 
+	          StringUtils.join(l, ':'), 
+	          Joiner.on(';').withKeyValueSeparator(": ").join(properties));
+	    }
 		String str = String.format("%d[%s]%s::%s", this.id, majorLabel, getEntry(), labels);
 		return str;
 	}

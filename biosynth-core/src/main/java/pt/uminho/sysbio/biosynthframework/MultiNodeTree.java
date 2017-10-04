@@ -2,7 +2,6 @@ package pt.uminho.sysbio.biosynthframework;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
@@ -52,8 +51,8 @@ public class MultiNodeTree<T> {
     gpr.addChild(gpr2);
     gpr.addChild(gpr3);
     
-    java.util.function.Function<Object, String> f = 
-        new Function<Object, String>() {
+    BFunction<Object, String> f = 
+        new BFunction<Object, String>() {
       
       @Override
       public String apply(Object t) {

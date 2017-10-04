@@ -8,7 +8,7 @@ public enum MetaboliteMajorLabel implements Label {
   //BioCyc
   MetaCyc, EcoCyc, HumanCyc, YeastCyc, AraCyc,
   HMDB, YMDB,
-  BiGG, BiGG2, MetaNetX, Seed, ModelSeed, MaizeCyc,
+  BiGG, BiGG2, BiGGMetabolite, MetaNetX, Seed, ModelSeed, MaizeCyc,
   
   ChEMBL, ChEBI, 
   Reactome, BRENDA, BioPath, UniPathway, KNApSAcK, CAS, DrugBank,

@@ -20,6 +20,8 @@ public interface BiodbService {
   public Long getIdByEntryAndDatabase(String entry, String database);
   public String getNamePropertyById(long id);
   public String getFormulaPropertyById(long id);
+  public String getEntityProperty(long id, String propertyType);
+  public Set<Long> getIdByProperty(String property, String propertyType);
   
   /**
    * Major type classification Metabolite, Reaction, ModelMetabolite, etc.

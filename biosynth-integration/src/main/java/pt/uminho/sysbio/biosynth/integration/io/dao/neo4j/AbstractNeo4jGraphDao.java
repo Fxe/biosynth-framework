@@ -58,6 +58,8 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
     if (node == null) {
       logger.trace("Previous node not found generating new node...");
       node = graphDatabaseService.createNode();
+      Neo4jUtils.setCreatedTimestamp(node);
+      Neo4jUtils.setUpdatedTimestamp(node);
     }
     
     logger.trace("Selected node: " + node);

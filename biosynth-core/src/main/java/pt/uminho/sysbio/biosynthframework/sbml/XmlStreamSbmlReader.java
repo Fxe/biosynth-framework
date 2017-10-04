@@ -4,6 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -95,18 +101,37 @@ public class XmlStreamSbmlReader {
   
   private final static String SBML_NOTES_BODY = "body";
 
-  private String data = null;
+  private String data;
+  public boolean decodeUtf8 = true;
   
   public Map<String, Integer> rejectedElements = new HashMap<> ();
 
   public XmlStreamSbmlReader(String path) throws IOException {
-    data = IOUtils.readFromFile(new File(path));
-    logger.debug("Loaded {} bytes", data.getBytes().length);
+    String xmlString = IOUtils.readFromFile(new File(path));
+    data = xmlString;
+    if (decodeUtf8) {
+      data = decode(xmlString);
+    }
+    logger.trace("Loaded {} bytes", data.getBytes().length);
   }
 
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
-    data = IOUtils.readFromInputStream(inputStream);
-    logger.debug("Loaded {} bytes", data.getBytes().length);
+    String xmlString = IOUtils.readFromInputStream(inputStream);
+    data = xmlString;
+    if (decodeUtf8) {
+      data = decode(xmlString);
+    }
+    logger.trace("Loaded {} bytes", data.getBytes().length);
+  }
+  
+  public String decode(String str) throws CharacterCodingException {
+    CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+    decoder.replaceWith(" ");
+    decoder.onMalformedInput(CodingErrorAction.REPLACE);
+    decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+    ByteBuffer bb = ByteBuffer.wrap(str.getBytes());
+    CharBuffer buffer = decoder.decode(bb);
+    return buffer.toString();
   }
 
   public XmlSbmlModel parse() throws IOException {
@@ -196,8 +221,8 @@ public class XmlStreamSbmlReader {
 //            List<XmlObject> xmlObjects = parseListOfParameters(xmlEventReader);
             break;
           default: 
-            logger.debug("+?+ {}", startElement.getName().getLocalPart());
-            logger.debug("+?+ {} {}", startElement.getName().getNamespaceURI(), startElement.getName().getPrefix());
+            logger.trace("+?+ {}", startElement.getName().getLocalPart());
+            logger.trace("+?+ {} {}", startElement.getName().getNamespaceURI(), startElement.getName().getPrefix());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
           }
@@ -257,7 +282,7 @@ public class XmlStreamSbmlReader {
   
   public XmlSbmlCompartment parseCompartment(XMLEventReader xmlEventReader, 
       StartElement compartmentStartElement) throws XMLStreamException {
-    logger.debug("+++ <compartment> reading compartment");
+    logger.trace("+++ <compartment> reading compartment");
     boolean read = true;
     XmlSbmlCompartment xmlSbmlCompartment = new XmlSbmlCompartment();
     xmlSbmlCompartment.lineNumber = compartmentStartElement.getLocation().getLineNumber();
@@ -271,7 +296,7 @@ public class XmlStreamSbmlReader {
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
         String startElementLocalPart = startElement.getName().getLocalPart();
-        logger.debug(" ++ <{}> reading metabolite specie", startElementLocalPart);
+        logger.trace(" ++ <{}> reading metabolite specie", startElementLocalPart);
         //              String namespace = startElement.getName().getNamespaceURI();
         switch (startElementLocalPart) {
         case SBML_COMPARTMENT: {
@@ -297,12 +322,12 @@ public class XmlStreamSbmlReader {
 
       }
     }
-    logger.debug("--- reading metabolite specie");
+    logger.trace("--- reading metabolite specie");
     return xmlSbmlCompartment;
   }
 
   public XmlSbmlSpecie parseSpecie(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    logger.debug("+++ <species> reading metabolite specie");
+    logger.trace("+++ <species> reading metabolite specie");
     boolean read = true;
     XmlSbmlSpecie xmlSbmlSpecie = new XmlSbmlSpecie();
     setupObject(xmlSbmlSpecie, specieStartElement);
@@ -317,7 +342,7 @@ public class XmlStreamSbmlReader {
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
         String startElementLocalPart = startElement.getName().getLocalPart();
-        logger.debug(" ++ <{}> reading metabolite specie", startElementLocalPart);
+        logger.trace(" ++ <{}> reading metabolite specie", startElementLocalPart);
         //				String namespace = startElement.getName().getNamespaceURI();
         switch (startElementLocalPart) {
         case SBML_NOTES: {
@@ -392,7 +417,7 @@ public class XmlStreamSbmlReader {
 
       }
     }
-    logger.debug("--- reading metabolite specie");
+    logger.trace("--- reading metabolite specie");
     return xmlSbmlSpecie;
   }
   
@@ -416,7 +441,7 @@ public class XmlStreamSbmlReader {
             kvd.add(xo);
             break;
           default:
-            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.trace("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -428,7 +453,7 @@ public class XmlStreamSbmlReader {
             read = false;
             break;
           default:
-            logger.debug("ignored --- {}", endElement.getName().getLocalPart());
+            logger.trace("ignored --- {}", endElement.getName().getLocalPart());
             break;
         }
       }
@@ -454,7 +479,7 @@ public class XmlStreamSbmlReader {
 //            listOfParameters.add(parameter);
 //            break;
           default:
-            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.trace("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -492,7 +517,7 @@ public class XmlStreamSbmlReader {
 //            listOfParameters.add(parameter);
 //            break;
           default:
-            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.trace("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -513,7 +538,7 @@ public class XmlStreamSbmlReader {
   
   public List<XmlObject> parseListOfParameters(XMLEventReader xmlEventReader) throws XMLStreamException {
     List<XmlObject> listOfParameters = new ArrayList<> ();
-    logger.debug("+++ reading listOfParameters");
+    logger.trace("+++ reading listOfParameters");
     boolean read = true;
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -528,7 +553,7 @@ public class XmlStreamSbmlReader {
             listOfParameters.add(buildSimpleObject(startElement));
             break;
           default:
-            logger.debug("ignored +++ {}", startElement.getName().getLocalPart());
+            logger.trace("ignored +++ {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -548,7 +573,7 @@ public class XmlStreamSbmlReader {
   }
   
   public Map<String, List<XmlObject>> parseAnnotation(XMLEventReader xmlEventReader) throws XMLStreamException {
-    logger.debug("+++ reading annotation");
+    logger.trace("+++ reading annotation");
     Map<String, List<XmlObject>> annotation = new HashMap<> ();
     boolean read = true;
     String bqbiolOntology = null;
@@ -594,7 +619,7 @@ public class XmlStreamSbmlReader {
             break;
           case RDF_LIST_ITEM:
             if (bqbiolOntology == null) {
-              logger.debug("unknown bqbiolOntology");
+              logger.trace("unknown bqbiolOntology");
             } else {
               annotation.get(bqbiolOntology).add(assembleObject(startElement));
             }
@@ -625,14 +650,14 @@ public class XmlStreamSbmlReader {
             break;
           case SBML_ANNOTATION: read = false; break;
           default:
-            logger.debug("ignored --- {}", endElement.getName().getLocalPart());
+            logger.trace("ignored --- {}", endElement.getName().getLocalPart());
             break;
         }
       } else if (xmlEvent.isEndDocument()) {
 
       }
     }
-    logger.debug("--- reading annotation");
+    logger.trace("--- reading annotation");
     return annotation;
   }
   
@@ -773,13 +798,13 @@ public class XmlStreamSbmlReader {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
-        logger.debug("+++ {}", startElement.getName().getLocalPart());
+        logger.trace("+++ {}", startElement.getName().getLocalPart());
         switch (startElement.getName().getLocalPart()) {
           case "modifierSpeciesReference":
             result.add(buildSimpleObject(startElement));
             break;
           default:
-            logger.debug("??? {}", startElement.getName().getLocalPart());
+            logger.trace("??? {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -796,7 +821,7 @@ public class XmlStreamSbmlReader {
             xmlEvent.asEndElement().getName().getLocalPart().equals("listOfModifiers");
 
         if (end) {
-          logger.debug("end");
+          logger.trace("end");
           break;
         }
       }
@@ -810,7 +835,7 @@ public class XmlStreamSbmlReader {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
         StartElement startElement = xmlEvent.asStartElement();
-        logger.debug("+++ {}", startElement.getName().getLocalPart());
+        logger.trace("+++ {}", startElement.getName().getLocalPart());
         switch (startElement.getName().getLocalPart()) {
           case "and":
             MultiNodeTree<Object> andTree = new MultiNodeTree<Object>(Operator.AND);
@@ -836,7 +861,7 @@ public class XmlStreamSbmlReader {
             }
             break;
           default:
-            logger.debug("??? {}", startElement.getName().getLocalPart());
+            logger.trace("??? {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -855,7 +880,7 @@ public class XmlStreamSbmlReader {
             xmlEvent.asEndElement().getName().getLocalPart().equals("geneProductAssociation");
 
         if (end) {
-          logger.debug("end");
+          logger.trace("end");
           break;
         }
       }
@@ -865,7 +890,7 @@ public class XmlStreamSbmlReader {
   }
   
   public XmlSbmlReaction parseReaction(XMLEventReader xmlEventReader, StartElement reactionStartElement) throws XMLStreamException {
-    logger.debug("+++ reading reaction");
+    logger.trace("+++ reading reaction");
     boolean read = true;
 //    List<XmlObject> listOfReactants = new ArrayList<> ();
 //    List<XmlObject> listOfProducts = new ArrayList<> ();
@@ -912,7 +937,7 @@ public class XmlStreamSbmlReader {
             sbmlReaction.getListOfModifiers().addAll(parseModifiers(xmlEventReader, startElement));
             break;
           default:
-            logger.debug("??? {}", startElement.getName().getLocalPart());
+            logger.trace("??? {}", startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -927,7 +952,7 @@ public class XmlStreamSbmlReader {
       }
     }
 
-    logger.debug("--- reading reaction");
+    logger.trace("--- reading reaction");
     return sbmlReaction;
   }
 
@@ -970,7 +995,7 @@ public class XmlStreamSbmlReader {
             definition.setListOfAnnotations(annotation);
             break;
           default:
-            logger.debug("+?+ " + startElement.getName().getLocalPart());
+            logger.trace("+?+ " + startElement.getName().getLocalPart());
             CollectionUtils.increaseCount(rejectedElements, startElement.getName().getLocalPart(), 1);
             break;
         }
@@ -995,7 +1020,7 @@ public class XmlStreamSbmlReader {
   }
   
   public XmlSbmlGroup parseGroup(XMLEventReader xmlEventReader, StartElement groupStartElement) throws XMLStreamException {
-    logger.debug("+++ reading group");
+    logger.trace("+++ reading group");
     boolean read = true;
     XmlSbmlGroup sbmlGroup = new XmlSbmlGroup();
     sbmlGroup.setAttributes(getAttributes(groupStartElement));
@@ -1039,7 +1064,7 @@ public class XmlStreamSbmlReader {
 
       }
     }
-    logger.debug("--- reading group");
+    logger.trace("--- reading group");
 
     return sbmlGroup;
   }

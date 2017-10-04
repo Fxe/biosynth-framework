@@ -8,6 +8,7 @@ dependencies {
 //  compile( project(':biosynth-graph') )
   compile( libraries.jung2_algo)
   compile( libraries.jung2_impl)
+  compile( libraries.ahocorasick)
 
   compile( libraries.neo4j_community)
   compile( libraries.jgrapht_core)

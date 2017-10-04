@@ -36,6 +36,19 @@ public class FirstDegreeReferences implements IntegrationEngine {
         for (String cpdEntry : i.get(db)) {
           Long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, db.toString());
 //          System.out.println(cpdId + " " + biodbService.getEntryById(cpdId));
+          if (cpdId == null && MetaboliteMajorLabel.BiGG2.equals(db)) {
+            Set<Long> allIds = biodbService.getIdByProperty(cpdEntry, "alias");
+            Set<Long> bigg2Ids = new HashSet<> ();
+            for (long id_ : allIds) {
+              String db_ = biodbService.getDatabaseById(id_);
+              if (MetaboliteMajorLabel.BiGG2.toString().equals(db_)) {
+                bigg2Ids.add(id_);
+              }
+              if (!bigg2Ids.isEmpty()) {
+                cpdId = bigg2Ids.iterator().next();
+              }
+            }
+          }
           if (cpdId != null) {
             Set<Long> refIds = biodbService.getReferencesBy(cpdId);
             
@@ -54,7 +67,7 @@ public class FirstDegreeReferences implements IntegrationEngine {
               }
             }
           } else {
-            logger.warn("!!!!!!!!!! {}", cpdEntry);
+            logger.warn("not found {} @ {}", cpdEntry, db);
           }
         }
       }

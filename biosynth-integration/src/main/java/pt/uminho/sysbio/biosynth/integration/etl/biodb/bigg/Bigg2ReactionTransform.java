@@ -18,8 +18,8 @@ import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ReactionMetaboliteEnti
 
 public class Bigg2ReactionTransform extends AbstractReactionTransform<Bigg2ReactionEntity> {
 
-  private static final String BIGG2_REACTION_LABEL = ReactionMajorLabel.BiGG2Reaction.toString();
-  private static final String BIGG2_REACTION_METABOLITE_LABEL = MetaboliteMajorLabel.BiGG2.toString();
+  private static final String BIGG2_REACTION_LABEL = ReactionMajorLabel.BiGGReaction.toString();
+  private static final String BIGG2_REACTION_METABOLITE_LABEL = MetaboliteMajorLabel.BiGGMetabolite.toString();
 
   public Bigg2ReactionTransform() {
     super(BIGG2_REACTION_LABEL, new BiobaseMetaboliteEtlDictionary<>(Bigg2MetaboliteEntity.class));

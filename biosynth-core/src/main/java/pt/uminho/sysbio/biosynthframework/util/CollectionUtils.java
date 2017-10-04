@@ -11,9 +11,18 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
+
 public class CollectionUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(CollectionUtils.class);
+  
+  public static<K, V> boolean insertHS(K key, V value, Map<K, Set<V>> map) {
+    if (!map.containsKey(key)) {
+      map.put(key, new HashSet<V> ());
+    }
+    return map.get(key).add(value);
+  }
   
   public static<K> void increaseCount(Map<K, Integer> map, K key, int amount) {
     if (!map.containsKey(key)) {
@@ -132,5 +141,19 @@ public class CollectionUtils {
     logger.debug("{} -> {}", total, index);
     
     return allocation;
+  }
+
+  public static<K, V> Map<V, Integer> count(Map<K, V> map) {
+    Map<V, Integer> result = new HashMap<> ();
+    
+    for (K key : map.keySet()) {
+      increaseCount(result, map.get(key), 1);
+    }
+    
+    return result;
+  }
+  
+  public static<K, V> String print(Map<K, V> map) {
+    return Joiner.on('\n').withKeyValueSeparator("\t").join(map);
   }
 }

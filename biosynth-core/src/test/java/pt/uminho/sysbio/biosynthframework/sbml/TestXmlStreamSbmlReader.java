@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.sbml;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -12,6 +13,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 public class TestXmlStreamSbmlReader {
@@ -31,6 +34,8 @@ public class TestXmlStreamSbmlReader {
   @After
   public void tearDown() throws Exception {
   }
+  
+  
 
   public void testModel(String SBML_PATH) throws IOException {
 //  XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -74,7 +79,7 @@ public class TestXmlStreamSbmlReader {
 //    break;
 //  }
 //  
-  Function<Object, String> f = new Function<Object, String>() {
+  BFunction<Object, String> f = new BFunction<Object, String>() {
     
     @Override
     public String apply(Object t) {
@@ -112,6 +117,7 @@ public class TestXmlStreamSbmlReader {
       System.out.println("  M " +  o);
     }
     rxnMap.put(reaction.getAttributes().get("id"), reaction);
+//    System.out.println(SbmlUtils.gprTreeToString(reaction.getGpr()));
     System.out.println(SbmlUtils.gprTreeToString(reaction.getGpr(), f));
     break;
   }
@@ -151,6 +157,16 @@ public class TestXmlStreamSbmlReader {
   System.out.println(sbmlReader.rejectedElements);
   }
   
+//  @Test
+  public void testScanner() throws IOException {
+    XmlStreamProfiller profiller = new XmlStreamProfiller();
+    InputStream is = new FileInputStream("/var/biomodels/sbml/iFF708.xml");
+    profiller.scan(is);
+    System.out.println("Shared");
+    System.out.println(DataUtils.toString(profiller.getSharedTags(), "\n", "\t"));
+    System.out.println(profiller.getNamespaces());
+  }
+  
   @Test
   public void test() throws IOException {
 //    final String SBML_PATH = "/var/biomodels/dirty/iAbaylyiV4.xml";
@@ -165,7 +181,7 @@ public class TestXmlStreamSbmlReader {
     SBML_PATH = "/var/biomodels/joana/iSB1139.xml";
     SBML_PATH = "/var/biomodels/joana/iJL432.xml";
     System.out.println(SBML_PATH);
-    testModel(SBML_PATH);
+//    testModel(SBML_PATH);
 //    SBML_PATH = "/var/biomodels/hvo_26_01_17.xml";
     
 //    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";

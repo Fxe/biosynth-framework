@@ -11,6 +11,6 @@ public class Bigg2ApiReaction {
   public Boolean pseudoreaction;
   public List<String> old_identifiers = new ArrayList<> ();
   public List<Map<String, Object>> metabolites = new ArrayList<> ();
-  public List<Map<String, Object>> database_links = new ArrayList<> ();
+  public List<Map<String, List<Map<String, Object>>>> database_links = new ArrayList<> ();
   public List<Map<String, String>> models_containing_reaction = new ArrayList<> ();
 }
