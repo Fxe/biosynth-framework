@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.mnx;
+package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,9 +23,9 @@ import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionCrossReferenceEnt
 import pt.uminho.sysbio.biosynthframework.biodb.mnx.MnxReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
-public class CsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
+public class TsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(CsvMnxReactionDaoImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TsvMnxReactionDaoImpl.class);
 	
 	private File reactionCsvFile;
 	private File crossreferenceCsvFile;
@@ -40,7 +40,7 @@ public class CsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
 	public void setBulkAccess(boolean bulkAccess) { this.bulkAccess = bulkAccess;}
 	
 	@Autowired
-	public CsvMnxReactionDaoImpl(File reactionCsvFile, File crossreferenceCsvFile) {
+	public TsvMnxReactionDaoImpl(File reactionCsvFile, File crossreferenceCsvFile) {
 		this.reactionCsvFile = reactionCsvFile;
 		this.crossreferenceCsvFile = crossreferenceCsvFile;
 		this.xrefMap.clear();

@@ -10,6 +10,7 @@ public enum GlobalLabel implements Label {
 	KeggPathway, MetaCycPathway,
 	ModelSeedRole, ModelSeedSubsystem,
 	KeggOrthology,
+	KeggEnviron,
 	EnzymeCommission,
 	MetabolicModel,
 	SuperMetabolite, Metabolite, MetaboliteProperty,

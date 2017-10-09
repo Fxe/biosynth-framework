@@ -1,12 +1,15 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.core.data.io.http.HttpRequest;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public abstract class AbstractRestfulKeggDao {
@@ -16,11 +19,25 @@ public abstract class AbstractRestfulKeggDao {
   protected String localStorage;
   protected boolean useLocalStorage = false;
   protected boolean saveLocalStorage = false;
-
+  protected String databaseVersion = "latest";
+  
+  public String getDatabaseVersion() { return databaseVersion;}
+  public void setDatabaseVersion(String databaseVersion) { this.databaseVersion = databaseVersion;}
+  
   public String getLocalStorage() { return localStorage;}
   public void setLocalStorage(String localStorage) {
     this.localStorage = localStorage.trim().replaceAll("\\\\", "/");
     if ( !this.localStorage.endsWith("/")) this.localStorage = this.localStorage.concat("/");
+  }
+  
+  public String getPath(String...path) {
+    List<String> p = new ArrayList<> ();
+    p.add(localStorage);
+    p.add(databaseVersion);
+    for (String s : path) {
+      p.add(s);
+    }
+    return StringUtils.join(p, '/');
   }
 
   protected String getLocalOrWeb(String restQuery, String localPath) throws IOException {
@@ -36,15 +53,18 @@ public abstract class AbstractRestfulKeggDao {
       httpResponseString = IOUtils.readFromFile(dataFile.getAbsolutePath());
     } else {
       //either not using local or datafile does not exists
-      httpResponseString = HttpRequest.get(restQuery);
+      
+      httpResponseString = IOUtils.getUrlAsString(restQuery); //HttpRequest.get(restQuery);
       didFetch = true;
     }
 
-    if (httpResponseString.isEmpty()) return null;
+    if (httpResponseString == null || httpResponseString.isEmpty()) {
+      return null;
+    }
 
     if (saveLocalStorage && didFetch) {
-      System.out.println("SAVING !" + localPath);
-      IOUtils.writeToFile(httpResponseString, localPath);			
+      logger.info("saving {}", localPath);
+      IOUtils.writeToFile(httpResponseString, localPath, true);
     }
 
     return httpResponseString;

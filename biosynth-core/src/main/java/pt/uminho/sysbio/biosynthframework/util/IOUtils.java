@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -64,6 +66,35 @@ public class IOUtils {
     }
   }
 
+  public static String getUrlAsString(String url) {
+    URLConnection connection = null;
+    try {
+      connection = new URL(url).openConnection();
+      List<String> lines = org.apache.commons.io.IOUtils.readLines(
+          connection.getInputStream());
+      if (lines != null) {
+        return StringUtils.join(lines, '\n');
+      }
+    } catch (IOException e) {
+      logger.warn("unable to get {}", e.getMessage());
+//      e.printStackTrace();
+    } finally {
+      org.apache.commons.io.IOUtils.close(connection);
+    }
+    
+    return null;
+  }
+  
+  public static void writeToFile(String data, String path, boolean createDir) throws IOException {
+    File fileDir = new File(new File(path).getParent() + "/");
+    if (!fileDir.exists() && createDir) {
+      boolean mkdirs = fileDir.mkdirs();
+      if (mkdirs) {
+        logger.debug("created path {}", fileDir.getAbsolutePath());
+      }
+    }
+    writeToFile(data, path);
+  }
 
   public static void printDir(String dir) {
     File f = new File(dir); // current directory

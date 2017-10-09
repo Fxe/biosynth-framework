@@ -69,15 +69,15 @@ public class GenericCrossreference implements Serializable {
 
   @Override
   public String toString() {
-    final char sep = ',';
-    final char ini = '<';
-    final char end = '>';
-    StringBuilder sb = new StringBuilder();
-    sb.append(ini);
-    sb.append(type).append(sep);
-    sb.append(ref).append(sep);
-    sb.append(value);
-    sb.append(end);
-    return sb.toString();
+//    final char sep = ',';
+//    final char ini = '<';
+//    final char end = '>';
+//    StringBuilder sb = new StringBuilder();
+//    sb.append(ini);
+//    sb.append(type).append(sep);
+//    sb.append(ref).append(sep);
+//    sb.append(value);
+//    sb.append(end);
+    return String.format("<%s, %s, %s>", type, ref, value);
   }
 }

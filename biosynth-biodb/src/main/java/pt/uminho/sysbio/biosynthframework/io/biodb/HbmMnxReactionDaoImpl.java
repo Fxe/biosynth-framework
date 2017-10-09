@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.mnx;
+package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import java.util.HashSet;
 import java.util.Set;

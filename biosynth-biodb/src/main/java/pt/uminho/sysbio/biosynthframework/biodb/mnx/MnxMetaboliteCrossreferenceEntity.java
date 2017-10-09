@@ -13,57 +13,57 @@ import pt.uminho.sysbio.biosynthframework.ReferenceType;
 @Table(name="MNX_METABOLITE_CROSSREF")
 public class MnxMetaboliteCrossreferenceEntity extends GenericCrossreference {
 
-	private static final long serialVersionUID = 1L;
-	
-	@ManyToOne
-	@JoinColumn(name="ID_METABOLITE")
-	private MnxMetaboliteEntity mnxMetaboliteEntity;
-	
-	@Column(name="EVIDENCE", length=63) private String evidence;
-	@Column(name="DESCRIPTION", length=32767) private String description;
-	
-	public MnxMetaboliteCrossreferenceEntity() {
-		super(null, null, null);
-	}
-	public MnxMetaboliteCrossreferenceEntity(ReferenceType type, String reference,
-			String value) {
-		super(type, reference, value);
-	}
-	
-	public MnxMetaboliteEntity getMnxMetaboliteEntity() {
-		return mnxMetaboliteEntity;
-	}
-	public void setMnxMetaboliteEntity(MnxMetaboliteEntity mnxMetaboliteEntity) {
-		this.mnxMetaboliteEntity = mnxMetaboliteEntity;
-	}
-	
-	public String getEvidence() {
-		return evidence;
-	}
-	public void setEvidence(String evidence) {
-		this.evidence = evidence;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	@Override
-	public String toString() {
-		final char sep = ',';
-		final char ini = '<';
-		final char end = '>';
-		StringBuilder sb = new StringBuilder();
-		sb.append(ini);
-		sb.append(type).append(sep);
-		sb.append(ref).append(sep);
-		sb.append(value).append(sep);
-		sb.append(evidence);
-		sb.append(end);
-		return sb.toString();
-	}
+  private static final long serialVersionUID = 1L;
+
+  @ManyToOne
+  @JoinColumn(name="ID_METABOLITE")
+  private MnxMetaboliteEntity mnxMetaboliteEntity;
+
+  @Column(name="EVIDENCE", length=63) private String evidence;
+  @Column(name="DESCRIPTION", length=32767) private String description;
+
+  public MnxMetaboliteCrossreferenceEntity() {
+    super(null, null, null);
+  }
+  public MnxMetaboliteCrossreferenceEntity(ReferenceType type, String reference,
+      String value) {
+    super(type, reference, value);
+  }
+
+  public MnxMetaboliteEntity getMnxMetaboliteEntity() {
+    return mnxMetaboliteEntity;
+  }
+  public void setMnxMetaboliteEntity(MnxMetaboliteEntity mnxMetaboliteEntity) {
+    this.mnxMetaboliteEntity = mnxMetaboliteEntity;
+  }
+
+  public String getEvidence() {
+    return evidence;
+  }
+  public void setEvidence(String evidence) {
+    this.evidence = evidence;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  @Override
+  public String toString() {
+//    final char sep = ',';
+//    final char ini = '<';
+//    final char end = '>';
+//    StringBuilder sb = new StringBuilder();
+//    sb.append(ini);
+//    sb.append(type).append(sep);
+//    sb.append(ref).append(sep);
+//    sb.append(value).append(sep);
+//    sb.append(evidence);
+//    sb.append(end);
+    return String.format("<%s, %s, %s, %s>", type, ref, value, evidence);
+  }
 
 }

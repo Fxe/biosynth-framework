@@ -71,6 +71,7 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
       case 'C': return MetaboliteMajorLabel.LigandCompound.toString();
       case 'D': return MetaboliteMajorLabel.LigandDrug.toString();
       case 'G': return MetaboliteMajorLabel.LigandGlycan.toString();
+      case 'E': return GlobalLabel.KeggEnviron.toString();
       case 'R': return ReactionMajorLabel.LigandReaction.toString();
       default:
         logger.warn("Unknown KEGG initial - {}", entry);

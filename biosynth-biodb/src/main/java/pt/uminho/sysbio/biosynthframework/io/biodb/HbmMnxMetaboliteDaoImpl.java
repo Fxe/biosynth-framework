@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.mnx;
+package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import java.io.Serializable;
 import java.util.List;
