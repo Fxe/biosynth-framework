@@ -33,10 +33,10 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGe
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggKOsDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggModuleDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycClassNames;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycXmlQueryResult;
 
+@Deprecated
 public class GeneralDriver {
   
   private static final Logger logger = LoggerFactory.getLogger(GeneralDriver.class);
@@ -127,9 +127,9 @@ public class GeneralDriver {
     String fileName = String.format("%s.xml", id);
     File path = new File(String.format("%s/%s/%s/", base, db, bclass));
     File file = new File(path.getAbsolutePath() + "/" + fileName);
-    if (!path.exists()) {
-      RestBiocycMetaboliteDaoImpl.createFolderIfNotExists(path.getAbsolutePath());
-    }
+//    if (!path.exists()) {
+//      RestBiocycMetaboliteDaoImpl.createFolderIfNotExists(path.getAbsolutePath());
+//    }
     String resultstr = null;
     if (!file.exists()) {
       OutputStream os = null;

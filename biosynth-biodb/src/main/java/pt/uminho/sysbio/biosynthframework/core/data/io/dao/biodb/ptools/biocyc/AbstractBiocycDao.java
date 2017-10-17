@@ -15,7 +15,7 @@ public class AbstractBiocycDao {
 	protected String pgdb = "META";
 	
 	protected final static String xmlGet = "https://biocyc.org/getxml?%s:%s";
-	protected final String xmlquery = "https://biocyc.org/xmlquery?%s";
+	protected final String xmlquery = "https://biocyc.org/xmlquery?%s&detail=none";
 	
 	public Set<String> getAllBioCycPGDB() {
 		try {

@@ -39,7 +39,10 @@ public class TestXmlSbmlModelAutofix {
     String modelPath = "/var/biomodels/iBROKEN.xml";
     modelPath = "/var/biomodels/joana/iCAC490.xml"; //iCAC490.xml
 //    modelPath = "/var/biomodels/joana/iCyc792.xml"; //iCyc792.xml
-//    modelPath = "/var/biomodels/2batch/iJB785.xml"; //iJB785.xml
+    modelPath = "/var/biomodels/2batch/iJB785.xml"; //iJB785.xml
+    modelPath = "/var/biomodels/test/iTZ479.xml"; //iTZ479.xml
+//    modelPath = "/var/biomodels/joana_bigg/iCHOv1.xml"; //iCHOv1.xml
+    
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(modelPath);
     XmlSbmlModel xmodel = reader.parse();
     XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
@@ -52,6 +55,8 @@ public class TestXmlSbmlModelAutofix {
     System.out.println("----------------------------------");
     
     XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
+    autofix.group.put(MessageCategory.STOICH_NO_VALUE, 
+        new XmlMessageGroup(MessageCategory.STOICH_NO_VALUE, MessageType.WARN, "assume value 1"));
     autofix.fix(xmodel, msgs);
     
     System.out.println("-------FIX------------------------");
@@ -59,6 +64,10 @@ public class TestXmlSbmlModelAutofix {
     for (XmlMessage m : autofix.messages) {
       System.out.println(m);
     }
+    for (XmlMessageGroup g : autofix.group.values()) {
+      System.out.println(g);
+    }
+    
     System.out.println("-------FINAL----------------------");
     XmlSbmlModelValidator validator2 = new XmlSbmlModelValidator(xmodel);
     XmlSbmlModelValidator.initializeDefaults(validator2);

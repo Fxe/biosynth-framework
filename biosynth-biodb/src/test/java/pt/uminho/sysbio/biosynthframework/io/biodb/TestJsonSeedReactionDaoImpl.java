@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.seed;
+package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;

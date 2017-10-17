@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggCompoundMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
@@ -31,11 +32,23 @@ public class TestRestBiocycMetaboliteDaoImpl {
 
   @Test
   public void test() {
-//    RestBiocycMetaboliteDaoImpl metaCyc = new RestBiocycMetaboliteDaoImpl();
-//    metaCyc.setLocalStorage("/var/biodb/biocyc2");
-//    metaCyc.setUseLocalStorage(true);
-//    metaCyc.setSaveLocalStorage(true);
-//    metaCyc.getMetaboliteByEntry("META:CPD-882");
+    RestBiocycMetaboliteDaoImpl dao = new RestBiocycMetaboliteDaoImpl();
+    
+//    RestKeggCompoundMetaboliteDaoImpl dao = new RestKeggCompoundMetaboliteDaoImpl();
+//    dao.setDatabaseVersion("test");
+//    dao.setUseLocalStorage(true);
+//    dao.setSaveLocalStorage(true);
+//    dao.setLocalStorage("/tmp/trash/kegg");
+//    dao.getMetaboliteByEntry("C00001");
+    
+    dao.setLocalStorage("/tmp/trash/biocyc");
+    dao.setDatabaseVersion("test");
+    dao.setUseLocalStorage(true);
+    dao.setSaveLocalStorage(true);
+    dao.setPgdb("META");
+//    dao.getMetaboliteByEntry("META:CPD-882");
+    dao.getMetaboliteByEntry("META:WATER");
+    dao.getAllMetaboliteEntries();
   }
 
 }

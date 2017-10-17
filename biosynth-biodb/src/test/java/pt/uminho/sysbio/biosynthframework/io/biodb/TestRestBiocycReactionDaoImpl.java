@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
+package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import static org.junit.Assert.*;
 

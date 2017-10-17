@@ -1,12 +1,22 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
+
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,7 +24,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.util.AutoFileReader;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import pt.uminho.sysbio.biosynthframework.util.InputStreamSet;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 public class TestXmlStreamSbmlReader {
@@ -35,7 +47,45 @@ public class TestXmlStreamSbmlReader {
   public void tearDown() throws Exception {
   }
   
+  public static void testStrem(String f) {
+    AutoFileReader reader = new AutoFileReader(f, null);
+    InputStreamSet iss = reader.getStreams();
+    System.out.println(iss);
+    IOUtils.closeQuietly(reader);
+  }
   
+  @Test
+  public void testStreams() {
+//    testStrem("/var/data.zip");
+//    testStrem("/iCyc792_export.sbml");
+    
+    
+//    reader.getFileType("/var/data.zip");
+//    reader.getFileType("/iCyc792_export.sbml");
+//    reader.getFileType("/iBif_temp.xml");
+  }
+  
+  @Test
+  public void aaa() throws XMLStreamException {
+    String data = 
+          "<species metaid=\"_321136\" id=\"Cell\" speciesType=\"STCell\" "
+        + "compartment=\"environment\" boundaryCondition=\"true\"/>";
+    XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(
+        new ByteArrayInputStream(data.getBytes()));
+    XMLEvent event = xmlEventReader.nextEvent();
+    assertTrue(event.isStartDocument());
+    event = xmlEventReader.nextEvent();
+    assertTrue(event.isStartElement());
+    
+    StartElement element = event.asStartElement();
+    System.out.println(element.getName());
+    System.out.println(element.getSchemaType());
+    event = xmlEventReader.nextEvent();
+    event = xmlEventReader.nextEvent();
+//    XmlStreamSbmlReader reader = null;
+//    reader.parseSpecie(xmlEventReader, specieStartElement)
+  }
 
   public void testModel(String SBML_PATH) throws IOException {
 //  XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -195,3 +245,4 @@ public class TestXmlStreamSbmlReader {
   }
 
 }
+

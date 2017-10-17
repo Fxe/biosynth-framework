@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,12 +47,18 @@ public class XmlSbmlModelAutofix {
     // TODO Auto-generated constructor stub
   }
   
+  public Map<MessageCategory, XmlMessageGroup> group = new HashMap<> ();
+  
   public void issueFixMessage(XmlObject xo, MessageCategory cat, String str, Object...args) {
-    messages.add(new XmlMessage(xo, cat, MessageType.FIX, str, args));
+    issueMessage(xo, cat, MessageType.FIX, str, args);
   }
   
   public void issueMessage(XmlObject xo, MessageCategory cat, MessageType type, String str, Object...args) {
-    messages.add(new XmlMessage(xo, cat, type, str, args));
+    if (group.containsKey(cat)) {
+      group.get(cat).add(xo);
+    } else {
+      messages.add(new XmlMessage(xo, cat, type, str, args));
+    }
   }
   
   public void indexByLineAndColumn(XmlObject o, Map<Integer, Map<Integer, XmlObject>> index) {

@@ -2,7 +2,10 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +19,26 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
   protected String localStorage;
   protected boolean useLocalStorage = false;
   protected boolean saveLocalStorage = false;
-
+  protected String databaseVersion = "latest";
+  
+  public String getDatabaseVersion() { return databaseVersion;}
+  public void setDatabaseVersion(String databaseVersion) { this.databaseVersion = databaseVersion;}
+  
   public String getLocalStorage() { return localStorage;}
   public void setLocalStorage(String localStorage) {
     this.localStorage = localStorage.trim().replaceAll("\\\\", "/");
     if ( !this.localStorage.endsWith("/")) this.localStorage = this.localStorage.concat("/");
+  }
+  
+  public String getPath(String...parts) {
+    List<String> p = new ArrayList<> ();
+    p.add(localStorage);
+    p.add(databaseVersion);
+    p.add(pgdb);
+    for (String s : parts) {
+      p.add(s);
+    }
+    return StringUtils.join(p, "/");
   }
 
   protected String getLocalOrWeb(String restQuery, String localPath) throws IOException {
@@ -44,7 +62,8 @@ public abstract class AbstractRestfullBiocycDao extends AbstractBiocycDao {
 
     if (saveLocalStorage && didFetch) {
       logger.debug("Write: " + localPath);
-      IOUtils.writeToFile(httpResponseString, localPath);			
+      IOUtils.writeToFile(httpResponseString, localPath, true);
+//      IOUtils.writeToFile(httpResponseString, localPath);			
     }
 
     return httpResponseString;

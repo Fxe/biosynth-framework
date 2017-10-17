@@ -52,15 +52,12 @@ public class XmlStreamSbmlReader {
   private static final String BQBIOL_IS_VERSION_OF   = "isVersionOf";
   private static final String BQBIOL_HAS_PART        = "hasPart";
   
-  
-  
   private static final String KEY_VALUE_DATA_LIST = "listOfKeyValueData";
   private static final String KEY_VALUE_DATA_ITEM = "data";
   
   private static final String FLUXNS_LIMIT = "limit";
   
   private static final String DC_RELATION        = "relation";
-
 
   private final static String RDF_LIST_ITEM = "li";
 

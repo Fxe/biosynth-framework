@@ -241,9 +241,7 @@ public class XmlSbmlModelValidator {
       String value_ = xo.getAttributes().get("stoichiometry");
       if (value_ == null) {
         issueMessage(xo, MessageCategory.STOICH_NO_VALUE, MessageType.WARN, "stoichiometry not found");
-//        value_ = "1";
-      }
-      if (NumberUtils.isNumber(value_)) {
+      } else if (NumberUtils.isNumber(value_)) {
         Double value = Double.parseDouble(value_);
         if (value <= 0.0) {
           issueMessage(xo, MessageCategory.STOICH_INVALID_VALUE, MessageType.CRITICAL, "invalid stoichiometry value %s", value_);
