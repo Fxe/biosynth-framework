@@ -206,11 +206,10 @@ public class XmlSbmlModelMetabolicNetworkFactory extends DefaultMetabolicNetwork
     if (bounds == null) {
       if (rev != null) {
         if (rev) {
-          
           rxnBounds.put(entry, new Range(-1 * infValue, infValue));
           rxnBoundType.put(entry, BoundType.INF_REV_UNBOUNDED);
         } else {
-          rxnBounds.put(entry, new Range(0, infValue));
+          rxnBounds.put(entry, new Range(0.0, infValue));
           rxnBoundType.put(entry, BoundType.INF_IREV_UNBOUNDED);
         }
       } else {

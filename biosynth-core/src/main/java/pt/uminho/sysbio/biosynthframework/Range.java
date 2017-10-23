@@ -1,23 +1,24 @@
 package pt.uminho.sysbio.biosynthframework;
 
-public class Range {
+public class Range extends Tuple2<Double> {
   
-  public Double inf = null;
-  
-  public double lb;
-  public double ub;
-  
-  public Range(double lb, double ub) {
+  public Range(Double lb, Double ub) {
+    super(lb, ub);
     this.lb = lb;
     this.ub = ub;
   }
+
+  public Double inf = null;
+  
+  public final double lb;
+  public final double ub;
   
   /**
    * [a, b] such that a = b
    * @return
    */
   public boolean isFixed() {
-    return this.lb == this.ub;
+    return this.e1 == this.e2;
   }
   
   /**
@@ -25,7 +26,7 @@ public class Range {
    * @return
    */
   public boolean isNull() {
-    return this.lb > this.ub;
+    return this.e1 > this.e2;
   }
   
   /**
@@ -33,7 +34,7 @@ public class Range {
    * @return
    */
   public boolean isPositive() {
-    return this.lb < this.ub && this.lb > 0.0;
+    return this.e1 < this.e2 && this.e1 > 0.0;
   }
   
   /**
@@ -41,16 +42,16 @@ public class Range {
    * @return
    */
   public boolean isNegative() {
-    return this.lb < this.ub && this.ub < 0.0;
+    return this.e1 < this.e2 && this.e2 < 0.0;
   }
   
   @Override
   public String toString() {
     if (inf != null) {
-      String lbStr = (lb <= -1 * inf) ? "-inf" : Double.toString(lb);
-      String ubStr = (ub >= inf) ? "inf" : Double.toString(ub);
+      String lbStr = (e1 <= -1 * inf) ? "-inf" : Double.toString(e1);
+      String ubStr = (e2 >= inf) ? "inf" : Double.toString(e2);
       return String.format("[%s, %s]", lbStr, ubStr);
     }
-    return String.format("[%f, %f]", lb, ub);
+    return String.format("[%f, %f]", e1, e2);
   }
 }

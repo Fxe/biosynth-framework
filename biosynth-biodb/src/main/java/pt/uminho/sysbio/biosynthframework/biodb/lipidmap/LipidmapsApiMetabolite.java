@@ -21,5 +21,7 @@ public class LipidmapsApiMetabolite {
   public String pubchem_cid;
   public String smiles;
   public String synonyms;
+  public String class_level4;
+  
 //  public String smiles;
 }
