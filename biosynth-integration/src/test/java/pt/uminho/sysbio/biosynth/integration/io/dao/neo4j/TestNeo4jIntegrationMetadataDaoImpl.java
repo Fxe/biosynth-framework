@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;

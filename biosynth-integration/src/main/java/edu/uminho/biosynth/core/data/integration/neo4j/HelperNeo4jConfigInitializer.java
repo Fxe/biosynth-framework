@@ -1,6 +1,7 @@
 package edu.uminho.biosynth.core.data.integration.neo4j;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
+import java.io.File;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.slf4j.Logger;
@@ -104,45 +105,44 @@ public class HelperNeo4jConfigInitializer {
   };
 
   public static GraphDatabaseService initializeNeo4jDataDatabaseConstraints(String databasePath) {
-    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
-    ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
 
     for (MetaboliteMajorLabel label : MetaboliteMajorLabel.values()) {
       String cypherQuery = String.format("CREATE CONSTRAINT ON (cpd:%s) ASSERT cpd.entry IS UNIQUE", label);
       logger.trace("Execute Constraint: " + cypherQuery);
-      engine.execute(cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
     }
 
     for (MetabolitePropertyLabel label : MetabolitePropertyLabel.values()) {
       String cypherQuery = String.format("CREATE CONSTRAINT ON (p:%s) ASSERT p.key IS UNIQUE", label);
       logger.trace("Execute Constraint: " + cypherQuery);
-      engine.execute(cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
     }
 
     for (ReactionMajorLabel label : ReactionMajorLabel.values()) {
       String cypherQuery = String.format("CREATE CONSTRAINT ON (rxn:%s) ASSERT rxn.entry IS UNIQUE", label);
       logger.trace("Execute Constraint: " + cypherQuery);
-      engine.execute(cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
     }
 
     for (MetabolicModelLabel label : MetabolicModelLabel.values()) {
       String cypherQuery = String.format("CREATE CONSTRAINT ON (n:%s) ASSERT n.entry IS UNIQUE", label);
       logger.trace("Execute Constraint: " + cypherQuery);
-      engine.execute(cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
     }
 
     for (String query: NEO_DATA_CONSTRAINTS) {
-      engine.execute(query);
+      graphDatabaseService.execute(query);
     }
 
     return graphDatabaseService;
   }
 
   public static GraphDatabaseService initializeNeo4jMetaDatabaseConstraints(String databasePath) {
-    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
-    ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
+
     for (String query: NEO_META_CONSTRAINTS) {
-      engine.execute(query);
+      graphDatabaseService.execute(query);
       logger.trace("Execute Constraint: " + query);
     }
 
@@ -150,10 +150,10 @@ public class HelperNeo4jConfigInitializer {
   }
 
   public static GraphDatabaseService initializeNeo4jCuraDatabaseConstraints(String databasePath) {
-    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
-    ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
+
     for (String query: NEO_CURA_CONSTRAINTS) {
-      engine.execute(query);
+      graphDatabaseService.execute(query);
       logger.trace("Execute Constraint: " + query);
     }
 
@@ -162,9 +162,9 @@ public class HelperNeo4jConfigInitializer {
 
   public static GraphDatabaseService executeNeo4jLayoDatabaseConstraints(
       GraphDatabaseService service) {
-    ExecutionEngine engine = new ExecutionEngine(service);
+
     for (String query: NEO_LAYO_CONSTRAINTS) {
-      engine.execute(query);
+      service.execute(query);
       logger.trace("Execute Constraint: " + query);
     }
 
@@ -172,10 +172,10 @@ public class HelperNeo4jConfigInitializer {
   }
 
   public static GraphDatabaseService initializeNeo4jStruDatabaseConstraints(String path) {
-    GraphDatabaseService service = new GraphDatabaseFactory().newEmbeddedDatabase(path);
-    ExecutionEngine engine = new ExecutionEngine(service);
+    GraphDatabaseService service = new GraphDatabaseFactory().newEmbeddedDatabase(new File(path));
+    
     for (String query: NEO_STRU_CONSTRAINTS) {
-      engine.execute(query);
+      service.execute(query);
       logger.trace("Execute Constraint: " + query);
     }
 
@@ -183,7 +183,7 @@ public class HelperNeo4jConfigInitializer {
   }
 
   public static GraphDatabaseService initializeNeo4jDatabase(String path) {
-    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(path);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(path));
     return graphDatabaseService;
   }
 

@@ -5,8 +5,7 @@ import java.util.Collection;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
-import org.neo4j.helpers.collection.IteratorUtil;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
@@ -22,14 +21,14 @@ public class MetadataContentReporter implements GlobalReporter {
 	@Override
 	public void generateReport() {
 		System.out.println("System Labels:");
-		for (Label label : GlobalGraphOperations.at(graphDatabaseService).getAllLabels()) {
+		for (Label label : graphDatabaseService.getAllLabels()) {
 			System.out.println(label);
 		}
 		
-		System.out.println("Total Nodes: " + IteratorUtil.asCollection(GlobalGraphOperations.at(graphDatabaseService).getAllNodes()).size());
+		System.out.println("Total Nodes: " + Iterators.asSet(graphDatabaseService.getAllNodes()).size());
 		
 		for (Label label : IntegrationNodeLabel.values()) {
-			Collection<Node> nodes = IteratorUtil.asCollection(GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(label));
+			Collection<Node> nodes = Iterators.asCollection(graphDatabaseService.findNodes(label));
 			int total;
 			
 			total = nodes.size();
@@ -37,10 +36,9 @@ public class MetadataContentReporter implements GlobalReporter {
 		}
 		
 		System.out.println("---- Integration Sets ----");
-		Collection<Node> nodes = IteratorUtil
-				.asCollection(GlobalGraphOperations
-						.at(graphDatabaseService)
-						.getAllNodesWithLabel(IntegrationNodeLabel.IntegrationSet));
+		Collection<Node> nodes = Iterators
+				.asCollection(graphDatabaseService
+						.findNodes(IntegrationNodeLabel.IntegrationSet));
 		for (Node iidNode : nodes) {
 			System.out.println("\t>" + Neo4jUtils.getPropertiesMap(iidNode));
 		}

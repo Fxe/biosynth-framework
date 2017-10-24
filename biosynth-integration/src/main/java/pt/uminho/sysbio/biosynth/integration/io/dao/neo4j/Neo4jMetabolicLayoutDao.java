@@ -3,15 +3,14 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetabolicLayoutDao;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.LayoutNode;
 import pt.uminho.sysbio.biosynthframework.MetabolicLayout;
 import pt.uminho.sysbio.biosynthframework.MetabolicLayout.LayoutEdge;
@@ -21,14 +20,12 @@ public class Neo4jMetabolicLayoutDao implements MetabolicLayoutDao {
 
   private static final Logger logger = LoggerFactory.getLogger(Neo4jMetabolicLayoutDao.class);
   
-  protected GraphDatabaseService service;
-  protected ExecutionEngine executionEngine;
+  protected final BiodbGraphDatabaseService service;
   protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
       new AnnotationPropertyContainerBuilder();
   
   public Neo4jMetabolicLayoutDao(GraphDatabaseService graphDatabaseService) {
-    this.service = graphDatabaseService;
-    this.executionEngine = new ExecutionEngine(graphDatabaseService);
+    this.service = new BiodbGraphDatabaseService(graphDatabaseService);
   }
   
   @Override
@@ -68,7 +65,7 @@ public class Neo4jMetabolicLayoutDao implements MetabolicLayoutDao {
   @Override
   public MetabolicLayout findByEntry(String entry) {
     Node node = Neo4jUtils.getUniqueResult(
-        service.findNodesByLabelAndProperty(Neo4jLayoutLabel.MetabolicLayout, 
+        service.listNodes(Neo4jLayoutLabel.MetabolicLayout, 
                                             "entry", entry));
     
     if (node == null) {
@@ -144,8 +141,8 @@ public class Neo4jMetabolicLayoutDao implements MetabolicLayoutDao {
   @Override
   public Map<Long, String> list() {
     Map<Long, String> result = new HashMap<> ();
-    for (Node node : GlobalGraphOperations.at(service)
-        .getAllNodesWithLabel(Neo4jLayoutLabel.MetabolicLayout)) {
+    for (Node node : service
+        .listNodes(Neo4jLayoutLabel.MetabolicLayout)) {
       result.put(node.getId(), (String) node.getProperty("entry"));
     }
     return result;

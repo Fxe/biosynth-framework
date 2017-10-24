@@ -1,11 +1,18 @@
 package pt.uminho.sysbio.biosynthframework;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.QueryExecutionException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterable;
+import org.neo4j.graphdb.ResourceIterator;
+import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.KernelEventHandler;
 import org.neo4j.graphdb.event.TransactionEventHandler;
@@ -13,6 +20,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.graphdb.traversal.BidirectionalTraversalDescription;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.collection.Iterators;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
@@ -51,12 +59,26 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   
   @Override
   public Node createNode() {
-    return service.createNode();
+    Node node = service.createNode();
+    Neo4jUtils.setCreatedTimestamp(node);
+    Neo4jUtils.setUpdatedTimestamp(node);
+    return node;
   }
 
   @Override
   public Node createNode(Label... labels) {
-    return service.createNode(labels);
+    Node node = this.createNode();
+    for (Label l : labels) {
+      node.addLabel(l);
+    }
+    
+    return node;
+  }
+  
+  @Override
+  public Long createNodeId() {
+    Node node = service.createNode();
+    return node.getId();
   }
 
   @Override
@@ -67,23 +89,6 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   @Override
   public Relationship getRelationshipById(long id) {
     return service.getRelationshipById(id);
-  }
-
-  @Deprecated
-  @Override
-  public Iterable<Node> getAllNodes() {
-    return service.getAllNodes();
-  }
-
-  @Override
-  public ResourceIterable<Node> findNodesByLabelAndProperty(Label label, String key, Object value) {
-    return service.findNodesByLabelAndProperty(label, key, value);
-  }
-
-  @Deprecated
-  @Override
-  public Iterable<RelationshipType> getRelationshipTypes() {
-    return service.getRelationshipTypes();
   }
 
   @Override
@@ -139,6 +144,92 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   @Override
   public BidirectionalTraversalDescription bidirectionalTraversalDescription() {
     return service.bidirectionalTraversalDescription();
+  }
+
+
+
+  @Override
+  public ResourceIterable<Node> getAllNodes() {
+    return service.getAllNodes();
+  }
+
+  @Override
+  public ResourceIterable<Relationship> getAllRelationships() {
+    return service.getAllRelationships();
+  }
+
+  @Override
+  public ResourceIterator<Node> findNodes(Label label, String key, Object value) {
+    return service.findNodes(label, key, value);
+  }
+
+  @Override
+  public Node findNode(Label label, String key, Object value) {
+    return service.findNode(label, key, value);
+  }
+
+  @Override
+  public ResourceIterator<Node> findNodes(Label label) {
+    return service.findNodes(label);
+  }
+  
+  public Set<Node> listNodes(Label label) {
+    return Iterators.asSet(service.findNodes(label));
+  }
+  
+  public Set<Node> listNodes(Label label, String key, Object value) {
+    return Iterators.asSet(service.findNodes(label, key, value));
+  }
+
+  @Override
+  public ResourceIterable<Label> getAllLabelsInUse() {
+    return service.getAllLabelsInUse();
+  }
+
+  @Override
+  public ResourceIterable<RelationshipType> getAllRelationshipTypesInUse() {
+    return service.getAllRelationshipTypesInUse();
+  }
+
+  @Override
+  public ResourceIterable<Label> getAllLabels() {
+    return service.getAllLabels();
+  }
+
+  @Override
+  public ResourceIterable<RelationshipType> getAllRelationshipTypes() {
+    return service.getAllRelationshipTypes();
+  }
+
+  @Override
+  public ResourceIterable<String> getAllPropertyKeys() {
+    return service.getAllPropertyKeys();
+  }
+
+  @Override
+  public Transaction beginTx(long timeout, TimeUnit unit) {
+    return service.beginTx();
+  }
+
+  @Override
+  public Result execute(String query) throws QueryExecutionException {
+    return service.execute(query);
+  }
+
+  @Override
+  public Result execute(String query, long timeout, TimeUnit unit) throws QueryExecutionException {
+    return service.execute(query, timeout, unit);
+  }
+
+  @Override
+  public Result execute(String query, Map<String, Object> parameters) throws QueryExecutionException {
+    return service.execute(query, parameters);
+  }
+
+  @Override
+  public Result execute(String query, Map<String, Object> parameters, long timeout, TimeUnit unit)
+      throws QueryExecutionException {
+    return service.execute(query, parameters, timeout, unit);
   }
 
 }

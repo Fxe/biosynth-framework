@@ -10,8 +10,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -21,7 +19,8 @@ import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterable;
-import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.graphdb.ResourceIterator;
+import org.neo4j.graphdb.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +123,11 @@ public class Neo4jUtils {
   }
 
   public static Set<Label> getLabels(Node node) {
-    return IteratorUtil.asSet(node.getLabels());
+    Set<Label> result = new HashSet<> ();
+    for (Label l : node.getLabels()) {
+      result.add(l);
+    }
+    return result;
   }
   public static Set<String> getLabelsAsString(Node node) {
     Set<String> labels = new HashSet<> ();
@@ -266,19 +269,21 @@ public class Neo4jUtils {
     return proxyEntities;
   }
 
+  @Deprecated
   public static void printNode(Node node) {
-    String header = String.format("[%d]%s", node.getId(), IteratorUtil.asCollection(node.getLabels()));
-    System.out.println(header);
-    System.out.println(getPropertiesMap(node));
-
-    for (Relationship relationship : node.getRelationships()) {
-      System.out.println("================" + relationship.getType());
-      Node other = relationship.getOtherNode(node);
-      System.out.println(getPropertiesMap(relationship));
-      String header_ = String.format("[%d]%s", other.getId(), IteratorUtil.asCollection(other.getLabels()));
-      System.out.println(header_);
-      System.out.println(getPropertiesMap(other));
-    }
+    logger.warn("not implemented");
+//    String header = String.format("[%d]%s", node.getId(), IteratorUtil.asCollection(node.getLabels()));
+//    System.out.println(header);
+//    System.out.println(getPropertiesMap(node));
+//
+//    for (Relationship relationship : node.getRelationships()) {
+//      System.out.println("================" + relationship.getType());
+//      Node other = relationship.getOtherNode(node);
+//      System.out.println(getPropertiesMap(relationship));
+//      String header_ = String.format("[%d]%s", other.getId(), IteratorUtil.asCollection(other.getLabels()));
+//      System.out.println(header_);
+//      System.out.println(getPropertiesMap(other));
+//    }
   }
 
   public static void applyProperties(Node node, Map<String, Object> properties) {
@@ -286,11 +291,23 @@ public class Neo4jUtils {
       node.setProperty(key, properties.get(key));
     }
   }
+  
+  public static Set<Node> findNodes(Label label, String key, Object value, 
+                             GraphDatabaseService graphDatabaseService) {
+    Set<Node> result = new HashSet<> ();
+    
+    ResourceIterator<Node> ri = graphDatabaseService.findNodes(label, key, value);
+    while (ri.hasNext()) {
+      result.add(ri.next());
+    }
+    
+    return result;
+  }
 
   @Deprecated
   public static Node mergeNode(Label label, String key, Object value, GraphDatabaseService graphDatabaseService) {
     Node node = null;
-    for (Node res : graphDatabaseService.findNodesByLabelAndProperty(label, key, value)) {
+    for (Node res : findNodes(label, key, value, graphDatabaseService)) {
       node = res;
       System.out.println(res);
     }
@@ -306,6 +323,7 @@ public class Neo4jUtils {
 
   @Deprecated
   public static Node mergeNode(String label, String key, Object value, GraphDatabaseService graphDatabaseService) {
+    
     return mergeNode(DynamicLabel.label(label), key, value, graphDatabaseService);
   }
 
@@ -322,12 +340,43 @@ public class Neo4jUtils {
 
     return node;
   }
-
-  public static Node getExecutionResultGetSingle(String column, ExecutionResult executionResult) {
-    if (executionResult == null) return null;
-
+  
+  public static Node getUniqueResult(
+      ResourceIterator<Node> findNodesByLabelAndProperty) {
     Node node = null;
-    for (Object object : IteratorUtil.asList(executionResult.columnAs(column))) {
+    
+    while (findNodesByLabelAndProperty.hasNext()) { 
+      if (node != null) {
+        logger.warn("Resource not unique");
+      }
+      node = findNodesByLabelAndProperty.next(); 
+    }
+
+    return node;
+  }
+  
+  public static Node getUniqueResult(
+      Collection<Node> findNodesByLabelAndProperty) {
+    Node node = null;
+
+    for (Node node_ : findNodesByLabelAndProperty) {
+      if (node != null) {
+        logger.warn("Resource not unique");
+      }
+      node = node_;
+    }
+
+    return node;
+  }
+
+  public static Node getExecutionResultGetSingle(String column, Result executionResult) {
+    if (executionResult == null) return null;
+    
+    ResourceIterator<Object> ri = executionResult.columnAs(column);
+    
+    Node node = null;
+    while(ri.hasNext()) {
+      Object object = ri.next();
       if (node != null) logger.warn("Integrity failure. Not unique result.");
       node = (Node) object;
     }
@@ -345,7 +394,8 @@ public class Neo4jUtils {
 
 
 
-  public static Node mergeUniqueNode(Label label, String key, Object value, ExecutionEngine ee) {
+  public static Node mergeUniqueNode(Label label, String key, Object value, 
+                                     GraphDatabaseService graphDatabaseService) {
     String query = String.format("MERGE (n:%s {%s:{%s}}) "
         + "ON CREATE SET n.created_at = timestamp(), n.updated_at = timestamp() "
         + "ON MATCH SET n.updated_at = timestamp() RETURN n", 
@@ -354,12 +404,12 @@ public class Neo4jUtils {
     params.put(key, value);
 
     logger.trace(String.format("Cypher: %s - %s", query, params));
-    Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
+    Node node = getExecutionResultGetSingle("n", graphDatabaseService.execute(query, params));
     return node;
   }
 
   public static Node getOrCreateNode(Label label,
-      String key, Object value, ExecutionEngine ee) {
+      String key, Object value, GraphDatabaseService service) {
     String query = String.format(
         "MERGE (n:%s {%s:{%s}}) " + 
             "ON CREATE SET n.created_at=timestamp(), n.updated_at=timestamp() " + 
@@ -368,7 +418,7 @@ public class Neo4jUtils {
     logger.trace("Query: " + query);
     Map<String, Object> params = new HashMap<> ();
     params.put(key, value);
-    Node node = getExecutionResultGetSingle("n", ee.execute(query, params));
+    Node node = getExecutionResultGetSingle("n", service.execute(query, params));
 
     return node;
   }
@@ -458,8 +508,7 @@ public class Neo4jUtils {
    */
   public static Node getNodeByEntry(Label label, String entry, GraphDatabaseService db) {
     Node node = getUniqueResult(
-        db.findNodesByLabelAndProperty(label, 
-            Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry));
+        findNodes(label, Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry, db));
     return node;
   }
   
@@ -472,8 +521,7 @@ public class Neo4jUtils {
    */
   public static Node getNodeByKey(Label label, String entry, GraphDatabaseService db) {
     Node node = getUniqueResult(
-        db.findNodesByLabelAndProperty(label, 
-            Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, entry));
+        findNodes(label, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, entry, db));
     return node;
   }
 }

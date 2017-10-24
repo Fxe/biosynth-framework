@@ -356,7 +356,7 @@ public class IntegrationUtils {
     Map<Long, Node> idToNode = new HashMap<> ();
     for (long spiId : spiIdSet) {
       Node spiNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, spiId));
       if (spiNode == null) {
@@ -431,7 +431,7 @@ public class IntegrationUtils {
     Map<Long, Node> idToNode = new HashMap<> ();
     for (long mrxnId : mrxn) {
       Node mrxnNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, mrxnId));
       if (mrxnNode == null) {
@@ -513,7 +513,7 @@ public class IntegrationUtils {
     //collect eidAdd nodes
     for (long refId : eidAdd) {
       Node eidNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, refId));
 
@@ -547,7 +547,7 @@ public class IntegrationUtils {
     Set<Long> ctrIds = new HashSet<> ();
     for (long eidId : eidIdSet) {
       Node eidNode = Neo4jUtils.getUniqueResult(
-          meta.findNodesByLabelAndProperty(
+          meta.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, eidId));
 //      System.out.println(eidId + " " + eidNode);
@@ -583,7 +583,7 @@ public class IntegrationUtils {
       Set<Long> ctrIds = new HashSet<> ();
       for (long mcpdId : mcpdCtr) {
         Node mcpdRefNode = Neo4jUtils.getUniqueResult(
-            graphMetaService.findNodesByLabelAndProperty(
+            graphMetaService.findNodes(
                 IntegrationNodeLabel.IntegratedMember, 
                 Neo4jDefinitions.MEMBER_REFERENCE, mcpdId));
         if (mcpdRefNode != null) {
@@ -619,7 +619,7 @@ public class IntegrationUtils {
       for (long spiId : spiIdCluster) {
 //        System.out.println(spiId);
         Node spiRrefNode = Neo4jUtils.getUniqueResult(
-            graphMetaService.findNodesByLabelAndProperty(
+            graphMetaService.findNodes(
                 IntegrationNodeLabel.IntegratedMember, 
                 Neo4jDefinitions.MEMBER_REFERENCE, spiId));
         if (spiRrefNode != null) {
@@ -740,12 +740,7 @@ public class IntegrationUtils {
     }
   }
   
-  public static Node getNodeByDatabaseAndEntry(Label database, String entry, GraphDatabaseService service) {
-    Node node = Neo4jUtils.getUniqueResult(
-        service.findNodesByLabelAndProperty(
-            database, 
-            Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry));
-    
-    return node;
-  }
+//  public static Node getNodeByDatabaseAndEntry(Label database, String entry, GraphDatabaseService service) {
+//    return Neo4jUtils.getNodeByEntry(database, entry, service);
+//  }
 }

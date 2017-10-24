@@ -6,31 +6,28 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.helpers.collection.IteratorUtil;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.Neo4jNode;
 import pt.uminho.sysbio.biosynth.integration.Neo4jRelationship;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 
 public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 
   private final static Logger logger = LoggerFactory.getLogger(Neo4jSuperDaoImpl.class);
 
-  private final GraphDatabaseService graphDatabaseService;
-  private final ExecutionEngine executionEngine;
+  private final BiodbGraphDatabaseService graphDatabaseService;
 
   public Neo4jSuperDaoImpl(GraphDatabaseService graphDatabaseService) {
-    this.graphDatabaseService = graphDatabaseService;
-    this.executionEngine = new ExecutionEngine(graphDatabaseService);
+    this.graphDatabaseService = new BiodbGraphDatabaseService(graphDatabaseService);
   }
 
   private Neo4jNode toNeo4jNode(Node node) {
@@ -153,7 +150,7 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
   @Override
   public Map<Set<String>, Set<Long>> superHeavyMethod() {
     Map<Set<String>, Set<Long>> result = new HashMap<> ();
-    for (Node node : GlobalGraphOperations.at(graphDatabaseService).getAllNodes()) {
+    for (Node node : graphDatabaseService.getAllNodes()) {
       Set<String> labels = Neo4jUtils.getLabelsAsString(node);
       if (!result.containsKey(labels)) {
         result.put(labels, new HashSet<Long> ());
@@ -220,14 +217,14 @@ public class Neo4jSuperDaoImpl implements Neo4jSuperDao {
 
   @Override
   public String executeQuery(String query, Map<String, Object> params) {
-    return this.executionEngine.execute(query, params).dumpToString();
+    return this.graphDatabaseService.execute(query, params).resultAsString();
   }
 
   @Override
   public Set<Long> findNodesByLabelAndProperty(String label, String key, Object value) {
     Set<Long> idSet = new HashSet<> ();
-    for (Node node : IteratorUtil.asList(graphDatabaseService
-        .findNodesByLabelAndProperty(DynamicLabel.label(label), key, value))) {
+    for (Node node : graphDatabaseService
+        .listNodes(DynamicLabel.label(label), key, value)) {
       idSet.add(node.getId());
     }
     return idSet;

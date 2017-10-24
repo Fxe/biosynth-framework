@@ -123,7 +123,7 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
 
     tx = service.beginTx();
     Node node = Neo4jUtils.getUniqueResult(service
-        .findNodesByLabelAndProperty(MetaboliteMajorLabel.LigandDrug, "entry", metabolite2.getEntry()));
+        .findNodes(MetaboliteMajorLabel.LigandDrug, "entry", metabolite2.getEntry()));
 
     assertNotNull(node);
     assertEquals(Long.parseLong(metabolite2.getId().toString()), node.getId());

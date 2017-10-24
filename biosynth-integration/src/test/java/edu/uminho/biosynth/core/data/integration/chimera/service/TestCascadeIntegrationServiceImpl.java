@@ -1,6 +1,5 @@
 package edu.uminho.biosynth.core.data.integration.chimera.service;
 
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.util.HashMap;

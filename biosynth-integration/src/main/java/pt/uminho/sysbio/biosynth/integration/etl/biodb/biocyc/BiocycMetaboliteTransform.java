@@ -123,6 +123,9 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
       GraphMetaboliteEntity centralMetaboliteEntity,
       BioCycMetaboliteEntity metabolite) {
     for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+      if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
+        xref.setRef("bigg2");
+      }
       if (xref.getRef().toLowerCase().equals("bigg")) {
         if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
           xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));

@@ -7,7 +7,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,9 +126,8 @@ public class ReactionIntegrationReporter implements IntegrationSetReporter {
 			int totalIntegratedGenerics = 0;
 			int totalNonGenerics = 0;
 			int totalIntegratedNonGenerics = 0;
-			for (Node node : GlobalGraphOperations
-					.at(graphDataService)
-					.getAllNodesWithLabel(label)) {
+			for (Node node : Iterators.asIterable(graphDataService
+					.findNodes(label))) {
 				long nodeId = node.getId();
 				if (node.hasLabel(GlobalLabel.Reaction)) {
 					boolean generic = isGenericReactionNode(node);

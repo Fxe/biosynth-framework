@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +26,8 @@ public class Neo4jReactionDao extends AbstractNeo4jDao implements ReactionDao<De
 	public DefaultReaction getReactionById(Long id) {
 		Node node = graphDatabaseService.getNodeById(id);
 		
-		LOGGER.trace(String.format("%s -> %s", 
-				node, node != null ? IteratorUtil.asCollection(node.getLabels()) : "null"));
+//		LOGGER.trace("{} -> {}", 
+//				node, node != null ? Iterators.asCollection(node.getLabels()) : "null");
 		
 		if (node == null || !node.hasLabel(GlobalLabel.Reaction)) return null;
 		
@@ -47,7 +47,7 @@ public class Neo4jReactionDao extends AbstractNeo4jDao implements ReactionDao<De
 
 	@Override
 	public DefaultReaction getReactionByEntry(String entry) {
-		Node node = graphDatabaseService.findNodesByLabelAndProperty(ReactionMajorLabel.BiGG, "entry", entry).iterator().next();
+		Node node = graphDatabaseService.listNodes(ReactionMajorLabel.BiGG, "entry", entry).iterator().next();
 		
 		return this.getReactionById(node.getId());
 	}

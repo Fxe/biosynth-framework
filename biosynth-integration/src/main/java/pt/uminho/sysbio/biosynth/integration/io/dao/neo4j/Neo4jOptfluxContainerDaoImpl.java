@@ -10,8 +10,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.helpers.collection.IteratorUtil;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +62,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   public ExtendedMetabolicModelEntity getMetabolicModelByEntry(
       String entry) {
     Node node = Neo4jUtils.getUniqueResult(
-        graphDatabaseService.findNodesByLabelAndProperty(
+        graphDatabaseService.listNodes(
             GlobalLabel.MetabolicModel, "entry", entry));
 
     if (node == null) {
@@ -79,7 +78,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       ExtendedMetabolicModelEntity mmd) {
 
     try {
-      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", mmd.getEntry(), executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", mmd.getEntry(), graphDatabaseService);
       Map<String, Object> properties = a.extractProperties(mmd, ExtendedMetabolicModelEntity.class);
       Neo4jUtils.setPropertiesMap(properties, node);
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
@@ -96,9 +95,8 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   @Override
   public Set<Long> getAllMetabolicModelIds() {
     Set<Long> res = new HashSet<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(GlobalLabel.MetabolicModel)) {
+    for (Node node : graphDatabaseService
+        .listNodes(GlobalLabel.MetabolicModel)) {
       res.add(node.getId());
     }
     return res;
@@ -117,7 +115,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     String query = String.format("MATCH (n:%s) WHERE n.entry =~ '%s' RETURN n", GlobalLabel.MetabolicModel, search);
     logger.trace("Query: {}", query);
     //		System.out.println(query);
-    for (Object o : IteratorUtil.asList(executionEngine.execute(query).columnAs("n"))) {
+    for (Object o : Iterators.asList(graphDatabaseService.execute(query).columnAs("n"))) {
       Node node = (Node) o;
       ExtendedMetabolicModelEntity model = this.getMetabolicModelById(node.getId());
       if (model != null) res.add(model);
@@ -133,7 +131,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   
   public Node getGcmpNode(SubcellularCompartment gcmp) {
     Node gcmpNode = Neo4jUtils.getUniqueResult(
-        graphDatabaseService.findNodesByLabelAndProperty(
+        graphDatabaseService.listNodes(
             GlobalLabel.SubcellularCompartment, "entry", gcmp.toString()));
     if (gcmpNode == null) {
       gcmpNode = graphDatabaseService.createNode();
@@ -244,7 +242,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node cmpNode = Neo4jUtils.getUniqueResult(
-        graphDatabaseService.findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, 
+        graphDatabaseService.listNodes(GlobalLabel.SubcellularCompartment, 
                                      "entry", cmpEntry));
     return this.getCompartmentById(cmpNode.getId());
   }
@@ -256,7 +254,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
     try {
       String entry = String.format("%s@%s", cmp.getEntry(), mmd.getEntry());
-      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.SubcellularCompartment, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.SubcellularCompartment, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = a.extractProperties(cmp, DefaultSubcellularCompartmentEntity.class);
       properties.remove("entry");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -376,7 +374,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry));
+        .listNodes(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry));
 
     if (node == null) {
       logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.MetaboliteSpecie, spiEntry);
@@ -393,7 +391,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
     try {
       String entry = String.format("%s@%s", spi.getEntry(), mmd.getEntry());
-      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.MetaboliteSpecie, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.MetaboliteSpecie, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = a.extractProperties(spi, ExtendedMetaboliteSpecie.class);
       properties.remove("entry");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -404,7 +402,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
       String cmpEntry = String.format("%s@%s", spi.getComparment(), mmd.getEntry());
       Node cmpNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-          .findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
+          .listNodes(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
       node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
     } catch (Exception e) {
       logger.error("E - {}", e.getMessage());
@@ -452,7 +450,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.ModelReaction, "entry", rxnEntry));
+        .listNodes(MetabolicModelLabel.ModelReaction, "entry", rxnEntry));
 
     if (node == null) {
       logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.ModelReaction, rxnEntry);
@@ -469,7 +467,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
     try {
       String entry = String.format("%s@%s", rxn.getEntry(), mmd.getEntry());
-      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = a.extractProperties(rxn, OptfluxContainerReactionEntity.class);
       properties.remove("entry");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -514,7 +512,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   public void createStoichiometryLink(String spiEntry, String mmdEntry, Node rxn, Map<String, Object> properties, MetabolicModelRelationshipType r) {
     String spiEntry_ = String.format("%s@%s", spiEntry, mmdEntry);
     Node spiNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
+        .listNodes(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
 
     Relationship relationship = rxn.createRelationshipTo(spiNode, r);
     Neo4jUtils.setPropertiesMap(properties, relationship);
@@ -563,7 +561,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node cpdNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.ModelMetabolite, 
+        .listNodes(MetabolicModelLabel.ModelMetabolite, 
                                      "entry", spiEntry));
     return this.getModelMetaboliteById(cpdNode.getId());
   }
@@ -579,7 +577,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
 
     try {
       String entry = String.format("%s@%s", cpd.getEntry(), mmd.getEntry());
-      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelMetabolite, "entry", entry, graphDatabaseService);
       logger.debug("Created {}", node);
       Map<String, Object> properties = a.extractProperties(cpd, ExtendedModelMetabolite.class);
       properties.remove("entry");

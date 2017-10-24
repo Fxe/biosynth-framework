@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class TheBestIntegrationMethod {
       Set<Long> all = new HashSet<> ();
 //      dataTx = graphDataService.beginTx();
       
-      for (Node n : GlobalGraphOperations.at(gds).getAllNodesWithLabel(db)) {
+      for (Node n : Iterators.asIterable(gds.findNodes(db))) {
         if (n.hasLabel(GlobalLabel.Metabolite)) {
           boolean proxy = (boolean) n.getProperty(Neo4jDefinitions.PROXY_PROPERTY);
           if (!proxy) {
@@ -62,7 +62,7 @@ public class TheBestIntegrationMethod {
       
       
       Set<Tuple2<Long>> pairs = new HashSet<> ();
-      for (Node n : GlobalGraphOperations.at(gds).getAllNodesWithLabel(p)) {
+      for (Node n : Iterators.asIterable(gds.findNodes(p))) {
         all.add(n.getId());
         
         Set<Long> linked = new HashSet<> ();

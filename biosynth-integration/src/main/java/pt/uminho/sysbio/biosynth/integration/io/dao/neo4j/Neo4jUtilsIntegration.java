@@ -43,7 +43,7 @@ public class Neo4jUtilsIntegration {
   public static Node getOrCreateIntegratedMemberByReferenceId(
       long refId, GraphDatabaseService dataDb, GraphDatabaseService targetDb) {
     Node refNode = Neo4jUtils.getUniqueResult(
-        targetDb.findNodesByLabelAndProperty(
+        targetDb.findNodes(
             IntegrationNodeLabel.IntegratedMember, 
             Neo4jDefinitions.MEMBER_REFERENCE, refId));
     
@@ -220,7 +220,7 @@ public class Neo4jUtilsIntegration {
     Map<Long, Node> idToNode = new HashMap<> ();
     for (long id : ctr) {
       Node refNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, id));
       if (refNode == null) {
@@ -327,7 +327,7 @@ public class Neo4jUtilsIntegration {
       //    System.out.println(spiId);
 
       Node refNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, refId));
       if (refNode != null) {
@@ -380,7 +380,7 @@ public class Neo4jUtilsIntegration {
     //collect eidAdd nodes
     for (long refId : eidAdd) {
       Node eidNode = Neo4jUtils.getUniqueResult(
-          graphMetaService.findNodesByLabelAndProperty(
+          graphMetaService.findNodes(
               IntegrationNodeLabel.IntegratedMember, 
               Neo4jDefinitions.MEMBER_REFERENCE, refId));
 

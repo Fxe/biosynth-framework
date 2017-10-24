@@ -30,11 +30,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
   
   public Neo4jXmlSbmlModelDao(GraphDatabaseService graphDatabaseService) {
     super(graphDatabaseService);
-  }
-  
-
-  
-
+  } 
   
   protected static Map<String, Object> getProperties(XmlObject xmlObject) {
     Map<String, Object> properties = new HashMap<> ();
@@ -159,7 +155,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     String modelEntry = mmd.getAttributes().get("id");
     
     try {
-      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", modelEntry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.MetabolicModel, "entry", modelEntry, graphDatabaseService);
       Map<String, Object> properties = getProperties(mmd);
       properties.remove("id");
       
@@ -186,7 +182,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     
     try {
       String entry = String.format("%s@%s", cmpEntry, modelEntry);
-      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.SubcellularCompartment, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(GlobalLabel.SubcellularCompartment, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = getProperties(cmp);
       properties.remove("id");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -208,7 +204,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     
     try {
       String entry = String.format("%s@%s", spiEntry, modelEntry);
-      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.MetaboliteSpecie, "entry", entry, executionEngine);
+      Node node = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.MetaboliteSpecie, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = getProperties(spi);
       properties.remove("id");
       Neo4jUtils.setPropertiesMap(properties, node);
@@ -220,7 +216,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       String spiCmp = spi.getAttributes().get("compartment");
       String cmpEntry = String.format("%s@%s", spiCmp, modelEntry);
       Node cmpNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-          .findNodesByLabelAndProperty(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
+          .findNodes(GlobalLabel.SubcellularCompartment, "entry", cmpEntry));
       if (cmpNode != null) {
         node.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
       }
@@ -247,7 +243,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
     
     try {
       String entry = String.format("%s@%s", rxnEntry, modelEntry);
-      Node rxnNode = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, executionEngine);
+      Node rxnNode = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = getProperties(rxn);
       properties.remove("id");
       mergeNotes(SbmlUtils.parseNotes(rxn.getNotes()), rxnNode);
@@ -273,7 +269,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       if (rxnNode.hasProperty("subsystem")) {
         String ssysEntry = String.format("%s@%s", rxnNode.getProperty("subsystem"), modelEntry);
         Node subsysNode = Neo4jUtils.getOrCreateNode(
-            MetabolicModelLabel.ModelSubsystem, "entry", ssysEntry, executionEngine);
+            MetabolicModelLabel.ModelSubsystem, "entry", ssysEntry, graphDatabaseService);
         Relationship subsysToModel = subsysNode.getSingleRelationship(
             MetabolicModelRelationshipType.has_subsystem, Direction.BOTH);
         if (subsysToModel == null) {
@@ -312,7 +308,7 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
   public void createStoichiometryLink(String spiEntry, String mmdEntry, Node rxn, Map<String, Object> properties, MetabolicModelRelationshipType r) {
     String spiEntry_ = String.format("%s@%s", spiEntry, mmdEntry);
     Node spiNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
+        .findNodes(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry_));
     
     Relationship relationship = rxn.createRelationshipTo(spiNode, r);
     toDouble(properties, "stoichiometry");

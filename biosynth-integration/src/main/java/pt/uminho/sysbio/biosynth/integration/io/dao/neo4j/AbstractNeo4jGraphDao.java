@@ -3,7 +3,6 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -14,17 +13,16 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 
 public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractNeo4jGraphDao.class);
 
-  protected GraphDatabaseService graphDatabaseService;
-  protected ExecutionEngine executionEngine;
+  protected BiodbGraphDatabaseService graphDatabaseService;
 
   public AbstractNeo4jGraphDao(GraphDatabaseService graphDatabaseService) {
-    this.graphDatabaseService = graphDatabaseService;
-    this.executionEngine = new ExecutionEngine(graphDatabaseService);
+    this.graphDatabaseService = new BiodbGraphDatabaseService(graphDatabaseService);
   }
 
   //	protected<T extends AbstractGraphNodeEntity> AbstractGraphNodeEntity getGraphNodeEntity(long id, Class<T> clazz) {
@@ -51,7 +49,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
         entity.getMajorLabel() != null){
       logger.trace("Lookup previous [{}:{}] non zero looking for existing node", entity.getMajorLabel(), entity.getProperty(entity.getUniqueKey(), null));
       Object uniqueContraintValue = entity.getProperty(entity.getUniqueKey(), null);
-      node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(DynamicLabel.label(entity.getMajorLabel()), entity.getUniqueKey(), uniqueContraintValue));
+      node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodes(DynamicLabel.label(entity.getMajorLabel()), entity.getUniqueKey(), uniqueContraintValue));
     }
 
 
@@ -105,6 +103,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
         Node otherNode = graphDatabaseService.getNodeById(nodeEntity.getId());
         //				String relationshipType = edgeEntity.getLabels().iterator().next();
         //			if (node.getR)
+
         Relationship relationship = node.createRelationshipTo(otherNode, DynamicRelationshipType.withName(relationshipType));
         logger.trace(String.format("Connected %s:%s -[:%s]-> %s:%s", 
             node, Neo4jUtils.getLabels(node), relationshipType, 

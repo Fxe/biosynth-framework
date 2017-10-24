@@ -7,11 +7,11 @@ import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.tooling.GlobalGraphOperations;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 /**
@@ -22,12 +22,12 @@ import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 public class NodeAttributeReporter implements GlobalReporter {
   
   private final MetaboliteMajorLabel[] databases;
-  private final GraphDatabaseService graphDatabaseService;
+  private final BiodbGraphDatabaseService graphDatabaseService;
   
   public NodeAttributeReporter(MetaboliteMajorLabel[] databases,
                                GraphDatabaseService graphDatabaseService) {
     this.databases = databases;
-    this.graphDatabaseService = graphDatabaseService;
+    this.graphDatabaseService = new BiodbGraphDatabaseService(graphDatabaseService);
   }
 
   @Override
@@ -38,7 +38,7 @@ public class NodeAttributeReporter implements GlobalReporter {
       Map<String, Set<String>> attributeType2 = new HashMap<>();
       Map<String, Integer> attributeCount2 = new HashMap<>();
       int total = 0;
-      for (Node node : GlobalGraphOperations.at(graphDatabaseService).getAllNodesWithLabel(db)) {
+      for (Node node : graphDatabaseService.listNodes(db)) {
   //      Node node = graphDataService.getNodeById(1321992L);
         if (node.hasLabel(GlobalLabel.Metabolite)) {
           Map<String, String> a1 = extractAttributes(node);
