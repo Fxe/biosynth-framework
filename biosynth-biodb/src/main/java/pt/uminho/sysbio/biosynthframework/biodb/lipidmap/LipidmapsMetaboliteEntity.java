@@ -40,6 +40,12 @@ public class LipidmapsMetaboliteEntity extends GenericMetabolite {
   public void setExactMass(double exactMass) { this.exactMass = exactMass;}
   
   @MetaProperty
+  @Column(name="inchi")
+  private String inchi;
+  public String getInchi() { return inchi;}
+  public void setInchi(String inchi) { this.inchi = inchi;}
+
+  @MetaProperty
   @Column(name="inchi_key")
   private String inchiKey;
   public String getInchiKey() { return inchiKey;}

@@ -2,11 +2,19 @@ package pt.uminho.sysbio.biosynth.chemanalysis.opsin;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SMILESReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmiFlavor;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
 
 import pt.uminho.sysbio.biosynthframework.chemanalysis.inchi.JniInchi;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.opsin.OpsinWrapper;
@@ -54,5 +62,25 @@ public class TestOpsinWrapper {
 		String inchi = OpsinWrapper.iupacToInchi("Foo ?");
 		
 		assertEquals(null, inchi);
+	}
+	
+	@Test
+	public void testSmiles() throws Exception {
+	  String[] smis = new String[]{
+	      "O=C(O)C(=O)C", "CC(=O)C(O)=O", "CC(=O)C(=O)[O-]", "CC(=O)C([O-])=O"};
+	  SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
+	  for (String s : smis) {
+	    IAtomContainer ac   = sp.parseSmiles(s);
+	    //      SmilesGenerator sg = new SmilesGenerator(SmiFlavor.Default);
+	    SmilesGenerator sg = new SmilesGenerator(SmiFlavor.UniversalSmiles);
+	    String can = sg.create(ac);
+
+	    System.out.println(can + " " + s);
+	  }
+	  
+	  
+
+
+//	  assertEquals(null, inchi);
 	}
 }

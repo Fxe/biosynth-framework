@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
@@ -104,6 +105,16 @@ public class TestXmlStreamSbmlReader {
       new FileInputStream(SBML_PATH));
   XmlSbmlModel model = sbmlReader.parse();
   System.out.println(model.getNotes());
+  
+  for (XmlSbmlSpecie spi : model.getSpecies()) {
+    System.out.println(spi.getListOfAnnotations());
+    List<XmlObject> os = spi.getListOfAnnotations().get("is");
+    for (XmlObject o : os) {
+      String resource = o.getAttributes().get("resource");
+      System.out.println(resource);
+    }
+//    System.out.println(o);
+  }
   for (XmlUnitDefinition xud : model.units) {
     System.out.println(xud.getAttributes());
     System.out.println("\t" + xud.getListOfAnnotations());
@@ -230,8 +241,9 @@ public class TestXmlStreamSbmlReader {
     SBML_PATH = "/var/biomodels/sbml/iTO977.xml";
     SBML_PATH = "/var/biomodels/joana/iSB1139.xml";
     SBML_PATH = "/var/biomodels/joana/iJL432.xml";
+    SBML_PATH = "/var/biomodels/fungis/iOD907_bqbiol.xml";
     System.out.println(SBML_PATH);
-//    testModel(SBML_PATH);
+    testModel(SBML_PATH);
 //    SBML_PATH = "/var/biomodels/hvo_26_01_17.xml";
     
 //    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";
@@ -245,4 +257,5 @@ public class TestXmlStreamSbmlReader {
   }
 
 }
+
 

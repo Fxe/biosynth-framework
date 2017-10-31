@@ -15,8 +15,9 @@ public class OpsinWrapper {
 	
 	public static String iupacToCml(String name) throws NameToStructureException {
 		NameToStructure nameToStructure = NameToStructure.getInstance();
-		Element element = nameToStructure.parseToCML(name);
-		return element.toXML();
+		String xml = nameToStructure.parseToCML(name);
+//		Element element = nameToStructure.parseToCML(name);
+		return xml;
 //		return ;nameToStructure.parseToCML(name)
 	}
 	

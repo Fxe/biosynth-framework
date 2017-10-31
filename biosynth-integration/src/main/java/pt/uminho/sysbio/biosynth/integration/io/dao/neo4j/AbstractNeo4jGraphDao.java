@@ -40,7 +40,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 
   protected void saveGraphEntity(AbstractGraphNodeEntity entity) {
     Node node = null;
-
+    
     if (entity.getId() != null) {
       logger.trace("Lookup previous id[{}] ...", entity.getId());
       node = graphDatabaseService.getNodeById(entity.getId());
@@ -51,7 +51,6 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
       Object uniqueContraintValue = entity.getProperty(entity.getUniqueKey(), null);
       node = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodes(DynamicLabel.label(entity.getMajorLabel()), entity.getUniqueKey(), uniqueContraintValue));
     }
-
 
     if (node == null) {
       logger.trace("Previous node not found generating new node...");

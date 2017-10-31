@@ -99,6 +99,11 @@ public class BioDbDictionary {
     dictionary.put("LipidBank", MetaboliteMajorLabel.LipidBank.toString());
     dictionary.put("LIPIDBANK_ID", MetaboliteMajorLabel.LipidBank.toString());
 
+    dictionary.put("REFMET", MetaboliteMajorLabel.RefMet.toString());
+    
+    dictionary.put("GlyTouCan", MetaboliteMajorLabel.GlyTouCan.toString());
+    dictionary.put("GlycoEpitope", MetaboliteMajorLabel.GlycoEpitope.toString());
+    
     dictionary.put("LIPID_MAPS", MetaboliteMajorLabel.LipidMAPS.toString());
     dictionary.put("LipidMaps", MetaboliteMajorLabel.LipidMAPS.toString());
     dictionary.put("lipidmaps", MetaboliteMajorLabel.LipidMAPS.toString());
@@ -113,6 +118,8 @@ public class BioDbDictionary {
     dictionary.put("DRUGBANK", MetaboliteMajorLabel.DrugBank.toString());
 
     dictionary.put("ChEMBL", MetaboliteMajorLabel.ChEMBL.toString());
+    
+    dictionary.put("PlantCyc", MetaboliteMajorLabel.PlantCyc.toString());
 
     //PlantCyc
     dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
@@ -168,8 +175,8 @@ public class BioDbDictionary {
 
     dictionary.put("NIKKAJI", MetaboliteMajorLabel.NIKKAJI.toString());
     dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
-    dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
-    dictionary.put("SEED Compound", MetaboliteMajorLabel.Seed.toString());
+    dictionary.put("seed", MetaboliteMajorLabel.ModelSeed.toString());
+    dictionary.put("SEED Compound", MetaboliteMajorLabel.ModelSeed.toString());
     //		dictionary.put("dghgkjk", MetaboliteMajorLabel.)
 
     dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());

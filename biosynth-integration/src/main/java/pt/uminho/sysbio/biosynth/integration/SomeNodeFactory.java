@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynth.integration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -124,13 +125,17 @@ public class SomeNodeFactory {
     return entity; 
   }
 
-  public GraphMetaboliteEntity buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel label) {
+  public GraphMetaboliteEntity buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel label, Collection<Label> otherLabels) {
     this.majorLabel = label.toString();
     this.labels.add(GlobalLabel.Metabolite.toString());
     GraphMetaboliteEntity entity = new GraphMetaboliteEntity();
     setupGraphGenericProxyEntity(entity);
     entity.getLabels().add(GlobalLabel.Metabolite.toString());
-
+    if (otherLabels != null) {
+      for (Label l : otherLabels) {
+        entity.addLabel(l.toString());
+      }
+    }
     return entity;
   }
 
@@ -201,7 +206,7 @@ public class SomeNodeFactory {
     edge.getProperties().put("stoichiometry", stoichiometry);
     GraphMetaboliteEntity node = new SomeNodeFactory()
         .withEntry(metaboliteEntry)
-        .buildGraphMetaboliteProxyEntity(majorLabel);
+        .buildGraphMetaboliteProxyEntity(majorLabel, null);
     return withLinkTo(node, edge);
   }
   public SomeNodeFactory withRightSoitchiometry(String metaboliteEntry, MetaboliteMajorLabel majorLabel, Double stoichiometry) {
@@ -210,7 +215,7 @@ public class SomeNodeFactory {
     edge.getProperties().put("stoichiometry", stoichiometry);
     GraphMetaboliteEntity node = new SomeNodeFactory()
         .withEntry(metaboliteEntry)
-        .buildGraphMetaboliteProxyEntity(majorLabel);
+        .buildGraphMetaboliteProxyEntity(majorLabel, null);
     return withLinkTo(node, edge);
   }
 }

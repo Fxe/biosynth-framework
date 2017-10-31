@@ -57,7 +57,7 @@ public class CdkWrapper implements FormulaReader {
     return atomMap;
   }
 
-  private Map<String, Integer> getAtomCountMap(IAtomContainer container) {
+  public Map<String, Integer> getAtomCountMap(IAtomContainer container) {
     Map<String, Integer> atomMap = new HashMap<> ();
     for (IAtom atom : container.atoms()) {
       CollectionUtils.increaseCount(atomMap, atom.getSymbol(), 1);

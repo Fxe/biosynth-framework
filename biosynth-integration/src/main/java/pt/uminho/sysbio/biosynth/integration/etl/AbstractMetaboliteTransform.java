@@ -5,12 +5,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.graphdb.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,6 @@ import pt.uminho.sysbio.biosynth.integration.SomeNodeFactory;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseLiteratureEtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.etl.dictionary.EtlDictionary;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
@@ -304,18 +306,28 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
           //						graphRelationshipEntity.setProperties(properties);
           //						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
           //						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
+          
+          Set<Label> otherLabels = new HashSet<> ();
           MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
           if (majorLabel.equals(MetaboliteMajorLabel.ChEBI) && 
               xref.getValue().toLowerCase().startsWith("chebi:")) {
             xref.setValue(StringUtils.removeStart(xref.getValue().toLowerCase(), "chebi:"));
+//            xref.setValue("CHEBI:".concat(xref.getValue()));
           }
+          
+          if (majorLabel.equals(MetaboliteMajorLabel.MetaCyc) && 
+              !xref.getValue().startsWith("META:")) {
+            xref.setValue("META:".concat(xref.getValue()));
+            otherLabels.add(GlobalLabel.BioCyc);
+          }
+          
           Map<String, Object> relationshipProperteis = 
               this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
           centralMetaboliteEntity.addConnectedEntity(
               this.buildPair(
                   new SomeNodeFactory()
                   .withEntry(xref.getValue())
-                  .buildGraphMetaboliteProxyEntity(majorLabel), 
+                  .buildGraphMetaboliteProxyEntity(majorLabel, otherLabels), 
                   new SomeNodeFactory()
                   .withProperties(relationshipProperteis)
                   .buildMetaboliteEdge(MetaboliteRelationshipType.has_crossreference_to)));

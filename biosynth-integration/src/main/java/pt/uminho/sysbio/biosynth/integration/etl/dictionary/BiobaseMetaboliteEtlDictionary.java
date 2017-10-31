@@ -68,15 +68,19 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
     if (entry.length() == 6) {
       char initial = entry.charAt(0);
       switch (initial) {
-      case 'C': return MetaboliteMajorLabel.LigandCompound.toString();
-      case 'D': return MetaboliteMajorLabel.LigandDrug.toString();
-      case 'G': return MetaboliteMajorLabel.LigandGlycan.toString();
-      case 'E': return GlobalLabel.KeggEnviron.toString();
-      case 'R': return ReactionMajorLabel.LigandReaction.toString();
-      default:
-        logger.warn("Unknown KEGG initial - {}", entry);
-        break;
-      }
+        case 'C': return MetaboliteMajorLabel.LigandCompound.toString();
+        case 'c': return MetaboliteMajorLabel.LigandCompound.toString();
+        case 'D': return MetaboliteMajorLabel.LigandDrug.toString();
+        case 'd': return MetaboliteMajorLabel.LigandDrug.toString();
+        case 'G': return MetaboliteMajorLabel.LigandGlycan.toString();
+        case 'g': return MetaboliteMajorLabel.LigandGlycan.toString();
+        case 'E': return GlobalLabel.KeggEnviron.toString();
+        case 'R': return ReactionMajorLabel.LigandReaction.toString();
+        case 'r': return ReactionMajorLabel.LigandReaction.toString();
+        default:
+          logger.warn("Unknown KEGG initial - {}", entry);
+          break;
+        }
     } else {
       logger.warn("Invalid KEGG size - [{}] (length != 6)", entry);
     }

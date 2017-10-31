@@ -26,6 +26,23 @@ public class DataUtils {
     return Joiner.on(sep).withKeyValueSeparator(kv).join(map);
   }
   
+  public static<X, Y, D> void printData(Map<X, Map<Y, D>> data) {
+    MatrixSFactory<X, Y, D> f = new MatrixSFactory<>();
+    f.withData(data);
+    f.build().printMatrix();
+  }
+  
+  public static<X, Y, D> String getTableStr(Map<X, Map<Y, D>> data, String yAxis, String...order) {
+    MatrixSFactory<X, Y, D> f = new MatrixSFactory<>();
+    f.withData(data)
+     .withYAxisLabel(yAxis);
+    return f.build().toTsv(order);
+  }
+  
+  public static<X, Y, D> void printData(Map<X, Map<Y, D>> data, String yAxis, String...order) {
+    System.out.println(getTableStr(data, yAxis, order));
+  }
+  
   public static<A> A getArray(A[] array, int index) {
     if (array == null) {
       return null;

@@ -23,6 +23,9 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.helpers.collection.Iterators;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 
 public class BiodbGraphDatabaseService implements GraphDatabaseService {
@@ -41,6 +44,56 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     
     return node;
+  }
+  
+  public Node getMetabolite(String entry, MetaboliteMajorLabel database) {
+    return this.findNode(database, Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry);
+  }
+  
+  public Node getMetaboliteProperty(String key, MetabolitePropertyLabel property) {
+    return this.findNode(property, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, key);
+  }
+  
+  public static String fixEntry(String entry, MetaboliteMajorLabel database) {
+    switch (database) {
+      case ChEBI:
+        return entry.startsWith("CHEBI:") ? entry : "CHEBI:".concat(entry);
+      default:
+        break;
+    }
+    
+    return entry;
+  }
+  
+  public boolean exists(MetaboliteMajorLabel db, String entry) {
+    return getMetabolite(entry, db) != null;
+  }
+  
+  public boolean exists(MetabolitePropertyLabel prop, String value) {
+    return getMetaboliteProperty(value, prop) != null;
+  }
+  
+  public Node getOrCreateMetabolite(String entry, MetaboliteMajorLabel database) {
+    Node cpdNode = getMetabolite(entry, database);
+    if (cpdNode == null) {
+      cpdNode = this.createNode(GlobalLabel.Metabolite, database);
+      cpdNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, database.toString());
+      String e = fixEntry(entry, database);
+      cpdNode.setProperty(Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, e);
+      cpdNode.setProperty(Neo4jDefinitions.PROXY_PROPERTY, true);
+    }
+    return cpdNode;
+  }
+  
+  public Node getOrCreateMetaboliteProperty(String key, MetabolitePropertyLabel property) {
+    Node propNode = getMetaboliteProperty(key, property);
+    if (propNode == null) {
+      propNode = this.createNode(GlobalLabel.MetaboliteProperty, property);
+      propNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, property.toString());
+//      String e = fixEntry(entry, database);
+      propNode.setProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, key);
+    }
+    return propNode;
   }
   
   public Node getNodeByEntryAndLabel(String entry, Label label) {

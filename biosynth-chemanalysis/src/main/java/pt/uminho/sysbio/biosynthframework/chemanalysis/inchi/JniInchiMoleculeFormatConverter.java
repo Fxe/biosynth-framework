@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis.inchi;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,7 @@ public class JniInchiMoleculeFormatConverter implements MoleculeFormatConverter 
 	}
 	
 	public String generateInchiKey(InputStream is) throws IOException {
-		return JniInchi.getInchiKeyFromInchi(IOUtils.toString(is));
+		return JniInchi.getInchiKeyFromInchi(IOUtils.toString(is, Charset.defaultCharset()));
 	}
 
 }

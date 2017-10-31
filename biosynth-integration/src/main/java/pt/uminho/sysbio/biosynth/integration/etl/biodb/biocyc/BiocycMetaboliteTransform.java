@@ -47,7 +47,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory()
               .withEntry(parent)
               .withLabel(GlobalLabel.BioCyc)
-              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.instance_of)));
     }
@@ -57,7 +57,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory()
               .withEntry(instance)
               .withLabel(GlobalLabel.BioCyc)
-              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.parent_of)));
     }
@@ -125,8 +125,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
     for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
       if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
         xref.setRef("bigg2");
-      }
-      if (xref.getRef().toLowerCase().equals("bigg")) {
+      } else if (xref.getRef().toLowerCase().equals("bigg")) {
         if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
           xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
         }
@@ -150,7 +149,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
       formula_ = formula_.concat(term);
     }
     if (!formula.equals(formula_)) {
-      logger.warn(formula + " -> " + formula_);
+      logger.debug(formula + " -> " + formula_);
     }
 
     return formula_;

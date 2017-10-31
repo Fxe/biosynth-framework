@@ -103,10 +103,11 @@ public class JsonModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeedMe
     CollectionType ctype = m.getTypeFactory()
                             .constructCollectionType(List.class, 
                                                      ModelSeedCompound.class);
-    
+
     try {
-      List<ModelSeedCompound> compounds = m.readValue(compoundsJson.getInputStream(), ctype);
-      for (ModelSeedCompound cpd : compounds) {
+      Map<String, ModelSeedCompound> compounds = m.readValue(compoundsJson.getInputStream(), ctype);
+      for (String id : compounds.keySet()) {
+        ModelSeedCompound cpd = compounds.get(id);
         if (cpd != null && cpd.id != null && !cpd.id.trim().isEmpty()) {
           if (data.put(cpd.id, cpd) != null) {
             logger.warn("duplicate ID - {}", cpd.id);
@@ -118,7 +119,6 @@ public class JsonModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeedMe
     } catch (IOException e) {
       logger.error("IO Error: {}", e.getMessage());
     }
-    
   }
   
   @Override

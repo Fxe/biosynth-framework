@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,6 +20,8 @@ implements EtlPipeline<SRC, DST> {
 	private EtlExtract<SRC> extractSubsystem;
 	private EtlTransform<SRC, DST> etlTransform;
 	private EtlLoad<DST> etlLoad;
+	
+	public Set<String> exclude = new HashSet<> ();
 	
 	private int batchSize = 100;
 	

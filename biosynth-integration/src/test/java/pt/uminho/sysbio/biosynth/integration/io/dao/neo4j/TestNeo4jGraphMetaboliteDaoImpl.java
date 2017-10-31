@@ -44,7 +44,7 @@ public class TestNeo4jGraphMetaboliteDaoImpl {
   public void test_save_proxy_metabolite_entity() {
     GraphMetaboliteEntity metabolite = new SomeNodeFactory()
         .withEntry("CPD-PX-10009")
-        .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.MetaCyc);
+        .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.MetaCyc, null);
 
     tx = service.beginTx();
     metaboliteDao.saveMetabolite("", metabolite);
