@@ -80,6 +80,18 @@ public class XmlReferencesBaseIntegrationEngine implements BaseIntegrationEngine
         if (str_.length == 2) {
           entry = str_[1];
         }
+      } else if (resource.startsWith("kegg.compound:")) {
+        database = MetaboliteMajorLabel.LigandCompound.toString();
+        String[] str_ = resource.split(":");
+        if (str_.length == 2) {
+          entry = str_[1];
+        }
+      } else if (resource.startsWith("kegg.reaction:")) {
+        database = ReactionMajorLabel.LigandReaction.toString();
+        String[] str_ = resource.split(":");
+        if (str_.length == 2) {
+          entry = str_[1];
+        }
       } else if (resource.startsWith("ec-code:")) {
         database = GlobalLabel.EnzymeCommission.toString();
         String[] str_ = resource.split(":");
