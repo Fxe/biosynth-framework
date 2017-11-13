@@ -1,9 +1,12 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,6 +125,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
   protected void configureCrossreferences(
       GraphMetaboliteEntity centralMetaboliteEntity,
       BioCycMetaboliteEntity metabolite) {
+    List<BioCycMetaboliteCrossreferenceEntity> xrefValid = new ArrayList<> ();
     for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
       if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
         xref.setRef("bigg2");
@@ -131,7 +135,13 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
         }
         logger.debug("Internal Id replaced: " + xref);
       }
+      if (xref.getRef().equals("bigg2") && NumberUtils.isDigits(xref.getValue())) {
+        logger.warn("Discard ref: {}", xref);
+      } else {
+        xrefValid.add(xref);
+      }
     }
+    metabolite.setCrossReferences(xrefValid);
     super.configureCrossreferences(centralMetaboliteEntity, metabolite);
   }
 

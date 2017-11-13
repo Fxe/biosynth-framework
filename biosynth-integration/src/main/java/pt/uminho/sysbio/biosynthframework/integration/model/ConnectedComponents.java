@@ -13,6 +13,9 @@ public class ConnectedComponents<T> extends HashSet<Set<T>> {
   
   @Override
   public boolean add(Set<T> e) {
+    if (e == null || e.isEmpty()) {
+      throw new IllegalArgumentException("invalid arg " + e);
+    }
     for (T t : e) {
       if (mapping.containsKey(t)) {
         throw new IllegalArgumentException("duplicates " + t);

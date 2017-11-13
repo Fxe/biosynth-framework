@@ -16,4 +16,5 @@ public enum ReactionMajorLabel implements Label {
 	NOTFOUND,
 	ModelSeedReaction,
 	MetaNetXReaction,
+	PIR,
 }

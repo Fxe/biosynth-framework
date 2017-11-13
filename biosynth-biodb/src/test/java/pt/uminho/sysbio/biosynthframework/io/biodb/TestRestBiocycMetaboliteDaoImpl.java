@@ -41,14 +41,15 @@ public class TestRestBiocycMetaboliteDaoImpl {
 //    dao.setLocalStorage("/tmp/trash/kegg");
 //    dao.getMetaboliteByEntry("C00001");
     
-    dao.setLocalStorage("/tmp/trash/biocyc");
-    dao.setDatabaseVersion("test");
-    dao.setUseLocalStorage(true);
-    dao.setSaveLocalStorage(true);
+//    dao.setLocalStorage("/tmp/trash/biocyc");
+//    dao.setDatabaseVersion("test");
+    dao.setUseLocalStorage(false);
+    dao.setSaveLocalStorage(false);
     dao.setPgdb("META");
 //    dao.getMetaboliteByEntry("META:CPD-882");
-    dao.getMetaboliteByEntry("META:WATER");
-    dao.getAllMetaboliteEntries();
+//    dao.getMetaboliteByEntry("META:WATER");
+    dao.getMetaboliteByEntry("CPD-7191");
+//    dao.getAllMetaboliteEntries();
   }
 
 }

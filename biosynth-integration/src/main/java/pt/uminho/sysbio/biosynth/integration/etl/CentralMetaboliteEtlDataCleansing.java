@@ -23,7 +23,8 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(CentralMetaboliteEtlDataCleansing.class);
 
-  private static final String DCS_STATUS_KEY = "DCS-status";
+  private static final String DCS_KEY_STATUS = "DCS-status";
+  private static final String DCS_KEY_ORIGINAL = "DCS-original";
 
   private final FormulaReader formulaConverter;
 
@@ -122,25 +123,35 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
         if (propertyEntity.getMajorLabel() == null) {
           System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
         }
+        Object key = propertyEntity.getProperties().get(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT);
         switch (propertyEntity.getMajorLabel()) {
           case "MolecularFormula":
-            triple = this.cleanseFormula((String)propertyEntity.getProperties().get("key"));
+            triple = this.cleanseFormula((String) key);
             propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
             //						propertyEntity.setUniqueKey(nullToString(triple.getLeft()));
-            relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
+            relationshipEntity.getProperties().put(DCS_KEY_STATUS, triple.getRight().toString());
+            if (EtlCleasingType.CORRECTED.equals(triple.getRight())) {
+              relationshipEntity.getProperties().put(DCS_KEY_ORIGINAL, key.toString());
+            }
             result.put("ChemicalFormula", triple);
             break;
           case "Name":
             triple = this.cleanseName((String)propertyEntity.getProperties().get("key"));
             propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
-            relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
+            relationshipEntity.getProperties().put(DCS_KEY_STATUS, triple.getRight().toString());
+            if (EtlCleasingType.CORRECTED.equals(triple.getRight())) {
+              relationshipEntity.getProperties().put(DCS_KEY_ORIGINAL, key.toString());
+            }
             result.put("Name", triple);
             break;
           case "MetaCyc":
           case "LigandCompound":
             triple = this.cleanseDatabase((String)propertyEntity.getProperties().get("entry"), propertyEntity.getMajorLabel());
             propertyEntity.getProperties().put(Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
-            relationshipEntity.getProperties().put(DCS_STATUS_KEY, triple.getRight().toString());
+            relationshipEntity.getProperties().put(DCS_KEY_STATUS, triple.getRight().toString());
+            if (EtlCleasingType.CORRECTED.equals(triple.getRight())) {
+              relationshipEntity.getProperties().put(DCS_KEY_ORIGINAL, key.toString());
+            }
             result.put("LigandCompound", triple);
             break;
         default:

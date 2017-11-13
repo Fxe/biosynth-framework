@@ -550,12 +550,16 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     String gpr = null;
     List<String> geneOrs = new ArrayList<> ();
     for (XmlObject o : xrxn.getListOfModifiers()) {
-      if (o.getAttributes().containsKey("species")) {
-        String modSpecie = o.getAttributes().get("species");
-        
+//      System.out.println(o);
+      String sboterm = o.getAttributes().get("sboTerm");
+      String modSpecie = o.getAttributes().get("species");
+      if ("SBO:0000460".equals(sboterm)) {
+        logger.debug("found enzymatic catalyst - [{}]", modSpecie);
+      } else if (o.getAttributes().containsKey("species")) {
         XmlSbmlSpecie xspiMod = xspiMap.get(modSpecie);
         
         if (xspiMod != null) {
+          logger.debug("found gene modifier: SBO: [{}] species: [{}]", sboterm, modSpecie);
           xspiType.put(modSpecie, EntityType.GENE);
           List<String> genes = new ArrayList<> ();
           String str = xspiMod.getAttributes().get("name");

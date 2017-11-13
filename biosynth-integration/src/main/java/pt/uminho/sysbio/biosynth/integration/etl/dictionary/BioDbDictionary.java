@@ -217,6 +217,8 @@ public class BioDbDictionary {
     dictionary.put("MetaNetX (MNX) Chemical", MetaboliteMajorLabel.MetaNetX.toString());
     dictionary.put("MetaNetX (MNX) Equation", ReactionMajorLabel.MetaNetXReaction.toString());
     
+    dictionary.put("PIR", ReactionMajorLabel.PIR.toString());
+    
     
     return dictionary;
   }

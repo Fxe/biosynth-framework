@@ -168,6 +168,8 @@ public class TheBestIntegrationMethod {
   public BiFunction<Long, Long, Double> S;
   public BiFunction<Long, Long, Double> F;
   public BiFunction<Long, Long, Double> R;
+  public BiFunction<Long, Long, Double> Z;
+  public BiFunction<Long, Long, Double> C;
   
   private Map<Tuple2<Long>, Double> scoreBoard = new HashMap<> ();
   
@@ -212,6 +214,20 @@ public class TheBestIntegrationMethod {
     return R.apply(a, b);
   }
   
+  public double Z(long a, long b) {
+    if (Z == null) {
+      return 0;
+    }
+    return Z.apply(a, b);
+  }
+  
+  public double C(long a, long b) {
+    if (C == null) {
+      return 0;
+    }
+    return C.apply(a, b);
+  }
+  
   public Map<Tuple2<Long>, Double> score() {
     Map<Tuple2<Long>, Double> result = new HashMap<> ();
     for (Tuple2<Long> t : scoreBoard.keySet()) {
@@ -227,5 +243,30 @@ public class TheBestIntegrationMethod {
   
   public double score(long a, long b) {
     return N(a, b) + F(a, b) + S(a, b) + X(a, b) + R(a, b);
+  }
+  
+  public double score2(long a, long b) {
+    score2(a, b, null);
+    return (N(a, b)  + S(a, b) + X(a, b) + R(a, b) + Z(a, b) + C(a, b)) * (1 + F(a, b));
+  }
+  
+  public double score2(long a, long b, Map<String, Double> result) {
+    double n = N(a, b);
+    double s = S(a, b);
+    double x = X(a, b);
+    double r = R(a, b);
+    double z = Z(a, b);
+    double c = C(a, b);
+    double f = F(a, b);
+    if (result != null) {
+      result.put("n", n);
+      result.put("s", s);
+      result.put("x", x);
+      result.put("r", r);
+      result.put("z", z);
+      result.put("c", c);
+      result.put("f", f);
+    }
+    return (n + s + x + r + z + c) * (1 + f);
   }
 }

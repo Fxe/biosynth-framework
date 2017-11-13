@@ -297,16 +297,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
         GenericCrossreference xref = GenericCrossreference.class.cast(xrefObject);
         switch (xref.getType()) {
         case DATABASE:
-          //						GraphMetaboliteProxyEntity proxyEntity = new GraphMetaboliteProxyEntity();
-          //						proxyEntity.setEntry(xref.getValue());
-          //						proxyEntity.setMajorLabel(this.dictionary.translate(xref.getRef()));
-          //						proxyEntity.addLabel(METABOLITE_LABEL);
-          //						GraphRelationshipEntity graphRelationshipEntity = new GraphRelationshipEntity();
-          //						Map<String, Object> properties = this.propertyContainerBuilder.extractProperties(xrefObject, xrefObject.getClass());
-          //						graphRelationshipEntity.setProperties(properties);
-          //						graphRelationshipEntity.setMajorLabel(METABOLITE_CROSSREFERENCE_RELATIONSHIP_TYPE);
-          //						centralMetaboliteEntity.addCrossreference(proxyEntity, graphRelationshipEntity);
-          
+
           Set<Label> otherLabels = new HashSet<> ();
           MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
           if (majorLabel.equals(MetaboliteMajorLabel.ChEBI) && 

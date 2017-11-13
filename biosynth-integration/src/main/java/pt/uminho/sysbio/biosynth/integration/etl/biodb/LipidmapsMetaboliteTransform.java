@@ -29,6 +29,13 @@ extends AbstractMetaboliteTransform<LipidmapsMetaboliteEntity> {
                                         MetabolitePropertyLabel.InChIKey, 
                                         MetaboliteRelationshipType.has_inchikey);
     }
+    if (metabolite.getInchi() != null && 
+        !metabolite.getInchi().trim().isEmpty()) {
+      this.configureGenericPropertyLink(centralMetaboliteEntity, 
+                                        metabolite.getInchi(), 
+                                        MetabolitePropertyLabel.InChI, 
+                                        MetaboliteRelationshipType.has_inchi);
+    }
   }
   
   @Override

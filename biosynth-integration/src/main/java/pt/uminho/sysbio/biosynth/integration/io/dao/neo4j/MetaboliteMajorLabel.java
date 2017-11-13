@@ -18,6 +18,8 @@ public enum MetaboliteMajorLabel implements Label {
   MET3D, NIKKAJI, PDB, NCI, LipidBank, JCGGDB, GlycomeDB, CCSD, Wikipedia,
   LigandBox, GlyTouCan, GlycoEpitope, 
   MetaboLights, Metabolomics, RefMet,
-  NOTFOUND, PlantCyc, 
+  NOTFOUND, PlantCyc,
+  SwissLipids, ENVIPath,
   ;
+  
 }
