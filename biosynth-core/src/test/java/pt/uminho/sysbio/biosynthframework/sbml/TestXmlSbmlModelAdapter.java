@@ -37,9 +37,11 @@ public class TestXmlSbmlModelAdapter {
   public void tearDown() throws Exception {
   }
 
-//  @Test
+  @Test
   public void testCoreModel() throws IOException {
-    InputStream is = new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml");
+//    InputStream is = new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml");
+    InputStream is = new FileInputStream("/var/biomodels/sbml/iAdipocytes1809.xml");
+//    InputStream is = new FileInputStream("/var/biomodels/sbml/yeast_7.6.xml");
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
     XmlSbmlModelAdapter adapter = new XmlSbmlModelAdapter(xmodel);
@@ -60,7 +62,7 @@ public class TestXmlSbmlModelAdapter {
     System.out.println(gprs);
   }
   
-  @Test
+//  @Test
   public void test1() {
     ZipContainer zipContainer = null;
     
