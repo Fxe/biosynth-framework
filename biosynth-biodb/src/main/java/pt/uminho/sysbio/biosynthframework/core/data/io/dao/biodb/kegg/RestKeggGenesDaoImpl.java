@@ -51,7 +51,7 @@ extends AbstractRestfulKeggDao  {
 //      String pathname = localPath;
       if (saveLocalStorage) {
         File f = new File(localPath);
-        System.out.println(f.getAbsolutePath());
+//        System.out.println(f.getAbsolutePath());
         if (!f.exists() || !f.isDirectory()) {
           f.mkdirs();
         }

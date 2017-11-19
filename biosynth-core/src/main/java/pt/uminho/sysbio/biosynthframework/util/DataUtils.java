@@ -14,6 +14,14 @@ public class DataUtils {
     return false;
   }
   
+  public static boolean empty(Object string) {
+    if (string == null || string.toString().trim().isEmpty()) {
+      return true;
+    }
+    
+    return false;
+  }
+  
   public static String trim(String string) {
     if (string != null) {
       return string.trim();

@@ -67,9 +67,9 @@ extends AbstractRestfulKeggDao {
         f.mkdirs();
     }
     
-    public static void main(String[] args) {
-        RestKeggKOsDaoImpl k = new RestKeggKOsDaoImpl();
-//      System.out.println(k.getAllKOEntries());
-        System.out.println(k.getKOByEntry("K09053"));
-    }
+//    public static void main(String[] args) {
+//        RestKeggKOsDaoImpl k = new RestKeggKOsDaoImpl();
+////      System.out.println(k.getAllKOEntries());
+//        System.out.println(k.getKOByEntry("K09053"));
+//    }
 }

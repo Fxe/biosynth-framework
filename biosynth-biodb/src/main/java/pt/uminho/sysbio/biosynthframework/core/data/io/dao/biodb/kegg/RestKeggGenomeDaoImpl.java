@@ -79,10 +79,10 @@ extends AbstractRestfulKeggDao {
 	}
 	
 	
-	public static void main(String[] args) {
-		RestKeggGenomeDaoImpl rest = new RestKeggGenomeDaoImpl();
-		rest.getGenomeByEntry("T02080");
-		System.out.println(rest.getAllGenomeEntries());
-		
-	}
+//	public static void main(String[] args) {
+//		RestKeggGenomeDaoImpl rest = new RestKeggGenomeDaoImpl();
+//		rest.getGenomeByEntry("T02080");
+//		System.out.println(rest.getAllGenomeEntries());
+//		
+//	}
 }

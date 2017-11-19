@@ -21,6 +21,7 @@ import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
+import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
@@ -217,13 +218,14 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   }
   
   @Override
-  public double[] getBounds(String mrxnEntry) {
+  public Range getBounds(String mrxnEntry) {
     XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
+    
     Double[] b = getSbmlReactionBounds2(xrxn, parameters);
     if (b == null) {
-      return new double[]{-1000, 1000};
+      return new Range(-1000.0, 1000.0);
     }
-    return new double[] {b[0], b[1]};
+    return new Range(b[0], b[1]);
   }
   
 
@@ -249,34 +251,33 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
         if (degree < 2) {
           logger.trace("WARN: discard specie [{}]", spiEntry);
         } else {
-          List<double[]> b = new ArrayList<> ();
+          List<Range> b = new ArrayList<> ();
           for (String drxnEntry : specieToDrain.get(spiEntry)) {
-            double[] bounds = getBounds(drxnEntry);
+            Range bounds = getBounds(drxnEntry);
             Map<String, String> dstoich = getStoichiometryString(drxnEntry);
             
             Double dstoichValue = Double.parseDouble(dstoich.get(spiEntry));
-            logger.trace("[{}] - {} {}: [{}, {}] {}", spiEntry, getSpecieAttribute(spiEntry, "name"), drxnEntry, bounds[0], bounds[1], dstoich);
+            logger.trace("[{}] - {} {}: {} {}", spiEntry, getSpecieAttribute(spiEntry, "name"), drxnEntry, bounds, dstoich);
             
             if (dstoichValue != null) {
               //specie is a product flip bonds
               if (dstoichValue > 0) {
-                double lb_ = bounds[1] * -1;
-                double ub_ = bounds[0] * -1;
-                bounds[0] = lb_;
-                bounds[1] = ub_;
+                double lb_ = bounds.ub * -1;
+                double ub_ = bounds.lb * -1;
+                bounds = new Range(lb_, ub_);
                 logger.trace("[{}] FIX: flip bounds => [{}, {}]", spiEntry, lbMap, ubMap);
               }
             } 
 //            else {
 //              logger.error("[{}] specie not found in drain stoichiometry", spiEntry);
 //            }
-            if (bounds[0] < -1000000000) {
+            if (bounds.lb < -1000000000) {
               logger.debug("[{}] lb value to high reducing to default", spiEntry);
-              bounds[0] = defaultLB;
+              bounds = new Range(defaultLB, bounds.ub);
             }
-            if (bounds[1] > 1000000000) {
+            if (bounds.ub > 1000000000) {
               logger.debug("[{}] ub value to high reducing to default", spiEntry);
-              bounds[1] = defaultUB;
+              bounds = new Range(bounds.lb, defaultUB);
             }
             
             b.add(bounds);
@@ -285,9 +286,9 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
           double lb = 0;
           double ub = 0;
           
-          for (double[] p : b) {
-            lb += p[0];
-            ub += p[1];
+          for (Range p : b) {
+            lb += p.lb;
+            ub += p.ub;
           }
           
           logger.trace("[{}]: [{}, {}]", spiEntry, lb, ub);
