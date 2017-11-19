@@ -15,5 +15,5 @@ public interface ModelAdapter {
 
   public boolean isBoundarySpecie(String spiEntry);
 
-  public double[] getBounds(String mrxnEntry);
+  public Range getBounds(String mrxnEntry);
 }

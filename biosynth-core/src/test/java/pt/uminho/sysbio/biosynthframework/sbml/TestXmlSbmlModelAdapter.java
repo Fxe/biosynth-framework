@@ -41,6 +41,7 @@ public class TestXmlSbmlModelAdapter {
   public void testCoreModel() throws IOException {
 //    InputStream is = new FileInputStream("/var/biomodels/sbml/yeast_7.6.xml");
     InputStream is = new FileInputStream("/var/biomodels/sbml/iAdipocytes1809.xml");
+//    InputStream is = new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml");
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
     XmlSbmlModelAdapter adapter = new XmlSbmlModelAdapter(xmodel);
