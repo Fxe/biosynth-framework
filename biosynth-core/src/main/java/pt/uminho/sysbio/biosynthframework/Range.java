@@ -4,11 +4,12 @@ public class Range extends Tuple2<Double> {
   
   public Range(Double lb, Double ub) {
     super(lb, ub);
+    this.lb = lb;
+    this.ub = ub;
+    
     if (this.lb > this.ub) {
       throw new IllegalArgumentException(String.format("invalid range [%d, %d]", lb, ub));
     }
-    this.lb = lb;
-    this.ub = ub;
   }
 
   public Double inf = null;

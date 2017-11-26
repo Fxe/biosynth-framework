@@ -44,4 +44,9 @@ public class Tuple2<E> {
     }
     return eq1 && eq2;
   }
+  
+  @Override
+  public String toString() {
+    return String.format("<%s, %s>", e1, e2);
+  }
 }
