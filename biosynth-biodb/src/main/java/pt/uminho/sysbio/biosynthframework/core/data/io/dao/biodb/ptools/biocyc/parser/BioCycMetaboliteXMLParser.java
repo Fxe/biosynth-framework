@@ -114,20 +114,19 @@ implements IGenericMetaboliteParser {
 
   public String getFormula() throws JSONException {
     String formula = null;
-
     switch (entityType) {
-    case Compound:
-      if (this.base.has("cml")) {
-        formula = this.base.getJSONObject("cml")
-            .getJSONObject("molecule").getJSONObject("formula").getString("concise");
-        formula = formula.replaceAll(" ", "");
-      } else {
-        return null;
-      }
-      break;
-    default:
-      logger.warn(String.format("getFormula Not parseable type - %s", entityType));
-      break;
+      case Compound:
+        if (this.base.has("cml")) {
+          formula = this.base.getJSONObject("cml")
+              .getJSONObject("molecule").getJSONObject("formula").getString("concise");
+          formula = formula.replaceAll(" ", "");
+        } else {
+          return null;
+        }
+        break;
+      default:
+        logger.warn(String.format("getFormula Not parseable type - %s", entityType));
+        break;
     }
     if (formula == null) return null;
 

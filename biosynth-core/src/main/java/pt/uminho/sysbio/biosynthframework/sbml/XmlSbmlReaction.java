@@ -7,7 +7,7 @@ import java.util.Map;
 
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 
-public class XmlSbmlReaction extends XmlObject {
+public class XmlSbmlReaction extends XmlSBaseObject {
   
   private Map<String, List<XmlObject>> listOfAnnotations = new HashMap<> ();
   private List<XmlObject> listOfReactants = new ArrayList<> ();
@@ -15,8 +15,6 @@ public class XmlSbmlReaction extends XmlObject {
   private List<XmlObject> listOfParameters  = new ArrayList<> ();
   private List<XmlObject> listOfModifiers  = new ArrayList<> ();
   private MultiNodeTree<Object> gpr = null;
-  
-  private List<String> notes  = new ArrayList<> ();
   
   public Map<String, List<XmlObject>> getListOfAnnotations() { return listOfAnnotations;}
   public void setListOfAnnotations(Map<String, List<XmlObject>> listOfAnnotations) { this.listOfAnnotations = listOfAnnotations;}
@@ -32,9 +30,6 @@ public class XmlSbmlReaction extends XmlObject {
   
   public List<XmlObject> getListOfModifiers() { return listOfModifiers;}
   public void setListOfModifiers(List<XmlObject> listOfModifiers) { this.listOfModifiers = listOfModifiers;}
-  
-  public List<String> getNotes() { return notes;}
-  public void setNotes(List<String> notes) { this.notes = notes;}
   
   public MultiNodeTree<Object> getGpr() { return gpr;}
   public void setGpr(MultiNodeTree<Object> gpr) { this.gpr = gpr;}

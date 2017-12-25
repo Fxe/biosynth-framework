@@ -220,7 +220,8 @@ public class XmlReferencesBaseIntegrationEngine implements BaseIntegrationEngine
       }
     }
     
-    Map<String, Set<String>> noteData = notesParser.parseNotes2(xspi.getNotes());
+    List<String> notesData = SbmlNotesParser.parseNotes(xspi.getNotes());
+    Map<String, Set<String>> noteData = notesParser.parseNotes2(notesData);
     if (notesParser.messages.size() > 0) {
       logger.warn("{}", notesParser.messages);
     }

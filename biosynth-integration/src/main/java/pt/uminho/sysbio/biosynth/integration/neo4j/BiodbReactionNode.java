@@ -20,6 +20,8 @@ public class BiodbReactionNode extends BiodbEntityNode {
 
   private static final Logger logger = LoggerFactory.getLogger(BiodbReactionNode.class);
   
+  public static String STOICHIOMETRY = "stoichiometry";
+  
   public BiodbReactionNode(Node node) {
     super(node);
     if (!node.hasLabel(GlobalLabel.Reaction)) {
@@ -43,8 +45,8 @@ public class BiodbReactionNode extends BiodbEntityNode {
         ReactionRelationshipType.left_component, 
         ReactionRelationshipType.right_component)) {
       Node cpdNode = lr.getOtherNode(node);
-      String coefficient = (String) lr.getProperty("coefficient");
-      if (!NumberUtils.isCreatable(coefficient)) {
+      Double stoichiometry = getStoichiometry(lr);
+      if (stoichiometry == null) {
         return false;
       }
       if (!a.add(cpdNode.getId())) {
@@ -52,6 +54,22 @@ public class BiodbReactionNode extends BiodbEntityNode {
       }
     }
     return true;
+  }
+  
+  public Double getStoichiometry(Relationship lr) {
+    Double result = null;
+    String value = null;
+    if (lr.hasProperty("coefficient")) {
+      value = (String) lr.getProperty("coefficient");
+    } else {
+      value = Double.toString((double) lr.getProperty(STOICHIOMETRY));
+    }
+    
+    if (NumberUtils.isCreatable(value)) {
+      result = Double.parseDouble(value);
+    }
+    
+    return result;
   }
   
   public Map<Long, Double> getStoichiometry() {
@@ -79,12 +97,7 @@ public class BiodbReactionNode extends BiodbEntityNode {
     Map<Long, Double> left = new HashMap<> ();
     for (Relationship l : node.getRelationships(ReactionRelationshipType.left_component)) {
       Node cpdNode = l.getOtherNode(node);
-      String coefficient = (String) l.getProperty("coefficient");
-      Double value = null;
-      if (NumberUtils.isCreatable(coefficient)) {
-        value = Double.parseDouble(coefficient);
-      }
-//      double value = l.getProperty(Neo4jDefinitions.)
+      Double value = getStoichiometry(l);
       if (left.put(cpdNode.getId(), value) != null) {
         logger.warn("[{}:{}] stoichiometry collision [left]", node.getId(), getEntry());
       }
@@ -97,11 +110,7 @@ public class BiodbReactionNode extends BiodbEntityNode {
     Map<Long, Double> right = new HashMap<> ();
     for (Relationship r : node.getRelationships(ReactionRelationshipType.right_component)) {
       Node cpdNode = r.getOtherNode(node);
-      String coefficient = (String) r.getProperty("coefficient");
-      Double value = null;
-      if (NumberUtils.isCreatable(coefficient)) {
-        value = Double.parseDouble(coefficient);
-      }
+      Double value = getStoichiometry(r);
       if (right.put(cpdNode.getId(), value) != null) {
         logger.warn("[{}:{}] stoichiometry collision [right]", node.getId(), getEntry());
       }

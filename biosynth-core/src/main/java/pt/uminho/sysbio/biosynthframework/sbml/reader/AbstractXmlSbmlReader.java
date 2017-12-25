@@ -10,6 +10,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSBaseObject;
 
 public class AbstractXmlSbmlReader {
   
@@ -98,8 +99,8 @@ public class AbstractXmlSbmlReader {
     }
   }
   
-  public XmlObject buildSimpleObject(StartElement startElement) {
-    XmlObject xmlObject = new XmlObject();
+  public XmlSBaseObject buildSimpleObject(StartElement startElement) {
+    XmlSBaseObject xmlObject = new XmlSBaseObject();
     xmlObject.lineNumber = startElement.getLocation().getLineNumber();
     xmlObject.columnNumber = startElement.getLocation().getColumnNumber();
     xmlObject.setAttributes(getAttributes(startElement));

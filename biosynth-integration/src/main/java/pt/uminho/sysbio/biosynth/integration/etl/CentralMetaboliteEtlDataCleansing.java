@@ -119,11 +119,14 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
         AbstractGraphNodeEntity propertyEntity = p.getRight();
         AbstractGraphEdgeEntity relationshipEntity = p.getLeft();
         Triple<String, String, EtlCleasingType> triple;
-        //				
-        if (propertyEntity.getMajorLabel() == null) {
-          System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
-        }
+//        System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());			
+//        if (propertyEntity.getMajorLabel() == null) {
+//          System.out.println(propertyEntity.getMajorLabel() + " " + propertyEntity.getLabels());
+//        }
         Object key = propertyEntity.getProperties().get(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT);
+        if (key == null) {
+          key = propertyEntity.getProperties().get(Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT);
+        }
         switch (propertyEntity.getMajorLabel()) {
           case "MolecularFormula":
             triple = this.cleanseFormula((String) key);
@@ -136,7 +139,7 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
             result.put("ChemicalFormula", triple);
             break;
           case "Name":
-            triple = this.cleanseName((String)propertyEntity.getProperties().get("key"));
+            triple = this.cleanseName((String) key);
             propertyEntity.getProperties().put(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
             relationshipEntity.getProperties().put(DCS_KEY_STATUS, triple.getRight().toString());
             if (EtlCleasingType.CORRECTED.equals(triple.getRight())) {
@@ -146,7 +149,7 @@ implements EtlDataCleansing<GraphMetaboliteEntity> {
             break;
           case "MetaCyc":
           case "LigandCompound":
-            triple = this.cleanseDatabase((String)propertyEntity.getProperties().get("entry"), propertyEntity.getMajorLabel());
+            triple = this.cleanseDatabase((String) key, propertyEntity.getMajorLabel());
             propertyEntity.getProperties().put(Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, nullToString(triple.getLeft()));
             relationshipEntity.getProperties().put(DCS_KEY_STATUS, triple.getRight().toString());
             if (EtlCleasingType.CORRECTED.equals(triple.getRight())) {

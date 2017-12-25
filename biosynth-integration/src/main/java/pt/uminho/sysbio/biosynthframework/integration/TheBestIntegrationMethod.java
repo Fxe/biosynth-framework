@@ -195,23 +195,53 @@ public class TheBestIntegrationMethod {
   }
 
   public double N(long a, long b) {
-    return N.apply(a, b);
+    double score = 0;
+    try {
+      score = N.apply(a, b);
+    } catch (Exception e) {
+      logger.error("failed to score N: <{}, {}>, {}, {}", a, b, N.getClass().getSimpleName(), e.getMessage());
+    }
+    return score;
   }
   
   public double X(long a, long b) {
-    return X.apply(a, b);
+    double score = 0;
+    try {
+      score = X.apply(a, b);
+    } catch (Exception e) {
+      logger.error("failed to score X: <{}, {}>, {}, {}", a, b, X.getClass().getSimpleName(), e.getMessage());
+    }
+    return score;
   }
   
   public double S(long a, long b) {
-    return S.apply(a, b);
+    double score = 0;
+    try {
+      score = S.apply(a, b);
+    } catch (Exception e) {
+      logger.error("failed to score S: <{}, {}>, {}, {}", a, b, S.getClass().getSimpleName(), e.getMessage());
+    }
+    return score;
   }
   
   public double F(long a, long b) {
-    return F.apply(a, b);
+    double score = 0;
+    try {
+      score = F.apply(a, b);
+    } catch (Exception e) {
+      logger.error("failed to score F: <{}, {}>, {}, {}", a, b, F.getClass().getSimpleName(), e.getMessage());
+    }
+    return score;
   }
   
   public double R(long a, long b) {
-    return R.apply(a, b);
+    double score = 0;
+    try {
+      score = R.apply(a, b);
+    } catch (Exception e) {
+      logger.error("failed to score R: <{}, {}>, {}, {}", a, b, R.getClass().getSimpleName(), e.getMessage());
+    }
+    return score;
   }
   
   public double Z(long a, long b) {
@@ -226,6 +256,42 @@ public class TheBestIntegrationMethod {
       return 0;
     }
     return C.apply(a, b);
+  }
+  
+  public Map<Tuple2<Long>, Double> score2() {
+    return score2(null);
+  }
+  
+  public Map<Tuple2<Long>, Double> score2(Map<Tuple2<Long>, Map<String, Double>> scores) {
+    Map<Tuple2<Long>, Double> result = new HashMap<> ();
+    
+    int total = scoreBoard.size();
+    
+    int i = 0;
+    double miles = 0.1;
+    
+    logger.info("pairs: {}", total);
+    
+    for (Tuple2<Long> t : scoreBoard.keySet()) {
+      long a = t.e1;
+      long b = t.e2;
+      Map<String, Double> values = null;
+      if (scores != null) {
+        values = new HashMap<>();
+        scores.put(t, values);
+      }
+      double score = this.score2(a, b, values);
+      result.put(t, score);
+      i++;
+      if ((i / (double) total) > miles) {
+        logger.info("{} of {}", miles, total);
+        miles +=0.1;
+      }
+    }
+    
+    scoreBoard = result;
+    
+    return this.scoreBoard;
   }
   
   public Map<Tuple2<Long>, Double> score() {

@@ -8,8 +8,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.etl.CentralMetaboliteEtlDataCleansing;
+import pt.uminho.sysbio.biosynth.integration.etl.EtlDataCleansing;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.chemanalysis.cdk.CdkWrapper;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycMetaboliteDaoImpl;
 
 public class TestBiocycMetaboliteTransform {
@@ -30,7 +33,10 @@ public class TestBiocycMetaboliteTransform {
     dao.setPgdb("META");
     //  dao.getMetaboliteByEntry("META:CPD-882");
     //  dao.getMetaboliteByEntry("META:WATER");
-    BioCycMetaboliteEntity cpd = dao.getMetaboliteByEntry("ACP");
+//    BioCycMetaboliteEntity cpd = dao.getMetaboliteByEntry("ACP");
+    
+//    BioCycMetaboliteEntity cpd = dao.getMetaboliteByEntry("CPD-4185");
+    BioCycMetaboliteEntity cpd = dao.getMetaboliteByEntry("Cytochromes-c553");
     Map<String, String> map = new HashMap<> ();
 
     BiocycMetaboliteTransform t = new BiocycMetaboliteTransform(MetaboliteMajorLabel.MetaCyc.toString(), map);
@@ -44,6 +50,8 @@ public class TestBiocycMetaboliteTransform {
         k++;
       }
     }
+    EtlDataCleansing<GraphMetaboliteEntity> c = new CentralMetaboliteEtlDataCleansing(new CdkWrapper());
+    c.etlCleanse(gcpd);
 //    try {
 //      Map<String, Triple<String, String, EtlCleasingType>> dc = dataCleansing.etlCleanse(cpd);
 //      for (String k : dc.keySet()) {

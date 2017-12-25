@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.Operator;
+import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 
@@ -62,28 +63,7 @@ public class SbmlUtils {
   }
   
   public static Map<String, String> parseNotes(List<String> notes) {
-    Map<String, String> data = new HashMap<> ();
-
-    sbmlNotesFieldMapping.put("FORMULA:", "formula");
-    sbmlNotesFieldMapping.put("CHARGE:", "charge");
-    sbmlNotesFieldMapping.put("EQUATION:", "equation");
-    sbmlNotesFieldMapping.put("GPR_ASSOCIATION:", "gene_association");
-    sbmlNotesFieldMapping.put("GENE_ASSOCIATION:", "gene_association");
-    sbmlNotesFieldMapping.put("GENE ASSOCIATION:", "gene_association");
-    sbmlNotesFieldMapping.put("GENE_LIST:", "gene_list");
-    sbmlNotesFieldMapping.put("PROTEIN_ASSOCIATION:", "protein_association");
-    sbmlNotesFieldMapping.put("SUBSYSTEM:", "subsystem");
-    sbmlNotesFieldMapping.put("PROTEIN_CLASS:", "protein_class");
-    sbmlNotesFieldMapping.put("CONFIDENCE LEVEL:", "confidence_level");
-    sbmlNotesFieldMapping.put("EC NUMBER:", "ec_number");
-    sbmlNotesFieldMapping.put("EC_NUMBER:", "ec_number");
-    sbmlNotesFieldMapping.put("EC:", "ec_number");
-    sbmlNotesFieldMapping.put("AUTHORS:", "authors");
-    sbmlNotesFieldMapping.put("COMPARTMENT:", "compartment");
-    sbmlNotesFieldMapping.put("KEGG ID:", "kegg");
-    sbmlNotesFieldMapping.put("KEGG_RID:", "kegg");
-    sbmlNotesFieldMapping.put("PUBCHEM ID:", "pubchem");
-    sbmlNotesFieldMapping.put("CHEBI ID:", "chebi");
+    Map<String, String> data = SbmlNotesParser.getDefaults();
     
     for (String line : notes) {
       if (line.replaceAll(" ", "").equals("<p></p>")) {

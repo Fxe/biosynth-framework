@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.integration;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,13 +68,12 @@ public class SingleMissReactionIntegration<MID, RID> extends BasicReactionIntegr
       Map<MID, Double> stoich = reactionStoichs.get(rxnId);
       Map<Set<MID>, Double> istoich = expand(stoich);
       Map<Set<MID>, Double> istoichRev = ReactionMath.scale(istoich, -1);
-      
       Set<Set<MID>> singles = getSingles(istoich);
       if (singles.size() == 1) {
         Map<Set<MID>, Double> istoichMiss = new HashMap<>(istoich);
         istoichMiss.keySet().removeAll(singles);
-        System.out.println(istoich + " -> " + singles);
-        System.out.println(istoichMiss);
+        logger.debug("{} -> {}", istoich, singles);
+        logger.debug("{}", istoichMiss);
         addMissStoich(istoichMiss, rxnId, singles.iterator().next().iterator().next());
       }
       

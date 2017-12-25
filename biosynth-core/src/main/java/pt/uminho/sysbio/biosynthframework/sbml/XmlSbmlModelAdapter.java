@@ -618,7 +618,8 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   
   public String getGprFromNotes(String mrxnEntry) {
     XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
-    Map<String, Set<String>> ndata = notesParser.parseNotes2(xrxn.getNotes());
+    String notes = xrxn.getNotes();
+    Map<String, Set<String>> ndata = notesParser.parseNotes2(null);
     String ngpr = null;
     if (ndata.containsKey("gene_association") && 
         ndata.get("gene_association").size() > 0) {

@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,9 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class SbmlNotesParser {
   
@@ -71,6 +79,30 @@ public class SbmlNotesParser {
     }
     
     return null;
+  }
+  
+  public static List<String> parseNotes(String xmlNotes) {
+    List<String> result = new ArrayList<> ();
+    
+    if (DataUtils.empty(xmlNotes)) {
+      return result;
+    }
+    
+    XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    try {
+      XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(
+          new ByteArrayInputStream(xmlNotes.getBytes()));
+      while (xmlEventReader.hasNext()) {
+        XMLEvent event = xmlEventReader.nextEvent();
+        if (event.isCharacters()) {
+          result.add(event.asCharacters().getData());
+        }
+      }
+    } catch (XMLStreamException e) {
+      e.printStackTrace(); 
+    }
+    
+    return result;
   }
   
   @Deprecated

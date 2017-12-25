@@ -56,7 +56,7 @@ public class XmlSbmlSpeciesReader extends AbstractXmlSbmlReader implements XmlSb
         //              String namespace = startElement.getName().getNamespaceURI();
         switch (startElementLocalPart) {
         case SBML_NOTES: {
-          List<String> notes = notesReader.parseNotes(xmlEventReader, startElement, rejectedElements);
+          String notes = notesReader.parseNotes(xmlEventReader, startElement, rejectedElements);
           xmlSbmlSpecie.setNotes(notes);
           break;
         }

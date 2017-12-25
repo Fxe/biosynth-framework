@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -104,6 +105,7 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
     XmlSbmlModel model = null;
     try {
       XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+//      XMLStreamReader xmlEventReader = xmlInputFactory.createXMLStreamReader(new ByteArrayInputStream(data.getBytes()));
       XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(
           new ByteArrayInputStream(data.getBytes()));
       
@@ -395,9 +397,9 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
 
 
   
-  public List<XmlObject> parseKineticLaw(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+  public List<XmlSBaseObject> parseKineticLaw(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
     boolean read = true;
-    List<XmlObject> parameters = new ArrayList<> ();
+    List<XmlSBaseObject> parameters = new ArrayList<> ();
     
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -442,8 +444,8 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
     return parameters;
   }
 
-  public List<XmlObject> parseSpeciesReference(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    List<XmlObject> list = new ArrayList<> ();
+  public List<XmlSBaseObject> parseSpeciesReference(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<XmlSBaseObject> list = new ArrayList<> ();
     boolean read = true;
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -470,8 +472,8 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
     return list;
   }
   
-  public List<XmlObject> parseModifiers(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    List<XmlObject> result = new ArrayList<> ();
+  public List<XmlSBaseObject> parseModifiers(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<XmlSBaseObject> result = new ArrayList<> ();
     while (xmlEventReader.hasNext()) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
@@ -586,7 +588,7 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
         logger.trace("{}", namespace);
         switch (startElement.getName().getLocalPart()) {
           case SBML_NOTES:
-            List<String> notes = notesReader.parseNotes(xmlEventReader, startElement, rejectedElements);
+            String notes = notesReader.parseNotes(xmlEventReader, startElement, rejectedElements);
             sbmlReaction.setNotes(notes);
             break;
 //          case SBML_REACTION: {

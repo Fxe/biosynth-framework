@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.AbstractNeo4jDao;
+import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
@@ -208,7 +209,8 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       Map<String, Object> properties = getProperties(spi);
       properties.remove("id");
       Neo4jUtils.setPropertiesMap(properties, node);
-      mergeNotes(SbmlUtils.parseNotes(spi.getNotes()), node);
+      List<String> data = SbmlNotesParser.parseNotes(spi.getNotes());
+      mergeNotes(SbmlUtils.parseNotes(data), node);
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
       Node mmdNode = graphDatabaseService.getNodeById(getNeo4jId(mmd));
@@ -246,7 +248,8 @@ public class Neo4jXmlSbmlModelDao extends AbstractNeo4jDao {
       Node rxnNode = Neo4jUtils.getOrCreateNode(MetabolicModelLabel.ModelReaction, "entry", entry, graphDatabaseService);
       Map<String, Object> properties = getProperties(rxn);
       properties.remove("id");
-      mergeNotes(SbmlUtils.parseNotes(rxn.getNotes()), rxnNode);
+      List<String> data = SbmlNotesParser.parseNotes(rxn.getNotes());
+      mergeNotes(SbmlUtils.parseNotes(data), rxnNode);
       mergeParameters(rxn, rxnNode);
       mergeFBC(rxn, rxnNode, mmd.getListOfParameters());
       Neo4jUtils.setPropertiesMap(properties, rxnNode);
