@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BiocycMetaboliteRegulationEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.parser.BioCycMetaboliteXMLParser;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
@@ -94,7 +95,8 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
     List<String> parents = parser.getParents();
     List<String> instances = parser.getInstanses();
     List<String> subclasses = parser.getSubclasses();
-
+    List<BiocycMetaboliteRegulationEntity> regulations = parser.getRegulation();
+    
     BioCycMetaboliteEntity cpd = new BioCycMetaboliteEntity();
     cpd.setDescription(path);
 
@@ -117,6 +119,7 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
     cpd.setParents(parents);
     cpd.setInstances(instances);
     cpd.setSubclasses(subclasses);
+    cpd.setRegulations(regulations);
     
     return cpd;
   }

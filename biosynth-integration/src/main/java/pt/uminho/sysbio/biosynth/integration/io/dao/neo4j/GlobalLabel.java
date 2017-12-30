@@ -7,6 +7,7 @@ public enum GlobalLabel implements Label {
 	BiGG,
 	KEGG, BioCyc,
 	Orthology,
+	MetaCycProtein,
 	KeggPathway, MetaCycPathway,
 	ModelSeedRole, ModelSeedSubsystem,
 	KeggOrthology,

@@ -43,6 +43,8 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE CONSTRAINT ON (mss : %s) ASSERT mss.entry IS UNIQUE", GlobalLabel.ModelSeedSubsystem),
       String.format("CREATE CONSTRAINT ON (msr : %s) ASSERT msr.entry IS UNIQUE", GlobalLabel.ModelSeedRole),
       
+      String.format("CREATE CONSTRAINT ON (prt : %s) ASSERT prt.entry IS UNIQUE", GlobalLabel.MetaCycProtein),
+      
       String.format("CREATE CONSTRAINT ON (org : %s) ASSERT org.entry IS UNIQUE", GlobalLabel.KeggOrganism),
       String.format("CREATE CONSTRAINT ON (kgn : %s) ASSERT kgn.entry IS UNIQUE", GlobalLabel.KeggGene),
       //		String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.BrendaEnzyme),

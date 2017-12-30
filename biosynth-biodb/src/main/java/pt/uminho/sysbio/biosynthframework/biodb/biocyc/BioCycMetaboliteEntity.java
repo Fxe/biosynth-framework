@@ -117,9 +117,19 @@ public class BioCycMetaboliteEntity extends GenericMetabolite {
 		this.crossReferences.add(crossReference);
 	}
 	
-	@Override
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	@OneToMany(mappedBy = "biocycMetaboliteEntity", cascade = CascadeType.ALL)
+	private List<BiocycMetaboliteRegulationEntity> regulations = new ArrayList<>();
+	public List<BiocycMetaboliteRegulationEntity> getRegulations() { return regulations;}
+    public void setRegulations(List<BiocycMetaboliteRegulationEntity> regulations) {
+      this.regulations = regulations;
+      for (BiocycMetaboliteRegulationEntity regulation : regulations) {
+        regulation.setBiocycMetaboliteEntity(this);
+      }
+    }
+    
+    @Override
 	public String toString() {
-//		return "Ok";
 		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString()).append(sep);

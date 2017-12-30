@@ -25,6 +25,8 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	has_inchikey_fikhb,     //InChIKey -[has_inchikey_fikhb]-> FIKHB
 	has_inchikey_sikhb,     //InChIKey -[has_inchikey_sikhb]-> SIKHB
 	
+	is_inhibitor_of,        //Metabolite -[is_inhibitor_of]-> Reaction
+	is_activator_of,        //Metabolite -[is_activator_of]-> Reaction
 	instance_of,            //Metabolite -[instance_of]-> Metabolite 1) to define metabolite hierarchy
 	parent_of,
     subclass_of,
