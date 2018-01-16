@@ -9,7 +9,9 @@ public enum EntityType {
   TRASNPORT_SYMPORTER,
   TRASNPORT_ANTIPORTER,
   AUXILIAR, //virtual reactions to group virtual components
+  METABOLITE,
   REACTION, //standard reaction operators
+  MODEL_REACTION,
   ATPM, //deprecated ... :( (fixed constant)
   CURRENCY, //componenents that to not play main route role
   SPECIE, 
@@ -17,4 +19,6 @@ public enum EntityType {
   GENE,
   VIRTUAL,
   ERROR, //invalid objects
+  MODEL_COMPARTMENT,
+  COMPARTMENT,
 }

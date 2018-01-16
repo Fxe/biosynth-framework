@@ -10,7 +10,7 @@ public class SimpleModelReaction<I> {
   public String name;
   
   public Map<I, Double> stoichiometry = new HashMap<> ();
-  
+  public String gpr;
   public Range bounds;
   
   public SimpleModelReaction(I id, double lb, double ub) {

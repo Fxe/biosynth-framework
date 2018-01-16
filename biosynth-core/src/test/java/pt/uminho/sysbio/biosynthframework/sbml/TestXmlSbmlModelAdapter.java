@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -14,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynthframework.EntityType;
+import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer;
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer.ZipRecord;
@@ -40,7 +39,8 @@ public class TestXmlSbmlModelAdapter {
   @Test
   public void testCoreModel() throws IOException {
 //    InputStream is = new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml");
-    InputStream is = new FileInputStream("/var/biomodels/sbml/iAdipocytes1809.xml");
+//    InputStream is = new FileInputStream("/var/biomodels/sbml/iAdipocytes1809.xml");
+    InputStream is = new FileInputStream("/iJDZ836_v2.xml");
 //    InputStream is = new FileInputStream("/var/biomodels/sbml/yeast_7.6.xml");
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
@@ -48,11 +48,14 @@ public class TestXmlSbmlModelAdapter {
     int gprs = 0;
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       String mrxnEntry = xrxn.getAttributes().get("id");
+      Range range = adapter.getBounds(mrxnEntry);
       if (mrxnEntry != null) {
         String gpr = adapter.getGpr(mrxnEntry);
         if (gpr != null) {
           gprs++;              
         }
+        
+        System.out.println(mrxnEntry + " " + range + " " + gpr);
       }
     }
     

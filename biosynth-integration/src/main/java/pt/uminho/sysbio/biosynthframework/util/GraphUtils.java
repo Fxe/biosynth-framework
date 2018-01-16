@@ -44,7 +44,7 @@ public class GraphUtils {
             next.add(e_);
           }
         }
-        logger.debug("Now: {}, V: {}, Next: {}", move, result, next);
+        logger.trace("Now: {}, V: {}, Next: {}", move, result, next);
       }
       visitedEdges.addAll(move);
       move.clear();
