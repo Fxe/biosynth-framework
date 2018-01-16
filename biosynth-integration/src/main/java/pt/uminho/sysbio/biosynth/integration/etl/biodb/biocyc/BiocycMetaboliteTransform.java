@@ -64,6 +64,17 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.parent_of)));
     }
+    for (String subclass : entity.getInstances()) {
+      centralMetaboliteEntity.addConnectedEntity(
+          this.buildPair(
+              new SomeNodeFactory()
+              .withEntry(subclass)
+              .withLabel(GlobalLabel.BioCyc)
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
+              new SomeNodeFactory().buildMetaboliteEdge(
+                  MetaboliteRelationshipType.subclass_of)));
+    }
+    
     
 //    for (String subClass : entity.getSubclasses()) {
 //      centralMetaboliteEntity.addConnectedEntity(
