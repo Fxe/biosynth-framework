@@ -9,6 +9,7 @@ ext {
   jungVersion = '2.0.1'
   mewVersion = '0.0.1'
   jgraphtVersion = '1.0.1'
+  poiVersion = '3.17'
   
   libraries = [
     // core
@@ -20,6 +21,12 @@ ext {
     http_client: 'org.apache.httpcomponents:httpclient:4.3.1',
     guava: 'com.google.guava:guava:23.0',
     ahocorasick: 'org.ahocorasick:ahocorasick:0.4.0',
+    jbool: 'com.bpodgursky:jbool_expressions:1.14',
+    javaluator: 'com.fathzer:javaluator:3.0.2',
+    
+     // apache.poi
+    apache_poi: "org.apache.poi:poi:${poiVersion}",
+    apache_poi_ooxml: "org.apache.poi:poi-ooxml:${poiVersion}",   
     
     // json
     json: 'org.json:json:20131018',
