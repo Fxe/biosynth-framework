@@ -83,7 +83,7 @@ public class TestTsvMnxMetaboliteDaoImpl {
         String refDb = xref.getRef();
         String refEntry = xref.getValue();
         if (!refData.containsKey(refDb)) {
-          refData.put(refDb, new HashSet<> ());
+          refData.put(refDb, new HashSet<String> ());
         }
         refData.get(refDb).add(refEntry.trim());
       }
