@@ -21,7 +21,10 @@ public enum GlobalLabel implements Label {
 	
 	//Things that I have no clue where to put !
 	KeggOrganism, KeggGene,
-	EntrezTaxonomy, NCBIGene, NCBINucleotide, NCBIProtein,
+	@Deprecated
+	EntrezTaxonomy,
+	NcbiTaxonomy,
+	NCBIGene, NCBINucleotide, NCBIProtein,
 	UniProtAccession,
 	UniProtProtein,
 	UniProt, Gene, EnzymePortal, BrendaEnzyme, SGD, Phenotype, ExPASy,
