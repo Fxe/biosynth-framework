@@ -3,15 +3,23 @@ package pt.uminho.sysbio.biosynth.integration.neo4j;
 import java.util.Map;
 
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
+
 public abstract class AbstractBiodbNode implements Node {
   
   protected final Node node;
+  
+  public Label getNamespace() {
+    String ns = node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, "undefined").toString();
+    return DynamicLabel.label(ns);
+  }
   
   public AbstractBiodbNode(Node node) {
     this.node = node;
