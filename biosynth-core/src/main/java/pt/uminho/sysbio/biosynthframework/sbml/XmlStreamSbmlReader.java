@@ -397,9 +397,9 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
 
 
   
-  public List<XmlSBaseObject> parseKineticLaw(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+  public List<SbmlSBaseObject> parseKineticLaw(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
     boolean read = true;
-    List<XmlSBaseObject> parameters = new ArrayList<> ();
+    List<SbmlSBaseObject> parameters = new ArrayList<> ();
     
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -444,8 +444,8 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
     return parameters;
   }
 
-  public List<XmlSBaseObject> parseSpeciesReference(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    List<XmlSBaseObject> list = new ArrayList<> ();
+  public List<SbmlSBaseObject> parseSpeciesReference(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<SbmlSBaseObject> list = new ArrayList<> ();
     boolean read = true;
     while (xmlEventReader.hasNext() && read) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
@@ -472,8 +472,8 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
     return list;
   }
   
-  public List<XmlSBaseObject> parseModifiers(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
-    List<XmlSBaseObject> result = new ArrayList<> ();
+  public List<SbmlSBaseObject> parseModifiers(XMLEventReader xmlEventReader, StartElement specieStartElement) throws XMLStreamException {
+    List<SbmlSBaseObject> result = new ArrayList<> ();
     while (xmlEventReader.hasNext()) {
       XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (xmlEvent.isStartElement()) {
@@ -595,8 +595,10 @@ public class XmlStreamSbmlReader extends AbstractXmlSbmlReader {
 //          //						specieObject = new XMLObject();  
 //          //						specieObject.attributes.putAll(getAttributes(startElement));
 //          } break;
-          case "annotation":
-            sbmlReaction.setListOfAnnotations(annotationReader.parseAnnotation(xmlEventReader, rejectedElements));
+          case SBML_ANNOTATION:
+            String annotation = XmlUtils.extractElementAsXml(xmlEventReader, startElement, SBML_ANNOTATION);
+            sbmlReaction.setAnnotation(annotation);
+//            sbmlReaction.setListOfAnnotations(annotationReader.parseAnnotation(xmlEventReader, rejectedElements));
             break;
           case SBML_REACTION_LIST_OF_REACTANTS:
             sbmlReaction.getListOfReactants().addAll(

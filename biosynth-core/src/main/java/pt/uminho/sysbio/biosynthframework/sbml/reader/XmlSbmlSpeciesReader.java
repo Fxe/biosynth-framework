@@ -1,7 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.sbml.reader;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
@@ -15,13 +14,17 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlUtils;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 public class XmlSbmlSpeciesReader extends AbstractXmlSbmlReader implements XmlSbmlComponentReader {
   
   private static final Logger logger = LoggerFactory.getLogger(XmlSbmlSpeciesReader.class);
   
+  @Deprecated
   private final XmlSbmlNotesReader notesReader;
+  @SuppressWarnings("unused")
+  @Deprecated
   private final XmlSbmlAnnotationReader annotationReader;
   
   public XmlSbmlSpeciesReader(XmlSbmlNotesReader notesReader, 
@@ -61,8 +64,10 @@ public class XmlSbmlSpeciesReader extends AbstractXmlSbmlReader implements XmlSb
           break;
         }
         case SBML_ANNOTATION:
-          Map<String, List<XmlObject>> annotation = annotationReader.parseAnnotation(xmlEventReader, rejectedElements);
-          xmlSbmlSpecie.setListOfAnnotations(annotation);
+          String annotation = XmlUtils.extractElementAsXml(xmlEventReader, startElement, SBML_ANNOTATION);
+          xmlSbmlSpecie.setAnnotation(annotation);
+//          Map<String, List<XmlObject>> annotation = annotationReader.parseAnnotation(xmlEventReader, rejectedElements);
+//          xmlSbmlSpecie.setListOfAnnotations(annotation);
           break;
         case DC_RELATION:
         case BQBIOL_IS_VERSION_OF:

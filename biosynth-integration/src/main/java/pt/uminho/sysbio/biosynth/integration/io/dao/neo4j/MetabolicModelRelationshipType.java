@@ -13,6 +13,7 @@ public enum MetabolicModelRelationshipType implements RelationshipType {
 	has_subsystem,
 	in_subsystem,
 	has_model_compartment,
+	@Deprecated
 	has_compartment, 
 	in_compartment, 
 	left_component, right_component, has_crossreference_to, 

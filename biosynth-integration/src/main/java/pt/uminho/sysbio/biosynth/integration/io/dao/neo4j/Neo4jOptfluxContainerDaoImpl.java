@@ -261,7 +261,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
       Node mmdNode = graphDatabaseService.getNodeById(mmd.getId());
-      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_compartment);
+      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_model_compartment);
     } catch (Exception e) {
       logger.error("E - {}", e.getMessage());
       e.printStackTrace();
@@ -276,7 +276,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       ExtendedMetabolicModelEntity model) {
     Set<Long> res = new HashSet<> ();
     Node mmdNode = graphDatabaseService.getNodeById(model.getId());
-    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_compartment));
+    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_model_compartment));
     return res;
   }
 
@@ -330,7 +330,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     for (Node spiNode : Neo4jUtils.collectNodeRelationshipNodes(
-        mcpdNode, MetabolicModelRelationshipType.has_specie)) {
+        mcpdNode, MetabolicModelRelationshipType.has_metabolite_species)) {
       for (Node cpdNode : Neo4jUtils.collectNodeRelationshipNodes(
           spiNode, MetabolicModelRelationshipType.has_crossreference_to)) {
         //accept only has_crossreference_to links to Metabolite
@@ -398,7 +398,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
       Node mmdNode = graphDatabaseService.getNodeById(mmd.getId());
-      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_specie);
+      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_metabolite_species);
 
       String cmpEntry = String.format("%s@%s", spi.getComparment(), mmd.getEntry());
       Node cmpNode = Neo4jUtils.getUniqueResult(graphDatabaseService
@@ -417,7 +417,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       ExtendedMetabolicModelEntity model) {
     Set<Long> res = new HashSet<> ();
     Node mmdNode = graphDatabaseService.getNodeById(model.getId());
-    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_specie));
+    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_metabolite_species));
     return res;
   }
 
@@ -474,7 +474,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
 
       Node mmdNode = graphDatabaseService.getNodeById(mmd.getId());
-      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_reaction);
+      mmdNode.createRelationshipTo(node, MetabolicModelRelationshipType.has_model_reaction);
 
       for (OptfluxContainerReactionLeft  l : rxn.getLeft()) {
         createStoichiometryLink(l.getCpdEntry(), mmd.getEntry(), node, 
@@ -523,7 +523,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
       ExtendedMetabolicModelEntity model) {
     Set<Long> res = new HashSet<> ();
     Node mmdNode = graphDatabaseService.getNodeById(model.getId());
-    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_reaction));
+    res.addAll(Neo4jUtils.collectNodeRelationshipNodeIds(mmdNode, MetabolicModelRelationshipType.has_model_reaction));
     return res;
   }
 

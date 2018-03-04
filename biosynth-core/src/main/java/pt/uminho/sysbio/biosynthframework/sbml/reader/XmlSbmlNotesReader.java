@@ -13,6 +13,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import pt.uminho.sysbio.biosynthframework.sbml.XmlUtils;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 public class XmlSbmlNotesReader extends AbstractXmlSbmlReader implements XmlSbmlComponentReader {
@@ -25,29 +26,29 @@ public class XmlSbmlNotesReader extends AbstractXmlSbmlReader implements XmlSbml
       StartElement element, 
       Map<String, Integer> rejectedElements) throws XMLStreamException {
     
-    StringWriter writer = new StringWriter();
-    XMLOutputFactory factory = XMLOutputFactory.newInstance();
-    XMLEventWriter xw = null;
-    XMLEvent event = null;
-    if (element.isStartElement() &&
-        SBML_NOTES.equals(
-            ((StartElement) element).getName().getLocalPart())) {
-      xw = factory.createXMLEventWriter(writer);
-      xw.add(element);
-      while (xmlEventReader.hasNext()) {
-        event = xmlEventReader.nextEvent();
-        if (event.isEndElement()
-            && ((EndElement) event).getName().getLocalPart().equals(SBML_NOTES)) {
-          break;
-        } else if (xw != null) {
-          xw.add(event);
-        }
-      }
-    }
+//    StringWriter writer = new StringWriter();
+//    XMLOutputFactory factory = XMLOutputFactory.newInstance();
+//    XMLEventWriter xw = null;
+//    XMLEvent event = null;
+//    if (element.isStartElement() &&
+//        SBML_NOTES.equals(
+//            ((StartElement) element).getName().getLocalPart())) {
+//      xw = factory.createXMLEventWriter(writer);
+//      xw.add(element);
+//      while (xmlEventReader.hasNext()) {
+//        event = xmlEventReader.nextEvent();
+//        if (event.isEndElement()
+//            && ((EndElement) event).getName().getLocalPart().equals(SBML_NOTES)) {
+//          break;
+//        } else if (xw != null) {
+//          xw.add(event);
+//        }
+//      }
+//    }
+//    
+//    xw.close();
     
-    xw.close();
-    
-    return writer.toString();
+    return XmlUtils.extractElementAsXml(xmlEventReader, element, SBML_NOTES);
   }
   
   public List<String> parseNotesOld(XMLEventReader xmlEventReader, 

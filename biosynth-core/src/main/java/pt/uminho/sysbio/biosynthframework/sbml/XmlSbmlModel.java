@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XmlSbmlModel extends XmlSBaseObject {
+public class XmlSbmlModel extends SbmlSBaseObject {
   
   private Map<String, String> sbmlAttributes = new HashMap<> ();
   public List<XmlUnitDefinition> units = new ArrayList<> ();

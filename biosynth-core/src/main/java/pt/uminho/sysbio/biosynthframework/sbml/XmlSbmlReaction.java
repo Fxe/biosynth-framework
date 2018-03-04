@@ -7,7 +7,7 @@ import java.util.Map;
 
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 
-public class XmlSbmlReaction extends XmlSBaseObject {
+public class XmlSbmlReaction extends SbmlSBaseObject {
   
   private Map<String, List<XmlObject>> listOfAnnotations = new HashMap<> ();
   private List<XmlObject> listOfReactants = new ArrayList<> ();
