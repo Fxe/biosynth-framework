@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-
+@Deprecated
 @MappedSuperclass
 public abstract class AbstractMetabolicModel implements IMetabolicModel {
 	

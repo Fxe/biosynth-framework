@@ -49,6 +49,10 @@ public class Range extends Tuple2<Double> {
     return this.e1 < this.e2 && this.e2 < 0.0;
   }
   
+  public boolean isWithin(double value) {
+    return value >= this.lb && value <= this.ub;
+  }
+  
   @Override
   public String toString() {
     if (inf != null) {
