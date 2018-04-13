@@ -104,6 +104,12 @@ public class LipidmapsMetaboliteEntity extends GenericMetabolite {
   public String classLevel4;
   public String getClassLevel4() { return classLevel4;}
   public void setClassLevel4(String classLevel4) { this.classLevel4 = classLevel4;}
+  
+  @MetaProperty
+  @Column(name="mol")
+  public String mol;
+  public String getMol() { return mol;}
+  public void setMol(String mol) { this.mol = mol;}
 
   @OneToMany(mappedBy = "metaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
   private List<LipidmapsMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();

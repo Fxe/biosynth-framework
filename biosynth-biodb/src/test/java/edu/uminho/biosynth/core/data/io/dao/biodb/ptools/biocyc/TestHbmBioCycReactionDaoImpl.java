@@ -1,7 +1,7 @@
 package edu.uminho.biosynth.core.data.io.dao.biodb.ptools.biocyc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+//import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.util.Set;

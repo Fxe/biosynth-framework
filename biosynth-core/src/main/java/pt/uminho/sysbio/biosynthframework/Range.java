@@ -26,7 +26,7 @@ public class Range extends Tuple2<Double> {
   }
   
   /**
-   * [a, b] such that a > b
+   * [a, b] such that a &gt; b
    * @return
    */
   public boolean isNull() {
@@ -34,7 +34,7 @@ public class Range extends Tuple2<Double> {
   }
   
   /**
-   * [a, b] such that a > 0 and a < b
+   * [a, b] such that a &gt; 0 and a &lt; b
    * @return
    */
   public boolean isPositive() {
@@ -42,7 +42,7 @@ public class Range extends Tuple2<Double> {
   }
   
   /**
-   * [a, b] such that b < 0 and a < b
+   * [a, b] such that b &lt; 0 and a &lt; b
    * @return
    */
   public boolean isNegative() {

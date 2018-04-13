@@ -90,7 +90,6 @@ public class CdkWrapper implements FormulaReader {
    * @param formula the molecular formula as string
    * @param setOne True, when must be set the value 1 for elements with one atom
    * @return Returns the string representation of the molecule formula. Based on Hill System.
-   * @see {@link org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator#getString(IMolecularFormula, boolean)}
    */
   public static String toIsotopeMolecularFormula(String formula, boolean setOne) {
 

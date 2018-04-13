@@ -9,41 +9,41 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 public class DefaultMetaboliteEtlExtract<M extends Metabolite> implements EtlExtract<M> {
 
-	private final MetaboliteDao<M> metaboliteDao;
-	
-	public DefaultMetaboliteEtlExtract(MetaboliteDao<M> metaboliteDao) {
-		this.metaboliteDao = metaboliteDao;
-	}
+  private final MetaboliteDao<M> metaboliteDao;
 
-	@Override
-	public M extract(Serializable id) {
-		M metaboliteEntity = null;
-		
-		if (id instanceof String) {
-			metaboliteEntity = metaboliteDao.getMetaboliteByEntry((String)id);
-		} else if (id instanceof Long) {
-			metaboliteEntity = metaboliteDao.getMetaboliteById((Long)id);
-		} else {
-			
-		}
+  public DefaultMetaboliteEtlExtract(MetaboliteDao<M> metaboliteDao) {
+    this.metaboliteDao = metaboliteDao;
+  }
 
-		return metaboliteEntity;
-	}
+  @Override
+  public M extract(Serializable id) {
+    M metaboliteEntity = null;
 
-	@Override
-	public List<M> extractAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    if (id instanceof String) {
+      metaboliteEntity = metaboliteDao.getMetaboliteByEntry((String)id);
+    } else if (id instanceof Long) {
+      metaboliteEntity = metaboliteDao.getMetaboliteById((Long)id);
+    } else {
 
-	@Override
-	public List<Serializable> getAllKeys() {
-		List<Serializable> keys = new ArrayList<> ();
-		for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
-			keys.add(entry);
-		}
-		
-		return keys;
-	}
+    }
+
+    return metaboliteEntity;
+  }
+
+  @Override
+  public List<M> extractAll() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public List<Serializable> getAllKeys() {
+    List<Serializable> keys = new ArrayList<> ();
+    for (String entry : metaboliteDao.getAllMetaboliteEntries()) {
+      keys.add(entry);
+    }
+
+    return keys;
+  }
 
 }

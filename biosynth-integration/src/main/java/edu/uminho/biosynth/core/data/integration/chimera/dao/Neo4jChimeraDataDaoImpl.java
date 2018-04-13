@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.neo4j.graphdb.DynamicLabel;
@@ -50,7 +50,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	  this.graphDatabaseService = new BiodbGraphDatabaseService(graphDatabaseService);
 	}
 	
-	@PostConstruct
+//	@PostConstruct
 	public void initialize() {
 		LOGGER.info(String.format("%s initialized !", this));
 	}

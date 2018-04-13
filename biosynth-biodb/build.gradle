@@ -6,6 +6,10 @@ dependencies {
   compile( libraries.retrofit)
   compile( libraries.okhttp)
   compile( libraries.http_client)
+  compile( libraries.cdk_bundle) {
+    exclude module: 'cdk-log4j'
+    exclude module: 'cdk-iordf'
+  }
   
   testCompile ( libraries.spring_test)
   testCompile ( libraries.h2)

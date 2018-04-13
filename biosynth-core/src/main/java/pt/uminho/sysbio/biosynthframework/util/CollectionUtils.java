@@ -102,7 +102,7 @@ public class CollectionUtils {
   
 
   /**
-   * [{A -> j}, {B -> j}, {C -> j}]
+   * [{A &rarr; j}, {B &rarr; j}, {C &rarr; j}]
    * [ [A, B, C] ]
    * @param mapList
    * @return

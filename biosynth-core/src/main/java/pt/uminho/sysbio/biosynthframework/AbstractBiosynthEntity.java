@@ -6,9 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+//import javax.xml.bind.annotation.XmlAccessType;
+//import javax.xml.bind.annotation.XmlAccessorType;
+//import javax.xml.bind.annotation.XmlAttribute;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 
 @MappedSuperclass
-@XmlAccessorType(XmlAccessType.FIELD)
+//@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractBiosynthEntity implements Serializable {
 
   private static final long serialVersionUID = 353453463465587L;
@@ -34,7 +34,7 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 
   @MetaProperty
   @Column(name="entry", unique=true, length=255, nullable=false)
-  @XmlAttribute(name="entry")
+//  @XmlAttribute(name="entry")
   protected String entry;
 
   @MetaProperty
