@@ -18,15 +18,20 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabe
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jLayoutLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.neo4j.GenomeDatabase;
+import pt.uminho.sysbio.biosynthframework.neo4j.LiteratureDatabase;
+import pt.uminho.sysbio.biosynthframework.neo4j.OntologyDatabase;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class HelperNeo4jConfigInitializer {
 
   private final static Logger logger = LoggerFactory.getLogger(HelperNeo4jConfigInitializer.class);
 
   private static final String[] NEO_DATA_CONSTRAINTS = {
+      
       "CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.id IS UNIQUE",
       "CREATE CONSTRAINT ON (cpd:BiGG) ASSERT cpd.internalId IS UNIQUE",
-
+      String.format("CREATE CONSTRAINT ON (o : %s) ASSERT o.entry IS UNIQUE", GlobalLabel.Database),
       String.format("CREATE CONSTRAINT ON (mmd : %s) ASSERT mmd.entry IS UNIQUE", GlobalLabel.MetabolicModel),
       String.format("CREATE CONSTRAINT ON (cmp : %s) ASSERT cmp.entry IS UNIQUE", GlobalLabel.SubcellularCompartment),
       String.format("CREATE CONSTRAINT ON (rpr : %s) ASSERT rpr.entry IS UNIQUE", GlobalLabel.KeggReactionPair),
@@ -132,7 +137,25 @@ public class HelperNeo4jConfigInitializer {
       logger.trace("Execute Constraint: " + cypherQuery);
       graphDatabaseService.execute(cypherQuery);
     }
+    
+    for (LiteratureDatabase label : LiteratureDatabase.values()) {
+      String cypherQuery = String.format("CREATE CONSTRAINT ON (n:%s) ASSERT n.entry IS UNIQUE", label);
+      logger.trace("Execute Constraint: " + cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
+    }
+    
+    for (OntologyDatabase label : OntologyDatabase.values()) {
+      String cypherQuery = String.format("CREATE CONSTRAINT ON (n:%s) ASSERT n.entry IS UNIQUE", label);
+      logger.trace("Execute Constraint: " + cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
+    }
 
+    for (GenomeDatabase label : GenomeDatabase.values()) {
+      String cypherQuery = String.format("CREATE CONSTRAINT ON (n:%s) ASSERT n.entry IS UNIQUE", label);
+      logger.trace("Execute Constraint: " + cypherQuery);
+      graphDatabaseService.execute(cypherQuery);
+    }
+    
     for (String query: NEO_DATA_CONSTRAINTS) {
       graphDatabaseService.execute(query);
     }

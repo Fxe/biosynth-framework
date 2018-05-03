@@ -3,6 +3,7 @@ include 'biosynth-core',
         'biosynth-biodb', 
         'biosynth-biodb-chebi',
         'biosynth-biodb-reactome',
+        'biosynth-biodb-modelseed',
         'biosynth-chemanalysis',
         'biosynth-visualization',
         'biosynth-integration'

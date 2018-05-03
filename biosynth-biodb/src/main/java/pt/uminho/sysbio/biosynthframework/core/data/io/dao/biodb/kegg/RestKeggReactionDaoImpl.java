@@ -13,7 +13,7 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.Keg
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class RestKeggReactionDaoImpl
-extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
+extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggReactionEntity> {
 
   public static boolean DELAY_ON_IO_ERROR = false;
 
@@ -96,5 +96,17 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
   @Override
   public Set<Long> getAllReactionIds() {
     throw new RuntimeException("Unsupported Operation.");
+  }
+
+  @Override
+  public KeggReactionEntity getByEntry(String entry) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

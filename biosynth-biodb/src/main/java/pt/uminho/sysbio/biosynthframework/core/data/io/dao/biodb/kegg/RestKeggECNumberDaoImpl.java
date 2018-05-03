@@ -8,11 +8,12 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggECNumberEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGenericEntityFlatFileParser;
 
 public class RestKeggECNumberDaoImpl
-extends AbstractRestfulKeggDao {
+extends AbstractRestfulKeggDao<AbstractBiosynthEntity> {
 
 	public static boolean DELAY_ON_IO_ERROR = false;
 	
@@ -67,6 +68,12 @@ extends AbstractRestfulKeggDao {
 		File f = new File(getPathFolder());
 		f.mkdirs();
 	}
+
+  @Override
+  public AbstractBiosynthEntity getByEntry(String e) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 	
 
 }

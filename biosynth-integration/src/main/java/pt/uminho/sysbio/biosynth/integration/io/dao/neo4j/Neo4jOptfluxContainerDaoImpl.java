@@ -207,7 +207,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
   public DefaultSubcellularCompartmentEntity getCompartmentById(Long id) {
     Node node = graphDatabaseService.getNodeById(id);
     
-    if (node == null || !node.hasLabel(GlobalLabel.SubcellularCompartment)) {
+    if (node == null || !node.hasLabel(MetabolicModelLabel.ModelCompartment)) {
       logger.trace("{} not a SubcellularCompartment", node);
       return null;
     }

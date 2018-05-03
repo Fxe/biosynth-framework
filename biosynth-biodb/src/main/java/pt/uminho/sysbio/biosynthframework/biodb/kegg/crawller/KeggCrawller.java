@@ -38,8 +38,8 @@ public class KeggCrawller {
 			rest.setLocalStorage(folder);
 			rest.setSaveLocalStorage(true);
 			rest.setUseLocalStorage(true);
-			rest.createFolder();
-			Set<String> genomes = rest.getAllGenomeEntries();
+//			rest.createFolder();
+			Set<String> genomes = rest.getAllEntries();
 			for(String genome : genomes){
 				keggGenomeAndGenesRunnable crawler = new keggGenomeAndGenesRunnable(i,folder, genome);
 				runs.add(crawler);

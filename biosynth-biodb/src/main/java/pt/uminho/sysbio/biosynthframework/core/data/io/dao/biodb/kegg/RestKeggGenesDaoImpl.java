@@ -22,7 +22,7 @@ import pt.uminho.sysbio.biosynthframework.util.JsonMapUtils;
 
 
 public class RestKeggGenesDaoImpl
-extends AbstractRestfulKeggDao  {
+extends AbstractRestfulKeggDao<KeggGeneEntity>  {
 
   public static boolean DELAY_ON_IO_ERROR = false;
 
@@ -147,5 +147,19 @@ extends AbstractRestfulKeggDao  {
 //      }
 //    }
 
+  }
+
+
+  @Override
+  public KeggGeneEntity getByEntry(String entry) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  @Override
+  public Set<String> getAllEntries() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

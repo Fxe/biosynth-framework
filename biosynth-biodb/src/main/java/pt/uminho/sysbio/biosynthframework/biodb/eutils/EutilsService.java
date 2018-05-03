@@ -29,6 +29,10 @@ public interface EutilsService {
   public EntrezProtein efetchProtein(@Query("id") String id, 
                                      @Query("retmode") EntrezRetmode retmode);
 
+  @GET("/efetch.fcgi?db=pubmed")
+  public EutilsPubmedObject efetchPubmed(@Query("id") String id, 
+                                         @Query("retmode") String retmode);
+  
   //esearch.fcgi?db=gene&term=txid326442&retstart=38&retmax=100
   @GET("/esearch.fcgi")
   public EntrezSearchResult esearch(@Query("db") EntrezDatabase db, 

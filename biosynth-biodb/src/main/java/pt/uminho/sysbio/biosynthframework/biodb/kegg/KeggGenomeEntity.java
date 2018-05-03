@@ -2,17 +2,13 @@ package pt.uminho.sysbio.biosynthframework.biodb.kegg;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
+/**
+ * 
+ * @author Someone at Silico Life
+ * @author Filipe Liu
+ *
+ */
 public class KeggGenomeEntity extends KeggEntity{
-
-  //	protected String entry;
-  	protected String name;
-  	
-  public String getName() {
-      return name;
-    }
-    public void setName(String name) {
-      this.name = name;
-    }
 
   //	protected String definition;
   protected String dataSource;
@@ -35,7 +31,7 @@ public class KeggGenomeEntity extends KeggEntity{
   //	protected String title;
   //	protected String jornal;
   protected String annotation;
-  
+
 
   public String getAnnotation() {
     return annotation;

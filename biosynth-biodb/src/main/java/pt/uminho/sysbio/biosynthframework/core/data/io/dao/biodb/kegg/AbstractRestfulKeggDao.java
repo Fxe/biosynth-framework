@@ -1,18 +1,20 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
-public abstract class AbstractRestfulKeggDao {
+public abstract class AbstractRestfulKeggDao<T extends AbstractBiosynthEntity> implements BiosDao<T>{
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractRestfulKeggDao.class);
   
@@ -76,4 +78,23 @@ public abstract class AbstractRestfulKeggDao {
   public boolean isSaveLocalStorage() { return saveLocalStorage;}
   public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
 
+  @Override
+  public T getById(long id) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public Long save(T o) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public boolean delete(T o) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public Set<Long> getAllIds() {
+    throw new RuntimeException("Unsupported Operation");
+  }
 }

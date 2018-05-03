@@ -3,7 +3,9 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGlycanMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGlycanMetaboliteFlatFileParser;
@@ -12,7 +14,7 @@ import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 
 public class RestKeggGlycanMetaboliteDaoImpl 
-extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEntity> {
+extends AbstractRestfulKeggDao<KeggGlycanMetaboliteEntity> implements MetaboliteDao<KeggGlycanMetaboliteEntity> {
 
   private static final String restGlQuery = "http://rest.kegg.jp/get/gl:%s";
   private static final String restGlMolQuery = "http://rest.kegg.jp/get/gl:%s/mol";
@@ -35,12 +37,6 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
       System.err.println(e.getMessage());
     }
     return cpdIds;
-  }
-
-  @Override
-  public Serializable save(KeggGlycanMetaboliteEntity entity) {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   public static KeggGlycanMetaboliteEntity convert(String glFlatFile, String glMolFile) {
@@ -116,22 +112,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
 
   @Override
   public List<String> getAllMetaboliteEntries() {
-    List<String> cpdIds = new ArrayList<>();
-    String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "gl");
-    String localPath = getPath("query", "glycan.txt"); //this.getLocalStorage() + "query" + "/glycan.txt";
-    try {
-      String httpResponseString = getLocalOrWeb(restListDrQuery, localPath);
-      String[] httpResponseLine = httpResponseString.split("\n");
-      for ( int i = 0; i < httpResponseLine.length; i++) {
-        //				dr:D10517\tCrisantaspase (JAN)
-        String[] values = httpResponseLine[i].split("\\t");
-        //				remove dr:
-        cpdIds.add(values[0].substring(3));
-      }
-    } catch (IOException e) {
-      System.err.println(e.getMessage());
-    }
-    return cpdIds;
+    return new ArrayList<> (getAllEntries());
   }
 
   @Override
@@ -143,5 +124,31 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggGlycanMetaboliteEnti
   @Override
   public Serializable saveMetabolite(Object entity) {
     throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public KeggGlycanMetaboliteEntity getByEntry(String entry) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    Set<String> cpdIds = new HashSet<>();
+    String restListDrQuery = String.format("http://rest.kegg.jp/%s/%s", "list", "gl");
+    String localPath = getPath("query", "glycan.txt"); //this.getLocalStorage() + "query" + "/glycan.txt";
+    try {
+      String httpResponseString = getLocalOrWeb(restListDrQuery, localPath);
+      String[] httpResponseLine = httpResponseString.split("\n");
+      for ( int i = 0; i < httpResponseLine.length; i++) {
+        //              dr:D10517\tCrisantaspase (JAN)
+        String[] values = httpResponseLine[i].split("\\t");
+        //              remove dr:
+        cpdIds.add(values[0].substring(3));
+      }
+    } catch (IOException e) {
+      System.err.println(e.getMessage());
+    }
+    return cpdIds;
   }
 }

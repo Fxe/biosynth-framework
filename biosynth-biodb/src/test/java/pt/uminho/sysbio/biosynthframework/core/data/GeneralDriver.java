@@ -71,7 +71,7 @@ public class GeneralDriver {
       for (Pair<String, String> gpair : ko.g) {
         System.out.println(gpair);
         try {
-          KeggGenomeEntity g = genomeDao.getGenomeByEntry(gpair.getLeft());
+          KeggGenomeEntity g = genomeDao.getByEntry(gpair.getLeft());
 
           System.out.println(g.getTaxonomy());
           

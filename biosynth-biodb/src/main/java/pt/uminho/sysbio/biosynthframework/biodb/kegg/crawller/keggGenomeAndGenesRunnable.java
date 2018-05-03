@@ -29,7 +29,7 @@ public class keggGenomeAndGenesRunnable implements Runnable, Callable<Integer>{
 		genomeDao.setLocalStorage(folder);
 		genomeDao.setSaveLocalStorage(true);
 		genomeDao.setUseLocalStorage(true);
-		genomeDao.createFolder();
+//		genomeDao.createFolder();
 		this.id = id;
 	}
 	
@@ -38,7 +38,7 @@ public class keggGenomeAndGenesRunnable implements Runnable, Callable<Integer>{
 		
 		try {
 			
-			genomeDao.getGenomeByEntry(genome);
+			genomeDao.getByEntry(genome);
 			Set<String> geneIds = genes.getAllGenesEntries(genome);
 			for(String gId : geneIds){
 				genes.getGeneByEntry(gId);

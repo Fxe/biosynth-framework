@@ -8,7 +8,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RestKeggGeneDaoImpl extends AbstractRestfulKeggDao {
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+
+public class RestKeggGeneDaoImpl extends AbstractRestfulKeggDao<AbstractBiosynthEntity> {
 	
 	private Map<String, Set<String>> geneToEcMap = new HashMap<> ();
 	
@@ -49,4 +51,16 @@ public class RestKeggGeneDaoImpl extends AbstractRestfulKeggDao {
 		
 		return ecSet;
 	}
+
+  @Override
+  public AbstractBiosynthEntity getByEntry(String e) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

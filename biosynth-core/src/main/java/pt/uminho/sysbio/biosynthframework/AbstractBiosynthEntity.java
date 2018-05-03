@@ -44,6 +44,10 @@ public abstract class AbstractBiosynthEntity implements Serializable {
   @MetaProperty
   @Column(name="e_source", length=255)
   protected String source;
+  
+  @MetaProperty
+  @Column(name="bios_version", length=255)
+  protected String version;
 
   @MetaProperty
   @Column(name="description", length=2047)
@@ -73,7 +77,10 @@ public abstract class AbstractBiosynthEntity implements Serializable {
 
   public String getSource() { return source;}
   public void setSource(String source) { this.source = source;}
-
+  
+  public String getVersion() { return version;}
+  public void setVersion(String version) { this.version = version;}
+  
   @JsonIgnore
   @JsonSerialize(using = DateTimeSerializer.class)
   public DateTime getCreatedAt() { return created_at;}

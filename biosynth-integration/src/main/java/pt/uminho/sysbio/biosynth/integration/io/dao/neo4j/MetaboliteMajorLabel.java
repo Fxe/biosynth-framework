@@ -20,6 +20,6 @@ public enum MetaboliteMajorLabel implements Label {
   MetaboLights, Metabolomics, RefMet,
   NOTFOUND, PlantCyc,
   SwissLipids, ENVIPath,
-  ;
+  
   
 }

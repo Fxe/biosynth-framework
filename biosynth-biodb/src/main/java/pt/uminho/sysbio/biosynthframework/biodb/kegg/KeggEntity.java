@@ -11,13 +11,13 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
-public abstract class KeggEntity implements Serializable{
+public abstract class KeggEntity extends AbstractBiosynthEntity implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
-	
-	protected String entry;
+	private static final long serialVersionUID = 1L;	
+
 	protected List<String> names;
 	protected String definition;
 	
