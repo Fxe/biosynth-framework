@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public abstract class AbstractRestfulKeggDao<T extends AbstractBiosynthEntity> implements BiosDao<T>{
@@ -30,6 +32,14 @@ public abstract class AbstractRestfulKeggDao<T extends AbstractBiosynthEntity> i
   public void setLocalStorage(String localStorage) {
     this.localStorage = localStorage.trim().replaceAll("\\\\", "/");
     if ( !this.localStorage.endsWith("/")) this.localStorage = this.localStorage.concat("/");
+  }
+  
+  public static String getString(Map<String, Object> odata, String key) {
+    if (!DataUtils.empty(odata.get(key))) {
+      return odata.get(key).toString().trim();
+    }
+    
+    return null;
   }
   
   public String getPath(String...path) {

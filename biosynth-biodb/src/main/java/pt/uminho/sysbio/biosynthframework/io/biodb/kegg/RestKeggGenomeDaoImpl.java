@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
+package pt.uminho.sysbio.biosynthframework.io.biodb.kegg;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.AbstractRestfulKeggDao;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggGenomeFlatFileParser;
 
 /**

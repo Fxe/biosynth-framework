@@ -7,5 +7,6 @@ public enum EntrezDatabase {
   protein, //Protein
   genome, //Genome
   biosample, //BioSample
-  
+  assembly, //Assembly
+  pubmed,
 }

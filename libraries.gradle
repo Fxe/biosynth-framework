@@ -10,6 +10,7 @@ ext {
   mewVersion = '0.0.1'
   jgraphtVersion = '1.0.1'
   poiVersion = '3.17'
+  jsoupVersion = '1.11.3'
   
   libraries = [
     // core
@@ -23,6 +24,8 @@ ext {
     ahocorasick: 'org.ahocorasick:ahocorasick:0.4.0',
     jbool: 'com.bpodgursky:jbool_expressions:1.14',
     javaluator: 'com.fathzer:javaluator:3.0.2',
+    
+    jsoup: 'org.jsoup:jsoup:1.11.3',
     
      // apache.poi
     apache_poi: "org.apache.poi:poi:${poiVersion}",

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggECNumberDaoImpl;
 
+@Deprecated
 public class KeggECNumbersRunnable implements Runnable{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KeggECNumbersRunnable.class);

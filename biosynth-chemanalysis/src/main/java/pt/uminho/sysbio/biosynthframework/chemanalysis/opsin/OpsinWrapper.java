@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis.opsin;
 
-import nu.xom.Element;
 import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructureException;

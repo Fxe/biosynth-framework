@@ -16,7 +16,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,10 +50,12 @@ public class TestXmlStreamSbmlReader {
   }
 
   public static void testStrem(String f) {
-    AutoFileReader reader = new AutoFileReader(f, null);
-    InputStreamSet iss = reader.getStreams();
-    System.out.println(iss);
-    IOUtils.closeQuietly(reader);
+    try (AutoFileReader reader = new AutoFileReader(f, null)) {
+      InputStreamSet iss = reader.getStreams();
+      System.out.println(iss);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test

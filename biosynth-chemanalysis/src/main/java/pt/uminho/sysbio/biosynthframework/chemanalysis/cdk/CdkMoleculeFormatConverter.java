@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis.cdk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -98,7 +99,7 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
   public IAtomContainerSet readInchi(InputStream is) throws CDKException {
     InChIToStructure inChIToStructure;
     try {
-      String inchi = StringUtils.join(IOUtils.readLines(is), "");
+      String inchi = StringUtils.join(IOUtils.readLines(is, Charset.defaultCharset()), "");
       IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
       inChIToStructure = InChIGeneratorFactory
           .getInstance()

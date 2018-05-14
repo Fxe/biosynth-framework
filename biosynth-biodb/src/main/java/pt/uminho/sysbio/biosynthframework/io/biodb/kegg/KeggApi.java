@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
+package pt.uminho.sysbio.biosynthframework.io.biodb.kegg;
 
 import retrofit.http.GET;
 import retrofit.http.Path;

@@ -10,11 +10,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.IOUtils;
-
-public class ZipContainer implements Closeable {
+public class ZipContainer implements Closeable, AutoCloseable {
   
-  public static class ZipRecord implements Closeable {
+  public static class ZipRecord implements Closeable, AutoCloseable {
     public String name;
     public long size;
     public long compressedSize;
@@ -23,7 +21,7 @@ public class ZipContainer implements Closeable {
     
     @Override
     public void close() throws IOException {
-      IOUtils.closeQuietly(this.is);
+      this.is.close();
     }
     
     @Override
@@ -61,8 +59,8 @@ public class ZipContainer implements Closeable {
   
   @Override
   public void close() throws IOException {
-    IOUtils.closeQuietly(this.zf);
-    IOUtils.closeQuietly(this.zis);
-    IOUtils.closeQuietly(this.is);
+    this.zf.close();
+    this.zis.close();
+    this.is.close();
   }
 }

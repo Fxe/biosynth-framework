@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,15 +7,14 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.zip.ZipException;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer.ZipRecord;
 
-public class AutoFileReader implements Closeable {
+public class AutoFileReader implements AutoCloseable {
   
-  private Closeable closeable = null;
+  private AutoCloseable closeable = null;
   private InputStreamSet iss = null;
   
   private static final Logger logger = LoggerFactory.getLogger(AutoFileReader.class);
@@ -73,16 +71,12 @@ public class AutoFileReader implements Closeable {
   public static FileType getFileType(String file) {
     FileType ftype = FileType.XML;
     File f = new File(file);
-    ZipContainer container = null;
-    try {
-      container = new ZipContainer(f.getAbsolutePath());
+    try (ZipContainer container = new ZipContainer(f.getAbsolutePath())) {
       ftype = FileType.ZIP;
     } catch (ZipException e) {
       logger.debug("not zip {}", f);
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(container);
     }
     
     return ftype;
@@ -91,7 +85,11 @@ public class AutoFileReader implements Closeable {
   @Override
   public void close() throws IOException {
     if (closeable != null) {
-      this.closeable.close();
+      try {
+        this.closeable.close();
+      } catch (Exception e) {
+        throw new IOException(e);
+      }
     }
   }
 }

@@ -30,11 +30,11 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggKOEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggModuleEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenesDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggKOsDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggModuleDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycClassNames;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycXmlQueryResult;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggModuleDaoImpl;
 
 @Deprecated
 public class GeneralDriver {
@@ -65,7 +65,7 @@ public class GeneralDriver {
     genomeDao.setSaveLocalStorage(true);
     genomeDao.setUseLocalStorage(true);
     
-    KeggModuleEntity module = moduleDao.getModuleByEntry("M00124");
+    KeggModuleEntity module = moduleDao.getByEntry("M00124");
     for (String koEntry : module.getOrthologs()) {
       KeggKOEntity ko = koDao.getKOByEntry(koEntry);
       for (Pair<String, String> gpair : ko.g) {

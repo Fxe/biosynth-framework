@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
+package pt.uminho.sysbio.biosynthframework.io.biodb.kegg;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.AbstractRestfulKeggDao;
 
 public class RestKeggGeneDaoImpl extends AbstractRestfulKeggDao<AbstractBiosynthEntity> {
 	

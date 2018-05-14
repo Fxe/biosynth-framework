@@ -7,8 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenesDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
 
+@Deprecated
 public class keggGenomeAndGenesRunnable implements Runnable, Callable<Integer>{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(keggGenomeAndGenesRunnable.class);

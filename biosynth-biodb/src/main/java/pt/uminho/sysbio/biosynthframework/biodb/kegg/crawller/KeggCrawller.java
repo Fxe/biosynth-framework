@@ -13,12 +13,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggECNumberDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggKOsDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggModuleDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggModuleDaoImpl;
 
 import com.google.common.collect.Lists;
 
+@Deprecated
 public class KeggCrawller {
 
 	
@@ -68,7 +69,7 @@ public class KeggCrawller {
 			rest.setLocalStorage(folder);
 			rest.setSaveLocalStorage(true);
 			rest.setUseLocalStorage(true);
-			rest.createFolder();
+//			rest.createFolder();
 			
 			Set<String> entries = rest.getAllEntries();
 			List<List<String>> parts = Lists.partition(new ArrayList<String>(entries), entries.size()/partition);
@@ -83,9 +84,9 @@ public class KeggCrawller {
 			rest.setLocalStorage(folder);
 			rest.setSaveLocalStorage(true);
 			rest.setUseLocalStorage(true);
-			rest.createFolder();
+//			rest.createFolder();
 			
-			Set<String> entries = rest.getAllModuleEntries();
+			Set<String> entries = rest.getAllEntries();
 			List<List<String>> parts = Lists.partition(new ArrayList<String>(entries), entries.size()/partition);
 			for(List<String> p : parts){
 				keggModuleRunnable crawler = new keggModuleRunnable(folder, p);

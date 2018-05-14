@@ -4,7 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
 
 public class TestRestKeggGennomeDaoImpl {
 	

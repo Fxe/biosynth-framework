@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggKOsDaoImpl;
 
+@Deprecated
 public class KeggKORunnable implements Runnable{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KeggKORunnable.class);
