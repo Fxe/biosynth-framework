@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 
+import pt.uminho.sysbio.biosynthframework.Tuple2;
+
 public class CollectionUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(CollectionUtils.class);
@@ -155,5 +157,36 @@ public class CollectionUtils {
   
   public static<K, V> String print(Map<K, V> map) {
     return Joiner.on('\n').withKeyValueSeparator("\t").join(map);
+  }
+
+  public static<E> Set<Set<E>> makePairs(Collection<E> set) {
+    Set<Set<E>> result = new HashSet<>();
+    List<E> l = new ArrayList<>(set);
+    for (int i = 0; i < l.size(); i++) {
+      E e1 = l.get(i);
+      for (int j = i + 1; j < l.size(); j++) {
+        E e2 = l.get(j);
+        Set<E> p = new HashSet<>();
+        p.add(e1);
+        p.add(e2);
+        result.add(p);
+      }
+    }
+    
+    return result;
+  }
+  
+  public static<T> Set<Tuple2<T>> getAllPairs(List<T> list) {
+    Set<Tuple2<T>> pairs = new HashSet<> ();
+
+    for (int i = 0; i < list.size(); i++) {
+      T a = list.get(i);
+      for (int j = i + 1; j < list.size(); j++) {
+        T b = list.get(j);
+        pairs.add(new Tuple2<T>(a, b));
+      }
+    }
+
+    return pairs;
   }
 }

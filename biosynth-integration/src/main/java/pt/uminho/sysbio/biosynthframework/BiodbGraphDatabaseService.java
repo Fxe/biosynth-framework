@@ -123,6 +123,14 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     return getMetabolite(ref.entry, MetaboliteMajorLabel.valueOf(ref.source));
   }
   
+  public BiodbMetaboliteNode getMetabolite(long id) {
+    return new BiodbMetaboliteNode(this.getNodeById(id));
+  }
+  
+  public BiodbReactionNode getReaction(long id) {
+    return new BiodbReactionNode(this.getNodeById(id));
+  }
+  
   public BiodbReactionNode getReaction(ExternalReference ref) {
     return getReaction(ref.entry, ReactionMajorLabel.valueOf(ref.source));
   }
