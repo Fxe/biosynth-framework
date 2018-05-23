@@ -13,6 +13,7 @@ public class LiteratureEntity extends AbstractBiosynthEntity {
   protected String pubmedEntry;
   protected String doiEntry;
   protected String journal;
+  protected String journalAbbreviation;
   protected File folder;
   protected List<SupplementaryMaterialEntity> supplementaryMaterials = new ArrayList<>();
   
@@ -24,6 +25,9 @@ public class LiteratureEntity extends AbstractBiosynthEntity {
   
   public String getJournal() { return journal;}
   public void setJournal(String journal) { this.journal = journal;}
+  
+  public String getJournalAbbreviation() { return journalAbbreviation;}
+  public void setJournalAbbreviation(String journalAbbreviation) { this.journalAbbreviation = journalAbbreviation;}
   
   public File getFolder() { return folder;}
   public void setFolder(File folder) { this.folder = folder;}

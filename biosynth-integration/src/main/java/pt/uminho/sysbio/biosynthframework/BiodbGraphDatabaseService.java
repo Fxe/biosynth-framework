@@ -41,33 +41,33 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiosMetabolicModelNode;
 public class BiodbGraphDatabaseService implements GraphDatabaseService {
 
   private static final Logger logger = LoggerFactory.getLogger(BiodbGraphDatabaseService.class);
-  
+
   private final GraphDatabaseService service;
-  
+
   public BiodbGraphDatabaseService(GraphDatabaseService service) {
     this.service = service;
   }
-  
+
   public Node getNodeByIdAndLabel(long id, Label label) {
     Node node = this.getNodeById(id);
-    
+
     if (node != null && !node.hasLabel(label)) {
       return null;
     }
-    
+
     return node;
   }
-  
+
   public BiodbEntityNode getEntityNode(String entry, Label label) {
     Node node = this.findNode(label, Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry);
     BiodbEntityNode entity = null;
     if (node != null) {
       entity = new BiodbEntityNode(node);
     }
-    
+
     return entity;
   }
-  
+
   public BiodbMetaboliteNode getMetabolite(String entry, MetaboliteMajorLabel database) {
     Node node = this.findNode(database, Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry);;
     if (node != null && node.hasLabel(GlobalLabel.Metabolite)) {
@@ -75,7 +75,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return null;
   }
-  
+
   public BiodbReactionNode getReaction(String entry, ReactionMajorLabel database) {
     Node node = this.findNode(database, Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry);;
     if (node != null && node.hasLabel(GlobalLabel.Reaction)) {
@@ -83,7 +83,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return null;
   }
-  
+
   public Map<ExternalReference, Long> translate(Collection<ExternalReference> refs) {
     Map<ExternalReference, Long> result = new HashMap<> ();
     for (ExternalReference ref : refs) {
@@ -109,7 +109,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return result;
   }
-  
+
   public BiosMetabolicModelNode getMetabolicModel(String entry) {
     Node node = this.getEntityNode(entry, GlobalLabel.MetabolicModel);
     BiosMetabolicModelNode modelNode = null;
@@ -118,58 +118,65 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return modelNode;
   }
-  
+
   public BiodbMetaboliteNode getMetabolite(ExternalReference ref) {
     return getMetabolite(ref.entry, MetaboliteMajorLabel.valueOf(ref.source));
   }
-  
+
   public BiodbMetaboliteNode getMetabolite(long id) {
     return new BiodbMetaboliteNode(this.getNodeById(id));
   }
-  
+
   public BiodbReactionNode getReaction(long id) {
     return new BiodbReactionNode(this.getNodeById(id));
   }
-  
+
   public BiodbReactionNode getReaction(ExternalReference ref) {
     return getReaction(ref.entry, ReactionMajorLabel.valueOf(ref.source));
   }
-  
+
   public Node getMetaboliteProperty(String key, MetabolitePropertyLabel property) {
     return this.findNode(property, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, key);
   }
-  
+
   public static String fixEntry(String entry, MetaboliteMajorLabel database) {
     switch (database) {
-      case ChEBI:
-        return entry.startsWith("CHEBI:") ? entry : "CHEBI:".concat(entry);
-      default:
-        break;
+    case ChEBI:
+      return entry.startsWith("CHEBI:") ? entry : "CHEBI:".concat(entry);
+    default:
+      break;
     }
-    
+
     return entry;
   }
-  
+
   public boolean exists(MetaboliteMajorLabel db, String entry) {
     return getMetabolite(entry, db) != null;
   }
-  
+
   public boolean exists(MetabolitePropertyLabel prop, String value) {
     return getMetaboliteProperty(value, prop) != null;
   }
-  
+
   public Node getOrCreateNode(Label label, String key, Object value) {
-//    this.execute(query, parameters)
+    return getOrCreateNode(label, key, value, false);
+  }
+
+  public Node getOrCreateNode(Label label, String key, Object value, boolean proxy) {
+    //    this.execute(query, parameters)
     Node node = this.findNode(label, key, value);
     if (node == null) {
       node = this.createNode(label);
       node.setProperty(key, value);
       node.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, label.toString());
+      if (proxy) {
+        node.setProperty(Neo4jDefinitions.PROXY_PROPERTY, true);
+      }
     }
-    
+
     return node;
   }
-  
+
   public BiodbMetaboliteNode getOrCreateMetabolite(String entry, MetaboliteMajorLabel database) {
     Node cpdNode = getMetabolite(entry, database);
     if (cpdNode == null) {
@@ -181,31 +188,31 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return new BiodbMetaboliteNode(cpdNode);
   }
-  
-  
+
+
   public Node getOrCreateMetaboliteProperty(String key, MetabolitePropertyLabel property) {
     Node propNode = getMetaboliteProperty(key, property);
     if (propNode == null) {
       propNode = this.createNode(GlobalLabel.MetaboliteProperty, property);
       propNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, property.toString());
-//      String e = fixEntry(entry, database);
+      //      String e = fixEntry(entry, database);
       propNode.setProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, key);
     }
     return propNode;
   }
-  
+
   public Node getNodeByEntryAndLabel(String entry, Label label) {
     return Neo4jUtils.getNodeByEntry(label, entry, service);
   }
-  
+
   public Node getModelNodeById(long id) {
     return getNodeByIdAndLabel(id, GlobalLabel.MetabolicModel);
   }
-  
+
   public Node getModelNodeByEntry(String entry) {
     return getNodeByEntryAndLabel(entry, GlobalLabel.MetabolicModel);
   }
-  
+
   @Override
   public Node createNode() {
     Node node = service.createNode();
@@ -220,10 +227,10 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     for (Label l : labels) {
       node.addLabel(l);
     }
-    
+
     return node;
   }
-  
+
   @Override
   public Long createNodeId() {
     Node node = service.createNode();
@@ -321,11 +328,11 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   public ResourceIterator<Node> findNodes(Label label) {
     return service.findNodes(label);
   }
-  
+
   public Set<Node> listNodes(Label label) {
     return Iterators.asSet(service.findNodes(label));
   }
-  
+
   public Set<BiodbMetaboliteNode> listMetabolites() {
     Set<BiodbMetaboliteNode> result = new HashSet<> ();
     for (MetaboliteMajorLabel db : MetaboliteMajorLabel.values()) {
@@ -334,7 +341,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
 
     return result;
   }
-  
+
   public Set<BiodbMetaboliteNode> listMetabolites(MetaboliteMajorLabel database) {
     Set<BiodbMetaboliteNode> result = new HashSet<> ();
     for (Node node : listNodes(database)) {
@@ -344,7 +351,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return result;
   }
-  
+
   public Set<BiodbReactionNode> listReactions() {
     Set<BiodbReactionNode> result = new HashSet<> ();
     for (ReactionMajorLabel db : ReactionMajorLabel.values()) {
@@ -353,7 +360,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
 
     return result;
   }
-  
+
   public Set<BiodbReactionNode> listReactions(ReactionMajorLabel database) {
     Set<BiodbReactionNode> result = new HashSet<> ();
     for (Node node : listNodes(database)) {
@@ -363,7 +370,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return result;
   }
-  
+
   public Set<Node> listNodes(Label label, String key, Object value) {
     return Iterators.asSet(service.findNodes(label, key, value));
   }

@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.io.AbstractMetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 
 /**
@@ -23,7 +24,12 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
  */
 
 @Repository
-public class CsvBiggMetaboliteDaoImpl implements MetaboliteDao<BiggMetaboliteEntity>{
+public class CsvBiggMetaboliteDaoImpl extends AbstractMetaboliteDao<BiggMetaboliteEntity> 
+implements MetaboliteDao<BiggMetaboliteEntity>{
+
+  public CsvBiggMetaboliteDaoImpl() {
+    super("legacy");
+  }
 
   private static final Logger logger = LoggerFactory.getLogger(CsvBiggMetaboliteDaoImpl.class);
 

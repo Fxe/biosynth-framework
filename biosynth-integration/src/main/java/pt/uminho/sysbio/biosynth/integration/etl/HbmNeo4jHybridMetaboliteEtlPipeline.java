@@ -152,8 +152,14 @@ implements EtlPipeline<SRC, DST> {
 
   public void etl(Collection<Serializable> ids) {
 
-    org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
-    org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
+    org.hibernate.Transaction hbmTx = null;
+    org.neo4j.graphdb.Transaction neoTx = null;
+    if (sessionFactory != null) {
+      hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+    }
+    if (graphDatabaseService != null) {
+      neoTx = graphDatabaseService.beginTx();
+    }
 
     int i = 0;
     for (Serializable id : ids) {
@@ -178,9 +184,14 @@ implements EtlPipeline<SRC, DST> {
       }
     }
 
-    hbmTx.rollback();
-    neoTx.success();
-    neoTx.close();
+    if (sessionFactory != null) {
+      hbmTx.rollback();
+    }
+    
+    if (graphDatabaseService != null) {
+      neoTx.success();
+      neoTx.close();
+    }
   }
 
 }

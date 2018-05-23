@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis.cdk;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -29,24 +30,35 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MoleculeFormat;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.MoleculeFormatConverter;
+import pt.uminho.sysbio.biosynthframework.cheminformatics.render.CdkSVGRenderer;
 
 public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger(CdkMoleculeFormatConverter.class);
+  private final static Logger logger = LoggerFactory.getLogger(CdkMoleculeFormatConverter.class);
 
   @Override
-  public String convert(InputStream input, MoleculeFormat in,
-      MoleculeFormat out, String...params) throws IOException {
-
+  public String convert(InputStream input, 
+                        MoleculeFormat in,
+                        MoleculeFormat out, 
+                        String...params) throws IOException {
+    
+    if (MoleculeFormat.MDLMolFile.equals(in) &&
+        MoleculeFormat.SVG.equals(out)) {
+      CdkSVGRenderer renderer = new CdkSVGRenderer();
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      renderer.convertMolToSvg(input, os);
+      return os.toString();
+    }
+    
     IAtomContainerSet containerSet = null;
     IAtomContainer container = null;
 
     try {
       switch (in) {
-        case SMILES: containerSet = readSmiles(input); break;
-        case InChI:  containerSet = readInchi(input); break;
-        case MDLMolFile: containerSet = readMol(input); break;
-        default: throw new IllegalArgumentException("Unsupported input format " + in);
+      case SMILES: containerSet = readSmiles(input); break;
+      case InChI:  containerSet = readInchi(input); break;
+      case MDLMolFile: containerSet = readMol(input); break;
+      default: throw new IllegalArgumentException("Unsupported input format " + in);
       }
 
       container = containerSet.getAtomContainer(0);
@@ -54,20 +66,20 @@ public class CdkMoleculeFormatConverter implements MoleculeFormatConverter {
       for (String param : params) {
         switch (param) {
         case "-d":
-          LOGGER.debug("AtomContainerManipulator.removeHydrogens");
+          logger.debug("AtomContainerManipulator.removeHydrogens");
           container = AtomContainerManipulator.removeHydrogens(container);
           break;
           //					case "-h": new CDKHydrogenAdder();  //FAIL !
-        default: LOGGER.warn("Ignored param: {}", param); break;
+        default: logger.warn("Ignored param: {}", param); break;
         }
 
       }
 
       switch (out) {
-        case SMILES: return writeSmiles(container).trim();
-        case MDLMolFile: return writeMol(container);
-        case InChI: return writeInchi(container);
-        default: throw new IllegalArgumentException("Unsupported output format " + out);
+      case SMILES: return writeSmiles(container).trim();
+      case MDLMolFile: return writeMol(container);
+      case InChI: return writeInchi(container);
+      default: throw new IllegalArgumentException("Unsupported output format " + out);
       }
 
     } catch (CDKException e) {

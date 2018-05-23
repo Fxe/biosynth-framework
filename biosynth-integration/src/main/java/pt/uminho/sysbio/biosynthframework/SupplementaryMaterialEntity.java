@@ -3,11 +3,13 @@ package pt.uminho.sysbio.biosynthframework;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class SupplementaryMaterialEntity extends AbstractBiosynthEntity {
@@ -22,6 +24,9 @@ public class SupplementaryMaterialEntity extends AbstractBiosynthEntity {
   protected Boolean literature;
   protected File file;
   protected File folder;
+  protected String type;
+  protected Set<String> tags = new TreeSet<>();
+  
   public URL getUrl() {
     return url;
   }
@@ -73,6 +78,19 @@ public class SupplementaryMaterialEntity extends AbstractBiosynthEntity {
   }
   public void setFolder(File folder) {
     this.folder = folder;
+  }
+  
+  
+  
+  public String getType() { return type;}
+  public void setType(String type) { this.type = type; }
+  
+  public Set<String> getTags() { return tags; }
+  public void setTags(Set<String> tags) { this.tags = tags;}
+  public void setTags(String tags) {
+    if (!DataUtils.empty(tags)) {
+      this.tags.addAll(Arrays.asList(tags.split(";")));
+    }
   }
   
   @Override

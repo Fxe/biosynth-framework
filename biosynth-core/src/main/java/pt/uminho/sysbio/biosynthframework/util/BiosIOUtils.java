@@ -5,6 +5,8 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -15,7 +17,14 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +73,7 @@ public class BiosIOUtils {
       return;
     }
     
-    logger.info("Enter folder {}", folder.getAbsolutePath());
+    logger.debug("Enter folder {}", folder.getAbsolutePath());
     
     for (File file : folder.listFiles(filter)) {
       if (file.isDirectory()) {
@@ -127,5 +136,23 @@ public class BiosIOUtils {
       e.printStackTrace();
     }
     return json;
+  }
+  
+  public static String download(URI uri) throws IOException {
+    HttpClient client = HttpClientBuilder.create().build();
+    HttpUriRequest request = new HttpGet(uri);
+    HttpResponse response = client.execute(request);
+    
+    HttpEntity entity = response.getEntity();
+    String result = null;
+    if (entity != null) {
+      InputStream is = entity.getContent();
+      StringWriter sw = new StringWriter();
+      IOUtils.copy(is, sw, Charset.defaultCharset());
+      is.close();
+      result = sw.toString();
+    }
+    
+    return result;
   }
 }

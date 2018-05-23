@@ -27,6 +27,10 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
+import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
 
 /**
  * Utilities used to perform several Neo4j operations.
@@ -47,6 +51,90 @@ public class Neo4jUtils {
 
   public static Set<Long> collectNodes(Node node) {
     return null;
+  }
+  
+  public static ConnectedComponents<String> translateCpds(ConnectedComponents<Long> ccs, BiodbGraphDatabaseService service) {
+    ConnectedComponents<String> result = new ConnectedComponents<>();
+    for (Set<Long> ids : ccs) {
+      Set<String> t = new HashSet<>();
+      for (long id : ids) {
+        BiodbMetaboliteNode node = service.getMetabolite(id);
+        if (node != null) {
+          t.add(String.format("%s@%s", node.getEntry(), node.getDatabase()));
+        }
+      }
+      if (!t.isEmpty()) {
+        result.add(t);
+      }
+    }
+    return result;
+  }
+  
+  public static ConnectedComponents<String> translateRxns(ConnectedComponents<Long> ccs, BiodbGraphDatabaseService service) {
+    ConnectedComponents<String> result = new ConnectedComponents<>();
+    for (Set<Long> ids : ccs) {
+      Set<String> t = new HashSet<>();
+      for (long id : ids) {
+        BiodbReactionNode node = service.getReaction(id);
+        if (node != null) {
+          t.add(String.format("%s@%s", node.getEntry(), node.getDatabase()));
+        }
+      }
+      if (!t.isEmpty()) {
+        result.add(t);
+      }
+    }
+    return result;
+  }
+  
+  public static ConnectedComponents<Long> toCpdIds(ConnectedComponents<String> ccs, Set<String> notfound, GraphDatabaseService graphDataService) {
+    ConnectedComponents<Long> result = new ConnectedComponents<>();
+    
+    for (Set<String> set : ccs) {
+      Set<Long> ids = new HashSet<> ();
+      for (String s : set) {
+        MetaboliteMajorLabel db = MetaboliteMajorLabel.valueOf(s.split("@")[1]);
+        String e = s.split("@")[0];
+        Node n = Neo4jUtils.getNodeByEntry(db, e, graphDataService);
+        if (n != null) {
+          ids.add(n.getId());
+        } else {
+          if (notfound != null) {
+            notfound.add(s);
+          }
+          logger.debug("not found: {}", s);
+        }
+      }
+      if (!ids.isEmpty()) {
+        result.add(ids);
+      }
+    }
+    
+    return result;
+  }
+  
+  public static ConnectedComponents<Long> toRxnIds(ConnectedComponents<String> ccs, Set<String> notfound, GraphDatabaseService graphDataService) {
+    ConnectedComponents<Long> result = new ConnectedComponents<>();
+    
+    for (Set<String> set : ccs) {
+      Set<Long> ids = new HashSet<> ();
+      for (String s : set) {
+        ReactionMajorLabel db = ReactionMajorLabel.valueOf(s.split("@")[1]);
+        String e = s.split("@")[0];
+        Node n = Neo4jUtils.getNodeByEntry(db, e, graphDataService);
+        if (n != null) {
+          ids.add(n.getId());
+        } else {
+          if (notfound != null) {
+            notfound.add(s);
+          }
+          logger.debug("not found: {}", s);
+        }
+      }
+      result.add(ids);
+    }
+    
+    return result;
   }
 
   //	public static Set<Long> collectNodes(Set<Long> eids, ReactionRelationshipType...relationshipTypes) {
@@ -464,6 +552,18 @@ public class Neo4jUtils {
   public static boolean exitsRelationshipBetween(Node node1,
       Node node2, Direction direction) {
     for (Relationship r : node1.getRelationships(direction)) {
+      Node other = r.getOtherNode(node1);
+      if (other.getId() == node2.getId()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+  
+  public static boolean exitsRelationshipBetween(Node node1,
+      Node node2, Direction direction, RelationshipType type) {
+    for (Relationship r : node1.getRelationships(type, direction)) {
       Node other = r.getOtherNode(node1);
       if (other.getId() == node2.getId()) {
         return true;
