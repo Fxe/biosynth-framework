@@ -24,107 +24,133 @@ import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 public class AbstractGraphNodeEntity extends AbstractBiosynthEntity {
 
   private final String ENTRY = Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT;
+
+  private static final long serialVersionUID = 1L;
+
+  protected String majorLabel;
+  protected String version;
+
+  protected Set<String> labels = new HashSet<> ();
+  protected Map<String, Object> properties = new HashMap<> ();
+  protected Map<String, Object> eproperties = new HashMap<> ();
   
-	private static final long serialVersionUID = 1L;
+  public String getVersion() {
+    Object o = properties.get(Neo4jDefinitions.ENTITY_VERSION);
+    if (o == null) {
+      return null;
+    }
+    return (String) o;
+  }
+  public void setVersion(String version) {
+    this.properties.put(Neo4jDefinitions.ENTITY_VERSION, version);
+  }
 
-	protected String majorLabel;
-	
-	protected Set<String> labels = new HashSet<> ();
-	protected Map<String, Object> properties = new HashMap<> ();
-	
-	public String uniqueKey;
-	public String getUniqueKey() {
-		return uniqueKey;
-	}
-	public void setUniqueKey(String uniqueKey) {
-		this.uniqueKey = uniqueKey;
-	}
-	
-	public Map<String, Integer> connectionTypeCounter = new HashMap<> ();
-	public Map<String, Integer> getConnectionTypeCounter() {
-		return connectionTypeCounter;
-	}
-	public void setConnectionTypeCounter(Map<String, Integer> connectionTypeCounter) {
-		this.connectionTypeCounter = connectionTypeCounter;
-	}
-	public void addConnectionTypeCounter(String type) {
-		if (!this.connectionTypeCounter.containsKey(type)) {
-			this.connectionTypeCounter.put(type, 0);
-		}
-		this.connectionTypeCounter.put(type, this.connectionTypeCounter.get(type) + 1);
-	}
-	public Integer getConnectionTypeCounter(String type) {
-		if (!this.connectionTypeCounter.containsKey(type)) {
-			return 0;
-		}
-		return this.connectionTypeCounter.get(type);
-	}
+  public String uniqueKey;
+  public String getUniqueKey() {
+    return uniqueKey;
+  }
+  public void setUniqueKey(String uniqueKey) {
+    this.uniqueKey = uniqueKey;
+  }
 
-	public Map<String, List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>>> connectedEntities = new HashMap<> ();
-	public Map<String, List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>>> getConnectedEntities() { return connectedEntities;}
-	public void setConnectedEntities(
-			List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities) {
-		for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : connectedEntities) {
-			this.addConnectedEntity(p);
-		}
-	}
-	public void addConnectedEntity(Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> pair) {
-		String relationshipType = pair.getLeft().getLabels().iterator().next();
-		if (!this.connectedEntities.containsKey(relationshipType)) {
-			this.connectedEntities.put(relationshipType, new ArrayList<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> ());
-		}
-		this.connectedEntities.get(relationshipType).add(pair);
-		
-		this.addConnectionTypeCounter(relationshipType);
-	}
-	
-	public String getMajorLabel() { return majorLabel;}
-	public void setMajorLabel(String majorLabel) { this.majorLabel = majorLabel;}
-	
-	public Set<String> getLabels() { return labels;}
-	public void setLabels(Set<String> labels) { this.labels = labels;}
-	public void addLabel(String label) { this.labels.add(label);}
-	
-	public Map<String, Object> getProperties() { return properties;}
-	public void setProperties(Map<String, Object> properties) { 
-		this.properties = properties;
-		if (properties.containsKey(Neo4jDefinitions.MAJOR_LABEL_PROPERTY)) {
-			this.majorLabel = (String) getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, "null_label");
-		}
-	}
-	public void addProperty(String key, Object value) {
-		if (value != null) {
-			properties.put(key, value);
-		}
-	}
-	public Object getProperty(String key, Object defaultValue) {
-		Object value = this.properties.get(key);
-		if (value == null) value = defaultValue;
-		return value;
-	}
-	
-	@Override
-	public String getEntry() { return (String) this.properties.get(ENTRY);}
-	@Override
-	public void setEntry(String entry) { properties.put(ENTRY, entry);};
-	
-	@Override
-	public String getName() { return (String)this.properties.get("name");}
-	public void setName(String name) { this.properties.put("name", name);}
-	
-	@Override
-	public String toString() {
-	    if (labels.contains(GlobalLabel.MetaboliteProperty.toString()) ||
-	        labels.contains(GlobalLabel.ReactionProperty.toString())) {
-	      Set<String> l = new HashSet<> (labels);
-	      l.remove(GlobalLabel.MetaboliteProperty.toString());
-	      l.remove(GlobalLabel.ReactionProperty.toString());
-	      return String.format("PropertyNode[%d::%s]<%s>", 
-	          id, 
-	          StringUtils.join(l, ':'), 
-	          Joiner.on(';').withKeyValueSeparator(": ").join(properties));
-	    }
-		String str = String.format("%d[%s]%s::%s", this.id, majorLabel, getEntry(), labels);
-		return str;
-	}
+
+
+  public Map<String, Object> getEproperties() {
+    return eproperties;
+  }
+  public void setEproperties(Map<String, Object> eproperties) {
+    this.eproperties = eproperties;
+  }
+
+
+
+  public Map<String, Integer> connectionTypeCounter = new HashMap<> ();
+  public Map<String, Integer> getConnectionTypeCounter() {
+    return connectionTypeCounter;
+  }
+  public void setConnectionTypeCounter(Map<String, Integer> connectionTypeCounter) {
+    this.connectionTypeCounter = connectionTypeCounter;
+  }
+  public void addConnectionTypeCounter(String type) {
+    if (!this.connectionTypeCounter.containsKey(type)) {
+      this.connectionTypeCounter.put(type, 0);
+    }
+    this.connectionTypeCounter.put(type, this.connectionTypeCounter.get(type) + 1);
+  }
+  public Integer getConnectionTypeCounter(String type) {
+    if (!this.connectionTypeCounter.containsKey(type)) {
+      return 0;
+    }
+    return this.connectionTypeCounter.get(type);
+  }
+
+  public Map<String, List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>>> connectedEntities = new HashMap<> ();
+  public Map<String, List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>>> getConnectedEntities() { return connectedEntities;}
+  public void setConnectedEntities(
+      List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities) {
+    for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : connectedEntities) {
+      this.addConnectedEntity(p);
+    }
+  }
+  public void addConnectedEntity(Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> pair) {
+    String relationshipType = pair.getLeft().getLabels().iterator().next();
+    if (!this.connectedEntities.containsKey(relationshipType)) {
+      this.connectedEntities.put(relationshipType, new ArrayList<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> ());
+    }
+    this.connectedEntities.get(relationshipType).add(pair);
+
+    this.addConnectionTypeCounter(relationshipType);
+  }
+
+  public String getMajorLabel() { return majorLabel;}
+  public void setMajorLabel(String majorLabel) { this.majorLabel = majorLabel;}
+
+  public Set<String> getLabels() { return labels;}
+  public void setLabels(Set<String> labels) { this.labels = labels;}
+  public void addLabel(String label) { this.labels.add(label);}
+
+  public Map<String, Object> getProperties() { return properties;}
+  public void setProperties(Map<String, Object> properties) { 
+    this.properties = properties;
+    if (properties.containsKey(Neo4jDefinitions.MAJOR_LABEL_PROPERTY)) {
+      this.majorLabel = (String) getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, "null_label");
+    }
+  }
+  public void addProperty(String key, Object value) {
+    if (value != null) {
+      properties.put(key, value);
+    }
+  }
+  public Object getProperty(String key, Object defaultValue) {
+    Object value = this.properties.get(key);
+    if (value == null) value = defaultValue;
+    return value;
+  }
+
+  @Override
+  public String getEntry() { 
+    return (String) this.properties.get(ENTRY);
+  }
+  @Override
+  public void setEntry(String entry) { properties.put(ENTRY, entry);};
+
+  @Override
+  public String getName() { return (String)this.properties.get("name");}
+  public void setName(String name) { this.properties.put("name", name);}
+
+  @Override
+  public String toString() {
+    if (labels.contains(GlobalLabel.MetaboliteProperty.toString()) ||
+        labels.contains(GlobalLabel.ReactionProperty.toString())) {
+      Set<String> l = new HashSet<> (labels);
+      l.remove(GlobalLabel.MetaboliteProperty.toString());
+      l.remove(GlobalLabel.ReactionProperty.toString());
+      return String.format("PropertyNode[%d::%s]<%s>", 
+          id, 
+          StringUtils.join(l, ':'), 
+          Joiner.on(';').withKeyValueSeparator(": ").join(properties));
+    }
+    String str = String.format("%d[%s]%s::%s", this.id, majorLabel, getEntry(), labels);
+    return str;
+  }
 }

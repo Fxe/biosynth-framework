@@ -18,6 +18,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 
@@ -131,28 +132,42 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 
     super.configureNameLink(centralMetaboliteEntity, entity);
   }
-
+  
+  @Override
+  protected GenericCrossreference configureReference(GenericCrossreference xref) {
+    if ("BIGG".equals(xref.getRef()) && 
+        NumberUtils.isDigits(xref.getValue()) &&
+        biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+      xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
+      xref.setRef(MetaboliteMajorLabel.BiGG.toString());
+    } else if ("BIGG".equals(xref.getRef()) && 
+               !NumberUtils.isDigits(xref.getValue())){
+      xref.setRef(MetaboliteMajorLabel.BiGGMetabolite.toString());
+    }
+    return super.configureReference(xref);
+  }
+  
   @Override
   protected void configureCrossreferences(
       GraphMetaboliteEntity centralMetaboliteEntity,
       BioCycMetaboliteEntity metabolite) {
-    List<BioCycMetaboliteCrossreferenceEntity> xrefValid = new ArrayList<> ();
-    for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
-      if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
-        xref.setRef("bigg2");
-      } else if (xref.getRef().toLowerCase().equals("bigg")) {
-        if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
-          xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
-        }
-        logger.debug("Internal Id replaced: " + xref);
-      }
-      if (xref.getRef().equals("bigg2") && NumberUtils.isDigits(xref.getValue())) {
-        logger.warn("Discard ref: {}", xref);
-      } else {
-        xrefValid.add(xref);
-      }
-    }
-    metabolite.setCrossReferences(xrefValid);
+//    List<BioCycMetaboliteCrossreferenceEntity> xrefValid = new ArrayList<> ();
+//    for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+//      if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
+//        xref.setRef("bigg2");
+//      } else if (xref.getRef().toLowerCase().equals("bigg")) {
+//        if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+//          xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
+//        }
+//        logger.debug("Internal Id replaced: " + xref);
+//      }
+//      if (xref.getRef().equals("bigg2") && NumberUtils.isDigits(xref.getValue())) {
+//        logger.warn("Discard ref: {}", xref);
+//      } else {
+//        xrefValid.add(xref);
+//      }
+//    }
+//    metabolite.setCrossReferences(xrefValid);
     super.configureCrossreferences(centralMetaboliteEntity, metabolite);
   }
 

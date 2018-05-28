@@ -9,8 +9,8 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 
 public class BiosMetabolicModelNode extends BiodbEntityNode {
 
-  public BiosMetabolicModelNode(Node node) {
-    super(node);
+  public BiosMetabolicModelNode(Node node, String databasePath) {
+    super(node, databasePath);
   }
   
   public Set<Node> getMetaboliteSpecies() {

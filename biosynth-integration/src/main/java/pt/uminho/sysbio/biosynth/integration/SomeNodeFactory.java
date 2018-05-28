@@ -30,6 +30,7 @@ public class SomeNodeFactory {
   private Set<String> labels = new HashSet<> ();
   private List<Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity>> connectedEntities = new ArrayList<> ();
   private Map<String, Object> properties = new HashMap<> ();
+  private Map<String, Object> eproperties = new HashMap<> ();
 
   public SomeNodeFactory withLinkTo(AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
     if (node != null && edge != null) {
@@ -60,6 +61,10 @@ public class SomeNodeFactory {
   }
   public SomeNodeFactory withProperty(String key, Object value) {
     this.properties.put(key, value);
+    return this;
+  }
+  public SomeNodeFactory withExternalProperty(String key, Object value) {
+    this.eproperties.put(key, value);
     return this;
   }
   public SomeNodeFactory withEntry(String entry) {
@@ -109,6 +114,7 @@ public class SomeNodeFactory {
   private void setupGraphBaseEntity(AbstractGraphNodeEntity entity) {
 
     entity.setProperties(properties);
+    entity.setEproperties(eproperties);
     if (this.uniqueConstraintProperty != null) entity.setUniqueKey(uniqueConstraintProperty);
     if (this.entry != null) entity.setEntry(this.entry);
     entity.setMajorLabel(this.majorLabel);

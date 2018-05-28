@@ -17,6 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "metabolite_stga")
+@Deprecated
 public class MetaboliteStga implements java.io.Serializable {
 
 	private static final long serialVersionUID = -1930706943643869966L;

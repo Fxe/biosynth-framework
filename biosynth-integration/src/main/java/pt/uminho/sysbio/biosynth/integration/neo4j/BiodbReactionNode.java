@@ -22,8 +22,8 @@ public class BiodbReactionNode extends BiodbEntityNode {
   
   public static String STOICHIOMETRY = "stoichiometry";
   
-  public BiodbReactionNode(Node node) {
-    super(node);
+  public BiodbReactionNode(Node node, String databasePath) {
+    super(node, databasePath);
     if (!node.hasLabel(GlobalLabel.Reaction)) {
       throw new IllegalArgumentException("invalid node: missing " + GlobalLabel.Reaction);
     }

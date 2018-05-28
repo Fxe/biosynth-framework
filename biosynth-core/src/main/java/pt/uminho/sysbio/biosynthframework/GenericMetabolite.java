@@ -29,6 +29,7 @@ public class GenericMetabolite extends AbstractBiosynthEntity implements Metabol
 	@Transient private Map<Integer, GenericReaction> rxnMap = new HashMap<> ();
 	@Transient private Map<Integer, GenericEnzyme> ecnMap = new HashMap<> ();
 	
+	
 	public GenericMetabolite() {
 		super(null);
 	}
@@ -85,8 +86,9 @@ public class GenericMetabolite extends AbstractBiosynthEntity implements Metabol
 	public void setMetaboliteClass(String metaboliteClass) {
 		this.metaboliteClass = metaboliteClass;
 	}
+	
 
-	@Override
+  @Override
 	public String toString() {
 		final char sep = '\n';
 		StringBuilder sb = new StringBuilder();

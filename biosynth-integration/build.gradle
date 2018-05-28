@@ -14,5 +14,5 @@ dependencies {
   compile( libraries.jgrapht_core)
   compile( libraries.jgrapht_ext)
   compile( libraries.jsoup)
-  testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '2.1.5', classifier: 'tests'
+  testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '3.4.0', classifier: 'tests'
 }

@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 
+import pt.uminho.sysbio.biosynthframework.report.neo4j.SupplementaryFileReporter;
+import pt.uminho.sysbio.biosynthframework.report.neo4j.TotalLabelSetReporter;
 import pt.uminho.sysbio.biosynthframework.test.TestConfiguration;
 
 public class TestSupplementaryFileReporter {

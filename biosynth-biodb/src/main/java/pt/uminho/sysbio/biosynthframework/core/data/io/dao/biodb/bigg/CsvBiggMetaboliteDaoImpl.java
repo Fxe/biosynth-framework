@@ -108,6 +108,7 @@ implements MetaboliteDao<BiggMetaboliteEntity>{
       res = DefaultBiggMetaboliteParser.parseMetabolites(in);
 
       for (BiggMetaboliteEntity cpd : res) {
+        cpd.setVersion(version);
         this.cachedData.put(cpd.getEntry(), cpd);
         this.idToEntry.put(cpd.getInternalId(), cpd.getEntry());
       }

@@ -15,6 +15,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
@@ -23,9 +24,16 @@ public class ModelSeedReactionTransform extends AbstractReactionTransform<ModelS
 
   private static final Logger logger = LoggerFactory.getLogger(ModelSeedReactionTransform.class);
   
+  public static Map<String, String> getDbMapping() {
+    Map<String, String> mapping = new HashMap<>();
+    mapping.put("KEGG", ReactionMajorLabel.LigandReaction.toString());
+    mapping.put("PlantCyc", ReactionMajorLabel.PlantCycReaction.toString());
+    return mapping;
+  }
+  
   public ModelSeedReactionTransform() {
     super(ReactionMajorLabel.ModelSeedReaction.toString(), 
-        new BiobaseMetaboliteEtlDictionary<>(ModelSeedMetaboliteEntity.class));
+        new BiobaseMetaboliteEtlDictionary<>(ModelSeedMetaboliteEntity.class, getDbMapping()));
   }
 
   @Override
@@ -65,6 +73,39 @@ public class ModelSeedReactionTransform extends AbstractReactionTransform<ModelS
       logger.error(e.getMessage());
       throw new RuntimeException(e);
     }
+  }
+  
+  @Override
+  protected GenericCrossreference configureCrossreference(GenericCrossreference xref) {
+    if (xref.getRef().startsWith("KEGG")) {
+      xref.setRef("KEGG");
+    }
+    if (xref.getRef().equals("MetaCyc") || xref.getRef().equals("PlantCyc")) {
+      String value = xref.getValue();
+      if (value.endsWith(".cp") ||
+          value.endsWith(".ce") ||
+          value.endsWith(".cd") ||
+          value.endsWith(".cr") ||
+          value.endsWith(".cv") ||
+          value.endsWith(".cx")) {
+        xref.setValue(value.substring(0, value.length() - 3));
+      }
+      if (value.endsWith(".c") || 
+          value.endsWith(".x") ||
+          value.endsWith(".m") ||
+          value.endsWith(".e") ||
+          value.endsWith(".g") ||
+          value.endsWith(".n") ||
+          value.endsWith(".r") ||
+          value.endsWith(".w") ||
+          value.endsWith(".p") ||
+          value.endsWith(".v")) {
+        xref.setValue(value.substring(0, value.length() - 2));
+      }
+//      System.out.println(xref.getValue());
+    }
+    
+    return super.configureCrossreference(xref);
   }
 
   @Override

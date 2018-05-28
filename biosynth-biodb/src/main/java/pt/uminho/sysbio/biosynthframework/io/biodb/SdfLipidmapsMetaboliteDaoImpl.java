@@ -32,7 +32,8 @@ public class SdfLipidmapsMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao
   private final File file;
   private Map<String, LipidmapsMetaboliteEntity> data = null;
   
-  public SdfLipidmapsMetaboliteDaoImpl(File file) {
+  public SdfLipidmapsMetaboliteDaoImpl(File file, String version) {
+    super(version);
     this.file = file;
   }
   
@@ -182,6 +183,11 @@ public class SdfLipidmapsMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao
     if (data == null) {
       this.load();
     }
-    return data.get(entry);
+    
+    LipidmapsMetaboliteEntity cpd = data.get(entry);
+    if (cpd != null) {
+      cpd.setVersion(version);
+    }
+    return cpd;
   }
 }

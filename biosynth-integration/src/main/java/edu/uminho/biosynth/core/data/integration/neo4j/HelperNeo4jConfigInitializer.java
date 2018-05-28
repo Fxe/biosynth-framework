@@ -3,7 +3,9 @@ package edu.uminho.biosynth.core.data.integration.neo4j;
 import java.io.File;
 
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.graphdb.schema.ConstraintDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,17 +13,16 @@ import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.Neo4jSignatureLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationNodeLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.LiteratureMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jLayoutLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.neo4j.GenomeDatabase;
 import pt.uminho.sysbio.biosynthframework.neo4j.LiteratureDatabase;
 import pt.uminho.sysbio.biosynthframework.neo4j.OntologyDatabase;
-import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class HelperNeo4jConfigInitializer {
 
@@ -54,9 +55,9 @@ public class HelperNeo4jConfigInitializer {
       String.format("CREATE CONSTRAINT ON (kgn : %s) ASSERT kgn.entry IS UNIQUE", GlobalLabel.KeggGene),
       //		String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.BrendaEnzyme),
       String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.EnzymePortal),
-      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureMajorLabel.Patent),
-      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureMajorLabel.PubMed),
-      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureMajorLabel.CiteXplore),
+      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureDatabase.Patent),
+      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureDatabase.PubMed),
+      String.format("CREATE CONSTRAINT ON (lit : %s) ASSERT lit.entry IS UNIQUE", LiteratureDatabase.CiteXplore),
       
       String.format("CREATE CONSTRAINT ON (phe : %s) ASSERT phe.key IS UNIQUE", GlobalLabel.Phenotype),
       //		String.format("CREATE CONSTRAINT ON (pro : %s) ASSERT pro.entry IS UNIQUE", GlobalLabel.EnzymePortal),
@@ -113,6 +114,11 @@ public class HelperNeo4jConfigInitializer {
 
   public static GraphDatabaseService initializeNeo4jDataDatabaseConstraints(String databasePath) {
     GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
+    return initializeNeo4jDataDatabaseConstraints(graphDatabaseService);
+  }
+  
+  public static GraphDatabaseService initializeNeo4jDataDatabaseConstraints(GraphDatabaseService graphDatabaseService) {
+    
 
     for (MetaboliteMajorLabel label : MetaboliteMajorLabel.values()) {
       String cypherQuery = String.format("CREATE CONSTRAINT ON (cpd:%s) ASSERT cpd.entry IS UNIQUE", label);
@@ -208,8 +214,30 @@ public class HelperNeo4jConfigInitializer {
   }
 
   public static GraphDatabaseService initializeNeo4jDatabase(String path) {
-    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(path));
-    return graphDatabaseService;
+    File dbPath = new File(path);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(dbPath);
+    
+    Transaction tx = graphDatabaseService.beginTx();
+    
+    Iterable<ConstraintDefinition> it = graphDatabaseService.schema().getConstraints();
+
+    if (!it.iterator().hasNext()) {
+      logger.info("initialized constraints...");
+      initializeNeo4jDataDatabaseConstraints(graphDatabaseService);
+    }
+    
+    tx.success();
+    tx.close();
+    
+    BiodbGraphDatabaseService service = new BiodbGraphDatabaseService(graphDatabaseService);
+    service.databasePath = path;
+    File edata = new File(path + "/../" + dbPath.getName() + "_" + Neo4jDefinitions.EXTERNAL_DATA_FOLDER);
+    if (!edata.exists()) {
+      edata.mkdir();
+      logger.info("created external data folder at: {}", edata);
+    }
+    service.databasePath = edata.getAbsolutePath();
+    return service;
   }
 
   public static GraphDatabaseService s(String mg) {

@@ -106,7 +106,7 @@ extends AbstractRestfulKeggDao<KeggGlycanMetaboliteEntity> implements Metabolite
 
 
     KeggGlycanMetaboliteEntity cpd = convert(glFlatFile, glMolFile);
-
+    cpd.setVersion(databaseVersion);
     return cpd;
   }
 
@@ -128,8 +128,7 @@ extends AbstractRestfulKeggDao<KeggGlycanMetaboliteEntity> implements Metabolite
 
   @Override
   public KeggGlycanMetaboliteEntity getByEntry(String entry) {
-    // TODO Auto-generated method stub
-    return null;
+    return this.getMetaboliteByEntry(entry);
   }
 
   @Override

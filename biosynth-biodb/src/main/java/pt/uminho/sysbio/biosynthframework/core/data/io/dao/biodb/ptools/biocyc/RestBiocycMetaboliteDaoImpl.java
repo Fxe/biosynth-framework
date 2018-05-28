@@ -147,7 +147,7 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
       xmlDoc = this.getLocalOrWeb(restCpdQuery, localPath);
       
       cpd = convert(xmlDoc, localPath);
-
+      cpd.setVersion(databaseVersion);
     } catch (IOException e) {
       logger.error(String.format("IO - %s", e.getMessage()));
       cpd = null;
@@ -155,7 +155,7 @@ implements MetaboliteDao<BioCycMetaboliteEntity> {
       logger.error(String.format("PARSE ERROR - %s", e.getMessage()));
       cpd = null;
     }
-
+    
     return cpd;
   }
   

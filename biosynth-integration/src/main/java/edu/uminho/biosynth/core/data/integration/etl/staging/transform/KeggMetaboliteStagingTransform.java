@@ -7,6 +7,7 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteCross
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.etl.staging.components.MetaboliteStga;
 
+@Deprecated
 public class KeggMetaboliteStagingTransform extends AbstractMetaboliteStagingTransform<KeggCompoundMetaboliteEntity, KeggCompoundMetaboliteCrossreferenceEntity>{
 	
 //	private Map<Set<Integer>, Integer> xrefsToGroupId = new HashMap<> ();

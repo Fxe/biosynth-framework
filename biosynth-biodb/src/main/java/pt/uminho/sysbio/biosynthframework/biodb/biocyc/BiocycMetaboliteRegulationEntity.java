@@ -27,7 +27,7 @@ public class BiocycMetaboliteRegulationEntity {
   private List<String> reaction = new ArrayList<> ();
   private String protein;
   private String commonName;
-  
+  private String resource;
   private String enzymeEntry;
   private String enzymeOrgid;
   
@@ -85,6 +85,12 @@ public class BiocycMetaboliteRegulationEntity {
   }
   public void setEnzymeOrgid(String enzymeOrgid) {
     this.enzymeOrgid = enzymeOrgid;
+  }
+  public String getResource() {
+    return resource;
+  }
+  public void setResource(String resource) {
+    this.resource = resource;
   }
   
   

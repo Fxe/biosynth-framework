@@ -47,7 +47,7 @@ extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggRe
       rxn.setOrthologies(parser.getOrthologies());
       rxn.setLeft(parser.getLeft());
       rxn.setRight(parser.getRight());
-
+      rxn.setVersion(databaseVersion);
     } catch (IOException e) {
       logger.error(e.getMessage());
 
@@ -100,8 +100,7 @@ extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggRe
 
   @Override
   public KeggReactionEntity getByEntry(String entry) {
-    // TODO Auto-generated method stub
-    return null;
+    return this.getReactionByEntry(entry);
   }
 
   @Override

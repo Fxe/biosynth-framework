@@ -121,7 +121,9 @@ implements EtlPipeline<SRC, DST> {
           i++;
         }
       } catch (Exception e) {
+        e.printStackTrace();
         logger.error("{} - {}", entry, e.getMessage());
+        break;
       }
 
       
@@ -175,12 +177,17 @@ implements EtlPipeline<SRC, DST> {
       
       if ((i % batchSize) == 0) {
         logger.debug(String.format("Commit ! %d", i));
+        
+        if (neoTx != null) {
         neoTx.success();
-        neoTx.close();
-        neoTx = graphDatabaseService.beginTx();
+        neoTx.close();        
+          neoTx = graphDatabaseService.beginTx();          
+        }
+        if (hbmTx != null) {
+          hbmTx.rollback();
+          hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+        }
 
-        hbmTx.rollback();
-        hbmTx = sessionFactory.getCurrentSession().beginTransaction();
       }
     }
 

@@ -22,8 +22,8 @@ public class Neo4jExtFunction implements BiFunction<Long, Long, Double> {
   
   @Override
   public Double apply(Long t, Long u) {
-    BiodbMetaboliteNode a = new BiodbMetaboliteNode(graphDataService.getNodeById(t));
-    BiodbMetaboliteNode b = new BiodbMetaboliteNode(graphDataService.getNodeById(u));
+    BiodbMetaboliteNode a = graphDataService.getMetabolite(t); //new BiodbMetaboliteNode(graphDataService.getNodeById(t));
+    BiodbMetaboliteNode b = graphDataService.getMetabolite(u); //new BiodbMetaboliteNode(graphDataService.getNodeById(u));
     
     if (a.hasLabel(MetaboliteMajorLabel.BiGG) && b.hasLabel(MetaboliteMajorLabel.BiGGMetabolite) ||
         a.hasLabel(MetaboliteMajorLabel.BiGGMetabolite) && b.hasLabel(MetaboliteMajorLabel.BiGG)) {

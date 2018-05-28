@@ -3,9 +3,23 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 public interface Neo4jDefinitions {
 
   /**
+   * Value is defined in an external file (too big, not worthy to index)
+   * Example: MOL, Sequences, Image
+   */
+  public final static String EXTERNAL_DATA = "EXTERNAL_DATA";
+  
+  public final static String CREATED_AT = "created_at";
+  public final static String UPDATED_AT = "updated_at";
+  
+  /**
    * user defined unique key for entities
    */
   public final static String ENTITY_NODE_UNIQUE_CONSTRAINT = "entry";
+  
+  /**
+   * object version
+   */
+  public final static String ENTITY_VERSION = "bios_version";
   
   /**
    * user defined unique key for properties
@@ -53,4 +67,6 @@ public interface Neo4jDefinitions {
    * Origin of the annotation
    */
   public final static String ANNOTATION_SOURCE = "source";
+
+  public static final String EXTERNAL_DATA_FOLDER = "edata";
 }

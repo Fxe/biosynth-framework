@@ -273,11 +273,15 @@ implements IGenericMetaboliteParser {
                     String orgid = regulatedEntity.get("orgid").toString();
                     result.setEnzymeOrgid(orgid);
                     break;
+                  case "resource":
+                    String resource = regulatedEntity.get(reField).toString();
+                    result.setResource(resource);
+                    break;
                   case "ID":
                   case "detail":
                     break;
                   default:
-                    logger.warn("[{}] unknown field ignored: {} -> {}", this.getEntry(), reField, regulatedEntity.get(reField));
+                    logger.warn("[{}] unknown field ignored: [{}] -> [{}]", this.getEntry(), reField, regulatedEntity.get(reField));
                     break;
                 }
               }
@@ -306,7 +310,7 @@ implements IGenericMetaboliteParser {
           case "detail":
             break;
           default:
-            logger.warn("unknown field ignored: {} -> {}", field, regulation.get(field));
+            logger.warn("unknown field ignored: [{}] -> [{}]", field, regulation.get(field));
             break;
         }
       }

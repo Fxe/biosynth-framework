@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ extends AbstractRestfulKeggDao<KeggDrugMetaboliteEntity> implements MetaboliteDa
       logger.error(e.getMessage());
       return null;
     }
-    
+    cpd.setVersion(databaseVersion);
     return cpd;
   }
 
@@ -160,14 +161,13 @@ extends AbstractRestfulKeggDao<KeggDrugMetaboliteEntity> implements MetaboliteDa
   }
 
   @Override
-  public KeggDrugMetaboliteEntity getByEntry(String e) {
-    // TODO Auto-generated method stub
-    return null;
+  public KeggDrugMetaboliteEntity getByEntry(String entry) {
+    return this.getMetaboliteByEntry(entry);
   }
 
   @Override
   public Set<String> getAllEntries() {
     // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.getAllMetaboliteEntries());
   }
 }

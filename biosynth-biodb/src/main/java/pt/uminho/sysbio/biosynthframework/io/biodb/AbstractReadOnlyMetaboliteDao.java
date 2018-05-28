@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import pt.uminho.sysbio.biosynthframework.Metabolite;
-import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.io.AbstractMetaboliteDao;
 
-public abstract class AbstractReadOnlyMetaboliteDao<M extends Metabolite> implements MetaboliteDao<M> {
+public abstract class AbstractReadOnlyMetaboliteDao<M extends Metabolite> extends AbstractMetaboliteDao<M> {
+
+  public AbstractReadOnlyMetaboliteDao(String version) {
+    super(version);
+  }
 
   @Override
   public abstract List<String> getAllMetaboliteEntries();

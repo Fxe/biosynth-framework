@@ -184,4 +184,9 @@ public abstract class AbstractBiodbNode implements Node {
   public Iterable<Label> getLabels() {
     return node.getLabels();
   }
+  
+  @Override
+  public String toString() {
+    return node.toString();
+  }
 }

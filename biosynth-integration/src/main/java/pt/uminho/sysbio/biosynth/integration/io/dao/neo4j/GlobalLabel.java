@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynth.integration.io.dao.neo4j;
 import org.neo4j.graphdb.Label;
 
 public enum GlobalLabel implements Label {
+  EXTERNAL_DATA,
   Database,
 	Literature,
 	BiGG,
@@ -33,6 +34,6 @@ public enum GlobalLabel implements Label {
 	KeggReactionPair, Hypothetical,
 	
 	LogicalOperator,
-	Protein, ProteinProperty,
+	Protein, ProteinProperty, VERSION,
 	
 }

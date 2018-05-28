@@ -1,5 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl.dictionary;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,20 +13,33 @@ import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
 
 public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String, String> {
 
   private static final Logger logger = LoggerFactory.getLogger(BiobaseMetaboliteEtlDictionary.class);
 
   private final Class<M> clazz;
+  private final Map<String, String> mapping = new HashMap<>();
 
   public BiobaseMetaboliteEtlDictionary(Class<M> clazz) {
     this.clazz = clazz;
   }
+  
+  public BiobaseMetaboliteEtlDictionary(Class<M> clazz, Map<String, String> mapping) {
+    this.clazz = clazz;
+    this.mapping.putAll(mapping);
+  }
 
   @Override
   public String translate(String lookup, String entry) {
+    if (mapping.containsKey(lookup)) {
+      return mapping.get(lookup);
+    }
+    
     BioDbDictionary.setupDefaults();
+    
     String result = BioDbDictionary.translate(clazz, lookup);
     
     if (result != null) {
@@ -51,11 +67,13 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
 
     logger.debug(String.format("Translated %s -> %s using modifier %s", lookup, result, clazz));
 
+
+    
     if (result.equals(GlobalLabel.KEGG.toString())) {
       result = resolveKeggDatabase(entry); 
       logger.debug(String.format("KEGG resolve %s -> %s", lookup, result, clazz));
     }
-
+    
     return result;
   }
 
@@ -104,6 +122,8 @@ public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements Etl
       }
     }
 
+
+    
     if (result == null) {
       System.out.println("Unable to translate " + lookup + ":" + entry);
       result = MetaboliteMajorLabel.NOTFOUND.toString();

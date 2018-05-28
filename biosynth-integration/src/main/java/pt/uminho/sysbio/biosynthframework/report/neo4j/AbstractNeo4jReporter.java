@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.neo4j.report;
+package pt.uminho.sysbio.biosynthframework.report.neo4j;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 

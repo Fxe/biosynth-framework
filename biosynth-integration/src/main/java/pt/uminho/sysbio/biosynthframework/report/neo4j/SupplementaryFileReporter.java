@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.neo4j.report;
+package pt.uminho.sysbio.biosynthframework.report.neo4j;
 
 import java.util.HashMap;
 import java.util.Map;

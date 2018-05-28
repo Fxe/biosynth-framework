@@ -4,7 +4,7 @@ ext {
   springVersion = '5.0.0.RELEASE'
   jacksonVersion = '2.9.2'
   hibernateVersion = '5.2.13.Final'
-  neo4jVersion = '3.3.0'
+  neo4jVersion = '3.4.0'
   cdkVersion = '2.0'
   jungVersion = '2.0.1'
   mewVersion = '0.0.1'

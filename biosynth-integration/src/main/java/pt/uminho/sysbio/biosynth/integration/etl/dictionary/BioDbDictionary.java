@@ -36,7 +36,7 @@ public class BioDbDictionary {
       return getDbDictionary().get(db);
     }
 
-    logger.error(String.format("[%s] not found in translation dictionary", db));
+    logger.warn(String.format("[%s] not found in translation dictionary", db));
     return "NOTFOUND";
   }
 
@@ -135,6 +135,7 @@ public class BioDbDictionary {
     dictionary.put("BioCyc", MetaboliteMajorLabel.MetaCyc.toString());
     dictionary.put("MetaCyc accession", MetaboliteMajorLabel.MetaCyc.toString());
 
+    dictionary.put("BiGG1", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("BIGG", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("bigg", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("bigg2", MetaboliteMajorLabel.BiGGMetabolite.toString());
@@ -146,6 +147,7 @@ public class BioDbDictionary {
     dictionary.put("KEGG Compound", GlobalLabel.KEGG.toString());
     dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
     dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
+    dictionary.put("KEGG Drug", MetaboliteMajorLabel.LigandDrug.toString());
     dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());
     dictionary.put("KEGG-GLYCAN", MetaboliteMajorLabel.LigandGlycan.toString());
     dictionary.put("LigandBox", MetaboliteMajorLabel.LigandBox.toString());

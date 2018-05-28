@@ -29,14 +29,17 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericMetabolite;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.integration.etl.AbstractBiosEntityTransform;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public abstract class AbstractMetaboliteTransform<M extends GenericMetabolite> 
-implements EtlTransform<M, GraphMetaboliteEntity> {
+extends AbstractBiosEntityTransform<M, GraphMetaboliteEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
 
@@ -70,17 +73,22 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 
   protected final String majorLabel;
 
-  protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
-      new AnnotationPropertyContainerBuilder();
-  protected final EtlDictionary<String, String, String> dictionary;
   protected final EtlDictionary<String, String, String> literatureDictionary;
 
   public AbstractMetaboliteTransform(String majorLabel, EtlDictionary<String, String, String> dictionary) {
+    super(dictionary);
     this.majorLabel = majorLabel;
-    this.dictionary = dictionary;
     this.literatureDictionary = new BiobaseLiteratureEtlDictionary<ChebiMetaboliteEntity>(ChebiMetaboliteEntity.class);
   }
 
+  protected void configureVersion(GraphMetaboliteEntity gcpd, M metabolite) {
+    if (DataUtils.empty(metabolite.getVersion())) {
+      logger.warn("not version assigned to: {}", metabolite);
+    } else {
+      gcpd.setVersion(metabolite.getVersion());
+    }
+  }
+  
   @Override
   public GraphMetaboliteEntity etlTransform(M metabolite) {
     //some validation of metabolite
@@ -90,6 +98,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
         .buildGraphMetaboliteEntity(MetaboliteMajorLabel.valueOf(majorLabel));
 
     this.configureProperties(centralMetaboliteEntity, metabolite);
+    this.configureVersion(centralMetaboliteEntity, metabolite);
     this.configureFormulaLink(centralMetaboliteEntity, metabolite);
     this.configureNameLink(centralMetaboliteEntity, metabolite);
     this.configureAdditionalPropertyLinks(centralMetaboliteEntity, metabolite);
@@ -100,6 +109,15 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
   
   @Override
   public GraphMetaboliteEntity apply(M t) {
+    if (t == null) {
+      logger.warn("null entity");
+      return null;
+    }
+    String e = t.getEntry();
+    if (e == null) {
+      logger.warn("invalid entity missing entry");
+      return null;
+    }
     return etlTransform(t);
   }
 
@@ -188,14 +206,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
     return buildPropertyEntity("key", value, majorLabel);
   }
 
-  protected GraphRelationshipEntity buildRelationhipEntity(
-      String relationShipType) {
-    GraphRelationshipEntity relationshipEntity =
-        new GraphRelationshipEntity();
-    relationshipEntity.setMajorLabel(relationShipType);
 
-    return relationshipEntity;
-  }
 
   @Deprecated
   protected Pair<GraphPropertyEntity, GraphRelationshipEntity> buildPropertyLinkPair(
@@ -250,14 +261,7 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
 
     return propertyPair;
   }
-
-  protected Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> buildPair(
-      AbstractGraphNodeEntity node, AbstractGraphEdgeEntity edge) {
-    Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p =
-        new ImmutablePair<>(edge, node);
-    return p;
-  }
-
+  
   protected void configureFormulaLink(GraphMetaboliteEntity centralMetaboliteEntity, M entity) {
     this.configureGenericPropertyLink(centralMetaboliteEntity, entity.getFormula(), MetabolitePropertyLabel.MolecularFormula, MetaboliteRelationshipType.has_molecular_formula);
   }
@@ -275,14 +279,25 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
   }
   protected void configureGenericPropertyLink(GraphMetaboliteEntity centralMetaboliteEntity, Object value, MetabolitePropertyLabel label, MetaboliteRelationshipType relationship) {
     if (value != null) {
-      centralMetaboliteEntity.addConnectedEntity(
-          this.buildPair(
-              new SomeNodeFactory().buildGraphMetabolitePropertyEntity(label, value), 
-              new SomeNodeFactory().buildMetaboliteEdge(relationship)));
+      if (MetabolitePropertyLabel.MDLMolFile.equals(label)) {
+        centralMetaboliteEntity.addConnectedEntity(
+            this.buildPair(
+                new SomeNodeFactory()
+                .withLabel(GlobalLabel.EXTERNAL_DATA)
+                .withProperty("mol", Neo4jDefinitions.EXTERNAL_DATA)
+                .withExternalProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, value)
+                .buildGraphMetabolitePropertyEntity(label, centralMetaboliteEntity.getEntry()), 
+                new SomeNodeFactory().buildMetaboliteEdge(relationship)));
+      } else {
+        centralMetaboliteEntity.addConnectedEntity(
+            this.buildPair(
+                new SomeNodeFactory().buildGraphMetabolitePropertyEntity(label, value), 
+                new SomeNodeFactory().buildMetaboliteEdge(relationship)));
+      }
+
       logger.trace("add link [{}] - {}:{}", relationship, label, value);
     }
   }
-
 
   protected abstract void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity, M metabolite);
 
@@ -295,9 +310,9 @@ implements EtlTransform<M, GraphMetaboliteEntity> {
       for (Object xrefObject : xrefs) {
         logger.debug("Found cross-reference: " + xrefObject);
         GenericCrossreference xref = GenericCrossreference.class.cast(xrefObject);
+        xref = configureReference(xref);
         switch (xref.getType()) {
         case DATABASE:
-
           Set<Label> otherLabels = new HashSet<> ();
           MetaboliteMajorLabel majorLabel = MetaboliteMajorLabel.valueOf(this.dictionary.translate(xref.getRef(), xref.getValue()));
           if (majorLabel.equals(MetaboliteMajorLabel.ChEBI) && 

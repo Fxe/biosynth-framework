@@ -53,8 +53,8 @@ public class Neo4jReactionMatchFunction implements BiFunction<Long, Long, Double
    */
   @Override
   public Double apply(Long t, Long u) {
-    BiodbMetaboliteNode a = new BiodbMetaboliteNode(graphDataService.getNodeById(t));
-    BiodbMetaboliteNode b = new BiodbMetaboliteNode(graphDataService.getNodeById(u));
+    BiodbMetaboliteNode a = graphDataService.getMetabolite(t); //new BiodbMetaboliteNode(graphDataService.getNodeById(t));
+    BiodbMetaboliteNode b = graphDataService.getMetabolite(u); //new BiodbMetaboliteNode(graphDataService.getNodeById(u));
     
     Set<Node> rxnA = Neo4jUtils.collectNodeRelationshipNodes(a, 
         ReactionRelationshipType.left_component, ReactionRelationshipType.right_component);
@@ -77,7 +77,7 @@ public class Neo4jReactionMatchFunction implements BiFunction<Long, Long, Double
         
         Map<MetaboliteMajorLabel, Integer> dbCount = new HashMap<>();
         for (long id : ccA) {
-          BiodbMetaboliteNode n = new BiodbMetaboliteNode(graphDataService.getNodeById(id));
+          BiodbMetaboliteNode n = graphDataService.getMetabolite(id); //new BiodbMetaboliteNode(graphDataService.getNodeById(id));
           CollectionUtils.increaseCount(dbCount, n.getDatabase(), 1);
         }
         

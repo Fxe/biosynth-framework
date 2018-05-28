@@ -28,25 +28,24 @@ import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
-import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.io.AbstractReadOnlyReactionDao;
 
 /**
  * 
  * @author Filipe Liu
  *
  */
-public class GithubModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReactionEntity> {
+public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<ModelSeedReactionEntity> {
   
   private static final Logger logger = LoggerFactory.getLogger(GithubModelSeedReactionDaoImpl.class);
   
-  private String version;
   private String repository = "ModelSEED/ModelSEEDDatabase";
   public String path = null;
   
   public Map<String, ModelSeedReactionEntity> data = null;
   
   public GithubModelSeedReactionDaoImpl(String version) {
-    this.version = version;
+    super(version);
   }
 //  public Function<String, ModelSeedReactionReagentEntity> stoichParser = new ;
   
@@ -201,7 +200,6 @@ public class GithubModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReac
   }
   
 
-
   public void loadData() throws IOException {
     if (path != null) {
       File base = new File(path + "/" + version);
@@ -237,6 +235,12 @@ public class GithubModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReac
     } else {
       //loadDataGithub();
     }
+    
+    if (data != null) {
+      for (String k : data.keySet()) {
+        data.get(k).setVersion(version);
+      }
+    }
   }
 
   @Override
@@ -257,12 +261,6 @@ public class GithubModelSeedReactionDaoImpl implements ReactionDao<ModelSeedReac
     }
     
     return data.get(entry);
-  }
-
-  @Override
-  public ModelSeedReactionEntity saveReaction(ModelSeedReactionEntity reaction) {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   @Override

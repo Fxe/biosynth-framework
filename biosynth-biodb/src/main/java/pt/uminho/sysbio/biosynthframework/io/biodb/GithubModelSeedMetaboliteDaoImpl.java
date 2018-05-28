@@ -75,6 +75,12 @@ public class GithubModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeed
     } else {
       loadDataGithub();
     }
+    if (data != null) {
+      for (String k : data.keySet()) {
+        data.get(k).setVersion(version);
+      }
+    }
+
   }
   
   public void loadDataGithub() throws IOException {

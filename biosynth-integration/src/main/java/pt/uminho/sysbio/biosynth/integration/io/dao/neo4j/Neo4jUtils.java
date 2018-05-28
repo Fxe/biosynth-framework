@@ -624,4 +624,44 @@ public class Neo4jUtils {
         findNodes(label, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, entry, db));
     return node;
   }
+
+  public static Label buildNamespace(String ns) {
+    return DynamicLabel.label(ns);
+  }
+
+  public static boolean isMetaboliteDatabase(String label) {
+    try {
+      MetaboliteMajorLabel.valueOf(label);
+      logger.trace(label + " is a Metabolite Database");
+      return true;
+    } catch (IllegalArgumentException e) {
+      logger.trace(label + " is not Metabolite Database - " + e.getMessage());
+    }
+    
+    return false;
+  }
+  
+  public static<T extends Enum<T>> boolean isReactionDatabase(String str, Class<T> enumType) {
+    try {
+      ReactionMajorLabel.valueOf(str);
+      logger.trace(str + " is a Reaction Database");
+      return true;
+    } catch (IllegalArgumentException e) {
+      logger.trace(str + " is not Reaction Database - " + e.getMessage());
+    }
+    
+    return false;
+  }
+  
+  public static<T extends Enum<T>> boolean isDatabase(String str, Class<T> enumType) {
+    try {
+      Enum.valueOf(enumType, str);
+      logger.trace(str + " is a Database");
+      return true;
+    } catch (IllegalArgumentException e) {
+      logger.trace(str + " is not Database - " + e.getMessage());
+    }
+    
+    return false;
+  }
 }

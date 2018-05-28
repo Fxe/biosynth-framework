@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
+import pt.uminho.sysbio.biosynthframework.io.AbstractReactionDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 /**
@@ -24,9 +25,18 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
  */
 
 @Repository
-public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
+public class CsvBiggReactionDaoImpl extends AbstractReactionDao<BiggReactionEntity> {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CsvBiggReactionDaoImpl.class);
+  public CsvBiggReactionDaoImpl() {
+    super("legacy");
+  }
+  
+  public CsvBiggReactionDaoImpl(String version) {
+    super(version);
+  }
+
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CsvBiggReactionDaoImpl.class);
 	
 	private Resource csvFile;
 	
@@ -118,6 +128,7 @@ public class CsvBiggReactionDaoImpl implements ReactionDao<BiggReactionEntity> {
 			res = this.biggReactionParser.parseReactions(in);
 			
 			for (BiggReactionEntity rxn : res) {
+			  rxn.setVersion(version);
 				this.cachedData.put(rxn.getEntry(), rxn);
 				this.idToEntry.put(rxn.getInternalId(), rxn.getEntry());
 			}

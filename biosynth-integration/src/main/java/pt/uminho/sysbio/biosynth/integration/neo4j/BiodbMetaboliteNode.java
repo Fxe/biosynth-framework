@@ -8,17 +8,23 @@ import java.util.Set;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
 
 public class BiodbMetaboliteNode extends BiodbEntityNode {
-
-  public BiodbMetaboliteNode(Node node) {
-    super(node);
+  
+  private static final Logger logger = LoggerFactory.getLogger(BiodbMetaboliteNode.class);
+  
+  public BiodbMetaboliteNode(Node node, String databasePath) {
+    super(node, databasePath);
     if (!node.hasLabel(GlobalLabel.Metabolite)) {
       throw new IllegalArgumentException("invalid node: missing " + GlobalLabel.Metabolite);
     }
@@ -28,10 +34,41 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     return MetaboliteMajorLabel.valueOf((String) getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY));
   }
   
-  public Set<BiodbPropertyNode> getMetaboliteProperty(MetabolitePropertyLabel property) {
+  public BiosVersionNode getPreviousVersion() {
+    Relationship relationship = 
+        this.getSingleRelationship(GenericRelationship.has_version, Direction.OUTGOING);
+    if (relationship != null) {
+      Node versionNode = relationship.getOtherNode(this);
+      return new BiosVersionNode(versionNode, databasePath);
+    }
+    return null;
+  }
+  
+  public String getVersion() {
+    return (String) this.getProperty(Neo4jDefinitions.ENTITY_VERSION, null);
+  }
+  
+  public BiodbPropertyNode getMetaboliteProperty(MetabolitePropertyLabel property) {
     Set<BiodbPropertyNode> result = new HashSet<> ();
     for (Node node : Neo4jUtils.collectNodeRelationshipNodes(node, property)) {
-      result.add(new BiodbPropertyNode(node));
+      result.add(new BiodbPropertyNode(node, databasePath));
+    }
+    
+    if (result.size() > 1) {
+      logger.warn("Metabolite [{}] has more than 1 [{}] (found {}). ", this.getEntry(), property, result.size());
+    }
+    
+    if (result.isEmpty()) {
+      return null;
+    }
+    
+    return result.iterator().next();
+  }
+  
+  public Set<BiodbPropertyNode> getMetaboliteProperties(MetabolitePropertyLabel property) {
+    Set<BiodbPropertyNode> result = new HashSet<> ();
+    for (Node node : Neo4jUtils.collectNodeRelationshipNodes(node, property)) {
+      result.add(new BiodbPropertyNode(node, databasePath));
     }
     return result;
   }
@@ -61,5 +98,10 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     }
     
     return result;
+  }
+  
+  @Override
+  public String toString() {
+    return super.toString();
   }
 }

@@ -13,6 +13,35 @@ public class MapUtils {
   
   private static final Logger logger = LoggerFactory.getLogger(MapUtils.class);
   
+  public static Map<String, Object> exclusive1(Map<String, Object> m1, Map<String, Object> m2) {
+    Map<String, Object> copy = new HashMap<>(m1);
+    copy.keySet().removeAll(m2.keySet());
+    return copy;
+  }
+  
+  public static Map<String, Object> exclusive2(Map<String, Object> m1, Map<String, Object> m2) {
+    Map<String, Object> copy = new HashMap<>(m2);
+    copy.keySet().removeAll(m1.keySet());
+    return copy;
+  }
+  
+  public static Map<String, Object> diff1(Map<String, Object> m1, Map<String, Object> m2) {
+    Map<String, Object> diff = new HashMap<>();
+    Set<String> both = Sets.intersection(m1.keySet(), m2.keySet());
+    for (String key : both) {
+      Object o1 = m1.get(key);
+      Object o2 = m2.get(key);
+      if (!o2.equals(o1)) {
+        logger.debug("[*]{}: {} -> {}", key, o1, o2);
+        diff.put(key, o1);
+      } else {
+        logger.debug("[=]{}: {}", key, o1, o2);
+      }
+    }
+    
+    return diff;
+  }
+  
   public static<K> Map<K, Double> filterZero(Map<K, Double> s) {
     return filterByValue(s, 0.0);
   }

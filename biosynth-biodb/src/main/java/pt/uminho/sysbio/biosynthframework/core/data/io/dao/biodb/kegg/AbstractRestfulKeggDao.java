@@ -56,7 +56,7 @@ public abstract class AbstractRestfulKeggDao<T extends AbstractBiosynthEntity> i
     String httpResponseString = null;
     //		String dataFileStr = localStorage  + entityType + "/" + entry + "." + extension;
     File dataFile = new File(localPath);
-
+    
     boolean didFetch = false;
     //check local file
     if (useLocalStorage && dataFile.exists()) {

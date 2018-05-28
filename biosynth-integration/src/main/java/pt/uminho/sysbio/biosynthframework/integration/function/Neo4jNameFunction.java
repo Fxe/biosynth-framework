@@ -80,7 +80,7 @@ public class Neo4jNameFunction implements BiFunction<Long, Long, Double>{
     int mmax = 0;
     
     for (Relationship r : a.getRelationships(MetaboliteRelationshipType.has_name)) {
-      BiodbPropertyNode nameNode = new BiodbPropertyNode(r.getOtherNode(a));
+      BiodbPropertyNode nameNode = new BiodbPropertyNode(r.getOtherNode(a), null);
       long propertyId = nameNode.getId();
       String k = (String) nameNode.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT);
       k = fixName(k);
@@ -95,7 +95,7 @@ public class Neo4jNameFunction implements BiFunction<Long, Long, Double>{
     }
     
     for (Relationship r : b.getRelationships(MetaboliteRelationshipType.has_name)) {
-      BiodbPropertyNode nameNode = new BiodbPropertyNode(r.getOtherNode(b));
+      BiodbPropertyNode nameNode = new BiodbPropertyNode(r.getOtherNode(b), null);
       long propertyId = nameNode.getId();
       String k = (String) nameNode.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT);
       k = fixName(k);

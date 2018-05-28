@@ -13,9 +13,9 @@ import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ReactionEntity;
 
-public class TestRestBigg2ReactionDaoImpl {
+public class TestRestBiggReactionDaoImpl {
   
-  private RestBigg2ReactionDaoImpl dao = null;
+  private RestBiggReactionDaoImpl dao = null;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -27,7 +27,7 @@ public class TestRestBigg2ReactionDaoImpl {
 
   @Before
   public void setUp() throws Exception {
-    dao = new RestBigg2ReactionDaoImpl();
+    dao = new RestBiggReactionDaoImpl("1.5", "/var/biodb/bigg2");
   }
 
   @After
@@ -39,7 +39,8 @@ public class TestRestBigg2ReactionDaoImpl {
     Set<String> list = dao.getAllReactionEntries();
     
     assertNotNull(list);
-    assertEquals("15288 at 10/03/2017", 15288, list.size());
+//    assertEquals("15288 at 10/03/2017", 15288, list.size());
+    assertEquals("24311 at 05/23/2018", 24311, list.size());
   }
   
   @Test
@@ -49,10 +50,10 @@ public class TestRestBigg2ReactionDaoImpl {
     assertNotNull(rxn);
     assertEquals("PYK", rxn.getEntry());
     assertEquals("Pyruvate kinase", rxn.getName());
-    assertEquals("adp_c +  h_c +  pep_c  &#8652;  atp_c +  pyr_c", rxn.getReactionString());
+    assertEquals("adp_c + h_c + pep_c &#8652; atp_c + pyr_c", rxn.getReactionString());
     assertEquals(false, rxn.getPseudoreaction());
     assertNotNull(rxn.getModels());
-    assertEquals(79, rxn.getModels().size());
+    assertEquals(84, rxn.getModels().size());
 //    System.out.println(rxn.getMetabolites());
 //    System.out.println(rxn.getCrossreferences());
   }

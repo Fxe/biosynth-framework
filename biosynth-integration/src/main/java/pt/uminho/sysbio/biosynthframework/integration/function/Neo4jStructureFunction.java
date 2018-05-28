@@ -96,7 +96,7 @@ public class Neo4jStructureFunction implements BiFunction<Long, Long, Double> {
       if (confidence.equals("high")) {
         Node node = r.getOtherNode(a);
         logger.debug("[{}] i+:{}", t, node.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT));
-        ia.add(new BiodbPropertyNode(node));
+        ia.add(new BiodbPropertyNode(node, null));
       }
     }
     for (Relationship r : b.getRelationships(MetaboliteRelationshipType.has_inchi)) {
@@ -104,7 +104,7 @@ public class Neo4jStructureFunction implements BiFunction<Long, Long, Double> {
       if (confidence.equals("high")) {
         Node node = r.getOtherNode(b);
         logger.debug("[{}] i+:{}", u, node.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT));
-        ib.add(new BiodbPropertyNode(node));
+        ib.add(new BiodbPropertyNode(node, null));
       }
     }
     
