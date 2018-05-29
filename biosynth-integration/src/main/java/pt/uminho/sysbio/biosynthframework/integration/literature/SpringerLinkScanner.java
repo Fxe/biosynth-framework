@@ -9,17 +9,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class SpringerLinkScanner implements Function<String, List<String>> {
+import pt.uminho.sysbio.biosynthframework.SupplementaryMaterialEntity;
+
+public class SpringerLinkScanner implements Function<String, List<SupplementaryMaterialEntity>> {
 
   @Override
-  public List<String> apply(String page) {
-    List<String> links = new ArrayList<> ();
+  public List<SupplementaryMaterialEntity> apply(String page) {
+    List<SupplementaryMaterialEntity> links = new ArrayList<> ();
     Document document = Jsoup.parse(page);
     Elements elements = document.getElementsByClass("filename");
     for (Element a : elements) {
       if (a.tagName() == "a") {
         String href = a.attr("href");
-        links.add(href);
+        SupplementaryMaterialEntity sup = new SupplementaryMaterialEntity();
+        sup.setUrl(href);
+        links.add(sup);
       }
     }
     

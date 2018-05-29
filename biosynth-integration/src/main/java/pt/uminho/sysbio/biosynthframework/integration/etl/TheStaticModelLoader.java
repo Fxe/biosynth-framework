@@ -161,7 +161,7 @@ public class TheStaticModelLoader {
     return rxnNode;
   }
   
-  public static void loadModel(XmlSbmlModel xmodel, String modelEntry, BiodbGraphDatabaseService service) {
+  public static Long loadModel(XmlSbmlModel xmodel, String modelEntry, BiodbGraphDatabaseService service) {
     Node modelNode = service.getMetabolicModel(modelEntry);
     if (modelNode == null) {
       modelNode = saveMetabolicModel(xmodel, modelEntry, service);
@@ -228,6 +228,8 @@ public class TheStaticModelLoader {
         }
       }
     }
+    
+    return modelNode.getId();
   }
   
   public static Relationship createStoichiometryLink(Node rxnNode, Node spiNode, RelationshipType t, Map<String, Object> p) {

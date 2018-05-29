@@ -70,7 +70,7 @@ public class LiteratureManagerService {
   private Map<String, LiteratureEntity> records = new HashMap<>();
   private Map<String, LiteratureEntity> pmidToRecord = new HashMap<>();
   
-  public Map<String, Function<String, List<String>>> linkScanner = new HashMap<>();
+  public Map<String, Function<String, List<SupplementaryMaterialEntity>>> linkScanner = new HashMap<>();
   
   @Autowired
   public LiteratureManagerService(Resource path) {
@@ -112,11 +112,19 @@ public class LiteratureManagerService {
     
     PlosLinkScanner plosLinkScanner = new PlosLinkScanner();
     SpringerLinkScanner springerLinkScanner = new SpringerLinkScanner();
+    RscLinkScanner rscLinkScanner = new RscLinkScanner();
+    MolSysBioLinkScanner molSysBioLinkScanner = new MolSysBioLinkScanner();
+    AsmLinkScanner asmLinkScanner = new AsmLinkScanner();
     linkScanner.put("BMC Genomics", springerLinkScanner);
     linkScanner.put("BMC Microbiol.", springerLinkScanner);
     linkScanner.put("BMC Syst Biol", springerLinkScanner);
+    linkScanner.put("Microb. Cell Fact.", springerLinkScanner);
+    linkScanner.put("Genome Biol.", springerLinkScanner);
     linkScanner.put("PLoS ONE", plosLinkScanner);
     linkScanner.put("PLoS Comput. Biol.", plosLinkScanner);
+    linkScanner.put("J. Bacteriol.", asmLinkScanner);
+    linkScanner.put("Mol. Syst. Biol.", molSysBioLinkScanner);
+    linkScanner.put("Mol Biosyst", rscLinkScanner);
   }
   
   public void initialize() throws IOException {
@@ -344,12 +352,12 @@ public class LiteratureManagerService {
   
   public List<SupplementaryMaterialEntity> getSupplementaryMaterial(String doi, String journal, File folder) {
     List<SupplementaryMaterialEntity> result = new ArrayList<> ();
-    List<String> urls = fetchSupplementaryMaterialUrls(doi, journal);
+    List<SupplementaryMaterialEntity> urls = fetchSupplementaryMaterialUrls(doi, journal);
     if (urls == null) {
       return null;
     }
-    for (String url : urls) {
-      SupplementaryMaterialEntity sm = getSupplementaryMaterial(folder, url);
+    for (SupplementaryMaterialEntity sup : urls) {
+      SupplementaryMaterialEntity sm = getSupplementaryMaterial(folder, sup.getUrl().toExternalForm());
       if (sm != null) {
         result.add(sm);
       }
@@ -390,7 +398,7 @@ public class LiteratureManagerService {
     
   };
   
-  public List<String> fetchSupplementaryMaterialUrls(LiteratureEntity entity) {
+  public List<SupplementaryMaterialEntity> fetchSupplementaryMaterialUrls(LiteratureEntity entity) {
     if (entity == null) {
       logger.warn("null entity");
       return null;
@@ -407,13 +415,13 @@ public class LiteratureManagerService {
     return fetchSupplementaryMaterialUrls(entity.getDoiEntry(), entity.getJournalAbbreviation());
   };
   
-  public List<String> fetchSupplementaryMaterialUrls(String doi, String journal) {
+  public List<SupplementaryMaterialEntity> fetchSupplementaryMaterialUrls(String doi, String journal) {
     if (linkScanner.containsKey(journal)) {
-      Function<String, List<String>> scanner = linkScanner.get(journal);
+      Function<String, List<SupplementaryMaterialEntity>> scanner = linkScanner.get(journal);
       try {
         URI uri = new URI("https://doi.org/" + doi);
         String html = BiosIOUtils.download(uri);
-        List<String> links = scanner.apply(html);
+        List<SupplementaryMaterialEntity> links = scanner.apply(html);
         return links;
       } catch (IOException | URISyntaxException e) {
         e.printStackTrace();

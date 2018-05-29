@@ -7,28 +7,29 @@ import java.util.function.Function;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import pt.uminho.sysbio.biosynthframework.SupplementaryMaterialEntity;
 
-public class PlosLinkScanner implements Function<String, List<SupplementaryMaterialEntity>> {
+public class RscLinkScanner implements Function<String, List<SupplementaryMaterialEntity>> {
 
   @Override
   public List<SupplementaryMaterialEntity> apply(String page) {
     List<SupplementaryMaterialEntity> links = new ArrayList<> ();
     Document document = Jsoup.parse(page);
-    Elements elements = document.getElementsByClass("supplementary-material");
-    for (Element e : elements) {
-      Elements doi = e.getElementsByClass("siDoi");
-      if (doi.size() == 1 && doi.get(0).getElementsByTag("a").size() == 1) {
-        Element a = doi.get(0).getElementsByTag("a").get(0);
-        String href = a.attr("href");
+    for (Element a : document.getElementsByTag("a")) {
+      if (a.text().toLowerCase().contains("supplementary information")) {
+        String description = a.text();
+        String url = a.attr("href");
+//        System.out.println(url);
+//        System.out.println(description);
         SupplementaryMaterialEntity sup = new SupplementaryMaterialEntity();
-        sup.setUrl(href);
+        sup.setDescription(description);
+        sup.setUrl(url);
         links.add(sup);
       }
+
     }
-    
     return links;
   }
+
 }

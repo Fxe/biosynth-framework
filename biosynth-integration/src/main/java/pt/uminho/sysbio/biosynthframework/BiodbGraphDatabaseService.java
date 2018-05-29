@@ -45,6 +45,17 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
 
   private final GraphDatabaseService service;
   public String databasePath;
+  
+  
+
+  public String getDatabasePath() {
+    return databasePath;
+  }
+
+  public void setDatabasePath(String databasePath) {
+    logger.info("setting database edata path to: {}", databasePath);
+    this.databasePath = databasePath;
+  }
 
   public BiodbGraphDatabaseService(GraphDatabaseService service) {
     this.service = service;

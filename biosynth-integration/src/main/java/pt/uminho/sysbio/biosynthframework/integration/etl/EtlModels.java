@@ -14,19 +14,21 @@ public class EtlModels extends AbstractNeo4jEtl {
     super(service);
   }
   
-  public void etlXml(InputStream is, String entry) {
+  public Long etlXml(InputStream is, String entry) {
+    Long modelId = null;
     try {
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
       XmlSbmlModel xmodel = reader.parse();
-      TheStaticModelLoader.loadModel(xmodel, entry, service);
+      modelId = TheStaticModelLoader.loadModel(xmodel, entry, service);
     } catch (IOException e) {
       e.printStackTrace();
     }
+    
+    return modelId;
   }
 
   @Override
   public void etl(String e) {
     // TODO Auto-generated method stub
-    
   }
 }

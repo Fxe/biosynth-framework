@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -15,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.zip.ZipException;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
@@ -25,6 +27,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.poi.hssf.record.RecordInputStream.LeftoverDataException;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.poifs.filesystem.NotOLE2FileException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +42,8 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
+
+import pt.uminho.sysbio.biosynthframework.io.FileType;
 
 public class BiosIOUtils {
   
@@ -52,6 +61,60 @@ public class BiosIOUtils {
     }
     
     return digest;
+  }
+  
+  public static boolean isSbml(String data) {
+    return data.contains("<sbml") &&
+           data.contains("<listOfSpecies>") && 
+           data.contains("</sbml>") && 
+           data.contains("</model>"); 
+  }
+  
+  public static FileType detectType(File f) {
+    if (f.exists() && f.isFile()) {
+      try (InputStream is = new FileInputStream(f)) {
+        StringWriter sw = new StringWriter();
+        IOUtils.copy(is, sw, Charset.defaultCharset());
+        String data = sw.toString();
+        if (isSbml(data)) {
+          return FileType.SBML;
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      
+      try (XSSFWorkbook is = new XSSFWorkbook(f)) {
+        return FileType.XLSX;
+      } catch (IOException e) {
+//        System.out.println(e.getMessage());
+        e.printStackTrace();
+      } catch (InvalidFormatException e) {
+//        System.out.println(e.getMessage());
+//        e.printStackTrace();
+      } catch (Exception e) {
+//        System.out.println(e.getMessage());
+      }
+      
+      try (
+          InputStream fis = new FileInputStream(f);
+          HSSFWorkbook is = new HSSFWorkbook(fis)) {
+        return FileType.XLS;
+      } catch (NotOLE2FileException | IllegalArgumentException | LeftoverDataException e) {
+        //working as intended
+      } catch (IOException e) {
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+      }
+      
+      try (ZipContainer zip = new ZipContainer(f.getAbsolutePath())) {
+        return FileType.ZIP;
+      } catch (ZipException e) {
+        //working as intended
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
   }
 
   public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
@@ -136,6 +199,14 @@ public class BiosIOUtils {
       e.printStackTrace();
     }
     return json;
+  }
+  
+  public static String download(String url) throws IOException {
+    try {
+      return download(new URI(url));
+    } catch (URISyntaxException e) {
+      throw new IOException(e);
+    }
   }
   
   public static String download(URI uri) throws IOException {
