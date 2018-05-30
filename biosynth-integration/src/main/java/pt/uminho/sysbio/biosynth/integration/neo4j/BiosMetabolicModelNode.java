@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynth.integration.neo4j;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.neo4j.graphdb.Node;
@@ -13,15 +14,23 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     super(node, databasePath);
   }
   
-  public Set<Node> getMetaboliteSpecies() {
-    Set<Node> result = 
-        Neo4jUtils.collectNodeRelationshipNodes(this, MetabolicModelRelationshipType.has_metabolite_species);
+  public Set<BiodbEntityNode> getModelEntity(MetabolicModelRelationshipType r) {
+    Set<BiodbEntityNode> result = new HashSet<>();
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(this, r)) {
+      result.add(new BiodbEntityNode(n, databasePath));
+    }
     return result;
   }
   
-  public Set<Node> getModelReactions() {
-    Set<Node> result = 
-        Neo4jUtils.collectNodeRelationshipNodes(this, MetabolicModelRelationshipType.has_model_reaction);
-    return result;
+  public Set<BiodbEntityNode> getModelCompartments() {
+    return getModelEntity(MetabolicModelRelationshipType.has_model_compartment);
+  }
+  
+  public Set<BiodbEntityNode> getMetaboliteSpecies() {
+    return getModelEntity(MetabolicModelRelationshipType.has_metabolite_species);
+  }
+  
+  public Set<BiodbEntityNode> getModelReactions() {
+    return getModelEntity(MetabolicModelRelationshipType.has_model_reaction);
   }
 }

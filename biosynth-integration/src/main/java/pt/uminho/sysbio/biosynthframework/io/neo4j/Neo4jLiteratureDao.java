@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -58,9 +59,11 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     node.setProperty("file", o.getFile().getName());
     node.setProperty("md5", o.getMd5());
     
-    Relationship r = litNode.createRelationshipTo(node, GenericRelationship.has_supplementary_file);
-    Neo4jUtils.setCreatedTimestamp(r);
-    Neo4jUtils.setUpdatedTimestamp(r);
+    if (!Neo4jUtils.exitsRelationshipBetween(litNode, node, Direction.BOTH)) {
+      Relationship r = litNode.createRelationshipTo(node, GenericRelationship.has_supplementary_file);
+      Neo4jUtils.setCreatedTimestamp(r);
+      Neo4jUtils.setUpdatedTimestamp(r);
+    }
     
     return node.getId();
   }

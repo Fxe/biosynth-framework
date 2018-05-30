@@ -134,6 +134,15 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return modelNode;
   }
+  
+  public BiosMetabolicModelNode getMetabolicModel(long id) {
+    Node node = this.getNodeById(id);
+    BiosMetabolicModelNode modelNode = null;
+    if (node != null) {
+      modelNode = new BiosMetabolicModelNode(node, databasePath);
+    }
+    return modelNode;
+  }
 
   public BiodbMetaboliteNode getMetabolite(ExternalReference ref) {
     return getMetabolite(ref.entry, MetaboliteMajorLabel.valueOf(ref.source));
