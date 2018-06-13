@@ -3,7 +3,9 @@ package pt.uminho.sysbio.biosynthframework;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,6 +28,8 @@ public class SupplementaryMaterialEntity extends AbstractBiosynthEntity {
   protected File folder;
   protected String type;
   protected Set<String> tags = new TreeSet<>();
+  
+  public List<SupplementaryMaterialEntity> files = new ArrayList<> ();
   
   public URL getUrl() {
     return url;

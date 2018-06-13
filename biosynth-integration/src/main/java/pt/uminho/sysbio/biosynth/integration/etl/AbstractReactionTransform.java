@@ -26,12 +26,15 @@ import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import pt.uminho.sysbio.biosynthframework.StoichiometryPair;
 import pt.uminho.sysbio.biosynthframework.annotations.AnnotationPropertyContainerBuilder;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public abstract class AbstractReactionTransform<R extends GenericReaction>
 implements EtlTransform<R, GraphReactionEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractReactionTransform.class);
 
+  public boolean ignoreReferences = false;
+  
   protected final EtlDictionary<String, String, String> dictionary;
   protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
       new AnnotationPropertyContainerBuilder();
@@ -49,15 +52,28 @@ implements EtlTransform<R, GraphReactionEntity> {
     this.majorLabel = majorLabel;
     this.dictionary = dictionary;
   }
+  
+  protected void configureVersion(GraphReactionEntity grxn, R reaction) {
+    if (DataUtils.empty(reaction.getVersion())) {
+      logger.warn("not version assigned to: {}", reaction);
+    } else {
+      grxn.setVersion(reaction.getVersion());
+    }
+  }
 
   @Override
   public GraphReactionEntity etlTransform(R entity) {
     GraphReactionEntity centralReactionEntity = new GraphReactionEntity();
     centralReactionEntity.setUniqueKey("entry");
     this.configureProperties(centralReactionEntity, entity);
+    this.configureVersion(centralReactionEntity, entity);
     this.setupLeftMetabolites(centralReactionEntity, entity);
     this.setupRightMetabolites(centralReactionEntity, entity);
-    this.configureCrossreferences(centralReactionEntity, entity);
+    
+    if (!ignoreReferences) {
+      this.configureCrossreferences(centralReactionEntity, entity);
+    }
+    
     this.configureNameLink(centralReactionEntity, entity);
     this.configureAdditionalPropertyLinks(centralReactionEntity, entity);
 

@@ -214,15 +214,34 @@ implements IGenericMetaboliteParser {
             result.setParent(parentEntry);
             break;
           case "regulator":
-            Map<String, Object> regulator = JsonMapUtils.getMap("regulator", regulation);
-            if (regulator.containsKey("Compound")) {
-              Map<String, Object> regulatorEntity = JsonMapUtils.getMap("Compound", regulator);
-              String regulatorEntry = String.format("%s:%s", 
-                  regulatorEntity.get("orgid"), regulatorEntity.get("frameid"));
-              result.setRegulator(regulatorEntry);
-            } else {
-              logger.warn("unknown regulator, expected (Compound): {}", regulator.keySet());
+            if (regulation.containsKey("regulator")) {
+              if (regulation.get("regulator") instanceof Map) {
+                Map<String, Object> regulator = JsonMapUtils.getMap("regulator", regulation);
+                if (regulator.containsKey("Compound")) {
+                  Map<String, Object> regulatorEntity = JsonMapUtils.getMap("Compound", regulator);
+                  String regulatorEntry = String.format("%s:%s", 
+                      regulatorEntity.get("orgid"), regulatorEntity.get("frameid"));
+                  result.setRegulator(regulatorEntry);
+                } else {
+                  logger.warn("unknown regulator, expected (Compound): {}", regulator.keySet());
+                }
+              } else if (regulation.get("regulator") instanceof List) {
+                List<Object> regulators = JsonMapUtils.getList("regulator", regulation);
+                for (Object oregulator : regulators) {
+                  @SuppressWarnings("unchecked")
+                  Map<String, Object> regulator = (Map<String, Object>)oregulator;
+                  if (regulator.containsKey("Compound")) {
+                    Map<String, Object> regulatorEntity = JsonMapUtils.getMap("Compound", regulator);
+                    String regulatorEntry = String.format("%s:%s", 
+                        regulatorEntity.get("orgid"), regulatorEntity.get("frameid"));
+                    result.setRegulator(regulatorEntry);
+                  } else {
+                    logger.warn("unknown regulator, expected (Compound): {}", regulator.keySet());
+                  }
+                }
+              }
             }
+
             break;
           case "regulated-entity":
             Map<String, Object> regulated = JsonMapUtils.getMap("regulated-entity", regulation);
@@ -254,7 +273,11 @@ implements IGenericMetaboliteParser {
                   case "synonym":
                     List<Map<String, Object>> synonymData = toList("synonym", regulatedEntity);
                     for (Map<String, Object> s : synonymData) {
-                      result.getProteinSynonym().add(s.get("content").toString());
+                      if (s.containsKey("content")) {
+                        result.getProteinSynonym().add(s.get("content").toString());
+                      } else {
+                        logger.warn("bad synonym {}", s);
+                      }
                     }
                     break;
                   case "enzyme":

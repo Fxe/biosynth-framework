@@ -6,15 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
 
 public class BiodbReactionNode extends BiodbEntityNode {
 
@@ -31,6 +34,20 @@ public class BiodbReactionNode extends BiodbEntityNode {
   
   public ReactionMajorLabel getDatabase() {
     return ReactionMajorLabel.valueOf((String) getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY));
+  }
+  
+  public BiosVersionNode getPreviousVersion() {
+    Relationship relationship = 
+        this.getSingleRelationship(GenericRelationship.has_version, Direction.OUTGOING);
+    if (relationship != null) {
+      Node versionNode = relationship.getOtherNode(this);
+      return new BiosVersionNode(versionNode, databasePath);
+    }
+    return null;
+  }
+  
+  public String getVersion() {
+    return (String) this.getProperty(Neo4jDefinitions.ENTITY_VERSION, null);
   }
   
   /**
@@ -60,7 +77,12 @@ public class BiodbReactionNode extends BiodbEntityNode {
     Double result = null;
     String value = null;
     if (lr.hasProperty("coefficient")) {
-      value = (String) lr.getProperty("coefficient");
+      Object o = lr.getProperty("coefficient");
+      if (o instanceof String) {
+        value = (String) lr.getProperty("coefficient");
+      } else {
+        result = (Double) lr.getProperty("coefficient");
+      }
     } else {
       value = Double.toString((double) lr.getProperty(STOICHIOMETRY));
     }

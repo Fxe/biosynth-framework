@@ -443,7 +443,6 @@ public class LiteratureManagerService {
   public SupplementaryMaterialEntity getProperties(File file) {
     SupplementaryMaterialEntity entity = new SupplementaryMaterialEntity();
     
-    
     String md5 = null;
     long size = file.length();
     try {

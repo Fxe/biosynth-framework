@@ -36,8 +36,8 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
-import pt.uminho.sysbio.biosynth.integration.neo4j.BiosMetabolicModelNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
 
 public class BiodbGraphDatabaseService implements GraphDatabaseService {
 

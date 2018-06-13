@@ -7,6 +7,8 @@ import org.springframework.core.io.InputStreamResource;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.CsvBiggReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggEquationParserImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.bigg.DefaultBiggReactionParserImpl;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 
 public class InternalBigg1ReactionDaoImpl extends CsvBiggReactionDaoImpl
@@ -15,6 +17,8 @@ implements BiosDao<BiggReactionEntity>{
   public InternalBigg1ReactionDaoImpl() {
     InputStream is = getClass().getClassLoader().getResourceAsStream("bigg1_reactions.tsv");
     this.setCsvFile(new InputStreamResource(is));
+    this.setBiggEquationParser(new DefaultBiggEquationParserImpl());
+    this.setBiggReactionParser(new DefaultBiggReactionParserImpl());
     this.initialize();
   }
 

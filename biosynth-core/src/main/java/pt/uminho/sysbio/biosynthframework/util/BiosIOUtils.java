@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -49,6 +50,21 @@ public class BiosIOUtils {
   
   private static final Logger logger = LoggerFactory.getLogger(BiosIOUtils.class);
   
+  public static String getMD5(InputStream is) {
+    MessageDigest md;
+    try {
+      md = MessageDigest.getInstance("MD5");
+      return getDigest(is, md, 2048);
+    } catch (IOException | NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+  
+  public static String getMD5(String string) {
+    return getMD5(new ByteArrayInputStream(string.getBytes()));
+  }
+  
   public static String digest(String algorithm, File file) 
       throws NoSuchAlgorithmException {
     MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -61,6 +77,20 @@ public class BiosIOUtils {
     }
     
     return digest;
+  }
+  
+  public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
+      throws NoSuchAlgorithmException, IOException {
+
+    md.reset();
+    byte[] bytes = new byte[byteArraySize];
+    int numBytes;
+    while ((numBytes = is.read(bytes)) != -1) {
+      md.update(bytes, 0, numBytes);
+    }
+    byte[] digest = md.digest();
+    String result = new String(Hex.encodeHex(digest));
+    return result;
   }
   
   public static boolean isSbml(String data) {
@@ -117,19 +147,7 @@ public class BiosIOUtils {
     return null;
   }
 
-  public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
-      throws NoSuchAlgorithmException, IOException {
 
-    md.reset();
-    byte[] bytes = new byte[byteArraySize];
-    int numBytes;
-    while ((numBytes = is.read(bytes)) != -1) {
-      md.update(bytes, 0, numBytes);
-    }
-    byte[] digest = md.digest();
-    String result = new String(Hex.encodeHex(digest));
-    return result;
-  }
   
   public static void folderScan(Set<String> files, File folder, FileFilter filter) {
     if (!folder.isDirectory()) {

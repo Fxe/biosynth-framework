@@ -31,6 +31,7 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 /**
  * Utilities used to perform several Neo4j operations.
@@ -131,11 +132,39 @@ public class Neo4jUtils {
           logger.debug("not found: {}", s);
         }
       }
-      result.add(ids);
+      if (!ids.isEmpty()) {
+        result.add(ids);
+      }
     }
     
     return result;
   }
+  
+//  public static ConnectedComponents<Long> toSpiIds(ConnectedComponents<String> ccs, Set<String> notfound, GraphDatabaseService graphDataService) {
+//    ConnectedComponents<Long> result = new ConnectedComponents<>();
+//    
+//    for (Set<String> set : ccs) {
+//      Set<Long> ids = new HashSet<> ();
+//      for (String s : set) {
+//        Neo4jUtils.
+//        String e = s.split("@")[0];
+////        Node n = Neo4jUtils.getNodeByKey(MetabolicModelLabel.MetaboliteSpecie, "id", graphDataService);
+//        if (n != null) {
+//          ids.add(n.getId());
+//        } else {
+//          if (notfound != null) {
+//            notfound.add(s);
+//          }
+//          logger.debug("not found: {}", s);
+//        }
+//      }
+//      if (!ids.isEmpty()) {
+//        result.add(ids);
+//      }
+//    }
+//    
+//    return result;
+//  }
 
   //	public static Set<Long> collectNodes(Set<Long> eids, ReactionRelationshipType...relationshipTypes) {
   //		Set<Long> nodes = new HashSet<> ();
@@ -663,5 +692,17 @@ public class Neo4jUtils {
     }
     
     return false;
+  }
+
+  public static Map<String, Integer> countLinkType(Node node) {
+    return countLinkType(node, Direction.BOTH);
+  }
+  
+  public static Map<String, Integer> countLinkType(Node node, Direction dir) {
+    Map<String, Integer> count = new HashMap<> ();
+    for (Relationship r : node.getRelationships(dir)) {
+      CollectionUtils.increaseCount(count, r.getType().name(), 1);
+    }
+    return count;
   }
 }

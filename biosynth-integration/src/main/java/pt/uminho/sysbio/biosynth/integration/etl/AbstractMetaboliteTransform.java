@@ -43,6 +43,8 @@ extends AbstractBiosEntityTransform<M, GraphMetaboliteEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractMetaboliteTransform.class);
 
+  public boolean ignoreReferences = false;
+  
   protected static final String MODEL_LABEL = GlobalLabel.MetabolicModel.toString();
   protected static final String SUPER_METABOLITE_LABEL = GlobalLabel.SuperMetabolite.toString();
   protected static final String METABOLITE_LABEL = GlobalLabel.Metabolite.toString();
@@ -102,8 +104,11 @@ extends AbstractBiosEntityTransform<M, GraphMetaboliteEntity> {
     this.configureFormulaLink(centralMetaboliteEntity, metabolite);
     this.configureNameLink(centralMetaboliteEntity, metabolite);
     this.configureAdditionalPropertyLinks(centralMetaboliteEntity, metabolite);
-    this.configureCrossreferences(centralMetaboliteEntity, metabolite);
-
+    
+    if (!ignoreReferences) {
+      this.configureCrossreferences(centralMetaboliteEntity, metabolite);
+    }
+    
     return centralMetaboliteEntity;
   }
   

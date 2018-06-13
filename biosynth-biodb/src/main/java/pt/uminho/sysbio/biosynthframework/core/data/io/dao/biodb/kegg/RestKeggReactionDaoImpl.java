@@ -29,8 +29,8 @@ extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggRe
     String rnFlatFile = null;
 
     try {
-      logger.info(restRxnQuery);
-      logger.info(localPath);
+      logger.debug(restRxnQuery);
+      logger.debug(localPath);
       rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + ".txt");
 
       KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
@@ -58,7 +58,6 @@ extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggRe
           System.out.println(es.getMessage());
         }
       }
-      //			LOGGER.debug(e.getStackTrace());
       return null;
     }
     return rxn;
@@ -105,7 +104,6 @@ extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggRe
 
   @Override
   public Set<String> getAllEntries() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.getAllReactionEntries();
   }
 }

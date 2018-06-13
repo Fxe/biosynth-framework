@@ -48,6 +48,7 @@ public class RestKeggOrthologDaoImpl extends AbstractRestfulKeggDao<KeggOrtholog
       ko.setReactions(dblinks.get("RN"));
       ko.setGo(dblinks.get("GO"));
       ko.setCog(dblinks.get("COG"));
+      ko.setVersion(databaseVersion);
     } catch (Exception e) {
       e.printStackTrace();
       logger.error(e.getMessage());

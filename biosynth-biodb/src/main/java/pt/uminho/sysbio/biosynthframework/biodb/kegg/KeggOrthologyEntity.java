@@ -6,12 +6,15 @@ import java.util.Map;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+import pt.uminho.sysbio.biosynthframework.annotations.MetaProperty;
 
 public class KeggOrthologyEntity extends AbstractBiosynthEntity {
 
   private static final long serialVersionUID = 1L;
   
+  @MetaProperty
   protected String definition;
+  
   protected Set<String> reactions = new HashSet<>();
   protected Set<String> cog = new HashSet<>();
   protected Set<String> go = new HashSet<>();

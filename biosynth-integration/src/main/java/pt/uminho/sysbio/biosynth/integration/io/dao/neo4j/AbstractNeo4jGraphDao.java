@@ -96,8 +96,8 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
       }
     }
     
-    logger.info("Version Node: {} {}", prev, Neo4jUtils.getLabels(prev));
-    logger.info("Version Node: {} {}", prev, prev.getAllProperties());
+    logger.debug("Version Node: {} {}", prev, Neo4jUtils.getLabels(prev));
+    logger.debug("Version Node: {} {}", prev, prev.getAllProperties());
     
     Long latest = saveGraphEntity(entity);
     
@@ -119,7 +119,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
       Node other = r.getOtherNode(prev);
       if (sboth.contains(other.getId())) {
         logger.debug("D[P] {} -> {}", r.getType().name(), other);
-        r.delete();
+//        r.delete();
       } else {
         logger.debug("K[P] {} -> {}", r.getType().name(), other);
       }
@@ -144,10 +144,22 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
   
   protected Long saveGraphEntity(AbstractGraphNodeEntity entity) {
     if (isUpdate(entity)) {
-      logger.info("version: {} -> {}", entity.getEntry(), entity.getVersion());
+      logger.debug("version: {} -> {}", entity.getEntry(), entity.getVersion());
       return update(entity);
     }
-    logger.info("merge: {} -> {}", entity.getEntry(), entity.getVersion());
+    
+    String key = entity.getUniqueKey();
+    Object kvalue = entity.getProperty(key, null);
+    if (kvalue == null) {
+      logger.warn("null index key: {} {}", key, entity.getLabels());
+      return null;
+    }
+    if (kvalue.toString().length() > 4000) {
+      logger.warn("key size > 4000: {}", kvalue);
+      return null;
+    }
+    
+    logger.debug("merge: {} -> {}", entity.getEntry(), entity.getVersion());
     
     Node node = find(entity);
 //    if (entity.getId() != null) {
@@ -224,16 +236,20 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
         AbstractGraphEdgeEntity edgeEntity = pair.getLeft();
         AbstractGraphNodeEntity nodeEntity = pair.getRight();
 
-        this.saveGraphEntity(nodeEntity);
-        Node otherNode = graphDatabaseService.getNodeById(nodeEntity.getId());
-        if (!Neo4jUtils.exitsRelationshipBetween(node, otherNode, Direction.BOTH, DynamicRelationshipType.withName(relationshipType))) {
-          Relationship relationship = node.createRelationshipTo(otherNode, DynamicRelationshipType.withName(relationshipType));
-          logger.trace(String.format("Connected %s:%s -[:%s]-> %s:%s", 
-              node, Neo4jUtils.getLabels(node), relationshipType, 
-              otherNode, Neo4jUtils.getLabels(otherNode)));
-          Neo4jUtils.setPropertiesMap(edgeEntity.getProperties(), relationship);
-          Neo4jUtils.setCreatedTimestamp(relationship);
-          Neo4jUtils.setUpdatedTimestamp(relationship);
+        Long id = this.saveGraphEntity(nodeEntity);
+        if (id != null) {
+          Node otherNode = graphDatabaseService.getNodeById(nodeEntity.getId());
+          if (!Neo4jUtils.exitsRelationshipBetween(node, otherNode, Direction.BOTH, DynamicRelationshipType.withName(relationshipType))) {
+            Relationship relationship = node.createRelationshipTo(otherNode, DynamicRelationshipType.withName(relationshipType));
+            logger.trace(String.format("Connected %s:%s -[:%s]-> %s:%s", 
+                node, Neo4jUtils.getLabels(node), relationshipType, 
+                otherNode, Neo4jUtils.getLabels(otherNode)));
+            Neo4jUtils.setPropertiesMap(edgeEntity.getProperties(), relationship);
+            Neo4jUtils.setCreatedTimestamp(relationship);
+            Neo4jUtils.setUpdatedTimestamp(relationship);
+          }
+        } else {
+          logger.warn("unable to save node: {}", nodeEntity.getLabels());
         }
       }
     }

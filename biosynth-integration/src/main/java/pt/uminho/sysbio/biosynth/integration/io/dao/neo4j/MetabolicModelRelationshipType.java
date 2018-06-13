@@ -16,6 +16,9 @@ public enum MetabolicModelRelationshipType implements RelationshipType {
 	@Deprecated
 	has_compartment, 
 	in_compartment, 
-	left_component, right_component, has_crossreference_to, 
+	left_component, right_component, 
+	has_crossreference_to, 
+	is_a, is_version_of,
 	has_gpr_gene,
+	has_gpr,
 }

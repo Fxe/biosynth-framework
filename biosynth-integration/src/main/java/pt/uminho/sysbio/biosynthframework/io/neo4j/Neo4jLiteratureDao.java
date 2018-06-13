@@ -37,6 +37,11 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     List<SupplementaryMaterialEntity> result = new ArrayList<>();
     for (Node supNode : Neo4jUtils.collectNodeRelationshipNodes(litNode, GenericRelationship.has_supplementary_file)) {
       SupplementaryMaterialEntity sup = convertSup(supNode);
+      
+      for (Node inner : Neo4jUtils.collectNodeRelationshipNodes(supNode, GenericRelationship.has_file)) {
+        SupplementaryMaterialEntity innerSup = convertSup(inner);
+        sup.files.add(innerSup);
+      }
       result.add(sup);
     }
     
@@ -68,6 +73,31 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     return node.getId();
   }
   
+  public Long save(SupplementaryMaterialEntity zip, SupplementaryMaterialEntity o) {
+    Node supMasterNode = service.getNodeById(zip.getId());
+    if (supMasterNode == null) {
+      return null;
+    }
+    
+    String entry = String.format("%s/%s", supMasterNode.getProperty("entry"), o.getName());
+    Node node = service.getOrCreateNode(LiteratureDatabase.SupplementaryMaterial, 
+                                        Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, 
+                                        entry);
+    
+    node.setProperty("size", o.getSize());
+    node.setProperty("file", o.getName());
+    node.setProperty("md5", o.getMd5());
+    node.setProperty("parent_file", zip.getId());
+    
+    if (!Neo4jUtils.exitsRelationshipBetween(supMasterNode, node, Direction.BOTH)) {
+      Relationship r = supMasterNode.createRelationshipTo(node, GenericRelationship.has_file);
+      Neo4jUtils.setCreatedTimestamp(r);
+      Neo4jUtils.setUpdatedTimestamp(r);
+    }
+    
+    return node.getId();
+  }
+  
   @Override
   public Long save(PubmedEntity o) {
     Node node = null;
@@ -92,7 +122,6 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     
     return node.getId();
   }
-  
   
   public SupplementaryMaterialEntity convertSup(Node node) {
     long id = node.getId();

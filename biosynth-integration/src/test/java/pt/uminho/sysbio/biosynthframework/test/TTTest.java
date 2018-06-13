@@ -1,36 +1,49 @@
 package pt.uminho.sysbio.biosynthframework.test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.schema.ConstraintDefinition;
 
-import edu.uminho.biosynth.core.data.integration.etl.staging.transform.KeggMetaboliteStagingTransform;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
+import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
+import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
+import pt.uminho.sysbio.biosynth.integration.HeterogenousReactionEtlLoad;
 import pt.uminho.sysbio.biosynth.integration.etl.CentralMetaboliteEtlDataCleansing;
 import pt.uminho.sysbio.biosynth.integration.etl.DefaultMetaboliteEtlExtract;
+import pt.uminho.sysbio.biosynth.integration.etl.DefaultReactionEtlExtract;
 import pt.uminho.sysbio.biosynth.integration.etl.EtlTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.HbmNeo4jHybridMetaboliteEtlPipeline;
+import pt.uminho.sysbio.biosynth.integration.etl.HbmNeo4jHybridReactionEtlPipeline;
 import pt.uminho.sysbio.biosynth.integration.etl.HeterogenousMetaboliteEtlLoad;
-import pt.uminho.sysbio.biosynth.integration.etl.biodb.LipidmapsMetaboliteTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc.BiocycMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg.KeggCompoundTransform;
+import pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg.KeggReactionTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jGraphMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jGraphReactionDaoImpl;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
+import pt.uminho.sysbio.biosynthframework.Reaction;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.chemanalysis.cdk.CdkWrapper;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggCompoundMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.RestBiocycMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.io.biodb.SdfLipidmapsMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
 
 public class TTTest {
@@ -147,6 +160,21 @@ public class TTTest {
     etl.etl(cpdEntry);
   }
   
+  public static<SRC extends Reaction> void dieRETL(GraphDatabaseService service, 
+      EtlTransform<SRC, GraphReactionEntity> transform, ReactionDao<SRC> dao1, String cpdEntry) {
+    Neo4jGraphReactionDaoImpl dst = new Neo4jGraphReactionDaoImpl(service);
+    HbmNeo4jHybridReactionEtlPipeline<SRC, GraphReactionEntity> etl
+      = new HbmNeo4jHybridReactionEtlPipeline<>(null, service);
+    etl.setSkipLoad(false);
+    etl.setSessionFactory(null);
+//    etl.setEtlDataCleasingSubsystem(new CentralMetaboliteEtlDataCleansing(new CdkWrapper()));
+    etl.setExtractSubsystem(new DefaultReactionEtlExtract<SRC>(dao1));
+    etl.setLoadSubsystem(new HeterogenousReactionEtlLoad<GraphReactionEntity>(dst));
+    etl.setTransformSubsystem(transform);
+    
+    etl.etl(cpdEntry);
+  }
+  
   
   public static void aaaa(BiodbGraphDatabaseService service, MetaboliteMajorLabel database) {
     Map<String, Set<Long>> aa = new HashMap<>();
@@ -185,6 +213,39 @@ public class TTTest {
     dao1.setLocalStorage("D:\\var\\biodb\\kegg");
     dao1.setSaveLocalStorage(true);
     dao1.setUseLocalStorage(true);
+    
+    RestBiocycMetaboliteDaoImpl daoM = new RestBiocycMetaboliteDaoImpl();
+    daoM.setDatabaseVersion("2015");
+    daoM.setLocalStorage("D:\\var\\biodb\\biocyc");
+    daoM.setSaveLocalStorage(true);
+    daoM.setUseLocalStorage(true);
+    daoM.setPgdb("META");
+    //15-DIDEOXY-15-IMINO-D-GALACTITOL
+    Map<String, String> a = new HashMap<>();
+    BiocycMetaboliteTransform t = new BiocycMetaboliteTransform("MetaCyc", a);
+    for (String e : daoM.getAllMetaboliteEntries()) {
+      System.out.println(e);
+      BioCycMetaboliteEntity entity = daoM.getMetaboliteByEntry(e);
+      GraphMetaboliteEntity gcpd = t.etlTransform(entity);
+      String key = gcpd.getUniqueKey();
+      Object k = gcpd.getProperty(key, null);
+      if (k.toString().getBytes().length > 4000) {
+        System.out.println(e);
+      }
+      Neo4jGraphMetaboliteDaoImpl daoaa;
+//      System.out.println(k.toString().getBytes().length);
+      for (String kk : gcpd.getConnectedEntities().keySet()) {
+        for (Pair<AbstractGraphEdgeEntity, AbstractGraphNodeEntity> p : gcpd.connectedEntities.get(kk)) {
+          String key_ = p.getRight().getUniqueKey();
+          Object k_ = p.getRight().getProperty(key_, null);
+          int size = k_.toString().getBytes().length;
+          if (size > 4000) {
+            System.out.println(size + " " + e + " " + p.getRight().getMajorLabel() + p.getRight().getProperties());
+          }
+        }
+      }
+    }
+    System.exit(0);
 //    dao1.getByEntry(e)
 //    RestKeggDrugMetaboliteDaoImpl dao2 = new RestKeggDrugMetaboliteDaoImpl();
 ////    dao2.getByEntry(entry)
@@ -247,12 +308,12 @@ public class TTTest {
 //    daoV3.setUseLocalStorage(true);
 //    String cpdEntry = "C15812";
 
-    SdfLipidmapsMetaboliteDaoImpl daoV1 = new SdfLipidmapsMetaboliteDaoImpl(
-        new File("D:\\var\\biodb\\lipidmaps/LMSDFDownload28Jun15.zip"), "28Jun15");
-    SdfLipidmapsMetaboliteDaoImpl daoV2 = new SdfLipidmapsMetaboliteDaoImpl(
-        new File("D:\\var\\biodb\\lipidmaps/LMSDFDownload12Dec17.zip"), "12Dec17");
-    LipidmapsMetaboliteTransform transform = new LipidmapsMetaboliteTransform();
-    String cpdEntry = "LMFA11000147";
+//    SdfLipidmapsMetaboliteDaoImpl daoV1 = new SdfLipidmapsMetaboliteDaoImpl(
+//        new File("D:\\var\\biodb\\lipidmaps/LMSDFDownload28Jun15.zip"), "28Jun15");
+//    SdfLipidmapsMetaboliteDaoImpl daoV2 = new SdfLipidmapsMetaboliteDaoImpl(
+//        new File("D:\\var\\biodb\\lipidmaps/LMSDFDownload12Dec17.zip"), "12Dec17");
+//    LipidmapsMetaboliteTransform transform = new LipidmapsMetaboliteTransform();
+//    String cpdEntry = "LMFA11000147";
     
     
     BiodbGraphDatabaseService service = TestConfiguration.getTestGraphDatabaseService("D:\\tmp\\biodb\\kegg_vtest");
@@ -264,11 +325,42 @@ public class TTTest {
 //    for (BiodbMetaboliteNode cpdNode : service.listMetabolites(MetaboliteMajorLabel.LigandCompound)) {
 //      System.out.println(cpdNode.getAllProperties());
 //    }
-    dieETL(service, transform, daoV1, cpdEntry);
-    dieETL(service, transform, daoV2, cpdEntry);
+//    dieETL(service, transform, daoV1, cpdEntry);
+//    dieETL(service, transform, daoV2, cpdEntry);
 //    dieETL(service, transform, daoV3, cpdEntry);
-    aaaa(service, MetaboliteMajorLabel.LipidMAPS);
+//    aaaa(service, MetaboliteMajorLabel.LipidMAPS);
 //    etl.etl("C00001");
+
+    
+    KeggCompoundTransform aa;
+//    Neo4jGraphMetaboliteDaoImpl a;
+//    Neo4jGraphReactionDaoImpl b;
+    String rxnEntry = "R07295";
+    RestKeggReactionDaoImpl daoA = new RestKeggReactionDaoImpl();
+    daoA.setDatabaseVersion("2015");
+    daoA.setLocalStorage("D:\\var\\biodb\\kegg");
+    daoA.setSaveLocalStorage(true);
+    daoA.setUseLocalStorage(true);
+    RestKeggReactionDaoImpl daoB = new RestKeggReactionDaoImpl();
+    daoB.setDatabaseVersion("84.0");
+    daoB.setLocalStorage("D:\\var\\biodb\\kegg");
+    daoB.setSaveLocalStorage(true);
+    daoB.setUseLocalStorage(true);
+    dieRETL(service, new KeggReactionTransform(), daoA, rxnEntry);
+    dieRETL(service, new KeggReactionTransform(), daoB, rxnEntry);
+    
+    BiodbReactionNode rxnNode = service.getReaction("R07295", ReactionMajorLabel.LigandReaction);
+    System.out.println(rxnNode.getAllProperties());
+//    CsvBiggMetaboliteDaoImpl a;
+//    CsvBiggReactionDaoImpl b;
+    for (Relationship r : rxnNode.getRelationships()) {
+      System.out.println(r.getType().name() + r.getOtherNode(rxnNode).getAllProperties());
+    }
+    System.out.println("----------");
+    Node n = rxnNode.getPreviousVersion();
+    for (Relationship r : n.getRelationships()) {
+      System.out.println(r.getType().name() + " " + r.getOtherNode(n).getAllProperties());
+    }
     
     tx.failure();
     tx.close();

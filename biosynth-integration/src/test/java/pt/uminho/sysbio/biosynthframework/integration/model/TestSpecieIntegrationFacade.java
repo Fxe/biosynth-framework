@@ -60,7 +60,7 @@ public class TestSpecieIntegrationFacade {
     e1.ids.addAll(facade.spiToCompartment.keySet());
     
     facade.baseEngines.put("trie", e1);
-    facade.baseEngines.put("idpattern", e2);
+//    facade.baseEngines.put("idpattern", e2);
     facade.generatePatterns();
     
     e2.patterns = facade.getPatterns();
