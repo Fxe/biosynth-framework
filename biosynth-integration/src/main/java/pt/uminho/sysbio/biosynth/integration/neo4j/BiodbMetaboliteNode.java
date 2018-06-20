@@ -26,7 +26,8 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
   public BiodbMetaboliteNode(Node node, String databasePath) {
     super(node, databasePath);
     if (!node.hasLabel(GlobalLabel.Metabolite)) {
-      throw new IllegalArgumentException("invalid node: missing " + GlobalLabel.Metabolite);
+      throw new IllegalArgumentException("invalid node: missing " + GlobalLabel.Metabolite + " " + 
+                                         node + " " + Neo4jUtils.getLabels(node) + " " + node.getAllProperties());
     }
   }
   

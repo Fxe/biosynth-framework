@@ -13,5 +13,7 @@ public enum IntegrationRelationshipType implements RelationshipType {
 	has_integrated_reaction,   //ITG->EID
 	has_integrated_model_reaction,
 	has_integrated_model_specie,
-	has_integrated_model_metabolite
+	has_integrated_model_metabolite,
+	has_universal_metabolite,
+	has_universal_reaction,
 }

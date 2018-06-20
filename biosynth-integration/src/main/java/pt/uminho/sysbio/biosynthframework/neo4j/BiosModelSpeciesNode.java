@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.neo4j;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,25 @@ public class BiosModelSpeciesNode extends BiodbEntityNode {
 
   public String getSid() {
     return (String) this.getProperty("id", null);
+  }
+  
+  public Map<String, Integer> getAnnotationUsers(BiodbMetaboliteNode cpdNode) {
+    Map<String, Integer> users = new HashMap<>();
+    Relationship referenceLink = null;
+    for (Relationship r : this.getRelationships(
+        Direction.OUTGOING, MetabolicModelRelationshipType.has_crossreference_to)) {
+      if (r.getOtherNode(this.node).getId() == cpdNode.getId()) {
+        referenceLink = r;
+      }
+    }
+    
+    if (referenceLink != null) {
+      String authorsStr = (String) referenceLink.getProperty("authors", "");
+      Map<String, Integer> authors = parse(authorsStr);
+      users.putAll(authors);
+    }
+    
+    return users;
   }
   
   public Long addAnnotation(BiodbMetaboliteNode cpdNode, int score, String author) {

@@ -46,20 +46,24 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
   @Override
   public GraphMetaboliteEntity getMetaboliteById(String tagsss, Serializable id) {
-    BiodbMetaboliteNode node = graphDatabaseService.getMetabolite(Long.parseLong(id.toString()));
-
-    if (node == null) {
+    Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
+    if (!node.hasLabel(GlobalLabel.Metabolite)) {
       return null;
     }
     
-    logger.debug(String.format("Found %s - %s", node, Neo4jUtils.getLabels(node)));
+    BiodbMetaboliteNode cpdNode = graphDatabaseService.getMetabolite(Long.parseLong(id.toString()));
+
+    if (cpdNode == null) {
+      return null;
+    }
+    
+    logger.debug(String.format("Found %s - %s", cpdNode, Neo4jUtils.getLabels(cpdNode)));
 
     GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
-    metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
-    metaboliteEntity.setId(node.getId());
-    metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(node));
-    setupConnectedLinks(metaboliteEntity, node);
-
+    metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(cpdNode));
+    metaboliteEntity.setId(cpdNode.getId());
+    metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(cpdNode));
+    setupConnectedLinks(metaboliteEntity, cpdNode);
 
     return metaboliteEntity;
   }
@@ -119,7 +123,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
 
   private AbstractGraphNodeEntity deserialize(Node node) {
     if (node.hasLabel(GlobalLabel.EXTERNAL_DATA)) {
-      logger.info("reloading node");
+      logger.debug("reloading node");
       node = graphDatabaseService.getNodeById(node.getId());
     }
     GraphMetaboliteEntity entity = new GraphMetaboliteEntity();

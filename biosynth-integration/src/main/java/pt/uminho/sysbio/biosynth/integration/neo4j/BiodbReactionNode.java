@@ -102,7 +102,7 @@ public class BiodbReactionNode extends BiodbEntityNode {
     for (long k : l.keySet()) {
       Double value = l.get(k);
       if (value != null) {
-        value = -1 * value;
+        value = -1 * Math.abs(value);
       }
       stoich.put(k, value);
     }

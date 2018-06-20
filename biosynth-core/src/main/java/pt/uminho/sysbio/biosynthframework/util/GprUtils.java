@@ -62,16 +62,35 @@ public class GprUtils {
     return protein;
   }
   
+  public static String preprocess(String expression) {
+    String result = expression;
+    result = result.replaceAll(" and ", " & ");
+    result = result.replaceAll(" AND ", " & ");
+    result = result.replaceAll(" or ",  " | ");
+    result = result.replaceAll(" OR ",  " | ");
+    result = result.replaceAll("-",     "__DASH__");
+    result = result.replaceAll("\\?",   "__QMARK__");
+    result = result.replaceAll("\\.",   "__DOT__");
+    return result;
+  }
+  
+  public static String postprocess(String expression) {
+    String result = expression;
+    result = result.replaceAll("__DOT__",   ".");
+    result = result.replaceAll("__DASH__",  "-");
+    result = result.replaceAll("__QMARK__", "?");
+    result = result.replaceAll(" & ",       " and ");
+    result = result.replaceAll(" \\| ",     " or ");
+    return result;
+  }
+  
+  
   public static String toLexicographicString(String gprExpression) {
-    String expression = gprExpression.replaceAll(" and ", "&");
-    expression = expression.replaceAll(" AND ", "&");
-    expression = expression.replaceAll(" or ", "|");
-    expression = expression.replaceAll(" OR ", "|");
-    expression = expression.replaceAll("-", "_");
+    String expression = preprocess(gprExpression);
     Expression<String> nonStandard = ExprParser.parse(expression);
     Expression<String> dnf = RuleSet.toDNF(nonStandard);
-    
-    return dnf.toLexicographicString();
+    String lexpression = dnf.toLexicographicString(); 
+    return postprocess(lexpression);
   }
   
   public static<T> Set<Set<T>> translate(Set<Set<T>> proteins, Map<T, T> t) {
@@ -189,13 +208,6 @@ public class GprUtils {
     return ExprParser.parse(str);
   }
   
-  public static String toSymbols(String gprExpression) {
-    String expression = gprExpression.replaceAll(" and ", "&");
-    expression = expression.replaceAll(" AND ", "&");
-    expression = expression.replaceAll(" or ", "|");
-    expression = expression.replaceAll(" OR ", "|");
-    return expression;
-  }
   
   public static Set<Set<String>> getProteinsSimple(String gprExpression) {
     Set<Set<String>> proteins = new HashSet<>();
@@ -240,8 +252,12 @@ public class GprUtils {
   }
   
   public static Set<String> getVariables(String gprExpression) {
-    Expression<String> expr = ExprParser.parse(toSymbols(gprExpression));
-    Set<String> variables = ExprUtil.getVariables(expr);
+    Expression<String> expr = ExprParser.parse(preprocess(gprExpression));
+    Set<String> v = ExprUtil.getVariables(expr);
+    Set<String> variables = new HashSet<>();
+    for (String s : v) {
+      variables.add(postprocess(s));
+    }
     return variables;
   }
   

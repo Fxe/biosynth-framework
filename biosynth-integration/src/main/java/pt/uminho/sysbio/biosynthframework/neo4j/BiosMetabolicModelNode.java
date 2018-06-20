@@ -27,6 +27,50 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     return getModelEntity(MetabolicModelRelationshipType.has_model_compartment);
   }
   
+  public BiosModelSpeciesNode getMetaboliteSpecie(long id) {
+    BiosModelSpeciesNode result = null;
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
+        this, MetabolicModelRelationshipType.has_metabolite_species)) {
+      if (n.getId() == id) {
+        result = new BiosModelSpeciesNode(node, databasePath);
+      }
+    }
+    return result;
+  }
+  
+  public BiosModelSpeciesNode getMetaboliteSpecie(String sid) {
+    BiosModelSpeciesNode result = null;
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
+        this, MetabolicModelRelationshipType.has_metabolite_species)) {
+      if (sid.equals(n.getProperty("id", null))) {
+        result = new BiosModelSpeciesNode(node, databasePath);
+      }
+    }
+    return result;
+  }
+  
+  public BiosModelReactionNode getModelReaction(long id) {
+    BiosModelReactionNode result = null;
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
+        this, MetabolicModelRelationshipType.has_model_reaction)) {
+      if (n.getId() == id) {
+        result = new BiosModelReactionNode(node, databasePath);
+      }
+    }
+    return result;
+  }
+  
+  public BiosModelReactionNode getModelReaction(String sid) {
+    BiosModelReactionNode result = null;
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
+        this, MetabolicModelRelationshipType.has_model_reaction)) {
+      if (sid.equals(n.getProperty("id", null))) {
+        result = new BiosModelReactionNode(node, databasePath);
+      }
+    }
+    return result;
+  }
+  
   public Set<BiosModelSpeciesNode> getMetaboliteSpecies() {
     Set<BiosModelSpeciesNode> result = new HashSet<>();
     for (Node n : Neo4jUtils.collectNodeRelationshipNodes(this, MetabolicModelRelationshipType.has_metabolite_species)) {

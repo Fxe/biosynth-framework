@@ -28,64 +28,69 @@ public class ModelSeedAliasesAdapter {
   public String header;
 //  public BMap<ExternalReference, String> refToMseedMap = new BHashMap<>();
   
+  public static ModelSeedAliasesAdapter fromStream(InputStream is) throws IOException {
+    ModelSeedAliasesAdapter adapter = new ModelSeedAliasesAdapter();
+    List<String> lines = IOUtils.readLines(is, Charset.defaultCharset());
+
+    //  System.out.println(lines.get(0));
+
+    Map<String, Set<ExternalReference>> mseedEntryMap = new HashMap<> ();
+    Map<String, Set<ExternalReference>> omseedEntryMap = new HashMap<> ();
+
+    adapter.header = lines.get(0);
+
+    for (int i = 1; i < lines.size(); i++) {
+      String[] cols = lines.get(i).concat("\t").concat("!").split("\t");
+      //    System.out.println( cols[0]);
+      String msidStr = cols[0];
+      String omsidStr = cols[1];
+      String databaseEntry = cols[2];
+      String database = cols[3];
+      ExternalReference ref = null;
+
+      if (databaseEntry != null && !databaseEntry.isEmpty() &&
+          database != null && !database.isEmpty()) {
+        ref = new ExternalReference(databaseEntry, database);
+      } else {
+        logger.info("!!");
+      }
+
+      Set<String> mset = new HashSet<> ();
+      for (String mseedEntry : msidStr.split("\\|")) {
+        //      if (adapter.refToMseedMap.put(ref, mseedEntry.trim()) != null) {
+        //        logger.warn("duplicate ref {}", ref, mseedEntry);
+        //      }
+        if (!mseedEntryMap.containsKey(mseedEntry.trim())) {
+          mseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
+        }
+        mseedEntryMap.get(mseedEntry.trim()).add(ref);
+        mset.add(mseedEntry);
+      }
+
+      if (mset.size() > 1) {
+        for (String e : mset) {
+          adapter.multiSets.put(e, new TreeSet<>(mset));
+        }
+      }
+
+      for (String mseedEntry : omsidStr.split("\\|")) {
+        if (!omseedEntryMap.containsKey(mseedEntry.trim())) {
+          omseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
+        }
+        omseedEntryMap.get(mseedEntry.trim()).add(ref);
+      }
+
+    }
+
+    adapter.mseedRefMap = mseedEntryMap;
+    adapter.omseedRefMap = omseedEntryMap;
+    return adapter;
+  }
+  
   public static ModelSeedAliasesAdapter fromModelSeedTsv(String path) {
     ModelSeedAliasesAdapter adapter = null;
     try (InputStream is = new FileInputStream(path)) {
-      List<String> lines = IOUtils.readLines(is, Charset.defaultCharset());
-      
-//      System.out.println(lines.get(0));
-      
-      Map<String, Set<ExternalReference>> mseedEntryMap = new HashMap<> ();
-      Map<String, Set<ExternalReference>> omseedEntryMap = new HashMap<> ();
-      
-      adapter = new ModelSeedAliasesAdapter();
-      adapter.header = lines.get(0);
-      
-      for (int i = 1; i < lines.size(); i++) {
-        String[] cols = lines.get(i).concat("\t").concat("!").split("\t");
-//        System.out.println( cols[0]);
-        String msidStr = cols[0];
-        String omsidStr = cols[1];
-        String databaseEntry = cols[2];
-        String database = cols[3];
-        ExternalReference ref = null;
-        
-        if (databaseEntry != null && !databaseEntry.isEmpty() &&
-            database != null && !database.isEmpty()) {
-          ref = new ExternalReference(databaseEntry, database);
-        } else {
-          logger.info("!!");
-        }
-        
-        Set<String> mset = new HashSet<> ();
-        for (String mseedEntry : msidStr.split("\\|")) {
-//          if (adapter.refToMseedMap.put(ref, mseedEntry.trim()) != null) {
-//            logger.warn("duplicate ref {}", ref, mseedEntry);
-//          }
-          if (!mseedEntryMap.containsKey(mseedEntry.trim())) {
-            mseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
-          }
-          mseedEntryMap.get(mseedEntry.trim()).add(ref);
-          mset.add(mseedEntry);
-        }
-        
-        if (mset.size() > 1) {
-          for (String e : mset) {
-            adapter.multiSets.put(e, new TreeSet<>(mset));
-          }
-        }
-        
-        for (String mseedEntry : omsidStr.split("\\|")) {
-          if (!omseedEntryMap.containsKey(mseedEntry.trim())) {
-            omseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
-          }
-          omseedEntryMap.get(mseedEntry.trim()).add(ref);
-        }
-
-      }
-      
-      adapter.mseedRefMap = mseedEntryMap;
-      adapter.omseedRefMap = omseedEntryMap;
+      adapter = fromStream(is);
     } catch (IOException e) {
       e.printStackTrace();
     }

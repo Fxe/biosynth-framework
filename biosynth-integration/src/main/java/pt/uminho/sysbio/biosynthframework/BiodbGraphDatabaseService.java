@@ -46,8 +46,6 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   private final GraphDatabaseService service;
   public String databasePath;
   
-  
-
   public String getDatabasePath() {
     return databasePath;
   }
@@ -412,6 +410,15 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
         result.add(new BiodbReactionNode(node, databasePath));
       }
     }
+    return result;
+  }
+  
+  public Set<BiosMetabolicModelNode> listMetabolicModels() {
+    Set<BiosMetabolicModelNode> result = new HashSet<> ();
+    for (Node node : listNodes(GlobalLabel.MetabolicModel)) {
+      result.add(new BiosMetabolicModelNode(node, databasePath));
+    }
+
     return result;
   }
 
