@@ -9,6 +9,8 @@ import java.util.TreeMap;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 
@@ -19,6 +21,8 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 
 public class BiosModelReactionNode extends BiodbEntityNode {
 
+  private static final Logger logger = LoggerFactory.getLogger(BiosModelReactionNode.class);
+  
   public BiosModelReactionNode(Node node, String databasePath) {
     super(node, databasePath);
   }
@@ -134,6 +138,25 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     referenceLink.setProperty("authors", toString(authors));
     
     return referenceLink.getId();
+  }
+  
+  public Set<Long> deleteGpr() {
+    Set<Long> deleted = new HashSet<>();
+    Set<Long> deletedR = new HashSet<>();
+    for (Relationship r : 
+      this.getRelationships(MetabolicModelRelationshipType.has_gpr, Direction.BOTH)) {
+      Node gpr = r.getOtherNode(this);
+      for (Relationship r2 : gpr.getRelationships()) {
+        deletedR.add(r2.getId());
+        r2.delete();
+      }
+      deleted.add(gpr.getId());
+      gpr.delete();
+    }
+    
+    logger.info("deleted: R:{}, N:{}", deletedR.size(), deleted.size());
+    
+    return deleted;
   }
   //stoich etc
 }

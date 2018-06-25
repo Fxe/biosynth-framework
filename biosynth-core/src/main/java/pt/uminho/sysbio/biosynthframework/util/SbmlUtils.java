@@ -32,9 +32,8 @@ public class SbmlUtils {
     return null;
   }
   
-  public static List<String> gprTreeToString(MultiNodeTree<Object> tree
-      , BFunction<Object, String> f
-      ) {
+  public static List<String> gprTreeToString(MultiNodeTree<Object> tree, 
+                                             BFunction<Object, String> f) {
     if (tree == null) {
       return null;
     }

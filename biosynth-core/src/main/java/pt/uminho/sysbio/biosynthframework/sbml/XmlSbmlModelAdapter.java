@@ -22,6 +22,9 @@ import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.Range;
+import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
+import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
+import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
@@ -721,5 +724,41 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     }
     
     return ngpr;
+  }
+
+  @Override
+  public SimpleModelReaction<String> getReaction(String rxnId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public SimpleModelSpecie<String> getSpecies(String spiId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public SimpleCompartment<String> getCompartment(String cmpId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getReactionIds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getSpeciesIds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getCompartmentIds() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

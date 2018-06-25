@@ -115,16 +115,35 @@ public class LiteratureManagerService {
     RscLinkScanner rscLinkScanner = new RscLinkScanner();
     MolSysBioLinkScanner molSysBioLinkScanner = new MolSysBioLinkScanner();
     AsmLinkScanner asmLinkScanner = new AsmLinkScanner();
+    WileyLinkScanner wileyLinkScanner = new WileyLinkScanner();
+    NatureLinkScanner natureLinkScanner = new NatureLinkScanner();
     linkScanner.put("BMC Genomics", springerLinkScanner);
     linkScanner.put("BMC Microbiol.", springerLinkScanner);
     linkScanner.put("BMC Syst Biol", springerLinkScanner);
     linkScanner.put("Microb. Cell Fact.", springerLinkScanner);
     linkScanner.put("Genome Biol.", springerLinkScanner);
+    linkScanner.put("Metabolomics", springerLinkScanner);
+    linkScanner.put("Appl. Microbiol. Biotechnol.", springerLinkScanner);
+    linkScanner.put("Biotechnol Biofuels", springerLinkScanner);
+    linkScanner.put("Antonie Van Leeuwenhoek", springerLinkScanner);
     linkScanner.put("PLoS ONE", plosLinkScanner);
     linkScanner.put("PLoS Comput. Biol.", plosLinkScanner);
     linkScanner.put("J. Bacteriol.", asmLinkScanner);
+    linkScanner.put("Appl. Environ. Microbiol.", new AsmLinkScanner("http://aem.asm.org"));
+    linkScanner.put("Genome Res.", new CshLinkScanner());
+    linkScanner.put("J. Biol. Chem.", new CshLinkScanner("http://www.jbc.org", "dslink-supplemental-data"));
     linkScanner.put("Mol. Syst. Biol.", molSysBioLinkScanner);
     linkScanner.put("Mol Biosyst", rscLinkScanner);
+    linkScanner.put("Database (Oxford)", new OupLinkScanner());
+    linkScanner.put("Integr Biol (Camb)", rscLinkScanner);
+    linkScanner.put("Biotechnol. Bioeng.", wileyLinkScanner);
+    linkScanner.put("Biotechnol J", wileyLinkScanner);
+    linkScanner.put("Environ. Microbiol.", wileyLinkScanner);
+    linkScanner.put("Mol. Ecol.", wileyLinkScanner);
+    linkScanner.put("Plant J.", wileyLinkScanner);
+    linkScanner.put("Nat. Biotechnol.", natureLinkScanner);
+    linkScanner.put("Nat. Methods", natureLinkScanner);
+    linkScanner.put("Sci Rep", natureLinkScanner);
   }
   
   public void initialize() throws IOException {

@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -25,8 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.poi.hssf.record.RecordInputStream.LeftoverDataException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -229,8 +230,11 @@ public class BiosIOUtils {
   
   public static String download(URI uri) throws IOException {
     HttpClient client = HttpClientBuilder.create().build();
-    HttpUriRequest request = new HttpGet(uri);
-    HttpResponse response = client.execute(request);
+    RequestConfig config = RequestConfig.custom().setCircularRedirectsAllowed(true).build();
+//    HttpUriRequest request = new HttpGet(uri);
+    HttpGet get = new HttpGet(uri);
+    get.setConfig(config);
+    HttpResponse response = client.execute(get);
     
     HttpEntity entity = response.getEntity();
     String result = null;
@@ -243,5 +247,11 @@ public class BiosIOUtils {
     }
     
     return result;
+  }
+
+  public static InputStream copyToByteArrayStream(InputStream is) throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    IOUtils.copy(is, baos);
+    return new ByteArrayInputStream(baos.toByteArray());
   }
 }

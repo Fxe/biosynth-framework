@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 
@@ -15,6 +16,7 @@ public class EtlModels extends AbstractNeo4jEtl {
   }
   
   public Long etlXml(InputStream is, String entry) {
+    
     Long modelId = null;
     try {
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);

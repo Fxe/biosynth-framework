@@ -15,6 +15,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
@@ -64,6 +65,28 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     }
     
     return result.iterator().next();
+  }
+  
+  public Relationship addMetaboliteProperty(BiodbPropertyNode propNode, MetaboliteRelationshipType type) {
+    if (propNode == null) {
+      return null;
+    }
+    
+    Relationship r = null;
+    if (!Neo4jUtils.exitsRelationshipBetween(this, propNode, Direction.BOTH)) {
+      logger.debug("[{}] -[{}]-> [{}]", this.getEntry(), type, propNode.getValue());
+      r = this.createRelationshipTo(propNode, type);
+      Neo4jUtils.setCreatedTimestamp(r);
+      Neo4jUtils.setUpdatedTimestamp(r);
+    } else {
+      for (Relationship relationship : this.getRelationships(type)) {
+        if (relationship.getOtherNode(this).getId() == propNode.getId()) {
+          r = relationship;
+        }
+      }
+    }
+    
+    return r;
   }
   
   public Set<BiodbPropertyNode> getMetaboliteProperties(MetabolitePropertyLabel property) {

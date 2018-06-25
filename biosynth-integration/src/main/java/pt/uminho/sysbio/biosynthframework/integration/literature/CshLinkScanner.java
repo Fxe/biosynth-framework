@@ -13,19 +13,17 @@ import org.jsoup.select.Elements;
 import pt.uminho.sysbio.biosynthframework.SupplementaryMaterialEntity;
 import pt.uminho.sysbio.biosynthframework.util.BiosIOUtils;
 
-public class AsmLinkScanner implements Function<String, List<SupplementaryMaterialEntity>> {
+public class CshLinkScanner implements Function<String, List<SupplementaryMaterialEntity>> {
 
-  private String base = "http://jb.asm.org";
-  private String internalLinkClass = "dslink-supplemental-material"; //dslink-supplemental-research-data
-  public AsmLinkScanner() {
-    // TODO Auto-generated constructor stub
-  }
+  private String base = "https://genome.cshlp.org";
+  private String internalLinkClass = "dslink-supplemental-research-data";
+  public CshLinkScanner() { }
   
-  public AsmLinkScanner(String baseUrl) {
+  public CshLinkScanner(String baseUrl) {
     this.base = baseUrl;
   }
   
-  public AsmLinkScanner(String baseUrl, String linkClass) {
+  public CshLinkScanner(String baseUrl, String linkClass) {
     this.base = baseUrl;
     this.internalLinkClass = linkClass;
   }
@@ -36,12 +34,9 @@ public class AsmLinkScanner implements Function<String, List<SupplementaryMateri
     Elements es = document.getElementsByTag("li");
     for (Element e : es) {
       Elements as = e.getElementsByTag("a");
-      if (as.size() == 1 && as.get(0).text().contains("Supplemental file")) {
+      if (as.size() == 1 && as.get(0).attr("href").contains("/suppl/")) {
         String url = base + as.get(0).attr("href");
         String description = e.text();
-//        System.out.println(url);
-//        System.out.println(description);
-//        System.out.println("---");
         SupplementaryMaterialEntity sup = new SupplementaryMaterialEntity();
         sup.setUrl(url);
         sup.setDescription(description);
@@ -76,5 +71,4 @@ public class AsmLinkScanner implements Function<String, List<SupplementaryMateri
     
     return links;
   }
-
 }

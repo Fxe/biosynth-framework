@@ -21,4 +21,6 @@ public enum MetabolicModelRelationshipType implements RelationshipType {
 	is_a, is_version_of,
 	has_gpr_gene,
 	has_gpr,
+	has_modifier_to,
+	has_genome,
 }

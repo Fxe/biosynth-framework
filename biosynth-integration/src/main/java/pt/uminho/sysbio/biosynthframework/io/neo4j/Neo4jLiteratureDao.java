@@ -63,12 +63,15 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     node.setProperty("size", o.getSize());
     node.setProperty("file", o.getFile().getName());
     node.setProperty("md5", o.getMd5());
+    node.setProperty("local_file", o.getFile().getAbsolutePath());
     
     if (!Neo4jUtils.exitsRelationshipBetween(litNode, node, Direction.BOTH)) {
       Relationship r = litNode.createRelationshipTo(node, GenericRelationship.has_supplementary_file);
       Neo4jUtils.setCreatedTimestamp(r);
       Neo4jUtils.setUpdatedTimestamp(r);
     }
+    
+    o.setId(node.getId());
     
     return node.getId();
   }
@@ -80,22 +83,24 @@ public class Neo4jLiteratureDao extends AbstractNeo4jBiosDao<PubmedEntity> {
     }
     
     String entry = String.format("%s/%s", supMasterNode.getProperty("entry"), o.getName());
-    Node node = service.getOrCreateNode(LiteratureDatabase.SupplementaryMaterial, 
+    Node childNode = service.getOrCreateNode(LiteratureDatabase.SupplementaryMaterial, 
                                         Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, 
                                         entry);
     
-    node.setProperty("size", o.getSize());
-    node.setProperty("file", o.getName());
-    node.setProperty("md5", o.getMd5());
-    node.setProperty("parent_file", zip.getId());
+    childNode.setProperty("size", o.getSize());
+    childNode.setProperty("file", o.getName());
+    childNode.setProperty("md5", o.getMd5());
+    childNode.setProperty("parent_file", zip.getId());
     
-    if (!Neo4jUtils.exitsRelationshipBetween(supMasterNode, node, Direction.BOTH)) {
-      Relationship r = supMasterNode.createRelationshipTo(node, GenericRelationship.has_file);
+    if (!Neo4jUtils.exitsRelationshipBetween(supMasterNode, childNode, Direction.BOTH)) {
+      Relationship r = supMasterNode.createRelationshipTo(childNode, GenericRelationship.has_file);
       Neo4jUtils.setCreatedTimestamp(r);
       Neo4jUtils.setUpdatedTimestamp(r);
     }
     
-    return node.getId();
+    o.setId(childNode.getId());
+    
+    return childNode.getId();
   }
   
   @Override

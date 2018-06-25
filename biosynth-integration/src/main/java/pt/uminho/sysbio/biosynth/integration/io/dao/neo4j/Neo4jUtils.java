@@ -276,6 +276,15 @@ public class Neo4jUtils {
   public static void setPropertiesMap(Map<String, Object> properties, Relationship relationship) {
     setPropertiesFromPropertyContainer(properties, relationship);
   }
+  
+  public static void setPropertiesMapWild(Map<String, ?> properties, Relationship relationship) {
+    Map<String, Object> p = new HashMap<>();
+    for (String k : properties.keySet()) {
+      p.put(k, properties.get(k));
+    }
+    setPropertiesFromPropertyContainer(p, relationship);
+  }
+  
   private static void setPropertiesFromPropertyContainer(
       Map<String, Object> properties, PropertyContainer propertyContainer) {
     if (propertyContainer == null) return;
