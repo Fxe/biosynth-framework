@@ -49,11 +49,11 @@ public class BiosGenomeNode extends BiodbEntityNode {
     return null;
   }
   
-  public Node getTaxonomy() {
-    Node taxNode = null;
+  public BiosTaxonomyNode getTaxonomy() {
+    BiosTaxonomyNode taxNode = null;
     Relationship r = this.getSingleRelationship(GenericRelationship.has_taxonomy, Direction.BOTH);
     if (r != null) {
-      taxNode = r.getOtherNode(this);
+      taxNode = new BiosTaxonomyNode(r.getOtherNode(this), databasePath);
     }
     
     return taxNode;

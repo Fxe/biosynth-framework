@@ -13,6 +13,7 @@ import org.neo4j.graphdb.Relationship;
 import com.google.common.base.Joiner;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
@@ -87,11 +88,35 @@ public class BiosModelSpeciesNode extends BiodbEntityNode {
     return referenceLink.getId();
   }
   
+  public Long deleteAnnotation(BiodbMetaboliteNode cpdNode) {
+    Long deleted = null;
+    for (Relationship r : this.getRelationships(
+        Direction.OUTGOING, MetabolicModelRelationshipType.has_crossreference_to)) {
+      if (r.getOtherNode(this.node).getId() == cpdNode.getId()) {
+        deleted = r.getId();
+        r.delete();
+      }
+    }
+    
+    return deleted;
+  }
+  
   public Set<BiodbMetaboliteNode> getReferences() {
     Set<BiodbMetaboliteNode> references = new HashSet<>();
     for (Relationship r : this.getRelationships(MetabolicModelRelationshipType.has_crossreference_to)) {
       Node other = r.getOtherNode(node);
       references.add(new BiodbMetaboliteNode(other, databasePath));
+    }
+    return references;
+  }
+  
+  public Set<BiodbMetaboliteNode> getReferences(MetaboliteMajorLabel database) {
+    Set<BiodbMetaboliteNode> references = new HashSet<>();
+    for (Relationship r : this.getRelationships(MetabolicModelRelationshipType.has_crossreference_to)) {
+      Node other = r.getOtherNode(node);
+      if (other.hasLabel(database)) {
+        references.add(new BiodbMetaboliteNode(other, databasePath));        
+      }
     }
     return references;
   }
@@ -103,5 +128,31 @@ public class BiosModelSpeciesNode extends BiodbEntityNode {
       r.delete();
     }
     return deleted;
+  }
+  
+  public Integer getAnnotationScore(BiodbMetaboliteNode cpdNode) {
+    Integer score = -1;
+    
+    Map<String, Integer> users = this.getAnnotationUsers(cpdNode);
+    for (Integer v : users.values()) {
+      if (score < v) {
+        score = v;
+      }
+    }
+    
+    return score;
+  }
+
+  public String getCompartmentSid() {
+    Relationship r = this.getSingleRelationship(MetabolicModelRelationshipType.in_compartment, Direction.BOTH);
+    if (r == null) {
+      return null;
+    }
+    return (String) r.getOtherNode(this).getProperty("id", null);
+  }
+  
+  @Override
+  public String toString() {
+    return String.format("[%d]%s", getId(), getSid());
   }
 }

@@ -46,6 +46,7 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosGenomeNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosTaxonomyNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.GenomeDatabase;
 
 public class BiodbGraphDatabaseService implements GraphDatabaseService {
@@ -171,6 +172,23 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     return result;
   }
 
+  public BiosTaxonomyNode getTaxonomy(String ncbiTax) {
+    Node node = this.getNodeByEntryAndLabel(ncbiTax, GlobalLabel.NcbiTaxonomy);
+    if (node != null) {
+      return getTaxonomy(node.getId());
+    }
+    return null;
+  }
+  
+  public BiosTaxonomyNode getTaxonomy(long id) {
+    Node node = this.getNodeById(id);
+    BiosTaxonomyNode bnode = null;
+    if (node != null) {
+      bnode = new BiosTaxonomyNode(node, databasePath);
+    }
+    return bnode;
+  }
+  
   public BiosGenomeNode getGenome(long id) {
     Node node = this.getNodeById(id);
     BiosGenomeNode genomeNode = null;

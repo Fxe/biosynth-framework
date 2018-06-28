@@ -140,4 +140,9 @@ public class BiodbReactionNode extends BiodbEntityNode {
 
     return right;
   }
+  
+  @Override
+  public String toString() {
+    return String.format("[%d]%s@%s", getId(), getEntry(), getDatabase());
+  }
 }

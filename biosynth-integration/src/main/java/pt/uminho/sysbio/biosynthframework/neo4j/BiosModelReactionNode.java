@@ -15,8 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 
 public class BiosModelReactionNode extends BiodbEntityNode {
@@ -87,11 +90,48 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     return stoichiometryMap;
   }
   
+  public Map<BiosModelSpeciesNode, Double> getStoichiometryAsNodes(double defaultValue) {
+    Map<BiosModelSpeciesNode, Double> stoichiometryMap = new HashMap<>();
+    for (Relationship l : this.getRelationships(MetabolicModelRelationshipType.left_component)) {
+      Node other = l.getOtherNode(this);
+      double value = getStoichiometry(l, defaultValue);
+      stoichiometryMap.put(new BiosModelSpeciesNode(other, databasePath), -1 * value);
+    }
+    for (Relationship r : this.getRelationships(MetabolicModelRelationshipType.right_component)) {
+      Node other = r.getOtherNode(this);
+      double value = getStoichiometry(r, defaultValue);
+      stoichiometryMap.put(new BiosModelSpeciesNode(other, databasePath), value);
+    }
+    
+    return stoichiometryMap;
+  }
+  
+  public boolean isTranslocation() {
+    Set<String> cmps = new HashSet<>();
+    Map<BiosModelSpeciesNode, Double> stoich = this.getStoichiometryAsNodes(1);
+    for (BiosModelSpeciesNode spiNode : stoich.keySet()) {
+      String cmpSid = spiNode.getCompartmentSid();
+      cmps.add(cmpSid);
+    }
+    return cmps.size() > 1;
+  }
+  
   public Set<BiodbReactionNode> getReferences() {
     Set<BiodbReactionNode> references = new HashSet<>();
     for (Relationship r : this.getRelationships(MetabolicModelRelationshipType.has_crossreference_to)) {
       Node other = r.getOtherNode(node);
       references.add(new BiodbReactionNode(other, databasePath));
+    }
+    return references;
+  }
+  
+  public Set<BiodbReactionNode> getReferences(ReactionMajorLabel database) {
+    Set<BiodbReactionNode> references = new HashSet<>();
+    for (Relationship r : this.getRelationships(MetabolicModelRelationshipType.has_crossreference_to)) {
+      Node other = r.getOtherNode(node);
+      if (other.hasLabel(database)) {
+        references.add(new BiodbReactionNode(other, databasePath));        
+      }
     }
     return references;
   }

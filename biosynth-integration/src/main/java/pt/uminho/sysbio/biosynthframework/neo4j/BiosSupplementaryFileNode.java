@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynthframework.util.BiosIOUtils;
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer;
@@ -46,6 +49,14 @@ public class BiosSupplementaryFileNode extends BiodbEntityNode {
   public String getAbsolutePath() {
     String localFile = (String) this.getProperty(LOCAL_FILE, null);
     return localFile;
+  }
+  
+  public Set<BiosSupplementaryFileNode> getChilds() {
+    Set<BiosSupplementaryFileNode> childs = new HashSet<>();
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(this, GenericRelationship.has_file)) {
+      childs.add(new BiosSupplementaryFileNode(n, databasePath));
+    }
+    return childs;
   }
   
   public InputStream getInputStream() throws IOException {

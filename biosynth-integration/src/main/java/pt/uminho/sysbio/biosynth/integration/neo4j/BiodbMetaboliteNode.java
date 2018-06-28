@@ -13,11 +13,13 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosUniversalMetaboliteNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
 
 public class BiodbMetaboliteNode extends BiodbEntityNode {
@@ -124,8 +126,17 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     return result;
   }
   
+  public BiosUniversalMetaboliteNode getUniversalMetabolite() {
+    Relationship ur = this.getSingleRelationship(IntegrationRelationshipType.has_universal_metabolite, Direction.BOTH);
+    if (ur == null) {
+      return null;
+    }
+    
+    return new BiosUniversalMetaboliteNode(ur.getOtherNode(this), databasePath);
+  }
+  
   @Override
   public String toString() {
-    return super.toString();
+    return String.format("[%d]%s@%s", getId(), getEntry(), getDatabase());
   }
 }

@@ -9,4 +9,5 @@ public enum GenericRelationship implements RelationshipType {
   has_publication,
   has_source_file,
   has_version,
+  has_parent_taxonomy,
 }

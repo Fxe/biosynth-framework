@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
+import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
@@ -57,15 +58,37 @@ public class Neo4jModelToDatabaseReactionMatchReport extends AbstractNeo4jReport
     for (BiosModelSpeciesNode spiNode : modelNode.getMetaboliteSpecies()) {
       logger.debug("{}:{}", spiNode, spiNode.getSid());
       Set<BiodbMetaboliteNode> dblinks = spiNode.getReferences();
-      Set<Long> cpdIds = new HashSet<>();
+      Map<Long, BiodbMetaboliteNode> refs = new HashMap<>();
+//      Set<Long> cpdIds = new HashSet<>();
       for (BiodbMetaboliteNode cpdNode : dblinks) {
-        cpdIds.add(cpdNode.getId());
+//        cpdIds.add(cpdNode.getId());
+        refs.put(cpdNode.getId(), cpdNode);
       }
-      Set<Long> i = Sets.intersection(cpdIds, validCpdIds);
+      Set<Long> i = Sets.intersection(refs.keySet(), validCpdIds);
       if (i.size() == 1) {
         long translatedId = i.iterator().next();
         logger.debug("{}:{} -> {}", spiNode, spiNode.getSid(), translatedId);
         spiTranslationMap.put(spiNode.getId(), translatedId);
+      } else if (i.size() > 1){
+        logger.warn("[MULTI] {}", i);
+        int best = -1;
+        Set<BiodbMetaboliteNode> bestRefs = new HashSet<>();
+        for (long cpdId : i) {
+          Integer score = spiNode.getAnnotationScore(refs.get(cpdId));
+          if (score != null && score > best) {
+            best = score;
+            bestRefs.clear();
+            bestRefs.add(refs.get(cpdId));
+          } else if (score != null && score == best) {
+            bestRefs.add(refs.get(cpdId));
+          }
+        }
+        
+        if (bestRefs.size() == 1) {
+          spiTranslationMap.put(spiNode.getId(), bestRefs.iterator().next().getId());
+        } else if (bestRefs.size() > 1){
+          logger.warn("[MULTI] {}", bestRefs);
+        }
       }
     }
     

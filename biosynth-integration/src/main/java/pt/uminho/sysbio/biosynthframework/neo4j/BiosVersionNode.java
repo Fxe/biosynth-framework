@@ -28,6 +28,26 @@ public class BiosVersionNode extends BiodbEntityNode {
     return null;
   }
   
+//  public BiosVersionNode getNextVersion() {
+//    Relationship relationship = 
+//        this.getSingleRelationship(GenericRelationship.has_version, Direction.INCOMING);
+//    if (relationship != null) {
+//      Node versionNode = relationship.getOtherNode(this);
+//      return new BiosVersionNode(versionNode, databasePath);
+//    }
+//    return null;
+//  }
+  
+  public BiodbEntityNode getLatestVersion() {
+    Relationship next = 
+        this.getSingleRelationship(GenericRelationship.has_version, Direction.INCOMING);
+    Node nextNode = next.getOtherNode(this);
+    while (next != null) {
+      next = nextNode.getSingleRelationship(GenericRelationship.has_version, Direction.INCOMING);
+    }
+    return new BiodbEntityNode(nextNode, databasePath);
+  }
+  
   public String getVersion() {
     return (String) this.getProperty(Neo4jDefinitions.ENTITY_VERSION, null);
   }

@@ -32,7 +32,7 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
         this, MetabolicModelRelationshipType.has_metabolite_species)) {
       if (n.getId() == id) {
-        result = new BiosModelSpeciesNode(node, databasePath);
+        result = new BiosModelSpeciesNode(n, databasePath);
       }
     }
     return result;
@@ -43,7 +43,7 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
         this, MetabolicModelRelationshipType.has_metabolite_species)) {
       if (sid.equals(n.getProperty("id", null))) {
-        result = new BiosModelSpeciesNode(node, databasePath);
+        result = new BiosModelSpeciesNode(n, databasePath);
       }
     }
     return result;
@@ -54,7 +54,7 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
         this, MetabolicModelRelationshipType.has_model_reaction)) {
       if (n.getId() == id) {
-        result = new BiosModelReactionNode(node, databasePath);
+        result = new BiosModelReactionNode(n, databasePath);
       }
     }
     return result;
@@ -65,7 +65,7 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
     for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
         this, MetabolicModelRelationshipType.has_model_reaction)) {
       if (sid.equals(n.getProperty("id", null))) {
-        result = new BiosModelReactionNode(node, databasePath);
+        result = new BiosModelReactionNode(n, databasePath);
       }
     }
     return result;
@@ -93,5 +93,17 @@ public class BiosMetabolicModelNode extends BiodbEntityNode {
   
   public Set<BiodbEntityNode> getModelSubsystems() {
     return getModelEntity(MetabolicModelRelationshipType.has_subsystem);
+  }
+  
+  public BiosGenomeNode getGenome(GenomeDatabase database) {
+    BiosGenomeNode gnode = null;
+    for (Node n : Neo4jUtils.collectNodeRelationshipNodes(
+        this, MetabolicModelRelationshipType.has_genome)) {
+      if (n.hasLabel(database)) {
+        gnode = new BiosGenomeNode(n, databasePath);
+      }
+    }
+    
+    return gnode;
   }
 }
