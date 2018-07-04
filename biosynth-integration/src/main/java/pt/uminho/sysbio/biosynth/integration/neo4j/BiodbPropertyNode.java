@@ -55,7 +55,7 @@ public class BiodbPropertyNode extends BiosExternalDataNode {
         logger.warn("Unable to load external data. [databasePath] must be assigned");
         return "ERROR_DATABASE_PATH_NOT_ASSIGNED";
       }
-      File dataFile = new File(this.databasePath + "/edata/" + this.getId() + ".json");
+      File dataFile = new File(this.databasePath + "/" + this.getId() + ".json");
       logger.trace("Node[{}] EXTERNAL DATA ! {}", this.getId(), dataFile);
       if (!dataFile.exists() || !dataFile.isFile()) {
         logger.warn("Unable to load external data. File not found: {}", dataFile);

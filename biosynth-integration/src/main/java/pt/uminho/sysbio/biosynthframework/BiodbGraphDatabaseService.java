@@ -471,6 +471,16 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
     return result;
   }
+  
+  public Set<BiodbPropertyNode> listMetaboliteProperties(MetabolitePropertyLabel property) {
+    Set<BiodbPropertyNode> result = new HashSet<> ();
+    for (Node node : listNodes(property)) {
+      if (node.hasLabel(GlobalLabel.MetaboliteProperty)) {
+        result.add(new BiodbPropertyNode(node, databasePath));
+      }
+    }
+    return result;
+  }
 
   public Set<BiodbReactionNode> listReactions() {
     Set<BiodbReactionNode> result = new HashSet<> ();

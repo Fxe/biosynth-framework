@@ -14,9 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosUniversalMetaboliteNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosUniversalReactionNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosVersionNode;
 
 public class BiodbReactionNode extends BiodbEntityNode {
@@ -139,6 +142,26 @@ public class BiodbReactionNode extends BiodbEntityNode {
     }
 
     return right;
+  }
+  
+  public BiosUniversalReactionNode getUniversalReaction() {
+    Relationship ur = this.getSingleRelationship(IntegrationRelationshipType.has_universal_reaction, Direction.BOTH);
+    if (ur == null) {
+      return null;
+    }
+    
+    return new BiosUniversalReactionNode(ur.getOtherNode(this), databasePath);
+  }
+  
+  public boolean releaseFromUniversalEntity() {
+    Relationship ur = this.getSingleRelationship(IntegrationRelationshipType.has_universal_reaction, Direction.BOTH);
+    if (ur == null) {
+      return false;
+
+    }
+    
+    ur.delete();
+    return true;
   }
   
   @Override

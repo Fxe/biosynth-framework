@@ -397,7 +397,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     entity.setId(node.getId());
     entity.setLabels(Neo4jUtils.getLabelsAsString(node));
     entity.setProperties(Neo4jUtils.getPropertiesMap(node));
-    String majorLabel = (String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
+    String majorLabel = (String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, "");
     //		if (entity.getLabels().contains(GlobalLabel.ReactionProperty.toString())) {
     //			for (String label : entity.getLabels()) {
     //				if (isMetabolitePropertyLabel(label)) majorLabel = label;

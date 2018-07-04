@@ -38,9 +38,9 @@ public class DefaultCheminformaticsModule implements CheminformaticsModule {
   
   private static final Logger logger = LoggerFactory.getLogger(DefaultCheminformaticsModule.class);
   
-  private CdkWrapper cdk;
+  private CdkWrapper cdk = new CdkWrapper();
   private SmilesParser sp = new SmilesParser(SilentChemObjectBuilder.getInstance());
-  private JniInchiMoleculeFormatConverter inchiConverter;
+  private JniInchiMoleculeFormatConverter inchiConverter = new JniInchiMoleculeFormatConverter();
   
   public String getUniversalSmiles(IAtomContainer ac) {
     SmilesGenerator sg = new SmilesGenerator(SmiFlavor.UniversalSmiles);

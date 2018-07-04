@@ -8,13 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.AbstractBiodbNode;
 
 public class BiosExternalDataNode extends AbstractBiodbNode {
 
+  private static final Logger logger = LoggerFactory.getLogger(BiosExternalDataNode.class);
+  
   protected final String databasePath;
 
   protected Map<String, Object> eproperties;
@@ -23,7 +28,7 @@ public class BiosExternalDataNode extends AbstractBiodbNode {
   public BiosExternalDataNode(Node node, String databasePath) {
     super(node);
     this.databasePath = databasePath;
-    if (databasePath != null) {
+    if (databasePath != null && this.hasLabel(GlobalLabel.EXTERNAL_DATA)) {
       loadExternalData();
     }
   }
@@ -31,10 +36,10 @@ public class BiosExternalDataNode extends AbstractBiodbNode {
   public void loadExternalData() {
     if (!loaded) {
       loaded = true;
-      File dataFile = new File(this.databasePath + "/edata/" + this.getId() + ".json");
-      if (dataFile.exists() && dataFile.isFile()) {
+      File efile = new File(this.databasePath + "/" + this.getId() + ".json");
+      if (efile.exists() && efile.isFile()) {
         ObjectMapper om = new ObjectMapper();
-        try (InputStream is = new FileInputStream(dataFile)) {
+        try (InputStream is = new FileInputStream(efile)) {
           Map<String, Object> d = om.readValue(is, om.getTypeFactory().constructMapLikeType(
               HashMap.class, String.class, Object.class));
           if (d != null) {
@@ -43,6 +48,8 @@ public class BiosExternalDataNode extends AbstractBiodbNode {
         } catch (IOException e) {
           e.printStackTrace();
         }
+      } else {
+        logger.warn("file not found: {}", efile);
       }
     }
   }

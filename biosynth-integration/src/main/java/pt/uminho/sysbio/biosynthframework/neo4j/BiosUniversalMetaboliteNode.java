@@ -3,7 +3,11 @@ package pt.uminho.sysbio.biosynthframework.neo4j;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationRelationshipType;
@@ -14,6 +18,8 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 
 public class BiosUniversalMetaboliteNode extends BiodbEntityNode {
 
+  private static final Logger logger = LoggerFactory.getLogger(BiosUniversalMetaboliteNode.class);
+  
   public BiosUniversalMetaboliteNode(Node node, String databasePath) {
     super(node, databasePath);
     if (!this.node.hasLabel(CurationLabel.UniversalMetabolite)) {
@@ -39,5 +45,36 @@ public class BiosUniversalMetaboliteNode extends BiodbEntityNode {
       }
     }
     return metabolites;
+  }
+  
+  public Long addMetabolite(BiodbMetaboliteNode cpdNode) {
+    Relationship r = cpdNode.getSingleRelationship(
+        IntegrationRelationshipType.has_universal_metabolite, Direction.OUTGOING);
+    if (r == null) {
+      logger.info("ADD ENTITY TO UNODE {} <-[{}]- {}", this, IntegrationRelationshipType.has_universal_metabolite, cpdNode);
+      r = cpdNode.createRelationshipTo(this, IntegrationRelationshipType.has_universal_metabolite);
+      Neo4jUtils.setCreatedTimestamp(r);
+      Neo4jUtils.setUpdatedTimestamp(r);
+    }
+    return r.getId();
+  }
+  
+  public Long deleteMetabolite(BiodbMetaboliteNode cpdNode) {
+    Relationship r = cpdNode.getSingleRelationship(
+        IntegrationRelationshipType.has_universal_metabolite, Direction.OUTGOING);
+    if (r == null || r.getOtherNode(cpdNode).getId() != this.getId()) {
+      return null;
+    }
+    logger.info("DELETE ENTITY TO UNODE {} <-[{}]- {}", this, IntegrationRelationshipType.has_universal_metabolite, cpdNode);
+    r.delete();
+    return r.getId();
+  }
+
+  public Set<Long> getMetaboliteIds() {
+    Set<Long> ids = new HashSet<>();
+    for (BiodbMetaboliteNode cpd : this.getMetabolites()) {
+      ids.add(cpd.getId());
+    }
+    return ids;
   }
 }

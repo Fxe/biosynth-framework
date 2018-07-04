@@ -1,16 +1,13 @@
 package pt.uminho.sysbio.biosynthframework.integration.neo4j;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.openscience.cdk.exception.CDKException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +20,6 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbPropertyNode;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
-import pt.uminho.sysbio.biosynthframework.chemanalysis.inchi.JniInchiMoleculeFormatConverter;
 import pt.uminho.sysbio.biosynthframework.cheminformatics.CheminformaticsModule;
 import pt.uminho.sysbio.biosynthframework.cheminformatics.DefaultCheminformaticsModule;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -33,8 +29,8 @@ public class Neo4jChemExpansion {
 
   private static final Logger logger = LoggerFactory.getLogger(Neo4jChemExpansion.class);
 
-  private BiodbGraphDatabaseService graphDatabaseService;
-  private CheminformaticsModule cm;
+  private final BiodbGraphDatabaseService graphDatabaseService;
+  private final CheminformaticsModule cm;
 
 
   public Map<Long, String> existingFormulas = new HashMap<> ();
@@ -45,12 +41,20 @@ public class Neo4jChemExpansion {
   public Map<Long, String> newInchis = new HashMap<> ();
   public Set<Long> a = new HashSet<>();
   public Set<Long> e = new HashSet<>();
+  
+  public Neo4jChemExpansion(CheminformaticsModule cm, BiodbGraphDatabaseService service) {
+    this.graphDatabaseService = service;
+    this.cm = cm;
+  }
 
   private BiodbPropertyNode connectProperty(BiodbPropertyNode sourceProperty, String property, 
       Set<BiodbMetaboliteNode> cpdNodes, 
       MetabolitePropertyLabel propertyType, 
       MetaboliteRelationshipType relationshipType, 
       MetabolitePropertyLabel...extraLabels) {
+    
+    
+    
     if (property != null && !property.trim().isEmpty()) {
       property = property.trim();
       BiodbPropertyNode propertyNode = graphDatabaseService.getMetaboliteProperty(property, propertyType);
@@ -65,12 +69,14 @@ public class Neo4jChemExpansion {
       }
 
       if (sourceProperty != null) {
+        logger.debug("{} -[{}]-> {}", sourceProperty, relationshipType, propertyNode);
         Relationship r = sourceProperty.connectToProperty(propertyNode, relationshipType);
         r.setProperty("source", "inferred");
       }
 
       if (cpdNodes != null) {
         for (BiodbMetaboliteNode cpdNode : cpdNodes) {
+          logger.debug("{} -[{}]-> {}", cpdNode, relationshipType, propertyNode);
           Relationship r = cpdNode.addMetaboliteProperty(propertyNode, relationshipType);
           r.setProperty("source", "inferred");
           Neo4jUtils.setUpdatedTimestamp(r);
@@ -108,6 +114,12 @@ public class Neo4jChemExpansion {
         MetabolitePropertyLabel.SMILES, MetaboliteRelationshipType.has_smiles, MetabolitePropertyLabel.UniversalSMILES);
   }
 
+  public void expandKeggGlycanComposition() {
+    for (BiodbMetaboliteNode cpdNode : graphDatabaseService.listMetabolites(MetaboliteMajorLabel.LigandGlycan)) {
+      this.expandKeggGlycanComposition(cpdNode);
+    }
+  }
+  
   public void expandKeggGlycanComposition(BiodbMetaboliteNode glNode) {
     if (glNode.hasProperty("composition")) {
       Map<String, Integer> comp = KeggUtils.parseComposition(glNode.getProperty("composition").toString());
@@ -153,6 +165,12 @@ public class Neo4jChemExpansion {
     }
   }
 
+  public void expandInchi() {
+    for (BiodbPropertyNode propNode : graphDatabaseService.listMetaboliteProperties(MetabolitePropertyLabel.InChI)) {
+      this.expandInchi(propNode);
+    }
+  }
+  
   public Set<BiodbPropertyNode> expandInchi(BiodbPropertyNode inchiNode) {
     Set<BiodbPropertyNode> added = new HashSet<> ();
     String k = inchiNode.getValue();
@@ -200,7 +218,17 @@ public class Neo4jChemExpansion {
     return added;
   }
 
+  public void expandSmiles() {
+    for (BiodbPropertyNode propNode : graphDatabaseService.listMetaboliteProperties(MetabolitePropertyLabel.SMILES)) {
+      this.expandSmiles(propNode);
+    }
+  }
+  
   public Set<BiodbPropertyNode> expandSmiles(BiodbPropertyNode smiNode) {
+    if (!smiNode.hasLabel(MetabolitePropertyLabel.SMILES)) {
+      logger.warn("expected SMILES node, found: {}", Neo4jUtils.getLabelsAsString(smiNode));
+      return null;
+    }
     Set<BiodbPropertyNode> added = new HashSet<> ();
     String k = smiNode.getValue();
     Set<BiodbMetaboliteNode> cpdNodes = smiNode.getMetabolites(MetaboliteRelationshipType.has_smiles);
@@ -252,19 +280,28 @@ public class Neo4jChemExpansion {
     return added;
   }
 
+  public void expandMol() {
+    for (BiodbPropertyNode propNode : graphDatabaseService.listMetaboliteProperties(MetabolitePropertyLabel.MDLMolFile)) {
+      this.expandMol(propNode);
+    }
+  }
+  
   public Set<BiodbPropertyNode> expandMol(BiodbPropertyNode molNode) {
+    if (!molNode.hasLabel(MetabolitePropertyLabel.MDLMolFile)) {
+      logger.warn("expected MDLMolFile node, found: {}", Neo4jUtils.getLabelsAsString(molNode));
+      return null;
+    }
     Set<BiodbPropertyNode> added = new HashSet<> ();
     String k = molNode.getValue();
+    if (k.startsWith("ERROR_")) {
+      logger.warn("unable to read property value: {}", molNode);
+      return added;
+    }
     Set<BiodbMetaboliteNode> cpdNodes = molNode.getMetabolites(MetaboliteRelationshipType.has_mdl_mol_file);
 
     String formula = null;
     String can = cm.molToSmiles(k);
     String inchi = cm.molToInchi(k);
-    String inchiKey = null;
-
-    //      if (inchi != null) {
-    //        inchiKey = ig.getInchiKey();
-    //      }
 
     if (!k.contains(" R ")) {
       Map<String, Integer> atomCount = cm.molToAtomMap(k);
@@ -299,6 +336,12 @@ public class Neo4jChemExpansion {
     return added;
   }
 
+  public void expandName() {
+    for (BiodbPropertyNode propNode : graphDatabaseService.listMetaboliteProperties(MetabolitePropertyLabel.Name)) {
+      this.expandName(propNode);
+    }
+  }
+  
   public Set<BiodbPropertyNode> expandName(BiodbPropertyNode nameNode) {
     Set<BiodbPropertyNode> added = new HashSet<> ();
     String k = nameNode.getValue();
@@ -337,7 +380,17 @@ public class Neo4jChemExpansion {
     return added;
   }
 
+  public void expandInchikey() {
+    for (BiodbPropertyNode propNode : graphDatabaseService.listMetaboliteProperties(MetabolitePropertyLabel.InChIKey)) {
+      this.expandInchikey(propNode);
+    }
+  }
+  
   public Set<BiodbPropertyNode> expandInchikey(BiodbPropertyNode inchikeyNode) {
+    if (!inchikeyNode.hasLabel(MetabolitePropertyLabel.InChIKey)) {
+      logger.warn("expected InChIKey node, found: {}", Neo4jUtils.getLabelsAsString(inchikeyNode));
+      return null;
+    }
     Set<BiodbPropertyNode> added = new HashSet<> ();
 
     String k = (String) inchikeyNode.getProperty("key");
@@ -379,35 +432,39 @@ public class Neo4jChemExpansion {
     if (propNode.hasLabel(GlobalLabel.MetaboliteProperty)) {
       String ml = (String) propNode.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
       MetabolitePropertyLabel property = MetabolitePropertyLabel.valueOf(ml);
-      //      System.out.println(property + " " + propNode.getProperty(Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, null));
       switch (property) {
-      case Name:
-      {
-        Set<BiodbPropertyNode> exp = expandName(propNode);
-        expanded.addAll(exp);
-      }
-      break;
-      case InChI:
-      {
-        Set<BiodbPropertyNode> exp = expandInchi(propNode);
-        expanded.addAll(exp);
-      }
-      break;
-      case SMILES:
-      {
-        Set<BiodbPropertyNode> exp = expandSmiles(propNode);
-        expanded.addAll(exp);
-      }
-      break;
-      case MDLMolFile:
-      {
-        Set<BiodbPropertyNode> exp = expandMol(propNode);
-        expanded.addAll(exp);
-      }
-      break;
-      case MolecularFormula:
-      case InChIKey:
-        break;
+        case Name:
+          {
+            Set<BiodbPropertyNode> exp = expandName(propNode);
+            expanded.addAll(exp);
+          }
+          break;
+        case InChI:
+          {
+            Set<BiodbPropertyNode> exp = expandInchi(propNode);
+            expanded.addAll(exp);
+          }
+          break;
+        case SMILES:
+          {
+            Set<BiodbPropertyNode> exp = expandSmiles(propNode);
+            expanded.addAll(exp);
+          }
+          break;
+        case MDLMolFile:
+          {
+            Set<BiodbPropertyNode> exp = expandMol(propNode);
+            expanded.addAll(exp);
+          }
+          break;
+        case MolecularFormula:
+          break;
+        case InChIKey:
+          {
+            Set<BiodbPropertyNode> exp = expandInchikey(propNode);
+            expanded.addAll(exp);
+          }
+          break;
       default:
         logger.warn("[SKIP] {}", property);
         break;

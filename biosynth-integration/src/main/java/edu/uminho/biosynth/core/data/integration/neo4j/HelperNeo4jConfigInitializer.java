@@ -239,6 +239,33 @@ public class HelperNeo4jConfigInitializer {
     service.databasePath = edata.getAbsolutePath();
     return service;
   }
+  
+  public static BiodbGraphDatabaseService initializeBiosNeo4jDatabase(String path) {
+    File dbPath = new File(path);
+    GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(dbPath);
+    
+    Transaction tx = graphDatabaseService.beginTx();
+    
+    Iterable<ConstraintDefinition> it = graphDatabaseService.schema().getConstraints();
+
+    if (!it.iterator().hasNext()) {
+      logger.info("initialized constraints...");
+      initializeNeo4jDataDatabaseConstraints(graphDatabaseService);
+    }
+    
+    tx.success();
+    tx.close();
+    
+    BiodbGraphDatabaseService service = new BiodbGraphDatabaseService(graphDatabaseService);
+    service.databasePath = path;
+    File edata = new File(path + "/../" + dbPath.getName() + "_" + Neo4jDefinitions.EXTERNAL_DATA_FOLDER);
+    if (!edata.exists()) {
+      edata.mkdir();
+      logger.info("created external data folder at: {}", edata);
+    }
+    service.databasePath = edata.getAbsolutePath();
+    return service;
+  }
 
   public static GraphDatabaseService s(String mg) {
     //		org.neo4j.
