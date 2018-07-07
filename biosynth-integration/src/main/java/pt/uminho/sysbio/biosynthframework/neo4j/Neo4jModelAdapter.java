@@ -1,24 +1,41 @@
 package pt.uminho.sysbio.biosynthframework.neo4j;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
 public class Neo4jModelAdapter implements ModelAdapter{
 
   private final BiosMetabolicModelNode modelNode;
   
+  private Map<String, BiodbEntityNode>  cmpNodes = new HashMap<>();
+  private Map<String, BiosModelSpeciesNode>  spiNodes = new HashMap<>();
+  private Map<String, BiosModelReactionNode> mrxnNodes = new HashMap<>();
+  
   public Neo4jModelAdapter(BiosMetabolicModelNode modelNode) {
     this.modelNode = modelNode;
+    for (BiodbEntityNode n : this.modelNode.getModelCompartments()) {
+      String sid = (String) n.getProperty("id", null);
+      cmpNodes.put(sid, n);
+    }
+    for (BiosModelSpeciesNode n : this.modelNode.getMetaboliteSpecies()) {
+      spiNodes.put(n.getSid(), n);
+    }
+    for (BiosModelReactionNode n : this.modelNode.getModelReactions()) {
+      mrxnNodes.put(n.getSid(), n);
+    }
   }
   
   public Neo4jModelAdapter(Node node) {
@@ -79,38 +96,52 @@ public class Neo4jModelAdapter implements ModelAdapter{
 
   @Override
   public SimpleModelReaction<String> getReaction(String rxnId) {
-    // TODO Auto-generated method stub
-    return null;
+    BiosModelReactionNode mrxnNode = this.mrxnNodes.get(rxnId);
+    if (mrxnNode == null) {
+      return null;
+    }
+    
+    SimpleModelReaction<String> mrxn = new SimpleModelReaction<String>(rxnId, 0, 0);
+    //TODO: !!
+    return mrxn;
   }
 
   @Override
   public SimpleModelSpecie<String> getSpecies(String spiId) {
-    // TODO Auto-generated method stub
-    return null;
+    BiosModelSpeciesNode spiNode = this.spiNodes.get(spiId);
+    if (spiNode == null) {
+      return null;
+    }
+    String name = (String) spiNode.getProperty("name", null);
+    String cmpSid = spiNode.getCompartmentSid();
+    SimpleModelSpecie<String> spi = new SimpleModelSpecie<String>(spiId, name, cmpSid);
+    return spi;
   }
 
   @Override
   public SimpleCompartment<String> getCompartment(String cmpId) {
-    // TODO Auto-generated method stub
-    return null;
+    BiodbEntityNode cmpNode = this.cmpNodes.get(cmpId);
+    if (cmpNode == null) {
+      return null;
+    }
+    SimpleCompartment<String> cmp = new SimpleCompartment<String>(cmpId);
+    cmp.name = (String) cmpNode.getProperty("name", null);
+    return cmp;
   }
 
   @Override
   public Set<String> getReactionIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.mrxnNodes.keySet());
   }
-
+  
   @Override
   public Set<String> getSpeciesIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.spiNodes.keySet());
   }
 
   @Override
   public Set<String> getCompartmentIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.cmpNodes.keySet());
   }
 
 }

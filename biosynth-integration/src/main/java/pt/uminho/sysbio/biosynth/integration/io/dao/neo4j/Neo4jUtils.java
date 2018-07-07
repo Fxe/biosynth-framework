@@ -49,6 +49,11 @@ public class Neo4jUtils {
   public static void setUpdatedTimestamp(PropertyContainer node) {
     node.setProperty("updated_at", System.currentTimeMillis()); 
   }
+  
+  public static void setTimestamps(PropertyContainer node) {
+    setCreatedTimestamp(node);
+    setUpdatedTimestamp(node);
+  }
 
   public static Set<Long> collectNodes(Node node) {
     return null;
@@ -519,6 +524,9 @@ public class Neo4jUtils {
   }
 
 
+//  public static Node mergeNode(Node a, Node b) {
+//    
+//  }
 
   public static Node mergeUniqueNode(Label label, String key, Object value, 
                                      GraphDatabaseService graphDatabaseService) {

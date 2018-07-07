@@ -189,4 +189,16 @@ public class CollectionUtils {
 
     return pairs;
   }
+
+  public static Set<String> toStrings(Set<Long> set) {
+    Set<String> strings = new HashSet<>();
+    for (Long i : set) {
+      if (i != null) {
+        strings.add(Long.toString(i));
+      } else {
+        strings.add(null);
+      }
+    }
+    return strings;
+  }
 }
