@@ -370,7 +370,7 @@ public class DefaultAssembler {
   }
   
   public String getMolStructure(Set<BiodbMetaboliteNode> ids) {
-    logger.info("picutres ! {}", ids);
+    logger.debug("picutres ! {}", ids);
     Map<MetaboliteMajorLabel, Set<String>> molStructures = new HashMap<>();
     for (BiodbMetaboliteNode cpdNode : ids) {
       BiodbPropertyNode p = cpdNode.getMetaboliteProperty(MetabolitePropertyLabel.MDLMolFile);
@@ -416,6 +416,9 @@ public class DefaultAssembler {
     String alias = cpdAliasGenerator.apply(ids); //generateAlias(ids);
     cpdData.id = id;
     cpdData.alias = alias;
+    if (cpdData.alias == null) {
+      cpdData.alias = cpdData.id;
+    }
     cpdData.reactions = getMetaboliteReactions(ids);
     
     for (String plugin : cpdAssemblePlugins.keySet()) {
@@ -665,7 +668,7 @@ public class DefaultAssembler {
     
     String json = DataUtils.toJson(table, false);
     try {
-      IOUtils.writeToFile(json, outputPath + "/reactionTable.json");
+      IOUtils.writeToFile(json, outputPath + "/data/rxns.json");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -704,7 +707,7 @@ public class DefaultAssembler {
     
     String json = DataUtils.toJson(table, false);
     try {
-      IOUtils.writeToFile(json, outputPath + "/cpds.json");
+      IOUtils.writeToFile(json, outputPath + "/data/cpds.json");
     } catch (IOException e) {
       e.printStackTrace();
     }
