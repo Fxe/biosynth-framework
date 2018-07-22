@@ -34,4 +34,7 @@ public class XmlSbmlReaction extends SbmlSBaseObject {
   public MultiNodeTree<Object> getGpr() { return gpr;}
   public void setGpr(MultiNodeTree<Object> gpr) { this.gpr = gpr;}
   
+  public String getId() {
+    return this.getAttributes().get("id");
+  }
 }

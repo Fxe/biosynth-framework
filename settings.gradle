@@ -6,4 +6,5 @@ include 'biosynth-core',
         'biosynth-biodb-modelseed',
         'biosynth-chemanalysis',
         'biosynth-visualization',
+        'biosynth-optimization',
         'biosynth-integration'
