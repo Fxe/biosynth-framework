@@ -3,15 +3,14 @@ package pt.uminho.sysbio.biosynthframework.io;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EntrezTaxonomyConverter;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsPubmedObject;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsService;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.PubmedEntity;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import pt.uminho.sysbio.biosynthframework.io.biodb.Bigg2ApiService;
+import retrofit2.Retrofit;
 
 public class EutilsPubmedDao implements BiosDao<PubmedEntity> {
   public static final String defaultEndpoint = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils";
@@ -22,17 +21,22 @@ public class EutilsPubmedDao implements BiosDao<PubmedEntity> {
 
     long connectionTimeout = 60;
     long readTimeout = 60;
-
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-        .setConverter(new EntrezTaxonomyConverter())
-        .setLogLevel(LogLevel.NONE)
-        .setClient(new OkClient(okHttpClient))
-        .setEndpoint(defaultEndpoint)
-        .build();
-    service = restAdapter.create(EutilsService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(defaultEndpoint)
+                                              .addConverterFactory(new EntrezTaxonomyConverter(null))
+                                              .build();
+    service = retrofit.create(EutilsService.class);
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+////    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+////    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//        .setConverter(new EntrezTaxonomyConverter())
+//        .setLogLevel(LogLevel.NONE)
+//        .setClient(new OkClient(okHttpClient))
+//        .setEndpoint(defaultEndpoint)
+//        .build();
+//    service = restAdapter.create(EutilsService.class);
 
   }
 

@@ -2,15 +2,12 @@ package pt.uminho.sysbio.biosynthframework.biodb.eutils;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.lf5.LogLevel;
 
-import com.squareup.okhttp.OkHttpClient;
-
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
 
 public class EntrezTaxonomyService {
   public EutilsService eutilsService;
@@ -20,17 +17,22 @@ public class EntrezTaxonomyService {
     String endPoint = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils";
     long connectionTimeout = 60;
     long readTimeout = 60;
-    
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setConverter(new EntrezTaxonomyConverter())
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    eutilsService = restAdapter.create(EutilsService.class);
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+//                                              .ad
+                                              .build();
+    eutilsService = retrofit.create(EutilsService.class);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setConverter(new EntrezTaxonomyConverter())
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(client))
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    eutilsService = restAdapter.create(EutilsService.class);
   }
   
   public Object fetch(EntrezDatabase db, String id) {

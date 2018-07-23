@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.KeggApi;
-import retrofit.RestAdapter;
 
 @SuppressWarnings("unused")
 public class TestRetrofitKeggApi {

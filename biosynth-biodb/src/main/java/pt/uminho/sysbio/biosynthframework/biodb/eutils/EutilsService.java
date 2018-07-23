@@ -2,8 +2,11 @@ package pt.uminho.sysbio.biosynthframework.biodb.eutils;
 
 import java.util.Map;
 
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+
+//import retrofit.http.GET;
+//import retrofit.http.Query;
 
 public interface EutilsService {
   

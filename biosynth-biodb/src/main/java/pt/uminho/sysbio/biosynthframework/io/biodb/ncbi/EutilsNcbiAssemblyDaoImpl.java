@@ -10,17 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.OkHttpClient;
 
+import okhttp3.OkHttpClient;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EntrezDatabase;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EntrezRetmode;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsAssemblyObject;
 import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsService;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 import pt.uminho.sysbio.biosynthframework.util.JsonMapUtils;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import retrofit2.Retrofit;
 
 public class EutilsNcbiAssemblyDaoImpl implements BiosDao<EutilsAssemblyObject> {
 
@@ -31,18 +29,22 @@ public class EutilsNcbiAssemblyDaoImpl implements BiosDao<EutilsAssemblyObject> 
   
   public EutilsNcbiAssemblyDaoImpl() {
     String endPoint = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils";
-    long connectionTimeout = 60;
-    long readTimeout = 60;
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
     
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(EutilsService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .build();
+    service = retrofit.create(EutilsService.class);
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(EutilsService.class);
   }
   
   @Override

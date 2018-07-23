@@ -23,18 +23,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.squareup.okhttp.OkHttpClient;
-
+import okhttp3.OkHttpClient;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ApiMetabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2MetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2MetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsService;
 import pt.uminho.sysbio.biosynthframework.io.AbstractReadOnlyMetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 import pt.uminho.sysbio.biosynthframework.io.biodb.Bigg2ApiService.ListResult;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import retrofit2.Retrofit;
 
 public class RestBiggMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao<Bigg2MetaboliteEntity>
 implements BiosDao<Bigg2MetaboliteEntity> {
@@ -59,19 +57,26 @@ implements BiosDao<Bigg2MetaboliteEntity> {
   public RestBiggMetaboliteDaoImpl(String biggServicePath, String version, String localStorage) {
     super(version);
     String endPoint = biggServicePath;
-    long connectionTimeout = 60;
-    long readTimeout = 60;
     
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setConverter(new Bigg2JsonConverter(databasePath))
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(Bigg2ApiService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .build();
+    service = retrofit.create(Bigg2ApiService.class);
+    
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
+//    
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setConverter(new Bigg2JsonConverter(databasePath))
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(Bigg2ApiService.class);
     this.databasePath = localStorage;
     if (databasePath != null && cacheData) {
       localStorageFolder = new File(databasePath + "/" + version);
@@ -140,19 +145,26 @@ implements BiosDao<Bigg2MetaboliteEntity> {
   public RestBiggMetaboliteDaoImpl(String biggServicePath) {
     super("");
     String endPoint = biggServicePath;
-    long connectionTimeout = 60;
-    long readTimeout = 60;
     
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setConverter(new Bigg2JsonConverter(databasePath))
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(Bigg2ApiService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .build();
+    service = retrofit.create(Bigg2ApiService.class);
+    
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
+//    
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setConverter(new Bigg2JsonConverter(databasePath))
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(Bigg2ApiService.class);
   }
 
   public static Bigg2ApiMetabolite getAndCacheCpd2(String id) {

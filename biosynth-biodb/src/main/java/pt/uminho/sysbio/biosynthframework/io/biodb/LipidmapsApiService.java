@@ -1,8 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.io.biodb;
 
 import pt.uminho.sysbio.biosynthframework.biodb.lipidmap.LipidmapsApiMetabolite;
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface LipidmapsApiService {
 //  http://www.lipidmaps.org/rest/compound/lm_id/LMGP04010986/all/

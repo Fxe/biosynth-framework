@@ -23,19 +23,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.squareup.okhttp.OkHttpClient;
-
+import okhttp3.OkHttpClient;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ApiReaction;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ReactionCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ReactionMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.eutils.EntrezTaxonomyConverter;
+import pt.uminho.sysbio.biosynthframework.biodb.eutils.EutilsService;
 import pt.uminho.sysbio.biosynthframework.io.AbstractReadOnlyReactionDao;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 import pt.uminho.sysbio.biosynthframework.io.biodb.Bigg2ApiService.ListResult;
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import retrofit2.Retrofit;
 
 public class RestBiggReactionDaoImpl extends AbstractReadOnlyReactionDao<Bigg2ReactionEntity> 
 implements BiosDao<Bigg2ReactionEntity> {
@@ -54,19 +53,27 @@ implements BiosDao<Bigg2ReactionEntity> {
   public RestBiggReactionDaoImpl(String biggServicePath, String version, String localStorage) {
     super(version);
     String endPoint = biggServicePath;
-    long connectionTimeout = 60;
-    long readTimeout = 60;
     
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setConverter(new Bigg2JsonConverter(databasePath))
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(Bigg2ApiService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .addConverterFactory(new EntrezTaxonomyConverter(null))
+                                              .build();
+    service = retrofit.create(Bigg2ApiService.class);
+    
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
+//    
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setConverter(new Bigg2JsonConverter(databasePath))
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(Bigg2ApiService.class);
     this.databasePath = localStorage;
     if (databasePath != null && cacheData) {
       localStorageFolder = new File(databasePath + "/" + version);
@@ -90,22 +97,30 @@ implements BiosDao<Bigg2ReactionEntity> {
   public RestBiggReactionDaoImpl(String biggServicePath) {
     super("");
     String endPoint = biggServicePath;
-    long connectionTimeout = 60;
-    long readTimeout = 60;
     
     final OkHttpClient okHttpClient = new OkHttpClient();
-//    okHttpClient.networkInterceptors().add(REwr)
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-//        .setp
-//        .setRequestInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
-                  .setConverter(new Bigg2JsonConverter(databasePath))
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(Bigg2ApiService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .addConverterFactory(new Bigg2JsonConverter(null))
+                                              .build();
+    service = retrofit.create(Bigg2ApiService.class);
+    
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
+//    
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+////    okHttpClient.networkInterceptors().add(REwr)
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+////        .setp
+////        .setRequestInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
+//                  .setConverter(new Bigg2JsonConverter(databasePath))
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(Bigg2ApiService.class);
   }
   
 //  private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {

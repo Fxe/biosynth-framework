@@ -12,16 +12,24 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import retrofit.converter.ConversionException;
-import retrofit.converter.Converter;
-import retrofit.mime.TypedInput;
-import retrofit.mime.TypedOutput;
+import retrofit2.Converter;
 
-public class Bigg2JsonConverter implements Converter {
+//import retrofit.converter.ConversionException;
+//import retrofit.converter.Converter;
+//import retrofit.mime.TypedInput;
+//import retrofit.mime.TypedOutput;
+
+public class Bigg2JsonConverter extends Converter.Factory implements Converter<Object, Object> {
 
   private final ObjectMapper mapper;
   
   private final String cachePath; 
+  
+  @Override
+  public Object convert(Object value) throws IOException {
+    // TODO Auto-generated method stub
+    return null;
+  }
   
   public Bigg2JsonConverter(String cache) {
     cachePath = cache;
@@ -62,37 +70,39 @@ public class Bigg2JsonConverter implements Converter {
     }
     return result;
   }
-  
-  @Override
-  public Object fromBody(TypedInput body, Type type) throws ConversionException {
-    Object result = null;
-    try {
-      Class<?> clazz = Class.forName(type.getTypeName());
-      String jsonStr = StringUtils.join(IOUtils.readLines(body.in()), '\n');
-//      if (cachePath != null) {
-//        OutputStream os = null;
-//        try {
-//          os = new FileOutputStream(cachePath + "/reactions/")
-//          IOUtils.write(jsonStr, os);
-//        } catch (IOException e) {
-//          e.printStackTrace();          
-//        } finally {
-//          IOUtils.closeQuietly(os);
-//        }
-//        
-//      }
-      result = mapper.readValue(jsonStr, clazz);
-    } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
-      throw new ConversionException(e);
-    }
-    return result;
-  }
 
-  @Override
-  public TypedOutput toBody(Object object) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+
+  
+//  @Override
+//  public Object fromBody(TypedInput body, Type type) throws ConversionException {
+//    Object result = null;
+//    try {
+//      Class<?> clazz = Class.forName(type.getTypeName());
+//      String jsonStr = StringUtils.join(IOUtils.readLines(body.in()), '\n');
+////      if (cachePath != null) {
+////        OutputStream os = null;
+////        try {
+////          os = new FileOutputStream(cachePath + "/reactions/")
+////          IOUtils.write(jsonStr, os);
+////        } catch (IOException e) {
+////          e.printStackTrace();          
+////        } finally {
+////          IOUtils.closeQuietly(os);
+////        }
+////        
+////      }
+//      result = mapper.readValue(jsonStr, clazz);
+//    } catch (IOException | ClassNotFoundException e) {
+//      e.printStackTrace();
+//      throw new ConversionException(e);
+//    }
+//    return result;
+//  }
+//
+//  @Override
+//  public TypedOutput toBody(Object object) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
 
 }

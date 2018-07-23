@@ -5,73 +5,62 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
 import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.Tuple2;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
-import pt.uminho.sysbio.biosynthframework.sbml.reader.FbcXmlSbmlModelBoundReader;
-import pt.uminho.sysbio.biosynthframework.sbml.reader.FluxnsXmlSbmlModelBoundReader;
-import pt.uminho.sysbio.biosynthframework.sbml.reader.ParametersXmlSbmlModelBoundReader;
-import pt.uminho.sysbio.biosynthframework.sbml.reader.XmlSbmlModelBoundReader;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelReactionNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelSpeciesNode;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
-public class SbmlConstraintBasedModelFactory implements ConstraintBasedModelFactory {
+public class Neo4jConstraintBasedModelFactory implements ConstraintBasedModelFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(SbmlConstraintBasedModelFactory.class);
   
+  private BiosMetabolicModelNode model;
   private Map<String, Integer> spiIndexMap = new HashMap<>();
   private Map<String, Integer> rxnIndexMap = new HashMap<>();
-  public Map<String, XmlSbmlModelBoundReader> boundReaders = new HashMap<>();
-  private XmlSbmlModel model;
   
-  public SbmlConstraintBasedModelFactory(XmlSbmlModel model) {
+  public Neo4jConstraintBasedModelFactory(BiosMetabolicModelNode model) {
     this.model = model;
+  }
+  
+  public void init(BiosMetabolicModelNode model) {
     int i = 0;
-    for (XmlSbmlSpecie o : model.getSpecies()) {
-      String id = o.getAttributes().get("id");
-      if (!DataUtils.empty(id)) {
-        spiIndexMap.put(id, i++);
-      } else {
-        logger.warn("empty species id");
-      }
+    for (BiosModelSpeciesNode n : model.getMetaboliteSpecies()) {
+      String id = n.getSid();
+      spiIndexMap.put(id, i++);
     }
     i = 0;
-    for (XmlSbmlReaction o : model.getReactions()) {
-      String id = o.getAttributes().get("id");
-      if (!DataUtils.empty(id)) {
-        rxnIndexMap.put(id, i++);
-      } else {
-        logger.warn("empty reaction id");
-      }
+    for (BiosModelReactionNode n : model.getModelReactions()) {
+      String id = n.getSid();
+      rxnIndexMap.put(id, i++);
     }
-    
-    boundReaders.put("params", new ParametersXmlSbmlModelBoundReader(this.model));
-    boundReaders.put("fluxns", new FluxnsXmlSbmlModelBoundReader(this.model));
-    boundReaders.put("fbc", new FbcXmlSbmlModelBoundReader(this.model));
   }
-
+  
   @Override
   public double[][] getMatrix() {
     double[][] matrix = new double[spiIndexMap.size()][rxnIndexMap.size()];
     
-    for (XmlSbmlReaction o : model.getReactions()) {
-      String id = o.getAttributes().get("id");
+    for (BiosModelReactionNode n : model.getModelReactions()) {
+      String id = n.getSid();
       Integer rxnIndex = this.rxnIndexMap.get(id);
       
       logger.debug("{} -[index]-> {}", id, rxnIndex);
       
       
-      for (XmlObject xo : o.getListOfReactants()) {
-        String s = xo.getAttributes().get("species");
-        String value = xo.getAttributes().get("stoichiometry");
+      for (Relationship r : n.getRelationships(MetabolicModelRelationshipType.left_component)) {
+        Node spi = r.getOtherNode(n);
+        String s = (String) spi.getProperty("id");
+        String value = null;
         Integer spiIndex = this.spiIndexMap.get(s);
         
-        logger.debug("{} -[reactant]-> {} {} -> {}", id, value, s, spiIndex);
+        logger.debug("{} -[reactant]-> {} {} -> {} [{}]", id, value, s, spiIndex, r.getAllProperties());
         
         if (DataUtils.empty(value)) {
           value = "1";
@@ -79,12 +68,13 @@ public class SbmlConstraintBasedModelFactory implements ConstraintBasedModelFact
         
         matrix[spiIndex][rxnIndex] = -1 * Double.parseDouble(value);
       }
-      for (XmlObject xo : o.getListOfProducts()) {
-        String s = xo.getAttributes().get("species");
-        String value = xo.getAttributes().get("stoichiometry");
+      for (Relationship r : n.getRelationships(MetabolicModelRelationshipType.right_component)) {
+        Node spi = r.getOtherNode(n);
+        String s = (String) spi.getProperty("id");
+        String value = null;
         Integer spiIndex = this.spiIndexMap.get(s);
         
-        logger.debug("{} -[product]-> {} {} -> {}", id, value, s, spiIndex);
+        logger.debug("{} -[product]-> {} {} -> {} [{}]", id, value, s, spiIndex, r.getAllProperties());
         
         if (DataUtils.empty(value)) {
           value = "1";
@@ -100,20 +90,20 @@ public class SbmlConstraintBasedModelFactory implements ConstraintBasedModelFact
   @Override
   public double[][] getBounds() {
     double[][] bounds = new double[this.rxnIndexMap.size()][2];
-    for (XmlSbmlReaction o : model.getReactions()) {
-      String id = o.getAttributes().get("id");
+    for (BiosModelReactionNode rxn : model.getModelReactions()) {
+      String id = rxn.getSid();
       
       Tuple2<String> bound = null;
       String lb = null;
       String ub = null;
-      for (String method : boundReaders.keySet()) {
-        bound = boundReaders.get(method).getReactionBounds(id);
-        if (bound != null) {
-          lb = bound.e1;
-          ub = bound.e2;
-          break;
-        }
-      }
+//      for (String method : boundReaders.keySet()) {
+//        bound = boundReaders.get(method).getReactionBounds(id);
+//        if (bound != null) {
+//          lb = bound.e1;
+//          ub = bound.e2;
+//          break;
+//        }
+//      }
       
       Integer rxnIndex = this.rxnIndexMap.get(id);
       if (!DataUtils.empty(lb)) {
@@ -147,12 +137,11 @@ public class SbmlConstraintBasedModelFactory implements ConstraintBasedModelFact
   public ConstraintBasedModel build() {
     List<Range> bounds = new ArrayList<> ();
     double[][] bs = getBounds();
+    double[][] matrix = getMatrix();
     for (int i = 0; i < rxnIndexMap.size(); i++) {
       bounds.add(new Range(bs[i][0], bs[i][1]));
     }
-    return new ConstraintBasedModel(getMatrix(), bounds, spiIndexMap, rxnIndexMap);
+    return new ConstraintBasedModel(matrix, bounds, spiIndexMap, rxnIndexMap);
   }
-  
-
 
 }

@@ -14,5 +14,7 @@ dependencies {
   compile( libraries.jgrapht_core)
   compile( libraries.jgrapht_ext)
   compile( libraries.jsoup)
+  compile( libraries.selenium_java)
+  compile( libraries.selenium_phantomjsdriver)
   testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: '3.4.0', classifier: 'tests'
 }

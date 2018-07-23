@@ -24,6 +24,8 @@ ext {
     ahocorasick: 'org.ahocorasick:ahocorasick:0.4.0',
     jbool: 'com.bpodgursky:jbool_expressions:1.14',
     javaluator: 'com.fathzer:javaluator:3.0.2',
+    selenium_java: 'org.seleniumhq.selenium:selenium-java:3.13.0',
+    selenium_phantomjsdriver: 'com.codeborne:phantomjsdriver:1.4.4',
     
     jsoup: 'org.jsoup:jsoup:1.11.3',
     
@@ -90,8 +92,8 @@ ext {
     mew_mewcore: "pt.uminho.ceb.biosystems.mew:mewcore:${mewVersion}",
     
     // misc
-    retrofit: 'com.squareup.retrofit:retrofit:1.9.0',
-    okhttp: 'com.squareup.okhttp:okhttp:2.7.4',
+    retrofit: 'com.squareup.retrofit2:retrofit:2.4.0',
+    okhttp: 'com.squareup.okhttp3:okhttp:3.10.0',
     jsbml: 'org.sbml.jsbml:jsbml:1.0',
     
     // logging
