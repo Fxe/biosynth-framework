@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.AbstractReactionDao;
-import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
+import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 
 /**
  * 
@@ -25,7 +25,7 @@ import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
  */
 
 @Repository
-public class CsvBiggReactionDaoImpl extends AbstractReactionDao<BiggReactionEntity> {
+public class CsvBiggReactionDaoImpl extends AbstractReactionDao<BiggReactionEntity> implements BiosDao<BiggReactionEntity> {
 	
   public CsvBiggReactionDaoImpl() {
     super("legacy");
@@ -138,4 +138,38 @@ public class CsvBiggReactionDaoImpl extends AbstractReactionDao<BiggReactionEnti
 			LOGGER.error(String.format("IOException - [%s]", e.getMessage()));
 		}
 	}
+
+  @Override
+  public BiggReactionEntity getByEntry(String entry) {
+    return this.getReactionByEntry(entry);
+  }
+
+  @Override
+  public BiggReactionEntity getById(long id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Long save(BiggReactionEntity o) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean delete(BiggReactionEntity o) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Set<Long> getAllIds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    return new HashSet<>(this.cachedData.keySet());
+  }
 }

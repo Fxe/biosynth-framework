@@ -77,4 +77,9 @@ public class BiosUniversalReactionNode extends BiodbEntityNode {
     r.delete();
     return r.getId();
   }
+  
+  @Override
+  public String toString() {
+    return String.format("URxnNode[%d]", getId());
+  }
 }

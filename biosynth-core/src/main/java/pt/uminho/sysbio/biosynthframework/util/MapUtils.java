@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -120,6 +122,9 @@ public class MapUtils {
       logger.warn("specie {} not in both reactions");
       return null;
     }
-
   }
+  
+//  public static<K, V> Map<V, Set<K>> reverse(Map<K, V> map) {
+//    return null;
+//  }
 }

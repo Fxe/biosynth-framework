@@ -11,7 +11,6 @@ import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.IntegrationRelationshipType;
@@ -127,6 +126,16 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     return result;
   }
   
+  public Set<BiodbMetaboliteNode> getInstances() {
+    Set<BiodbMetaboliteNode> instances = new HashSet<>();
+    for (Relationship r : this.getRelationships(MetaboliteRelationshipType.parent_of, Direction.OUTGOING)) {
+      Node n = r.getOtherNode(this);
+      instances.add(new BiodbMetaboliteNode(n, databasePath));
+    }
+    
+    return instances;
+  }
+  
   public BiosUniversalMetaboliteNode getUniversalMetabolite() {
 //    Map<String, Integer> lt =  Neo4jUtils.countLinkType(this.node);
 //    logger.debug("[{}] -> {}", this.getId(), Neo4jUtils.countLinkType(this.node));
@@ -149,6 +158,16 @@ public class BiodbMetaboliteNode extends BiodbEntityNode {
     }
     
     return new BiosUniversalMetaboliteNode(ur.getOtherNode(this), databasePath);
+  }
+  
+  public boolean releaseFromUniversalEntity() {
+    Relationship ur = this.getSingleRelationship(IntegrationRelationshipType.has_universal_metabolite, Direction.BOTH);
+    if (ur == null) {
+      return false;
+    }
+    
+    ur.delete();
+    return true;
   }
   
   @Override

@@ -39,7 +39,7 @@ implements BiosDao<Bigg2MetaboliteEntity> {
   
   private static final Logger logger = LoggerFactory.getLogger(RestBiggMetaboliteDaoImpl.class);
   
-  public static String DEFAULT_SERVICE_PATH = "http://bigg.ucsd.edu/api/v2";
+  public static String DEFAULT_SERVICE_PATH = "http://bigg.ucsd.edu/api/v2/";
   
   public final Bigg2ApiService service;
   protected String databasePath = null;

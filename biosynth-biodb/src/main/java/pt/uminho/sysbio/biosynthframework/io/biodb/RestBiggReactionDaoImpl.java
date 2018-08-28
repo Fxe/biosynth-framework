@@ -41,7 +41,7 @@ implements BiosDao<Bigg2ReactionEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(RestBiggReactionDaoImpl.class);
   
-  public static String DEFAULT_SERVICE_PATH = "http://bigg.ucsd.edu/api/v2";
+  public static String DEFAULT_SERVICE_PATH = "http://bigg.ucsd.edu/api/v2/";
   
   public boolean cacheData = true;
   public boolean cacheUse = true;

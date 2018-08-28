@@ -13,8 +13,8 @@ import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.chebi.ChebiMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggCompoundMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
 
 public class BiobaseMetaboliteEtlDictionary<M extends Metabolite> implements EtlDictionary<String, String, String> {
 

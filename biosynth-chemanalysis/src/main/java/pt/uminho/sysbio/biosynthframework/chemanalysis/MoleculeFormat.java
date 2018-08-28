@@ -5,4 +5,5 @@ public enum MoleculeFormat {
   InChI, InChIKey,
   MDLMolFile,
   SVG, PNG,
+  SMARTS, RSMARTS
 }

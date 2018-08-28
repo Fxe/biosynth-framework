@@ -16,9 +16,9 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionRelationshipType;
 import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionReagentEntity;
 
 public class ModelSeedReactionTransform extends AbstractReactionTransform<ModelSeedReactionEntity>{
 

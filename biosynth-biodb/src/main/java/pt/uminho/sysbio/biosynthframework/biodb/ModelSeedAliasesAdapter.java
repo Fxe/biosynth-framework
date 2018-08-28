@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.ExternalReference;
 
+@Deprecated
 public class ModelSeedAliasesAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(ModelSeedAliasesAdapter.class);
@@ -121,7 +122,7 @@ public class ModelSeedAliasesAdapter {
       for (int i = 1; i < lines.size(); i++) {
         String[] cols = lines.get(i).concat("\t").concat("!").split("\t");
         String cpdEntry = cols[0].trim();
-        String refEntry = cols[1].trim();
+//        String refEntry = cols[1].trim();
         String refDb = cols[2].trim();
         String stringStructure = cols[3].trim();
         ExternalReference eref = new ExternalReference(cpdEntry, refDb);

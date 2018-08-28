@@ -65,7 +65,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.parent_of)));
     }
-    for (String subclass : entity.getInstances()) {
+    for (String subclass : entity.getSubclasses()) {
       centralMetaboliteEntity.addConnectedEntity(
           this.buildPair(
               new SomeNodeFactory()

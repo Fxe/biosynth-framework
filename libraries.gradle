@@ -90,10 +90,14 @@ ext {
     mew_solvers: "pt.uminho.ceb.biosystems.mew:solvers:${mewVersion}",
     mew_utilities: "pt.uminho.ceb.biosystems.mew:utilities:${mewVersion}",
     mew_mewcore: "pt.uminho.ceb.biosystems.mew:mewcore:${mewVersion}",
-    
     // misc
-    retrofit: 'com.squareup.retrofit2:retrofit:2.4.0',
+    retrofit:            'com.squareup.retrofit2:retrofit:2.4.0',
+    retrofit_rxjava2:    'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
+    retrofit_converters: 'com.squareup.retrofit2:retrofit-converters:2.4.0',
+    retrofit_simplexml:  'com.squareup.retrofit2:converter-simplexml:2.4.0',
+    retrofit_jackson:    'com.squareup.retrofit2:converter-jackson:2.4.0',
     okhttp: 'com.squareup.okhttp3:okhttp:3.10.0',
+    okhttp_logging_interceptor: 'com.squareup.okhttp3:logging-interceptor:3.10.0',
     jsbml: 'org.sbml.jsbml:jsbml:1.0',
     
     // logging

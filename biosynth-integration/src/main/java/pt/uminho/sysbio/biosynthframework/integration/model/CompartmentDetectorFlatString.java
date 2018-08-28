@@ -25,6 +25,7 @@ public class CompartmentDetectorFlatString implements CompartmentDetector {
     flatMapping.put("extraorganism", SubcellularCompartment.EXTRACELLULAR);
     flatMapping.put("extra_cellular", SubcellularCompartment.EXTRACELLULAR);
     flatMapping.put("extracellular", SubcellularCompartment.EXTRACELLULAR);
+    flatMapping.put("extracellular space", SubcellularCompartment.EXTRACELLULAR);
     flatMapping.put("extc", SubcellularCompartment.EXTRACELLULAR);
     
     flatMapping.put("p", SubcellularCompartment.PERIPLASM);

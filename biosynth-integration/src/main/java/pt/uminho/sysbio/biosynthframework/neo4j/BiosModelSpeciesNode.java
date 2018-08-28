@@ -9,6 +9,8 @@ import java.util.TreeMap;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 
@@ -17,8 +19,12 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
+import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
+import pt.uminho.sysbio.biosynthframework.integration.etl.EtlModels;
 
 public class BiosModelSpeciesNode extends BiodbEntityNode {
+
+  private static final Logger logger = LoggerFactory.getLogger(BiosModelSpeciesNode.class);
 
   public BiosModelSpeciesNode(Node node, String databasePath) {
     super(node, databasePath);
@@ -142,6 +148,42 @@ public class BiosModelSpeciesNode extends BiodbEntityNode {
     
     return score;
   }
+  
+  public BiosModelCompartmentNode getCompartment() {
+    Relationship r = this.getSingleRelationship(MetabolicModelRelationshipType.in_compartment, Direction.BOTH);
+    if (r == null) {
+      return null;
+    }
+    return new BiosModelCompartmentNode(r.getOtherNode(this), databasePath);
+  }
+  
+  public boolean setCompartment(BiosModelCompartmentNode cmpNode) {
+    Relationship r = this.getSingleRelationship(MetabolicModelRelationshipType.in_compartment, Direction.BOTH);
+    if (r != null) {
+      Node other = r.getOtherNode(this);
+      if (other.getId() == cmpNode.getId()) {
+        return false;
+      }
+      logger.warn("[RMLK] [{}] -[{}]-> [{}]", this, MetabolicModelRelationshipType.in_compartment, other);
+      r.delete();
+    }
+    if (!Neo4jUtils.exitsRelationshipBetween(this, cmpNode, Direction.BOTH)) {
+      logger.info("[LINK] [{}] -[{}]-> [{}]", this, MetabolicModelRelationshipType.in_compartment, cmpNode);
+      this.createRelationshipTo(cmpNode, MetabolicModelRelationshipType.in_compartment);
+    }
+    
+    return true;
+  }
+  
+  public SubcellularCompartment getSubcellularCompartment() {
+    SubcellularCompartment scmp = null;
+    BiosModelCompartmentNode cmp = this.getCompartment();
+    BiosUniversalCompartmentNode ucmpNode = null;
+    if (cmp != null && (ucmpNode = cmp.getUniversalCompartment()) != null) {
+      scmp = ucmpNode.getCompartment();
+    }
+    return scmp;
+  }
 
   public String getCompartmentSid() {
     Relationship r = this.getSingleRelationship(MetabolicModelRelationshipType.in_compartment, Direction.BOTH);
@@ -149,6 +191,27 @@ public class BiosModelSpeciesNode extends BiodbEntityNode {
       return null;
     }
     return (String) r.getOtherNode(this).getProperty("id", null);
+  }
+  
+  public BiosUniversalMetaboliteNode getUniversalMetabolite() {
+    return getUniversalMetabolite(5);
+  }
+  
+  public BiosUniversalMetaboliteNode getUniversalMetabolite(int score) {
+    Map<Long, BiosUniversalMetaboliteNode> match = new HashMap<>();
+    for (BiodbMetaboliteNode cpdNode : this.getReferences()) {
+      if (this.getAnnotationScore(cpdNode) >= score) {
+        BiosUniversalMetaboliteNode ucpdNode = cpdNode.getUniversalMetabolite();
+        if (ucpdNode != null) {
+          match.put(ucpdNode.getId(), ucpdNode);          
+        }
+      }
+    }
+    
+    if (match.size() == 1) {
+      return match.values().iterator().next();
+    }
+    return null;
   }
   
   @Override

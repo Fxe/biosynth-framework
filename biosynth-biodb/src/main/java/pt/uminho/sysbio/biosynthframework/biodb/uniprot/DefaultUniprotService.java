@@ -7,7 +7,7 @@ public class DefaultUniprotService {
   public final UniprotService service;
   
   public DefaultUniprotService() {
-    String endPoint = "http://www.uniprot.org";
+    String endPoint = "http://www.uniprot.org/";
     final OkHttpClient okHttpClient = new OkHttpClient();
     Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
                                               .baseUrl(endPoint)

@@ -25,9 +25,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.base.Function;
 
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionCrossreferenceEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionReagentEntity;
 import pt.uminho.sysbio.biosynthframework.io.AbstractReadOnlyReactionDao;
 
 /**

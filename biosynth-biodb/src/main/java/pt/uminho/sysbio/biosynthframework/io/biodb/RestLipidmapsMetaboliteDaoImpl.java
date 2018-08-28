@@ -10,7 +10,7 @@ public class RestLipidmapsMetaboliteDaoImpl {
   public String databasePath = null;;
   
   public RestLipidmapsMetaboliteDaoImpl() {
-    String endPoint = "http://www.lipidmaps.org/rest";
+    String endPoint = "http://www.lipidmaps.org/rest/";
     
     final OkHttpClient okHttpClient = new OkHttpClient();
     Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)

@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.io;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +14,7 @@ import pt.uminho.sysbio.biosynthframework.io.biodb.Bigg2ApiService;
 import retrofit2.Retrofit;
 
 public class EutilsPubmedDao implements BiosDao<PubmedEntity> {
-  public static final String defaultEndpoint = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils";
+  public static final String defaultEndpoint = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
   private final EutilsService service;
 
@@ -64,7 +65,12 @@ public class EutilsPubmedDao implements BiosDao<PubmedEntity> {
 
 
   public PubmedEntity getByEntry(String entry) {
-    EutilsPubmedObject o = service.efetchPubmed(entry, "xml");
+    EutilsPubmedObject o = null;
+    try {
+      o = service.efetchPubmed(entry, "xml").execute().body();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     return convert(entry, o);
   }
 

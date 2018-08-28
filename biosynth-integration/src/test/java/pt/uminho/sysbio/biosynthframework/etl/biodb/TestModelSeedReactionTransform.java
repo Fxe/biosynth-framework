@@ -16,9 +16,9 @@ import org.junit.Test;
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.ModelSeedReactionTransform;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionCrossreferenceEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionReagentEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionReagentEntity;
 
 public class TestModelSeedReactionTransform {
 

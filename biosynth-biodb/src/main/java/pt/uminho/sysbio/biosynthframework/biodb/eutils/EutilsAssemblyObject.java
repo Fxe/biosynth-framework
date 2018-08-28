@@ -39,7 +39,7 @@ public class EutilsAssemblyObject extends AbstractBiosynthEntity {
   public String biosampleid;
   public Object biosource;
   public String partialgenomerepresentation;
-  public Integer coverage;
+  public Object coverage;
   
   public String ftppath_genbank;
   public String ftppath_refseq;

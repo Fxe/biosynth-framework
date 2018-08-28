@@ -47,7 +47,7 @@ public class TestEntrezTaxonomyService {
     service.eutilsService.efetchNucleotide("", EntrezRetmode.xml, "");
   }
   
-//  @Test
+  @Test
   public void test_search_yeast() {
     EntrezTaxonomyService service = new EntrezTaxonomyService();
     EntrezSearchResult taxon = service.searchGenes(326442L, 2, 0);

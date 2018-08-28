@@ -13,7 +13,7 @@ public class SimpleModelReaction<I> {
   public String gpr;
   public Range bounds;
   
-  public Map<String, Object> extra = new HashMap<>();
+  public Map<String, Object> attributes = new HashMap<>();
   
   public SimpleModelReaction(I id, double lb, double ub) {
     if (DataUtils.empty(id)) {
@@ -22,5 +22,10 @@ public class SimpleModelReaction<I> {
     
     this.id = id;
     this.bounds = new Range(lb, ub);
+  }
+  
+  @Override
+  public String toString() {
+    return String.format("%s", id);
   }
 }

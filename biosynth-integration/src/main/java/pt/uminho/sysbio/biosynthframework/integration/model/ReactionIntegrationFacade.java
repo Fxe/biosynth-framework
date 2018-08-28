@@ -13,6 +13,8 @@ import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
+import pt.uminho.sysbio.biosynthframework.integration.ReactionMatcher;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
@@ -23,6 +25,42 @@ public class ReactionIntegrationFacade {
   private static final Logger logger = LoggerFactory.getLogger(ReactionIntegrationFacade.class);
   
   private final BiodbService biodbService;
+  
+  public Set<Long> exclude = new HashSet<>();
+  public Map<Long, Map<Long, Double>> rxnMap = new HashMap<>();
+  
+  public Map<?, ?> wut(ReactionMajorLabel database) {
+    Set<Long> validCpdIds = new HashSet<>();
+    for (long rxnId : biodbService.getIdsByDatabaseAndType(database.toString(), GlobalLabel.Reaction.toString())) {
+//      boolean obsolete = (boolean) rxnNode.getProperty("obsolete", false);
+      Map<Long, Double> stoich = biodbService.getStoichiometry(rxnId);
+      validCpdIds.addAll(stoich.keySet());
+      stoich.keySet().removeAll(exclude);
+      rxnMap.put(rxnId, stoich);
+    }
+    
+    ReactionMatcher<Long, Long, Long> matcher = new ReactionMatcher<>();
+    matcher.exclude.addAll(this.exclude);
+    for (long rxnId : rxnMap.keySet()) {
+      matcher.addDatabaseReaction(rxnId, rxnMap.get(rxnId));
+    }
+    
+    logger.info("Database Stoichs: {}", matcher.dbtoichDictionary.size());
+    Map<String, Set<Long>> mrxnIdToRxnSet = new HashMap<>();
+    Map<String, Map<Long, Double>> rxnIdToStoich = new HashMap<>();
+    Map<String, Boolean> mrxnIdToBasic = new HashMap<>();
+    Map<Long, Long> spiTranslationMap = new HashMap<>();
+    for (String mrxnId : mrxnIdToBasic.keySet()) {
+      if (mrxnIdToBasic.get(mrxnId)) {
+        Set<Long> match = matcher.match(rxnIdToStoich.get(mrxnId), spiTranslationMap);
+        if (match != null) {
+          mrxnIdToRxnSet.put(mrxnId, match);
+        }
+      }
+    }
+    
+    return mrxnIdToRxnSet;
+  }
   
   public Map<ReactionMajorLabel, Set<String>> exclusion = new HashMap<> ();
   public Map<ReactionMajorLabel, Map<Map<String, Double>, Set<String>>> dictMap = new HashMap<> ();

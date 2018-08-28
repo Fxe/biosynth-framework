@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.uminho.sysbio.biosynthframework.Tuple2;
 
 public class EquationParser {
+  
+  private static final Logger logger = LoggerFactory.getLogger(EquationParser.class);
+  
   public static boolean VERBOSE = false;
 
   public static final int LEFT_TO_RIGHT = 1;
@@ -32,8 +38,9 @@ public class EquationParser {
   
   public String detectSplitToken(String eq) {
     String result = null;
+    String str = " " + eq + " ";
     for (String symbol : splitTokens.keySet()) {
-      if (eq.indexOf(String.format(" %s ", symbol)) >= 0) {
+      if (str.indexOf(String.format(" %s ", symbol)) >= 0) {
         result = symbol;
         break;
       }
@@ -62,8 +69,10 @@ public class EquationParser {
     List<Tuple2<String>> result = new ArrayList<>();
     String[] parts = str.split("\\+");
     for (String p : parts) {
-      Tuple2<String> tuple = getTuple(p);
-      result.add(tuple);
+      if (!DataUtils.empty(p)) {
+        Tuple2<String> tuple = getTuple(p);
+        result.add(tuple);
+      }
     }
     
     return result;
@@ -85,14 +94,26 @@ public class EquationParser {
   }
   
   public void parse(String eq) {
+    logger.debug("Equation: {}", eq);
+    
     String eqSplit = detectSplitToken(eq);
     if (eqSplit == null) {
       throw new IllegalArgumentException("split token not found. expected: " + splitTokens.keySet());
     }
     
-    String[] blocks = eq.split(eqSplit);
+    logger.debug("Split   : {}", eqSplit);
+    
+    String[] blocks = (" " + eq + " ").split(eqSplit);
+    
+    logger.debug("Block 1 : {}", blocks[0]);
+    logger.debug("Block 2 : {}", blocks[1]);
+    
     List<Tuple2<String>> l = getBlocks(blocks[0]);
     List<Tuple2<String>> r = getBlocks(blocks[1]);
+    
+    logger.debug("Tuple 1 : {}", l);
+    logger.debug("Tuple 2 : {}", r);
+    
     this.leftBasic  = getStoichiometry(l);
     this.rightBasic = getStoichiometry(r);
     

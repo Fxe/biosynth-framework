@@ -18,8 +18,8 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
 import pt.uminho.sysbio.biosynth.integration.etl.biodb.ModelSeedMetaboliteTransform;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteCrossreferenceEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
 
 public class TestModelSeedMetaboliteTransform {
 

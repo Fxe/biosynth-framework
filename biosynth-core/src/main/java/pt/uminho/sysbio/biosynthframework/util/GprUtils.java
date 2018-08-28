@@ -64,10 +64,12 @@ public class GprUtils {
   
   public static String preprocess(String expression) {
     String result = expression;
+    result = result.replaceAll(" \\^ ", " & ");
     result = result.replaceAll(" and ", " & ");
     result = result.replaceAll(" AND ", " & ");
     result = result.replaceAll(" or ",  " | ");
     result = result.replaceAll(" OR ",  " | ");
+    result = result.replaceAll(" v ",   " | ");
     result = result.replaceAll("-",     "__DASH__");
     result = result.replaceAll("\\?",   "__QMARK__");
     result = result.replaceAll("\\.",   "__DOT__");

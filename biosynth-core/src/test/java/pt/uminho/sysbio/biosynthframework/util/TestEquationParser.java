@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class TestEquationParser {
 
-  private EquationParser parser = new EquationParser();
+  private EquationParser parser = null;
   
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -22,10 +22,12 @@ public class TestEquationParser {
 
   @Before
   public void setUp() throws Exception {
+    parser = new EquationParser();
   }
 
   @After
   public void tearDown() throws Exception {
+    parser = null;
   }
 
   @Test
@@ -42,6 +44,16 @@ public class TestEquationParser {
     assertTrue(parser.rightBasic.containsKey("C181ACP"));
     assertTrue(parser.rightBasic.containsKey("CO2"));
     assertTrue(parser.rightBasic.containsKey("ACP"));
+  }
+  
+  @Test
+  public void test_eq1() {
+    String eq = "H[e] <=>";
+    parser.splitTokens.put("<=>", EquationParser.BIDIRECTIONAL);
+    parser.parse(eq);
+    assertNotNull(parser.leftBasic);
+    assertNotNull(parser.rightBasic);
+    assertTrue(parser.rightBasic.isEmpty());
   }
 
 }

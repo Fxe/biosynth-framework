@@ -42,10 +42,12 @@ public class CompartmentIntegration {
     }
     
     for (String spiId : model.getSpeciesIds()) {
-      String cmpId = model.getSpecies(spiId).compartmentId;
-      if (cmpIdToSpecies.containsKey(cmpId)) {
-        cmpIdToSpecies.get(cmpId).add(cmpId);
-      }      
+      if (model.getSpecies(spiId) != null) {
+        String cmpId = model.getSpecies(spiId).compartmentId;
+        if (cmpIdToSpecies.containsKey(cmpId)) {
+          cmpIdToSpecies.get(cmpId).add(cmpId);
+        }  
+      }
 //      String bcStr = xspi.getAttributes().get("boundaryCondition");
 //      if (bcStr != null && Boolean.parseBoolean(bcStr.toLowerCase())) {
 //        bcSpecies.add(xspi);

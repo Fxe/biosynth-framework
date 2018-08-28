@@ -9,18 +9,18 @@ import java.util.TreeMap;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
-import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
+import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 
 public class BiosModelReactionNode extends BiodbEntityNode {
 
@@ -88,6 +88,24 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     }
     
     return stoichiometryMap;
+  }
+  
+  
+  public CompartmentalizedStoichiometry<Long, Long> getCompartmentalizedStoichiometry(double defaultValue) {
+    CompartmentalizedStoichiometry<Long, Long> stoichiometry = new CompartmentalizedStoichiometry<>();
+    
+    Map<BiosModelSpeciesNode, Double> data = getStoichiometryAsNodes(defaultValue);
+    for (BiosModelSpeciesNode spiNode : data.keySet()) {
+      double value = data.get(spiNode);
+      Node node = spiNode.getCompartment();
+      long cmpId = -1;
+      if (node != null) {
+        cmpId = node.getId();
+      }
+      stoichiometry.add(spiNode.getId(), cmpId, value);
+    }
+    
+    return stoichiometry;
   }
   
   public Map<BiosModelSpeciesNode, Double> getStoichiometryAsNodes(double defaultValue) {
@@ -178,6 +196,36 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     referenceLink.setProperty("authors", toString(authors));
     
     return referenceLink.getId();
+  }
+  
+  public Long addLeftComponent(BiosModelSpeciesNode node, Map<String, Object> properties) {
+    Relationship r = this.createStoichiometryLink(node, 
+        MetabolicModelRelationshipType.left_component, properties);
+    if (r != null) {
+      return r.getId();
+    }
+    return null;
+  }
+  
+  public Long addRightComponent(BiosModelSpeciesNode node, Map<String, Object> properties) {
+    Relationship r = this.createStoichiometryLink(node, 
+        MetabolicModelRelationshipType.right_component, properties);
+    if (r != null) {
+      return r.getId();
+    }
+    return null;
+  }
+  
+  protected Relationship createStoichiometryLink(Node spiNode, RelationshipType t, Map<String, Object> p) {
+    Relationship r = null;
+    if (!Neo4jUtils.exitsRelationshipBetween(this, spiNode, Direction.BOTH)) {
+      logger.info("[LINK] [{}] -[{}]-> [{}]", this, t, spiNode);
+      r = this.createRelationshipTo(spiNode, t);
+      Neo4jUtils.setPropertiesMap(p, r);
+      Neo4jUtils.setTimestamps(r);
+    }
+
+    return r;
   }
   
   public Set<Long> deleteGpr() {

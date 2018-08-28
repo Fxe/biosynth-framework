@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynthframework;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -20,13 +22,21 @@ public class CompartmentalizedStoichiometry<T, C> {
   
   public CompartmentalizedStoichiometry() { }
   
+  public Set<C> getCompartments() {
+    Set<C> compartments = new HashSet<>();
+    for (Pair<T, C> p  : stoichiometry.keySet()) {
+      compartments.add(p.getRight());
+    }
+    return compartments;
+  }
+  
   public double addLeft(T k, C c, double value) {
     Pair<T, C> p = new ImmutablePair<T, C>(k, c);
     if (!stoichiometry.containsKey(p)) {
       stoichiometry.put(p, Math.abs(value) * -1);
       return value;
     } else {
-      value = Math.abs(value) * -1 + stoichiometry.get(k);
+      value = Math.abs(value) * -1 + stoichiometry.get(p);
       stoichiometry.put(p, value);
       return value;
     }
@@ -38,14 +48,28 @@ public class CompartmentalizedStoichiometry<T, C> {
   
   public double addRight(T k, C c, double value) {
     Pair<T, C> p = new ImmutablePair<T, C>(k, c);
-    if (!stoichiometry.containsKey(k)) {
+    if (!stoichiometry.containsKey(p)) {
       stoichiometry.put(p, Math.abs(value));
       return value;
     } else {
-      value = Math.abs(value) + stoichiometry.get(k);
+      value = Math.abs(value) + stoichiometry.get(p);
       stoichiometry.put(p, value);
       return value;
     }
+  }
+  
+  public double add(T k, C c, double value) {
+    Pair<T, C> p = new ImmutablePair<T, C>(k, c);
+    stoichiometry.put(p, value);
+    return value;
+//    if (!stoichiometry.containsKey(p)) {
+//      stoichiometry.put(p, value);
+//      return value;
+//    } else {
+//      value = Math.abs(value) + stoichiometry.get(p);
+//      stoichiometry.put(p, value);
+//      return value;
+//    }
   }
   
   public void addLeft(Map<Pair<T, C>, Double> l) {

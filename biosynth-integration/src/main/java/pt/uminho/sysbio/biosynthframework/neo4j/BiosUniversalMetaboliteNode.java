@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.neo4j;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.neo4j.graphdb.Direction;
@@ -76,5 +78,28 @@ public class BiosUniversalMetaboliteNode extends BiodbEntityNode {
       ids.add(cpd.getId());
     }
     return ids;
+  }
+  
+  public Set<BiosUniversalMetaboliteNode> getInstances() {
+    Map<Long, Node> ids = new HashMap<>();
+    for (BiodbMetaboliteNode cpdNode : getMetabolites()) {
+      for (BiodbMetaboliteNode i : cpdNode.getInstances()) {
+        Node n = i.getUniversalMetabolite();
+        if (n != null) {
+          ids.put(n.getId(), n);
+        }
+      }
+    }
+    
+    Set<BiosUniversalMetaboliteNode> instances = new HashSet<>();
+    for (long id : ids.keySet()) {
+      instances.add(new BiosUniversalMetaboliteNode(ids.get(id), databasePath));
+    }
+    return instances;
+  }
+  
+  @Override
+  public String toString() {
+    return String.format("UCpdNode[%d]", getId());
   }
 }

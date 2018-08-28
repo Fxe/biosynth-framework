@@ -117,6 +117,7 @@ public class LiteratureManagerService {
     AsmLinkScanner asmLinkScanner = new AsmLinkScanner();
     WileyLinkScanner wileyLinkScanner = new WileyLinkScanner();
     NatureLinkScanner natureLinkScanner = new NatureLinkScanner();
+    ElsevierLinkScanner elsevierLinkScanner = new ElsevierLinkScanner("/opt/webdriver/phantomjs/2.11/bin/phantomjs.exe");
     linkScanner.put("BMC Genomics", springerLinkScanner);
     linkScanner.put("BMC Microbiol.", springerLinkScanner);
     linkScanner.put("BMC Syst Biol", springerLinkScanner);
@@ -144,6 +145,10 @@ public class LiteratureManagerService {
     linkScanner.put("Nat. Biotechnol.", natureLinkScanner);
     linkScanner.put("Nat. Methods", natureLinkScanner);
     linkScanner.put("Sci Rep", natureLinkScanner);
+    linkScanner.put("Gene", elsevierLinkScanner);
+    linkScanner.put("J. Biotechnol.", elsevierLinkScanner);
+    linkScanner.put("Res. Microbiol.", elsevierLinkScanner);
+    linkScanner.put("J. Theor. Biol.", elsevierLinkScanner);
   }
   
   public void initialize() throws IOException {

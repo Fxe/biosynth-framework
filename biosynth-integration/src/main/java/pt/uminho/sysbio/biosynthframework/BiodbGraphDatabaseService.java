@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
+import pt.uminho.sysbio.biosynth.integration.curation.CurationLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
@@ -47,6 +49,7 @@ import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosGenomeNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosTaxonomyNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosUniversalCompartmentNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.GenomeDatabase;
 
 public class BiodbGraphDatabaseService implements GraphDatabaseService {
@@ -58,6 +61,48 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   
   public String getDatabasePath() {
     return databasePath;
+  }
+  
+  private Node createUniversalCompartmentNode(SubcellularCompartment compartment) {
+    String symbol = null;
+    switch (compartment) {
+      case CYTOSOL: symbol = "c"; break;
+      case EXTRACELLULAR: symbol = "e"; break;
+      case BOUNDARY: symbol = "b"; break;
+      case PERIPLASM: symbol = "p"; break;
+      case MITOCHONDRIA: symbol = "m"; break;
+      case NUCLEUS: symbol = "n"; break;
+      default:
+        break;
+    }
+    
+    if (symbol == null) {
+      return null;
+    }
+    
+    logger.warn("Generate node for SubcellularCompartment: {}", compartment);
+    
+    Node ucmpNode = this.createNode(CurationLabel.UniversalCompartment);
+    ucmpNode.setProperty("bios_scmp", compartment.toString());
+    ucmpNode.setProperty(Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, symbol);
+    Neo4jUtils.setTimestamps(ucmpNode);
+    return ucmpNode;
+  }
+  
+  public BiosUniversalCompartmentNode getUniversalCompartment(SubcellularCompartment compartment) {
+    Node n = Neo4jUtils.getUniqueResult(
+        this.findNodes(CurationLabel.UniversalCompartment, "bios_scmp", compartment.toString()));
+    if (n != null) {
+      return new BiosUniversalCompartmentNode(n, databasePath);
+    }
+    
+    n = createUniversalCompartmentNode(compartment);
+    if (n != null) {
+      return new BiosUniversalCompartmentNode(n, databasePath);
+    } else {
+      logger.warn("failed to generate UniversalCompartment for: {}", compartment);
+      return null;
+    }
   }
 
   public void setDatabasePath(String databasePath) {
@@ -317,8 +362,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
   @Override
   public Node createNode() {
     Node node = service.createNode();
-    Neo4jUtils.setCreatedTimestamp(node);
-    Neo4jUtils.setUpdatedTimestamp(node);
+    Neo4jUtils.setTimestamps(node);
     return node;
   }
 

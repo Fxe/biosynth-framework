@@ -4,6 +4,7 @@ dependencies {
   compile( project(':biosynth-core') )
   compile( project(':biosynth-biodb') )
   compile( project(':biosynth-biodb-chebi') )
+  compile( project(':biosynth-biodb-modelseed') )
   compile( project(':biosynth-chemanalysis') )
 //  compile( project(':biosynth-graph') )
   compile( libraries.jung2_algo)

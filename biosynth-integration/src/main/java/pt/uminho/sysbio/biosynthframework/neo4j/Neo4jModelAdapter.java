@@ -14,7 +14,7 @@ import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
-import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class Neo4jModelAdapter implements ModelAdapter{
 
@@ -31,7 +31,10 @@ public class Neo4jModelAdapter implements ModelAdapter{
       cmpNodes.put(sid, n);
     }
     for (BiosModelSpeciesNode n : this.modelNode.getMetaboliteSpecies()) {
-      spiNodes.put(n.getSid(), n);
+      String sid = n.getSid();
+      if (!DataUtils.empty(sid)) {
+        spiNodes.put(n.getSid(), n);        
+      }
     }
     for (BiosModelReactionNode n : this.modelNode.getModelReactions()) {
       mrxnNodes.put(n.getSid(), n);
@@ -112,8 +115,12 @@ public class Neo4jModelAdapter implements ModelAdapter{
     if (spiNode == null) {
       return null;
     }
+    
     String name = (String) spiNode.getProperty("name", null);
     String cmpSid = spiNode.getCompartmentSid();
+    if (!DataUtils.empty(spiId) || !DataUtils.empty(cmpSid)) {
+      return null;
+    }
     SimpleModelSpecie<String> spi = new SimpleModelSpecie<String>(spiId, name, cmpSid);
     return spi;
   }

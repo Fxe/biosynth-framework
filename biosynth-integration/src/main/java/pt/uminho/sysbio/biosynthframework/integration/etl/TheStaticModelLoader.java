@@ -22,6 +22,7 @@ import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelReactionNode;
 import pt.uminho.sysbio.biosynthframework.sbml.SbmlSBaseObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
@@ -176,7 +177,7 @@ public class TheStaticModelLoader {
     return node;
   }
 
-  public static Node saveModelReaction(String entry, XmlSbmlModel mmd, XmlSbmlReaction rxn, BiodbGraphDatabaseService service) {
+  public static BiosModelReactionNode saveModelReaction(String entry, XmlSbmlModel mmd, XmlSbmlReaction rxn, BiodbGraphDatabaseService service) {
     Map<String, Object> properties = getProperties(rxn);
     includeNotes(rxn, properties);
     includeAnnotation(rxn, properties);
@@ -187,9 +188,6 @@ public class TheStaticModelLoader {
           entry);
       Neo4jUtils.setPropertiesMap(properties, rxnNode);
       rxnNode.setProperty(Neo4jDefinitions.PROXY_PROPERTY, false);
-      //      Node mmdNode = graphDatabaseService.getNodeById(getNeo4jId(mmd));
-      //      mmdNode.createRelationshipTo(rxnNode, MetabolicModelRelationshipType.has_reaction);
-
       //      if (rxnNode.hasProperty("subsystem")) {
       //        String ssysEntry = String.format("%s@%s", rxnNode.getProperty("subsystem"), modelEntry);
       //        Node subsysNode = Neo4jUtils.getOrCreateNode(
@@ -207,20 +205,17 @@ public class TheStaticModelLoader {
       return null;
     }
 
-    return rxnNode;
+    return new BiosModelReactionNode(rxnNode, null);
   }
-
-  public static Long loadModel(XmlSbmlModel xmodel, String modelEntry, BiodbGraphDatabaseService service) {
-    BiosMetabolicModelNode modelNode = saveMetabolicModel(xmodel, modelEntry, service);
-
-    final Map<String, Node> cmpNodes = loadModelCompartments(xmodel, modelNode, modelEntry, service);
-    final Map<String, Node> geneNodes = loadModelGenes(xmodel, modelNode, modelEntry, service);
-    final Map<String, Node> spiNodes = new HashMap<>();
-
-    for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
+  
+  public static Map<String, Node> loadModelSpecies(
+      XmlSbmlModel model, BiosMetabolicModelNode modelNode, String modelEntry, Map<String, Node> cmpNodes, BiodbGraphDatabaseService service) {
+    Map<String, Node> species = new HashMap<>();
+    
+    for (XmlSbmlSpecie xspi : model.getSpecies()) {
       String spiEntry = buildEntry(xspi, modelEntry, "species");
       String id = xspi.getAttributes().get("id");
-      Node spiNode = saveModelMetaboliteSpecie(spiEntry, xmodel, xspi, service);
+      Node spiNode = saveModelMetaboliteSpecie(spiEntry, model, xspi, service);
       if (!Neo4jUtils.exitsRelationshipBetween(modelNode, spiNode, Direction.BOTH)) {
         modelNode.createRelationshipTo(spiNode, MetabolicModelRelationshipType.has_metabolite_species);
       }
@@ -239,22 +234,32 @@ public class TheStaticModelLoader {
       }
 
       if (!DataUtils.empty(id) && spiNode != null) {
-        if (spiNodes.put(id, spiNode) != null) {
+        if (species.put(id, spiNode) != null) {
           logger.warn("duplicate: {}", id);
         }
       }
     }
+    
+    return species;
+  }
 
+  public static Long loadModel(XmlSbmlModel xmodel, String modelEntry, BiodbGraphDatabaseService service) {
+    BiosMetabolicModelNode modelNode = saveMetabolicModel(xmodel, modelEntry, service);
 
+    final Map<String, Node> cmpNodes = loadModelCompartments(xmodel, modelNode, modelEntry, service);
+    final Map<String, Node> geneNodes = loadModelGenes(xmodel, modelNode, modelEntry, service);
+    final Map<String, Node> spiNodes = loadModelSpecies(xmodel, modelNode, modelEntry, cmpNodes, service);
 
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       String entry = buildEntry(xrxn, modelEntry, "reaction");
-      Node mrxnNode = saveModelReaction(entry, xmodel, xrxn, service);
-      System.out.println(mrxnNode.getId());
-      System.out.println(DataUtils.toString(mrxnNode.getAllProperties(), "\n", ": "));
+      BiosModelReactionNode mrxnNode = saveModelReaction(entry, xmodel, xrxn, service);
+      logger.info("[{}] [{}]{} {}", modelEntry, mrxnNode.getId(), mrxnNode.getSid(), mrxnNode.getAllProperties().keySet());
+//      System.out.println(mrxnNode.getId());
+//      System.out.println(DataUtils.toString(mrxnNode.getAllProperties(), "\n", ": "));
       if (!Neo4jUtils.exitsRelationshipBetween(modelNode, mrxnNode, Direction.BOTH)) {
         modelNode.createRelationshipTo(mrxnNode, MetabolicModelRelationshipType.has_model_reaction);
       }
+      
       for (XmlObject  l : xrxn.getListOfReactants()) {
         String spiId = l.getAttributes().get("species");
         if (!DataUtils.empty(spiId) && spiNodes.containsKey(spiId)) {

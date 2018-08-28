@@ -272,7 +272,7 @@ public class UnifiedModel {
       result.name = nameArray.get(0);
       result.gpr = gprString;
       result.stoichiometry.putAll(stoich);
-      result.extra.put("id", ids.iterator().next());
+      result.attributes.put("id", ids.iterator().next());
       
     } else {
       logger.warn("!!!!!! {}", gprArray);

@@ -14,6 +14,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.ExternalReference;
+import pt.uminho.sysbio.biosynthframework.annotations.BiosReport;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelReactionNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelSpeciesNode;
@@ -105,6 +106,7 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
     return new ExternalReference(value, database);
   }
 
+  @BiosReport
   public Dataset<String, String, Integer> reportRxn(Set<String> models) {
     Dataset<String, String, Integer> report = new Dataset<>();
     
@@ -124,6 +126,7 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
     return report; 
   }
   
+  @BiosReport
   public Dataset<String, String, Integer> reportRxnBasic(Set<String> models) {
     Dataset<String, String, Integer> report = new Dataset<>();
     
@@ -145,7 +148,7 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
     return report; 
   }
   
-  
+  @BiosReport
   public Dataset<String, String, Integer> reportSpi(Set<String> models) {
     Dataset<String, String, Integer> report = new Dataset<>();
     
@@ -164,6 +167,7 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
     return report; 
   }
   
+  @BiosReport
   public Dataset<String, String, Integer> reportSpi() {
     Set<String> models = new HashSet<>();
     for (BiosMetabolicModelNode m : service.listMetabolicModels()) {
@@ -172,6 +176,7 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
     return reportSpi(models);
   }
   
+  @BiosReport
   public Dataset<String, String, Integer> reportRxn() {
     Set<String> models = new HashSet<>();
     for (BiosMetabolicModelNode m : service.listMetabolicModels()) {

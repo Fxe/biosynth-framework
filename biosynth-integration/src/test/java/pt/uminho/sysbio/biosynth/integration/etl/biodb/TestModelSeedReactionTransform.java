@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import pt.uminho.sysbio.biosynth.integration.GraphReactionEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
+//import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
 
 @Deprecated
 public class TestModelSeedReactionTransform {
@@ -34,8 +34,8 @@ public class TestModelSeedReactionTransform {
 
 //  @Test
   public void testEmpty() {
-    ModelSeedReactionEntity rxn = new ModelSeedReactionEntity();
-    GraphReactionEntity grxn = transform.apply(rxn);
-    assertNull(grxn);
+//    ModelSeedReactionEntity rxn = new ModelSeedReactionEntity();
+//    GraphReactionEntity grxn = transform.apply(rxn);
+//    assertNull(grxn);
   }
 }

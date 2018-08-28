@@ -11,7 +11,7 @@ import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtl
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
 
 public class ModelSeedMetaboliteTransform extends AbstractMetaboliteTransform<ModelSeedMetaboliteEntity>{
 
