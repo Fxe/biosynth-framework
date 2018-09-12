@@ -38,6 +38,7 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   public final XmlSbmlModel xmodel;
   protected Map<String, XmlSbmlReaction> xrxnMap = new HashMap<> ();
   protected Map<String, XmlSbmlSpecie> xspiMap = new HashMap<> ();
+  protected Map<String, XmlSbmlCompartment> xcmpMap = new HashMap<> ();
   protected Set<String> boundarySpecies = new HashSet<> ();
   
   protected BMap<String, Integer> xspiDegreeMap = new BHashMap<> ();
@@ -486,6 +487,10 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   public XmlSbmlModelAdapter(XmlSbmlModel xmodel) {
     this.xmodel = xmodel;
 
+    for (XmlSbmlCompartment xo : xmodel.getCompartments()) {
+      xcmpMap.put(xo.getAttributes().get("id"), xo);
+    }
+    
     for (XmlObject xparams : xmodel.getListOfParameters()) {
       parameters.put(xparams.getAttributes().get("id"), xparams);
     }
@@ -740,25 +745,28 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
 
   @Override
   public SimpleCompartment<String> getCompartment(String cmpId) {
-    // TODO Auto-generated method stub
-    return null;
+    XmlSbmlCompartment xcmp = this.xcmpMap.get(cmpId);
+    if (xcmp == null) {
+      return null;
+    }
+    
+    SimpleCompartment<String> cmp = new SimpleCompartment<String>(cmpId);
+    cmp.name = xcmp.getAttributes().get("name");
+    return cmp;
   }
 
   @Override
   public Set<String> getReactionIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.xrxnMap.keySet());
   }
 
   @Override
   public Set<String> getSpeciesIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.xspiMap.keySet());
   }
 
   @Override
   public Set<String> getCompartmentIds() {
-    // TODO Auto-generated method stub
-    return null;
+    return new HashSet<>(this.xcmpMap.keySet());
   }
 }

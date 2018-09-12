@@ -17,20 +17,24 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.Joiner;
+
 public class ModelSeedGenomeFileBuilder {
   
   protected Set<GenomeReaction> genomeReactions = new HashSet<>();
   
-  public static String HEADER = 
-      "REACTIONS\n" + 
-      "LOAD;DIRECTIONALITY;COMPARTMENT;ASSOCIATED PEG;SUBSYSTEM;CONFIDENCE;REFERENCE;NOTES";
+  public static String COL_SEP = ";";
+  public static String COL_ITEM_SEP = "!";
+  public static String[] COLS = new String[]{
+      "LOAD", "DIRECTIONALITY", "COMPARTMENT", "ASSOCIATED PEG", "SUBSYSTEM", "CONFIDENCE", "REFERENCE", "NOTES"};
+  public static String HEADER = "REACTIONS\n" + Joiner.on(COL_SEP).join(COLS);
   
   public ModelSeedGenomeFileBuilder withRxnToGeneMapping(Map<String, Set<String>> mapping) {
     for (String rxn : mapping.keySet()) {
       Set<String> genes = mapping.get(rxn);
       GenomeReaction gr = new GenomeReaction();
       gr.load = rxn;
-      gr.associated_peg = StringUtils.join(genes, '|');
+      gr.associated_peg = StringUtils.join(genes, COL_ITEM_SEP);
       gr.compartment = "c";
       gr.directionality = ModelSeedReversibility.REVERSIBLE;
       gr.subsystem = "NONE";
@@ -67,7 +71,7 @@ public class ModelSeedGenomeFileBuilder {
       
       grs = new ArrayList<>();
       for (int i = 2; i < lines.size(); i++) {
-        String[] p = lines.get(i).split(";");
+        String[] p = lines.get(i).split(COL_SEP);
         GenomeReaction gr = new GenomeReaction();
         gr.load = p[0];
         gr.directionality = ModelSeedReversibility.getEnum(p[1]);

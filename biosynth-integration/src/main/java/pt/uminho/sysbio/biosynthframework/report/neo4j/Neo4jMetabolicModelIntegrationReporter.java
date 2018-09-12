@@ -12,6 +12,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelation
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.ExternalReference;
 import pt.uminho.sysbio.biosynthframework.annotations.BiosReport;
@@ -161,6 +162,26 @@ public class Neo4jMetabolicModelIntegrationReporter extends AbstractNeo4jReporte
           CollectionUtils.increaseCount(count, ref.source, 1);
         }
         report.dataset.put(modelEntry, count);
+      }
+    }
+    
+    return report; 
+  }
+  
+  @BiosReport
+  public Dataset<String, String, Object> reportSpiTable(String modelEntry) {
+    Dataset<String, String, Object> report = new Dataset<>();
+    BiosMetabolicModelNode modelNode = service.getMetabolicModel(modelEntry);
+      
+    if (modelNode != null && !modelNode.isProxy()) {
+      for (BiosModelSpeciesNode spiNode : modelNode.getMetaboliteSpecies()) {
+        String sid = spiNode.getSid();
+        for (BiodbMetaboliteNode cpdNode : spiNode.getReferences()) {
+          Integer score = spiNode.getAnnotationScore(cpdNode);
+          MetaboliteMajorLabel db = cpdNode.getDatabase();
+          report.add(sid, db.toString(), cpdNode.getEntry());
+          report.add(sid, db.toString() + " (score)", score);
+        }
       }
     }
     

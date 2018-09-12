@@ -24,10 +24,18 @@ public class CompartmentalizedStoichiometry<T, C> {
   
   public Set<C> getCompartments() {
     Set<C> compartments = new HashSet<>();
-    for (Pair<T, C> p  : stoichiometry.keySet()) {
+    for (Pair<?, C> p  : stoichiometry.keySet()) {
       compartments.add(p.getRight());
     }
     return compartments;
+  }
+  
+  public Set<T> getCompounds() {
+    Set<T> compounds = new HashSet<>();
+    for (Pair<T, ?> p  : stoichiometry.keySet()) {
+      compounds.add(p.getLeft());
+    }
+    return compounds;
   }
   
   public double addLeft(T k, C c, double value) {
@@ -70,6 +78,19 @@ public class CompartmentalizedStoichiometry<T, C> {
 //      stoichiometry.put(p, value);
 //      return value;
 //    }
+  }
+  
+  public boolean remove(T compound) {
+    Set<Pair<T, C>> remove = new HashSet<>();
+    for (Pair<T, C> p : stoichiometry.keySet()) {
+      if (p.getLeft().equals(compound)) {
+        remove.add(p);
+      }
+    }
+    
+    stoichiometry.keySet().removeAll(remove);
+    
+    return !remove.isEmpty();
   }
   
   public void addLeft(Map<Pair<T, C>, Double> l) {

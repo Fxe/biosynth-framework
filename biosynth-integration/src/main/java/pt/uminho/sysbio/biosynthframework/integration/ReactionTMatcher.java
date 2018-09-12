@@ -19,6 +19,9 @@ public class ReactionTMatcher<CMP, ID> {
   
   private static final Logger logger = LoggerFactory.getLogger(ReactionTMatcher.class);
   
+  public boolean allowSingle = false;
+  public boolean testReverse = true;
+  
   public Map<CompartmentalizedStoichiometry<ID, Integer>, Set<ID>> cstoichToRxnIds = new HashMap<>();
   
   public Set<ID> match(CompartmentalizedStoichiometry<ID, ?> cstoich) {
@@ -66,11 +69,24 @@ public class ReactionTMatcher<CMP, ID> {
   public void addReactionInternal(CompartmentalizedStoichiometry<ID, Integer> rxn, ID rxnId) {
     Set<CompartmentalizedStoichiometry<ID, Integer>> perm = getPermutations(rxn);
     boolean found = false;
-    for (Object o : perm) {
+    for (CompartmentalizedStoichiometry<ID, Integer> o : perm) {
       logger.debug("test  {}", o);
+      CompartmentalizedStoichiometry<ID, Integer> rev = null;
+      if (testReverse) {
+        rev = new CompartmentalizedStoichiometry<>();
+        for (Pair<ID, Integer> p : o.stoichiometry.keySet()) {
+          double v = o.stoichiometry.get(p);
+          rev.stoichiometry.put(p, -1 * v);
+        }
+      }
       if (cstoichToRxnIds.containsKey(o)) {
-        logger.debug("found {}", o);
+        logger.debug("found LR {}", o);
         cstoichToRxnIds.get(o).add(rxnId);
+        found = true;
+        break;
+      } else if (rev != null && cstoichToRxnIds.containsKey(rev)) {
+        logger.debug("found RL {}", rev);
+        cstoichToRxnIds.get(rev).add(rxnId);
         found = true;
         break;
       }
@@ -91,7 +107,6 @@ public class ReactionTMatcher<CMP, ID> {
     
     Set<CompartmentalizedStoichiometry<ID, Integer>> result = new HashSet<>();
     if (cmps.size() == 2) {
-      
       CompartmentalizedStoichiometry<ID, Integer> swap = new CompartmentalizedStoichiometry<>();
       Map<Integer, Integer> cswap = new HashMap<>();
       List<Integer> ocmp = new ArrayList<> (cmps);
@@ -108,7 +123,9 @@ public class ReactionTMatcher<CMP, ID> {
       
       result.add(cstoich);
       result.add(swap);
-    } else {
+    } else if (allowSingle && cmps.size() <= 2) {
+      result.add(cstoich);
+    } else { 
       result.add(cstoich);
       logger.warn("not implemetned for higher than 2");
     }

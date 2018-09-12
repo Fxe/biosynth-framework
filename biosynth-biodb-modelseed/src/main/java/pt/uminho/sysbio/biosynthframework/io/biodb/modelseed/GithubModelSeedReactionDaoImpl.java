@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,13 +30,14 @@ import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionCross
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionReagentEntity;
 import pt.uminho.sysbio.biosynthframework.io.AbstractReadOnlyReactionDao;
+import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 
 /**
  * 
  * @author Filipe Liu
  *
  */
-public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<ModelSeedReactionEntity> {
+public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<ModelSeedReactionEntity> implements BiosDao<ModelSeedReactionEntity> {
   
   private static final Logger logger = LoggerFactory.getLogger(GithubModelSeedReactionDaoImpl.class);
   
@@ -133,6 +135,22 @@ public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<
     }
   };
   
+  public static Double getDouble(Object o) {
+    if (o == null) {
+      return null;
+    }
+    if (o instanceof Double) {
+      return (Double) o;
+    } else {
+      String str = o.toString();
+      if (NumberUtils.isParsable(str)) {
+        return Double.parseDouble(str);
+      } else {
+        return null;
+      }
+    }
+  }
+  
   public static Map<String, ModelSeedReactionEntity> parse(InputStream is, InputStream isAliases) throws IOException {
     Map<String, List<ModelSeedReactionCrossreferenceEntity>> xrefsMap = parseAliases(isAliases);
     
@@ -151,6 +169,10 @@ public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<
         rxn.setName(reactionData.name);
         rxn.setEquation(reactionData.equation);
         rxn.setCode(reactionData.code);
+        rxn.setAbbreviation(reactionData.abbreviation);
+        rxn.setDeltag(getDouble(reactionData.deltag));
+        rxn.setDeltagerr(getDouble(reactionData.deltagerr));
+//        rxn.setDeltag(getreactionData.deltag);
         if (reactionData.is_obsolete != null) {
           if (reactionData.is_obsolete == 0) {
             rxn.setObsolete(false);
@@ -173,7 +195,6 @@ public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<
         }
 
 //        rxn.setFormula(getString(compoundData, "formula"));
-//        rxn.setAbbreviation(getString(compoundData, "abbreviation"));
 //        rxn.setDefaultCharge(getInteger(compoundData, "charge"));
 //        rxn.setObsolete(getBoolean(compoundData, "is_obsolete"));
 //        rxn.setCore(getBoolean(compoundData, "is_core"));
@@ -281,5 +302,39 @@ public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<
     }
     
     return new HashSet<> (data.keySet());
+  }
+
+  @Override
+  public ModelSeedReactionEntity getByEntry(String entry) {
+    return this.getReactionByEntry(entry);
+  }
+
+  @Override
+  public ModelSeedReactionEntity getById(long id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Long save(ModelSeedReactionEntity o) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean delete(ModelSeedReactionEntity o) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Set<Long> getAllIds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    return new HashSet<>(this.getAllReactionEntries());
   }
 }

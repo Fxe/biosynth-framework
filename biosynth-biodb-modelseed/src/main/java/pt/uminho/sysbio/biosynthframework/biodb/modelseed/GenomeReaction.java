@@ -29,10 +29,14 @@ public class GenomeReaction {
   public String notes = "NONE";
   
   public Set<String> getGenes() {
+    return getGenes("\\|");
+  }
+  
+  public Set<String> getGenes(String split) {
     Set<String> genes = new HashSet<>();
     
     if (!DataUtils.empty(associated_peg)) {
-      for (String s : this.associated_peg.split("\\|")) {
+      for (String s : this.associated_peg.split(split)) {
         genes.add(s.trim());
       }
     }
@@ -52,6 +56,6 @@ public class GenomeReaction {
     data.add(confidence);
     data.add(reference);
     data.add(notes);
-    return StringUtils.join(data, ';');
+    return StringUtils.join(data, ModelSeedGenomeFileBuilder.COL_SEP);
   }
 }

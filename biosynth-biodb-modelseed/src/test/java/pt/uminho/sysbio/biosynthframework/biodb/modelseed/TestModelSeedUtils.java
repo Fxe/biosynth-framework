@@ -10,6 +10,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.core.io.FileSystemResource;
+
+import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.JsonModelSeedRoleDao;
 
 public class TestModelSeedUtils {
 
@@ -98,5 +101,19 @@ public class TestModelSeedUtils {
     ids.add("rxn00000");
     String low = ModelSeedUtils.selectLowestId(ids);
     assertEquals("rxn00001", low);
+  }
+  
+  @Test
+  public void test_role_searchname() {
+    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao.Builder().build(new FileSystemResource("/var/argonne/annotation/Roles.json"));
+    for (String r : roleDao.getAllEntries()) {
+      ModelSeedRole role = roleDao.getByEntry(r);
+      String search = role.searchname;
+      String name = role.getName();
+      String search2 = ModelSeedUtils.convertToSearchName(name);
+      if (!search.equals(search2)) {
+        System.out.println(search + "\t" + search2);
+      }
+    }
   }
 }

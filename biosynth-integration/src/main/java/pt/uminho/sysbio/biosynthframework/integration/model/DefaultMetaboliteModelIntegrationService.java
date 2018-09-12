@@ -22,6 +22,7 @@ public class DefaultMetaboliteModelIntegrationService implements MetaboliteModel
   }
   
   public void wut() {
+    IdBaseIntegrationEngine a;
     BiodbService biodbService = null;
     SpecieIntegrationFacade spiIntegration = new SpecieIntegrationFacade();
     ReactionIntegrationFacade rxnIntegration = new ReactionIntegrationFacade(biodbService);

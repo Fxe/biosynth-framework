@@ -2,8 +2,10 @@ package pt.uminho.sysbio.biosynthframework.io.biodb.modelseed;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedSubsystem;
+import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 
-public class JsonModelSeedSubsystemDao {
+public class JsonModelSeedSubsystemDao implements BiosDao<ModelSeedSubsystem>{
   
   private static final Logger logger = LoggerFactory.getLogger(JsonModelSeedSubsystemDao.class);
   
@@ -42,5 +45,39 @@ public class JsonModelSeedSubsystemDao {
     } catch (IOException e) {
       logger.error("IO Error: {}", e.getMessage());
     }
+  }
+
+  @Override
+  public ModelSeedSubsystem getByEntry(String entry) {
+    return this.data.get(entry);
+  }
+
+  @Override
+  public ModelSeedSubsystem getById(long id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Long save(ModelSeedSubsystem o) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean delete(ModelSeedSubsystem o) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Set<Long> getAllIds() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    return new HashSet<>(data.keySet());
   }
 }
