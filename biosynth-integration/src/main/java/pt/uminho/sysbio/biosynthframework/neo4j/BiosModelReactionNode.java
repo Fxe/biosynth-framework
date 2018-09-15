@@ -21,6 +21,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class BiosModelReactionNode extends BiodbEntityNode {
 
@@ -48,6 +49,22 @@ public class BiosModelReactionNode extends BiodbEntityNode {
   
   public String getSid() {
     return (String) this.getProperty("id", null);
+  }
+  
+  public Set<String> getGeneKBaseIds() {
+    BiodbEntityNode gprNode = this.getGpr();
+    Set<String> geneIds = new HashSet<>();
+    if (gprNode != null) {
+      for (Relationship r : gprNode.getRelationships(MetabolicModelRelationshipType.has_gpr_gene)) {
+        Node n = r.getOtherNode(gprNode);
+        String geneId = (String) n.getProperty("bios_kbase_id", null);
+        if (!DataUtils.empty(geneId)) {
+          geneIds.add(geneId);              
+        }
+      }
+    }
+    
+    return geneIds;
   }
   
   public BiodbEntityNode getGpr() {

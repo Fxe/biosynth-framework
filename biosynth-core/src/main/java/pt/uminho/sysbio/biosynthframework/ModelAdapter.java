@@ -28,4 +28,6 @@ public interface ModelAdapter {
   public Set<String> getReactionIds();
   public Set<String> getSpeciesIds();
   public Set<String> getCompartmentIds();
+  
+  public CompartmentalizedStoichiometry<String, String> getCompartmentalizedStoichiometry(String mrxnEntry);
 }

@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
+import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
@@ -149,6 +151,27 @@ public class Neo4jModelAdapter implements ModelAdapter{
   @Override
   public Set<String> getCompartmentIds() {
     return new HashSet<>(this.cmpNodes.keySet());
+  }
+
+  @Override
+  public CompartmentalizedStoichiometry<String, String> getCompartmentalizedStoichiometry(String mrxnEntry) {
+    BiosModelReactionNode mrxnNode = this.mrxnNodes.get(mrxnEntry);
+    
+    if (mrxnNode == null) {
+      return null;
+    }
+    
+    CompartmentalizedStoichiometry<String, String> cstoich = new CompartmentalizedStoichiometry<>();
+    CompartmentalizedStoichiometry<Long, Long> cstoichIds = mrxnNode.getCompartmentalizedStoichiometry(1.0);
+    for (Pair<Long, Long> p : cstoichIds.stoichiometry.keySet()) {
+      String spi = Long.toString(p.getLeft());
+      String cmp = Long.toString(p.getRight());
+      Double value = cstoichIds.stoichiometry.get(p);
+      
+      cstoich.add(spi, cmp, value);
+    }
+    
+    return cstoich;
   }
 
 }

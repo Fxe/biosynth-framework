@@ -70,7 +70,7 @@ public class ReactionTMatcher<CMP, ID> {
     Set<CompartmentalizedStoichiometry<ID, Integer>> perm = getPermutations(rxn);
     boolean found = false;
     for (CompartmentalizedStoichiometry<ID, Integer> o : perm) {
-      logger.debug("test  {}", o);
+      logger.trace("test  {}", o);
       CompartmentalizedStoichiometry<ID, Integer> rev = null;
       if (testReverse) {
         rev = new CompartmentalizedStoichiometry<>();

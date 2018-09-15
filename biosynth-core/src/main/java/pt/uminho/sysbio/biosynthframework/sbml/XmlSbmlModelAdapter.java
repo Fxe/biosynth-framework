@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
@@ -768,5 +769,38 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   @Override
   public Set<String> getCompartmentIds() {
     return new HashSet<>(this.xcmpMap.keySet());
+  }
+  
+  public Double getValue(String str) {
+    if (NumberUtils.isParsable(str)) {
+      return Double.parseDouble(str);
+    }
+    return null;
+  }
+  
+
+  @Override
+  public CompartmentalizedStoichiometry<String, String> getCompartmentalizedStoichiometry(String mrxnEntry) {
+    XmlSbmlReaction xrxn = this.xrxnMap.get(mrxnEntry);
+    
+    if (xrxn == null) {
+      return null;
+    }
+    
+    CompartmentalizedStoichiometry<String, String> cstoich = new CompartmentalizedStoichiometry<>();
+    for (XmlObject xo : xrxn.getListOfReactants()) {
+      String specie = xo.getAttributes().get("species");
+      String cmp = this.getSpecieCompartment(specie);
+      Double value = getValue(xo.getAttributes().get("stoichiometry"));
+      cstoich.addLeft(specie, cmp, value == null ? 1.0 : value);
+    }
+    for (XmlObject xo : xrxn.getListOfProducts()) {
+      String specie = xo.getAttributes().get("species");
+      String cmp = this.getSpecieCompartment(specie);
+      Double value = getValue(xo.getAttributes().get("stoichiometry"));
+      cstoich.addRight(specie, cmp, value == null ? 1.0 : value);
+    }
+    
+    return cstoich;
   }
 }

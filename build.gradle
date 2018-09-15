@@ -18,7 +18,7 @@ allprojects {
   repositories {
     mavenCentral()
     mavenLocal()
-    maven { url 'http://192.168.1.99/nexus/content/groups/public/' }
+    //maven { url 'http://192.168.1.99/nexus/content/groups/public/' }
     maven { url 'http://193.137.11.210/nexus/content/groups/public/' }
     maven { url 'http://www.ebi.ac.uk/~maven/m2repo' }
     maven { url 'http://biojava.org/download/maven/' }
@@ -52,8 +52,8 @@ subprojects { subProject ->
   group = 'pt.uminho.sysbio.biosynthframework'
   version = '0.9.0-SNAPSHOT'
   
-  targetCompatibility = 1.7
-  sourceCompatibility = 1.7
+  targetCompatibility = 1.8
+  sourceCompatibility = 1.8
   
 
   

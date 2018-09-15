@@ -49,6 +49,11 @@ public class GithubModelSeedReactionDaoImpl extends AbstractReadOnlyReactionDao<
   public GithubModelSeedReactionDaoImpl(String version) {
     super(version);
   }
+  
+  public GithubModelSeedReactionDaoImpl(String version, String localStorage) {
+    super(version);
+    this.path = localStorage;
+  }
 //  public Function<String, ModelSeedReactionReagentEntity> stoichParser = new ;
   
   public static Map<String, List<ModelSeedReactionCrossreferenceEntity>> parseAliases(InputStream is) {
