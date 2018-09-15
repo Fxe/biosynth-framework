@@ -51,6 +51,9 @@ public class SimpleMetabolicModelReactionIntegrationImpl<RXN extends AbstractBio
       RXN rxn = dao.getByEntry(rxnEntry);
       if (isBasic.apply(rxn)) {
         CompartmentalizedStoichiometry<String, Integer> cstoich = convertToStoich.apply(rxn);
+        for (String id : excludeIds) {
+          cstoich.remove(id);
+        }
         matcher.addReaction(cstoich, rxnEntry);
       }
     }
