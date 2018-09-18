@@ -174,4 +174,13 @@ public class Neo4jModelAdapter implements ModelAdapter{
     return cstoich;
   }
 
+  @Override
+  public Set<String> getReactionGeneIds(String rxnId) {
+    BiosModelReactionNode mrxnNode = this.mrxnNodes.get(rxnId);
+    if (mrxnNode == null) {
+      return null;
+    }
+    return mrxnNode.getGeneKBaseIds();
+  }
+
 }

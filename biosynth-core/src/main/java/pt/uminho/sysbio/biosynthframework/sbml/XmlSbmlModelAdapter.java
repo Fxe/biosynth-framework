@@ -803,4 +803,11 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     
     return cstoich;
   }
+
+  @Override
+  public Set<String> getReactionGeneIds(String rxnId) {
+    System.err.println("not impl");
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
