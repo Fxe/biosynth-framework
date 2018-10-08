@@ -33,6 +33,10 @@ public class SbmlNotesParser {
     EC_NUMBER,
     SUBSYSTEM,
     GENE_ASSOCIATION,
+    INCHI,
+    KEGG,
+    METACYC,
+    SEED,
   }
   
   private static final Logger logger = LoggerFactory.getLogger(SbmlNotesParser.class);
@@ -99,9 +103,10 @@ public class SbmlNotesParser {
     fields.put("FORMULA", Fields.FORMULA.toString());
     fields.put("SMILES", Fields.SMILES.toString());
     fields.put("CHARGE", Fields.CHARGE.toString());
+    fields.put("INCHI", Fields.INCHI.toString());
     
 //    fields.put("EQUATION", "equation");
-    fields.put("GPR_ASSOCIATION", Fields.GENE_ASSOCIATION.toString());
+    fields.put("GPR_ASSOCIATION",  Fields.GENE_ASSOCIATION.toString());
     fields.put("GENE_ASSOCIATION", Fields.GENE_ASSOCIATION.toString());
     fields.put("GENE ASSOCIATION", Fields.GENE_ASSOCIATION.toString());
 //    fields.put("GENE_LIST", "gene_list");
@@ -113,15 +118,18 @@ public class SbmlNotesParser {
 //    fields.put("CONFIDENCE LEVEL", "confidence_level");
     fields.put("EC NUMBER", Fields.EC_NUMBER.toString());
     fields.put("EC_NUMBER", Fields.EC_NUMBER.toString());
-    fields.put("EC", Fields.EC_NUMBER.toString());
+    fields.put("EC",        Fields.EC_NUMBER.toString());
     
+    fields.put("KEGG ID",       Fields.KEGG.toString());
+    fields.put("KEGG_RID",      Fields.KEGG.toString());
+    fields.put("KEGG COMPOUND", Fields.KEGG.toString());
+    fields.put("BIOCYC",        Fields.METACYC.toString());
+    fields.put("SEED COMPOUND", Fields.SEED.toString());
 //    fields.put("PROTEIN_NAME", "reaction_name");
     
     
 //    fields.put("AUTHORS", "authors");
 //    fields.put("COMPARTMENT", "compartment");
-//    fields.put("KEGG ID", "kegg");
-//    fields.put("KEGG_RID", "kegg");
 //    fields.put("PUBCHEM ID", "pubchem");
 //    fields.put("CHEBI ID", "chebi");
     
