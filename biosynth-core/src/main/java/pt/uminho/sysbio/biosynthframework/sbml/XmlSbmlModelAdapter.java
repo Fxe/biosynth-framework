@@ -26,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
+import pt.uminho.sysbio.biosynthframework.Tuple2;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
@@ -626,14 +627,27 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   }
   
   public String getGprFromNotes(String mrxnEntry) {
+    String ngpr = null;
+    
     XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
     String notes = xrxn.getNotes();
-    Map<String, Set<String>> ndata = notesParser.parseNotes2(null);
-    String ngpr = null;
-    if (ndata.containsKey("gene_association") && 
-        ndata.get("gene_association").size() > 0) {
-      ngpr = ndata.get("gene_association").iterator().next();
+    
+    if (!DataUtils.empty(notes)) {
+      SbmlNotesParser parser = new SbmlNotesParser(notes);
+      parser.parse();
+      for (Tuple2<String> t : parser.getData()) {
+        if ("GENE_ASSOCIATION".equals(t.e1) && !DataUtils.empty(t.e2)) {
+          ngpr = t.e2;
+        }
+      }
     }
+    
+//    Map<String, Set<String>> ndata = notesParser.parse(notes);
+//    
+//    if (ndata.containsKey("gene_association") && 
+//        ndata.get("gene_association").size() > 0) {
+//      ngpr = ndata.get("gene_association").iterator().next();
+//    }
     
     return ngpr;
   }
