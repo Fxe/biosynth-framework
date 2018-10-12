@@ -127,7 +127,7 @@ public class ReactionTMatcher<CMP, ID> {
       result.add(cstoich);
     } else { 
       result.add(cstoich);
-      logger.warn("not implemetned for higher than 2");
+      logger.trace("not implemetned for higher than 2");
     }
     
     return result;
