@@ -46,7 +46,7 @@ public class ReactionTMatcher<CMP, ID> {
       Object cmpEntry = p.getRight();
       ID spiEntry = p.getLeft();
       Double value = cstoich.stoichiometry.get(p);
-      logger.debug("{} {} {}", cmpEntry, spiEntry, value);
+      logger.trace("{} {} {}", cmpEntry, spiEntry, value);
       if (!cmap.keySet().contains(cmpEntry)) {
         cmap.put(cmpEntry, index++);
       }
@@ -80,12 +80,12 @@ public class ReactionTMatcher<CMP, ID> {
         }
       }
       if (cstoichToRxnIds.containsKey(o)) {
-        logger.debug("found LR {}", o);
+        logger.trace("found LR {}", o);
         cstoichToRxnIds.get(o).add(rxnId);
         found = true;
         break;
       } else if (rev != null && cstoichToRxnIds.containsKey(rev)) {
-        logger.debug("found RL {}", rev);
+        logger.trace("found RL {}", rev);
         cstoichToRxnIds.get(rev).add(rxnId);
         found = true;
         break;
