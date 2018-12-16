@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -131,23 +132,39 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     }
   }
   
-  public Node merge(Node a, Node b) {
+  public static Node merge(Node a, Node b) {
+    Set<Long> inc = new HashSet<>();
+    Set<Long> out = new HashSet<>();
     Map<Long, RelationshipType> t = new HashMap<>();
     Map<Long, Map<String, Object>> p = new HashMap<>();
     Map<Long, Node> o = new HashMap<>();
     
-    for (Relationship r : b.getRelationships()) {
+    for (Relationship r : b.getRelationships(Direction.INCOMING)) {
+      logger.debug("<- {}, {}, {}", r.getId(), r.getType(), r.getAllProperties());
+      inc.add(r.getId());
       t.put(r.getId(), r.getType());
       p.put(r.getId(), r.getAllProperties());
       o.put(r.getId(), r.getOtherNode(b));
       r.delete();
     }
     
-    for (long i : t.keySet()) {
+    for (Relationship r : b.getRelationships(Direction.OUTGOING)) {
+      logger.debug("-> {}, {}, {}", r.getId(), r.getType(), r.getAllProperties());
+      out.add(r.getId());
+      t.put(r.getId(), r.getType());
+      p.put(r.getId(), r.getAllProperties());
+      o.put(r.getId(), r.getOtherNode(b));
+      r.delete();
+    }
+    
+    for (long i : inc) {
+      Relationship r = o.get(i).createRelationshipTo(a, t.get(i));
+      Neo4jUtils.setPropertiesMap(p.get(i), r);
+    }
+    for (long i : out) {
       Relationship r = a.createRelationshipTo(o.get(i), t.get(i));
       Neo4jUtils.setPropertiesMap(p.get(i), r);
     }
-    Neo4jUtils.setUpdatedTimestamp(a);
     b.delete();
     
     logger.info("moved {} relationships", t.size());
