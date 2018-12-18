@@ -19,6 +19,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelation
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
 import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
@@ -107,7 +108,6 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     return stoichiometryMap;
   }
   
-  
   public CompartmentalizedStoichiometry<Long, Long> getCompartmentalizedStoichiometry(double defaultValue) {
     CompartmentalizedStoichiometry<Long, Long> stoichiometry = new CompartmentalizedStoichiometry<>();
     
@@ -171,6 +171,19 @@ public class BiosModelReactionNode extends BiodbEntityNode {
     return references;
   }
 
+  public Integer getAnnotationScore(BiodbReactionNode rxnNode) {
+    Integer score = -1;
+    
+    Map<String, Integer> users = this.getAnnotationUsers(rxnNode);
+    for (Integer v : users.values()) {
+      if (score < v) {
+        score = v;
+      }
+    }
+    
+    return score;
+  }
+  
   public Map<String, Integer> getAnnotationUsers(BiodbReactionNode rxnNode) {
     Map<String, Integer> users = new HashMap<>();
     Relationship referenceLink = null;
