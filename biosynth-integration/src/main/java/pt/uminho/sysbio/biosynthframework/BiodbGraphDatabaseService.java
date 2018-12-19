@@ -73,6 +73,10 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
       case PERIPLASM: symbol = "p"; break;
       case MITOCHONDRIA: symbol = "m"; break;
       case NUCLEUS: symbol = "n"; break;
+      case GOLGI: symbol = "g"; break;
+      case RETICULUM: symbol = "r"; break;
+      case VACUOLE: symbol = "v"; break;
+      case PEROXISOME: symbol = "x"; break;
       default:
         break;
     }
