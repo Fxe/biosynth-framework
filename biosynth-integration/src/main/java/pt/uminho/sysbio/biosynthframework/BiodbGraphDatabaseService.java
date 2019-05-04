@@ -46,6 +46,7 @@ import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbEntityNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbPropertyNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbReactionNode;
+import pt.uminho.sysbio.biosynthframework.integration.ReactionTMatcher;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosGenomeNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
@@ -84,7 +85,7 @@ public class BiodbGraphDatabaseService implements GraphDatabaseService {
     if (symbol == null) {
       return null;
     }
-    
+    ReactionTMatcher<?, ?> aaa;
     logger.warn("Generate node for SubcellularCompartment: {}", compartment);
     
     Node ucmpNode = this.createNode(CurationLabel.UniversalCompartment);

@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
+import pt.uminho.sysbio.biosynthframework.Tuple2;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelSpeciesNode;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosUniversalMetaboliteNode;
@@ -23,19 +24,25 @@ public class MetabolicModelIntegrationTools {
   
   private static final Logger logger = LoggerFactory.getLogger(MetabolicModelIntegrationTools.class);
   
-  public static void fixGeneProteinSbo(String modelEntry, BiodbGraphDatabaseService services) {
+  public static Tuple2<Set<String>> fixGeneProteinSbo(String modelEntry, BiodbGraphDatabaseService services) {
     BiosMetabolicModelNode model = services.getMetabolicModel(modelEntry);
+    Set<String> sboGenes = new HashSet<>();
+    Set<String> sboComplexes = new HashSet<>();
     for (BiosModelSpeciesNode spi : model.getMetaboliteSpecies()) {
       String sid = spi.getSid();
       if (sid.startsWith("E_")) {
         Node sboterm = services.getNodeByEntryAndLabel("SBO:0000243", OntologyDatabase.SBO);
         spi.setSystemsBiologyOntology(sboterm);
+        sboGenes.add(sid);
       }
       if (sid.startsWith("Cx_")) {
         Node sboterm = services.getNodeByEntryAndLabel("SBO:0000297", OntologyDatabase.SBO);
         spi.setSystemsBiologyOntology(sboterm);
+        sboComplexes.add(sid);
       }
     }
+    
+    return new Tuple2<Set<String>>(sboGenes, sboComplexes);
   }
   
   public static Set<Long> reduce(Map<String, Set<Long>> map) {

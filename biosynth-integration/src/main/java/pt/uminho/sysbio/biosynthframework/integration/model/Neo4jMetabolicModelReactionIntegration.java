@@ -32,7 +32,7 @@ public class Neo4jMetabolicModelReactionIntegration implements MetabolicModelRea
   
   private final BiodbGraphDatabaseService service;
   
-  public Function<BiodbReactionNode, CompartmentalizedStoichiometry<Long, Integer>> nodeConverter;
+  public Function<BiodbReactionNode, CompartmentalizedStoichiometry<Long, Object>> nodeConverter;
   
   public Dataset<String, String, Tuple2<Object>> report = new Dataset<>();
   public Dataset<String, String, Object> treport = new Dataset<>();
@@ -62,14 +62,17 @@ public class Neo4jMetabolicModelReactionIntegration implements MetabolicModelRea
     return ustoich;
   }
   
-  public<T> void aaa(BiosModelReactionNode mrxnNode, ReactionTMatcher<T, Long> matcher, Map<Long, Long> uspiMap, BiodbMetaboliteNode remove, Dataset<String, String, Object> report) {
+  public<T> void aaa(BiosModelReactionNode mrxnNode, ReactionTMatcher<T, Long> matcher, 
+      Map<Long, Long> uspiMap, Set<BiodbMetaboliteNode> removes, Dataset<String, String, Object> report) {
     String sid = mrxnNode.getSid();
     CompartmentalizedStoichiometry<Long, Long> aa = mrxnNode.getCompartmentalizedStoichiometry(1.0);
     
     if (aa.getCompartments().size() > 0) {
       CompartmentalizedStoichiometry<Long, Long> ustoich = mapToUniversals(aa, uspiMap);
-      if (remove != null) {
-        ustoich.remove(remove.getId());
+      if (removes != null) {
+        for (BiodbMetaboliteNode remove : removes) {
+          ustoich.remove(remove.getId());          
+        }
       }
 //      System.out.println("universal " + ustoich);
       if (ustoich.getCompartments().size() > 0) {
@@ -114,17 +117,20 @@ public class Neo4jMetabolicModelReactionIntegration implements MetabolicModelRea
         if (mresult != null && !mresult.isEmpty()) {
           report.add(sid, "ustoich", ustoich);
           report.add(sid, "mresult", mresult);
-          report.add(sid, "names", names);
+          report.add(sid, "all", names);
           report.add(sid, "best", best);
         }
       }
     }
   }
   
-  public IntegrationMap<String, ReactionMajorLabel> reactionIntegration(Dataset<String, String, String> mapping, BiosMetabolicModelNode modelNode) {
-    IntegrationMap<String, ReactionMajorLabel> integration = new IntegrationMap<>();
+  public Map<Long, Long> getIdTranslation(
+      Dataset<String, String, String> mapping, 
+      BiosMetabolicModelNode modelNode, 
+      MetaboliteMajorLabel target) {
+    
     Map<Long, Long> uspiMap = new HashMap<>();
-    MetaboliteMajorLabel target = MetaboliteMajorLabel.ModelSeed;
+    
     for (String spiEntry : mapping.dataset.keySet()) {
       for (String db : mapping.dataset.get(spiEntry).keySet()) {
         if (db.equals(target.toString())) {
@@ -139,43 +145,72 @@ public class Neo4jMetabolicModelReactionIntegration implements MetabolicModelRea
       }
     }
     
+    return uspiMap;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public IntegrationMap<String, ReactionMajorLabel> reactionIntegration(
+      Dataset<String, String, String> mapping, 
+      BiosMetabolicModelNode modelNode, 
+      MetaboliteMajorLabel cpdDatabase, ReactionMajorLabel rxnDatabase,
+      Set<BiodbMetaboliteNode> exclude) {
+    
+    IntegrationMap<String, ReactionMajorLabel> integration = new IntegrationMap<>();
+    Map<Long, Long> uspiMap = getIdTranslation(mapping, modelNode, cpdDatabase);
+    
+    logger.info("uspiMap (size) {}", uspiMap.size());
+    
 //    Dataset<String, String, Object> trxnReport = new Dataset<>(); 
 //    Dataset<String, String, Object> mrxnReport = new Dataset<>();
     
     {
-      ReactionTMatcher<Integer, Long> matcher = new ReactionTMatcher<>();
+      ReactionTMatcher<Object, Long> matcher = new ReactionTMatcher<>();
       matcher.allowSingle = false;
       matcher.testReverse = true;
-      for (BiodbReactionNode rxnNode : service.listReactions(ReactionMajorLabel.ModelSeedReaction)) {
+      for (BiodbReactionNode rxnNode : service.listReactions(rxnDatabase)) {
         if (!rxnNode.isBasic()) {
-          CompartmentalizedStoichiometry<Long, Integer> cstoich = nodeConverter.apply(rxnNode);
+          CompartmentalizedStoichiometry<Long, Object> cstoich = nodeConverter.apply(rxnNode);
           matcher.addReaction(cstoich, rxnNode.getId());
         }
       }
       
-      BiodbMetaboliteNode hydron = null;
-  //  hydron = service.getMetabolite("cpd00067", MetaboliteMajorLabel.ModelSeed);
+      logger.info("translocation matcher (size) {}", matcher.cstoichToRxnIds.size());
       
       for (BiosModelReactionNode mrxnNode : modelNode.getModelReactions()) {
-        aaa(mrxnNode, matcher, uspiMap, hydron, treport);
+        if (mrxnNode.isTranslocation()) {
+          aaa(mrxnNode, matcher, uspiMap, null, treport);
+        }
       }
     }
     {
-      ReactionTMatcher<Integer, Long> matcher = new ReactionTMatcher<>();
+      ReactionTMatcher<Object, Long> matcher = new ReactionTMatcher<>();
       matcher.allowSingle = true;
       matcher.testReverse = true;
-      for (BiodbReactionNode rxnNode : service.listReactions(ReactionMajorLabel.ModelSeedReaction)) {
+      
+//      Set<BiodbMetaboliteNode> exclude = new HashSet<>();
+//      BiodbMetaboliteNode hydron = proton;
+      
+      for (BiodbReactionNode rxnNode : service.listReactions(rxnDatabase)) {
         if (rxnNode.isBasic()) {
-          CompartmentalizedStoichiometry<Long, Integer> cstoich = nodeConverter.apply(rxnNode);
+          CompartmentalizedStoichiometry<Long, Object> cstoich = nodeConverter.apply(rxnNode);
+          if (exclude != null) {
+            for (BiodbMetaboliteNode ex : exclude) {
+              cstoich.remove(ex.getId());
+            }
+          }
+
           matcher.addReaction(cstoich, rxnNode.getId());
         }
       }
       
-      BiodbMetaboliteNode hydron = null;
-      hydron = service.getMetabolite("cpd00067", MetaboliteMajorLabel.ModelSeed);
+      logger.info("matcher (size) {}", matcher.cstoichToRxnIds.size());
+      
+      
       
       for (BiosModelReactionNode mrxnNode : modelNode.getModelReactions()) {
-        aaa(mrxnNode, matcher, uspiMap, hydron, mreport);
+        if (!mrxnNode.isTranslocation()) {
+          aaa(mrxnNode, matcher, uspiMap, exclude, mreport);
+        }
       }
     }
     
@@ -211,6 +246,31 @@ public class Neo4jMetabolicModelReactionIntegration implements MetabolicModelRea
       }
     }
     
+    for (String rxnEntry : report.dataset.keySet()) {
+      
+      Tuple2<Object> tuple = report.get(rxnEntry).get("all");
+//      System.out.println(rxnEntry + " " + tuple);
+      if (tuple.e1 != null) {
+        for (Object o : (Iterable<Object>)tuple.e1) {
+          integration.addIntegration(rxnEntry, rxnDatabase, o.toString());
+        }
+      }
+      if (tuple.e2 != null) {
+        for (Object o : (Iterable<Object>)tuple.e2) {
+          integration.addIntegration(rxnEntry, rxnDatabase, o.toString());
+        }
+      }
+    }
+    
     return integration;
+  }
+  
+  public IntegrationMap<String, ReactionMajorLabel> reactionIntegration(Dataset<String, String, String> mapping, BiosMetabolicModelNode modelNode) {
+    Set<BiodbMetaboliteNode> exclude = new HashSet<>();
+    exclude.add(service.getMetabolite("cpd00067", MetaboliteMajorLabel.ModelSeed));
+    return reactionIntegration(mapping, modelNode, 
+                               MetaboliteMajorLabel.ModelSeed, 
+                               ReactionMajorLabel.ModelSeedReaction, 
+                               exclude);
   }
 }

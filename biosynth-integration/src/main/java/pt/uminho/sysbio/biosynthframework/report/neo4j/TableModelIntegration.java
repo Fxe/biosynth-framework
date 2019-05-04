@@ -10,19 +10,29 @@ import java.util.function.Function;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Joiner;
 
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolicModelRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
 import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbNode;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 //import pt.uminho.sysbio.biosynthframework.Source;
 import pt.uminho.sysbio.biosynthframework.Dataset;
+import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.Tuple2;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosMetabolicModelNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosModelSpeciesNode;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class TableModelIntegration<T> {
+  
+  private static final Logger logger = LoggerFactory.getLogger(TableModelIntegration.class);
   
   public static enum Source {
     Resource, Manual, Curation, Inferred, Undefined, Predicted, 
@@ -42,6 +52,61 @@ public class TableModelIntegration<T> {
     this.integrationSetId = integrationSetId;
   }
   
+  public Dataset<String, String, String> remap(Dataset<String, String, String> dataset, String attribute,
+      BiodbGraphDatabaseService service) {
+    Dataset<String, String, String> table = new Dataset<>();
+    
+    for (String modelEntry : dataset.keySet()) {
+      BiosMetabolicModelNode modelNode = service.getMetabolicModel(modelEntry);
+      if (modelNode != null) {
+        for (String col : dataset.getColumns()) {
+          table.add(modelEntry, col, "");
+          if (!DataUtils.empty(dataset.get(modelEntry).get(col))) {
+            String sid = dataset.get(modelEntry).get(col);
+            BiosModelSpeciesNode spiNode = modelNode.getMetaboliteSpecie(sid);
+            if (spiNode != null) {
+              String value = spiNode.getProperty(attribute, "").toString();
+              table.add(modelEntry, col, value);              
+            } else {
+              logger.warn("not found {} - {}", modelEntry, sid);
+            }
+          }
+        }
+      }
+    }
+    
+    return table;
+  }
+  
+  public Dataset<String, String, String> report(Set<String> models, Set<String> metabolites, MetaboliteMajorLabel database,
+      SubcellularCompartment scmp, int minScore,
+      BiodbGraphDatabaseService service) {
+    Dataset<String, String, String> table = new Dataset<>();
+    
+    for (String modelEntry : models) {
+      BiosMetabolicModelNode modelNode = service.getMetabolicModel(modelEntry);
+      if (modelNode != null) {
+        for (String a : metabolites) {
+          table.add(modelEntry, a, "");
+        }
+        for (BiosModelSpeciesNode spiNode : modelNode.getMetaboliteSpecies()) {
+          SubcellularCompartment scmp_ = spiNode.getSubcellularCompartment();
+          if (scmp.equals(scmp_)) {
+            Set<BiodbMetaboliteNode> refs = spiNode.getReferences(database);
+            for (BiodbMetaboliteNode ref : refs) {
+              Integer score = spiNode.getAnnotationScore(ref);
+              if (metabolites.contains(ref.getEntry()) && score != null && score >= minScore) {
+                table.add(modelEntry, ref.getEntry(), spiNode.getSid());
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    return table;
+  }
+  
   public Dataset<String, String, T> getTable(String[] models, String[] ucomp, MetaboliteMajorLabel database) {
     Dataset<String, String, T> result = new Dataset<>();
     Set<Long> ucompIds = new HashSet<> ();
@@ -53,7 +118,7 @@ public class TableModelIntegration<T> {
     Map<String, Map<Long, Set<Long>>> data = new HashMap<> ();
     
     for (String modelEntry : models) {
-      Map<Long, Set<Long>> species = lookupSpecies(modelEntry, ucompIds);
+      Map<Long, Set<Long>> species = lookupSpecies(modelEntry, ucompIds, 5, false);
       data.put(modelEntry, species);
     }
     
@@ -83,32 +148,40 @@ public class TableModelIntegration<T> {
     return result;
   }
   
-  public Map<Long, Set<Long>> lookupSpecies(String modelEntry, Set<Long> ucompIds) {
+  public Map<Long, Set<Long>> lookupSpecies(String modelEntry, Set<Long> ucompIds, int minScore, boolean expand) {
 //    BiodbService service = new Neo4jBiodbDataServiceImpl(
 //        DATA_NEO4J_DAO, META_NEO4J_DAO, CURA_NEO4J_DAO, INTEGRATION_SET);
     
-    Node modelNode = Neo4jUtils.getNodeByEntry(GlobalLabel.MetabolicModel, modelEntry, graphDataService);
-    
+    Node modelNode_ = Neo4jUtils.getNodeByEntry(GlobalLabel.MetabolicModel, modelEntry, graphDataService);
+    BiosMetabolicModelNode modelNode = new BiosMetabolicModelNode(modelNode_, null);
     
     Map<Long, Set<Long>> result = new HashMap<> ();
     
-    for (Node spiNode : Neo4jUtils.collectNodeRelationshipNodes(
-        modelNode, MetabolicModelRelationshipType.has_specie)) {
+    for (BiosModelSpeciesNode spiNode : modelNode.getMetaboliteSpecies()) {
+
+      Map<Long, String> refIds = new HashMap<> ();
       
-//      System.out.println(spiNode.getProperty("entry") + "\t" + spiNode.getProperty("name", ""));
-      
-      
-      Map<Long, Source> refIds = new HashMap<> ();
-      
-      for (Relationship relationship : spiNode.getRelationships(
-          MetabolicModelRelationshipType.has_crossreference_to)) {
-        Node cpdNode = relationship.getOtherNode(spiNode);
+      for (BiodbMetaboliteNode cpdNode : spiNode.getReferences()) {
+        Integer score = spiNode.getAnnotationScore(cpdNode);
+        if (score == null) {
+          score = -1;
+        }
         
-        Source source = Source.valueOf(relationship.getProperty("source", Source.Undefined.toString()).toString());
-//        System.out.println("\t" + cpdNode.getProperty("entry") + "\t" + source);
-        
-        refIds.put(cpdNode.getId(), source);
+        if (score >= minScore) {
+          Map<String, Integer> scores = spiNode.getAnnotationUsers(cpdNode);
+          String source = Joiner.on(";").join(scores.keySet());
+          refIds.put(cpdNode.getId(), source);
+        }
       }
+//      for (Relationship relationship : spiNode.getRelationships(
+//          MetabolicModelRelationshipType.has_crossreference_to)) {
+//        Node cpdNode = relationship.getOtherNode(spiNode);
+//        
+//        Source source = Source.valueOf(relationship.getProperty("source", Source.Undefined.toString()).toString());
+////        System.out.println("\t" + cpdNode.getProperty("entry") + "\t" + source);
+//        
+//        refIds.put(cpdNode.getId(), source);
+//      }
       
       
       
@@ -136,12 +209,12 @@ public class TableModelIntegration<T> {
               }
               
 //              Node cpdNode = graphDataService.getNodeById(id);
-              Source source = refIds.get(id);
-              if (source != null) {
-//                System.out.println("\t" + cpdNode.getProperty("entry") + "\tConflict");
-              } else {
-//                System.out.println("\t" + cpdNode.getProperty("entry") + "\tIntegration");
-              }
+//              Source source = refIds.get(id);
+//              if (source != null) {
+////                System.out.println("\t" + cpdNode.getProperty("entry") + "\tConflict");
+//              } else {
+////                System.out.println("\t" + cpdNode.getProperty("entry") + "\tIntegration");
+//              }
               
             }
           }
