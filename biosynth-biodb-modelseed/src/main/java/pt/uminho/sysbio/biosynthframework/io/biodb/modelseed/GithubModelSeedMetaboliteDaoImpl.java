@@ -26,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class GithubModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeedMetaboliteEntity> {
 
@@ -155,6 +156,10 @@ public class GithubModelSeedMetaboliteDaoImpl implements MetaboliteDao<ModelSeed
         cpd.setDeltaG(getDouble(compoundData, "deltag"));
         cpd.setDeltaGErr(getDouble(compoundData, "deltagerr"));
         cpd.setStructure(getString(compoundData, "structure"));
+        String linked = getString(compoundData, "linked_compound");
+        if (!DataUtils.empty(linked) && !"null".equals(linked)) {
+          cpd.setLinkedCompound(linked);
+        }
         List<ModelSeedMetaboliteCrossreferenceEntity> xrefs = xrefsMap.get(id);
         if (xrefs != null) {
           cpd.setCrossreferences(xrefs);

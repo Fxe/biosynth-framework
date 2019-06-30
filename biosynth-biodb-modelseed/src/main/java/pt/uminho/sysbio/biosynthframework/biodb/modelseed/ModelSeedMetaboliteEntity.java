@@ -67,6 +67,17 @@ public class ModelSeedMetaboliteEntity extends GenericMetabolite {
   @Column(name="cofactor") 
   private Boolean cofactor;
   
+  @MetaProperty
+  @Column(name="linked_compound") 
+  private String linkedCompound;
+  
+  public String getLinkedCompound() {
+    return linkedCompound;
+  }
+  public void setLinkedCompound(String linkedCompound) {
+    this.linkedCompound = linkedCompound;
+  }
+  
   @ElementCollection
   @CollectionTable(name="modelseed_metabolite_name", joinColumns=@JoinColumn(name="metabolite_id"))
   @Column(name="name", length=255)
