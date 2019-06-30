@@ -19,6 +19,7 @@ allprojects {
     mavenCentral()
     mavenLocal()
     //maven { url 'http://192.168.1.99/nexus/content/groups/public/' }
+    //maven { url 'http://193.137.11.210/nexus/content/groups/public/' }
     maven { url 'https://nexus.bio.di.uminho.pt/content/groups/public/' }
     maven { url 'http://www.ebi.ac.uk/~maven/m2repo' }
     maven { url 'http://biojava.org/download/maven/' }
@@ -26,12 +27,12 @@ allprojects {
 }
 
 ext {
-  expectedGradleVersion = '5.5'
+  expectedGradleVersion = '4.5'
 }
 
-//task wrapper(type: Wrapper) {
-//    gradleVersion = '5.5' //we want gradle 2.10 to run this project
-//}
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.5' //
+}
 
 configurations {
     compile
@@ -50,7 +51,7 @@ subprojects { subProject ->
   apply plugin: 'eclipse'
   
   group = 'pt.uminho.sysbio.biosynthframework'
-  version = '0.9.0-JRE7'
+  version = '0.9.0-SNAPSHOT'
   
   targetCompatibility = 1.8
   sourceCompatibility = 1.8
