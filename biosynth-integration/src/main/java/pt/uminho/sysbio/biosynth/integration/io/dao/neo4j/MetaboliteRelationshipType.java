@@ -17,6 +17,7 @@ public enum MetaboliteRelationshipType implements RelationshipType{
 	found_in,				//Metabolite -[found_in]-> SubcellularCompartment 1) metabolite can be found in SubcellularCompartment
 	chebi_parent,			//Metabolite:ChEBI -[chebi_parent]-> Metabolite:ChEBI
 	has_mdl_mol_file,		//Metabolite -[has_mdl_mol_file]-> ..
+	has_cml_file,           //Metabolite -[has_cml_file]-> ..
 	in_pathway,				//Metabolite -[in_pathway]-> MetabolicPathway
 	related_to,				//Metabolite -[related_to?]-> [Reaction|ec number|Gene|protein ?] e c number 1) this is a generic connection
 	has_literature, 

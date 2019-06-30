@@ -22,7 +22,10 @@ public class ModelSeedAliasesAdapter {
   private static final Logger logger = LoggerFactory.getLogger(ModelSeedAliasesAdapter.class);
   
   public Map<String, Set<ExternalReference>> mseedRefMap;
+  
+  @Deprecated
   public Map<String, Set<ExternalReference>> omseedRefMap;
+  
   public Map<String, Set<String>> multiSets = new HashMap<> ();
   
   public String header;
@@ -35,55 +38,64 @@ public class ModelSeedAliasesAdapter {
     //  System.out.println(lines.get(0));
 
     Map<String, Set<ExternalReference>> mseedEntryMap = new HashMap<> ();
-    Map<String, Set<ExternalReference>> omseedEntryMap = new HashMap<> ();
+//    Map<String, Set<ExternalReference>> omseedEntryMap = new HashMap<> ();
 
     adapter.header = lines.get(0);
 
     for (int i = 1; i < lines.size(); i++) {
       String[] cols = lines.get(i).concat("\t").concat("!").split("\t");
       //    System.out.println( cols[0]);
-      String msidStr = cols[0];
-      String omsidStr = cols[1];
-      String databaseEntry = cols[2];
-      String database = cols[3];
-      ExternalReference ref = null;
+      String msid = cols[0];
+//      String omsidStr = cols[1];
+      String databaseEntry = cols[1];
+      String databases = cols[2];
+//      ExternalReference ref = null;
 
-      if (databaseEntry != null && !databaseEntry.isEmpty() &&
-          database != null && !database.isEmpty()) {
-        ref = new ExternalReference(databaseEntry, database);
+      
+      
+      if (msid != null && databaseEntry != null && !databaseEntry.isEmpty() &&
+          databases != null && !databases.isEmpty()) {
+        
+        for (String database : databases.split("\\|")) {
+          ExternalReference ref = new ExternalReference(databaseEntry, database);
+//          System.out.println(ref);
+          
+          if (!mseedEntryMap.containsKey(msid.trim())) {
+            mseedEntryMap.put(msid.trim(), new HashSet<ExternalReference> ());
+          }
+          mseedEntryMap.get(msid.trim()).add(ref);
+        }
+//        ref = new ExternalReference(databaseEntry, database);
       } else {
         logger.info("!!");
       }
 
-      Set<String> mset = new HashSet<> ();
-      for (String mseedEntry : msidStr.split("\\|")) {
-        //      if (adapter.refToMseedMap.put(ref, mseedEntry.trim()) != null) {
-        //        logger.warn("duplicate ref {}", ref, mseedEntry);
-        //      }
-        if (!mseedEntryMap.containsKey(mseedEntry.trim())) {
-          mseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
-        }
-        mseedEntryMap.get(mseedEntry.trim()).add(ref);
-        mset.add(mseedEntry);
-      }
-
-      if (mset.size() > 1) {
-        for (String e : mset) {
-          adapter.multiSets.put(e, new TreeSet<>(mset));
-        }
-      }
-
-      for (String mseedEntry : omsidStr.split("\\|")) {
-        if (!omseedEntryMap.containsKey(mseedEntry.trim())) {
-          omseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
-        }
-        omseedEntryMap.get(mseedEntry.trim()).add(ref);
-      }
+//      Set<String> mset = new HashSet<> ();
+//      for (String mseedEntry : msidStr.split("\\|")) {
+//        //      if (adapter.refToMseedMap.put(ref, mseedEntry.trim()) != null) {
+//        //        logger.warn("duplicate ref {}", ref, mseedEntry);
+//        //      }
+//        
+//        mset.add(mseedEntry);
+//      }
+//
+//      if (mset.size() > 1) {
+//        for (String e : mset) {
+//          adapter.multiSets.put(e, new TreeSet<>(mset));
+//        }
+//      }
+//
+//      for (String mseedEntry : omsidStr.split("\\|")) {
+//        if (!omseedEntryMap.containsKey(mseedEntry.trim())) {
+//          omseedEntryMap.put(mseedEntry.trim(), new HashSet<ExternalReference> ());
+//        }
+//        omseedEntryMap.get(mseedEntry.trim()).add(ref);
+//      }
 
     }
 
     adapter.mseedRefMap = mseedEntryMap;
-    adapter.omseedRefMap = omseedEntryMap;
+//    adapter.omseedRefMap = omseedEntryMap;
     return adapter;
   }
   

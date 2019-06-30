@@ -8,6 +8,7 @@ public enum GenericRelationship implements RelationshipType {
   has_supplementary_file, has_file,
   has_publication,
   has_source_file,
+  has_sbo_term,
   has_version,
   has_parent_taxonomy,
 }

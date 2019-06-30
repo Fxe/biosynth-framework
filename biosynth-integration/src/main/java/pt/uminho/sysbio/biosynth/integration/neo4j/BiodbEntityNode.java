@@ -1,11 +1,16 @@
 package pt.uminho.sysbio.biosynth.integration.neo4j;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GenericRelationship;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jUtils;
 import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
+import pt.uminho.sysbio.biosynthframework.neo4j.OntologyDatabase;
 
 public class BiodbEntityNode extends BiosExternalDataNode {
 
@@ -26,6 +31,43 @@ public class BiodbEntityNode extends BiosExternalDataNode {
       logger.warn("{} Proxy attribute not found. Default as TRUE", this.node);
     }
     return proxy;
+  }
+  
+  public Node getSystemsBiologyOntology() {
+    Relationship r = this.getSingleRelationship(GenericRelationship.has_sbo_term, Direction.OUTGOING);
+    
+    if (r != null) {
+      Node sbo = r.getOtherNode(node);
+      return sbo;
+    }
+    
+    return null;
+  }
+  
+  public Long setSystemsBiologyOntology(Node sboNode) {
+    Relationship r = null;
+    
+    if (sboNode.hasLabel(OntologyDatabase.SBO)) {
+      Node prevSboNode = getSystemsBiologyOntology();
+      
+      if (prevSboNode != null) {
+        if (prevSboNode.getId() == sboNode.getId()) {
+          return null;
+        } else {
+          logger.info("DELETE PREV {} {}", r, prevSboNode.getAllProperties());
+          r = this.getSingleRelationship(GenericRelationship.has_sbo_term, Direction.OUTGOING);
+          r.delete();
+        }
+      }
+      
+      r = this.node.createRelationshipTo(sboNode, GenericRelationship.has_sbo_term);
+      Neo4jUtils.setTimestamps(r);
+    }
+    
+    if (r == null) {
+      return null;
+    }
+    return r.getId();
   }
 
   @Override

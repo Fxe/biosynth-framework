@@ -60,8 +60,12 @@ public class TsvMnxReactionDaoImpl implements ReactionDao<MnxReactionEntity> {
 		LOGGER.trace("L:" + record);
 		String[] fields = record.trim().split("\t");
 		String key = fields[1].trim();
-		String reference = fields[0].trim().split(":")[0].trim();
-		String entry = fields[0].trim().split(":")[1].trim();
+		String reference = "none";
+		String entry = fields[0].trim();
+		if (entry.contains(":")) {
+		  reference = fields[0].trim().split(":")[0].trim();
+		  entry = fields[0].trim().split(":")[1].trim();
+		}
 		MnxReactionCrossReferenceEntity xref = new MnxReactionCrossReferenceEntity(ReferenceType.DATABASE, reference, entry);
 //		if (fields.length > 3) xref.setDescription(fields[3].trim());
 //		xref.setEvidence(fields[2].trim());

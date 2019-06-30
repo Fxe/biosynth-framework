@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis.cdk;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,14 +11,18 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -169,6 +174,23 @@ public class CdkWrapper implements FormulaReader {
     return inchiTuple;
   }
 
+  public IAtomContainerSet readCml(InputStream is) {
+    try (CMLReader reader = new CMLReader(is)) {
+      ChemFile chemFile = new ChemFile();
+      reader.read(chemFile);
+      for (IChemSequence o : chemFile.chemSequences()) {
+        for (IChemModel model : o.chemModels()) {
+          IAtomContainerSet acSet = model.getMoleculeSet();
+          return acSet;
+        }
+      }
+    } catch (IOException | CDKException e) {
+      e.printStackTrace();
+    }
+    
+    return null;
+  }
+  
   public static void a(String inchi) {
 
   }
