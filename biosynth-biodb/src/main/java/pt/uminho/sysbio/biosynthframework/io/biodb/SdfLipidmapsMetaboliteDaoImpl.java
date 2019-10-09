@@ -43,12 +43,16 @@ public class SdfLipidmapsMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao
       if (file.getName().endsWith(".zip")) {
         logger.info("loading ZIP file: {}", file.getAbsolutePath());
         ZipContainer container = new ZipContainer(file.getAbsolutePath());
-        for (ZipRecord zr : container.getInputStreams()) {
+        List<ZipRecord> zrs = container.getInputStreams();
+        for (ZipRecord zr : zrs) {
           is = zr.is;
           String p[] = zr.name.split("/");
           String name = p[p.length - 1];
           if (name.endsWith("All.sdf")) {
             logger.info("found All.sdf: {}", zr.name);
+            data = readSdf(is);
+          } else if (zrs.size() == 1) {
+            logger.info("single sdf zip: {}", zr.name);
             data = readSdf(is);
           }
           is.close();
@@ -70,11 +74,15 @@ public class SdfLipidmapsMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao
   }
   
   public static enum LipidmapsAttributes {
-    LM_ID, COMMON_NAME, SYSTEMATIC_NAME, SYNONYMS, EXACT_MASS, FORMULA,
+    LM_ID,
+    NAME, //(Common name)
+    COMMON_NAME, 
+    ABBREVIATION,
+    SYSTEMATIC_NAME, SYNONYMS, EXACT_MASS, FORMULA,
     STATUS,
     LIPIDBANK_ID, PUBCHEM_SID, PUBCHEM_CID, KEGG_ID, HMDBID, CHEBI_ID,
     METABOLOMICS_ID,
-    INCHI_KEY, INCHI,
+    INCHI_KEY, INCHI, SMILES,
     PUBCHEM_SUBSTANCE_URL, LIPID_MAPS_CMPD_URL,
     CATEGORY, MAIN_CLASS, SUB_CLASS, CLASS_LEVEL4
   }
@@ -111,12 +119,15 @@ public class SdfLipidmapsMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao
                 LipidmapsAttributes lattribute = LipidmapsAttributes.valueOf(attribute);
                 switch (lattribute) {
                   case LM_ID: cpd.setEntry(value); break;
+                  case NAME:
                   case COMMON_NAME: cpd.setName(value); break;
                   case SYSTEMATIC_NAME: cpd.setSystematicName(value); break;
                   case SYNONYMS: cpd.setSynonyms(value); break;
+                  case ABBREVIATION: cpd.setAbbreviation(value); break;
                   case FORMULA: cpd.setFormula(value); break;
                   case EXACT_MASS: cpd.setExactMass(Double.parseDouble(value)); break;
                   case INCHI_KEY: cpd.setInchiKey(value); break;
+                  case SMILES: cpd.setSmiles(value); break;
                   case CATEGORY: cpd.setCategory(value); break;
                   case MAIN_CLASS: cpd.setMainClass(value); break;
                   case SUB_CLASS: cpd.setSubSlass(value); break;

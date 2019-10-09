@@ -2,12 +2,12 @@ package pt.uminho.sysbio.biosynthframework.integration.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Sets;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;

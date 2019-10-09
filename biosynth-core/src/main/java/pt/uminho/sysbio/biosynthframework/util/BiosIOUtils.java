@@ -66,6 +66,21 @@ public class BiosIOUtils {
     return getMD5(new ByteArrayInputStream(string.getBytes()));
   }
   
+  public static String getSHA256(String string) {
+    try {
+      return digest("SHA-256", new ByteArrayInputStream(string.getBytes()));
+    } catch (NoSuchAlgorithmException | IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+  
+  public static String digest(String algorithm, InputStream is) 
+		  throws NoSuchAlgorithmException, IOException {
+      MessageDigest md = MessageDigest.getInstance(algorithm);
+    return getDigest(is, md, 2048);
+  }
+  
   public static String digest(String algorithm, File file) 
       throws NoSuchAlgorithmException {
     MessageDigest md = MessageDigest.getInstance(algorithm);

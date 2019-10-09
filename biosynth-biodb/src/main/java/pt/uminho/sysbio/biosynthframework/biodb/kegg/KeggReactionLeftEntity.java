@@ -22,6 +22,11 @@ public class KeggReactionLeftEntity extends StoichiometryPair{
 	public String getCoefficient() { return coefficient;}
 	public void setCoefficient(String coefficient) { this.coefficient = coefficient;}
 	
+    @MetaProperty
+    @Column(name="modifier") protected String modifier;
+    public String getModifier() { return modifier;}
+    public void setModifier(String modifier) { this.modifier = modifier;}
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="reaction_id")

@@ -26,6 +26,7 @@ import com.google.common.collect.Sets;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphEdgeEntity;
 import pt.uminho.sysbio.biosynth.integration.AbstractGraphNodeEntity;
 import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
+import pt.uminho.sysbio.biosynthframework.util.BiosIOUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.MapUtils;
 
@@ -35,6 +36,7 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
 
   protected BiodbGraphDatabaseService graphDatabaseService;
   
+  public static int MAX_KEY_SIZE = 4000;
   public String databasePath;
 
   public AbstractNeo4jGraphDao(GraphDatabaseService graphDatabaseService) {
@@ -154,9 +156,15 @@ public class AbstractNeo4jGraphDao<E extends AbstractGraphNodeEntity> {
       logger.warn("null index key: {} {}", key, entity.getLabels());
       return null;
     }
-    if (kvalue.toString().length() > 4000) {
-      logger.warn("key size > 4000: {}", kvalue);
-      return null;
+    
+    if (kvalue.toString().length() > MAX_KEY_SIZE) {
+      logger.warn("key size > {}: {}", MAX_KEY_SIZE, kvalue);
+      
+      entity.addLabel(GlobalLabel.SHA256_KEY.toString());
+      String sha = BiosIOUtils.getSHA256(kvalue.toString());
+      entity.addProperty("bios_key_value", kvalue);
+      entity.addProperty(key, sha);
+      kvalue = sha;
     }
     
     logger.debug("merge: {} -> {}", entity.getEntry(), entity.getVersion());
