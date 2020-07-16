@@ -16,7 +16,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,10 +50,12 @@ public class TestXmlStreamSbmlReader {
   }
 
   public static void testStrem(String f) {
-    AutoFileReader reader = new AutoFileReader(f, null);
-    InputStreamSet iss = reader.getStreams();
-    System.out.println(iss);
-    IOUtils.closeQuietly(reader);
+    try (AutoFileReader reader = new AutoFileReader(f, null)) {
+      InputStreamSet iss = reader.getStreams();
+      System.out.println(iss);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test
@@ -236,9 +237,9 @@ public class TestXmlStreamSbmlReader {
     //    SBML_PATH = "/var/biomodels/joana/iJL432.xml";
     System.out.println(SBML_PATH);
     XmlSbmlModel xmodel = testModel(SBML_PATH);
-    SimpleModelBuilder<String> builder = SimpleModelBuilder.fromXmlSbmlModel(xmodel);
-    SimpleMetabolicModel<String> model = builder.build();
-    Exporter.exportToFiles(model, "/tmp/trash/test.cpd.tsv", "/tmp/trash/test.rxn.tsv");
+//    SimpleModelBuilder<String> builder = SimpleModelBuilder.fromXmlSbmlModel(xmodel);
+//    SimpleMetabolicModel<String> model = builder.build();
+//    Exporter.exportToFiles(model, "/tmp/trash/test.cpd.tsv", "/tmp/trash/test.rxn.tsv");
     //    SBML_PATH = "/var/biomodels/hvo_26_01_17.xml";
 
     //    final String SBML_PATH = "D:/var/biomodels/sbml/hsa/MODEL6399676120.xml";
@@ -252,4 +253,3 @@ public class TestXmlStreamSbmlReader {
   }
 
 }
-

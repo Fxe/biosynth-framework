@@ -12,6 +12,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,10 +137,10 @@ public class Neo4jGraphNormalizedGPR extends AbstractNeo4jDao implements GPRDao<
 	public GraphGPRGeneEntity createGeneGPR(Node parent, GraphGPRGeneEntity gene){
 		DynamicRelationshipType relationshipType = DynamicRelationshipType.withName(GPRRelationshipType.has_leaf.toString());
 		boolean create = true;
-		for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
+		for (Node node : Iterators.asIterable(graphDatabaseService.findNodes(
 				DynamicLabel.label(gene.getMajorLabel()),
 				"entry",
-				gene.getEntry())) {
+				gene.getEntry()))) {
 			create = false;
 			LOGGER.debug(String.format("Found Previous node with entry:%s", gene.getEntry()));
 			LOGGER.debug(String.format("MODE:UPDATE %s", node));

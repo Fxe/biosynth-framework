@@ -3,7 +3,9 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 public class RestKeggDrugMetaboliteDaoImpl
-extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity>{
+extends AbstractRestfulKeggDao<KeggDrugMetaboliteEntity> implements MetaboliteDao<KeggDrugMetaboliteEntity>{
 
   private static final Logger logger = LoggerFactory.getLogger(RestKeggDrugMetaboliteDaoImpl.class);
   private static final String restDrQuery = "http://rest.kegg.jp/get/dr:%s";
@@ -118,7 +120,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
       logger.error(e.getMessage());
       return null;
     }
-    
+    cpd.setVersion(databaseVersion);
     return cpd;
   }
 
@@ -154,7 +156,18 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggDrugMetaboliteEntity
   }
   
   @Override
-  public Serializable save(KeggDrugMetaboliteEntity entity) {
+  public Long save(KeggDrugMetaboliteEntity entity) {
     throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public KeggDrugMetaboliteEntity getByEntry(String entry) {
+    return this.getMetaboliteByEntry(entry);
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    // TODO Auto-generated method stub
+    return new HashSet<>(this.getAllMetaboliteEntries());
   }
 }

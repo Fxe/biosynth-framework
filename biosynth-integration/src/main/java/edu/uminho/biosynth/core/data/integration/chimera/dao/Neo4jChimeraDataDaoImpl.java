@@ -8,20 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
-import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.graphdb.ResourceIterator;
+import org.neo4j.graphdb.Result;
+import org.neo4j.helpers.collection.Iterators;
 import org.neo4j.kernel.impl.core.NodeProxy;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.CompositeMetaboliteEntity;
 import edu.uminho.biosynth.core.data.integration.chimera.domain.components.IntegratedMetaboliteCrossreferenceEntity;
@@ -42,43 +42,34 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jChimeraDataDaoImpl.class);
 	
+	
+	private final BiodbGraphDatabaseService graphDatabaseService;
+	
 	@Autowired
-	private GraphDatabaseService graphDatabaseService;
+	public Neo4jChimeraDataDaoImpl(GraphDatabaseService graphDatabaseService) {
+	  this.graphDatabaseService = new BiodbGraphDatabaseService(graphDatabaseService);
+	}
 	
-	private ExecutionEngine executionEngine;
-	
-	public Neo4jChimeraDataDaoImpl() { }
-	
-	@PostConstruct
+//	@PostConstruct
 	public void initialize() {
-		if (executionEngine == null) {
-			this.setGraphDatabaseService(graphDatabaseService);
-		}
 		LOGGER.info(String.format("%s initialized !", this));
 	}
 
 	public GraphDatabaseService getGraphDatabaseService() {
 		return graphDatabaseService;
 	}
-
-	public void setGraphDatabaseService(GraphDatabaseService graphDatabaseService) {
-		if (graphDatabaseService != null) {
-			this.graphDatabaseService = graphDatabaseService;
-			this.executionEngine = new ExecutionEngine(graphDatabaseService);
-		}
-	}
 	
 	public Node getMetaboliteNodeByEntry(String entry, CompoundNodeLabel type) {
 		Node node = null;
-		ResourceIterable<Node> res = this.graphDatabaseService.findNodesByLabelAndProperty(type, "entry", entry);
-		Iterator<Node> i = res.iterator();
-		while (i.hasNext()) {
+		ResourceIterator<Node> res = this.graphDatabaseService.findNodes(type, "entry", entry);
+//		Iterator<Node> i = res.iterator();
+		while (res.hasNext()) {
 			//entry should have unique constraint therefore no more 
 			//than one node should be found per compoud label
 			if (node != null) {
 				System.err.println("error duplicate entry missing unique constraint");
 			}
-			node = i.next();
+			node = res.next();
 		}
 		
 		return node;
@@ -87,8 +78,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	@Override
 	public List<Long> getClusterByQuery(String query) {
 		List<Long> clusterElements = new ArrayList<> ();
-		ExecutionResult res = this.executionEngine.execute(query);
-		List<Object> nodeList = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
+		Result res = this.graphDatabaseService.execute(query);
+		List<Object> nodeList = Iterators.asList(res.columnAs(res.columns().iterator().next()));
 		for (Object obj: nodeList) {
 			if (obj instanceof SeqWrapper) {
 				for (Object node: (SeqWrapper<?>) obj) {
@@ -129,7 +120,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 			
 			Node other = relationship.getOtherNode(root);
 			Set<String> labels = new HashSet<> ();
-			for (Label label: IteratorUtil.asSet(other.getLabels())) labels.add(label.toString());
+			for (Label label: other.getLabels()) labels.add(label.toString());
 			if (other.hasLabel(CompoundNodeLabel.Compound)) {
 				labels.remove("Compound");
 				IntegratedMetaboliteCrossreferenceEntity xref = new IntegratedMetaboliteCrossreferenceEntity();
@@ -176,9 +167,9 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		String.format("START cpd=node(%d) MATCH path1=(cpd)-[*1..1]->(c) RETURN c AS ret "
 				+ "UNION START cpd=node(%d) MATCH path2=(cpd)-[*1..1]->(c2)-[:Isomorphic]->(i) RETURN i AS ret", id, id);
 //		System.out.println(query);
-		ExecutionResult res = this.executionEngine.execute(query);
+		Result res = this.graphDatabaseService.execute(query);
 		
-		List<Object> list = IteratorUtil.asList(res.columnAs(res.columns().iterator().next()));
+		List<Object> list = Iterators.asList(res.columnAs(res.columns().iterator().next()));
 //		System.out.println("Found " + list.size());
 		for (Object obj: list) {
 			NodeProxy proxy = null;
@@ -205,7 +196,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 //					System.out.println(proxy.getLabels());
 //					System.out.println(proxy.getPropertyKeys());
 					Set<String> labels = new HashSet<> ();
-					for (Label label: IteratorUtil.asSet(proxy.getLabels()))
+					for (Label label: proxy.getLabels())
 						labels.add(label.toString());
 					if (labels.contains("Compound")) {
 						labels.remove("Compound");
@@ -247,10 +238,10 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	@Override
 	public Map<String, Object> getEntryProperties(Long id) {
 		Map<String, Object> propsMap = new HashMap<> ();
-		ExecutionResult res = this.executionEngine.execute(
+		Result res = this.graphDatabaseService.execute(
 				String.format("START cpd=node(%d) RETURN cpd;", id));
 		
-		List<?> list = IteratorUtil.asList(res.columnAs("cpd"));
+		List<?> list = Iterators.asList(res.columnAs("cpd"));
 		Node node = Node.class.cast(list.iterator().next());
 //		System.out.println(node);
 		String labels = StringUtils.join(node.getLabels(), ":");
@@ -298,8 +289,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	public List<Long> getAllPropertiesId(String propertyType) {
 		List<Long> result = new ArrayList<> ();
 		
-		for (Node node : GlobalGraphOperations.at(graphDatabaseService)
-				.getAllNodesWithLabel(DynamicLabel.label(propertyType))) {
+		for (Node node : graphDatabaseService
+				.listNodes(DynamicLabel.label(propertyType))) {
 			result.add(node.getId());
 		}
 		
@@ -309,8 +300,8 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	@Override
 	public List<Long> getAllMetaboliteIds() {
 		List<Long> idList = new ArrayList<> ();
-		for (Node n : GlobalGraphOperations.at(graphDatabaseService)
-				.getAllNodesWithLabel(GlobalLabel.Metabolite)) {
+		for (Node n : graphDatabaseService
+				.listNodes(GlobalLabel.Metabolite)) {
 			
 			if (!((Boolean) n.getProperty("proxy"))) idList.add(n.getId());
 		}
@@ -320,7 +311,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 	@Override
 	public List<String> getAllProperties() {
 		List<String> res = new ArrayList<> ();
-		for (Label label : GlobalGraphOperations.at(graphDatabaseService)
+		for (Label label : graphDatabaseService
 				.getAllLabels()) {
 			res.add(label.toString());
 		}
@@ -340,9 +331,9 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		String query = String.format("MATCH cpd:%s {entry:{entry}} RETURN cpd", labelString);
 		Map<String, Object> params = new HashMap<> ();
 		params.put("entry", entry);
-		ExecutionResult res = this.executionEngine.execute(query, params );
+		Result res = this.graphDatabaseService.execute(query, params );
 
-		List<Object> nodes = IteratorUtil.asList(res.columnAs("cpd"));
+		List<Object> nodes = Iterators.asList(res.columnAs("cpd"));
 		
 		if (nodes.isEmpty()) return null;
 		if (nodes.size() > 1) {
@@ -400,7 +391,7 @@ public class Neo4jChimeraDataDaoImpl implements IntegrationDataDao {
 		
 		String cypherQuery = String.format("MATCH (cpd:%s {proxy:false}) RETURN ID(cpd) AS id", label);
 		
-		ExecutionResult executionResult = executionEngine.execute(cypherQuery);
+		Result executionResult = graphDatabaseService.execute(cypherQuery);
 		while (executionResult.columnAs("id").hasNext()) {
 			set.add((Long)executionResult.columnAs("id").next());
 		}

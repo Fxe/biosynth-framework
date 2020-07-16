@@ -16,6 +16,7 @@ import edu.uminho.biosynth.core.data.integration.chimera.strategy.ClusteringStra
  * @author Filipe
  *
  */
+@Deprecated
 public class ReactionIntegration {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactionIntegration.class);

@@ -5,8 +5,8 @@ apply from: "./libraries.gradle"
 /*
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Gradle Quickstart',
-                   'Implementation-Version': 1.0
+        attributes 'Implementation-Title': 'biosynth-framework',
+                   'Implementation-Version': '0.9.0-SNAPSHOT'
     }
 }
 */
@@ -18,24 +18,31 @@ allprojects {
   repositories {
     mavenCentral()
     mavenLocal()
-    maven { url 'http://192.168.1.99/nexus/content/groups/public/' }
-    maven { url 'http://193.137.11.210/nexus/content/groups/public/' }
+    //maven { url 'http://192.168.1.99/nexus/content/groups/public/' }
+    //maven { url 'http://193.137.11.210/nexus/content/groups/public/' }
+    maven { url 'https://nexus.bio.di.uminho.pt/content/groups/public/' }
     maven { url 'http://www.ebi.ac.uk/~maven/m2repo' }
     maven { url 'http://biojava.org/download/maven/' }
   }
 }
 
 ext {
-  expectedGradleVersion = '3.5'
+  expectedGradleVersion = '5.5'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5' //we want gradle 2.10 to run this project
-}
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '5.5' //we want gradle 2.10 to run this project
+//}
 
 configurations {
     compile
 }
+
+  allprojects {
+    tasks.withType(Javadoc) {
+      //options.addStringOption('Xdoclint:none', '-quiet')
+    }
+  }
 
 subprojects { subProject ->
   apply plugin: 'java'
@@ -44,14 +51,31 @@ subprojects { subProject ->
   apply plugin: 'eclipse'
   
   group = 'pt.uminho.sysbio.biosynthframework'
-  version = '0.0.1-SNAPSHOT'
+  version = '0.9.1-SNAPSHOT'
   
-  targetCompatibility = 1.7
-  sourceCompatibility = 1.7
+  targetCompatibility = 1.8
+  sourceCompatibility = 1.8
+  
+
   
   task copyRuntimeLibs(type: Copy) {
     into "../jars"
     from configurations.compile
+  }
+  
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+  
+  task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+  }
+
+  artifacts {
+    //archives javadocJar
+    archives sourcesJar
   }
   
   defaultTasks 'build'
@@ -66,6 +90,10 @@ subprojects { subProject ->
     compile libraries.json_api_core, libraries.json_api_databind, libraries.json_api_annotations
     compile libraries.json_api_datatype_joda
     compile libraries.json_api_dataformat_xml
+    compile libraries.apache_poi
+    compile libraries.apache_poi_ooxml
+    compile libraries.jbool
+    compile libraries.javaluator
     compile 'org.jadira.usertype:usertype.core:3.0.0.CR1'
     
     // logging
@@ -87,4 +115,3 @@ subprojects { subProject ->
     }
   }
 }
-

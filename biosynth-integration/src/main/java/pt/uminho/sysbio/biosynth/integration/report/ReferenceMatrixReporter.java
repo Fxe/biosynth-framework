@@ -11,19 +11,19 @@ import java.util.Set;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.Neo4jDefinitions;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 
 public class ReferenceMatrixReporter {
 
-  private GraphDatabaseService graphDataService;
+  private BiodbGraphDatabaseService graphDataService;
   
   public ReferenceMatrixReporter(GraphDatabaseService graphDataService) {
-    this.graphDataService = graphDataService;
+    this.graphDataService = new BiodbGraphDatabaseService(graphDataService);
   }
   
 //  @Override
@@ -37,8 +37,7 @@ public class ReferenceMatrixReporter {
     int[][] matrix = new int[a.size()][a.size()];
     Set<Long> visitedEdges = new HashSet<> ();
     for (MetaboliteMajorLabel label : a) {
-      for (Node n : GlobalGraphOperations.at(graphDataService)
-                                         .getAllNodesWithLabel(label)) {
+      for (Node n : graphDataService.listNodes(label)) {
         for (Relationship r : n.getRelationships(MetaboliteRelationshipType.has_crossreference_to)) {
           if (!visitedEdges.contains(r.getId())) {
             if (r.getOtherNode(n).hasLabel(GlobalLabel.Metabolite)) {

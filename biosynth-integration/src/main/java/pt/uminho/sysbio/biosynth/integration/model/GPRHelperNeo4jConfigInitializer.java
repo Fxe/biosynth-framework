@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.model;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
+
+import java.io.File;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
@@ -16,10 +18,10 @@ public class GPRHelperNeo4jConfigInitializer {
 
 	
 	public static GraphDatabaseService initializeNeo4jDatabaseConstraints(String databasePath) {
-		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
-		ExecutionEngine engine = new ExecutionEngine(graphDatabaseService);
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
+		
 		for (String query: NEO_DATA_CONSTRAINTS) {
-			engine.execute(query);
+		  graphDatabaseService.execute(query);
 		}
 		
 		return graphDatabaseService;
@@ -29,7 +31,7 @@ public class GPRHelperNeo4jConfigInitializer {
 	
 	
 	public static GraphDatabaseService initializeNeo4jDatabase(String databasePath) {
-		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(databasePath);
+		GraphDatabaseService graphDatabaseService = new GraphDatabaseFactory().newEmbeddedDatabase(new File(databasePath));
 		return graphDatabaseService;
 	}
 	

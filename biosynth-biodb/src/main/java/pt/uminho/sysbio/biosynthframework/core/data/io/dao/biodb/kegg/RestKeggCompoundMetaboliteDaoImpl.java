@@ -3,7 +3,9 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,7 @@ import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
 @Repository
 public class RestKeggCompoundMetaboliteDaoImpl 
-extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEntity> {
+extends AbstractRestfulKeggDao<KeggCompoundMetaboliteEntity> implements MetaboliteDao<KeggCompoundMetaboliteEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(RestKeggCompoundMetaboliteDaoImpl.class);
 
@@ -67,7 +69,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
   }
 
   @Override
-  public Serializable save(KeggCompoundMetaboliteEntity entity) {
+  public Long save(KeggCompoundMetaboliteEntity entity) {
     throw new RuntimeException("Unsupported Operation");
   }
   
@@ -121,6 +123,7 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
     }
 
     KeggCompoundMetaboliteEntity cpd = convert(cpdFlatFile, cpdMolFile);
+    cpd.setVersion(databaseVersion);
     return cpd;
   }
 
@@ -142,6 +145,16 @@ extends AbstractRestfulKeggDao implements MetaboliteDao<KeggCompoundMetaboliteEn
       System.err.println(e.getMessage());
     }
     return cpdIds;
+  }
+
+  @Override
+  public KeggCompoundMetaboliteEntity getByEntry(String e) {
+    return this.getMetaboliteByEntry(e);
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    return new HashSet<>(this.getAllMetaboliteEntries());
   }
 
 

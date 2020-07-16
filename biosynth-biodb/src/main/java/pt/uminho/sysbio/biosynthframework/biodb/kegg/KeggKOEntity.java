@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.KeggTokens;
 
+@Deprecated
 public class KeggKOEntity extends KeggEntity{
     
   private static final long serialVersionUID = 1L;

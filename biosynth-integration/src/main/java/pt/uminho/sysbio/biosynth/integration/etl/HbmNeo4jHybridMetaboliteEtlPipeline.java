@@ -2,6 +2,8 @@ package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -25,6 +27,7 @@ implements EtlPipeline<SRC, DST> {
   private EtlExtract<SRC> etlExtract;
   private EtlTransform<SRC, DST> etlTransform;
   private EtlLoad<DST> etlLoad;
+  public Set<String> exclude = new HashSet<> ();
 
   private int batchSize = 100;
   private boolean skipLoad = false;
@@ -113,12 +116,17 @@ implements EtlPipeline<SRC, DST> {
     int i = 0;
     for (Serializable entry : etlExtract.getAllKeys()) {
       try {
-        etl(entry);
+        if (!exclude.contains(entry.toString())) {
+          etl(entry);
+          i++;
+        }
       } catch (Exception e) {
+        e.printStackTrace();
         logger.error("{} - {}", entry, e.getMessage());
+        break;
       }
 
-      i++;
+      
       if ((i % batchSize) == 0) {
         logger.debug(String.format("Commit ! %d", i));
         if (graphDatabaseService != null) {
@@ -146,32 +154,51 @@ implements EtlPipeline<SRC, DST> {
 
   public void etl(Collection<Serializable> ids) {
 
-    org.hibernate.Transaction hbmTx = sessionFactory.getCurrentSession().beginTransaction();
-    org.neo4j.graphdb.Transaction neoTx = graphDatabaseService.beginTx();
+    org.hibernate.Transaction hbmTx = null;
+    org.neo4j.graphdb.Transaction neoTx = null;
+    if (sessionFactory != null) {
+      hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+    }
+    if (graphDatabaseService != null) {
+      neoTx = graphDatabaseService.beginTx();
+    }
 
     int i = 0;
     for (Serializable id : ids) {
       try {
-        etl(id);
+        if (!exclude.contains(id.toString())) {
+          etl(id);
+          i++;
+        }
       } catch (Exception e) {
         logger.error("{} - {}", id, e.getMessage());
       }
 
-      i++;
+      
       if ((i % batchSize) == 0) {
         logger.debug(String.format("Commit ! %d", i));
+        
+        if (neoTx != null) {
         neoTx.success();
-        neoTx.close();
-        neoTx = graphDatabaseService.beginTx();
+        neoTx.close();        
+          neoTx = graphDatabaseService.beginTx();          
+        }
+        if (hbmTx != null) {
+          hbmTx.rollback();
+          hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+        }
 
-        hbmTx.rollback();
-        hbmTx = sessionFactory.getCurrentSession().beginTransaction();
       }
     }
 
-    hbmTx.rollback();
-    neoTx.success();
-    neoTx.close();
+    if (sessionFactory != null) {
+      hbmTx.rollback();
+    }
+    
+    if (graphDatabaseService != null) {
+      neoTx.success();
+      neoTx.close();
+    }
   }
 
 }

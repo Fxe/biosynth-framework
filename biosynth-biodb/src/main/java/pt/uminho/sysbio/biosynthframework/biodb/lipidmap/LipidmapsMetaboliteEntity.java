@@ -34,17 +34,35 @@ public class LipidmapsMetaboliteEntity extends GenericMetabolite {
   public void setSynonyms(String synonyms) { this.synonyms = synonyms;}
 
   @MetaProperty
+  @Column(name="abbreviation")
+  private String abbreviation;
+  public String getAbbreviation() { return abbreviation;}
+  public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation;}
+
+  @MetaProperty
   @Column(name="exact_mass")
   private Double exactMass;
   public Double getExactMass() { return exactMass;}
   public void setExactMass(double exactMass) { this.exactMass = exactMass;}
   
   @MetaProperty
+  @Column(name="inchi")
+  private String inchi;
+  public String getInchi() { return inchi;}
+  public void setInchi(String inchi) { this.inchi = inchi;}
+
+  @MetaProperty
   @Column(name="inchi_key")
   private String inchiKey;
   public String getInchiKey() { return inchiKey;}
   public void setInchiKey(String inchiKey) { this.inchiKey = inchiKey;}
   
+  @MetaProperty
+  @Column(name="smiles")
+  private String smiles;
+  public String getSmiles() { return smiles;}
+  public void setSmiles(String smiles) { this.smiles = smiles;}
+
   @MetaProperty
   @Column(name="pubchem_substance_url")
   private String pubchemSubstanceUrl;
@@ -98,6 +116,12 @@ public class LipidmapsMetaboliteEntity extends GenericMetabolite {
   public String classLevel4;
   public String getClassLevel4() { return classLevel4;}
   public void setClassLevel4(String classLevel4) { this.classLevel4 = classLevel4;}
+  
+  @MetaProperty
+  @Column(name="mol")
+  public String mol;
+  public String getMol() { return mol;}
+  public void setMol(String mol) { this.mol = mol;}
 
   @OneToMany(mappedBy = "metaboliteEntity", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
   private List<LipidmapsMetaboliteCrossreferenceEntity> crossreferences = new ArrayList<> ();

@@ -2,6 +2,10 @@ package edu.uminho.biosynth.core.data.integration.chimera.domain;
 
 import static org.junit.Assert.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
@@ -9,13 +13,18 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.neo4j.graphdb.GraphDatabaseService;
 
+import edu.uminho.biosynth.core.data.integration.neo4j.HelperNeo4jConfigInitializer;
 import pt.uminho.sysbio.biosynth.integration.IntegratedCluster;
 import pt.uminho.sysbio.biosynth.integration.IntegratedClusterMember;
 import pt.uminho.sysbio.biosynth.integration.IntegratedMember;
 import pt.uminho.sysbio.biosynth.integration.IntegrationSet;
 import pt.uminho.sysbio.biosynth.integration.io.dao.hbm.HbmIntegrationMetadataDaoImpl;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.biodb.helper.HelperHbmConfigInitializer;
+import pt.uminho.sysbio.biosynthframework.integration.etl.EtlModels;
+import pt.uminho.sysbio.biosynthframework.integration.etl.TheStaticModelLoader;
 
 public class TestDomainEntities {
 
@@ -60,6 +69,29 @@ public class TestDomainEntities {
 //		dao.saveIntegratedMember(node2);
 //		dao.saveIntegratedMember(node3);
 //	}
+  
+  @Test
+  public void test() {
+    GraphDatabaseService service = 
+        HelperNeo4jConfigInitializer.initializeNeo4jDatabase("D:\\tmp\\biodb/debe");
+    
+    org.neo4j.graphdb.Transaction tx = service.beginTx();
+    
+    EtlModels etlModel = new EtlModels(service);
+    try (InputStream is = new FileInputStream("D:\\var\\biomodels\\fbc3/iJDZ836.xml")) {
+      etlModel.etlXml(is, "test");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    
+    tx.failure();
+    tx.close();
+    
+    service.shutdown();
+  }
+  
+  
 //
 //	@Test
 //	public void test() {

@@ -9,7 +9,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.helpers.collection.IteratorUtil;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +48,10 @@ public class CanSmileClusterStrategy extends AbstractNeo4jClusteringStrategy {
 		}
 		for (Long isoNodeId: isomorphicProperties) {
 			Node isoNode = db.getNodeById(isoNodeId);
-			List<Relationship> links = IteratorUtil.asList(
+			Iterable<Relationship> links = 
 					isoNode.getRelationships(
 							MetaboliteRelationshipType.has_inchi, 
-							MetaboliteRelationshipType.has_smiles));
+							MetaboliteRelationshipType.has_smiles);
 			
 			for (Relationship r: links) {
 				if (r.getStartNode().hasLabel(CompoundNodeLabel.Compound)) {

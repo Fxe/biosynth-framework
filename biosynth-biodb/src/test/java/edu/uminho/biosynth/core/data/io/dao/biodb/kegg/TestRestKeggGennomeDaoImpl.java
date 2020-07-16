@@ -4,7 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
 
 public class TestRestKeggGennomeDaoImpl {
 	
@@ -17,12 +17,12 @@ public class TestRestKeggGennomeDaoImpl {
 		rest.setLocalStorage(folder);
 		rest.setSaveLocalStorage(true);
 		rest.setUseLocalStorage(true);
-		rest.createFolder();
+//		rest.createFolder();
 	}
 	
-	@Test
+//	@Test
 	public void test1(){
-		KeggGenomeEntity genomeEntity = rest.getGenomeByEntry("T00007");
+		KeggGenomeEntity genomeEntity = rest.getByEntry("T00007");
 		System.out.println("Entry: " + genomeEntity.getEntry());
 		System.out.println("Name: " + genomeEntity.getNames());
 		System.out.println(genomeEntity.getLineage());

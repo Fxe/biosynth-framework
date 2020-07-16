@@ -87,7 +87,7 @@ extends AbstractMetaboliteTransform<ChebiMetaboliteEntity>{
 					this.buildPair(
 					new SomeNodeFactory()
 							.withEntry(Long.toString(parentId))
-							.buildGraphMetaboliteProxyEntity(majorLabel), 
+							.buildGraphMetaboliteProxyEntity(majorLabel, null), 
 					new SomeNodeFactory()
 							.buildMetaboliteEdge(MetaboliteRelationshipType.chebi_parent)));
 		}

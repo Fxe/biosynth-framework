@@ -9,4 +9,5 @@ public enum MetabolicModelLabel implements Label {
 	ModelSubsystem,
 	ModelGene,
 	ModelGPR,
+	ModelCompartment,
 }

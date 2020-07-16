@@ -6,8 +6,8 @@ import java.util.Map;
 
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ApiMetabolite;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.Bigg2ApiReaction;
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface Bigg2ApiService {
   

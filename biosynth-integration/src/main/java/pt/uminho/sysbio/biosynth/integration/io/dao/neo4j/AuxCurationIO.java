@@ -10,7 +10,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +79,7 @@ public class AuxCurationIO {
   public static Map<Long, String> listUniversalEntity(GraphDatabaseService service, Label label) {
     Map<Long, String> result = new HashMap<> ();
     
-    for (Node node : GlobalGraphOperations.at(service).getAllNodesWithLabel(label)) {
+    for (Node node : Iterators.asIterable(service.findNodes(label))) {
       long id = node.getId();
       String entry = (String) node.getProperty("entry");
       result.put(id, entry);
@@ -214,7 +214,7 @@ public class AuxCurationIO {
   public static Node getNode(Label label, 
                              String entry, GraphDatabaseService service) {
     Node node = Neo4jUtils.getUniqueResult(
-        service.findNodesByLabelAndProperty(label, 
+        service.findNodes(label, 
             Neo4jDefinitions.ENTITY_NODE_UNIQUE_CONSTRAINT, entry));
     
     return node;

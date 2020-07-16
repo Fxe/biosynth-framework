@@ -1,6 +1,9 @@
 package pt.uminho.sysbio.biosynth.integration.etl;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -22,6 +25,8 @@ implements EtlPipeline<SRC, DST> {
   private EtlExtract<SRC> extractSubsystem;
   private EtlTransform<SRC, DST> transformSubsystem;
   private EtlLoad<DST> loadSubsystem;
+  
+  public Set<String> exclude = new HashSet<> ();
 
   private int batchSize = 100;
   private boolean skipLoad = false;
@@ -127,6 +132,52 @@ implements EtlPipeline<SRC, DST> {
       }
     }
 
+    if (sessionFactory != null) {
+      hbmTx.rollback();
+    }
+    
+    if (graphDatabaseService != null) {
+      neoTx.success();
+      neoTx.close();
+    }
+  }
+  
+  public void etl(Collection<Serializable> ids) {
+    if (this.dataCleasingSubsystem == null) {
+      logger.debug("No data cleasing system attached");
+    }
+
+    org.hibernate.Transaction hbmTx = null;
+    org.neo4j.graphdb.Transaction neoTx = null;
+    if (sessionFactory != null) {
+      hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+    }
+    if (graphDatabaseService != null) {
+      neoTx = graphDatabaseService.beginTx();
+    }
+    
+    int i = 0;
+    for (Serializable id : ids) {
+      try {
+        if (!exclude.contains(id.toString())) {
+          etl(id);
+          i++;
+        }
+      } catch (Exception e) {
+        logger.error("{} - {}", id, e.getMessage());
+      }
+      
+      if ((i % batchSize) == 0) {
+        logger.debug(String.format("Commit ! %d", i));
+        neoTx.success();
+        neoTx.close();
+        neoTx = graphDatabaseService.beginTx();
+
+        hbmTx.rollback();
+        hbmTx = sessionFactory.getCurrentSession().beginTransaction();
+      }
+    }
+    
     if (sessionFactory != null) {
       hbmTx.rollback();
     }

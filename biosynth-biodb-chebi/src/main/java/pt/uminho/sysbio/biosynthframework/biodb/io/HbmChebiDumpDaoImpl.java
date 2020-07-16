@@ -7,11 +7,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -269,6 +273,11 @@ public class HbmChebiDumpDaoImpl implements MetaboliteDao<ChebiMetaboliteEntity>
 		ChebiDumpMetaboliteEntity cpd = null;
 		if (id instanceof String) {
 			String chebiAccession = ((String)id).startsWith("CHEBI:")?(String)id:"CHEBI:".concat((String)id);
+			CriteriaQuery<ChebiDumpMetaboliteEntity> query = 
+			    this.getSession().getCriteriaBuilder().createQuery(ChebiDumpMetaboliteEntity.class);
+//			query.from(ChebiDumpMetaboliteEntity.class).
+//			query.getGroupRestriction(Restrictions.eq("chebiAccession", chebiAccession));
+//			CriteriaBuilderImpl a = new CriteriaBuilderImpl(this.getSession());
 			Criteria criteria = this.getSession().createCriteria(ChebiDumpMetaboliteEntity.class);
 			criteria.add(Restrictions.eq("chebiAccession", chebiAccession));
 			List<?> res = criteria.list();

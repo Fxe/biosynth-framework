@@ -18,10 +18,15 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.Range;
+import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
+import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
+import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
+import pt.uminho.sysbio.biosynthframework.Tuple2;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
@@ -35,6 +40,7 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   public final XmlSbmlModel xmodel;
   protected Map<String, XmlSbmlReaction> xrxnMap = new HashMap<> ();
   protected Map<String, XmlSbmlSpecie> xspiMap = new HashMap<> ();
+  protected Map<String, XmlSbmlCompartment> xcmpMap = new HashMap<> ();
   protected Set<String> boundarySpecies = new HashSet<> ();
   
   protected BMap<String, Integer> xspiDegreeMap = new BHashMap<> ();
@@ -485,6 +491,10 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   public XmlSbmlModelAdapter(XmlSbmlModel xmodel) {
     this.xmodel = xmodel;
 
+    for (XmlSbmlCompartment xo : xmodel.getCompartments()) {
+      xcmpMap.put(xo.getAttributes().get("id"), xo);
+    }
+    
     for (XmlObject xparams : xmodel.getListOfParameters()) {
       parameters.put(xparams.getAttributes().get("id"), xparams);
     }
@@ -619,13 +629,27 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   }
   
   public String getGprFromNotes(String mrxnEntry) {
-    XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
-    Map<String, Set<String>> ndata = notesParser.parseNotes2(xrxn.getNotes());
     String ngpr = null;
-    if (ndata.containsKey("gene_association") && 
-        ndata.get("gene_association").size() > 0) {
-      ngpr = ndata.get("gene_association").iterator().next();
+    
+    XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
+    String notes = xrxn.getNotes();
+    
+    if (!DataUtils.empty(notes)) {
+      SbmlNotesParser parser = new SbmlNotesParser(notes);
+      parser.parse();
+      for (Tuple2<String> t : parser.getData()) {
+        if ("GENE_ASSOCIATION".equals(t.e1) && !DataUtils.empty(t.e2)) {
+          ngpr = t.e2;
+        }
+      }
     }
+    
+//    Map<String, Set<String>> ndata = notesParser.parse(notes);
+//    
+//    if (ndata.containsKey("gene_association") && 
+//        ndata.get("gene_association").size() > 0) {
+//      ngpr = ndata.get("gene_association").iterator().next();
+//    }
     
     return ngpr;
   }
@@ -732,5 +756,84 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     }
     
     return ngpr;
+  }
+
+  @Override
+  public SimpleModelReaction<String> getReaction(String rxnId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public SimpleModelSpecie<String> getSpecies(String spiId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public SimpleCompartment<String> getCompartment(String cmpId) {
+    XmlSbmlCompartment xcmp = this.xcmpMap.get(cmpId);
+    if (xcmp == null) {
+      return null;
+    }
+    
+    SimpleCompartment<String> cmp = new SimpleCompartment<String>(cmpId);
+    cmp.name = xcmp.getAttributes().get("name");
+    return cmp;
+  }
+
+  @Override
+  public Set<String> getReactionIds() {
+    return new HashSet<>(this.xrxnMap.keySet());
+  }
+
+  @Override
+  public Set<String> getSpeciesIds() {
+    return new HashSet<>(this.xspiMap.keySet());
+  }
+
+  @Override
+  public Set<String> getCompartmentIds() {
+    return new HashSet<>(this.xcmpMap.keySet());
+  }
+  
+  public Double getValue(String str) {
+    if (NumberUtils.isParsable(str)) {
+      return Double.parseDouble(str);
+    }
+    return null;
+  }
+  
+
+  @Override
+  public CompartmentalizedStoichiometry<String, String> getCompartmentalizedStoichiometry(String mrxnEntry) {
+    XmlSbmlReaction xrxn = this.xrxnMap.get(mrxnEntry);
+    
+    if (xrxn == null) {
+      return null;
+    }
+    
+    CompartmentalizedStoichiometry<String, String> cstoich = new CompartmentalizedStoichiometry<>();
+    for (XmlObject xo : xrxn.getListOfReactants()) {
+      String specie = xo.getAttributes().get("species");
+      String cmp = this.getSpecieCompartment(specie);
+      Double value = getValue(xo.getAttributes().get("stoichiometry"));
+      cstoich.addLeft(specie, cmp, value == null ? 1.0 : value);
+    }
+    for (XmlObject xo : xrxn.getListOfProducts()) {
+      String specie = xo.getAttributes().get("species");
+      String cmp = this.getSpecieCompartment(specie);
+      Double value = getValue(xo.getAttributes().get("stoichiometry"));
+      cstoich.addRight(specie, cmp, value == null ? 1.0 : value);
+    }
+    
+    return cstoich;
+  }
+
+  @Override
+  public Set<String> getReactionGeneIds(String rxnId) {
+    System.err.println("not impl");
+    // TODO Auto-generated method stub
+    return null;
   }
 }

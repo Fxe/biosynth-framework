@@ -3,7 +3,6 @@ package edu.uminho.biosynth.core.data.integration.chimera.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 import pt.uminho.sysbio.biosynth.integration.IntegratedMetaboliteEntity;
@@ -14,13 +13,10 @@ public class Neo4jIntegratedMetaboliteDao implements MetaboliteDao<IntegratedMet
 
 	private GraphDatabaseService graphdb;
 	
-	@SuppressWarnings("unused")
-	private ExecutionEngine engine;
 	
 	public GraphDatabaseService getGraphdb() { return graphdb;}
 	public void setGraphdb(GraphDatabaseService graphdb) {
 		this.graphdb = graphdb;
-		this.engine = new ExecutionEngine(graphdb);
 	}
 
 	@Override

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XmlSbmlModel extends XmlObject {
-  private List<String> notes  = new ArrayList<> ();
+public class XmlSbmlModel extends SbmlSBaseObject {
+  
   private Map<String, String> sbmlAttributes = new HashMap<> ();
   public List<XmlUnitDefinition> units = new ArrayList<> ();
   private List<XmlSbmlCompartment> compartments = new ArrayList<> ();
@@ -44,7 +44,4 @@ public class XmlSbmlModel extends XmlObject {
   
   public List<XmlObject> getListOfGeneProducts() { return listOfGeneProducts;}
   public void setListOfGeneProducts(List<XmlObject> listOfGeneProducts) { this.listOfGeneProducts = listOfGeneProducts;}
-  
-  public List<String> getNotes() { return notes;}
-  public void setNotes(List<String> notes) { this.notes = notes;}
 }

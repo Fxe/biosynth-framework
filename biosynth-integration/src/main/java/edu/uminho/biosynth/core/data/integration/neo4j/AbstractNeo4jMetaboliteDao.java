@@ -47,7 +47,7 @@ extends AbstractNeo4jDao<M> implements MetaboliteDao<M> {
 	public List<Serializable> getAllMetaboliteIds() {
 		List<Serializable> res = new ArrayList<> ();
 		String query = String.format("MATCH (cpd:%s) RETURN cpd.id AS ids", dbLabel);
-		Iterator<String> iterator = executionEngine.execute(query).columnAs("ids");
+		Iterator<String> iterator = graphDatabaseService.execute(query).columnAs("ids");
 		while (iterator.hasNext()) {
 			res.add(iterator.next());
 		}

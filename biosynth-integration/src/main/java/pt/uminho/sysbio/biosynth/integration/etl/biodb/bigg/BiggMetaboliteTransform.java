@@ -8,17 +8,34 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynthframework.ReferenceType;
+import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.bigg.BiggMetaboliteEntity;
 
 public class BiggMetaboliteTransform
 extends AbstractMetaboliteTransform<BiggMetaboliteEntity> {
 
   private static final String BIGG_METABOLITE_LABEL = MetaboliteMajorLabel.BiGG.toString();
-
+  
   public BiggMetaboliteTransform() {
     super(BIGG_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(BiggMetaboliteEntity.class));
   }
 
+  @Override
+  protected void configureCrossreferences(GraphMetaboliteEntity centralMetaboliteEntity,
+                                          BiggMetaboliteEntity metabolite) {
+    for (BiggMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+      if (xref.getValue().startsWith("KEGG -")) {
+        xref.setValue(xref.getValue().substring("KEGG -".length()).trim());
+      }
+      if (xref.getType().equals(ReferenceType.MODEL) && "Recon 1".equals(xref.getValue())) {
+        xref.setValue("RECON1");
+        xref.setRef("RECON1");
+      }
+    }
+    super.configureCrossreferences(centralMetaboliteEntity, metabolite);
+  }
+  
   @Override
   protected void configureAdditionalPropertyLinks(
       GraphMetaboliteEntity centralMetaboliteEntity,

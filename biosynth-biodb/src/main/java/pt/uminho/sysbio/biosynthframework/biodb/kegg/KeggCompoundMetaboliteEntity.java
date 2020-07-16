@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -22,7 +22,7 @@ import pt.uminho.sysbio.biosynthframework.annotations.SMILES;
 
 @Entity
 @Table(name="kegg_compound_metabolite")
-@XmlRootElement(name="KeggCompound")
+//@XmlRootElement(name="KeggCompound")
 public class KeggCompoundMetaboliteEntity extends AbstractKeggMetabolite{
 	
 	private static final long serialVersionUID = 1L;

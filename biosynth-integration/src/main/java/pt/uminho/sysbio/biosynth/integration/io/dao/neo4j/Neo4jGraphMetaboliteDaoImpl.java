@@ -14,7 +14,6 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,9 @@ import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteProxyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphPropertyEntity;
 import pt.uminho.sysbio.biosynth.integration.GraphRelationshipEntity;
 import pt.uminho.sysbio.biosynth.integration.io.dao.MetaboliteHeterogeneousDao;
+import pt.uminho.sysbio.biosynth.integration.neo4j.BiodbMetaboliteNode;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
+import pt.uminho.sysbio.biosynthframework.neo4j.BiosExternalDataNode;
 public class Neo4jGraphMetaboliteDaoImpl 
 extends AbstractNeo4jGraphDao<GraphMetaboliteEntity>
 implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
@@ -45,35 +47,41 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
   @Override
   public GraphMetaboliteEntity getMetaboliteById(String tagsss, Serializable id) {
     Node node = graphDatabaseService.getNodeById(Long.parseLong(id.toString()));
-    if (!node.hasLabel(GlobalLabel.Metabolite)) return null;
+    if (!node.hasLabel(GlobalLabel.Metabolite)) {
+      return null;
+    }
+    
+    BiodbMetaboliteNode cpdNode = graphDatabaseService.getMetabolite(Long.parseLong(id.toString()));
 
-    logger.debug(String.format("Found %s - %s", node, Neo4jUtils.getLabels(node)));
+    if (cpdNode == null) {
+      return null;
+    }
+    
+    logger.debug(String.format("Found %s - %s", cpdNode, Neo4jUtils.getLabels(cpdNode)));
 
     GraphMetaboliteEntity metaboliteEntity = new GraphMetaboliteEntity();
-    metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(node));
-    metaboliteEntity.setId(node.getId());
-    metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(node));
-    setupConnectedLinks(metaboliteEntity, node);
-
+    metaboliteEntity.setProperties(Neo4jUtils.getPropertiesMap(cpdNode));
+    metaboliteEntity.setId(cpdNode.getId());
+    metaboliteEntity.getLabels().addAll(Neo4jUtils.getLabelsAsString(cpdNode));
+    setupConnectedLinks(metaboliteEntity, cpdNode);
 
     return metaboliteEntity;
   }
 
   @Override
   public GraphMetaboliteEntity getMetaboliteByEntry(String tag, String entry) {
-    MetaboliteMajorLabel majorLabel;
+    MetaboliteMajorLabel database;
     try {
-      majorLabel = MetaboliteMajorLabel.valueOf(tag);
+      database = MetaboliteMajorLabel.valueOf(tag);
     } catch (IllegalArgumentException e) {
       logger.warn("IA - {}", e.getMessage());
       return null;
     }
-
-    Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(majorLabel, "entry", entry));
+    
+    BiodbMetaboliteNode node = graphDatabaseService.getMetabolite(entry, database);
 
     if (node == null) {
-      logger.debug(String.format("Metabolite [%s:%s] not found", tag, entry));
+      logger.debug("Metabolite [{}:{}] not found", tag, entry);
       return null;
     }
 
@@ -114,10 +122,14 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
   }
 
   private AbstractGraphNodeEntity deserialize(Node node) {
+    if (node.hasLabel(GlobalLabel.EXTERNAL_DATA)) {
+      logger.debug("reloading node");
+      node = graphDatabaseService.getNodeById(node.getId());
+    }
     GraphMetaboliteEntity entity = new GraphMetaboliteEntity();
     entity.setId(node.getId());
     entity.setLabels(Neo4jUtils.getLabelsAsString(node));
-    entity.setProperties(Neo4jUtils.getPropertiesMap(node));
+    entity.setProperties(node.getAllProperties());
     String majorLabel = null;
     if (entity.getLabels().contains(GlobalLabel.MetaboliteProperty.toString())) {
       for (String label : entity.getLabels()) {
@@ -126,7 +138,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
     }
     if (entity.getLabels().contains(GlobalLabel.Metabolite.toString())) {
       for (String label : entity.getLabels()) {
-        if (isMetaboliteMajorLabel(label)) majorLabel = label;
+        if (isMetaboliteDatabase(label)) majorLabel = label;
       }
     }
     entity.setMajorLabel(majorLabel);
@@ -145,20 +157,15 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
     return false;
   }
 
-  private boolean isMetaboliteMajorLabel(String label) {
-    try {
-      MetaboliteMajorLabel.valueOf(label);
-      logger.trace(label + " is a MetaboliteMajorLabel");
-      return true;
-    } catch (IllegalArgumentException e) {
-      logger.trace(label + " is not MetaboliteMajorLabel - " + e.getMessage());
-    }
-
-    return false;
+  @Deprecated
+  private boolean isMetaboliteDatabase(String label) {
+    return Neo4jUtils.isMetaboliteDatabase(label);
   }
 
   @Override
   public GraphMetaboliteEntity saveMetabolite(String tag, GraphMetaboliteEntity metabolite) {
+    logger.debug("save metabolite {}, {}", metabolite.getEntry(), metabolite.getVersion());
+    
     if (metabolite.getEntry() == null)
       logger.warn("Missing entry");
     if (metabolite.getMajorLabel() == null)
@@ -180,7 +187,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
     boolean create = true;
     System.out.println(metabolite.getMajorLabel());
     System.out.println(metabolite.getEntry());
-    for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
+    for (Node node : graphDatabaseService.listNodes(
         DynamicLabel.label(metabolite.getMajorLabel()), 
         "entry", 
         metabolite.getEntry())) {
@@ -252,7 +259,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
     GraphPropertyEntity propertyEntity = propertyLinkPair.getLeft();
     GraphRelationshipEntity relationshipEntity = propertyLinkPair.getRight();
     for (Node propertyNode : graphDatabaseService
-        .findNodesByLabelAndProperty(
+        .listNodes(
             DynamicLabel.label(propertyEntity.getMajorLabel()), 
             null,
             //						propertyEntity.uniqueProperty, 
@@ -306,7 +313,7 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
     GraphRelationshipEntity relationshipEntity = proxyPair.getRight();
     RelationshipType relationshipType = DynamicRelationshipType.withName(relationshipEntity.getMajorLabel());
     for (Node proxyNode : graphDatabaseService
-        .findNodesByLabelAndProperty(
+        .listNodes(
             DynamicLabel.label(proxy.getMajorLabel()), 
             "entry", 
             proxy.getEntry())) {
@@ -337,9 +344,8 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
   @Override
   public List<Long> getGlobalAllMetaboliteIds() {
     List<Long> result = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(METABOLITE_LABEL)) {
+    for (Node node : graphDatabaseService
+        .listNodes(METABOLITE_LABEL)) {
 
       result.add(node.getId());
     }
@@ -349,10 +355,9 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
   @Override
   public List<Long> getAllMetaboliteIds(String tag) {
     List<Long> result = new ArrayList<> ();
-    if (!isMetaboliteMajorLabel(tag)) return result;
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(DynamicLabel.label(tag))) {
+    if (!isMetaboliteDatabase(tag)) return result;
+    for (Node node : graphDatabaseService
+        .listNodes(DynamicLabel.label(tag))) {
 
       result.add(node.getId());
     }
@@ -362,10 +367,9 @@ implements MetaboliteHeterogeneousDao<GraphMetaboliteEntity>{
   @Override
   public List<String> getAllMetaboliteEntries(String tag) {
     List<String> result = new ArrayList<> ();
-    if (!isMetaboliteMajorLabel(tag)) return result;
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(DynamicLabel.label(tag))) {
+    if (!isMetaboliteDatabase(tag)) return result;
+    for (Node node : graphDatabaseService
+        .listNodes(DynamicLabel.label(tag))) {
 
       result.add((String)node.getProperty("entry"));
     }

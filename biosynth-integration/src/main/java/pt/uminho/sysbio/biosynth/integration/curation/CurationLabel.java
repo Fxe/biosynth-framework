@@ -12,6 +12,7 @@ public enum CurationLabel implements Label{
 	
 	UniversalSpecie,
 	
+	UniversalCompartment,
 	UniversalMetabolite,
 	UniversalReaction,
 }

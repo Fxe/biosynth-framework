@@ -20,7 +20,7 @@ public class Bigg2ReactionTransform extends AbstractReactionTransform<Bigg2React
 
   private static final String BIGG2_REACTION_LABEL = ReactionMajorLabel.BiGGReaction.toString();
   private static final String BIGG2_REACTION_METABOLITE_LABEL = MetaboliteMajorLabel.BiGGMetabolite.toString();
-
+  
   public Bigg2ReactionTransform() {
     super(BIGG2_REACTION_LABEL, new BiobaseMetaboliteEtlDictionary<>(Bigg2MetaboliteEntity.class));
   }

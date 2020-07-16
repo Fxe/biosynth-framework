@@ -1,9 +1,12 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.biocyc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +18,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
+import pt.uminho.sysbio.biosynthframework.GenericCrossreference;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteEntity;
 
@@ -47,7 +51,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory()
               .withEntry(parent)
               .withLabel(GlobalLabel.BioCyc)
-              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.instance_of)));
     }
@@ -57,20 +61,21 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
               new SomeNodeFactory()
               .withEntry(instance)
               .withLabel(GlobalLabel.BioCyc)
-              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.parent_of)));
     }
-    for (String subclass : entity.getInstances()) {
+    for (String subclass : entity.getSubclasses()) {
       centralMetaboliteEntity.addConnectedEntity(
           this.buildPair(
               new SomeNodeFactory()
               .withEntry(subclass)
               .withLabel(GlobalLabel.BioCyc)
-              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel)), 
+              .buildGraphMetaboliteProxyEntity(MetaboliteMajorLabel.valueOf(majorLabel), null), 
               new SomeNodeFactory().buildMetaboliteEdge(
                   MetaboliteRelationshipType.subclass_of)));
     }
+    
     
 //    for (String subClass : entity.getSubclasses()) {
 //      centralMetaboliteEntity.addConnectedEntity(
@@ -127,19 +132,42 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
 
     super.configureNameLink(centralMetaboliteEntity, entity);
   }
-
+  
+  @Override
+  protected GenericCrossreference configureReference(GenericCrossreference xref) {
+    if ("BIGG".equals(xref.getRef()) && 
+        NumberUtils.isDigits(xref.getValue()) &&
+        biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+      xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
+      xref.setRef(MetaboliteMajorLabel.BiGG.toString());
+    } else if ("BIGG".equals(xref.getRef()) && 
+               !NumberUtils.isDigits(xref.getValue())){
+      xref.setRef(MetaboliteMajorLabel.BiGGMetabolite.toString());
+    }
+    return super.configureReference(xref);
+  }
+  
   @Override
   protected void configureCrossreferences(
       GraphMetaboliteEntity centralMetaboliteEntity,
       BioCycMetaboliteEntity metabolite) {
-    for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
-      if (xref.getRef().toLowerCase().equals("bigg")) {
-        if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
-          xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
-        }
-        logger.debug("Internal Id replaced: " + xref);
-      }
-    }
+//    List<BioCycMetaboliteCrossreferenceEntity> xrefValid = new ArrayList<> ();
+//    for (BioCycMetaboliteCrossreferenceEntity xref : metabolite.getCrossreferences()) {
+//      if (xref.getUrl().startsWith("http://bigg.ucsd.edu")) {
+//        xref.setRef("bigg2");
+//      } else if (xref.getRef().toLowerCase().equals("bigg")) {
+//        if (biggInternalIdToEntryMap.containsKey(xref.getValue())) {
+//          xref.setValue(biggInternalIdToEntryMap.get(xref.getValue()));
+//        }
+//        logger.debug("Internal Id replaced: " + xref);
+//      }
+//      if (xref.getRef().equals("bigg2") && NumberUtils.isDigits(xref.getValue())) {
+//        logger.warn("Discard ref: {}", xref);
+//      } else {
+//        xrefValid.add(xref);
+//      }
+//    }
+//    metabolite.setCrossReferences(xrefValid);
     super.configureCrossreferences(centralMetaboliteEntity, metabolite);
   }
 
@@ -157,7 +185,7 @@ extends AbstractMetaboliteTransform<BioCycMetaboliteEntity>{
       formula_ = formula_.concat(term);
     }
     if (!formula.equals(formula_)) {
-      logger.warn(formula + " -> " + formula_);
+      logger.debug(formula + " -> " + formula_);
     }
 
     return formula_;

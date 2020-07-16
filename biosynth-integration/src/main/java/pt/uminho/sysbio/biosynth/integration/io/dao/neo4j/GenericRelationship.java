@@ -4,5 +4,11 @@ import org.neo4j.graphdb.RelationshipType;
 
 public enum GenericRelationship implements RelationshipType {
   has_taxonomy, has_gene, has_protein_sequence, has_nucleotide_sequence,
-  has_accession, has_protein,
+  has_accession, has_protein, has_inchikey_fikhb, has_inchikey_sikhb,
+  has_supplementary_file, has_file,
+  has_publication,
+  has_source_file,
+  has_sbo_term,
+  has_version,
+  has_parent_taxonomy,
 }

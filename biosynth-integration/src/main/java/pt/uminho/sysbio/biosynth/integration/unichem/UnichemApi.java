@@ -3,9 +3,9 @@ package pt.uminho.sysbio.biosynth.integration.unichem;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.http.GET;
-import retrofit.http.Headers;
-import retrofit.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.Path;
 
 public interface UnichemApi {
 	//https://www.ebi.ac.uk/unichem/rest/sources/1

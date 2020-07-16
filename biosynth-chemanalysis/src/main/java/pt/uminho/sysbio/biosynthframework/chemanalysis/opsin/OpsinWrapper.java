@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis.opsin;
 
-import nu.xom.Element;
 import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructureException;
@@ -15,8 +14,9 @@ public class OpsinWrapper {
 	
 	public static String iupacToCml(String name) throws NameToStructureException {
 		NameToStructure nameToStructure = NameToStructure.getInstance();
-		Element element = nameToStructure.parseToCML(name);
-		return element.toXML();
+		String xml = nameToStructure.parseToCML(name);
+//		Element element = nameToStructure.parseToCML(name);
+		return xml;
 //		return ;nameToStructure.parseToCML(name)
 	}
 	

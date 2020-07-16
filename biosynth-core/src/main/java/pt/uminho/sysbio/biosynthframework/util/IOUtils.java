@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -28,6 +28,7 @@ public class IOUtils {
 
   private static final Logger logger = LoggerFactory.getLogger(IOUtils.class);
   
+  @Deprecated
   public static String digest(String algorithm, File file) 
       throws NoSuchAlgorithmException, FileNotFoundException, IOException {
     MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -36,6 +37,7 @@ public class IOUtils {
     return digest;
   }
 
+  @Deprecated
   public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
       throws NoSuchAlgorithmException, IOException {
 
@@ -50,6 +52,7 @@ public class IOUtils {
     return result;
   }
   
+  @Deprecated
   public static void folderScan(Set<String> files, File folder, FileFilter filter) {
     if (!folder.isDirectory()) {
       return;
@@ -66,12 +69,13 @@ public class IOUtils {
     }
   }
 
+  @Deprecated
   public static String getUrlAsString(String url) {
     URLConnection connection = null;
     try {
       connection = new URL(url).openConnection();
       List<String> lines = org.apache.commons.io.IOUtils.readLines(
-          connection.getInputStream());
+          connection.getInputStream(), Charset.defaultCharset());
       if (lines != null) {
         return StringUtils.join(lines, '\n');
       }
@@ -119,25 +123,15 @@ public class IOUtils {
     printDir(".");
   }
 
-  public static String readFromFile(String path) throws FileNotFoundException, IOException {
+  public static String readFromFile(String path) throws IOException {
     return readFromFile(new File(path));
   }
 
-  public static String readFromFile(File file) throws FileNotFoundException, IOException {
-    return readFromInputStream(new FileInputStream(file));
-//    StringBuilder sb = new StringBuilder();
-//
-//    FileReader reader = new FileReader(file);
-//    BufferedReader br = new BufferedReader(reader);
-//    String line;
-//    while ( (line = br.readLine()) != null ) {
-//      sb.append(line).append('\n');
-//    }
-//
-//    br.close();
-//    reader.close();
-//
-//    return sb.toString();
+  public static String readFromFile(File file) throws IOException {
+    try (FileInputStream fis = new FileInputStream(file)) {
+      String result = readFromInputStream(fis);
+      return result;
+    }
   }
   
   public static void writeToFile(InputStream is, File file) throws IOException {
@@ -179,17 +173,6 @@ public class IOUtils {
 
   public static String readFromInputStream(InputStream inputStream) throws IOException {
     List<String> lines = org.apache.commons.io.IOUtils.readLines(inputStream, "UTF-8");
-    org.apache.commons.io.IOUtils.closeQuietly(inputStream);
-//    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//    StringBuilder sb = new StringBuilder();
-//    String line;
-//    while ( (line = br.readLine()) != null ) {
-//      sb.append(line).append('\n');
-//    }
-//
-//    br.close();
-//    inputStream.close();
-
     return StringUtils.join(lines, '\n');
   }
 }

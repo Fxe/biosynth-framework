@@ -7,6 +7,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
 import pt.uminho.sysbio.biosynthframework.biodb.lipidmap.LipidmapsMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class LipidmapsMetaboliteTransform 
 extends AbstractMetaboliteTransform<LipidmapsMetaboliteEntity> {
@@ -17,10 +18,24 @@ extends AbstractMetaboliteTransform<LipidmapsMetaboliteEntity> {
     super(LIPIDMAPS_LABEL, new BiobaseMetaboliteEtlDictionary<>(
         LipidmapsMetaboliteEntity.class));
   }
+  
+  @Override
+  public GraphMetaboliteEntity etlTransform(LipidmapsMetaboliteEntity metabolite) {
+    GraphMetaboliteEntity gcpd = super.etlTransform(metabolite);
+    gcpd.getProperties().remove("mol");
+    return gcpd;
+  }
 
   @Override
   protected void configureAdditionalPropertyLinks(GraphMetaboliteEntity centralMetaboliteEntity,
       LipidmapsMetaboliteEntity metabolite) {
+    
+    if (!DataUtils.empty(metabolite.getMol())) {
+      this.configureGenericPropertyLink(centralMetaboliteEntity, 
+                                        metabolite.getMol(), 
+                                        MetabolitePropertyLabel.MDLMolFile, 
+                                        MetaboliteRelationshipType.has_mdl_mol_file);
+    }
     
     if (metabolite.getInchiKey() != null && 
         !metabolite.getInchiKey().trim().isEmpty()) {
@@ -28,6 +43,13 @@ extends AbstractMetaboliteTransform<LipidmapsMetaboliteEntity> {
                                         metabolite.getInchiKey(), 
                                         MetabolitePropertyLabel.InChIKey, 
                                         MetaboliteRelationshipType.has_inchikey);
+    }
+    if (metabolite.getInchi() != null && 
+        !metabolite.getInchi().trim().isEmpty()) {
+      this.configureGenericPropertyLink(centralMetaboliteEntity, 
+                                        metabolite.getInchi(), 
+                                        MetabolitePropertyLabel.InChI, 
+                                        MetaboliteRelationshipType.has_inchi);
     }
   }
   

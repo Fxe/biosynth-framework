@@ -8,19 +8,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
+import retrofit2.Retrofit;
 
 public class TestRetrofitUnichemApi {
 
-	private static RestAdapter restAdapter;
+	private static Retrofit retrofit;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		restAdapter = new RestAdapter.Builder()
-									 .setEndpoint("https://www.ebi.ac.uk/unichem/rest/")
-									 .setLogLevel(LogLevel.NONE)
-									 .build();
+//		restAdapter = new RestAdapter.Builder()
+//									 .setEndpoint("https://www.ebi.ac.uk/unichem/rest/")
+//									 .setLogLevel(LogLevel.NONE)
+//									 .build();
 	}
 
 	@AfterClass
@@ -37,8 +36,8 @@ public class TestRetrofitUnichemApi {
 
 	@Test
 	public void test() {
-		UnichemApi unichemApi = restAdapter.create(UnichemApi.class);
-		System.out.println(unichemApi.getSourceIds());
+//		UnichemApi unichemApi = restAdapter.create(UnichemApi.class);
+//		System.out.println(unichemApi.getSourceIds());
 	}
 
 }

@@ -16,9 +16,13 @@ public class XmlObject {
   public int columnNumber = -1;
   
   private Map<String, String> attributes = new HashMap<> ();
+  private String data;
 
   public Map<String, String> getAttributes() { return attributes;}
   public void setAttributes(Map<String, String> attributes) { this.attributes = attributes;}
+  
+  public String getData() { return data;}
+  public void setData(String data) { this.data = data;}
   
   @Override
   public String toString() {

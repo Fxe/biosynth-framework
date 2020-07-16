@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class OpenBabelMoleculeFormatConverter implements MoleculeFormatConverter
 		args[args.length - 2] = inputArg;
 		
 		try {
-			String stdin = IOUtils.toString(input);
+			String stdin = IOUtils.toString(input, Charset.defaultCharset());
 			String[] res = obb.execute(stdin, args);
 			LOGGER.debug("stderr: {}", res[1]);
 			return res[0];

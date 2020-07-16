@@ -30,11 +30,12 @@ import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggGenomeEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggKOEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggModuleEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenesDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggGenomeDaoImpl;
 import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggKOsDaoImpl;
-import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.RestKeggModuleDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycClassNames;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycXmlQueryResult;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggModuleDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.ptools.RestBiocycPathwayDaoImpl;
 
 @Deprecated
 public class GeneralDriver {
@@ -65,13 +66,13 @@ public class GeneralDriver {
     genomeDao.setSaveLocalStorage(true);
     genomeDao.setUseLocalStorage(true);
     
-    KeggModuleEntity module = moduleDao.getModuleByEntry("M00124");
+    KeggModuleEntity module = moduleDao.getByEntry("M00124");
     for (String koEntry : module.getOrthologs()) {
       KeggKOEntity ko = koDao.getKOByEntry(koEntry);
       for (Pair<String, String> gpair : ko.g) {
         System.out.println(gpair);
         try {
-          KeggGenomeEntity g = genomeDao.getGenomeByEntry(gpair.getLeft());
+          KeggGenomeEntity g = genomeDao.getByEntry(gpair.getLeft());
 
           System.out.println(g.getTaxonomy());
           
@@ -429,6 +430,23 @@ public class GeneralDriver {
   }
   
   public static void main(String[] args) {
+    String localStorage = "G:\\var\\biodb\\biocyc";
+    String version = "23.5";
+    RestBiocycPathwayDaoImpl dao = new RestBiocycPathwayDaoImpl();
+    dao.setLocalStorage(localStorage);
+    dao.setSaveLocalStorage(true);
+    dao.setUseLocalStorage(true);
+    dao.setDatabaseVersion(version);
+    
+    List<String> entries = dao.getAllEntries();
+    
+    System.out.println(entries);
+    
+    for (String e : entries) {
+      dao.getEntry(e);
+    }
+    
+    System.exit(0);
     String pgdb = "ECOLI";
     String base = "/var/biodb/biocyc2";
     

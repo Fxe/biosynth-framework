@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,20 +8,132 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.Tuple2;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+
 public class SbmlNotesParser {
+  
+  public static enum Fields {
+    FORMULA,
+    CHARGE,
+    SMILES,
+    EC_NUMBER,
+    SUBSYSTEM,
+    GENE_ASSOCIATION,
+    INCHI,
+    KEGG,
+    METACYC,
+    SEED,
+  }
   
   private static final Logger logger = LoggerFactory.getLogger(SbmlNotesParser.class);
   
   public List<XmlMessage> messages = new ArrayList<> ();
-  
   public Map<String, String> fields = new HashMap<> ();
+  private String html;
+  private Set<String> texts = new HashSet<>();
+  private final Set<String> bad = new HashSet<>();
+  
+  private final List<Tuple2<String>> data = new ArrayList<> ();
   
   public SbmlNotesParser() {
     this.fields.putAll(getDefaults());
+  }
+  
+  public SbmlNotesParser(String html) {
+    this.fields.putAll(getDefaults2());
+    this.html = html;
+    this.parse(html);
+  }
+  
+  public List<Tuple2<String>> getData() { return data;}
+  public Set<String> getBad() { return bad;}
+
+  public static void processTexts(Elements es, Set<String> texts) {
+    for (Element e : es) {
+//      System.out.println("!" + e + " " + e.text());
+//      System.out.println("----------");
+      if (!DataUtils.empty(e.ownText())) {
+        texts.add(e.ownText().trim());
+      }
+      processTexts(e.children(), texts);
+    }
+  }
+  
+  public void parse(String html) {
+    Document document = Jsoup.parse(html);
+    processTexts(document.children(), texts);
+//    System.out.println(document);
+    for (String text : texts) {
+      if (StringUtils.countMatches(text, ":") == 1) {
+        String[] p = text.split(":");
+        if (p.length > 1) {
+          String mapping = fields.get(p[0].trim().toUpperCase());
+          if (mapping != null) {
+            data.add(new Tuple2<String>(mapping, p[1].trim()));
+          } else {
+            bad.add(text);
+          }
+        }
+      } else {
+        bad.add(text);
+      }
+    }
+  }
+  
+  public void parse() {
+    this.parse(html);
+  }
+  
+  public static Map<String, String> getDefaults2() {
+    Map<String, String> fields = new HashMap<> ();
+    fields.put("FORMULA", Fields.FORMULA.toString());
+    fields.put("SMILES", Fields.SMILES.toString());
+    fields.put("CHARGE", Fields.CHARGE.toString());
+    fields.put("INCHI", Fields.INCHI.toString());
+    
+//    fields.put("EQUATION", "equation");
+    fields.put("GPR_ASSOCIATION",  Fields.GENE_ASSOCIATION.toString());
+    fields.put("GENE_ASSOCIATION", Fields.GENE_ASSOCIATION.toString());
+    fields.put("GENE ASSOCIATION", Fields.GENE_ASSOCIATION.toString());
+//    fields.put("GENE_LIST", "gene_list");
+    
+//    fields.put("GENE_NAME", "protein_association");
+//    fields.put("PROTEIN_ASSOCIATION", "protein_association");
+    fields.put("SUBSYSTEM", Fields.SUBSYSTEM.toString());
+//    fields.put("PROTEIN_CLASS", "protein_class");
+//    fields.put("CONFIDENCE LEVEL", "confidence_level");
+    fields.put("EC NUMBER", Fields.EC_NUMBER.toString());
+    fields.put("EC_NUMBER", Fields.EC_NUMBER.toString());
+    fields.put("EC",        Fields.EC_NUMBER.toString());
+    
+    fields.put("KEGG ID",       Fields.KEGG.toString());
+    fields.put("KEGG_RID",      Fields.KEGG.toString());
+    fields.put("KEGG COMPOUND", Fields.KEGG.toString());
+    fields.put("BIOCYC",        Fields.METACYC.toString());
+    fields.put("SEED COMPOUND", Fields.SEED.toString());
+//    fields.put("PROTEIN_NAME", "reaction_name");
+    
+    
+//    fields.put("AUTHORS", "authors");
+//    fields.put("COMPARTMENT", "compartment");
+//    fields.put("PUBCHEM ID", "pubchem");
+//    fields.put("CHEBI ID", "chebi");
+    
+    return fields;
   }
   
   public static Map<String, String> getDefaults() {
@@ -71,6 +184,30 @@ public class SbmlNotesParser {
     }
     
     return null;
+  }
+  
+  public static List<String> parseNotes(String xmlNotes) {
+    List<String> result = new ArrayList<> ();
+    
+    if (DataUtils.empty(xmlNotes)) {
+      return result;
+    }
+    
+    XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    try {
+      XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(
+          new ByteArrayInputStream(xmlNotes.getBytes()));
+      while (xmlEventReader.hasNext()) {
+        XMLEvent event = xmlEventReader.nextEvent();
+        if (event.isCharacters()) {
+          result.add(event.asCharacters().getData());
+        }
+      }
+    } catch (XMLStreamException e) {
+      e.printStackTrace(); 
+    }
+    
+    return result;
   }
   
   @Deprecated

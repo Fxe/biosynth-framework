@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -17,11 +16,11 @@ import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.helpers.collection.IteratorUtil;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +51,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
   @Override
   public List<Long> getAllIntegrationSetsId() {
     List<Long> ids = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(IntegrationNodeLabel.IntegrationSet)) {
+    for (Node node : graphDatabaseService
+        .listNodes(IntegrationNodeLabel.IntegrationSet)) {
       ids.add(node.getId());
     }
     return ids;
@@ -63,9 +61,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
   @Override
   public List<String> getAllIntegrationSetsEntries() {
     List<String> result = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(IntegrationNodeLabel.IntegrationSet)) {
+    for (Node node : graphDatabaseService
+        .listNodes(IntegrationNodeLabel.IntegrationSet)) {
       result.add((String) node.getProperty("entry"));
     }
     return result;
@@ -88,7 +85,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     Node node = Neo4jUtils.mergeUniqueNode(
         IntegrationNodeLabel.IntegrationSet, 
         "entry", integrationSet.getEntry(), 
-        this.executionEngine);
+        this.graphDatabaseService);
 
     logger.trace("Returned node: " + node.toString());
 
@@ -123,7 +120,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     Map<String, Object> params = new HashMap<> ();
     params.put("entry", entry);
     logger.trace("Cypher: " + cypher);
-    ExecutionResult executionResult = this.executionEngine.execute(cypher, params);
+    Result executionResult = this.graphDatabaseService.execute(cypher, params);
     Node integrationSetNode = Neo4jUtils.getExecutionResultGetSingle("IID", executionResult);
 
     if (integrationSetNode == null 
@@ -246,8 +243,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     Set<Long> cidSet = new HashSet<> ();
     for (Long eid : eids) {
       Set<Long> eidsFound = Neo4jUtils.collectNodeIdsFromNodes(
-          IteratorUtil.asCollection(this.graphDatabaseService
-              .findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, eid)));
+          this.graphDatabaseService
+              .listNodes(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, eid));
       logger.debug("Member nodes: " + eidsFound.size());
       if (!eidsFound.isEmpty()) {
         if (eidsFound.size() > 1) logger.warn("Multiple members found with reference id: " + eid);
@@ -371,10 +368,10 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
     Node ctrNode = getNode(cluster);
     for (IntegratedClusterMeta meta : cluster.getMeta()) {
-      Node metaNode = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType()));
+      Node metaNode = Neo4jUtils.getUniqueResult(graphDatabaseService.listNodes(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType()));
       if (metaNode == null) {
         logger.warn("{}:{} not found new node created", IntegrationNodeLabel.MetaboliteClusterMetaProperty, meta.getMetaType());
-        metaNode = Neo4jUtils.mergeUniqueNode(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType(), this.executionEngine);
+        metaNode = Neo4jUtils.mergeUniqueNode(IntegrationNodeLabel.MetaboliteClusterMetaProperty, Neo4jDefinitions.PROPERTY_NODE_UNIQUE_CONSTRAINT, meta.getMetaType(), this.graphDatabaseService);
         metaNode.addLabel(DynamicLabel.label(meta.getLevel().toString()));
         metaNode.setProperty("level", meta.getLevel().toString());
         metaNode.setProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, meta.getMetaType());
@@ -427,7 +424,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     params.put("cluster_type", nullToString(cluster.getClusterType()));
 
     logger.debug(String.format("Execute:%s with %s", cypher, params)); 
-    Node clusterNode = Neo4jUtils.getExecutionResultGetSingle("CID", this.executionEngine.execute(cypher, params));
+    Node clusterNode = Neo4jUtils.getExecutionResultGetSingle("CID", this.graphDatabaseService.execute(cypher, params));
 
     for (Relationship relationship : clusterNode.getRelationships()) {
       System.out.println(relationship.getId());
@@ -568,7 +565,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
       //			params.put("member_type", nullToString(member.getMemberType()));
       //			System.out.println(String.format("Execute:%s with %s", cypher, params));
       logger.debug(String.format("Execute:%s with %s", cypher, params));
-      Node node = Neo4jUtils.getExecutionResultGetSingle("EID", this.executionEngine.execute(cypher, params));
+      Node node = Neo4jUtils.getExecutionResultGetSingle("EID", this.graphDatabaseService.execute(cypher, params));
       node.setProperty("description", nullToString(member.getDescription()));
       node.setProperty("member_type", nullToString(member.getMemberType()));
       node.addLabel(memberLabel);
@@ -647,7 +644,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     Map<String, Object> params = new HashMap<> ();
     params.put("iid", iid);
     params.put("eid", eid);
-    List<?> clusterEntryList = IteratorUtil.asList(executionEngine.execute(query, params).columnAs(columnName));
+    List<?> clusterEntryList = Iterators.asList(graphDatabaseService.execute(query, params).columnAs(columnName));
 
     //		String query = String.format("MATCH (n {id:{id}}) RETURN id(n) AS %s", columnName);
     //		Map<String, Object> params = new HashMap<> ();
@@ -690,9 +687,8 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
     Set<Long> validClusters = Neo4jUtils.collectNodeRelationshipNodeIds(
         iidNode, integrationRelationshipType);
 
-    for (Node memberNode : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(toLabel)) {
+    for (Node memberNode : graphDatabaseService
+        .listNodes(toLabel)) {
 
       Set<Long> clusters = Neo4jUtils.collectNodeRelationshipNodeIds(
           memberNode, IntegrationRelationshipType.Integrates);
@@ -760,7 +756,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
   @Override
   public List<IntegratedCluster> getIntegratedClusterByQuery(String query) {
-    ExecutionResult executionResult = this.executionEngine.execute(query);
+    Result executionResult = this.graphDatabaseService.execute(query);
 
     //		LOGGER.info(executionResult.dumpToString());
 
@@ -772,7 +768,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
 
     List<IntegratedCluster> result = new ArrayList<> ();
 
-    for (Object o : IteratorUtil.asCollection(executionResult.columnAs(column))) {
+    for (Object o : Iterators.asCollection(executionResult.columnAs(column))) {
       Node clusterNode = (Node) o;
       if (clusterNode.hasLabel(IntegrationNodeLabel.IntegratedCluster)) {
         System.out.println(clusterNode + " " + Neo4jUtils.getLabels(clusterNode) + " :: " + Neo4jUtils.getPropertiesMap(clusterNode));
@@ -788,7 +784,7 @@ public class Neo4jIntegrationMetadataDaoImpl extends AbstractNeo4jDao implements
   @Override
   public IntegratedMember getIntegratedMemberByReferenceEid(Long referenceEid) {
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, referenceEid));
+        .listNodes(IntegrationNodeLabel.IntegratedMember, MEMBER_DATA_ID_REFERENCE, referenceEid));
     return Neo4jMapper.nodeToIntegratedMember(node);
   }
 

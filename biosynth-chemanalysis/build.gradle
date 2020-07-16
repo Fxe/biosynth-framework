@@ -7,10 +7,11 @@ dependencies {
   compile( 'net.sf.jni-inchi:jni-inchi:0.8') {
     exclude module: 'log4j'
   }
-  compile( 'uk.ac.cam.ch.opsin:opsin-core:1.6.0') {
+  compile( 'uk.ac.cam.ch.opsin:opsin-core:2.3.1') {
     exclude module: 'log4j'
   }
-  compile( 'uk.ac.cam.ch.opsin:opsin-inchi:1.6.0')
+  compile( 'uk.ac.cam.ch.opsin:opsin-inchi:2.3.1')
+  
   compile( 'openbabel:openbabel:2.3.2')
   compile( libraries.cdk_bundle) {
     exclude module: 'cdk-log4j'

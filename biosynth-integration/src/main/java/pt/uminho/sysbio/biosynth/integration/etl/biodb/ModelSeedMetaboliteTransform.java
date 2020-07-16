@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynth.integration.GraphMetaboliteEntity;
@@ -9,15 +11,22 @@ import pt.uminho.sysbio.biosynth.integration.etl.dictionary.BiobaseMetaboliteEtl
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetabolitePropertyLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteRelationshipType;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
 
 public class ModelSeedMetaboliteTransform extends AbstractMetaboliteTransform<ModelSeedMetaboliteEntity>{
 
   private static final String MODELSEED_METABOLITE_LABEL = 
       MetaboliteMajorLabel.ModelSeed.toString();
   
+  public static Map<String, String> getDbMapping() {
+    Map<String, String> mapping = new HashMap<>();
+    mapping.put("BiGG1", MetaboliteMajorLabel.BiGG.toString());
+    mapping.put("BiGG", MetaboliteMajorLabel.BiGGMetabolite.toString());
+    return mapping;
+  }
+  
   public ModelSeedMetaboliteTransform() {
-    super(MODELSEED_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(ModelSeedMetaboliteEntity.class));
+    super(MODELSEED_METABOLITE_LABEL, new BiobaseMetaboliteEtlDictionary<>(ModelSeedMetaboliteEntity.class, getDbMapping()));
   }
   
   @Override

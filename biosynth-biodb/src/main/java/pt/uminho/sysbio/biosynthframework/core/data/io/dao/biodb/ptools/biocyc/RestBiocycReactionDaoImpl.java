@@ -127,7 +127,7 @@ implements ReactionDao<BioCycReactionEntity> {
       rxn.setCrossreferences(crossReferences);
       rxn.setSource(pgdb);
 
-
+      rxn.setVersion(databaseVersion);
     } catch (IOException e) {
       logger.error(String.format("IO ERROR - %s", e.getMessage()));
     }

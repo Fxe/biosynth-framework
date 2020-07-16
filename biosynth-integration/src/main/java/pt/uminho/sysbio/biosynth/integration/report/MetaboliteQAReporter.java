@@ -43,7 +43,6 @@ public class MetaboliteQAReporter implements IntegrationSetReporter {
 	public void generateReport(IntegrationSet integrationSet) {
 		long iid = integrationSet.getId();
 
-		
 		Map<Integer, Integer> sizeDistributionCount = new HashMap<> ();
 		Map<Integer, Integer> sizeDistributionChebiMergeCount = new HashMap<> ();
 		Map<Integer, Set<String>> efnjdsg = new HashMap<> ();

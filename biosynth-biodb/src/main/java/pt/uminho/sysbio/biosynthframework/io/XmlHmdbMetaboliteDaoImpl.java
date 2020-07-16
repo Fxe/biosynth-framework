@@ -24,14 +24,15 @@ import pt.uminho.sysbio.biosynthframework.biodb.hmdb.HmdbMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.hmdb.HmdbMetaboliteOntology;
 import pt.uminho.sysbio.biosynthframework.biodb.hmdb.XmlHmdbMetabolite;
 
-public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEntity> {
+public class XmlHmdbMetaboliteDaoImpl extends AbstractReadOnlyMetaboliteDao<HmdbMetaboliteEntity> {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlHmdbMetaboliteDaoImpl.class);
   
   private final String path;
   private ObjectMapper mapper = new XmlMapper();
   
-  public XmlHmdbMetaboliteDaoImpl(String path) {
+  public XmlHmdbMetaboliteDaoImpl(String path, String version) {
+    super(version);
     mapper = new XmlMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
@@ -61,11 +62,12 @@ public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEnt
     } catch (IOException e) {
       e.printStackTrace();
     }
-    
-    return this.convertXmlEntity(xmlMetabolite);
+    HmdbMetaboliteEntity cpd = convertXmlEntity(xmlMetabolite);
+    cpd.setVersion(version);
+    return cpd;
   }
   
-  public String fixString(String s) {
+  public static String fixString(String s) {
     if (s != null && !s.trim().isEmpty()) {
       return s.trim();
     }
@@ -73,7 +75,7 @@ public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEnt
     return null;
   }
 
-  public HmdbMetaboliteEntity convertXmlEntity(XmlHmdbMetabolite xmlEntity) {
+  public static HmdbMetaboliteEntity convertXmlEntity(XmlHmdbMetabolite xmlEntity) {
     HmdbMetaboliteEntity cpd = new HmdbMetaboliteEntity();
     cpd.setEntry(fixString(xmlEntity.accession));
     cpd.setName(fixString(xmlEntity.traditional_iupac));
@@ -111,7 +113,7 @@ public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEnt
     return cpd;
   }
   
-  private Set<String> toSet(Collection<String> collection) {
+  private static Set<String> toSet(Collection<String> collection) {
     Set<String> result = new HashSet<> ();
     if (collection != null) {
       for (String e : collection) {
@@ -123,7 +125,7 @@ public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEnt
     return result;
   }
   
-  private HmdbMetaboliteCrossreferenceEntity makeXref(String database, String entry) {
+  private static HmdbMetaboliteCrossreferenceEntity makeXref(String database, String entry) {
     if (entry != null && !entry.trim().isEmpty()) {
       return new HmdbMetaboliteCrossreferenceEntity(
           ReferenceType.DATABASE, database.trim(), entry.trim());
@@ -148,21 +150,6 @@ public class XmlHmdbMetaboliteDaoImpl implements MetaboliteDao<HmdbMetaboliteEnt
     }
     
     return entries;
-  }
-
-  @Override
-  public Serializable save(HmdbMetaboliteEntity entity) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public HmdbMetaboliteEntity saveMetabolite(HmdbMetaboliteEntity metabolite) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public Serializable saveMetabolite(Object metabolite) {
-    throw new UnsupportedOperationException();
   }
 
   @Override

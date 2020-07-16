@@ -16,9 +16,9 @@ public class KeggPathwayEntity extends KeggEntity{
 
   protected Set<String> modules;
 	
-	/** Map<Gene, [EC Number]> */
+	/** Map&lt;Gene, [EC Number]&gt; */
 	protected Map<String, Set<String>> geneStepEcs;
-	/** Map<Gene, [Ortholog]> */
+	/** Map&lt;Gene, [Ortholog]&gt; */
 	protected Map<String, Set<String>> geneStepOrthologs;
 	
 	

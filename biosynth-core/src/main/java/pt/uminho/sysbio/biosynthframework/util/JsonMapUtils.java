@@ -25,7 +25,7 @@ public class JsonMapUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static Map<String, Object> getMap(String key, Map<String, Object> map) {
+  public static Map<String, Object> getMap(String key, Map<?, ?> map) {
     if (map == null || !map.containsKey(key)) {
       return null;
     }
@@ -34,7 +34,7 @@ public class JsonMapUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static List<Object> getList(String key, Map<String, Object> map) {
+  public static List<Object> getList(String key, Map<?, ?> map) {
     return (List<Object>) map.get(key);
   }
 

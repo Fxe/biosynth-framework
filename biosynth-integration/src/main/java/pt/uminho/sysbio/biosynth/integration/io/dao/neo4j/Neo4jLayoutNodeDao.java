@@ -5,16 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.LayoutNodeDao;
+import pt.uminho.sysbio.biosynthframework.BiodbGraphDatabaseService;
 import pt.uminho.sysbio.biosynthframework.LayoutNode;
 import pt.uminho.sysbio.biosynthframework.LayoutNode.LayoutNodeType;
 import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
@@ -24,14 +23,12 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
   
   private static final Logger logger = LoggerFactory.getLogger(Neo4jLayoutNodeDao.class);
   
-  protected GraphDatabaseService service;
-  protected ExecutionEngine executionEngine;
+  protected BiodbGraphDatabaseService service;
   protected AnnotationPropertyContainerBuilder propertyContainerBuilder = 
       new AnnotationPropertyContainerBuilder();
   
   public Neo4jLayoutNodeDao(GraphDatabaseService graphDatabaseService) {
-    this.service = graphDatabaseService;
-    this.executionEngine = new ExecutionEngine(graphDatabaseService);
+    this.service = new BiodbGraphDatabaseService(graphDatabaseService);
   }
   
   private Node getOrCreateReferenceNode(String database,
@@ -40,7 +37,7 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
                                         Neo4jLayoutLabel label) {
     
     Node node = Neo4jUtils.getUniqueResult(service
-        .findNodesByLabelAndProperty(label, 
+        .listNodes(label, 
             Neo4jDefinitions.MEMBER_REFERENCE, referenceId));
     if (node == null) {
       logger.trace("created {} node [{}]{}:{}", 
@@ -100,7 +97,7 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
   @Override
   public LayoutNode findByEntry(String entry) {
     Node node = Neo4jUtils.getUniqueResult(
-        service.findNodesByLabelAndProperty(Neo4jLayoutLabel.LayoutNode, 
+        service.listNodes(Neo4jLayoutLabel.LayoutNode, 
                                             "entry", entry));
     return findById(node.getId());
   }
@@ -172,9 +169,7 @@ public class Neo4jLayoutNodeDao implements LayoutNodeDao {
   @Override
   public Map<Long, String> list() {
     Map<Long, String> result = new HashMap<> ();
-    for (Node node : GlobalGraphOperations
-        .at(service)
-        .getAllNodesWithLabel(Neo4jLayoutLabel.LayoutNode)) {
+    for (Node node : service.listNodes(Neo4jLayoutLabel.LayoutNode)) {
       String entry = (String) node.getProperty("entry", "");
       if (entry.isEmpty()) {
         logger.warn("found node {} with empty entry", node.getId());

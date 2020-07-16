@@ -1,18 +1,22 @@
 package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
+import pt.uminho.sysbio.biosynthframework.io.BiosDao;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.IOUtils;
 
-public abstract class AbstractRestfulKeggDao {
+public abstract class AbstractRestfulKeggDao<T extends AbstractBiosynthEntity> implements BiosDao<T>{
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractRestfulKeggDao.class);
   
@@ -30,6 +34,14 @@ public abstract class AbstractRestfulKeggDao {
     if ( !this.localStorage.endsWith("/")) this.localStorage = this.localStorage.concat("/");
   }
   
+  public static String getString(Map<String, Object> odata, String key) {
+    if (!DataUtils.empty(odata.get(key))) {
+      return odata.get(key).toString().trim();
+    }
+    
+    return null;
+  }
+  
   public String getPath(String...path) {
     List<String> p = new ArrayList<> ();
     p.add(localStorage);
@@ -44,7 +56,7 @@ public abstract class AbstractRestfulKeggDao {
     String httpResponseString = null;
     //		String dataFileStr = localStorage  + entityType + "/" + entry + "." + extension;
     File dataFile = new File(localPath);
-
+    
     boolean didFetch = false;
     //check local file
     if (useLocalStorage && dataFile.exists()) {
@@ -76,4 +88,23 @@ public abstract class AbstractRestfulKeggDao {
   public boolean isSaveLocalStorage() { return saveLocalStorage;}
   public void setSaveLocalStorage(boolean saveLocalStorage) { this.saveLocalStorage = saveLocalStorage;}
 
+  @Override
+  public T getById(long id) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public Long save(T o) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public boolean delete(T o) {
+    throw new RuntimeException("Unsupported Operation");
+  }
+
+  @Override
+  public Set<Long> getAllIds() {
+    throw new RuntimeException("Unsupported Operation");
+  }
 }

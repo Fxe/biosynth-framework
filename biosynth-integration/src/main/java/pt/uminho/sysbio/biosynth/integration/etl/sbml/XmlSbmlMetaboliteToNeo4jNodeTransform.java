@@ -21,7 +21,7 @@ public class XmlSbmlMetaboliteToNeo4jNodeTransform extends AbstractNeo4jDao impl
 	public Node etlTransform(XMLSbmlMetabolicModel mmd) {
 		if (!validate(mmd)) return null;
 		
-		Node mmdNode = Neo4jUtils.mergeUniqueNode(GlobalLabel.MetabolicModel, "entry", mmd.getAttributes().get("entry"), this.executionEngine);
+		Node mmdNode = Neo4jUtils.mergeUniqueNode(GlobalLabel.MetabolicModel, "entry", mmd.getAttributes().get("entry"), this.graphDatabaseService);
 		
 		return null;
 	}

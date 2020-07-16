@@ -23,7 +23,7 @@ import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.graphdb.traversal.Uniqueness;
-import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.helpers.collection.Iterators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -52,7 +52,7 @@ public class GPRIntegration {
 //				new Neo4jOptfluxContainerDaoImpl(graphDatabaseService);
 //		ExtendedMetabolicModelEntity model = 
 //				modelDao.getMetabolicModelByEntry(container.getModelName());
-		Node modelNode = (Node) graphDatabaseService.findNodesByLabelAndProperty(GlobalLabel.MetabolicModel, "entry", modelName);
+		Node modelNode = (Node) graphDatabaseService.findNode(GlobalLabel.MetabolicModel, "entry", modelName);
 		Set<Node> rxNodes = Neo4jUtils.collectNodeRelationshipNodes(modelNode, MetabolicModelRelationshipType.has_reaction);
 		for (Node node : rxNodes){
 			String entry = (String) node.getProperty("entry");
@@ -124,19 +124,19 @@ public class GPRIntegration {
 		Map<String, Integer> deletionInfo = new HashMap<String, Integer>();
 		Map<String, Integer> temp = new HashMap<String, Integer>();
 
-		ResourceIterable<Node> modelNodes = null;
+		ResourceIterator<Node> modelNodes = null;
 		
 		
 		if (modelEntry.equals("all")){
-			modelNodes = GlobalGraphOperations.at(graphDatabaseService)
-			.getAllNodesWithLabel(DynamicLabel.label(GlobalLabel.MetabolicModel.toString()));
+			modelNodes = graphDatabaseService
+			.findNodes(DynamicLabel.label(GlobalLabel.MetabolicModel.toString()));
 		} else {
-			modelNodes = graphDatabaseService.findNodesByLabelAndProperty(
+			modelNodes = graphDatabaseService.findNodes(
 					DynamicLabel.label(GlobalLabel.MetabolicModel.toString()), 
 					"entry", modelEntry);	
 		}
 		
-		for (Node modelNode : modelNodes){
+		for (Node modelNode : Iterators.asIterable(modelNodes)){
 			temp = clearModelGpr(modelNode, graphDatabaseService);
 			addToMap(temp, deletionInfo);
 		}

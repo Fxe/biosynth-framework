@@ -18,10 +18,12 @@ import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.Tuple2;
 import pt.uminho.sysbio.biosynthframework.integration.model.SbmlObjectMetadata.SbmlObjectMetadataType;
 import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class XmlReferencesBaseIntegrationEngine implements BaseIntegrationEngine {
 
@@ -220,36 +222,36 @@ public class XmlReferencesBaseIntegrationEngine implements BaseIntegrationEngine
       }
     }
     
-    Map<String, Set<String>> noteData = notesParser.parseNotes2(xspi.getNotes());
-    if (notesParser.messages.size() > 0) {
-      logger.warn("{}", notesParser.messages);
-    }
-    
-    for (String k : noteData.keySet()) {
-      switch (k) {
-        case "charge": break;
-        case "formula":
-          for (String s : noteData.get(k)) {
-            result.setFormula(s); 
-          }
-          break;
-        case "inchi":
-          for (String s : noteData.get(k)) {
-            result.setInchi(s); 
-          }
-          break;
-        case "smiles": 
-          for (String s : noteData.get(k)) {
-            result.setSmiles(s); 
-          }
-          break;
-        case "chebi": break;
-        case "pubchem": break;
-        case "kegg":
-          for (String s : noteData.get(k)) {
-            s = s.trim().toUpperCase();
-            if (s.length() == 6) {
-              switch (s.charAt(0)) {
+    String notes = xspi.getNotes();
+    if (!DataUtils.empty(notes)) {
+      SbmlNotesParser notesParser = new SbmlNotesParser(notes);
+      notesParser.parse();
+      for (Tuple2<String> t : notesParser.getData()) {
+        switch (t.e1) {
+          case "CHARGE": break;
+          case "FORMULA":
+            result.setFormula(t.e2);
+            break;
+          case "INCHI":
+            result.setFormula(t.e2);
+            break;
+          case "SMILES": 
+            result.setFormula(t.e2);
+            break;
+          case "CHEBI": break;
+          case "PUBCHEM": break;
+          case "SEED":
+            for (String s : t.e2.split(";")) {
+              if (s.startsWith("cpd")) {
+                result.references.add(new ImmutablePair<String, String>(MetaboliteMajorLabel.ModelSeed.toString(), s));
+              }
+            }
+            break;
+          case "KEGG":
+            for (String s : t.e2.split(";")) {
+              s = s.trim().toUpperCase();
+              if (s.length() == 6) {
+                switch (s.charAt(0)) {
                 case 'C':
                   result.references.add(new ImmutablePair<String, String>(MetaboliteMajorLabel.LigandCompound.toString(), s));
                   break;
@@ -260,22 +262,31 @@ public class XmlReferencesBaseIntegrationEngine implements BaseIntegrationEngine
                   result.references.add(new ImmutablePair<String, String>(MetaboliteMajorLabel.LigandDrug.toString(), s));
                   break;
                 default: logger.warn("not sure what to do with [{}]", s); break;
+                }
               }
             }
-          }
-          break;
-        case "metacyc":
-          for (String s : noteData.get(k)) {
-            if (!s.startsWith("META:")) {
-              s = "META:".concat(s);
+            break;
+          case "METACYC":
+            for (String s : t.e2.split(";")) {
+              if (!s.startsWith("META:")) {
+                s = "META:".concat(s);
+              }
+              result.references.add(new ImmutablePair<String, String>(MetaboliteMajorLabel.MetaCyc.toString(), s));
             }
-            result.references.add(new ImmutablePair<String, String>(MetaboliteMajorLabel.MetaCyc.toString(), s));
-          }
-          break;
-        case "trash": break;
-        default: logger.warn("not sure what to do with [{}]", k); break;
+            break;
+          case "trash": break;
+          default: logger.warn("not sure what to do with [{}]", t); break;
+        }
       }
     }
+    
+//    List<String> notesData = SbmlNotesParser.parseNotes();
+//    Map<String, Set<String>> noteData = notesParser.parseNotes2(notesData);
+//    if (notesParser.messages.size() > 0) {
+//      logger.warn("{}", notesParser.messages);
+//    }
+    
+
 //    System.out.println(noteData);
     
 //    System.out.println(rejectedResources);

@@ -1,21 +1,18 @@
 package pt.uminho.sysbio.biosynth.chemanalysis.openbabel;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper;
-import pt.uminho.sysbio.biosynthframework.util.IOUtils;
-
 public class TestOpenBabelWrapper {
 
-//	@BeforeClass
-//	public static void s() {
-//		OpenBabelWrapper.initializeLibrary();
-//	}
+  @BeforeClass
+  public static void s() {
+    pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel.OpenBabelWrapper.initializeLibrary();
+  }
 //	
 //	@Test
 //	public void testConvertSmilesToCannonicalSmiles() {
@@ -72,12 +69,13 @@ public class TestOpenBabelWrapper {
 //		assertEquals("O", OpenBabelWrapper.convert(molFile, "mol", "can"));
 //	}	
 //	
-//	@Test
-//	public void testConvertSmilesToEqualCan() throws IOException {
-//		String smiles1 = "OC(=O)CC[C@@H](NC(=O)C1=CC(CN(C(=O)CC(O)=O)C2=CC=C(C=C3SC(=O)NC3=O)C=C2)=CC=C1)C(O)=O";
-//		String smiles2 = "C(=O)(O)CC(=O)N(C1=CC=C(C=C1)\\C=C/1\\C(NC(S1)=O)=O)CC=1C=C(C(=O)N[C@H](CCC(=O)O)C(=O)O)C=CC1";
-//		
-//		System.out.println(OpenBabelWrapper.convertSmilesToCannonicalSmiles(smiles1));
-//		System.out.println(OpenBabelWrapper.convertSmilesToCannonicalSmiles(smiles2));
-//	}
+  @Test
+  public void testConvertSmilesToEqualCan() throws IOException {
+//    String smiles1 = "OC(=O)CC[C@@H](NC(=O)C1=CC(CN(C(=O)CC(O)=O)C2=CC=C(C=C3SC(=O)NC3=O)C=C2)=CC=C1)C(O)=O";
+//    String smiles2 = "C(=O)(O)CC(=O)N(C1=CC=C(C=C1)\\C=C/1\\C(NC(S1)=O)=O)CC=1C=C(C(=O)N[C@H](CCC(=O)O)C(=O)O)C=CC1";
+//
+//    System.out.println(OpenBabelWrapper.convertSmilesToCannonicalSmiles(smiles1));
+//    System.out.println(OpenBabelWrapper.convertSmilesToCannonicalSmiles(smiles2));
+    assertTrue(true);
+  }
 }

@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.ptools.biocyc.
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.ReferenceType;
 import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BioCycMetaboliteCrossreferenceEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.biocyc.BiocycMetaboliteRegulationEntity;
 import pt.uminho.sysbio.biosynthframework.core.data.io.parser.IGenericMetaboliteParser;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import pt.uminho.sysbio.biosynthframework.util.JsonMapUtils;
 
 public class BioCycMetaboliteXMLParser extends AbstractBioCycXMLParser 
 implements IGenericMetaboliteParser {
@@ -114,20 +118,19 @@ implements IGenericMetaboliteParser {
 
   public String getFormula() throws JSONException {
     String formula = null;
-
     switch (entityType) {
-    case Compound:
-      if (this.base.has("cml")) {
-        formula = this.base.getJSONObject("cml")
-            .getJSONObject("molecule").getJSONObject("formula").getString("concise");
-        formula = formula.replaceAll(" ", "");
-      } else {
-        return null;
-      }
-      break;
-    default:
-      logger.warn(String.format("getFormula Not parseable type - %s", entityType));
-      break;
+      case Compound:
+        if (this.base.has("cml")) {
+          formula = this.base.getJSONObject("cml")
+              .getJSONObject("molecule").getJSONObject("formula").getString("concise");
+          formula = formula.replaceAll(" ", "");
+        } else {
+          return null;
+        }
+        break;
+      default:
+        logger.warn(String.format("getFormula Not parseable type - %s", entityType));
+        break;
     }
     if (formula == null) return null;
 
@@ -143,6 +146,229 @@ implements IGenericMetaboliteParser {
     }
 
     return inchi;
+  }
+  
+  private String getEntryFromResource(Map<String, Object> d) {
+    if (d != null && d.containsKey("resource") && 
+        d.containsKey("frameid") && d.containsKey("orgid")) {
+      String entry = String.format("%s:%s", d.get("orgid"), d.get("frameid"));
+      return entry;
+    }
+    return null;
+  }
+  
+  private String getEntry(String type, Map<String, Object> data) {
+    if (data.containsKey(type)) {
+      Map<String, Object> entity = JsonMapUtils.getMap(type, data);
+      String reactionEntry = String.format("%s:%s", 
+          entity.get("orgid"), entity.get("frameid"));
+      
+      return reactionEntry;
+    }
+    
+    return null;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public List<Map<String, Object>> toList(String k, Map<?, ?> data) {
+    if (data.containsKey(k)) {
+      List<Map<String, Object>> result = new ArrayList<> ();
+      Object o = data.get(k);
+      if (o instanceof Map) {
+        result.add(JsonMapUtils.getMap(k, data));
+      } else if (o instanceof List) {
+        for (Object oo : JsonMapUtils.getList(k, data)) {
+          if (oo instanceof Map) {
+            result.add((Map<String, Object>) oo);
+          } else {
+            logger.warn("expected Map: {}", oo.getClass().getSimpleName());
+          }
+        }
+      } else {
+        logger.warn("unknown type error expected Map/List: {}:{}", k, data.get(k).getClass().getSimpleName());
+      }
+      return result;
+    }
+    
+    return null;
+  }
+  
+  public BiocycMetaboliteRegulationEntity parseRegulation(Object o) {
+    BiocycMetaboliteRegulationEntity result = null;
+    
+    if (o instanceof Map) {
+      result = new BiocycMetaboliteRegulationEntity();
+      @SuppressWarnings("unchecked")
+      Map<String, Object> regulation = (Map<String, Object>) o;
+      for (String field : regulation.keySet()) {
+        switch (field) {
+          case "mode":
+            Map<String, Object> mode = JsonMapUtils.getMap("mode", regulation);
+            result.setMode(mode.get("content").toString());
+            break;
+          case "parent":
+            Map<String, Object> parent = JsonMapUtils.getMap("parent", regulation);
+            Map<String, Object> parentEntity = JsonMapUtils.getMap("Regulation", parent);
+            String parentEntry = String.format("%s:%s", 
+                parentEntity.get("orgid"), parentEntity.get("frameid"));
+            result.setParent(parentEntry);
+            break;
+          case "regulator":
+            if (regulation.containsKey("regulator")) {
+              if (regulation.get("regulator") instanceof Map) {
+                Map<String, Object> regulator = JsonMapUtils.getMap("regulator", regulation);
+                if (regulator.containsKey("Compound")) {
+                  Map<String, Object> regulatorEntity = JsonMapUtils.getMap("Compound", regulator);
+                  String regulatorEntry = String.format("%s:%s", 
+                      regulatorEntity.get("orgid"), regulatorEntity.get("frameid"));
+                  result.setRegulator(regulatorEntry);
+                } else {
+                  logger.warn("unknown regulator, expected (Compound): {}", regulator.keySet());
+                }
+              } else if (regulation.get("regulator") instanceof List) {
+                List<Object> regulators = JsonMapUtils.getList("regulator", regulation);
+                for (Object oregulator : regulators) {
+                  @SuppressWarnings("unchecked")
+                  Map<String, Object> regulator = (Map<String, Object>)oregulator;
+                  if (regulator.containsKey("Compound")) {
+                    Map<String, Object> regulatorEntity = JsonMapUtils.getMap("Compound", regulator);
+                    String regulatorEntry = String.format("%s:%s", 
+                        regulatorEntity.get("orgid"), regulatorEntity.get("frameid"));
+                    result.setRegulator(regulatorEntry);
+                  } else {
+                    logger.warn("unknown regulator, expected (Compound): {}", regulator.keySet());
+                  }
+                }
+              }
+            }
+
+            break;
+          case "regulated-entity":
+            Map<String, Object> regulated = JsonMapUtils.getMap("regulated-entity", regulation);
+            if (regulated.containsKey("Enzymatic-Reaction")) {
+              Map<String, Object> regulatedEntity = JsonMapUtils.getMap("Enzymatic-Reaction", regulated);
+              
+              logger.trace("[{}] fields: ", this.getFrameId(), regulatedEntity.keySet());
+              
+              for (String reField : regulatedEntity.keySet()) {
+                switch (reField) {
+                  case "common-name":
+                    Map<String, Object> data = JsonMapUtils.getMap("common-name", regulatedEntity);
+                    result.setCommonName(data.get("content").toString());
+                    break;
+                  case "reaction":
+                    Map<String, Object> reactionEntity = JsonMapUtils.getMap("reaction", regulatedEntity);
+                    List<Map<String, Object>> rxnData = toList("Reaction", reactionEntity);
+                    for (Map<String, Object> d : rxnData) {
+                      result.getReaction().add(getEntryFromResource(d));
+                      
+//                      if (reactionEntity.containsKey("Reaction")) {
+//                        result.getReaction().add(getEntry("Reaction", d));
+//                        
+//                      } else {
+//                        logger.warn("wut {}", reactionEntity.keySet());
+//                      }
+                    }
+                    break;
+                  case "synonym":
+                    List<Map<String, Object>> synonymData = toList("synonym", regulatedEntity);
+                    for (Map<String, Object> s : synonymData) {
+                      if (s.containsKey("content")) {
+                        result.getProteinSynonym().add(s.get("content").toString());
+                      } else {
+                        logger.warn("bad synonym {}", s);
+                      }
+                    }
+                    break;
+                  case "enzyme":
+                    Map<String, Object> enzymeEntity = JsonMapUtils.getMap("enzyme", regulatedEntity);
+                    if (enzymeEntity.containsKey("Protein")) {
+                      result.setProtein(getEntry("Protein", enzymeEntity));
+                    } else {
+                      logger.warn("wut {}", enzymeEntity.keySet());
+                    }
+                    break;
+                  case "frameid":
+                    String frameid = regulatedEntity.get("frameid").toString();
+                    result.setEnzymeEntry(frameid);
+                    break;
+                  case "orgid":
+                    String orgid = regulatedEntity.get("orgid").toString();
+                    result.setEnzymeOrgid(orgid);
+                    break;
+                  case "resource":
+                    String resource = regulatedEntity.get(reField).toString();
+                    result.setResource(resource);
+                    break;
+                  case "ID":
+                  case "detail":
+                    break;
+                  default:
+                    logger.warn("[{}] unknown field ignored: [{}] -> [{}]", this.getEntry(), reField, regulatedEntity.get(reField));
+                    break;
+                }
+              }
+//              List<Object> synonymMap = JsonMapUtils.getList("synonym", regulatedEntity);
+              
+              
+              
+              
+              
+//              System.out.println(synonymMap);
+              
+              
+            } else {
+              logger.warn("unknown regulated, expected (Enzymatic-Reaction): {}", regulated.keySet());
+            }
+            break;
+          case "frameid":
+            String frameid = regulation.get("frameid").toString();
+            result.setEntry(frameid);
+            break;
+          case "orgid":
+            String orgid = regulation.get("orgid").toString();
+            result.setOrgid(orgid);
+            break;
+          case "ID":
+          case "detail":
+            break;
+          default:
+            logger.warn("unknown field ignored: [{}] -> [{}]", field, regulation.get(field));
+            break;
+        }
+      }
+    } else {
+      logger.warn("invalid data, expected Map: {}", o);
+    }
+    return result;
+  }
+  
+
+
+  public List<BiocycMetaboliteRegulationEntity> getRegulation() {
+    List<BiocycMetaboliteRegulationEntity> regulations = new ArrayList<> ();
+    if (this.base.has("regulates")) {
+      String s = this.base.getJSONObject("regulates").toString();
+      try {
+        Map<?, ?> data = DataUtils.fromJson(s, Map.class);
+//        System.out.println(this.getEntry() + " " + data);
+        for (Object key : data.keySet()) {
+          if ("Regulation".equals(key)) {
+            List<Map<String, Object>> regu = toList("Regulation", data);
+            for (Map<String, Object> reguData : regu) {
+              BiocycMetaboliteRegulationEntity reg = parseRegulation(reguData);
+              regulations.add(reg);
+            }
+          } else {
+            logger.warn("unknown field {}", key);
+          }
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    
+    return regulations;
   }
 
   public Integer getCharge() {

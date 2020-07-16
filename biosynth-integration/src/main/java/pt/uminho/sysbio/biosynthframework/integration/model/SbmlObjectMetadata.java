@@ -30,7 +30,7 @@ public class SbmlObjectMetadata {
     if (formula == null || formula.trim().isEmpty()) {
       return;
     }
-    if (this.formula != null) {
+    if (this.formula != null && !this.formula.equals(formula)) {
       logger.warn("formula rewrite {} -> {}", this.formula, formula);
     }
     this.formula = formula;
@@ -41,7 +41,7 @@ public class SbmlObjectMetadata {
     if (inchi == null || inchi.trim().isEmpty()) {
       return;
     }
-    if (this.inchi != null) {
+    if (this.inchi != null && !this.inchi.equals(inchi)) {
       logger.warn("inchi rewrite {} -> {}", this.inchi, inchi);
     }
     this.inchi = inchi;
@@ -52,7 +52,7 @@ public class SbmlObjectMetadata {
     if (smiles == null || smiles.trim().isEmpty()) {
       return;
     }
-    if (this.smiles != null) {
+    if (this.smiles != null && !this.smiles.equals(smiles)) {
       logger.warn("smiles rewrite {} -> {}", this.smiles, smiles);
     }
     this.smiles = smiles;

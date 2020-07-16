@@ -36,7 +36,7 @@ public class BioDbDictionary {
       return getDbDictionary().get(db);
     }
 
-    logger.error(String.format("[%s] not found in translation dictionary", db));
+    logger.warn(String.format("[%s] not found in translation dictionary", db));
     return "NOTFOUND";
   }
 
@@ -99,6 +99,11 @@ public class BioDbDictionary {
     dictionary.put("LipidBank", MetaboliteMajorLabel.LipidBank.toString());
     dictionary.put("LIPIDBANK_ID", MetaboliteMajorLabel.LipidBank.toString());
 
+    dictionary.put("REFMET", MetaboliteMajorLabel.RefMet.toString());
+    
+    dictionary.put("GlyTouCan", MetaboliteMajorLabel.GlyTouCan.toString());
+    dictionary.put("GlycoEpitope", MetaboliteMajorLabel.GlycoEpitope.toString());
+    
     dictionary.put("LIPID_MAPS", MetaboliteMajorLabel.LipidMAPS.toString());
     dictionary.put("LipidMaps", MetaboliteMajorLabel.LipidMAPS.toString());
     dictionary.put("lipidmaps", MetaboliteMajorLabel.LipidMAPS.toString());
@@ -113,6 +118,8 @@ public class BioDbDictionary {
     dictionary.put("DRUGBANK", MetaboliteMajorLabel.DrugBank.toString());
 
     dictionary.put("ChEMBL", MetaboliteMajorLabel.ChEMBL.toString());
+    
+    dictionary.put("PlantCyc", MetaboliteMajorLabel.PlantCyc.toString());
 
     //PlantCyc
     dictionary.put("PLANTCYC:MAIZE", "PlantCyc:MaizeCyc");
@@ -128,8 +135,10 @@ public class BioDbDictionary {
     dictionary.put("BioCyc", MetaboliteMajorLabel.MetaCyc.toString());
     dictionary.put("MetaCyc accession", MetaboliteMajorLabel.MetaCyc.toString());
 
+    dictionary.put("BiGG1", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("BIGG", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("bigg", MetaboliteMajorLabel.BiGG.toString());
+    dictionary.put("bigg2", MetaboliteMajorLabel.BiGGMetabolite.toString());
     dictionary.put("bigg_id", MetaboliteMajorLabel.BiGG.toString());
     dictionary.put("LIGAND-CPD", MetaboliteMajorLabel.LigandCompound.toString());
     dictionary.put("KEGG_ID", GlobalLabel.KEGG.toString());
@@ -138,6 +147,7 @@ public class BioDbDictionary {
     dictionary.put("KEGG Compound", GlobalLabel.KEGG.toString());
     dictionary.put("KEGG COMPOUND accession", MetaboliteMajorLabel.LigandCompound.toString());
     dictionary.put("KEGG DRUG accession", MetaboliteMajorLabel.LigandDrug.toString());
+    dictionary.put("KEGG Drug", MetaboliteMajorLabel.LigandDrug.toString());
     dictionary.put("KEGG GLYCAN accession", MetaboliteMajorLabel.LigandGlycan.toString());
     dictionary.put("KEGG-GLYCAN", MetaboliteMajorLabel.LigandGlycan.toString());
     dictionary.put("LigandBox", MetaboliteMajorLabel.LigandBox.toString());
@@ -167,8 +177,8 @@ public class BioDbDictionary {
 
     dictionary.put("NIKKAJI", MetaboliteMajorLabel.NIKKAJI.toString());
     dictionary.put("3DMET", MetaboliteMajorLabel.MET3D.toString());
-    dictionary.put("seed", MetaboliteMajorLabel.Seed.toString());
-    dictionary.put("SEED Compound", MetaboliteMajorLabel.Seed.toString());
+    dictionary.put("seed", MetaboliteMajorLabel.ModelSeed.toString());
+    dictionary.put("SEED Compound", MetaboliteMajorLabel.ModelSeed.toString());
     //		dictionary.put("dghgkjk", MetaboliteMajorLabel.)
 
     dictionary.put("HMDB", MetaboliteMajorLabel.HMDB.toString());
@@ -208,6 +218,8 @@ public class BioDbDictionary {
     //
     dictionary.put("MetaNetX (MNX) Chemical", MetaboliteMajorLabel.MetaNetX.toString());
     dictionary.put("MetaNetX (MNX) Equation", ReactionMajorLabel.MetaNetXReaction.toString());
+    
+    dictionary.put("PIR", ReactionMajorLabel.PIR.toString());
     
     
     return dictionary;

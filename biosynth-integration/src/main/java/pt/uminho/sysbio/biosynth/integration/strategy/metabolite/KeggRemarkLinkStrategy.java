@@ -69,7 +69,7 @@ public class KeggRemarkLinkStrategy extends AbstractNeo4jClusteringStrategy {
 			
 			for (Label label : extraLinks.keySet()) {
 				for (String entry : extraLinks.get(label)) {
-					Node keggNode = Neo4jUtils.getUniqueResult(db.findNodesByLabelAndProperty(label, "entry", entry));
+					Node keggNode = Neo4jUtils.getUniqueResult(db.findNodes(label, "entry", entry));
 					if (keggNode != null) {
 						LOGGER.trace(String.format("Found %s - %s", keggNode, Neo4jUtils.getLabels(keggNode)));
 						cluster.add(keggNode.getId());

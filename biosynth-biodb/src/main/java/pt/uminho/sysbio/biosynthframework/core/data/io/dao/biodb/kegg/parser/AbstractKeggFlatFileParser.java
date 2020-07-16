@@ -30,7 +30,10 @@ public abstract class AbstractKeggFlatFileParser {
   protected int getTabIndex( String name) {
     String dcName = name.toLowerCase();
     for ( Integer i : this.tabContent_.keySet()) {
-      if ( this.tabName_.get(i).equals(dcName)) return i;
+      String tabName = this.tabName_.get(i);
+      if (tabName != null && tabName.equals(dcName)) {
+        return i;
+      }
     }
 
     return -1;
@@ -68,8 +71,9 @@ public abstract class AbstractKeggFlatFileParser {
 
     }
     //PARSE LAST
-
-    tabName_.put( index, tabName.toLowerCase());
+    if (tabName != null) {
+      tabName_.put( index, tabName.toLowerCase());  
+    }
     int endOfFile = this.flatfile_.indexOf( END_OF_FILE_DELIMITER, 0);
     tabContent_.put( index, this.flatfile_.substring( start, --endOfFile));
   }

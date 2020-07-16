@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.chemanalysis.openbabel;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public class OpenBabelProcess {
     ProcessBuilder pb = new ProcessBuilder(argL.toArray(new String[0]));
     logger.debug("Process: {}", StringUtils.join(pb.command(), ' '));
     final Process process = pb.start();
-    IOUtils.write(stdin, process.getOutputStream());
+    IOUtils.write(stdin, process.getOutputStream(), Charset.defaultCharset());
 
     ProcessWorker worker = new ProcessWorker(process);
     Thread thread = new Thread(worker);
@@ -71,8 +72,8 @@ public class OpenBabelProcess {
 
     StringBuilder stdout = new StringBuilder();
     StringBuilder stderr = new StringBuilder();
-    stdout.append(IOUtils.toString(process.getInputStream()));
-    stderr.append(IOUtils.toString(process.getErrorStream()));
+    stdout.append(IOUtils.toString(process.getInputStream(), Charset.defaultCharset()));
+    stderr.append(IOUtils.toString(process.getErrorStream(), Charset.defaultCharset()));
 
     String[] output = new String[3];
     output[0] = stdout.toString();

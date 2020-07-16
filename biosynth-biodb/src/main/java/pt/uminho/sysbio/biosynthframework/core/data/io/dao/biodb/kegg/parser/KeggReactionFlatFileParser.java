@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggEquationParser;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionLeftEntity;
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggReactionRightEntity;
 import pt.uminho.sysbio.biosynthframework.util.BioSynthUtils;
@@ -168,13 +169,20 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 		
 		equation = equation.trim();
 		
-		EquationParser equationParser = new EquationParser(equation);
+		KeggEquationParser equationParser = new KeggEquationParser(equation);
 		for (String[] left : equationParser.getLeftTriplet()) {
 			KeggReactionLeftEntity leftEntity = new KeggReactionLeftEntity();
 			leftEntity.setCpdEntry(left[0]);;
 			leftEntity.setStoichiometry(Double.valueOf(left[1]));
 			leftEntity.setCoefficient(left[2]);
-			
+			String mod =  equationParser.leftModifier.get(left[0]);
+			leftEntity.setModifier(mod);
+			/*
+			if (mod == null) {
+			  leftEntity.setModifier("null");
+			} else {
+			  leftEntity.setModifier("mod");
+			}*/
 			leftEntities.add(leftEntity);
 		}
 		
@@ -183,11 +191,19 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 			rightEntity.setCpdEntry(right[0]);
 			rightEntity.setStoichiometry(Double.valueOf(right[1]));
 			rightEntity.setCoefficient(right[2]);
-			
+            String mod =  equationParser.rightModifier.get(right[0]);
+            rightEntity.setModifier(mod);
+            /*
+            if (mod == null) {
+              rightEntity.setModifier("null");
+            } else {
+              rightEntity.setModifier("mod");
+            }*/
 			rightEntities.add(rightEntity);
 		}
 	}
 	
+	@Deprecated
 	public class EquationParser {
 		
 		public static final boolean VERBOSE = false;

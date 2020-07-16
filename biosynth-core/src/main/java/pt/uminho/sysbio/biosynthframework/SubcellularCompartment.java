@@ -35,4 +35,6 @@ public enum SubcellularCompartment {
     RETICULUM_MEMBRANE,
   CELL_ENVELOPE,
   
+  CELL_WALL,
+  PLASTID,
 }

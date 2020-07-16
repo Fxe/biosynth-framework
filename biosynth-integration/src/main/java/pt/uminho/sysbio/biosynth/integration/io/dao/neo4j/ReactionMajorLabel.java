@@ -11,9 +11,11 @@ public enum ReactionMajorLabel implements Label {
 	BiGG2Reaction,
 	BiGGReaction,
 	Seed, Reactome, 
-	MetaCyc, HumanCyc, EcoCyc,
+	MetaCyc, HumanCyc, EcoCyc, YeastCycReaction, AraCycReaction,
+	PlantCycReaction,
 	BioPath, UniPathway, 
-	NOTFOUND,
 	ModelSeedReaction,
 	MetaNetXReaction,
+	PIR,
+	NOTFOUND,
 }

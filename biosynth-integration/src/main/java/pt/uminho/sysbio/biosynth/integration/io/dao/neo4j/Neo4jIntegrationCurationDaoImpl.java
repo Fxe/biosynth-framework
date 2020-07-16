@@ -12,7 +12,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +39,8 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public Set<Long> getAllCurationSetIds() {
 		Set<Long> ids = new HashSet<> ();
-		for (Node node : GlobalGraphOperations
-				.at(graphDatabaseService)
-				.getAllNodesWithLabel(CurationLabel.CurationSet)) {
+		for (Node node : graphDatabaseService
+				.listNodes(CurationLabel.CurationSet)) {
 			ids.add(node.getId());
 		}
 		return ids;
@@ -59,7 +57,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	public Node generateCurationSetNode(CurationSet curationSet) {
 		if (curationSet == null || curationSet.getEntry() == null) return null;
 		
-		Node node = Neo4jUtils.getOrCreateNode(CurationLabel.CurationSet, "entry", curationSet.getEntry(), executionEngine);
+		Node node = Neo4jUtils.getOrCreateNode(CurationLabel.CurationSet, "entry", curationSet.getEntry(), graphDatabaseService);
 		
 		return node;
 	}
@@ -69,7 +67,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		params.put("username", curationUser.getUsername());
 		String cypherQuery = String.format("MERGE (usr:%s {username:{username}}) RETURN usr AS USER", CurationLabel.CurationUser);
 		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
-		Node node = Neo4jUtils.getExecutionResultGetSingle("USER", executionEngine.execute(cypherQuery, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("USER", graphDatabaseService.execute(cypherQuery, params));
 		
 		return node;
 	}
@@ -85,14 +83,14 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 				"MERGE (cid:%s {entry:{entry}, reference_cid:{reference_cid}, cluster_type:{cluster_type}}) RETURN cid AS CID", 
 				IntegrationNodeLabel.IntegratedCluster);
 		LOGGER.debug(String.format("Execute:%s with %s", cypherQuery, params));
-		Node node = Neo4jUtils.getExecutionResultGetSingle("CID", executionEngine.execute(cypherQuery, params));
+		Node node = Neo4jUtils.getExecutionResultGetSingle("CID", graphDatabaseService.execute(cypherQuery, params));
 		
 		return node;
 	}
 	
 	public Node generateMemberNode(long referenceId, IntegrationNodeLabel label) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-				.findNodesByLabelAndProperty(
+				.listNodes(
 						IntegrationNodeLabel.IntegratedMember, 
 						Neo4jDefinitions.MEMBER_REFERENCE, referenceId));
 		
@@ -136,7 +134,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public CurationSet getCurationSet(String entry) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-				.findNodesByLabelAndProperty(CurationLabel.CurationSet, "entry", entry));
+				.listNodes(CurationLabel.CurationSet, "entry", entry));
 		if (node == null) return null;
 		return Neo4jMapper.nodeToCurationSet(node);
 	}
@@ -353,7 +351,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public CurationOperation getCurationOperationByEntry(String entry) {
 		Node oidNode = Neo4jUtils.getUniqueResult(graphDatabaseService
-				.findNodesByLabelAndProperty(
+				.listNodes(
 						CurationLabel.CurationOperation, "entry", entry));
 		
 		return assembleCurationOperationNode(oidNode);
@@ -366,7 +364,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		Set<Node> nodes = new HashSet<> ();
 		for (Long eid : eidSet) {
 			Node eidNode = Neo4jUtils.getUniqueResult(
-					graphDatabaseService.findNodesByLabelAndProperty(
+					graphDatabaseService.listNodes(
 							IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE, eid));
 			
 			if (eidNode != null) {
@@ -416,7 +414,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 	@Override
 	public CurationUser getCurationUserByUsername(String username) {
 		Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-				.findNodesByLabelAndProperty(CurationLabel.CurationUser, "username", username));
+				.listNodes(CurationLabel.CurationUser, "username", username));
 		CurationUser curationUser = Neo4jMapper.nodeToCurationUser(node);
 		return curationUser;
 	}
@@ -435,7 +433,7 @@ public class Neo4jIntegrationCurationDaoImpl extends AbstractNeo4jDao implements
 		
 		Set<Long> eids = new HashSet<> ();
 		for (long referenceEid : referenceEids) {
-			Node eidNode = Neo4jUtils.getUniqueResult(graphDatabaseService.findNodesByLabelAndProperty(
+			Node eidNode = Neo4jUtils.getUniqueResult(graphDatabaseService.listNodes(
 					IntegrationNodeLabel.IntegratedMember, Neo4jDefinitions.MEMBER_REFERENCE, referenceEid));
 			if (eidNode != null) {
 				eids.add(eidNode.getId());

@@ -1,31 +1,33 @@
 package pt.uminho.sysbio.biosynthframework.biodb.uniprot;
 
-import java.util.concurrent.TimeUnit;
-
-import com.squareup.okhttp.OkHttpClient;
-
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
-import retrofit.client.OkClient;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
 
 public class DefaultUniprotService {
   public final UniprotService service;
   
   public DefaultUniprotService() {
-    String endPoint = "http://www.uniprot.org";
-    long connectionTimeout = 60;
-    long readTimeout = 60;
-    
+    String endPoint = "http://www.uniprot.org/";
     final OkHttpClient okHttpClient = new OkHttpClient();
-    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
-    RestAdapter restAdapter = new RestAdapter.Builder()
-                  .setConverter(new UniprotEntryConverter())
-                  .setLogLevel(LogLevel.NONE)
-                  .setClient(new OkClient(okHttpClient))
-                  .setEndpoint(endPoint)
-                  .build();
-    service = restAdapter.create(UniprotService.class);
+    Retrofit retrofit = new Retrofit.Builder().client(okHttpClient)
+                                              .baseUrl(endPoint)
+                                              .addConverterFactory(new UniprotEntryConverter())
+                                              .build();
+    service = retrofit.create(UniprotService.class);
+//    
+//    long connectionTimeout = 60;
+//    long readTimeout = 60;
+//    
+//    final OkHttpClient okHttpClient = new OkHttpClient();
+//    okHttpClient.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//    okHttpClient.setConnectTimeout(connectionTimeout, TimeUnit.SECONDS);
+//    RestAdapter restAdapter = new RestAdapter.Builder()
+//                  .setConverter(new UniprotEntryConverter())
+//                  .setLogLevel(LogLevel.NONE)
+//                  .setClient(new OkClient(okHttpClient))
+//                  .setEndpoint(endPoint)
+//                  .build();
+//    service = restAdapter.create(UniprotService.class);
   }
   
   public UniprotEntry getEntry(String entry) {

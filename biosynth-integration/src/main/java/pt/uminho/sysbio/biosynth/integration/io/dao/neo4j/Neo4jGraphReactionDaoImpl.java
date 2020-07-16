@@ -16,7 +16,6 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.tooling.GlobalGraphOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +97,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
   public GraphReactionEntity getReactionByEntry(String tag, String entry) {
     ReactionMajorLabel majorLabel = ReactionMajorLabel.valueOf(tag);
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .findNodesByLabelAndProperty(majorLabel, "entry", entry));
+        .listNodes(majorLabel, "entry", entry));
 
     if (node == null) {
       logger.debug("Reaction [{}:{}] not found", tag, entry);
@@ -133,7 +132,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 
     boolean create = true;
 
-    for (Node node : graphDatabaseService.findNodesByLabelAndProperty(
+    for (Node node : graphDatabaseService.listNodes(
         DynamicLabel.label(reaction.getMajorLabel()), 
         "entry", 
         reaction.getEntry())) {
@@ -223,7 +222,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     params.put(uniqueProperty, value);
 
     logger.debug("Execution Engine: " + cypherQuery + " with " + params);
-    Node node = Neo4jUtils.getExecutionResultGetSingle("NODE", executionEngine.execute(cypherQuery, params));
+    Node node = Neo4jUtils.getExecutionResultGetSingle("NODE", graphDatabaseService.execute(cypherQuery, params));
     return node;
   }
 
@@ -236,7 +235,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 
     boolean create = true;
     for (Node proxyNode : graphDatabaseService
-        .findNodesByLabelAndProperty(
+        .listNodes(
             DynamicLabel.label(proxy.getMajorLabel()), 
             "entry", 
             proxy.getEntry())) {
@@ -295,7 +294,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
 
     boolean create = true;
     for (Node proxyNode : graphDatabaseService
-        .findNodesByLabelAndProperty(
+        .listNodes(
             DynamicLabel.label(proxy.getMajorLabel()), 
             "entry", 
             proxy.getEntry())) {
@@ -330,9 +329,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
   @Override
   public List<Long> getGlobalAllReactionIds() {
     List<Long> result = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(REACTION_LABEL)) {
+    for (Node node : graphDatabaseService
+        .listNodes(REACTION_LABEL)) {
 
       result.add(node.getId());
     }
@@ -344,9 +342,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     //TODO: verify label if valid
 
     List<Long> result = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(DynamicLabel.label(tag))) {
+    for (Node node : graphDatabaseService
+        .listNodes(DynamicLabel.label(tag))) {
 
       result.add(node.getId());
     }
@@ -358,9 +355,8 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     //TODO: verify label if valid
 
     List<String> result = new ArrayList<> ();
-    for (Node node : GlobalGraphOperations
-        .at(graphDatabaseService)
-        .getAllNodesWithLabel(DynamicLabel.label(tag))) {
+    for (Node node : graphDatabaseService
+        .listNodes(DynamicLabel.label(tag))) {
 
       result.add((String)node.getProperty("entry"));
     }
@@ -401,7 +397,7 @@ implements ReactionHeterogeneousDao<GraphReactionEntity> {
     entity.setId(node.getId());
     entity.setLabels(Neo4jUtils.getLabelsAsString(node));
     entity.setProperties(Neo4jUtils.getPropertiesMap(node));
-    String majorLabel = (String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY);
+    String majorLabel = (String) node.getProperty(Neo4jDefinitions.MAJOR_LABEL_PROPERTY, "");
     //		if (entity.getLabels().contains(GlobalLabel.ReactionProperty.toString())) {
     //			for (String label : entity.getLabels()) {
     //				if (isMetabolitePropertyLabel(label)) majorLabel = label;

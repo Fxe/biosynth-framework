@@ -1,15 +1,15 @@
 package pt.uminho.sysbio.biosynth.integration.etl.biodb.kegg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.uminho.sysbio.biosynthframework.biodb.kegg.KeggDrugMetaboliteEntity;
 
+@Deprecated
 public class TestKeggDrugTransform {
 
 	private KeggDrugTransform transform;

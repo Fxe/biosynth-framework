@@ -60,11 +60,11 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 				+ "rxn.updated_at=timestamp(), rxn.proxy=false";
 		
 		String query = String.format(query_, rxn.getConcatenatedLabel(':'));
-		this.executionEngine.execute(query, params);
+//		this.executionEngine.execute(query, params);
 		
 		Node rxnNode = null;
 		for (Node node : this.graphDatabaseService
-				.findNodesByLabelAndProperty(
+				.listNodes(
 						DynamicLabel.label(rxn.getMajorLabel()), 
 						"entry", rxn.getEntry())) {
 			
@@ -103,7 +103,7 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 			String propQuery = String.format(propQuery_, rxn.getMajorLabel(), cpdMajor, property.getRelationshipMajorLabel());
 			System.out.println(propParams);
 			System.out.println(propQuery);
-			this.executionEngine.execute(propQuery, propParams);
+			this.graphDatabaseService.execute(propQuery, propParams);
 		}
 		
 		return null;
@@ -118,7 +118,7 @@ public class Neo4jCentralDataReactionDaoImpl extends AbstractNeo4jDao<CentralDat
 		String query = String.format(query_, labels);
 		LOGGER.debug(query);
 		System.out.println(params);
-		this.executionEngine.execute(query, params);
+		this.graphDatabaseService.execute(query, params);
 	}
 
 	@Override

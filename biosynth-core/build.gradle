@@ -1,3 +1,5 @@
 dependencies {
   compile libraries.hibernate_core
+  compile libraries.http_client
+  compile libraries.jsoup
 }

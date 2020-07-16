@@ -13,8 +13,12 @@ import pt.uminho.sysbio.biosynthframework.core.data.io.dao.biodb.kegg.parser.Keg
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 
 public class RestKeggReactionDaoImpl
-extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
+extends AbstractRestfulKeggDao<KeggReactionEntity> implements ReactionDao<KeggReactionEntity> {
 
+  /**
+   * should not be at the DAO scope
+   */
+  @Deprecated
   public static boolean DELAY_ON_IO_ERROR = false;
 
   private static final Logger logger = LoggerFactory.getLogger(RestKeggReactionDaoImpl.class);
@@ -24,29 +28,33 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
   public KeggReactionEntity getReactionByEntry(String entry) {
     String restRxnQuery = String.format(RestKeggReactionDaoImpl.restRxnQuery, entry);
     String localPath = getPath("rn", entry); //this.getLocalStorage()  + "rn" + "/" + entry ;
-    KeggReactionEntity rxn = new KeggReactionEntity();
+    KeggReactionEntity rxn = null;
 
     String rnFlatFile = null;
 
     try {
-      logger.info(restRxnQuery);
-      logger.info(localPath);
+      logger.debug(restRxnQuery);
+      logger.debug(localPath);
       rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath + ".txt");
-
-      KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
-      rxn.setEntry(parser.getEntry());
-      rxn.setName(parser.getName());
-      rxn.setOrientation(Orientation.Reversible);
-      rxn.setComment(parser.getComment());
-      rxn.setRemark(parser.getRemark());
-      rxn.setDefinition(parser.getDefinition());
-      rxn.setEquation(parser.getEquation());
-      rxn.setEnzymes(parser.getEnzymes());
-      rxn.setPathways(parser.getPathways());
-      rxn.setRpairs(parser.getRPairs());
-      rxn.setOrthologies(parser.getOrthologies());
-      rxn.setLeft(parser.getLeft());
-      rxn.setRight(parser.getRight());
+      
+      if (rnFlatFile != null) {
+        rxn = new KeggReactionEntity();
+        KeggReactionFlatFileParser parser = new KeggReactionFlatFileParser(rnFlatFile);
+        rxn.setEntry(parser.getEntry());
+        rxn.setName(parser.getName());
+        rxn.setOrientation(Orientation.Reversible);
+        rxn.setComment(parser.getComment());
+        rxn.setRemark(parser.getRemark());
+        rxn.setDefinition(parser.getDefinition());
+        rxn.setEquation(parser.getEquation());
+        rxn.setEnzymes(parser.getEnzymes());
+        rxn.setPathways(parser.getPathways());
+        rxn.setRpairs(parser.getRPairs());
+        rxn.setOrthologies(parser.getOrthologies());
+        rxn.setLeft(parser.getLeft());
+        rxn.setRight(parser.getRight());
+        rxn.setVersion(databaseVersion);
+      }
 
     } catch (IOException e) {
       logger.error(e.getMessage());
@@ -58,7 +66,6 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
           System.out.println(es.getMessage());
         }
       }
-      //			LOGGER.debug(e.getStackTrace());
       return null;
     }
     return rxn;
@@ -96,5 +103,15 @@ extends AbstractRestfulKeggDao implements ReactionDao<KeggReactionEntity> {
   @Override
   public Set<Long> getAllReactionIds() {
     throw new RuntimeException("Unsupported Operation.");
+  }
+
+  @Override
+  public KeggReactionEntity getByEntry(String entry) {
+    return this.getReactionByEntry(entry);
+  }
+
+  @Override
+  public Set<String> getAllEntries() {
+    return this.getAllReactionEntries();
   }
 }

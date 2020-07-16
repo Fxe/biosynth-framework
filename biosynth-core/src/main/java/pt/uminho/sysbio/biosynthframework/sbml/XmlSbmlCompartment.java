@@ -1,5 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
-public class XmlSbmlCompartment extends XmlObject {
+public class XmlSbmlCompartment extends SbmlSBaseObject {
 
 }

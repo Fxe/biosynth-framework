@@ -8,7 +8,6 @@ import java.util.Set;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.helpers.collection.IteratorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +68,8 @@ public class YetAnotherReactionDao implements ReactionDao<GenericReaction> {
 		Node reactionNode = graphDatabaseService.getNodeById(id);
 		if (reactionNode == null || 
 				!reactionNode.hasLabel(GlobalLabel.Reaction)) {
-			LOGGER.debug(String.format("%s invalid label type %s", 
-					reactionNode, IteratorUtil.asList(reactionNode.getLabels())));
+//			LOGGER.debug("{} invalid label type {}", 
+//					reactionNode, IteratorUtil.asList(reactionNode.getLabels())));
 			return null;
 		}
 		
