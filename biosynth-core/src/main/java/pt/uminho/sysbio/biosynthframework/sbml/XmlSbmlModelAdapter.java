@@ -48,6 +48,7 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
   protected Map<String, XmlObject> parameters = new HashMap<> ();
   public BMap<String, EntityType> xrxnType = new BHashMap<> ();
   public BMap<String, EntityType> xspiType = new BHashMap<> ();
+  public Map<String, String> manualGpr = new HashMap<>();
   
   protected SbmlNotesParser notesParser = new SbmlNotesParser();
   
@@ -228,6 +229,7 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     XmlSbmlReaction xrxn = xrxnMap.get(mrxnEntry);
     
     Double[] b = getSbmlReactionBounds2(xrxn, parameters);
+    
     if (b == null) {
       return new Range(-1000.0, 1000.0);
     }
@@ -717,18 +719,24 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     return bounds;
   }
   
+  public void setGpr(String gpr, String mrxnEntry) {
+    this.manualGpr.put(mrxnEntry, gpr);
+  }
+  
   @Override
   public String getGpr(String mrxnEntry) {
     String fgpr = getGprFromFbc(mrxnEntry);
     String mgpr = getGprFromModifiers(mrxnEntry);
     String ngpr = getGprFromNotes(mrxnEntry);
+    String ugpr = manualGpr.get(mrxnEntry);
     
     int fgpr_ = DataUtils.empty(fgpr) ? 0 : 1;
     int mgpr_ = DataUtils.empty(mgpr) ? 0 : 1;
     int ngpr_ = DataUtils.empty(ngpr) ? 0 : 1;
+    int ugpr_ = DataUtils.empty(ugpr) ? 0 : 1;
     
-    if (fgpr_ + mgpr_ + ngpr_ > 1) {
-      logger.debug("multiple gpr: F:{}, N:{}, M:{}", fgpr, ngpr, mgpr);
+    if (fgpr_ + mgpr_ + ngpr_ + ugpr_ > 1) {
+      logger.debug("multiple gpr: F:{}, N:{}, M:{}, U:{}", fgpr, ngpr, mgpr, ugpr_);
     }
     
     if (fgpr_ > 0) {
@@ -741,6 +749,10 @@ public class XmlSbmlModelAdapter implements ModelAdapter {
     
     if (mgpr_ > 0) {
       return mgpr;
+    }
+    
+    if (ugpr_ > 0) {
+      return ugpr;
     }
     
     return ngpr;
