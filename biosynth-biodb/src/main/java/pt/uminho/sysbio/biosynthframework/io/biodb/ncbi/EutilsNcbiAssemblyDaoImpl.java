@@ -65,16 +65,21 @@ public class EutilsNcbiAssemblyDaoImpl implements BiosDao<EutilsAssemblyObject> 
     Map<String, Object> response = null;
     try {
       response = service.esearch(EntrezDatabase.assembly, entry, 10, 0, EntrezRetmode.json).execute().body();
+      
       List<Object> idlist = JsonMapUtils.getList("idlist", JsonMapUtils.getMap("esearchresult", response));
       if (idlist.size() == 1) {
         String id = (String) idlist.iterator().next();
         Map<String, Object> summary = service.esummary(
             EntrezDatabase.assembly.toString(), id, EntrezRetmode.json).execute().body();
         Map<String, Object> data = JsonMapUtils.getMap(id, JsonMapUtils.getMap("result", summary));
+        
         ObjectMapper om = new ObjectMapper();
         try {
           EutilsAssemblyObject assembly = om.readValue(om.writeValueAsString(data), EutilsAssemblyObject.class);
-          if (entry.equals(assembly.assemblyaccession)) {
+          if (assembly == null) {
+            return null;
+          }
+          if (entry.equals(assembly.assemblyaccession) || assembly.synonym.values().contains(entry)) {
             return assembly;
           } else {
             logger.warn("result reject assemble accession does not match. {} -> {}", entry, assembly.assemblyaccession);

@@ -374,7 +374,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .listNodes(MetabolicModelLabel.MetaboliteSpecie, "entry", spiEntry));
+        .listNodes(MetabolicModelLabel.MetaboliteSpecie, "id", spiEntry));
 
     if (node == null) {
       logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.MetaboliteSpecie, spiEntry);
@@ -450,7 +450,7 @@ public class Neo4jOptfluxContainerDaoImpl extends AbstractNeo4jDao implements Ex
     }
     
     Node node = Neo4jUtils.getUniqueResult(graphDatabaseService
-        .listNodes(MetabolicModelLabel.ModelReaction, "entry", rxnEntry));
+        .listNodes(MetabolicModelLabel.ModelReaction, "id", rxnEntry));
 
     if (node == null) {
       logger.debug("Metabolite Specie [{}:{}] not found", MetabolicModelLabel.ModelReaction, rxnEntry);

@@ -30,27 +30,30 @@ extends AbstractRestfulKeggDao<KeggGenomeEntity> {
   public KeggGenomeEntity getByEntry(String entry) {
     String restRxnQuery = String.format(RestKeggGenomeDaoImpl.restRxnQuery, entry);
     String localPath = getPath("gn", entry);
-    KeggGenomeEntity genome = new KeggGenomeEntity();
+    KeggGenomeEntity genome = null;
     String rnFlatFile = null; 
     try {
       logger.debug(restRxnQuery);
       logger.debug(localPath);
       rnFlatFile = this.getLocalOrWeb(restRxnQuery, localPath +".txt");
+      if (rnFlatFile != null) {
+        logger.debug("{}", rnFlatFile.getBytes().length);
 
-      logger.debug("{}", rnFlatFile.getBytes().length);
-
-      KeggGenomeFlatFileParser parser = new KeggGenomeFlatFileParser(rnFlatFile);
-      genome.setEntry(parser.getEntry());
-      genome.setName(parser.getName());
-      genome.setDefinition(parser.getDefinition());
-      genome.setTaxonomy(parser.getTaxonomy());
-      genome.setAnnotation(parser.getAnnotation());
-      genome.setDataSource(parser.getDataSource());
-      String lineage = genome.getTaxonomy();
-      if (lineage != null) {
-        lineage = lineage.split("\n")[1].trim().substring("LINEAGE   ".length());
+        KeggGenomeFlatFileParser parser = new KeggGenomeFlatFileParser(rnFlatFile);
+        genome = new KeggGenomeEntity();
+        genome.setEntry(parser.getEntry());
+        genome.setName(parser.getName());
+        genome.setDefinition(parser.getDefinition());
+        genome.setTaxonomy(parser.getTaxonomy());
+        genome.setAnnotation(parser.getAnnotation());
+        genome.setDataSource(parser.getDataSource());
+        String lineage = genome.getTaxonomy();
+        if (lineage != null) {
+          lineage = lineage.split("\n")[1].trim().substring("LINEAGE   ".length());
+        }
+        genome.setLineage(lineage);       
       }
-      genome.setLineage(lineage);
+
     } catch (IOException e) {
       logger.warn("error: {}", e.getMessage());
     }

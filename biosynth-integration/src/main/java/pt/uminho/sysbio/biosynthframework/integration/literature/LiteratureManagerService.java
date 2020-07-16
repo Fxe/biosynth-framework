@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
@@ -117,7 +118,9 @@ public class LiteratureManagerService {
     AsmLinkScanner asmLinkScanner = new AsmLinkScanner();
     WileyLinkScanner wileyLinkScanner = new WileyLinkScanner();
     NatureLinkScanner natureLinkScanner = new NatureLinkScanner();
+    NatureCommLinkScanner natureCommLinkScanner = new NatureCommLinkScanner();
     ElsevierLinkScanner elsevierLinkScanner = new ElsevierLinkScanner("/opt/webdriver/phantomjs/2.11/bin/phantomjs.exe");
+    MdpiMetabolitesScanner mdpiMetabolitesScanner = new MdpiMetabolitesScanner();
     linkScanner.put("BMC Genomics", springerLinkScanner);
     linkScanner.put("BMC Microbiol.", springerLinkScanner);
     linkScanner.put("BMC Syst Biol", springerLinkScanner);
@@ -145,10 +148,12 @@ public class LiteratureManagerService {
     linkScanner.put("Nat. Biotechnol.", natureLinkScanner);
     linkScanner.put("Nat. Methods", natureLinkScanner);
     linkScanner.put("Sci Rep", natureLinkScanner);
+    linkScanner.put("Nat Commun", natureCommLinkScanner);
     linkScanner.put("Gene", elsevierLinkScanner);
     linkScanner.put("J. Biotechnol.", elsevierLinkScanner);
     linkScanner.put("Res. Microbiol.", elsevierLinkScanner);
     linkScanner.put("J. Theor. Biol.", elsevierLinkScanner);
+    linkScanner.put("Metabolites", mdpiMetabolitesScanner);
   }
   
   public void initialize() throws IOException {
@@ -370,18 +375,10 @@ public class LiteratureManagerService {
     return null;
   }
   
-  public List<SupplementaryMaterialEntity> getSupplementaryMaterial(LiteratureEntity lit) {
-    return getSupplementaryMaterial(lit.getDoiEntry(), lit.getJournalAbbreviation(), lit.getFolder());
-  }
-  
-  public List<SupplementaryMaterialEntity> getSupplementaryMaterial(String doi, String journal, File folder) {
+  public List<SupplementaryMaterialEntity> getSupplementaryMaterials(File folder, List<String> urls) {
     List<SupplementaryMaterialEntity> result = new ArrayList<> ();
-    List<SupplementaryMaterialEntity> urls = fetchSupplementaryMaterialUrls(doi, journal);
-    if (urls == null) {
-      return null;
-    }
-    for (SupplementaryMaterialEntity sup : urls) {
-      SupplementaryMaterialEntity sm = getSupplementaryMaterial(folder, sup.getUrl().toExternalForm());
+    for (String url : urls) {
+      SupplementaryMaterialEntity sm = getSupplementaryMaterial(folder, url);
       if (sm != null) {
         result.add(sm);
       }
@@ -389,9 +386,25 @@ public class LiteratureManagerService {
     return result;
   }
   
+  public List<SupplementaryMaterialEntity> getSupplementaryMaterial(LiteratureEntity lit) {
+    return getSupplementaryMaterial(lit.getDoiEntry(), lit.getJournalAbbreviation(), lit.getFolder());
+  }
+  
+  public List<SupplementaryMaterialEntity> getSupplementaryMaterial(String doi, String journal, File folder) {
+    List<SupplementaryMaterialEntity> urls = fetchSupplementaryMaterialUrls(doi, journal);
+    if (urls == null) {
+      return null;
+    }
+    List<String> urlStringList  = urls.stream()
+                                      .map(x -> x.getUrl().toExternalForm())
+                                      .collect(Collectors.toList());
+    
+    return getSupplementaryMaterials(folder, urlStringList);
+  }
+  
   public SupplementaryMaterialEntity getSupplementaryMaterial(LiteratureEntity lit, String url) {    
     return getSupplementaryMaterial(lit.getFolder(), url);
-  };
+  }
   
   public SupplementaryMaterialEntity getSupplementaryMaterial(File folder, String url) {
     try {

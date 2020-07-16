@@ -135,66 +135,25 @@ public class KeggEquationParser {
     eqRight = eqRight.replaceAll(">", "").trim();
     logger.debug("RHS: [{}]", eqRight);
     parseExpression(eqRight, rightBasic, rightVariable, rightModifier);
-
-    /*
-      split = eqLeft.split(" \\+ ");
-      for (String s : split) {
-          String trimS = s.trim();
-          String[] eqSplit = trimS.split(" ");
-          if ( eqSplit.length > 2) System.err.println("BAD SPLIT LENGTH > 2 " + Arrays.toString(eqSplit));
-          if ( isSingleton(eqSplit)) {
-              leftBasic.put(trimS, 1d);
-              System.out.println("[" + 1.0d + "]" + " " + trimS);
-          } else if ( BioSynthUtilsIO.isNumeric(eqSplit[0])) {
-              leftBasic.put(eqSplit[1], Double.parseDouble(eqSplit[0]));
-              System.out.println("[" + Double.parseDouble(eqSplit[0]) + "]" + " " + eqSplit[1]);
-          } else {
-              eqSplit[0] = eqSplit[0].replaceAll("\\)|\\(", "");
-              leftGeneric.put(eqSplit[1], eqSplit[0]);
-              System.out.println("#" + eqSplit[0] + "#");
-          }
-
-      }*/
-
-
-    /*
-      System.out.println("RIGHT:");
-      split = eqRight.split(" \\+ ");
-
-      for (String s : split) {
-          String trimS = s.trim();
-          String[] eqSplit = trimS.split(" ");
-          if ( eqSplit.length > 2) System.err.println("BAD SPLIT LENGTH > 2 " + Arrays.toString(eqSplit));
-          if ( isSingleton(eqSplit)) {
-              rightBasic.put(trimS, 1d);
-              System.out.println("[" + 1.0d + "]" + " " + trimS);
-          } else if ( BioSynthUtilsIO.isNumeric(eqSplit[0])) {
-              rightBasic.put(eqSplit[1], Double.parseDouble(eqSplit[0]));
-              System.out.println("[" + Double.parseDouble(eqSplit[0]) + "]" + " " + eqSplit[1]);
-          } else {
-              eqSplit[0] = eqSplit[0].replaceAll("\\)|\\(", "");
-              rightGeneric.put(eqSplit[1], eqSplit[0]);
-              System.out.println("#" + eqSplit[0] + "#");
-          }
-      }
-     */
   }
 
   public String[][] getLeftTriplet() {
     //TODO: parse generic values
     int size = leftBasic.size() + leftVariable.size();
-    String[][] ret = new String[size][3];
+    String[][] ret = new String[size][4];
     int ptr = 0;
     for ( String cpdId : leftBasic.keySet()) {
       ret[ptr][0] = cpdId;
       ret[ptr][1] = leftBasic.get(cpdId).toString();
       ret[ptr][2] = ret[ptr][1];
+      ret[ptr][3] = leftModifier.get(cpdId);
       ptr++;
     }
     for ( String cpdId : leftVariable.keySet()) {
       ret[ptr][0] = cpdId;
       ret[ptr][1] = "1";
       ret[ptr][2] = leftVariable.get(cpdId).toString();
+      ret[ptr][3] = leftModifier.get(cpdId);
       ptr++;
     }
     return ret;
@@ -203,20 +162,23 @@ public class KeggEquationParser {
   public String[][] getRightTriplet() {
     //TODO: parse generic values
     int size = rightBasic.size() + rightVariable.size();
-    String[][] ret = new String[size][3];
+    String[][] ret = new String[size][4];
     int ptr = 0;
     for ( String cpdId : rightBasic.keySet()) {
       ret[ptr][0] = cpdId;
       ret[ptr][1] = rightBasic.get(cpdId).toString();
       ret[ptr][2] = ret[ptr][1];
+      ret[ptr][3] = rightModifier.get(cpdId);
       ptr++;
     }
     for ( String cpdId : rightVariable.keySet()) {
       ret[ptr][0] = cpdId;
       ret[ptr][1] = "1";
       ret[ptr][2] = rightVariable.get(cpdId).toString();
+      ret[ptr][3] = rightModifier.get(cpdId);
       ptr++;
     }
+    //System.out.println(rightModifier);
     return ret;
   }
 

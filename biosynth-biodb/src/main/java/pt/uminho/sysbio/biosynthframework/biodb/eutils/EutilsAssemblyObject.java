@@ -1,6 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.biodb.eutils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pt.uminho.sysbio.biosynthframework.AbstractBiosynthEntity;
 
@@ -48,7 +50,7 @@ public class EutilsAssemblyObject extends AbstractBiosynthEntity {
   public String ftppath_regions_rpt;
   public String submitterorganization;
   public String sortorder;
-  public Object synonym;
+  public Map<String, String> synonym = new HashMap<>();
   
   public String contign50;
   public String scaffoldn50;
@@ -73,4 +75,6 @@ public class EutilsAssemblyObject extends AbstractBiosynthEntity {
   public String fromtype;
   public List<String> propertylist;
   public String meta;
+  
+  public Object assemblystatussort;
 }

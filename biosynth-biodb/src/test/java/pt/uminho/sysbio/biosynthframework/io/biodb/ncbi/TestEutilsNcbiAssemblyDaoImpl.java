@@ -1,6 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.io.biodb.ncbi;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,10 +32,26 @@ public class TestEutilsNcbiAssemblyDaoImpl {
   }
 
   @Test
-  public void test() {
-    EutilsAssemblyObject res = dao.getByEntry("GCF_000009425.1");
-    
-    fail("Not yet implemented");
+  public void test_live_success1() {
+    try {
+      Thread.sleep(5000);
+      EutilsAssemblyObject res = dao.getByEntry("GCF_000009425.1");
+      assertNotNull(res);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
   }
 
+  @Test
+  public void test_live_success2() {
+    try {
+      Thread.sleep(5000);
+      EutilsAssemblyObject res = dao.getByEntry("GCA_001021085.1");
+      assertNotNull(res);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+  
 }

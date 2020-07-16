@@ -14,37 +14,64 @@ public interface EutilsService {
   //efetch.fcgi?db=taxonomy&id=9913,30521,4932&retmode=xml
   @GET("entrez/eutils/efetch.fcgi")
   public Call<Object> efetch(@Query("db") EntrezDatabase db, 
-                       @Query("id") String id, 
-                       @Query("retmode") EntrezRetmode retmode);
-  
+                             @Query("id") String id, 
+                             @Query("retmode") EntrezRetmode retmode);
   @GET("entrez/eutils/efetch.fcgi")
   public Call<Object> efetch(@Query("db") EntrezDatabase db, 
-                       @Query("id") String id, 
-                       @Query("rettype") String rettype, 
-                       @Query("retmode") EntrezRetmode retmode);
+                             @Query("id") String id, 
+                             @Query("rettype") String rettype, 
+                             @Query("retmode") EntrezRetmode retmode);
+  @GET("entrez/eutils/efetch.fcgi")
+  public Call<Object> efetch(@Query("db") EntrezDatabase db, 
+                             @Query("id") String id, 
+                             @Query("rettype") String rettype, 
+                             @Query("retmode") EntrezRetmode retmode,
+                             @Query("api_key") EntrezRetmode apiKey);
+  
   
   @GET("entrez/eutils/efetch.fcgi?db=taxonomy")
   public Call<EntrezTaxaSet> efetchTaxonomy(@Query("id") String id, 
-                                      @Query("retmode") EntrezRetmode retmode);
+                                            @Query("retmode") EntrezRetmode retmode);
+  @GET("entrez/eutils/efetch.fcgi?db=taxonomy")
+  public Call<EntrezTaxaSet> efetchTaxonomy(@Query("id") String id, 
+                                            @Query("retmode") EntrezRetmode retmode,
+                                            @Query("api_key") EntrezRetmode apiKey);
   
   @GET("entrez/eutils/efetch.fcgi?db=gene")
   public Call<EntrezGeneSet> efetchGene(@Query("id") String id, 
-                                  @Query("retmode") EntrezRetmode retmode);
+                                        @Query("retmode") EntrezRetmode retmode,
+                                        @Query("api_key") EntrezRetmode apiKey);
+  @GET("entrez/eutils/efetch.fcgi?db=gene")
+  public Call<EntrezGeneSet> efetchGene(@Query("id") String id, 
+                                        @Query("retmode") EntrezRetmode retmode);
+  
   
   @GET("entrez/eutils/efetch.fcgi?db=protein")
   public Call<EntrezProtein> efetchProtein(@Query("id") String id, 
-                                     @Query("retmode") EntrezRetmode retmode);
+                                           @Query("retmode") EntrezRetmode retmode);
+  @GET("entrez/eutils/efetch.fcgi?db=protein")
+  public Call<EntrezProtein> efetchProtein(@Query("id") String id, 
+                                           @Query("retmode") EntrezRetmode retmode,
+                                           @Query("api_key") EntrezRetmode apiKey);
+
 
   @GET("entrez/eutils/efetch.fcgi?db=pubmed")
   public Call<EutilsPubmedObject> efetchPubmed(@Query("id") String id, 
-                                         @Query("retmode") String retmode);
-  
-
+                                               @Query("retmode") String retmode);
+  @GET("entrez/eutils/efetch.fcgi?db=pubmed")
+  public Call<EutilsPubmedObject> efetchPubmed(@Query("id") String id, 
+                                               @Query("retmode") String retmode,
+                                               @Query("api_key") String apiKey);
   
   @GET("entrez/eutils/efetch.fcgi?db=nuccore")
   public Call<EntrezGeneSet> efetchNucleotide(@Query("id") String id, 
-                                        @Query("retmode") EntrezRetmode retmode,
-                                        @Query("rettype") String rettype);
+                                              @Query("retmode") EntrezRetmode retmode,
+                                              @Query("rettype") String rettype);
+  @GET("entrez/eutils/efetch.fcgi?db=nuccore")
+  public Call<EntrezGeneSet> efetchNucleotide(@Query("id") String id, 
+                                              @Query("retmode") EntrezRetmode retmode,
+                                              @Query("rettype") String rettype,
+                                              @Query("api_key") EntrezRetmode apiKey);
   
   //esearch.fcgi?db=gene&term=txid326442&retstart=38&retmax=100
   @GET("entrez/eutils/esearch.fcgi")

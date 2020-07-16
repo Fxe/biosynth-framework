@@ -176,11 +176,13 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 			leftEntity.setStoichiometry(Double.valueOf(left[1]));
 			leftEntity.setCoefficient(left[2]);
 			String mod =  equationParser.leftModifier.get(left[0]);
+			leftEntity.setModifier(mod);
+			/*
 			if (mod == null) {
 			  leftEntity.setModifier("null");
 			} else {
 			  leftEntity.setModifier("mod");
-			}
+			}*/
 			leftEntities.add(leftEntity);
 		}
 		
@@ -190,11 +192,13 @@ public class KeggReactionFlatFileParser extends AbstractKeggFlatFileParser {
 			rightEntity.setStoichiometry(Double.valueOf(right[1]));
 			rightEntity.setCoefficient(right[2]);
             String mod =  equationParser.rightModifier.get(right[0]);
+            rightEntity.setModifier(mod);
+            /*
             if (mod == null) {
               rightEntity.setModifier("null");
             } else {
               rightEntity.setModifier("mod");
-            }
+            }*/
 			rightEntities.add(rightEntity);
 		}
 	}

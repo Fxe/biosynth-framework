@@ -35,6 +35,7 @@ import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycClassNames;
 import pt.uminho.sysbio.biosynthframework.io.biodb.BiocycXmlQueryResult;
 import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggGenomeDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.kegg.RestKeggModuleDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.ptools.RestBiocycPathwayDaoImpl;
 
 @Deprecated
 public class GeneralDriver {
@@ -429,6 +430,23 @@ public class GeneralDriver {
   }
   
   public static void main(String[] args) {
+    String localStorage = "G:\\var\\biodb\\biocyc";
+    String version = "23.5";
+    RestBiocycPathwayDaoImpl dao = new RestBiocycPathwayDaoImpl();
+    dao.setLocalStorage(localStorage);
+    dao.setSaveLocalStorage(true);
+    dao.setUseLocalStorage(true);
+    dao.setDatabaseVersion(version);
+    
+    List<String> entries = dao.getAllEntries();
+    
+    System.out.println(entries);
+    
+    for (String e : entries) {
+      dao.getEntry(e);
+    }
+    
+    System.exit(0);
     String pgdb = "ECOLI";
     String base = "/var/biodb/biocyc2";
     

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 public class TestKeggEquationParser {
@@ -92,5 +94,27 @@ public class TestKeggEquationParser {
     assertNotNull(r);
     assertEquals(3, l.length);
     assertEquals(3, r.length);
+    for (String[] o : l) {
+      if (o[0].equals("C04488")) {
+        assertArrayEquals(new String[] {"C04488", "1.0", "1.0", null}, o);
+      }
+      if (o[0].equals("C03576")) {
+        assertArrayEquals(new String[] {"C03576", "1.0", "1.0", null}, o);
+      }
+      if (o[0].equals("C01330")) {
+        assertArrayEquals(new String[] {"C01330", "2.0", "2.0", "in"}, o);
+      }
+    }
+    for (String[] o : r) {
+      if (o[0].equals("C01217")) {
+        assertArrayEquals(new String[] {"C01217", "1.0", "1.0", null}, o);
+      }
+      if (o[0].equals("C03920")) {
+        assertArrayEquals(new String[] {"C03920", "1.0", "1.0", null}, o);
+      }
+      if (o[0].equals("C01330")) {
+        assertArrayEquals(new String[] {"C01330", "2.0", "2.0", "out"}, o);
+      }
+    }
   }
 }

@@ -35,31 +35,33 @@ public class RestKeggModuleDaoImpl extends AbstractRestfulKeggDao<KeggModuleEnti
       logger.debug(localPath);
       response = this.getLocalOrWeb(query, localPath + ".txt");
       logger.debug("{}", response.getBytes().length);
+      if (response != null) {
+        KeggFlatFileParser parser = new KeggFlatFileParser();
+        Map<String, Object> odata = parser.parse(response);
+        String name = getString(odata, "NAME");
+        String definition = getString(odata, "DEFINITION");
+        String mclass = getString(odata, "CLASS");
+        Map<String, Set<String>> orthology = 
+            KeggFlatFileParser.parseOrthology(getString(odata, "ORTHOLOGY"));
+        Map<Tuple2<String>, Set<String>> orthologyReaction = 
+            KeggFlatFileParser.parseOrthologyReaction(getString(odata, "REACTION"));
+        Set<String> compounds = 
+            KeggFlatFileParser.getIdentifers(getString(odata, "COMPOUND"), "C");
+        Set<String> pathways = 
+            KeggFlatFileParser.getIdentifers(getString(odata, "PATHWAY"), "map");
+//        Map<String, Set<String>> dblinks = 
+//            KeggFlatFileParser.parseDblinks(getString(odata, "DBLINKS"));
+        entity = new KeggModuleEntity();
+        entity.setEntry(entry);
+        entity.setName(name);
+        entity.setDefinition(definition);
+        entity.setModuleClass(mclass);
+        entity.setCompounds(compounds);
+        entity.setPathways(pathways);
+        entity.setOrthology(orthology);
+        entity.setOrthologyReaction(orthologyReaction);
+      }
 
-      KeggFlatFileParser parser = new KeggFlatFileParser();
-      Map<String, Object> odata = parser.parse(response);
-      String name = getString(odata, "NAME");
-      String definition = getString(odata, "DEFINITION");
-      String mclass = getString(odata, "CLASS");
-      Map<String, Set<String>> orthology = 
-          KeggFlatFileParser.parseOrthology(getString(odata, "ORTHOLOGY"));
-      Map<Tuple2<String>, Set<String>> orthologyReaction = 
-          KeggFlatFileParser.parseOrthologyReaction(getString(odata, "REACTION"));
-      Set<String> compounds = 
-          KeggFlatFileParser.getIdentifers(getString(odata, "COMPOUND"), "C");
-      Set<String> pathways = 
-          KeggFlatFileParser.getIdentifers(getString(odata, "PATHWAY"), "map");
-//      Map<String, Set<String>> dblinks = 
-//          KeggFlatFileParser.parseDblinks(getString(odata, "DBLINKS"));
-      entity = new KeggModuleEntity();
-      entity.setEntry(entry);
-      entity.setName(name);
-      entity.setDefinition(definition);
-      entity.setModuleClass(mclass);
-      entity.setCompounds(compounds);
-      entity.setPathways(pathways);
-      entity.setOrthology(orthology);
-      entity.setOrthologyReaction(orthologyReaction);
     } catch (IOException e) {
       logger.warn("error: {}", e.getMessage());
     }
